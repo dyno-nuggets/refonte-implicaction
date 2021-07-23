@@ -360,3 +360,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,macos,windows,linux,intellij+iml,node,angular,visualstudiocode
+/frontend-implicaction/node/
