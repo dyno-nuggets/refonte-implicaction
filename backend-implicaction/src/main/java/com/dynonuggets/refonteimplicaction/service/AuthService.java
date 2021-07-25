@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.UUID;
 
-import static com.dynonuggets.refonteimplicaction.util.Constants.ACTIVATION_EMAIL;
+import static com.dynonuggets.refonteimplicaction.util.Constants.ACTIVATION_ENDPOINT;
 
 @Service
 @AllArgsConstructor
@@ -23,8 +23,14 @@ public class AuthService {
     private final UserRepository userRepository;
     private final MailService mailService;
 
+    /**
+     * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
+     * @param reqisterRequest données d'identification de l'utilisateur
+     * @throws ImplicitActionException si l'envoi du mail échoue
+     * TODO: notifier lors de l'existance d'un utilisateur ayant le même mail ou login
+     */
     @Transactional
-    public void signup(ReqisterRequestDto reqisterRequest) throws ImplicitActionException {
+    public void signupAndSendConfirmation(ReqisterRequestDto reqisterRequest) throws ImplicitActionException {
         final String activationKey = generateActivationKey();
 
         User user = User.builder()
@@ -40,7 +46,7 @@ public class AuthService {
                 .subject("Please activate your account")
                 .recipient(user.getEmail())
                 .body("Thank you for signing up to Spring Reddit, please click on the below url to activate your account : "
-                        + ACTIVATION_EMAIL + "/" + activationKey)
+                        + ACTIVATION_ENDPOINT + "/" + activationKey)
                 .build();
         mailService.sendMail(notificationEmail);
     }

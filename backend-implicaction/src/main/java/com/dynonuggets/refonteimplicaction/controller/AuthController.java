@@ -21,7 +21,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody ReqisterRequestDto reqisterRequest) throws ImplicitActionException {
-        authService.signup(reqisterRequest);
+        authService.signupAndSendConfirmation(reqisterRequest);
         return new ResponseEntity<>("User registration successful", OK);
     }
 }
