@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
 import static javax.persistence.GenerationType.SEQUENCE;
@@ -16,7 +18,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Entity
 @Builder
 @Table(name = "wp_signups")
-public class SignUp {
+public class Signup {
     @Id
     @GeneratedValue(strategy = SEQUENCE)
     @Column(name = "signup_id")
@@ -24,14 +26,17 @@ public class SignUp {
     private String domain;
     private String path;
     private String title;
-    @Column(name = "user_login")
+    @Column(name = "user_login", unique = true)
+    @NotBlank(message = "login is required")
     private String userLogin;
-    @Column(name = "user_email")
+    @Column(name = "user_email", unique = true)
+    @NotEmpty(message = "Email is required")
     private String userEmail;
     private Instant registered;
     private Instant activated;
     private Boolean active;
     @Column(name = "activation_key")
+    @NotEmpty(message = "Activation Key is required")
     private String activationKey;
     private String meta;
 }
