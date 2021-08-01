@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface SignUpRepository extends JpaRepository<Signup, Long> {
     Optional<Signup> findByActivationKey(String activationKey);
+
+    Optional<Signup> findByUserLogin(String username);
 }

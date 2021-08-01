@@ -1,5 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.dto.AuthenticationResponseDto;
+import com.dynonuggets.refonteimplicaction.dto.LoginRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
@@ -26,5 +28,10 @@ public class AuthController {
     public ResponseEntity<String> verifyAccount(@PathVariable String activationKey) throws ImplicactionException {
         authService.verifyAccount(activationKey);
         return new ResponseEntity<>("Account Activated Success", OK);
+    }
+
+    @PostMapping("/login")
+    public AuthenticationResponseDto login(@RequestBody LoginRequestDto loginRequestDto) throws ImplicactionException {
+        return authService.login(loginRequestDto);
     }
 }

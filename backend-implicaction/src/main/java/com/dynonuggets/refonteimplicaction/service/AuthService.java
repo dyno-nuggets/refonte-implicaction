@@ -1,12 +1,19 @@
 package com.dynonuggets.refonteimplicaction.service;
 
+import com.dynonuggets.refonteimplicaction.dto.AuthenticationResponseDto;
+import com.dynonuggets.refonteimplicaction.dto.LoginRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.Signup;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +29,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final SignUpRepository signUpRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -53,6 +62,18 @@ public class AuthService {
             throw new ImplicactionException("Account With Associated Activation Key Already Activated - " + activationKey);
         }
         activateSignup(signup);
+    }
+
+    public AuthenticationResponseDto login(LoginRequestDto loginRequestDto) throws ImplicactionException {
+        Authentication authenticate = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequestDto.getLogin(), loginRequestDto.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+        return AuthenticationResponseDto.builder()
+                .authenticationToken(token)
+                .login(loginRequestDto.getLogin())
+                .build();
     }
 
     private void registerSignup(ReqisterRequestDto reqisterRequest, String activationKey, User user) {
