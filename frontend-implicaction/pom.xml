@@ -5,10 +5,11 @@
   <parent>
     <groupId>com.dyno-nuggets</groupId>
     <artifactId>refonte-implicaction</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>frontend-implicaction</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <build>
     <plugins>
