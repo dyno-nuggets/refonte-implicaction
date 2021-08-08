@@ -21,10 +21,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable()
+        httpSecurity.cors().disable()
+                .csrf().disable()
                 .authorizeRequests()
                 // désactive l'authentification pour les requêtes dont l'url commence par /api/auth/
                 .antMatchers("/api/auth/**")
+                .permitAll()
+                .antMatchers("/*")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
