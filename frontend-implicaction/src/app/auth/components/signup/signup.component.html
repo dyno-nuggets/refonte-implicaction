@@ -1,0 +1,57 @@
+<div class="register-section">
+  <div class="row justify-content-center">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4>Register</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="signupForm" (ngSubmit)="signup()">
+
+            <div class="form-group row mb-4">
+              <label for="inputEmail" class="col-sm-2 col-form-label">E-Mail</label>
+              <div class="col-sm-10">
+                <input type="email" [formControlName]="'email'" class="form-control" id="inputEmail" placeholder="Email"
+                       required autofocus>
+                <span *ngIf="!signupForm.get('email').valid && signupForm.get('email').touched">
+                  Vous devez saisir une adresse email valide
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-4">
+              <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+              <div class="col-sm-10">
+                <input type="text" [formControlName]="'username'" class="form-control" id="inputUsername"
+                       placeholder="Username" required>
+                <span *ngIf="!signupForm.get('username').valid && signupForm.get('username').touched">
+                  Vous devez saisir un nom d'utilisateur
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-4">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+              <div class="col-sm-10">
+                <input type="password" [formControlName]="'password'" class="form-control" id="inputPassword"
+                       placeholder="Password" required>
+                <span *ngIf="!signupForm.get('password').valid && signupForm.get('password').touched">
+                  Vous devez saisir un mot de passe
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Sign Up</button>
+                <span class="px-1">Existing user? <a routerLink="/auth/login">Log In</a></span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+</div>
