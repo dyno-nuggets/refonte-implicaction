@@ -18,7 +18,7 @@ export class SignupComponent implements OnInit {
       login: '',
       email: '',
       password: ''
-    }
+    };
   }
 
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  signup() {
+  signup(): void {
     this.signupRequestPayload.email = this.signupForm.get('email').value;
     this.signupRequestPayload.login = this.signupForm.get('username').value;
     this.signupRequestPayload.password = this.signupForm.get('password').value;

@@ -13,6 +13,7 @@ export class AuthService {
   constructor(private http: HttpClient) {
   }
 
+  // TODO: faire en sorte de renvoyer autre chose que Observable<any>
   signup(signupRequestPayload: SignupRequestPayload): Observable<any> {
     return this.http.post(`${AuthService.BASE_URL}/signup`, signupRequestPayload, {responseType: 'text'});
   }
