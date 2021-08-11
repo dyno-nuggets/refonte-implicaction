@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "jwt.expiration.time",
+      "type": "java.lang.Long",
+      "description": "expiration time for the jwt token."
+    }
+  ]
+}

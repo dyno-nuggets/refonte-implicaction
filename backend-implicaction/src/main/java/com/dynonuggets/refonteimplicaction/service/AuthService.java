@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.dto.AuthenticationResponseDto;
 import com.dynonuggets.refonteimplicaction.dto.LoginRequestDto;
+import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.Signup;
@@ -32,6 +33,7 @@ public class AuthService {
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
+    private final RefreshTokenService refreshTokenService;
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -39,10 +41,10 @@ public class AuthService {
      *
      * @param reqisterRequest données d'identification de l'utilisateur
      * @throws ImplicactionException si l'envoi du mail échoue
-     *                               TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
      */
     @Transactional
     public void signupAndSendConfirmation(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
+        // TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
         final String activationKey = generateActivationKey();
         final User user = registerUser(reqisterRequest, activationKey);
         registerSignup(reqisterRequest, activationKey, user);
@@ -72,8 +74,12 @@ public class AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
+        Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+        String refreshToken = refreshTokenService.generateRefreshToken().getToken();
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
+                .refreshToken(refreshToken)
+                .expiresAt(expiresAt)
                 .login(loginRequestDto.getLogin())
                 .build();
     }
@@ -84,6 +90,18 @@ public class AuthService {
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByLogin(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+    }
+
+    public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
+        refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
+        String token = jwtProvider.generateTokenWithUsername(refreshTokenRequestDto.getLogin());
+        Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+        return AuthenticationResponseDto.builder()
+                .authenticationToken(token)
+                .refreshToken(refreshTokenRequestDto.getRefreshToken())
+                .expiresAt(expiresAt)
+                .login(refreshTokenRequestDto.getLogin())
+                .build();
     }
 
     private void registerSignup(ReqisterRequestDto reqisterRequest, String activationKey, User user) {

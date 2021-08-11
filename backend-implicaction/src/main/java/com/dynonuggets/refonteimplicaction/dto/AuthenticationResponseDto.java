@@ -1,15 +1,17 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
 public class AuthenticationResponseDto {
     private String authenticationToken;
+    private String refreshToken;
+    private Instant expiresAt;
     private String login;
 }

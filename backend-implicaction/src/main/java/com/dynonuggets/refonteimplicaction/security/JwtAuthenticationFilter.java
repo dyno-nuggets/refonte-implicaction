@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String BEARER_PREFIX = "BEARER ";
+    private static final String AUTH_PREFIX = "Bearer ";
 
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
@@ -42,8 +42,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
-        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
-            return bearerToken.substring(BEARER_PREFIX.length());
+        // le header 'Authorization' est de la forme 'Bearer <token>', pour obtenir le token il suffit de supprimer 'Bearer '
+        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(AUTH_PREFIX)) {
+            return bearerToken.substring(AUTH_PREFIX.length());
         }
         return bearerToken;
     }
