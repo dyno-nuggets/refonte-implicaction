@@ -6,6 +6,7 @@ import {AppComponent} from './app.component';
 import {AuthModule} from './auth/auth.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {NgxWebstorageModule} from 'ngx-webstorage';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import {HttpClientModule} from '@angular/common/http';
     HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
+    NgxWebstorageModule.forRoot(),
     AuthModule,
   ],
   providers: [],

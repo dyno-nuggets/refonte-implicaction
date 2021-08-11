@@ -13,5 +13,5 @@ public class AuthenticationResponseDto {
     private String authenticationToken;
     private String refreshToken;
     private Instant expiresAt;
-    private String login;
+    private String username;
 }
