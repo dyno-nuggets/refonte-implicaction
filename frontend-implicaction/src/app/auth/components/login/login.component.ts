@@ -13,19 +13,18 @@ export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loginRequestPayload: LoginRequestPayload;
 
-
   constructor(private authService: AuthService) {
     this.loginRequestPayload = {
       username: '',
       password: ''
-    }
+    };
   }
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
       username: new FormControl('', Validators.required),
       password: new FormControl('', Validators.required)
-    })
+    });
   }
 
   login(): void {
