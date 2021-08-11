@@ -15,7 +15,7 @@
 
     <artifactId>backend-implicaction</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -85,6 +85,12 @@
             <version>0.11.2</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -95,12 +101,17 @@
                     <execution>
                         <id>copy-resources</id>
                         <phase>validate</phase>
-                        <goals><goal>copy-resources</goal></goals>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
                         <configuration>
-                            <outputDirectory>${project.build.directory}/backend-implicaction/classes/resources/</outputDirectory>
+                            <outputDirectory>${project.build.directory}/resources/frontend-implicaction/
+                            </outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.parent.basedir}/frontend-implicaction/dist/frontend-implicaction/</directory>
+                                    <directory>
+                                        ${project.parent.basedir}/frontend-implicaction/dist/frontend-implicaction/
+                                    </directory>
                                 </resource>
                             </resources>
                         </configuration>

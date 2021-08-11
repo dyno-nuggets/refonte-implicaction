@@ -14,10 +14,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -35,9 +36,10 @@ public class AuthService {
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
      * crée également une entrée dans la table wp_signups
+     *
      * @param reqisterRequest données d'identification de l'utilisateur
      * @throws ImplicactionException si l'envoi du mail échoue
-     * TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
+     *                               TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
      */
     @Transactional
     public void signupAndSendConfirmation(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
@@ -49,11 +51,11 @@ public class AuthService {
 
     /**
      * Vérifie existence et l'activation d'une clé d'activation et l'active si elle ne l'est pas déjà
-     * @throws ImplicactionException
-     * <ul>
-     *     <li>Si la clé n'existe pas</li>
-     *     <li>Si la clé est déjà activée</li>
-     * </ul>
+     *
+     * @throws ImplicactionException <ul>
+     *                               <li>Si la clé n'existe pas</li>
+     *                               <li>Si la clé est déjà activée</li>
+     *                               </ul>
      */
     public void verifyAccount(String activationKey) throws ImplicactionException {
         Signup signup = signUpRepository.findByActivationKey(activationKey).orElseThrow(() ->
@@ -74,6 +76,14 @@ public class AuthService {
                 .authenticationToken(token)
                 .login(loginRequestDto.getLogin())
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public User getCurrentUser() {
+        org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userRepository.findByLogin(principal.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
     }
 
     private void registerSignup(ReqisterRequestDto reqisterRequest, String activationKey, User user) {
