@@ -1,0 +1,46 @@
+<div class="login-section">
+  <div class="row justify-content-center">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header text-center">
+          <h4>Login</h4>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+            <div class="form-group row mb-4">
+              <label for="inputUsername" class="col-sm-2 col-form-label">Username</label>
+              <div class="col-sm-10">
+                <input type="text" [formControlName]="'username'" class="form-control" id="inputUsername"
+                       placeholder="Username" required autofocus>
+                <span *ngIf="!loginForm.get('username').valid && loginForm.get('username').touched">
+                  Vous devez saisir un nom d'utilisateur.
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row mb-4">
+              <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+              <div class="col-sm-10">
+                <input type="password" [formControlName]="'password'" class="form-control" id="inputPassword"
+                       placeholder="Password" required>
+                <span *ngIf="!loginForm.get('password').valid && loginForm.get('password').touched">
+                  Le mot de passe ne peut pas être vide.
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary">Sign In</button>
+                <span class="px-2">New to Implicaction? <a routerLink="/auth/sign-up">Sign Up</a></span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3"></div>
+  </div>
+</div>

@@ -70,7 +70,7 @@ public class AuthService {
 
     public AuthenticationResponseDto login(LoginRequestDto loginRequestDto) throws ImplicactionException {
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.getLogin(), loginRequestDto.getPassword())
+                new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
@@ -80,7 +80,7 @@ public class AuthService {
                 .authenticationToken(token)
                 .refreshToken(refreshToken)
                 .expiresAt(expiresAt)
-                .login(loginRequestDto.getLogin())
+                .username(loginRequestDto.getUsername())
                 .build();
     }
 
@@ -88,25 +88,25 @@ public class AuthService {
     public User getCurrentUser() {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByLogin(principal.getUsername())
+        return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
     }
 
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
-        String token = jwtProvider.generateTokenWithUsername(refreshTokenRequestDto.getLogin());
+        String token = jwtProvider.generateTokenWithUsername(refreshTokenRequestDto.getUsername());
         Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshTokenRequestDto.getRefreshToken())
                 .expiresAt(expiresAt)
-                .login(refreshTokenRequestDto.getLogin())
+                .username(refreshTokenRequestDto.getUsername())
                 .build();
     }
 
     private void registerSignup(ReqisterRequestDto reqisterRequest, String activationKey, User user) {
         Signup signup = Signup.builder()
-                .userLogin(reqisterRequest.getLogin())
+                .username(reqisterRequest.getUsername())
                 .userEmail(reqisterRequest.getEmail())
                 .registered(user.getRegistered())
                 .active(false)
@@ -117,7 +117,7 @@ public class AuthService {
 
     private User registerUser(ReqisterRequestDto reqisterRequest, String activationKey) {
         User user = User.builder()
-                .login(reqisterRequest.getLogin())
+                .username(reqisterRequest.getUsername())
                 .email(reqisterRequest.getEmail())
                 .password(passwordEncoder.encode(reqisterRequest.getPassword()))
                 .registered(Instant.now())

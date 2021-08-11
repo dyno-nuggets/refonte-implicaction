@@ -27,8 +27,8 @@ public class Signup {
     private String path;
     private String title;
     @Column(name = "user_login", unique = true)
-    @NotBlank(message = "login is required")
-    private String userLogin;
+    @NotBlank(message = "username is required")
+    private String username;
     @Column(name = "user_email", unique = true)
     @NotEmpty(message = "Email is required")
     private String userEmail;

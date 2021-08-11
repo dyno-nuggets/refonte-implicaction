@@ -12,7 +12,7 @@ public class FakeService {
 
     public FakeDto doTheFake() {
         return FakeDto.builder()
-                .username(authService.getCurrentUser().getLogin())
+                .username(authService.getCurrentUser().getUsername())
                 .build();
     }
 }
