@@ -30,7 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // désactive l'authentification pour les requêtes dont l'url commence par /api/auth/
                 .antMatchers("/api/auth/**")
                 .permitAll()
-                .antMatchers("/*")
+                .antMatchers("/assets/**")
+                .permitAll()
+                .antMatchers("/**")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
