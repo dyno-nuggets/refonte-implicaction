@@ -28,11 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 // désactive l'authentification pour les requêtes dont l'url commence par /api/auth/
-                .antMatchers("/api/auth/**")
-                .permitAll()
-                .antMatchers("/assets/**")
-                .permitAll()
-                .antMatchers("/**")
+                .antMatchers("/", "/error", "/api/all", "/api/auth/**", "/index.html", "/*.js", "/*.js.map", "/*.css", "/assets/img/*.png", "/favicon.ico")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
