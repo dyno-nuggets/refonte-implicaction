@@ -8,6 +8,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import {NgxWebstorageModule} from 'ngx-webstorage';
 import {SharedModule} from './shared/shared.module';
+import {CoreModule} from './core/core.module';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import {SharedModule} from './shared/shared.module';
     NgxWebstorageModule.forRoot(),
     AuthModule,
     SharedModule,
+    CoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
