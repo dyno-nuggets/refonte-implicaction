@@ -9,6 +9,9 @@ import {HttpClientModule} from '@angular/common/http';
 import {NgxWebstorageModule} from 'ngx-webstorage';
 import {SharedModule} from './shared/shared.module';
 import {CoreModule} from './core/core.module';
+import {ToastModule} from 'primeng/toast';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MessageService} from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -23,8 +26,10 @@ import {CoreModule} from './core/core.module';
     AuthModule,
     SharedModule,
     CoreModule,
+    BrowserAnimationsModule,
+    ToastModule,
   ],
-  providers: [],
+  providers: [MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
