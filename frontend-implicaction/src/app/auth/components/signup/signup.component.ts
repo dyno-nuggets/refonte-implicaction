@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {SignupRequestPayload} from '../../models/signup-request-payload';
-import {AuthService} from '../../services/auth.service';
+import {SignupRequestPayload} from '../../../core/models/signup-request-payload';
+import {AuthService} from '../../../core/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 
