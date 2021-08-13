@@ -8,6 +8,7 @@ import {Constants} from '../../config/constants';
 })
 @Injectable()
 export class ApiEndpointsService {
+
   constructor(private constants: Constants) {
   }
 
@@ -15,8 +16,12 @@ export class ApiEndpointsService {
     return this.createUrl('auth/login');
   }
 
-  getSignUpEndPoint(): string {
+  getSignUpEndpoint(): string {
     return this.createUrl('auth/signup');
+  }
+
+  getJwtRefreshTokenEndpoint(): string {
+    return this.createUrl('auth/refresh/token');
   }
 
   // URL
