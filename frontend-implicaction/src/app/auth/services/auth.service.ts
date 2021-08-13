@@ -1,30 +1,41 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
 import {SignupRequestPayload} from '../models/signup-request-payload';
 import {Observable} from 'rxjs';
 import {LoginRequestPayload} from '../models/login-request-payload';
-import {LoginResponse} from '../models/login-response';
-import {map} from 'rxjs/operators';
 import {LocalStorageService} from 'ngx-webstorage';
+import {ApiHttpService} from '../../core/services/api-http.service';
+import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
+import {map} from 'rxjs/operators';
+import {LoginResponse} from '../models/login-response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  static readonly BASE_URL = '/api/auth';
-
-  constructor(private http: HttpClient, private localStorage: LocalStorageService) {
+  constructor(
+    private apiHttpService: ApiHttpService,
+    private apiEndpointsService: ApiEndpointsService,
+    private localStorage: LocalStorageService
+  ) {
   }
 
   // TODO: faire en sorte de renvoyer autre chose que Observable<any>
   signup(signupRequestPayload: SignupRequestPayload): Observable<any> {
-    return this.http.post(`${AuthService.BASE_URL}/signup`, signupRequestPayload, {responseType: 'text'});
+    return this.apiHttpService
+      .post(
+        this.apiEndpointsService.getSignUpEndPoint(),
+        signupRequestPayload,
+        {responseType: 'text'}
+      );
   }
 
   login(loginRequestPayload: LoginRequestPayload): Observable<boolean> {
-    return this.http
-      .post<LoginResponse>(`${AuthService.BASE_URL}/login`, loginRequestPayload)
+    return (this.apiHttpService
+      .post(
+        this.apiEndpointsService.getLoginEndpoint(),
+        loginRequestPayload
+      ) as Observable<LoginResponse>)
       .pipe(
         map(loginResponse => {
           this.localStorage.store('authenticationToken', loginResponse.authenticationToken);
