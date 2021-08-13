@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {SignupRequestPayload} from '../../models/signup-request-payload';
 import {AuthService} from '../../services/auth.service';
+import {Router} from '@angular/router';
+import {ToasterService} from '../../../core/services/toaster.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,8 +14,13 @@ export class SignupComponent implements OnInit {
 
   signupForm: FormGroup;
   signupRequestPayload: SignupRequestPayload;
+  isError: boolean;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private toaster: ToasterService,
+    private router: Router,
+  ) {
     this.signupRequestPayload = {
       login: '',
       email: '',
@@ -36,9 +43,9 @@ export class SignupComponent implements OnInit {
 
     this.authService
       .signup(this.signupRequestPayload)
-      .subscribe(data => {
-        // TODO: Implémenter une redirection vers une page de succès
-        console.log(data);
-      });
+      .subscribe(
+        () => this.router.navigate(['/auth/login'], {queryParams: {registered: 'true'}}),
+        () => this.isError = true
+      );
   }
 }

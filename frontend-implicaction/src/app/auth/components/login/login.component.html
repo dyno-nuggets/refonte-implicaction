@@ -36,6 +36,10 @@
                 <button type="submit" class="btn btn-primary">Sign In</button>
                 <span class="px-2">New to Implicaction? <a routerLink="/auth/sign-up">Sign Up</a></span>
               </div>
+              <p class="mt-3 alert alert-danger" role="alert" *ngIf="isError">
+                Login Failed. Please check your credentials and try again.
+              </p>
+              <p class="mt-3 alert alert-success" *ngIf="registerSuccessMessage">{{registerSuccessMessage}}</p>
             </div>
           </form>
         </div>

@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {SignupRequestPayload} from '../models/signup-request-payload';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {LoginRequestPayload} from '../models/login-request-payload';
 import {LocalStorageService} from 'ngx-webstorage';
 import {ApiHttpService} from '../../core/services/api-http.service';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
-import {map} from 'rxjs/operators';
+import {catchError, map} from 'rxjs/operators';
 import {LoginResponse} from '../models/login-response';
 
 @Injectable({
@@ -20,7 +20,6 @@ export class AuthService {
   ) {
   }
 
-  // TODO: faire en sorte de renvoyer autre chose que Observable<any>
   signup(signupRequestPayload: SignupRequestPayload): Observable<any> {
     return this.apiHttpService
       .post(
@@ -43,6 +42,8 @@ export class AuthService {
           this.localStorage.store('refreshToken', loginResponse.refreshToken);
           this.localStorage.store('expiresAt', loginResponse.expiresAt);
           return true;
-        }));
+        }),
+        catchError(() => of(false))
+      );
   }
 }
