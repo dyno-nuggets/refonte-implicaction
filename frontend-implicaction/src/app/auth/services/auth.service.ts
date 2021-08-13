@@ -20,7 +20,6 @@ export class AuthService {
   ) {
   }
 
-  // TODO: faire en sorte de renvoyer autre chose que Observable<any>
   signup(signupRequestPayload: SignupRequestPayload): Observable<any> {
     return this.apiHttpService
       .post(
