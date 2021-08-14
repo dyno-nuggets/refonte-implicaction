@@ -1,26 +1,51 @@
-<header>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" routerLink="/">
-        <img src="assets/img/logo.png" alt="Implicaction">
-      </a>
-      <div>
-        <ul class="navbar-nav ms-auto flex-nowrap">
-          <ng-container *ngIf="isLoggedIn; else notLoggedOptions">
-            <li class="nav-item me-1 mb-1">
-              <button (click)="logout()" class="btn btn-sm btn-primary btn-logout">logout</button>
+<nav class="py-2 bg-light border-bottom">
+  <div class="container d-flex">
+    <ul class="nav me-auto">
+      <li><a routerLink="/" class="nav-link px-2 active">Accueil</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">A propos</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">Espace entreprise</a></li>
+    </ul>
+    <ng-container *ngIf="isLoggedIn; else registrationOptions">
+      <ul class="nav align-items-center user-options">
+        <li class="nav-item"><em class="pi pi-bell fs-5"></em></li>
+        <li class="nav-item"><em class="pi pi-users fs-5"></em></li>
+        <li class="nav-item"><em class="pi pi-inbox fs-5" pBadge severity="danger"></em></li>
+        <li class="nav-item pb-2"><a class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
+                                     id="dropdownUser2"
+                                     data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="assets/img/default-user.png" alt="mdo" class="rounded-circle avatar">
+        </a>
+          <ul class="dropdown-menu text-small shadow m-0 p-0" aria-labelledby="dropdownUser">
+            <li>
+            <li><a class="dropdown-item cursor-pointer">Profil</a></li>
+            <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
+            <li>
+              <hr class="dropdown-divider">
             </li>
-          </ng-container>
-          <ng-template #notLoggedOptions>
-            <li class="nav-item me-1 mb-1">
-              <a routerLink="/auth/login" class="btn btn-sm btn-outline-primary btn-login">login</a>
-            </li>
-            <li class="nav-item">
-              <a routerLink="/auth/sign-up" class="btn btn-sm btn-primary btn-sign-up">Sign up</a>
-            </li>
-          </ng-template>
-        </ul>
-      </div>
-    </div>
-  </nav>
+            <li><a class="dropdown-item cursor-pointer" (click)="logout()">Se déconnecter</a></li>
+          </ul>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-template #registrationOptions>
+      <ul class="nav align-items-center  user-options">
+        <li class="nav-item">
+          <a routerLink="/auth/login" class="btn btn-outline-primary">Login</a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/auth/sign-up" class="btn btn-primary">Sign up</a>
+        </li>
+      </ul>
+    </ng-template>
+  </div>
+</nav>
+<header class="py-3 mb-4 border-bottom">
+  <div class="container d-flex flex-wrap justify-content-center">
+    <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
+      <img src="assets/img/logo.png" alt="implic'action">
+    </a>
+    <form class="col-12 col-lg-auto mb-3 mb-lg-0">
+      <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+    </form>
+  </div>
 </header>
