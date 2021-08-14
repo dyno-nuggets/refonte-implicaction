@@ -1,11 +1,11 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
-import {SignupRequestPayload} from '../models/signup-request-payload';
-import {Observable, of} from 'rxjs';
-import {LoginRequestPayload} from '../models/login-request-payload';
+import {Observable, of, throwError} from 'rxjs';
 import {LocalStorageService} from 'ngx-webstorage';
-import {ApiHttpService} from './api-http.service';
-import {ApiEndpointsService} from './api-endpoints.service';
+import {ApiHttpService} from '../../core/services/api-http.service';
+import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {catchError, map, tap} from 'rxjs/operators';
+import {SignupRequestPayload} from '../models/signup-request-payload';
+import {LoginRequestPayload} from '../models/login-request-payload';
 import {LoginResponse} from '../models/login-response';
 
 @Injectable({
@@ -46,10 +46,36 @@ export class AuthService {
           this.localStorage.store('username', loginResponse.username);
           this.localStorage.store('refreshToken', loginResponse.refreshToken);
           this.localStorage.store('expiresAt', loginResponse.expiresAt);
+
+          this.loggedIn.emit(true);
+          this.username.emit(loginResponse.username);
           return true;
         }),
         catchError(() => of(false))
       );
+  }
+
+  logout(): Observable<boolean> {
+    const refreshTokenPayload = {
+      refreshToken: this.getRefreshToken(),
+      username: this.getUserName()
+    };
+
+    this.apiHttpService
+      .post(this.apiEndpointsService.getLogoutEndpoint(), refreshTokenPayload, {responseType: 'text'})
+      .subscribe(
+        () => {
+        },
+        (error) => throwError(error)
+      );
+    this.localStorage.clear('authenticationToken');
+    this.localStorage.clear('username');
+    this.localStorage.clear('refreshToken');
+    this.localStorage.clear('expiresAt');
+
+    this.loggedIn.emit(false);
+    this.username.emit(null);
+    return of(true);
   }
 
   getJwtToken(): string {
@@ -70,11 +96,11 @@ export class AuthService {
       }));
   }
 
-  private getRefreshToken(): string {
+  getRefreshToken(): string {
     return this.localStorage.retrieve('refreshToken');
   }
 
-  private getUserName(): string {
+  getUserName(): string {
     return this.localStorage.retrieve('username');
   }
 
