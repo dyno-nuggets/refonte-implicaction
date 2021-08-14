@@ -24,6 +24,10 @@ export class ApiEndpointsService {
     return this.createUrl('auth/refresh/token');
   }
 
+  getLogoutEndpoint(): string {
+    return this.createUrl('auth/logout');
+  }
+
   // URL
   private createUrl(action: string, isMockAPI: boolean = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(

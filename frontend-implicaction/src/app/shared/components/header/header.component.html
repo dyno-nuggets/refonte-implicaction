@@ -6,12 +6,19 @@
       </a>
       <div>
         <ul class="navbar-nav ms-auto flex-nowrap">
-          <li class="nav-item me-1 mb-1">
-            <a routerLink="/auth/login" class="btn btn-sm btn-outline-primary login">login</a>
-          </li>
-          <li class="nav-item">
-            <a routerLink="/auth/sign-up" class="btn btn-sm btn-primary sign-up">Sign up</a>
-          </li>
+          <ng-container *ngIf="isLoggedIn; else notLoggedOptions">
+            <li class="nav-item me-1 mb-1">
+              <button (click)="logout()" class="btn btn-sm btn-primary btn-logout">logout</button>
+            </li>
+          </ng-container>
+          <ng-template #notLoggedOptions>
+            <li class="nav-item me-1 mb-1">
+              <a routerLink="/auth/login" class="btn btn-sm btn-outline-primary btn-login">login</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/auth/sign-up" class="btn btn-sm btn-primary btn-sign-up">Sign up</a>
+            </li>
+          </ng-template>
         </ul>
       </div>
     </div>
