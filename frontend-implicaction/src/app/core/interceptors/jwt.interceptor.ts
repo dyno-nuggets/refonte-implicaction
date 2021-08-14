@@ -4,15 +4,19 @@ import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {AuthService} from '../../shared/services/auth.service';
 import {catchError, filter, switchMap, take} from 'rxjs/operators';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class JwtInterceptor implements HttpInterceptor {
+
+  constructor(private authService: AuthService) {
+  }
 
   isTokenRefreshing = false;
   refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
 
-  constructor(private authService: AuthService) {
+  private static addToken(request: HttpRequest<unknown>, jwtToken: string): HttpRequest<unknown> {
+    return request.clone({
+      headers: request.headers.set('Authorization', `Bearer ${jwtToken}`)
+    });
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -30,12 +34,6 @@ export class JwtInterceptor implements HttpInterceptor {
           }
         })
       );
-  }
-
-  private static addToken(request: HttpRequest<unknown>, jwtToken: string): HttpRequest<unknown> {
-    return request.clone({
-      headers: request.headers.set('Authorization', `Bearer ${jwtToken}`)
-    });
   }
 
   private handleAuthErrors(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
