@@ -22,13 +22,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/",
+            "/error",
+            // swagger
+            "/v2/api-docs",
+            // -- swagger ui
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/v2/api-docs",
+            "/webjars/**",
+            "/api/auth/**",
+            // -- angular
+            "/index.html",
+            "/*.js",
+            "/*.js.map",
+            "/*.css",
+            "/assets/img/*.png",
+            "/favicon.ico"
+    };
+
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
                 // désactive l'authentification pour les requêtes dont l'url commence par /api/auth/
-                .antMatchers("/", "/error", "/api/all", "/api/auth/**", "/index.html", "/*.js", "/*.js.map", "/*.css", "/assets/img/*.png", "/favicon.ico")
+                .antMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .anyRequest()
                 .authenticated();
