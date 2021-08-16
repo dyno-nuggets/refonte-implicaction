@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   loginRequestPayload: LoginRequestPayload;
-  registerSuccessMessage: string;
+  isRegisterSuccess: boolean;
   isError: boolean;
 
   constructor(
@@ -31,9 +31,7 @@ export class LoginComponent implements OnInit {
     this.activatedRoute
       .queryParams
       .subscribe(params => {
-        if (params.registered && params.registered === 'true') {
-          this.registerSuccessMessage = 'Your registration must be validated by an administrator. Please check your email';
-        }
+        this.isRegisterSuccess = params.registered && params.registered === 'true';
       });
   }
 
