@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {UrlBuilder} from '../../shared/classes/url-builder';
 import {QueryStringParameters} from '../../shared/classes/query-string-parameters';
 import {Constants} from '../../config/constants';
+import {Uris} from '../../shared/models/uris';
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +14,19 @@ export class ApiEndpointsService {
   }
 
   getLoginEndpoint(): string {
-    return this.createUrl('auth/login');
+    return this.createUrl(Uris.AUTH.LOGIN);
   }
 
   getSignUpEndpoint(): string {
-    return this.createUrl('auth/signup');
+    return this.createUrl(Uris.AUTH.SIGNUP);
   }
 
   getJwtRefreshTokenEndpoint(): string {
-    return this.createUrl('auth/refresh/token');
+    return this.createUrl(Uris.AUTH.REFRESH_TOKEN);
   }
 
   getLogoutEndpoint(): string {
-    return this.createUrl('auth/logout');
+    return this.createUrl(Uris.AUTH.LOGOUT);
   }
 
   // URL
