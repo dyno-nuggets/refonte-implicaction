@@ -46,7 +46,12 @@
               Pas encore membre ? <a routerLink="/auth/sign-up" class="link-danger">S'inscrire</a>
             </p>
           </div>
-
+          <div *ngIf="isRegisterSuccess" class="alert alert-success mt-4" role="alert">
+            <h4 class="alert-heading">
+              Félicitation !
+            </h4>
+            <p>Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.</p>
+          </div>
         </form>
       </div>
     </div>
