@@ -39,8 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/*.js",
             "/*.js.map",
             "/*.css",
+            "/*.css.map",
             "/assets/img/*.png",
-            "/favicon.ico"
+            "/favicon.ico",
+            "/*.ttf"
     };
 
     @Override
