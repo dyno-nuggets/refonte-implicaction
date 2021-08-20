@@ -14,8 +14,8 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   loginRequestPayload: LoginRequestPayload;
-  isRegisterSuccess: boolean;
-  isError: boolean;
+  showAlert: boolean;
+  alert: { title: string, severity: string, body: string };
 
   constructor(
     private authService: AuthService,
@@ -31,7 +31,12 @@ export class LoginComponent implements OnInit {
     this.activatedRoute
       .queryParams
       .subscribe(params => {
-        this.isRegisterSuccess = params.registered && params.registered === 'true';
+        this.showAlert = params.registered && params.registered === 'true';
+        this.alert = {
+          title: 'Félicitation',
+          body: 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.',
+          severity: 'success'
+        };
       });
   }
 
@@ -46,19 +51,35 @@ export class LoginComponent implements OnInit {
     if (!this.loginForm.valid) {
       return;
     }
+
     this.loginRequestPayload.username = this.loginForm.get('username').value;
     this.loginRequestPayload.password = this.loginForm.get('password').value;
+
     this.authService
       .login(this.loginRequestPayload)
       .subscribe(isLoginSuccess => {
         if (isLoginSuccess) {
-          this.isError = false;
-          this.router
-            .navigateByUrl('/')
-            .then(() => this.toaster.success('Success', 'Login Successful'));
+          this.showAlert = false;
+          this.redirectAndToastSuccess();
         } else {
-          this.isError = true;
+          this.showAlert = true;
+          this.alert = {
+            title: 'Erreur',
+            body: `Nom d'utilisateur ou mot de passe incorrect.`,
+            severity: 'danger'
+          };
         }
       });
+  }
+
+  private redirectAndToastSuccess(): void {
+    this.activatedRoute
+      .queryParams
+      .subscribe(
+        params => this.router
+          .navigateByUrl(params.returnUrl || '/')
+          .then(() => this.toaster.success('Success', 'Login Successful')),
+        error => console.log(error)
+      );
   }
 }

@@ -20,6 +20,9 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    if (!this.authService.getRefreshToken()) {
+      return next.handle(request);
+    }
     const jwtToken = this.authService.getJwtToken();
     if (jwtToken) {
       JwtInterceptor.addToken(request, jwtToken);
