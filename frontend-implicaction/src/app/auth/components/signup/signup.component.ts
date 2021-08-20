@@ -21,11 +21,15 @@ export class SignupComponent implements OnInit {
     private toaster: ToasterService,
     private router: Router,
   ) {
-    this.signupRequestPayload = {
-      login: '',
-      email: '',
-      password: ''
-    };
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/']);
+    } else {
+      this.signupRequestPayload = {
+        login: '',
+        email: '',
+        password: ''
+      };
+    }
   }
 
   ngOnInit(): void {

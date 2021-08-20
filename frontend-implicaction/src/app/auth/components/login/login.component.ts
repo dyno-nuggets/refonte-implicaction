@@ -23,21 +23,25 @@ export class LoginComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toaster: ToasterService,
   ) {
-    this.loginRequestPayload = {
-      username: '',
-      password: ''
-    };
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/']);
+    } else {
+      this.loginRequestPayload = {
+        username: '',
+        password: ''
+      };
 
-    this.activatedRoute
-      .queryParams
-      .subscribe(params => {
-        this.showAlert = params.registered && params.registered === 'true';
-        this.alert = {
-          title: 'Félicitation',
-          body: 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.',
-          severity: 'success'
-        };
-      });
+      this.activatedRoute
+        .queryParams
+        .subscribe(params => {
+          this.showAlert = params.registered && params.registered === 'true';
+          this.alert = {
+            title: 'Félicitation',
+            body: 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.',
+            severity: 'success'
+          };
+        });
+    }
   }
 
   ngOnInit(): void {
