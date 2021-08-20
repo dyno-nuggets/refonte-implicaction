@@ -1,10 +1,10 @@
 <section class="vh-100 mt-xl-5">
   <div class="container-fluid">
-    <div class="row d-flex justify-content-center align-items-center">
+    <div class="row d-flex justify-content-center align-items-start">
       <div class="col-md-9 col-lg-6 col-xl-5 mb-4 pt-5">
         <img src="assets/img/hand-shake.png" class="img-fluid" alt="Sample image">
       </div>
-      <div class="col-md-9 col-lg-6 col-xl-4 offset-xl-1">
+      <div class="col-md-9 col-lg-6 col-xl-4 offset-xl-1 align-items-start">
         <div class="divider d-flex align-items-center my-4">
           <p class="text-center mx-3 mb-0 fs-2">Connexion</p>
         </div>
@@ -46,13 +46,13 @@
               Pas encore membre ? <a routerLink="/auth/sign-up" class="link-danger">S'inscrire</a>
             </p>
           </div>
-          <div *ngIf="isRegisterSuccess" class="alert alert-success mt-4" role="alert">
-            <h4 class="alert-heading">
-              Félicitation !
-            </h4>
-            <p>Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.</p>
-          </div>
         </form>
+        <div *ngIf="showAlert" class="alert alert-{{alert.severity}} mt-4" role="alert">
+          <h4 class="alert-heading">
+            {{alert.title}}
+          </h4>
+          <p>{{alert.body}}</p>
+        </div>
       </div>
     </div>
   </div>
