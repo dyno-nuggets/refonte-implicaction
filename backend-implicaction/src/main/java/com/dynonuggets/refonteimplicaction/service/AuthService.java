@@ -122,6 +122,7 @@ public class AuthService {
                 .password(passwordEncoder.encode(reqisterRequest.getPassword()))
                 .registered(Instant.now())
                 .activationKey(activationKey)
+                .nicename(reqisterRequest.getNicename())
                 .build();
         return userRepository.save(user);
     }
