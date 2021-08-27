@@ -1,3 +1,7 @@
-.register-section {
-  margin: 100px;
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
 }
