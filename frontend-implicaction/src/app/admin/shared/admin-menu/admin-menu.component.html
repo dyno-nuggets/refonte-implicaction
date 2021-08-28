@@ -1,0 +1,30 @@
+<div class="card">
+  <div class="list-group list-group-flush">
+    <a
+      routerLink="/admin"
+      class="list-group-item active">
+      Dashboard
+    </a>
+
+    <ng-container *ngFor="let menuItem of menuItems">
+      <a
+        class="list-group-item d-flex justify-content-between"
+        routerLinkActive="text-primary"
+        [routerLink]="menuItem.link"
+      >
+        <div *ngIf="menuItem.classIcon">
+          <span
+            aria-hidden="true"
+            [class]="menuItem.classIcon"></span>
+          {{menuItem.label}}
+        </div>
+        <span
+          *ngIf="menuItem.badge"
+          class="badge rounded-pill bg-secondary"
+        >
+          {{menuItem.badge}}
+        </span>
+      </a>
+    </ng-container>
+  </div>
+</div>

@@ -2,43 +2,92 @@
   <div class="container-fluid">
     <div class="row d-flex justify-content-center align-items-start">
       <div class="col-md-9 col-lg-6 col-xl-5 mb-4 pt-5">
-        <img src="assets/img/hand-shake.png" class="img-fluid" alt="Sample image">
+        <img
+          src="assets/img/hand-shake.png"
+          class="img-fluid"
+          alt="Sample image"
+        />
       </div>
+
       <div class="col-md-9 col-lg-6 col-xl-4 offset-xl-1">
         <div class="divider d-flex align-items-center my-4">
           <p class="text-center mx-3 mb-0 fs-2">Connexion</p>
         </div>
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <form
+          [formGroup]="loginForm"
+          (ngSubmit)="login()"
+        >
+
+          <!-- USERNAME -->
           <div class="form-floating mb-4">
-            <input [formControlName]="'username'"
-                   id="floatingUsername"
-                   class="form-control form-control-lg"
-                   placeholder="Enter a valid email address" required autofocus/>
-            <label class="form-label" for="floatingUsername">Nom d'utilisateur</label>
+            <input
+              required
+              autofocus
+              id="floatingUsername"
+              class="form-control form-control-lg"
+              placeholder="Enter a valid email address"
+              [formControlName]="'username'"
+            />
+            <label
+              class="form-label"
+              for="floatingUsername"
+            >
+              Nom d'utilisateur
+            </label>
           </div>
 
+          <!-- PASSWORD -->
           <div class="form-floating mb-3">
-            <input type="password"
-                   [formControlName]="'password'"
-                   id="floatingPassword"
-                   class="form-control form-control-lg"
-                   placeholder="mot de passe" required/>
-            <label class="form-label" for="floatingPassword">Mot de passe</label>
+            <input
+              type="password"
+              id="floatingPassword"
+              class="form-control form-control-lg"
+              placeholder="mot de passe"
+              required
+              [formControlName]="'password'"
+            />
+            <label
+              class="form-label"
+              for="floatingPassword"
+            >
+              Mot de passe
+            </label>
           </div>
 
+          <!-- OPTIONS -->
           <div class="d-flex justify-content-between align-items-center">
+
+            <!-- REMEMBER ME -->
             <div class="form-check mb-0">
-              <input class="form-check-input me-2" type="checkbox" value="" id="rememberMe"/>
-              <label class="form-check-label" for="rememberMe">
+              <input
+                class="form-check-input me-2"
+                type="checkbox"
+                id="rememberMe"
+              />
+              <label
+                class="form-check-label"
+                for="rememberMe"
+              >
                 Se souvenir de moi
               </label>
             </div>
-            <a href="#" class="text-body">J'ai oublié mon mot de passe</a>
+
+            <!-- FORGOT PASSWORD -->
+            <a
+              href="#"
+              class="text-body"
+            >
+              J'ai oublié mon mot de passe
+            </a>
           </div>
 
+          <!-- SUBMIT -->
           <div class="text-center text-lg-start mt-4 pt-2">
             <div class="d-grid gap-2 ">
-              <button type="submit" class="btn btn-primary btn-lg">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg"
+              >
                 Connexion
               </button>
             </div>
@@ -47,12 +96,17 @@
             </p>
           </div>
         </form>
-        <div *ngIf="showAlert" class="alert alert-{{alert.severity}} mt-4" role="alert">
-          <h4 class="alert-heading">
-            {{alert.title}}
-          </h4>
-          <p>{{alert.body}}</p>
-        </div>
+
+        <!-- ALERT MESSAGES -->
+        <ng-container *ngIf="showAlert">
+          <div
+            class="alert alert-{{alert.severity}} mt-4"
+            role="alert"
+          >
+            <h4 class="alert-heading">{{alert.title}}</h4>
+            <p>{{alert.body}}</p>
+          </div>
+        </ng-container>
       </div>
     </div>
   </div>

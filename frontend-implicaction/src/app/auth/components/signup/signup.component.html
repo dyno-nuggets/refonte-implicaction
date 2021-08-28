@@ -1,55 +1,88 @@
 <section class="vh-100 mt-xl-5">
   <div class="container-fluid">
     <div class="row d-flex justify-content-center align-items-start">
+
+      <!--  FORM MARQUEE -->
       <div class="col-md-9 col-lg-6 col-xl-5 mb-4 pt-5">
-        <img src="assets/img/implicaction.png" class="img-fluid mt-5" alt="Sample image">
+        <img
+          src="assets/img/implicaction.png"
+          class="img-fluid mt-5"
+          alt="Sample image"
+        />
       </div>
+
+      <!-- FORM HEADER -->
       <div class="col-md-9 col-lg-6 col-xl-4 offset-xl-1">
         <div class="divider d-flex align-items-center my-4">
           <p class="text-center mx-3 mb-0 fs-2">Inscription</p>
         </div>
-        <form [formGroup]="signupForm" (ngSubmit)="signup()">
+        <form
+          [formGroup]="signupForm"
+          (ngSubmit)="signup()"
+        >
+
+          <!-- USERNAME -->
           <div class="form-floating mb-4">
-            <input [formControlName]="'username'"
-                   id="floatingUsername"
-                   class="form-control form-control-lg"
-                   placeholder="Enter a valid email address" required autofocus/>
+            <input
+              required
+              autofocus
+              id="floatingUsername"
+              class="form-control form-control-lg"
+              placeholder="Enter a valid email address"
+              [formControlName]="'username'"
+            />
             <label class="form-label" for="floatingUsername">Nom d'utilisateur</label>
           </div>
 
+          <!-- EMAIL -->
           <div class="form-floating mb-3">
-            <input type="email"
-                   [formControlName]="'email'"
-                   id="floatingEmail"
-                   class="form-control form-control-lg"
-                   placeholder="email" required/>
+            <input
+              required
+              type="email"
+              id="floatingEmail"
+              class="form-control form-control-lg"
+              placeholder="email"
+              [formControlName]="'email'"
+            />
             <label class="form-label" for="floatingEmail">Email</label>
           </div>
 
+          <!-- PASSWORD -->
           <div class="form-floating mb-3">
-            <input type="password"
-                   [formControlName]="'password'"
-                   id="floatingPassword"
-                   class="form-control form-control-lg"
-                   placeholder="mot de passe" required/>
+            <input
+              type="password"
+              id="floatingPassword"
+              class="form-control form-control-lg"
+              placeholder="mot de passe"
+              required
+              [formControlName]="'password'"
+            />
             <label class="form-label" for="floatingPassword">Mot de passe</label>
           </div>
 
+          <!-- REPEAT PASSWORD -->
           <div class="form-floating mb-3">
-            <input type="password"
-                   [formControlName]="'repeatPassword'"
-                   id="floatingConfirmPassword"
-                   class="form-control form-control-lg"
-                   placeholder="confirmer mot de passe" required/>
+            <input
+              type="password"
+              id="floatingConfirmPassword"
+              class="form-control form-control-lg"
+              placeholder="confirmer mot de passe"
+              required
+              [formControlName]="'repeatPassword'"
+            />
             <label class="form-label" for="floatingConfirmPassword">Confirmer mot de passe</label>
           </div>
 
+          <!-- NICENAME -->
           <div class="form-floating mb-3">
-            <input type="text"
-                   [formControlName]="'nicename'"
-                   id="floatingNicename"
-                   class="form-control form-control-lg"
-                   placeholder="Prénom Nom" required/>
+            <input
+              type="text"
+              id="floatingNicename"
+              class="form-control form-control-lg"
+              placeholder="Prénom Nom"
+              required
+              [formControlName]="'nicename'"
+            />
             <label class="form-label" for="floatingNicename">Prénom nom</label>
           </div>
 
@@ -62,12 +95,14 @@
             </p>
           </div>
         </form>
-        <div *ngIf="isError" class="alert alert-danger mt-4" role="alert">
-          <h4 class="alert-heading">
-            Erreur
-          </h4>
-          <p>Une erreur est survenue lors de votre inscription. Veuillez recommencer</p>
-        </div>
+
+        <!-- ALERT MESSAGES -->
+        <ng-container *ngIf="isError">
+          <div class="alert alert-danger mt-4" role="alert">
+            <h4 class="alert-heading">Erreur</h4>
+            <p>Une erreur est survenue lors de votre inscription. Veuillez recommencer</p>
+          </div>
+        </ng-container>
       </div>
     </div>
   </div>
