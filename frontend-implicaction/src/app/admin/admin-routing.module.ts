@@ -4,7 +4,9 @@ import {AdminComponent} from './admin.component';
 
 
 const routes: Routes = [
-  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
+  {
+    path: '', redirectTo: 'dashboard', pathMatch: 'full'
+  },
   {
     path: 'dashboard', component: AdminComponent, children: [
       {
