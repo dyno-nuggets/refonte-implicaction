@@ -4,33 +4,25 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {take} from 'rxjs/operators';
 import {LazyLoadEvent} from 'primeng/api';
 import {Pageable} from '../../../../shared/models/pageable';
+import {Constants} from '../../../../config/constants';
 
 @Component({
-  selector: 'app-users-table',
-  templateUrl: './users-table.component.html',
-  styleUrls: ['./users-table.component.scss']
+  selector: 'app-table-users',
+  templateUrl: './table-users.component.html',
+  styleUrls: ['./table-users.component.scss']
 })
-export class UsersTableComponent {
+export class TableUsersComponent {
 
   loading = true;
 
   // Pagination
   rowsPerPageOptions = [10, 25, 50];
   rowsPerPage = this.rowsPerPageOptions[0];
-  pageable: Pageable = {
-    page: 0,
-    size: 10,
-    totalElements: 0,
-    first: true,
-    content: [],
-    totalPages: 0,
-    empty: true,
-    last: true
-  };
+  pageable: Pageable = Constants.PAGEABLE_DEFAULT;
 
   constructor(
     private userService: UserService,
-    private toastServices: ToasterService
+    private toastServices: ToasterService,
   ) {
   }
 
