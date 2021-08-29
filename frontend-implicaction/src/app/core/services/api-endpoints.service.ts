@@ -3,6 +3,7 @@ import {UrlBuilder} from '../../shared/classes/url-builder';
 import {QueryStringParameters} from '../../shared/classes/query-string-parameters';
 import {Constants} from '../../config/constants';
 import {Uris} from '../../shared/models/uris';
+import {Pageable} from '../../shared/models/pageable';
 
 @Injectable({
   providedIn: 'root'
@@ -10,41 +11,25 @@ import {Uris} from '../../shared/models/uris';
 @Injectable()
 export class ApiEndpointsService {
 
-  constructor(private constants: Constants) {
-  }
-
-  getLoginEndpoint(): string {
-    return this.createUrl(Uris.AUTH.LOGIN);
-  }
-
-  getSignUpEndpoint(): string {
-    return this.createUrl(Uris.AUTH.SIGNUP);
-  }
-
-  getJwtRefreshTokenEndpoint(): string {
-    return this.createUrl(Uris.AUTH.REFRESH_TOKEN);
-  }
-
-  getLogoutEndpoint(): string {
-    return this.createUrl(Uris.AUTH.LOGOUT);
+  constructor() {
   }
 
   // URL
-  private createUrl(action: string, isMockAPI: boolean = false): string {
+  private static createUrl(action: string, isMockAPI: boolean = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
-      isMockAPI ? this.constants.API_MOCK_ENDPOINT : this.constants.API_ENDPOINT,
+      isMockAPI ? Constants.API_MOCK_ENDPOINT : Constants.API_ENDPOINT,
       action
     );
     return urlBuilder.toString();
   }
 
-  private createUrlWithQueryParameters(
+  private static createUrlWithQueryParameters(
     action: string,
     queryStringHandler?:
       (queryStringParameters: QueryStringParameters) => void
   ): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
-      this.constants.API_ENDPOINT,
+      Constants.API_ENDPOINT,
       action
     );
     // Push extra query string params
@@ -52,6 +37,32 @@ export class ApiEndpointsService {
       queryStringHandler(urlBuilder.queryString);
     }
     return urlBuilder.toString();
+  }
+
+  getLoginEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.AUTH.LOGIN);
+  }
+
+  getSignUpEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.AUTH.SIGNUP);
+  }
+
+  getJwtRefreshTokenEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.AUTH.REFRESH_TOKEN);
+  }
+
+  getLogoutEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.AUTH.LOGOUT);
+  }
+
+  getAllUserEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      'users',
+      (qs: QueryStringParameters) => {
+        qs.push('page', pageable.page);
+        qs.push('size', pageable.size);
+      }
+    );
   }
 
   // URL WITH PATH VARIABLES
@@ -63,7 +74,7 @@ export class ApiEndpointsService {
         encodedPathVariablesUrl += `/${encodeURIComponent(pathVariable.toString())}`;
       }
     }
-    const urlBuilder: UrlBuilder = new UrlBuilder(this.constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
+    const urlBuilder: UrlBuilder = new UrlBuilder(Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
     return urlBuilder.toString();
   }
 }

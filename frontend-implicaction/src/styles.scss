@@ -7,3 +7,9 @@ input.ng-invalid.ng-touched {
 .cursor-pointer {
   cursor: pointer;
 }
+
+.overflow-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

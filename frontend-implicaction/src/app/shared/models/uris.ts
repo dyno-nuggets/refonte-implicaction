@@ -8,4 +8,11 @@ export class Uris {
     static readonly REFRESH_TOKEN = 'auth/refresh/token';
     static readonly LOGOUT = 'auth/logout';
   };
+
+  /**
+   * USERS
+   */
+  static readonly USERS = class {
+    static readonly ALL = 'users';
+  };
 }
