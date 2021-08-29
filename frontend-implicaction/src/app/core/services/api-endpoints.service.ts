@@ -3,6 +3,7 @@ import {UrlBuilder} from '../../shared/classes/url-builder';
 import {QueryStringParameters} from '../../shared/classes/query-string-parameters';
 import {Constants} from '../../config/constants';
 import {Uris} from '../../shared/models/uris';
+import {Pageable} from '../../shared/models/pageable';
 
 @Injectable({
   providedIn: 'root'
@@ -27,6 +28,16 @@ export class ApiEndpointsService {
 
   getLogoutEndpoint(): string {
     return this.createUrl(Uris.AUTH.LOGOUT);
+  }
+
+  getAllUserEndpoint(pageable: Pageable): string {
+    return this.createUrlWithQueryParameters(
+      'users',
+      (qs: QueryStringParameters) => {
+        qs.push('page', pageable.page);
+        qs.push('size', pageable.size);
+      }
+    );
   }
 
   // URL
