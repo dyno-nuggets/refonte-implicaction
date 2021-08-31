@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {UserService} from '../../../../shared/services/user.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
-import {take} from 'rxjs/operators';
+import {finalize, take} from 'rxjs/operators';
 import {LazyLoadEvent} from 'primeng/api';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
@@ -13,7 +13,7 @@ import {Constants} from '../../../../config/constants';
 })
 export class TableUsersComponent {
 
-  loading = true;
+  loading = true; // indique si les données sont en chargement
 
   // Pagination
   rowsPerPageOptions = [10, 25, 50];
@@ -32,11 +32,13 @@ export class TableUsersComponent {
 
     this.userService
       .getAll({page, size: event.rows})
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        finalize(() => this.loading = false)
+      )
       .subscribe(
         users => this.pageable = users,
         () => this.toastServices.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
-        () => this.loading = false
       );
   }
 }
