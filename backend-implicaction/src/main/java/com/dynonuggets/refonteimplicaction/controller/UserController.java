@@ -20,7 +20,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping(params = {"page", "size"})
-    public ResponseEntity<Page<UserDto>> getAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<Page<UserDto>> getAll(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
         Pageable pageable = PageRequest.of(page, size);
         Page<UserDto> users = userService.getAll(pageable);
         return ResponseEntity.ok(users);
