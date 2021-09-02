@@ -16,4 +16,13 @@ public class ExceptionResponse {
     private int errorCode;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private LocalDateTime timestamp;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"errorMessage\": \"" + errorMessage + "\"" +
+                ", \"errorCode\": \"" + errorCode + "\"" +
+                ", \"timestamp\": \"" + timestamp + "\"" +
+                '}';
+    }
 }
