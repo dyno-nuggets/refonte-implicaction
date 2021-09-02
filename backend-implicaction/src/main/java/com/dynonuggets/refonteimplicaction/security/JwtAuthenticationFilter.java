@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (RuntimeException ex) {
-            // Si une exception est jetée dans le filter, elle n'est pas traitée par le GlobalExceptionHandler
+            // Si une exception est lancée dans le filter, elle n'est pas traitée par le GlobalExceptionHandler
             // on force donc une erreur 401 (Unauthorized) dans la réponse.
             ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                     .errorMessage(ex.getMessage())
