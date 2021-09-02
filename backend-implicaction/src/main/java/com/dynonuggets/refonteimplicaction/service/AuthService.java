@@ -105,9 +105,10 @@ public class AuthService {
     }
 
     private void registerSignup(ReqisterRequestDto reqisterRequest, String activationKey, User user) {
+        User userFromDb = userRepository.findByUsername(user.getUsername())
+                .orElseThrow(() -> new UsernameNotFoundException("Le nom d'utilisateur n'existe pas."));
         Signup signup = Signup.builder()
-                .username(reqisterRequest.getUsername())
-                .userEmail(reqisterRequest.getEmail())
+                .user(userFromDb)
                 .registered(user.getRegistered())
                 .active(false)
                 .activationKey(activationKey)

@@ -6,10 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
 @Data
@@ -17,21 +17,18 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @NoArgsConstructor
 @Entity
 @Builder
-@Table(name = "wp_signups")
+@Table(name = "signup")
 public class Signup {
     @Id
     @GeneratedValue(strategy = SEQUENCE)
     @Column(name = "signup_id")
     private Long signupId;
+    @OneToOne(fetch = LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+    private String title;
     private String domain;
     private String path;
-    private String title;
-    @Column(name = "user_login", unique = true)
-    @NotBlank(message = "username is required")
-    private String username;
-    @Column(name = "user_email", unique = true)
-    @NotEmpty(message = "Email is required")
-    private String userEmail;
     private Instant registered;
     private Instant activated;
     private Boolean active;
