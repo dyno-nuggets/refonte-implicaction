@@ -10,6 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,11 +65,14 @@ public class User {
                     @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false, updatable = false)
             })
     private Set<Group> groups = new HashSet<>();
-
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "sender", cascade = ALL, orphanRemoval = true)
     private Set<Relation> relationsAsSender;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "reciever", cascade = ALL, orphanRemoval = true)
     private Set<Relation> relationsAsReciever;
     @OneToOne(mappedBy = "user", fetch = LAZY, cascade = ALL)
     private Signup signup;
+    @Column(name = "phone_number")
+    private String phoneNumber;
+    private LocalDate birthday;
+    private String hobbies;
 }

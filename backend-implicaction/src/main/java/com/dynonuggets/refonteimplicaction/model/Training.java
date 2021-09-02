@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -23,4 +24,6 @@ public class Training {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+    private String label;
+    private LocalDate date;
 }
