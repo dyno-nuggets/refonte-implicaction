@@ -1,12 +1,12 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.model.Training;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.model.WorkExperience;
-import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -14,11 +14,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class UserAdapterTest {
-
+class WorkExperienceAdapterTest {
     User user;
     List<WorkExperience> experiences;
     List<Training> training;
@@ -27,12 +25,13 @@ class UserAdapterTest {
     UserAdapter userAdapter;
     WorkExperienceAdapter workExperienceAdapter;
     TrainingAdapter trainingAdapter;
-
+    WorkExperience experience;
+    
     @BeforeEach
-    public void setUp() {
+    public void setUp(){
         experiences = new ArrayList<>();
-
-        experiences.add(new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description"));
+        experience = new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description");
+        experiences.add(experience);
 
         training = new ArrayList<>();
 
@@ -70,21 +69,12 @@ class UserAdapterTest {
     }
 
     @Test
-    public void toDtoTest() {
-        UserDto userDto = userAdapter.toDto(user);
-
-        assertThat(userDto.getId()).isEqualTo(user.getId());
-        assertThat(userDto.getUsername()).isEqualTo(user.getUsername());
-        assertThat(userDto.getNicename()).isEqualTo(user.getNicename());
-        assertThat(userDto.getEmail()).isEqualTo(user.getEmail());
-        assertThat(userDto.getUrl()).isEqualTo(user.getUrl());
-        assertThat(userDto.getRegistered()).isEqualTo(user.getRegistered());
-        assertThat(userDto.getStatus()).isEqualTo(user.getStatus());
-        assertThat(userDto.getDispayName()).isEqualTo(user.getDispayName());
-        assertThat(userDto.getRegistered()).isEqualTo(user.getRegistered());
-        assertThat(userDto.getBirthday()).isEqualTo(user.getBirthday());
-        assertThat(userDto.getHobbies()).isEqualTo(user.getHobbies());
-        assertThat(userDto.getExperiences()).containsAll(expectedExperiencesDtos);
-        assertThat(userDto.getTrainings()).containsAll(expectedTrainingDtos);
+    public void workExperienceToDto(){
+        WorkExperienceDto workExperienceDto = workExperienceAdapter.toDto(experience);
+        assertThat(workExperienceDto.getId()).isEqualTo(experience.getId());
+        assertThat(workExperienceDto.getStartedAt()).isEqualTo(workExperienceDto.getStartedAt());
+        assertThat(workExperienceDto.getFinishedAt()).isEqualTo(workExperienceDto.getFinishedAt());
+        assertThat(workExperienceDto.getLabel()).isEqualTo(workExperienceDto.getLabel());
+        assertThat(workExperienceDto.getDescription()).isEqualTo(workExperienceDto.getDescription());
     }
 }

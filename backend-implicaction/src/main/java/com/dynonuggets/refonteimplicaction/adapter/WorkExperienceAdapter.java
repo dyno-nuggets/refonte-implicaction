@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class WorkExperienceAdapter {
+
     public WorkExperienceDto toDto(WorkExperience workExperience){
+
         return WorkExperienceDto.builder()
                 .id(workExperience.getId())
                 .startedAt(workExperience.getStartedAt())
