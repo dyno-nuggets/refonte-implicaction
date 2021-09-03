@@ -7,4 +7,6 @@ export interface User {
   activationKey?: string;
   status?: string;
   dispayName?: string;
+  birthday?: string;
+  phoneNumber?: string;
 }
