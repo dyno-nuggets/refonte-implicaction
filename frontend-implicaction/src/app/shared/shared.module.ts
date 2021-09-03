@@ -3,14 +3,17 @@ import {CommonModule} from '@angular/common';
 import {HeaderComponent} from './components/header/header.component';
 import {RouterModule} from '@angular/router';
 import {BadgeModule} from 'primeng/badge';
+import {UserCardComponent} from './components/user-card/user-card.component';
 
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
+    UserCardComponent
   ],
   exports: [
-    HeaderComponent
+    HeaderComponent,
+    UserCardComponent
   ],
   imports: [
     CommonModule,
