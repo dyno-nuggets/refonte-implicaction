@@ -1,5 +1,22 @@
-<div class="container d-flex justify-content-center mt-5">
+<div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 gap-lg-5 mb-2">
   <ng-container *ngFor="let user of users">
-    <app-user-card [user]="user"></app-user-card>
+    <app-user-card [user]="user">
+      <div class="d-grid mt-4 mb-2">
+        <button
+          type="button"
+          class="btn btn-primary rounded-pill btn-sm background-primary"
+        >
+          <i-feather name="plus" class="icon"></i-feather>
+          Ajouter
+        </button>
+      </div>
+    </app-user-card>
   </ng-container>
 </div>
+<p-paginator
+  [rows]="rowsPerPage"
+  [totalRecords]="pageable.totalElements"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  (onPageChange)="paginate($event)"
+>
+</p-paginator>

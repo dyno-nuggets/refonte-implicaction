@@ -4,21 +4,23 @@ import {HeaderComponent} from './components/header/header.component';
 import {RouterModule} from '@angular/router';
 import {BadgeModule} from 'primeng/badge';
 import {UserCardComponent} from './components/user-card/user-card.component';
+import {IconsModule} from '../icons/icons.module';
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
-    UserCardComponent
+    UserCardComponent,
   ],
   exports: [
     HeaderComponent,
-    UserCardComponent
+    UserCardComponent,
   ],
   imports: [
     CommonModule,
     RouterModule,
-    BadgeModule
+    BadgeModule,
+    IconsModule
   ]
 })
 export class SharedModule {

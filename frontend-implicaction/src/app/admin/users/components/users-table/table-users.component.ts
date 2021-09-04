@@ -16,9 +16,8 @@ export class TableUsersComponent {
   loading = true; // indique si les données sont en chargement
 
   // Pagination
-  rowsPerPageOptions = [10, 25, 50];
-  rowsPerPage = this.rowsPerPageOptions[0];
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
+  rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(
     private userService: UserService,

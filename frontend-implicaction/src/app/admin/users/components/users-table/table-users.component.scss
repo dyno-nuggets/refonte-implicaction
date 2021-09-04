@@ -1,8 +1,10 @@
+@import "src/assets/variables";
+
 ::ng-deep {
   .p-datatable-thead {
 
     th {
-      background-color: #0d6efd !important;
+      background-color: $primary !important;
       color: #fff !important;
 
       &:first-child {

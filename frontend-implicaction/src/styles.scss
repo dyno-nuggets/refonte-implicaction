@@ -1,4 +1,4 @@
-@import "~bootstrap/dist/css/bootstrap.css";
+@import "src/assets/variables";
 
 input.ng-invalid.ng-touched {
   border: 1px solid red;
@@ -13,3 +13,14 @@ input.ng-invalid.ng-touched {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+body {
+  background-color: $background-color;
+}
+
+button .icon {
+  width: 16px;
+  height: 16px;
+}
+
+@import "../node_modules/bootstrap/scss/bootstrap";

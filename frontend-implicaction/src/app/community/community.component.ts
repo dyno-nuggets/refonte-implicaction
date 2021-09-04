@@ -12,7 +12,10 @@ import {ToasterService} from '../core/services/toaster.service';
 export class CommunityComponent implements OnInit {
 
   users: User[] = [];
+
+  // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
+  rowsPerPage = 10;
 
   constructor(
     private userService: UserService,
@@ -21,16 +24,22 @@ export class CommunityComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.paginate({
+      first: 0,
+      rows: this.pageable.size,
+    });
+  }
+
+  paginate({first, rows}): void {
     this.userService
-      .getAll(this.pageable)
+      // TODO: ne récupérer que les utilisateurs dont le compte a été activé
+      .getAll({page: first / rows, size: rows})
       .subscribe(
         userPageable => {
           this.pageable = userPageable;
           this.users = userPageable.content;
-          console.log(this.users);
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')
       );
   }
-
 }

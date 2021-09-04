@@ -9,6 +9,7 @@ export class Constants {
     totalElements: 0,
     first: true,
     content: [],
+    rowsPerPages: [10, 25, 50],
     totalPages: 0,
     empty: true,
     last: true

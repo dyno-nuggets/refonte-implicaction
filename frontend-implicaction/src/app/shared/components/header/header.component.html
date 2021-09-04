@@ -1,21 +1,30 @@
 <nav class="py-2 bg-light border-bottom">
   <div class="container d-flex">
     <ul class="nav me-auto">
-      <li><a routerLink="/" class="nav-link px-2 active">Accueil</a></li>
+      <li><a [routerLink]="['/']" class="nav-link px-2">Accueil</a></li>
       <li><a href="#" class="nav-link px-2 link-dark">A propos</a></li>
       <li><a href="#" class="nav-link px-2 link-dark">Espace entreprise</a></li>
+      <li><a [routerLink]="['/community']" routerLinkActive="active" class="nav-link px-2 link-dark">Communauté</a></li>
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
       <ul class="nav align-items-center user-options">
-        <li class="nav-item"><em class="pi pi-bell fs-5"></em></li>
-        <li class="nav-item"><em class="pi pi-users fs-5"></em></li>
-        <li class="nav-item"><em class="pi pi-inbox fs-5" pBadge severity="danger"></em></li>
-        <li class="nav-item pb-2"><a class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
-                                     id="dropdownUser2"
-                                     data-bs-toggle="dropdown" aria-expanded="false">
-          <img src="assets/img/default-user.png" alt="mdo" class="rounded-circle avatar">
-        </a>
-          <ul class="dropdown-menu text-small shadow m-0 p-0" aria-labelledby="dropdownUser">
+        <li class="nav-item">
+          <i-feather name="bell" class="icon"></i-feather>
+        </li>
+        <li class="nav-item">
+          <i-feather name="user" class="icon"></i-feather>
+        </li>
+        <li class="nav-item">
+          <i-feather name="inbox" class="icon"></i-feather>
+        </li>
+        <li class="nav-item">
+          <a class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
+             id="dropdownUser2"
+             data-bs-toggle="dropdown" aria-expanded="false"
+          >
+            <img src="assets/img/default-user.png" alt="mdo" class="rounded-circle avatar">
+          </a>
+          <ul class="dropdown-menu text-small shadow m-0" aria-labelledby="dropdownUser">
             <li>
             <li><a class="dropdown-item cursor-pointer">Profil</a></li>
             <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
