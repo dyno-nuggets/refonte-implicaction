@@ -1,7 +1,20 @@
 import {NgModule} from '@angular/core';
 
 import {FeatherModule} from 'angular-feather';
-import {Bell, Camera, Github, Heart, Inbox, Plus, User} from 'angular-feather/icons';
+import {
+  Award,
+  Bell,
+  Calendar,
+  Camera,
+  Github,
+  Heart,
+  Inbox,
+  Mail,
+  Phone,
+  Plus,
+  Shield,
+  User
+} from 'angular-feather/icons';
 
 // Select some icons (use an object, not an array)
 const icons = {
@@ -11,7 +24,12 @@ const icons = {
   Plus,
   Bell,
   User,
-  Inbox
+  Inbox,
+  Mail,
+  Phone,
+  Calendar,
+  Award,
+  Shield
 };
 
 @NgModule({

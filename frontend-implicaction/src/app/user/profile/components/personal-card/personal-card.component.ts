@@ -3,10 +3,10 @@ import {User} from "../../../../shared/models/user";
 
 @Component({
   selector: 'app-primary-personal-card',
-  templateUrl: './primary-personal-card.component.html',
-  styleUrls: ['./primary-personal-card.component.scss']
+  templateUrl: './personal-card.component.html',
+  styleUrls: ['./personal-card.component.scss']
 })
-export class PrimaryPersonalCardComponent implements OnInit {
+export class PersonalCardComponent implements OnInit {
 
   @Input()
   user: User;

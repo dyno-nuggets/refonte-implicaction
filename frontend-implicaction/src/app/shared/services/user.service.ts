@@ -26,11 +26,18 @@ export class UserService {
     return of({
       id: '1',
       username: 'Mel',
-      email: 'mel@gmail.com',
+      email: 'melanie.da-costa@gmail.com',
       url: 'mel.com',
-      dispayName: 'Memel',
+      nicename: 'Mélanie DA COSTA',
       birthday: '26/07/1996',
       phoneNumber: '0606060606',
-    })
+      hobbies: 'Badminton, Série tv, Jeux video, Musique',
+      presentation: 'Etudiante en informatique',
+      purpose: 'Trouver du travail',
+      expectation: 'm\'enrichir',
+      contribution: 'A lui de voir !',
+      armyCorps: 'terre',
+      rank: 'officier',
+    });
   }
 }
