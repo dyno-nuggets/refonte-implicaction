@@ -21,6 +21,7 @@
     "@angular/platform-browser-dynamic": "~11.2.14",
     "@angular/router": "~11.2.14",
     "@popperjs/core": "^2.9.3",
+    "angular-feather": "^6.1.0",
     "bootstrap": "^5.1.0",
     "ngx-webstorage": "^7.0.1",
     "primeicons": "^4.1.0",

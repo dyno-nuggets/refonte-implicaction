@@ -1,7 +1,7 @@
 <p-table
   styleClass="p-datatable-striped"
   currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
-  [rowsPerPageOptions]="rowsPerPageOptions"
+  [rowsPerPageOptions]="[10, 25, 50]"
   [paginator]="true"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="true"

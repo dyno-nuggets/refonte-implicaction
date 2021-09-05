@@ -1,3 +1,9 @@
+@import "src/assets/variables";
+
+header {
+  background-color: white;
+}
+
 .btn-login, .btn-sign-up, .btn-logout {
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -11,4 +17,9 @@
 .avatar {
   width: 22px;
   height: 22px;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
 }

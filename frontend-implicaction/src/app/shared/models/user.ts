@@ -6,5 +6,5 @@ export interface User {
   registered?: string;
   activationKey?: string;
   status?: string;
-  dispayName?: string;
+  nicename?: string;
 }

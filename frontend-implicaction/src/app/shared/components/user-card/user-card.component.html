@@ -1,0 +1,13 @@
+<div class="col mb-3">
+  <div class="card align-items-center pt-5 shadow-sm border-0">
+    <img
+      src="/assets/img/default-user.png"
+      class="rounded-circle img-fluid shadow-sm user-avatar"
+      [alt]="user.nicename"
+    />
+    <div class="card-body text-center w-100">
+      <h5 class="card-title overflow-ellipsis">{{user.nicename}}</h5>
+      <ng-content></ng-content>
+    </div>
+  </div>
+</div>
