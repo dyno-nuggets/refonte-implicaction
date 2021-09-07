@@ -1,0 +1,31 @@
+<div class="col">
+  <div class="card py-4 px-4 shadow-sm border-0">
+    <div class="mb-3">
+      <h2>Experiences professionnelles</h2>
+    </div>
+    <ul>
+      <li *ngFor="let workExperience of user.workExperiences; last as isLast">
+        <div class="row mb-2">
+          <div class="col-1">
+            <img
+              src="https://scontent.fcdg2-1.fna.fbcdn.net/v/t1.6435-9/187524910_10165049864915526_6641535558151019010_n.jpg?_nc_cat=1&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=Ib_rwH5IwxMAX8CjRo6&_nc_ht=scontent.fcdg2-1.fna&oh=44394ba493a5b02dcb509b197adc252e&oe=615BBE86"
+              alt="Air France"
+              class="img-fluid">
+          </div>
+          <div class="col d-flex align-items-start flex-column align-self-center">
+            <h3 class="pb-1">{{workExperience.companyLabel}}</h3>
+            <h4 class="pt-1">{{workExperience.label}}</h4>
+          </div>
+        </div>
+        <div class="mb-2">
+          <p class="exp-desc-color">{{workExperience.description}}</p>
+        </div>
+        <div class="mb-2">
+          <i-feather name="Calendar" class="icon me-2"></i-feather>
+          <span class="v-align-middle mt-2 date-text">{{workExperience.startedAt}} - {{workExperience.finishedAt}}</span>
+        </div>
+        <hr *ngIf="!isLast" class="mx-4"/>
+      </li>
+    </ul>
+  </div>
+</div>

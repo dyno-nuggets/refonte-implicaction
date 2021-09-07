@@ -38,6 +38,29 @@ export class UserService {
       contribution: 'A lui de voir !',
       armyCorps: 'terre',
       rank: 'officier',
+      workExperiences: [
+        {
+          description: 'heyyy Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec volutpat eros.',
+          label: 'Ingénieur informaticien C#',
+          companyLabel: 'Air France',
+          startedAt: 'Décembre 2020',
+          finishedAt: 'Juillet 2021',
+        },
+        {
+          description: 'heyyy Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec volutpat eros.',
+          label: 'Ingénieur informaticien C#',
+          companyLabel: 'Air France',
+          startedAt: 'Décembre 2020',
+          finishedAt: 'Juillet 2021',
+        },
+        {
+          description: 'heyyyy Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nec volutpat eros.',
+          label: 'Ingénieur informaticien C#',
+          companyLabel: 'Air France',
+          startedAt: 'Décembre 2020',
+          finishedAt: 'Juillet 2021',
+        },
+      ]
     });
   }
 }

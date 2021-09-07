@@ -6,13 +6,15 @@ import { PersonalCardComponent } from './components/personal-card/personal-card.
 import {CardModule} from "primeng/card";
 import {SharedModule} from "../../shared/shared.module";
 import {IconsModule} from "../../icons/icons.module";
+import { WorkExperienceComponent } from './components/work-experience/work-experience.component';
 
 
 
 @NgModule({
   declarations: [
     ProfileComponent,
-    PersonalCardComponent
+    PersonalCardComponent,
+    WorkExperienceComponent
   ],
   imports: [
     CommonModule,
