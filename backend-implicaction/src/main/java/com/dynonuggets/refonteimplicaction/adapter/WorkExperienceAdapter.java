@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class WorkExperienceAdapter {
 
-    public WorkExperienceDto toDto(WorkExperience workExperience){
+    public WorkExperienceDto toDtoWithoutUser(WorkExperience workExperience){
 
         return WorkExperienceDto.builder()
                 .id(workExperience.getId())

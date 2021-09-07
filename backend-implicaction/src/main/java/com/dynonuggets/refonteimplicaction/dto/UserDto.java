@@ -21,7 +21,7 @@ public class UserDto {
     private String url;
     private Instant registered;
     private Integer status;
-    private String dispayName;
+    private String displayName;
     private String phoneNumber;
     private LocalDate birthday;
     private String hobbies;

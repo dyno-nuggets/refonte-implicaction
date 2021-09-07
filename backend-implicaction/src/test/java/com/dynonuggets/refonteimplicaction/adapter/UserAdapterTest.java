@@ -22,7 +22,7 @@ class UserAdapterTest {
     User user;
     List<WorkExperience> experiences;
     List<Training> training;
-    List<WorkExperienceDto> expectedExperiencesDtos;
+    List<WorkExperienceDto> expectedExperienceDtos;
     List<TrainingDto> expectedTrainingDtos;
     UserAdapter userAdapter;
     WorkExperienceAdapter workExperienceAdapter;
@@ -46,7 +46,7 @@ class UserAdapterTest {
                 .url("http/404")
                 .registered(Instant.now())
                 .status(0)
-                .dispayName("dispayname")
+                .displayName("dispayname")
                 .phoneNumber("0000000")
                 .birthday(LocalDate.now())
                 .hobbies("hobbies")
@@ -58,14 +58,14 @@ class UserAdapterTest {
         workExperienceAdapter = new WorkExperienceAdapter();
         userAdapter = new UserAdapter(workExperienceAdapter, trainingAdapter);
 
-        expectedExperiencesDtos = user.getExperiences()
+        expectedExperienceDtos = user.getExperiences()
                 .stream()
-                .map(workExperienceAdapter::toDto)
+                .map(workExperienceAdapter::toDtoWithoutUser)
                 .collect(Collectors.toList());
 
         expectedTrainingDtos = user.getTrainings()
                 .stream()
-                .map(trainingAdapter::toDto)
+                .map(trainingAdapter::toDtoWithoutUser)
                 .collect(Collectors.toList());
     }
 
@@ -80,11 +80,11 @@ class UserAdapterTest {
         assertThat(userDto.getUrl()).isEqualTo(user.getUrl());
         assertThat(userDto.getRegistered()).isEqualTo(user.getRegistered());
         assertThat(userDto.getStatus()).isEqualTo(user.getStatus());
-        assertThat(userDto.getDispayName()).isEqualTo(user.getDispayName());
+        assertThat(userDto.getDisplayName()).isEqualTo(user.getDisplayName());
         assertThat(userDto.getRegistered()).isEqualTo(user.getRegistered());
         assertThat(userDto.getBirthday()).isEqualTo(user.getBirthday());
         assertThat(userDto.getHobbies()).isEqualTo(user.getHobbies());
-        assertThat(userDto.getExperiences()).containsAll(expectedExperiencesDtos);
+        assertThat(userDto.getExperiences()).containsAll(expectedExperienceDtos);
         assertThat(userDto.getTrainings()).containsAll(expectedTrainingDtos);
     }
 }

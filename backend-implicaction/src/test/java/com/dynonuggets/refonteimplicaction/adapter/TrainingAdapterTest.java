@@ -20,7 +20,7 @@ class TrainingAdapterTest {
     User user;
     List<WorkExperience> experiences;
     List<Training> trainings;
-    List<WorkExperienceDto> expectedExperiencesDtos;
+    List<WorkExperienceDto> expectedExperienceDtos;
     List<TrainingDto> expectedTrainingDtos;
     UserAdapter userAdapter;
     WorkExperienceAdapter workExperienceAdapter;
@@ -46,7 +46,7 @@ class TrainingAdapterTest {
                 .url("http/404")
                 .registered(Instant.now())
                 .status(0)
-                .dispayName("dispayname")
+                .displayName("dispayname")
                 .phoneNumber("0000000")
                 .birthday(LocalDate.now())
                 .hobbies("hobbies")
@@ -58,20 +58,20 @@ class TrainingAdapterTest {
         workExperienceAdapter = new WorkExperienceAdapter();
         userAdapter = new UserAdapter(workExperienceAdapter, trainingAdapter);
 
-        expectedExperiencesDtos = user.getExperiences()
+        expectedExperienceDtos = user.getExperiences()
                 .stream()
-                .map(workExperienceAdapter::toDto)
+                .map(workExperienceAdapter::toDtoWithoutUser)
                 .collect(Collectors.toList());
 
         expectedTrainingDtos = user.getTrainings()
                 .stream()
-                .map(trainingAdapter::toDto)
+                .map(trainingAdapter::toDtoWithoutUser)
                 .collect(Collectors.toList());
     }
 
     @Test
-    public void trainingToDto(){
-        TrainingDto trainingDto = trainingAdapter.toDto(training);
+    public void trainingToDtoWithoutUser(){
+        TrainingDto trainingDto = trainingAdapter.toDtoWithoutUser(training);
         assertThat(trainingDto.getId()).isEqualTo(training.getId());
         assertThat(trainingDto.getDate()).isEqualTo(training.getDate());
         assertThat(trainingDto.getLabel()).isEqualTo(training.getLabel());
