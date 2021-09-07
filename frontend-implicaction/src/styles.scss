@@ -17,7 +17,7 @@ input.ng-invalid.ng-touched {
 
 body {
   background-color: $primary-bg-color;
-  color: $thirdy;
+  color: $tertiary;
 }
 
 button .icon {
@@ -26,10 +26,7 @@ button .icon {
 }
 
 h2 {
-  font-family: 'Open Sans', 'Arial', serif;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 18px;
+  font: normal bold 18px 'Open Sans', 'Arial', serif;
   line-height: 25px;
   display: flex;
   align-items: center;
@@ -41,10 +38,7 @@ h2 {
 }
 
 p {
-  font-family: 'Roboto', 'Arial', serif;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
+  font: normal 16px 'Roboto', 'Arial', serif;
   line-height: 19px;
   display: flex;
   align-items: center;

@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {User} from "../../../../shared/models/user";
 
 @Component({
-  selector: 'app-primary-personal-card',
+  selector: 'app-profile-personal-card',
   templateUrl: './personal-card.component.html',
   styleUrls: ['./personal-card.component.scss']
 })
