@@ -1,4 +1,11 @@
+@import "src/assets/variables";
+
 .user-avatar {
   width: 100px;
   height: auto;
+}
+
+.user-card {
+  background-color: $secondary-bg-color;
+  border-radius: 10px;
 }

@@ -7,4 +7,13 @@ export interface User {
   activationKey?: string;
   status?: string;
   nicename?: string;
+  birthday?: string;
+  phoneNumber?: string;
+  hobbies?: string;
+  presentation?: string;
+  purpose?: string;
+  expectation?: string;
+  contribution?: string;
+  armyCorps?: string;
+  rank?: string;
 }
