@@ -51,7 +51,7 @@ public class User {
     @Column(name = "user_status")
     private Integer status;
     @Column(name = "display_name")
-    private String dispayName;
+    private String displayName;
     @OneToMany(fetch = LAZY, mappedBy = "user")
     private List<WorkExperience> experiences;
     @OneToMany(fetch = LAZY, mappedBy = "user")

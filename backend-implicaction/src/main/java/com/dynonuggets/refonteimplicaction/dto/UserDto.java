@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.Getter;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -19,5 +21,11 @@ public class UserDto {
     private String url;
     private Instant registered;
     private Integer status;
-    private String dispayName;
+    private String displayName;
+    private String phoneNumber;
+    private LocalDate birthday;
+    private String hobbies;
+    private List<TrainingDto> trainings;
+    private List<WorkExperienceDto> experiences;
+
 }
