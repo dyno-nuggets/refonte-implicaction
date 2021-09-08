@@ -67,7 +67,7 @@ public class User {
     private Set<Group> groups = new HashSet<>();
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "sender", cascade = ALL, orphanRemoval = true)
     private Set<Relation> relationsAsSender;
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "reciever", cascade = ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "receiver", cascade = ALL, orphanRemoval = true)
     private Set<Relation> relationsAsReciever;
     @OneToOne(mappedBy = "user", fetch = LAZY, cascade = ALL)
     private Signup signup;

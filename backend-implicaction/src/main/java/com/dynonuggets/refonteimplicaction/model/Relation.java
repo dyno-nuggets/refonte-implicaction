@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
@@ -24,6 +24,6 @@ public class Relation {
     @ManyToOne
     private User sender;
     @ManyToOne
-    private User reciever;
-    private Date date;
+    private User receiver;
+    private LocalDate date;
 }
