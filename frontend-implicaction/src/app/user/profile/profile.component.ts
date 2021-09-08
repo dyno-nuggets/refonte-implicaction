@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     // TODO: Recuperer l'utilisateur en bd
     this.userService
-      .getUser(1)
+      .getUser("13")
       .subscribe(
         user => this.user = user,
         () => this.toasterService.error('oops', 'Une erreur est survenue !')

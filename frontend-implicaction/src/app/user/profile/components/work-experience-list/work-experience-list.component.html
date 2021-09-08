@@ -1,0 +1,19 @@
+<div class="col">
+  <div class="card py-4 px-4 shadow-sm border-0">
+    <div class="mb-3">
+      <h2>Experiences professionnelles</h2>
+    </div>
+    <ul>
+        <ng-container *ngIf="user.workExperiences; else elseBlock">
+          <li *ngFor="let workExperience of user.workExperiences; last as isLast; count as count">
+            <app-work-experience-detail [workExperience]="workExperience"></app-work-experience-detail>
+            <hr *ngIf="!isLast" class="mx-4"/>
+          </li>
+        </ng-container>
+      <ng-template #elseBlock>
+        <span class="fst-italic">Non renseigné.</span>
+      </ng-template>
+<!--    <p *ngIf="count===0"></p>-->
+    </ul>
+  </div>
+</div>
