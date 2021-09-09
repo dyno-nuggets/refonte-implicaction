@@ -29,4 +29,10 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
         return userAdapter.toDto(user);
     }
+
+    public UserDto getUserByUsername(String username) {
+        final User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("No user found with username " + username));
+        return userAdapter.toDto(user);
+    }
 }

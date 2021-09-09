@@ -1,11 +1,7 @@
 package com.dynonuggets.refonteimplicaction.service;
 
-import com.dynonuggets.refonteimplicaction.dto.AuthenticationResponseDto;
-import com.dynonuggets.refonteimplicaction.dto.LoginRequestDto;
-import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
-import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
+import com.dynonuggets.refonteimplicaction.dto.*;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Signup;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
@@ -30,6 +26,7 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final SignUpRepository signUpRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
@@ -79,7 +76,7 @@ public class AuthService {
         Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
-        final User user = getUserByUsername(username);
+        final UserDto user = userService.getUserByUsername(username);
 
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
@@ -90,17 +87,10 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public User getCurrentUser() {
-        org.springframework.security.core.userdetails.User principal =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return getUserByUsername(principal.getUsername());
-    }
-
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
 
-        final User user = getUserByUsername(username);
+        final UserDto user = userService.getUserByUsername(username);
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
         String token = jwtProvider.generateTokenWithUsername(username);
@@ -113,11 +103,6 @@ public class AuthService {
                 .username(username)
                 .userId(user.getId())
                 .build();
-    }
-
-    private User getUserByUsername(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
     }
 
     private void registerSignup(String activationKey, User user) {
