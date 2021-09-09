@@ -89,7 +89,6 @@ public class AuthService {
 
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
-
         final UserDto user = userService.getUserByUsername(username);
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
