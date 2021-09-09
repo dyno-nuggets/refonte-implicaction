@@ -79,8 +79,7 @@ public class AuthService {
         Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
-        final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
+        final User user = getUserByUsername(username);
 
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
@@ -95,15 +94,13 @@ public class AuthService {
     public User getCurrentUser() {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+        return getUserByUsername(principal.getUsername());
     }
 
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
 
-        final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
+        final User user = getUserByUsername(username);
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
         String token = jwtProvider.generateTokenWithUsername(username);
@@ -116,6 +113,11 @@ public class AuthService {
                 .username(username)
                 .userId(user.getId())
                 .build();
+    }
+
+    private User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
     }
 
     private void registerSignup(String activationKey, User user) {
