@@ -17,6 +17,8 @@ export class AuthService {
   loggedIn: EventEmitter<boolean> = new EventEmitter();
   @Output()
   username: EventEmitter<string> = new EventEmitter();
+  @Output()
+  userId: EventEmitter<string> = new EventEmitter();
 
   constructor(
     private apiHttpService: ApiHttpService,
@@ -46,9 +48,11 @@ export class AuthService {
           this.localStorage.store('username', loginResponse.username);
           this.localStorage.store('refreshToken', loginResponse.refreshToken);
           this.localStorage.store('expiresAt', loginResponse.expiresAt);
+          this.localStorage.store('userId', loginResponse.userId);
 
           this.loggedIn.emit(true);
           this.username.emit(loginResponse.username);
+          this.userId.emit(loginResponse.userId);
           return true;
         }),
         catchError(() => of(false))
@@ -75,6 +79,7 @@ export class AuthService {
 
     this.loggedIn.emit(false);
     this.username.emit(null);
+    this.userId.emit(null);
     return of(true);
   }
 
@@ -102,6 +107,10 @@ export class AuthService {
 
   getUserName(): string {
     return this.localStorage.retrieve('username');
+  }
+
+  getUserId(): string {
+    return this.localStorage.retrieve('userId');
   }
 
   isLoggedIn(): boolean {

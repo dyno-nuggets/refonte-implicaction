@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   isLoggedIn: boolean;
   username: string;
+  userId: string;
 
   private subscription: Subscription;
 
@@ -26,13 +27,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscription = this.authService
       .loggedIn
-      .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn);
-    this.subscription
+      .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn)
       .add(
-        this.authService.username.subscribe(username => this.username = username),
+        this.authService.username.subscribe(username => this.username = username)
+      )
+      .add(
+        this.authService.userId.subscribe(userId => this.userId = userId)
       );
     this.isLoggedIn = this.authService.isLoggedIn();
-    this.username = this.authService.getUserName();
+    this.userId = this.authService.getUserId();
   }
 
   logout(): void {

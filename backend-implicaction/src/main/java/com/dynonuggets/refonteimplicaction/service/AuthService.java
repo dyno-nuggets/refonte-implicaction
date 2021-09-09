@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.dto.LoginRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Signup;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
@@ -47,7 +48,7 @@ public class AuthService {
         // TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
         final String activationKey = generateActivationKey();
         final User user = registerUser(reqisterRequest, activationKey);
-        registerSignup(reqisterRequest, activationKey, user);
+        registerSignup(activationKey, user);
         mailService.sendUserActivationMail(activationKey, user);
     }
 
@@ -69,18 +70,24 @@ public class AuthService {
     }
 
     public AuthenticationResponseDto login(LoginRequestDto loginRequestDto) throws ImplicactionException {
+        final String username = loginRequestDto.getUsername();
         Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequestDto.getUsername(), loginRequestDto.getPassword())
+                new UsernamePasswordAuthenticationToken(username, loginRequestDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = jwtProvider.generateToken(authenticate);
         Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         String refreshToken = refreshTokenService.generateRefreshToken().getToken();
+
+        final User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
+
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshToken)
                 .expiresAt(expiresAt)
-                .username(loginRequestDto.getUsername())
+                .username(username)
+                .userId(user.getId())
                 .build();
     }
 
@@ -104,7 +111,7 @@ public class AuthService {
                 .build();
     }
 
-    private void registerSignup(ReqisterRequestDto reqisterRequest, String activationKey, User user) {
+    private void registerSignup(String activationKey, User user) {
         User userFromDb = userRepository.findByUsername(user.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("Le nom d'utilisateur n'existe pas."));
         Signup signup = Signup.builder()
