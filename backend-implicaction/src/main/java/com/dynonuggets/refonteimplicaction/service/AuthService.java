@@ -100,14 +100,21 @@ public class AuthService {
     }
 
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
+        final String username = refreshTokenRequestDto.getUsername();
+
+        final User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found with username " + username));
+
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
-        String token = jwtProvider.generateTokenWithUsername(refreshTokenRequestDto.getUsername());
+        String token = jwtProvider.generateTokenWithUsername(username);
         Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshTokenRequestDto.getRefreshToken())
                 .expiresAt(expiresAt)
-                .username(refreshTokenRequestDto.getUsername())
+                .username(username)
+                .userId(user.getId())
                 .build();
     }
 
