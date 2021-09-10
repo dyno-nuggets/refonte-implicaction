@@ -4,7 +4,7 @@ import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Observable} from 'rxjs';
 import {User} from '../models/user';
 import {Pageable} from '../models/pageable';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'

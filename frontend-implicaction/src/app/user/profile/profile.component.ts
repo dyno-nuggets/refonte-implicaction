@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from "../../shared/services/user.service";
-import {User} from "../../shared/models/user";
-import {ToasterService} from "../../core/services/toaster.service";
-import {ActivatedRoute} from "@angular/router";
+import {UserService} from '../../shared/services/user.service';
+import {User} from '../../shared/models/user';
+import {ToasterService} from '../../core/services/toaster.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
           user => this.user = user,
           () => this.toasterService.error('oops', 'Une erreur est survenue !')
         );
-    })
+    });
   }
 
 }

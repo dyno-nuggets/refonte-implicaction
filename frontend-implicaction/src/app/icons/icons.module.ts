@@ -3,7 +3,8 @@ import {NgModule} from '@angular/core';
 import {FeatherModule} from 'angular-feather';
 import {
   Award,
-  Bell, Briefcase,
+  Bell,
+  Briefcase,
   Calendar,
   Camera,
   Github,
@@ -13,7 +14,8 @@ import {
   Phone,
   Plus,
   Shield,
-  User, Users
+  User,
+  Users
 } from 'angular-feather/icons';
 
 // Select some icons (use an object, not an array)
