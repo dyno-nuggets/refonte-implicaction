@@ -1,9 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -11,10 +8,11 @@ import java.time.LocalDate;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.SEQUENCE;
 
-@Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Getter
+@Setter
 @Builder
 @Table(name = "work_experience")
 public class WorkExperience {

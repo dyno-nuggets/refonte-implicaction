@@ -8,7 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 
 @Component
@@ -16,19 +17,19 @@ import java.util.stream.Collectors;
 public class UserAdapter {
 
     private final WorkExperienceAdapter workExperienceAdapter;
-    private final TrainingAdapter trainingAdapter ;
+    private final TrainingAdapter trainingAdapter;
 
     public UserDto toDto(User user) {
-        
+
         List<WorkExperienceDto> experiencesDtos = user.getExperiences()
                 .stream()
                 .map(workExperienceAdapter::toDtoWithoutUser)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         List<TrainingDto> trainingDtos = user.getTrainings()
                 .stream()
                 .map(trainingAdapter::toDtoWithoutUser)
-                .collect(Collectors.toList());
+                .collect(toList());
 
         return UserDto.builder()
                 .id(user.getId())
@@ -44,6 +45,21 @@ public class UserAdapter {
                 .hobbies(user.getHobbies())
                 .experiences(experiencesDtos)
                 .trainings(trainingDtos)
+                .build();
+    }
+
+    public UserDto toDtoLight(User user) {
+        return UserDto.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .nicename(user.getNicename())
+                .email(user.getEmail())
+                .url(user.getUrl())
+                .registered(user.getRegistered())
+                .status(user.getStatus())
+                .displayName(user.getDisplayName())
+                .phoneNumber(user.getPhoneNumber())
+                .birthday(user.getBirthday())
                 .build();
     }
 
