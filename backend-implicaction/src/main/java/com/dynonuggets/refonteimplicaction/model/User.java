@@ -69,4 +69,13 @@ public class User {
     private String phoneNumber;
     private LocalDate birthday;
     private String hobbies;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
+    private String purpose;
+    private String presentation;
+    private String expectation;
+    private String contribution;
+
 }

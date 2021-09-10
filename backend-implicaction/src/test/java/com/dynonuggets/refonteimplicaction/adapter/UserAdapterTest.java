@@ -52,6 +52,12 @@ class UserAdapterTest {
                 .hobbies("hobbies")
                 .experiences(experiences)
                 .trainings(training)
+                .purpose("purpose")
+                .presentation("presentation")
+                .expectation("expectation")
+                .contribution("contribution")
+                .firstName("firstname")
+                .lastName("lastname")
                 .build();
 
         trainingAdapter = new TrainingAdapter();
@@ -86,5 +92,11 @@ class UserAdapterTest {
         assertThat(userDto.getHobbies()).isEqualTo(user.getHobbies());
         assertThat(userDto.getExperiences()).containsAll(expectedExperienceDtos);
         assertThat(userDto.getTrainings()).containsAll(expectedTrainingDtos);
+        assertThat(userDto.getPurpose()).isEqualTo(user.getPurpose());
+        assertThat(userDto.getPresentation()).isEqualTo(user.getPresentation());
+        assertThat(userDto.getExpectation()).isEqualTo(user.getExpectation());
+        assertThat(userDto.getContribution()).isEqualTo(user.getContribution());
+        assertThat(userDto.getFirstName()).isEqualTo(user.getFirstName());
+        assertThat(userDto.getLastName()).isEqualTo(user.getLastName());
     }
 }
