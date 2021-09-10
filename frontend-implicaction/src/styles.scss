@@ -17,7 +17,7 @@ input.ng-invalid.ng-touched {
 
 body {
   background-color: $primary-bg-color;
-  color: $tertiary;
+  color: $light-gray;
 }
 
 button .icon {
@@ -43,7 +43,7 @@ h3 {
   display: flex;
   align-items: center;
   text-transform: uppercase;
-  color: $quaternary;
+  color: $secondary;
 }
 
 h4 {
@@ -51,7 +51,7 @@ h4 {
   line-height: 21px;
   display: flex;
   align-items: center;
-  color: $quaternary;
+  color: $secondary;
 }
 
 p {
@@ -65,9 +65,9 @@ p {
   font: normal 600 16px 'Open Sans', 'Arial', serif;
   line-height: 22px;
   align-items: center;
-  color: $tertiary;
+  color: $light-gray;
 }
 
 .description-color {
-  color: $quaternary;
+  color: $secondary;
 }

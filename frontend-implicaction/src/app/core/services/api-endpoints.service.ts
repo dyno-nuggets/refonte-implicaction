@@ -68,8 +68,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.AUTH.LOGOUT);
   }
 
-  getUserEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.USER_BY_ID, [userId]);
+  getUserByIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BY_ID, [userId]);
   }
 
 

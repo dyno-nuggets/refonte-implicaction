@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
     this.route.paramMap.subscribe(paramMap => {
       const userId = paramMap.get('userId');
       this.userService
-        .getUser(userId)
+        .getUserById(userId)
         .subscribe(
           user => this.user = user,
           () => this.toasterService.error('oops', 'Une erreur est survenue !')
