@@ -27,6 +27,4 @@ public class UserDto {
     private String hobbies;
     private List<TrainingDto> trainings;
     private List<WorkExperienceDto> experiences;
-    private List<RelationsDto> relationsAsSender;
-    private List<RelationsDto> relationsAsReciever;
 }
