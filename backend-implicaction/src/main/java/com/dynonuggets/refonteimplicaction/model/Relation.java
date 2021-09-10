@@ -1,19 +1,17 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.Instant;
 
 import static javax.persistence.GenerationType.SEQUENCE;
 
-@Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
+@Getter
+@Setter
 @Builder
 @Table(name = "relation")
 public class Relation {
@@ -22,8 +20,11 @@ public class Relation {
     @Column(name = "id")
     private Long id;
     @ManyToOne
+    @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
     @ManyToOne
+    @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
-    private LocalDate date;
+    private Instant sentAt;
+    private Instant confirmedAt;
 }

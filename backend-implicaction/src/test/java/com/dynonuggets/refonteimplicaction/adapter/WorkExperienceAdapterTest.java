@@ -26,9 +26,10 @@ class WorkExperienceAdapterTest {
     WorkExperienceAdapter workExperienceAdapter;
     TrainingAdapter trainingAdapter;
     WorkExperience experience;
-    
+    RelationAdapter relationAdapter;
+
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         experiences = new ArrayList<>();
         experience = new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description");
         experiences.add(experience);
@@ -56,6 +57,7 @@ class WorkExperienceAdapterTest {
         trainingAdapter = new TrainingAdapter();
         workExperienceAdapter = new WorkExperienceAdapter();
         userAdapter = new UserAdapter(workExperienceAdapter, trainingAdapter);
+        relationAdapter = new RelationAdapter(userAdapter);
 
         expectedExperienceDtos = user.getExperiences()
                 .stream()
@@ -69,7 +71,7 @@ class WorkExperienceAdapterTest {
     }
 
     @Test
-    public void workExperienceToDtoWithoutUser(){
+    public void workExperienceToDtoWithoutUser() {
         WorkExperienceDto workExperienceDto = workExperienceAdapter.toDtoWithoutUser(experience);
         assertThat(workExperienceDto.getId()).isEqualTo(experience.getId());
         assertThat(workExperienceDto.getStartedAt()).isEqualTo(workExperienceDto.getStartedAt());

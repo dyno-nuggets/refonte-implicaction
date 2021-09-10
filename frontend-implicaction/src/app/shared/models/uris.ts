@@ -16,4 +16,8 @@ export class Uris {
     static readonly ALL = 'users';
     static readonly BY_ID = 'users';
   };
+
+  static readonly RELATIONS = class {
+    static readonly ALL_CONFIRMED_BY_USER_ID = 'relations';
+  };
 }

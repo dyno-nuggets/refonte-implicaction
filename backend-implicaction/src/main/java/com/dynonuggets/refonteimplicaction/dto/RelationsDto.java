@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.Instant;
 
 @Getter
 @Builder
@@ -13,5 +13,6 @@ public class RelationsDto {
     private Long id;
     private UserDto sender;
     private UserDto receiver;
-    private LocalDate date;
+    private Instant sentAt;
+    private Instant confirmedAt;
 }

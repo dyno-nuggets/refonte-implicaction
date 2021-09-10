@@ -14,9 +14,10 @@ public class RelationAdapter {
     public RelationsDto toDto(Relation relation) {
         return RelationsDto.builder()
                 .id(relation.getId())
-                .sender(userAdapter.toDto(relation.getSender()))
-                .receiver(userAdapter.toDto(relation.getReceiver()))
-                .date(relation.getDate())
+                .sender(userAdapter.toDtoLight(relation.getSender()))
+                .receiver(userAdapter.toDtoLight(relation.getReceiver()))
+                .sentAt(relation.getSentAt())
+                .confirmedAt(relation.getConfirmedAt())
                 .build();
     }
 }

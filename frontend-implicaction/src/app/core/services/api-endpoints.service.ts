@@ -76,12 +76,22 @@ export class ApiEndpointsService {
 
   getAllUserEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithQueryParameters(
-      'users',
+      Uris.USERS.ALL,
       (qs: QueryStringParameters) => {
         qs.push('page', pageable.page);
         qs.push('size', pageable.size);
-      }
-    );
+      });
+  }
+
+  getAllConfirmedFriendsBySenderIdEndpoint(userId: string, pageable: Pageable): string {
+    let endpoint = this.createUrlWithPathVariables(Uris.RELATIONS.ALL_CONFIRMED_BY_USER_ID, [userId, 'confirmed']);
+    endpoint = ApiEndpointsService.createUrlWithQueryParameters(
+      endpoint,
+      (qs: QueryStringParameters) => {
+        qs.push('page', pageable.page);
+        qs.push('size', pageable.size);
+      });
+    return endpoint;
   }
 
 }

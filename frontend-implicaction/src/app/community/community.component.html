@@ -3,10 +3,10 @@
     <app-user-card [user]="user">
       <div class="d-grid mt-4 mb-2">
         <button
-          type="button"
           class="btn btn-primary rounded-pill btn-sm background-primary"
+          type="button"
         >
-          <i-feather name="plus" class="icon"></i-feather>
+          <i-feather class="icon" name="plus"></i-feather>
           Ajouter
         </button>
       </div>
@@ -14,9 +14,9 @@
   </ng-container>
 </div>
 <p-paginator
+  (onPageChange)="paginate($event)"
+  [rowsPerPageOptions]="[10, 25, 50]"
   [rows]="rowsPerPage"
   [totalRecords]="pageable.totalElements"
-  [rowsPerPageOptions]="[10, 25, 50]"
-  (onPageChange)="paginate($event)"
 >
 </p-paginator>
