@@ -2,37 +2,37 @@
   <div class="container d-flex">
     <ul class="nav me-auto">
       <li><a [routerLink]="['/']" class="nav-link px-2">Accueil</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">A propos</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">Espace entreprise</a></li>
-      <li><a [routerLink]="['/community']" routerLinkActive="active" class="nav-link px-2 link-dark">Communauté</a></li>
+      <li><a class="nav-link px-2 link-dark" href="#">A propos</a></li>
+      <li><a class="nav-link px-2 link-dark" href="#">Espace entreprise</a></li>
+      <li><a [routerLink]="['/community']" class="nav-link px-2 link-dark" routerLinkActive="active">Communauté</a></li>
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
       <ul class="nav align-items-center user-options">
         <li class="nav-item">
-          <i-feather name="bell" class="icon"></i-feather>
+          <i-feather class="icon" name="bell"></i-feather>
         </li>
         <li class="nav-item">
-          <i-feather name="user" class="icon"></i-feather>
+          <i-feather class="icon" name="user"></i-feather>
         </li>
         <li class="nav-item">
-          <i-feather name="inbox" class="icon"></i-feather>
+          <i-feather class="icon" name="inbox"></i-feather>
         </li>
         <li class="nav-item">
-          <a class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
-             id="dropdownUser2"
-             data-bs-toggle="dropdown" aria-expanded="false"
+          <a aria-expanded="false"
+             class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
+             data-bs-toggle="dropdown" id="dropdownUser2"
           >
-            <img src="assets/img/default-user.png" alt="mdo" class="rounded-circle avatar">
+            <img alt="mdo" class="rounded-circle avatar" src="assets/img/default-user.png">
           </a>
-          <ul class="dropdown-menu text-small shadow m-0" aria-labelledby="dropdownUser">
+          <ul aria-labelledby="dropdownUser" class="dropdown-menu text-small shadow m-0">
             <li>
-            <li><a routerLink="/user/{{userId}}/profile" class="dropdown-item cursor-pointer">Profil</a></li>
+            <li><a class="dropdown-item cursor-pointer" routerLink="/user/{{userId}}/profile">Profil</a></li>
             <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a routerLink="/admin" class="dropdown-item cursor-pointer">Admin</a></li>
-            <li><a class="dropdown-item cursor-pointer" (click)="logout()">Se déconnecter</a></li>
+            <li><a class="dropdown-item cursor-pointer" routerLink="/admin">Admin</a></li>
+            <li><a (click)="logout()" class="dropdown-item cursor-pointer">Se déconnecter</a></li>
           </ul>
         </li>
       </ul>
@@ -40,10 +40,10 @@
     <ng-template #registrationOptions>
       <ul class="nav align-items-center  user-options">
         <li class="nav-item">
-          <a routerLink="/auth/login" class="btn btn-outline-primary">Se connecter</a>
+          <a class="btn btn-outline-primary" routerLink="/auth/login">Se connecter</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/auth/sign-up" class="btn btn-primary">S'inscrire</a>
+          <a class="btn btn-primary" routerLink="/auth/sign-up">S'inscrire</a>
         </li>
       </ul>
     </ng-template>
@@ -51,11 +51,11 @@
 </nav>
 <header class="py-3 mb-4 border-bottom">
   <div class="container d-flex flex-wrap justify-content-center">
-    <a href="/" class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none">
-      <img src="assets/img/logo.png" alt="implic'action" class="img-fluid">
+    <a class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" href="/">
+      <img alt="implic'action" class="img-fluid" src="assets/img/logo.png">
     </a>
     <form class="col-12 col-lg-auto mb-3 mb-lg-0">
-      <input type="search" class="form-control" placeholder="Search..." aria-label="Search">
+      <input aria-label="Search" class="form-control" placeholder="Search..." type="search">
     </form>
   </div>
 </header>

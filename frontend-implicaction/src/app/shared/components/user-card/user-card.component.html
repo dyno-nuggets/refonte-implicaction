@@ -6,7 +6,9 @@
       [alt]="user.nicename"
     />
     <div class="card-body text-center w-100">
-      <h5 class="card-title overflow-ellipsis">{{user.nicename}}</h5>
+      <h5 class="card-title overflow-ellipsis">
+        <a routerLink="/user/{{user.id}}/profile" >{{user.nicename}}</a>
+      </h5>
       <ng-content></ng-content>
     </div>
   </div>

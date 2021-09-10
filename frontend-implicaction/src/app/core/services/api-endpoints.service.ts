@@ -39,6 +39,19 @@ export class ApiEndpointsService {
     return urlBuilder.toString();
   }
 
+  // URL WITH PATH VARIABLES
+  private static createUrlWithPathVariables(action: string, pathVariables: any[] = []): string {
+    let encodedPathVariablesUrl = '';
+    // Push extra path variables
+    for (const pathVariable of pathVariables) {
+      if (pathVariable !== null) {
+        encodedPathVariablesUrl += `/${encodeURIComponent(pathVariable.toString())}`;
+      }
+    }
+    const urlBuilder: UrlBuilder = new UrlBuilder(Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
+    return urlBuilder.toString();
+  }
+
   getLoginEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.AUTH.LOGIN);
   }
@@ -55,6 +68,12 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.AUTH.LOGOUT);
   }
 
+  getUserByIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BY_ID, [userId]);
+  }
+
+
+
   getAllUserEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithQueryParameters(
       'users',
@@ -65,16 +84,4 @@ export class ApiEndpointsService {
     );
   }
 
-  // URL WITH PATH VARIABLES
-  private createUrlWithPathVariables(action: string, pathVariables: any[] = []): string {
-    let encodedPathVariablesUrl = '';
-    // Push extra path variables
-    for (const pathVariable of pathVariables) {
-      if (pathVariable !== null) {
-        encodedPathVariablesUrl += `/${encodeURIComponent(pathVariable.toString())}`;
-      }
-    }
-    const urlBuilder: UrlBuilder = new UrlBuilder(Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
-    return urlBuilder.toString();
-  }
 }

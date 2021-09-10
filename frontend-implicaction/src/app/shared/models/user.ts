@@ -1,3 +1,5 @@
+import {WorkExperience} from "./work-experience";
+
 export interface User {
   id?: string;
   username?: string;
@@ -16,4 +18,5 @@ export interface User {
   contribution?: string;
   armyCorps?: string;
   rank?: string;
+  workExperiences?: WorkExperience[];
 }
