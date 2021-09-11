@@ -4,7 +4,9 @@
       <li><a [routerLink]="['/']" class="nav-link px-2">Accueil</a></li>
       <li><a class="nav-link px-2 link-dark" href="#">A propos</a></li>
       <li><a class="nav-link px-2 link-dark" href="#">Espace entreprise</a></li>
-      <li><a [routerLink]="['/community']" class="nav-link px-2 link-dark" routerLinkActive="active">Communauté</a></li>
+      <li>
+        <a [routerLink]="['/users/list']" class="nav-link px-2 link-dark" routerLinkActive="active">Communauté</a>
+      </li>
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
       <ul class="nav align-items-center user-options">
@@ -26,7 +28,7 @@
           </a>
           <ul aria-labelledby="dropdownUser" class="dropdown-menu text-small shadow m-0">
             <li>
-            <li><a class="dropdown-item cursor-pointer" routerLink="/user/{{userId}}/profile">Profil</a></li>
+            <li><a class="dropdown-item cursor-pointer" routerLink="/users/{{userId}}/profile">Profil</a></li>
             <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
             <li>
               <hr class="dropdown-divider">

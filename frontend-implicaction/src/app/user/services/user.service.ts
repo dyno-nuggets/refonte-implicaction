@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {ApiHttpService} from '../../core/services/api-http.service';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Observable} from 'rxjs';
-import {User} from '../models/user';
-import {Pageable} from '../models/pageable';
+import {User} from '../../shared/models/user';
+import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
 
 @Injectable({

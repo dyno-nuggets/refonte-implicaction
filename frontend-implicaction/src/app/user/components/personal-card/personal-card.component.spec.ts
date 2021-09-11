@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { PersonalCardComponent } from './personal-card.component';
+import {PersonalCardComponent} from './personal-card.component';
 
 describe('PersonalCardComponent', () => {
   let component: PersonalCardComponent;
@@ -8,9 +8,9 @@ describe('PersonalCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PersonalCardComponent ]
+      declarations: [PersonalCardComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
