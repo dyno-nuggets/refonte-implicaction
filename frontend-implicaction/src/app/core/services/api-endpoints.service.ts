@@ -52,6 +52,10 @@ export class ApiEndpointsService {
     return urlBuilder.toString();
   }
 
+  /**
+   * Auth
+   */
+
   getLoginEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.AUTH.LOGIN);
   }
@@ -72,6 +76,9 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BY_ID, [userId]);
   }
 
+  /**
+   * Users
+   */
 
   getAllUserEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithQueryParameters(
@@ -81,6 +88,10 @@ export class ApiEndpointsService {
         qs.push('size', pageable.size);
       });
   }
+
+  /**
+   * Relations
+   */
 
   getAllConfirmedFriendsBySenderIdEndpoint(userId: string, pageable: Pageable): string {
     let endpoint = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_CONFIRMED_BY_USER_ID, [userId, 'confirmed']);
@@ -93,4 +104,11 @@ export class ApiEndpointsService {
     return endpoint;
   }
 
+  getAllRelationsByUserIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId]);
+  }
+
+  createRelationEndpoint(receiverId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
+  }
 }

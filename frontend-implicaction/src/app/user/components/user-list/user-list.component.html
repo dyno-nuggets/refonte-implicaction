@@ -2,13 +2,41 @@
   <ng-container *ngFor="let user of users">
     <app-user-card [user]="user">
       <div class="d-grid mt-4 mb-2">
-        <button
-          class="btn btn-primary rounded-pill btn-sm background-primary"
-          type="button"
-        >
-          <i-feather class="icon" name="plus"></i-feather>
-          Ajouter
-        </button>
+        <ng-container *ngIf="isFriend(user); else friendRequest">
+          <button
+            class="btn btn-danger text-light rounded-pill btn-sm background-primary"
+            type="button"
+          >
+            <i-feather class="icon" name="user-minus"></i-feather>
+            Retirer
+          </button>
+        </ng-container>
+        <ng-template #friendRequest>
+          <ng-container *ngIf="isFriendRequest(user); else friendPending">
+            En attente
+          </ng-container>
+        </ng-template>
+        <ng-template #friendPending>
+          <ng-container *ngIf="isFriendPending(user); else addFriend">
+            <button
+              class="btn btn-success rounded-pill btn-sm background-primary"
+              type="button"
+            >
+              <i-feather class="icon" name="user-check"></i-feather>
+              Accepter
+            </button>
+          </ng-container>
+        </ng-template>
+        <ng-template #addFriend>
+          <button
+            (click)="requestAsFriend(user)"
+            class="btn btn-primary rounded-pill btn-sm background-primary"
+            type="button"
+          >
+            <i-feather class="icon" name="user-plus"></i-feather>
+            Ajouter
+          </button>
+        </ng-template>
       </div>
     </app-user-card>
   </ng-container>

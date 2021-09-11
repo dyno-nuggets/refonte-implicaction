@@ -15,7 +15,10 @@ import {
   Plus,
   Shield,
   User,
-  Users
+  UserCheck,
+  UserMinus,
+  UserPlus,
+  Users,
 } from 'angular-feather/icons';
 
 // Select some icons (use an object, not an array)
@@ -33,7 +36,10 @@ const icons = {
   Award,
   Shield,
   Briefcase,
-  Users
+  Users,
+  UserMinus,
+  UserPlus,
+  UserCheck
 };
 
 @NgModule({
