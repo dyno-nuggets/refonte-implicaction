@@ -1,4 +1,5 @@
 import {WorkExperience} from './work-experience';
+import {Training} from './training';
 
 export interface User {
   id?: string;
@@ -19,4 +20,5 @@ export interface User {
   armyCorps?: string;
   rank?: string;
   workExperiences?: WorkExperience[];
+  trainings?: Training[];
 }

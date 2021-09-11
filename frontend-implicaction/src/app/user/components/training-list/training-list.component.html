@@ -1,0 +1,18 @@
+<div class="col">
+  <div class="card py-4 px-4 shadow-sm border-0">
+    <div class="mb-3">
+      <h2>Formations</h2>
+    </div>
+    <ul>
+      <ng-container *ngIf="user.trainings; else emptyInfo">
+        <li *ngFor="let training of user.trainings; last as isLast; count as count">
+          <app-training-detail [training]="training"></app-training-detail>
+          <hr *ngIf="!isLast" class="mx-4"/>
+        </li>
+      </ng-container>
+      <ng-template #emptyInfo>
+        <span class="fst-italic">Non renseigné.</span>
+      </ng-template>
+    </ul>
+  </div>
+</div>
