@@ -1,40 +1,67 @@
-<div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-4 row-cols-lg-5 gap-lg-5 mb-2">
+<div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 mb-2">
   <ng-container *ngFor="let user of users">
     <app-user-card [user]="user">
-      <div class="d-grid mt-4 mb-2">
-        <ng-container *ngIf="isFriend(user); else friendRequest">
+      <div class="mt-4 mb-2">
+        <!-- CAS 1 : est un ami -->
+        <ng-container *ngIf="isFriend(user); else optionSender">
           <button
-            class="btn btn-danger text-light rounded-pill btn-sm background-primary"
+            class="btn btn-danger text-light rounded-pill"
+            data-bs-placement="top"
+            data-bs-toggle="tooltip"
+            title="Retirer des amis"
             type="button"
           >
             <i-feather class="icon" name="user-minus"></i-feather>
-            Retirer
           </button>
         </ng-container>
-        <ng-template #friendRequest>
-          <ng-container *ngIf="isFriendRequest(user); else friendPending">
-            En attente
-          </ng-container>
-        </ng-template>
-        <ng-template #friendPending>
-          <ng-container *ngIf="isFriendPending(user); else addFriend">
+        <!-- CAS 2 : est à l'origine d'une demande non acceptée -->
+        <ng-template #optionSender>
+          <ng-container *ngIf="isSender(user); else optionReceiver">
             <button
-              class="btn btn-success rounded-pill btn-sm background-primary"
+              class="btn btn-danger text-light rounded-pill"
+              data-bs-placement="top"
+              data-bs-toggle="tooltip"
+              title="Annuler la demande d'ami"
               type="button"
             >
-              <i-feather class="icon" name="user-check"></i-feather>
-              Accepter
+              <i-feather class="icon" name="user-x"></i-feather>
             </button>
           </ng-container>
         </ng-template>
-        <ng-template #addFriend>
+        <!-- CAS 3 : est receveur d'une demande non acceptée -->
+        <ng-template #optionReceiver>
+          <ng-container *ngIf="isReceiver(user); else optionNoRelation">
+            <button
+              class="btn btn-success rounded-pill mx-2 mx-sm-1"
+              data-bs-placement="top"
+              data-bs-toggle="tooltip"
+              title="Accepter la demande d'ami"
+              type="button"
+            >
+              <i-feather class="icon" name="user-check"></i-feather>
+            </button>
+            <button
+              class="btn btn-danger rounded-pill mx-2 mx-sm-1"
+              data-bs-placement="top"
+              data-bs-toggle="tooltip"
+              title="Annuler la demande d'ami"
+              type="button"
+            >
+              <i-feather class="icon" name="user-x"></i-feather>
+            </button>
+          </ng-container>
+        </ng-template>
+        <!-- CAS 4 : aucune relation -->
+        <ng-template #optionNoRelation>
           <button
             (click)="requestAsFriend(user)"
-            class="btn btn-primary rounded-pill btn-sm background-primary"
+            class="btn btn-primary rounded-pill"
+            data-bs-placement="top"
+            data-bs-toggle="tooltip"
+            title="Demander en ami"
             type="button"
           >
             <i-feather class="icon" name="user-plus"></i-feather>
-            Ajouter
           </button>
         </ng-template>
       </div>

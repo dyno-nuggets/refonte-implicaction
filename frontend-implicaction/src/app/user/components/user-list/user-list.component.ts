@@ -16,8 +16,8 @@ export class UserListComponent implements OnInit {
   users: User[] = [];
   userId: string;
   friends: User[] = [];
-  requestFriends: User[] = [];
-  pendingFriends: User[] = [];
+  friendAsSenders: User[] = [];
+  friendAsReceivers: User[] = [];
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
@@ -38,6 +38,7 @@ export class UserListComponent implements OnInit {
       rows: this.pageable.size,
     });
     this.relationService
+      // TODO: peut être optimisé en ne recherchant que les relations avec les utilisateurs affichés
       .getAllByUserId(this.userId)
       .subscribe(
         relations => {
@@ -45,15 +46,20 @@ export class UserListComponent implements OnInit {
               if (relation.confirmedAt) {
                 this.friends.push(relation.sender.id !== this.userId ? relation.sender : relation.receiver);
               } else if (relation.sender.id === this.userId) {
-                this.requestFriends.push(relation.receiver);
+                this.friendAsSenders.push(relation.receiver);
               } else {
-                this.pendingFriends.push(relation.sender);
+                this.friendAsReceivers.push(relation.sender);
               }
             },
             () => this.toastService.error('Oops', 'Une erreur est survenue lors du chargement de la liste des utilisateurs.'));
-        }
-      );
+        });
   }
+
+  isFriend = (user: User): boolean => this.friends.find(u => user.id === u.id) !== undefined;
+
+  isSender = (user: User): boolean => this.friendAsSenders.find(u => user.id === u.id) !== undefined;
+
+  isReceiver = (user: User): boolean => this.friendAsReceivers.find(u => user.id === u.id) !== undefined;
 
   paginate({first, rows}): void {
     this.userService
@@ -68,19 +74,13 @@ export class UserListComponent implements OnInit {
       );
   }
 
-  isFriend = (user: User): boolean => this.friends.find(u => user.id === u.id) !== undefined;
-
-  isFriendRequest = (user: User): boolean => this.requestFriends.find(u => user.id === u.id) !== undefined;
-
-  isFriendPending = (user: User): boolean => this.pendingFriends.find(u => user.id === u.id) !== undefined;
-
   requestAsFriend(user: User): void {
     this.relationService
       .requestFriend(user.id)
       .subscribe(
-        relation => this.requestFriends.push(relation.receiver),
+        relation => this.friendAsSenders.push(relation.receiver),
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
-        () => this.toastService.success('Ok', `Votre demande a bien été envoyée à ${user.nicename}`)
+        () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.nicename}`)
       );
   }
 }

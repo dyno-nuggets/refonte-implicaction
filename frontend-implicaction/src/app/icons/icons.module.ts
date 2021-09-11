@@ -19,6 +19,7 @@ import {
   UserMinus,
   UserPlus,
   Users,
+  UserX,
 } from 'angular-feather/icons';
 
 // Select some icons (use an object, not an array)
@@ -39,7 +40,8 @@ const icons = {
   Users,
   UserMinus,
   UserPlus,
-  UserCheck
+  UserCheck,
+  UserX
 };
 
 @NgModule({
