@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {UserService} from '../../../../shared/services/user.service';
+import {UserService} from '../../../../user/services/user.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';
 import {LazyLoadEvent} from 'primeng/api';

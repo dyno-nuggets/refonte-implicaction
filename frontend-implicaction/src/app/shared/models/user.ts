@@ -1,4 +1,4 @@
-import {WorkExperience} from "./work-experience";
+import {WorkExperience} from './work-experience';
 
 export interface User {
   id?: string;
