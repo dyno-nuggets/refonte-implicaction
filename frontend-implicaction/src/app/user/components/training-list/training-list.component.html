@@ -4,7 +4,7 @@
       <h2>Formations</h2>
     </div>
     <ul>
-      <ng-container *ngIf="user.trainings; else emptyInf">
+      <ng-container *ngIf="user.trainings.length > 0; else emptyInfo">
         <li
           *ngFor="let training of user.trainings; last as isLast; count as count"
           class="list-unstyled"
@@ -16,12 +16,9 @@
           />
         </li>
       </ng-container>
-      <ng-template #emptyInf>
+      <ng-template #emptyInfo>
         <span class="fst-italic">Non renseigné.</span>
       </ng-template>
     </ul>
   </div>
-  <ng-template #emptyInf>
-    <span class="fst-italic">Non renseigné.</span>
-  </ng-template>
 </div>
