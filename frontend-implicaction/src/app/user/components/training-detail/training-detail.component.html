@@ -1,13 +1,13 @@
 <div class="row mb-2">
-  <div class="col-1 d-flex align-items-end">
-    <img alt="briefcase" class="img-fluid" src="assets/img/job-icon.png">
+  <div class="col-1 d-flex align-items-start">
+    <img alt="briefcase" class="img-fluid" src="assets/img/training-icon.png">
   </div>
   <div class="col d-flex align-items-start flex-column align-self-center ps-1">
     <h3 class="pb-1">{{training.label}}</h3>
     <h4 class="pt-1">{{training.school}}</h4>
+    <div class="mb-2">
+      <i-feather class="icon me-2" name="Calendar"></i-feather>
+      <span class="align-middle mt-2 date-text">{{training.date}}</span>
+    </div>
   </div>
-</div>
-<div class="mb-2">
-  <i-feather class="icon me-2" name="Calendar"></i-feather>
-  <span class="align-middle mt-2 date-text">{{training.date}}</span>
 </div>

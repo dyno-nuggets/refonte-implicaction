@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Training} from '../../../../shared/models/training';
+import {Training} from '../../../shared/models/training';
 
 @Component({
   selector: 'app-training-detail',

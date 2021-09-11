@@ -10,6 +10,8 @@ import {PersonalCardComponent} from './components/personal-card/personal-card.co
 import {FeatherModule} from 'angular-feather';
 import {UserListComponent} from './components/user-list/user-list.component';
 import {PaginatorModule} from 'primeng/paginator';
+import {TrainingListComponent} from './components/training-list/training-list.component';
+import {TrainingDetailComponent} from './components/training-detail/training-detail.component';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import {PaginatorModule} from 'primeng/paginator';
     ExperienceListComponent,
     UserProfileComponent,
     PersonalCardComponent,
-    UserListComponent
+    UserListComponent,
+    TrainingListComponent,
+    TrainingDetailComponent
   ],
   imports: [
     CommonModule,
