@@ -19,6 +19,6 @@ export interface User {
   contribution?: string;
   armyCorps?: string;
   rank?: string;
-  workExperiences?: WorkExperience[];
+  experiences?: WorkExperience[];
   trainings?: Training[];
 }

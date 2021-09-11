@@ -25,7 +25,10 @@ export class UserProfileComponent implements OnInit {
       this.userService
         .getUserById(userId)
         .subscribe(
-          user => this.user = user,
+          user => {
+            this.user = user;
+            console.log(user);
+          },
           () => this.toasterService.error('oops', 'Une erreur est survenue !')
         );
     });

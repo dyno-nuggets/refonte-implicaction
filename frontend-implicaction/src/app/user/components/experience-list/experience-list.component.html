@@ -4,12 +4,12 @@
       <h2>Experiences professionnelles</h2>
     </div>
     <ul>
-      <ng-container *ngIf="user.workExperiences; else emptyInfo">
+      <ng-container *ngIf="user.experiences else emptyInfo">
         <li
-          *ngFor="let workExperience of user.workExperiences; last as isLast; count as count"
+          *ngFor="let experience of user.experiences; last as isLast;"
           class="list-unstyled"
         >
-          <app-experience-detail [workExperience]="workExperience"></app-experience-detail>
+          <app-experience-detail [experience]="experience"></app-experience-detail>
           <hr
             *ngIf="!isLast"
             class="mx-4"

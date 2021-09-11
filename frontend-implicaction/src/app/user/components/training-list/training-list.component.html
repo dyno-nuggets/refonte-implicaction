@@ -4,9 +4,9 @@
       <h2>Formations</h2>
     </div>
     <ul>
-      <ng-container *ngIf="user.trainings.length > 0; else emptyInfo">
+      <ng-container *ngIf="user.trainings?.length; else emptyInfo">
         <li
-          *ngFor="let training of user.trainings; last as isLast; count as count"
+          *ngFor="let training of user.trainings; last as isLast;"
           class="list-unstyled"
         >
           <app-training-detail [training]="training"></app-training-detail>
