@@ -71,4 +71,12 @@ public class RelationController {
         relationService.cancelRelation(userId1, userId2);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping(value = "/confirm/{relationId}")
+    public ResponseEntity<RelationsDto> acceptRelation(
+            @PathVariable("relationId") Long relationId
+    ) {
+        RelationsDto relation = relationService.acceptRelation(relationId);
+        return ResponseEntity.ok(relation);
+    }
 }

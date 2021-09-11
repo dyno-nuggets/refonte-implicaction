@@ -89,4 +89,11 @@ public class RelationService {
                 .orElseThrow(() -> new NotFoundException("No relation found between " + userId1 + " and " + userId2));
         relationRepository.delete(relation);
     }
+
+    public RelationsDto acceptRelation(Long relationId) {
+        final Relation relation = relationRepository.findRelationByIdAndConfirmedAtIsNull(relationId);
+        relation.setConfirmedAt(Instant.now());
+        final Relation save = relationRepository.save(relation);
+        return relationAdapter.toDto(save);
+    }
 }
