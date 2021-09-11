@@ -21,43 +21,43 @@ public class RelationController {
     private final RelationService relationService;
     private final AuthService authService;
 
-    @PostMapping("{receiverId}")
+    @PostMapping("/request/{receiverId}")
     public ResponseEntity<RelationsDto> requestRelation(@PathVariable("receiverId") Long receiverId) {
         final User registredUser = authService.getCurrentUser();
         RelationsDto relationsDto = relationService.requestRelation(registredUser.getId(), receiverId);
         return ResponseEntity.ok(relationsDto);
     }
 
-    @GetMapping(value = "{userId}/confirmed", params = {"page", "size"})
+    @GetMapping(value = "/list/{userId}", params = {"page", "size"})
     public ResponseEntity<List<RelationsDto>> getAllConfirmedRelations(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        List<RelationsDto> relations = relationService.getAllConfirmedRelationsBySenderId(pageable, userId);
+        List<RelationsDto> relations = relationService.getAllForUserId(pageable, userId);
         return ResponseEntity.ok(relations);
     }
 
-    @GetMapping(value = "{userId}/pending", params = {"page", "size"})
+    @GetMapping(value = "/pending/{userId}", params = {"page", "size"})
     public ResponseEntity<List<RelationsDto>> getAllPendingRelations(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        List<RelationsDto> relations = relationService.getAllPendingRelationsBySenderId(pageable, userId);
+        List<RelationsDto> relations = relationService.getAllPendingBySenderId(pageable, userId);
         return ResponseEntity.ok(relations);
     }
 
-    @GetMapping(value = "{userId}/received", params = {"page", "size"})
+    @GetMapping(value = "/received/{userId}", params = {"page", "size"})
     public ResponseEntity<List<RelationsDto>> getAllReceivedRelations(
             @PathVariable("userId") Long userId,
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        List<RelationsDto> relations = relationService.getAllPendingRelationsByReceiverId(pageable, userId);
+        List<RelationsDto> relations = relationService.getAllPendingByReceiverId(pageable, userId);
         return ResponseEntity.ok(relations);
     }
 }

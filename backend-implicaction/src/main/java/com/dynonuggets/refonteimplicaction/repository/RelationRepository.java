@@ -12,12 +12,15 @@ import java.util.List;
 @SuppressWarnings("squid:S00100")
 public interface RelationRepository extends JpaRepository<Relation, Long> {
 
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END " +
-            "FROM Relation r " +
-            "WHERE (r.sender.id = ?1 AND r.receiver.id = ?2) OR (r.sender.id = ?2 AND r.receiver.id = ?1)")
+    @Query("select case when count (r) > 0 then true else false end " +
+            "from Relation r " +
+            "where (r.sender.id = ?1 and r.receiver.id = ?2) or (r.sender.id = ?2 and r.receiver.id = ?1)")
     boolean isInRelation(@Param("user1") Long userId1, Long userId2);
 
-    List<Relation> findAllBySender_IdAndConfirmedAtIsNotNull(Long userId, Pageable pageable);
+    @Query("select r from Relation r " +
+            "where (r.sender.id = ?1 or r.receiver.id = ?1) " +
+            "and r.confirmedAt is not null")
+    List<Relation> findAllByUserId(Long userId, Pageable pageable);
 
     List<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 

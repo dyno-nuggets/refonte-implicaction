@@ -44,21 +44,21 @@ public class RelationService {
         return relationAdapter.toDto(save);
     }
 
-    public List<RelationsDto> getAllConfirmedRelationsBySenderId(Pageable pageable, Long userId) {
-        final List<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNotNull(userId, pageable);
+    public List<RelationsDto> getAllForUserId(Pageable pageable, Long userId) {
+        final List<Relation> relations = relationRepository.findAllByUserId(userId, pageable);
         return relations.stream()
                 .map(relationAdapter::toDto)
                 .collect(toList());
     }
 
-    public List<RelationsDto> getAllPendingRelationsBySenderId(Pageable pageable, Long userId) {
+    public List<RelationsDto> getAllPendingBySenderId(Pageable pageable, Long userId) {
         final List<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId, pageable);
         return relations.stream()
                 .map(relationAdapter::toDto)
                 .collect(toList());
     }
 
-    public List<RelationsDto> getAllPendingRelationsByReceiverId(Pageable pageable, Long userId) {
+    public List<RelationsDto> getAllPendingByReceiverId(Pageable pageable, Long userId) {
         final List<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId, pageable);
         return relations.stream()
                 .map(relationAdapter::toDto)
