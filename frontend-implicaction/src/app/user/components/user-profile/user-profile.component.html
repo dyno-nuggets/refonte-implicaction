@@ -2,7 +2,12 @@
   <div class="col-3">
     <app-personal-card [user]="user"></app-personal-card>
   </div>
-  <div class="col-9 ps-5 pe-0">
-    <app-experience-list [user]="user"></app-experience-list>
+  <div class="col-9">
+    <div class="ps-5 pe-0 mb-5">
+      <app-experience-list [user]="user"></app-experience-list>
+    </div>
+    <div class="ps-5 pe-0 mb-5">
+      <app-training-list [user]="user"></app-training-list>
+    </div>
   </div>
 </div>

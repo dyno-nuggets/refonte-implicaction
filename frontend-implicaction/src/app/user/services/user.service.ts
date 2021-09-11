@@ -27,5 +27,4 @@ export class UserService {
   getUserById(userId: string): Observable<User> {
     return this.http.get(this.apiEndpointsService.getUserByIdEndpoint(userId));
   }
-
 }

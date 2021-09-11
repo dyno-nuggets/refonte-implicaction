@@ -9,7 +9,7 @@ import {WorkExperience} from '../../../shared/models/work-experience';
 export class ExperienceDetailComponent implements OnInit {
 
   @Input()
-  workExperience: WorkExperience;
+  experience: WorkExperience;
 
   constructor() {
   }
