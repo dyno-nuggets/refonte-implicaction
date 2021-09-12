@@ -27,4 +27,11 @@ public class UserDto {
     private String hobbies;
     private List<TrainingDto> trainings;
     private List<WorkExperienceDto> experiences;
+    private String purpose;
+    private String presentation;
+    private String expectation;
+    private String contribution;
+    private String firstName;
+    private String lastName;
+
 }

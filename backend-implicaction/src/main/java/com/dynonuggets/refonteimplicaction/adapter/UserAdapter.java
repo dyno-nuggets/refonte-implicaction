@@ -45,6 +45,12 @@ public class UserAdapter {
                 .hobbies(user.getHobbies())
                 .experiences(experiencesDtos)
                 .trainings(trainingDtos)
+                .purpose(user.getPurpose())
+                .presentation(user.getPresentation())
+                .expectation(user.getExpectation())
+                .contribution(user.getContribution())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .build();
     }
 
