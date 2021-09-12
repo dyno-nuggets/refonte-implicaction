@@ -63,4 +63,12 @@ public class RelationController {
         relationService.deleteRelation(senderId, receiverId);
         return ResponseEntity.noContent().build();
     }
+
+    @SuppressWarnings("rawtypes")
+    @DeleteMapping(value = "/{userId}/cancel")
+    public ResponseEntity cancelRelationByUser(@PathVariable("userId") Long userId1) {
+        final Long userId2 = authService.getCurrentUser().getId();
+        relationService.cancelRelation(userId1, userId2);
+        return ResponseEntity.noContent().build();
+    }
 }

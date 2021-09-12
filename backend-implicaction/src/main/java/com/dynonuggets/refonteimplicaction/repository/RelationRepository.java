@@ -27,4 +27,9 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
     List<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 
     Optional<Relation> findBySender_IdAndReceiver_Id(Long senderId, Long receiverId);
+
+    @Query("select r " +
+            "from Relation r " +
+            "where (r.sender.id = ?1 and r.receiver.id = ?2) or (r.sender.id = ?2 and r.receiver.id = ?1)")
+    Optional<Relation> findRelationBetween(Long userId1, Long userId2);
 }

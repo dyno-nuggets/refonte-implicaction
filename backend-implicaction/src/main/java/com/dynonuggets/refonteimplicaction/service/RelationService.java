@@ -71,9 +71,22 @@ public class RelationService {
                 .collect(toList());
     }
 
+    /**
+     * Supprime la relation entre le sender et le receiver dont les ids sont passé en paramètres
+     */
     public void deleteRelation(Long senderId, Long receiverId) {
         Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
                 .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
+        relationRepository.delete(relation);
+    }
+
+    /**
+     * Supprime la relation entre les utilisateurs dont les ids sont passés en paramètres, sans tenir compte de la notion
+     * de sender / receiver
+     */
+    public void cancelRelation(Long userId1, Long userId2) {
+        Relation relation = relationRepository.findRelationBetween(userId1, userId2)
+                .orElseThrow(() -> new NotFoundException("No relation found between " + userId1 + " and " + userId2));
         relationRepository.delete(relation);
     }
 }
