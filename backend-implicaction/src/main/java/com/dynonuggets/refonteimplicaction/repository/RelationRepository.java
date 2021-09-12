@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
 import com.dynonuggets.refonteimplicaction.model.Relation;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,6 +22,11 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
     @Query("select r from Relation r " +
             "where (r.sender.id = ?1 or r.receiver.id = ?1)")
     List<Relation> findAllByUserId(Long userId);
+
+    @Query("select r from Relation r " +
+            "where (r.sender.id = ?1 or r.receiver.id = ?1) " +
+            "and r.confirmedAt is not null")
+    Page<Relation> findAllFriendsByUserId(Long userId, Pageable pageable);
 
     List<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 

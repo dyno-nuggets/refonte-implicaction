@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.service.RelationService;
 import com.dynonuggets.refonteimplicaction.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class UserController {
 
     private final UserService userService;
+    private final RelationService relationService;
 
     @GetMapping(params = {"page", "size"})
     public ResponseEntity<Page<UserDto>> getAll(
@@ -34,5 +36,16 @@ public class UserController {
     public ResponseEntity<UserDto> getUserProfile(@PathVariable("userId") Long userId) {
         UserDto userdto = userService.getUserById(userId);
         return ResponseEntity.ok(userdto);
+    }
+
+    @GetMapping(path = "/{userId}/friends", params = {"page", "size"})
+    public ResponseEntity<Page<UserDto>> getAllFriends(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "0") int size,
+            @PathVariable("userId") Long userId
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserDto> userDtos = relationService.getAllFriendsByUserId(pageable, userId);
+        return ResponseEntity.ok(userDtos);
     }
 }
