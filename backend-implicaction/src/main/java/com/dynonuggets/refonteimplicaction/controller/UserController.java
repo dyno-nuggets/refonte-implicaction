@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import com.dynonuggets.refonteimplicaction.service.UserService;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class UserController {
 
     private final UserService userService;
     private final RelationService relationService;
+    private final AuthService authService;
 
     @GetMapping(params = {"page", "size"})
     public ResponseEntity<Page<UserDto>> getAll(
@@ -47,5 +49,16 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, size);
         Page<UserDto> userDtos = relationService.getAllFriendsByUserId(pageable, userId);
         return ResponseEntity.ok(userDtos);
+    }
+
+    @GetMapping(path = "/friends/received", params = {"page", "size"})
+    public ResponseEntity<Page<UserDto>> getReceivedFriendRequest(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Long userId = authService.getCurrentUser().getId();
+        Page<UserDto> usersDto = relationService.getReceivedFriendRequest(userId ,pageable);
+        return ResponseEntity.ok(usersDto);
     }
 }
