@@ -1,7 +1,9 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.RelationAdapter;
+import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
+import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
@@ -10,6 +12,7 @@ import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,8 @@ public class RelationService {
     private final UserRepository userRepository;
     private final RelationRepository relationRepository;
     private final RelationAdapter relationAdapter;
+    private final UserAdapter userAdapter;
+    private final UserService userService;
 
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
         // TODO: gérer avec une exception plus appropriée
@@ -100,5 +105,21 @@ public class RelationService {
         relation.setConfirmedAt(Instant.now());
         Relation relationUpdate = relationRepository.save(relation);
         return relationAdapter.toDto(relationUpdate);
+    }
+
+    /**
+     * Renvoie tous les utilisateurs qui sont amis avec l'utilisateur en paramètres
+     */
+    public Page<UserDto> getAllFriendsByUserId(Pageable pageable, Long userId) {
+        // renvoie une exception si l'utilisateur n'existe pas
+        userService.getUserById(userId);
+        Page<Relation> relations = relationRepository.findAllFriendsByUserId(userId, pageable);
+
+        return relations.map(relation -> {
+            if (relation.getSender().getId().equals(userId)) {
+                return userAdapter.toDto(relation.getReceiver());
+            }
+            return userAdapter.toDto(relation.getSender());
+        });
     }
 }
