@@ -30,6 +30,7 @@ public class RelationService {
     private final RelationAdapter relationAdapter;
     private final UserAdapter userAdapter;
     private final UserService userService;
+    private final AuthService authService;
 
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
         // TODO: gérer avec une exception plus appropriée
@@ -70,7 +71,7 @@ public class RelationService {
     }
 
     public List<RelationsDto> getAllPendingByReceiverId(Pageable pageable, Long userId) {
-        final List<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId, pageable);
+        final List<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId);
         return relations.stream()
                 .map(relationAdapter::toDto)
                 .collect(toList());
@@ -121,5 +122,10 @@ public class RelationService {
             }
             return userAdapter.toDto(relation.getSender());
         });
+    }
+
+    public Page<UserDto> getReceivedFriendRequest(Long userId, Pageable pageable) {
+        Page<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId, pageable);
+        return relations.map(relation -> userAdapter.toDto(relation.getSender()));
     }
 }

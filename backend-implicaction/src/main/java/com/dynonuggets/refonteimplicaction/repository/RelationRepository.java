@@ -30,7 +30,9 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
 
     List<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 
-    List<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
+    Page<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
+
+    List<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId);
 
     Optional<Relation> findBySender_IdAndReceiver_Id(Long senderId, Long receiverId);
 
