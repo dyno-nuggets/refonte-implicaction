@@ -19,6 +19,18 @@ export class RelationService {
     return this.http.get<Relation[]>(this.apiEndpointService.getAllRelationsByUserIdEndpoint(userId));
   }
 
+  // getFriends(userId: string): Observable<Relation[]> {
+  //   return this.http.get<Relation[]>(this.apiEndpointService.getAllFriendsByUserIdEndPoint(userId));
+  // }
+  //
+  // getReceivedRequests(userId: string): Observable<Relation[]> {
+  //   return this.http.get<Relation[]>(this.apiEndpointService.getAllReceivedRequestsByUserIdEndPoint(userId));
+  // }
+  //
+  // getSentRequests(userId: string): Observable<Relation[]> {
+  //   return this.http.get<Relation[]>(this.apiEndpointService.getAllSentRequestsByUserIdEndPoint(userId));
+  // }
+
   requestFriend(receiverId: string): Observable<Relation> {
     return this.http.post(this.apiEndpointService.createRelationEndpoint(receiverId), null);
   }

@@ -5,6 +5,7 @@ import {Constants} from '../../../config/constants';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RelationService} from '../../services/relation.service';
 import {AuthService} from '../../../shared/services/auth.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -18,6 +19,7 @@ export class UserListComponent implements OnInit {
   friends: User[] = [];
   friendAsSenders: User[] = [];
   friendAsReceivers: User[] = [];
+  action: string;
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
@@ -27,7 +29,8 @@ export class UserListComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private toastService: ToasterService,
-    private relationService: RelationService
+    private relationService: RelationService,
+    private route: ActivatedRoute
   ) {
   }
 
@@ -37,22 +40,24 @@ export class UserListComponent implements OnInit {
       first: 0,
       rows: this.pageable.size,
     });
-    this.relationService
-      // TODO: peut être optimisé en ne recherchant que les relations avec les utilisateurs affichés
-      .getAllByUserId(this.userId)
-      .subscribe(
-        relations => {
-          relations.forEach(relation => {
-              if (relation.confirmedAt) {
-                this.friends.push(relation.sender.id !== this.userId ? relation.sender : relation.receiver);
-              } else if (relation.sender.id === this.userId) {
-                this.friendAsSenders.push(relation.receiver);
-              } else {
-                this.friendAsReceivers.push(relation.sender);
-              }
-            },
-            () => this.toastService.error('Oops', 'Une erreur est survenue lors du chargement de la liste des utilisateurs.'));
-        });
+
+    this.route.paramMap.subscribe(paramMap => {
+      this.action = paramMap.get('action');
+      switch (this.action) {
+        case 'list':
+          this.getUsers();
+          break;
+        case 'friends':
+          this.getFriends();
+          break;
+        case 'received':
+          this.getReceivedRequests();
+          break;
+        case 'sent':
+          this.getSentRequests();
+          break;
+      }
+    });
   }
 
   isFriend = (user: User): boolean => this.friends.find(u => user.id === u.id) !== undefined;
@@ -82,5 +87,45 @@ export class UserListComponent implements OnInit {
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
         () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.nicename}`)
       );
+  }
+
+  private getUsers(): void {
+    this.relationService
+      // TODO: peut être optimisé en ne recherchant que les relations avec les utilisateurs affichés
+      .getAllByUserId(this.userId)
+      .subscribe(
+        relations => {
+          relations.forEach(relation => {
+              if (relation.confirmedAt) {
+                this.friends.push(relation.sender.id !== this.userId ? relation.sender : relation.receiver);
+              } else if (relation.sender.id === this.userId) {
+                this.friendAsSenders.push(relation.receiver);
+              } else {
+                this.friendAsReceivers.push(relation.sender);
+              }
+            },
+            () => this.toastService.error('Oops', 'Une erreur est survenue lors du chargement de la liste des utilisateurs.'));
+        });
+  }
+
+  private getFriends(): void {
+    this.users = [];
+    // this.relationService
+    //   .getFriends(this.userId)
+    //   .subscribe(friends => this.users = friends);
+  }
+
+  private getReceivedRequests(): void {
+    this.users = [];
+    // this.relationService
+    //   .getReceivedRequests(this.userId)
+    //   .subscribe(senders => this.users = senders);
+  }
+
+  private getSentRequests(): void {
+    this.users = [];
+    // this.relationService
+    //   .getSentRequests(this.userId)
+    //   .subscribe(receivers => this.users = receivers);
   }
 }

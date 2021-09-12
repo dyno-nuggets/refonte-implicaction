@@ -12,7 +12,6 @@ import {UserListComponent} from './components/user-list/user-list.component';
 import {PaginatorModule} from 'primeng/paginator';
 import {TrainingListComponent} from './components/training-list/training-list.component';
 import {TrainingDetailComponent} from './components/training-detail/training-detail.component';
-import { FriendsOverviewComponent } from './components/friends-overview/friends-overview.component';
 
 
 @NgModule({
@@ -24,7 +23,6 @@ import { FriendsOverviewComponent } from './components/friends-overview/friends-
     UserProfileComponent,
     PersonalCardComponent,
     UserListComponent,
-    FriendsOverviewComponent,
     TrainingListComponent,
     TrainingDetailComponent,
   ],
