@@ -72,11 +72,12 @@ public class RelationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "/confirm/{relationId}")
-    public ResponseEntity<RelationsDto> acceptRelation(
-            @PathVariable("relationId") Long relationId
+    @GetMapping(value = "/{senderId}/confirm")
+    public ResponseEntity<RelationsDto> confirmRelation(
+            @PathVariable("senderId") Long senderId
     ) {
-        RelationsDto relation = relationService.acceptRelation(relationId);
-        return ResponseEntity.ok(relation);
+        final Long receiverId = authService.getCurrentUser().getId();
+        relationService.confirmRelation(senderId, receiverId);
+        return ResponseEntity.noContent().build();
     }
 }

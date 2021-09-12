@@ -32,6 +32,4 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
             "from Relation r " +
             "where (r.sender.id = ?1 and r.receiver.id = ?2) or (r.sender.id = ?2 and r.receiver.id = ?1)")
     Optional<Relation> findRelationBetween(Long userId1, Long userId2);
-
-    Relation findRelationByIdAndConfirmedAtIsNull(Long relationId);
 }

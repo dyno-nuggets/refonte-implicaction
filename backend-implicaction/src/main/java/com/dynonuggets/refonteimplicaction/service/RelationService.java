@@ -90,10 +90,14 @@ public class RelationService {
         relationRepository.delete(relation);
     }
 
-    public RelationsDto acceptRelation(Long relationId) {
-        final Relation relation = relationRepository.findRelationByIdAndConfirmedAtIsNull(relationId);
+    /**
+     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres, sans tenir compte de la notion
+     * de sender / receiver
+     */
+    public void confirmRelation(Long senderId, Long receiverId) {
+        Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
+                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
         relation.setConfirmedAt(Instant.now());
-        final Relation save = relationRepository.save(relation);
-        return relationAdapter.toDto(save);
+        relationRepository.save(relation);
     }
 }
