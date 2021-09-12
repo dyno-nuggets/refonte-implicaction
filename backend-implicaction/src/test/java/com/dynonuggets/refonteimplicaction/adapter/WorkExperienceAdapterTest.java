@@ -36,7 +36,7 @@ class WorkExperienceAdapterTest {
 
         training = new ArrayList<>();
 
-        training.add(new Training(2L, user, "label", LocalDate.now()));
+        training.add(new Training(2L, user, "label", LocalDate.now(), "institution"));
 
         user = User.builder()
                 .id(10L)
@@ -71,7 +71,7 @@ class WorkExperienceAdapterTest {
     }
 
     @Test
-    public void workExperienceToDtoWithoutUser() {
+    void workExperienceToDtoWithoutUser() {
         WorkExperienceDto workExperienceDto = workExperienceAdapter.toDtoWithoutUser(experience);
         assertThat(workExperienceDto.getId()).isEqualTo(experience.getId());
         assertThat(workExperienceDto.getStartedAt()).isEqualTo(workExperienceDto.getStartedAt());

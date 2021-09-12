@@ -6,11 +6,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class TrainingAdapter {
-    public TrainingDto toDtoWithoutUser(Training training){
+    public TrainingDto toDtoWithoutUser(Training training) {
         return TrainingDto.builder()
                 .id(training.getId())
                 .label(training.getLabel())
                 .date(training.getDate())
+                .institution(training.getInstitution())
                 .build();
     }
 }

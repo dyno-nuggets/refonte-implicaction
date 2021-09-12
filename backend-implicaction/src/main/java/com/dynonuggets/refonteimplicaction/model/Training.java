@@ -24,4 +24,5 @@ public class Training {
     private User user;
     private String label;
     private LocalDate date;
+    private String institution;
 }

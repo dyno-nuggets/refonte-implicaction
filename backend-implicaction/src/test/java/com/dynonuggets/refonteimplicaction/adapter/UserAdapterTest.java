@@ -36,7 +36,7 @@ class UserAdapterTest {
 
         training = new ArrayList<>();
 
-        training.add(new Training(2L, user, "label", LocalDate.now()));
+        training.add(new Training(2L, user, "label", LocalDate.now(), "insitution"));
 
         user = User.builder()
                 .id(10L)
@@ -46,7 +46,7 @@ class UserAdapterTest {
                 .url("http/404")
                 .registered(Instant.now())
                 .status(0)
-                .displayName("dispayname")
+                .displayName("displayname")
                 .phoneNumber("0000000")
                 .birthday(LocalDate.now())
                 .hobbies("hobbies")
