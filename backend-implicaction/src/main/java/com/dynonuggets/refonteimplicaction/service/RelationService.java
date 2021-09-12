@@ -89,4 +89,16 @@ public class RelationService {
                 .orElseThrow(() -> new NotFoundException("No relation found between " + userId1 + " and " + userId2));
         relationRepository.delete(relation);
     }
+
+    /**
+     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres, en tenant compte de la notion
+     * de sender / receiver
+     */
+    public RelationsDto confirmRelation(Long senderId, Long receiverId) {
+        Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
+                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
+        relation.setConfirmedAt(Instant.now());
+        Relation relationUpdate = relationRepository.save(relation);
+        return relationAdapter.toDto(relationUpdate);
+    }
 }

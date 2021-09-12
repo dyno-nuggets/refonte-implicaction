@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import lombok.AllArgsConstructor;
@@ -70,5 +71,12 @@ public class RelationController {
         final Long userId2 = authService.getCurrentUser().getId();
         relationService.cancelRelation(userId1, userId2);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping(value = "/{senderId}/confirm")
+    public ResponseEntity<RelationsDto> confirmRelation(@PathVariable("senderId") Long senderId) {
+        final Long receiverId = authService.getCurrentUser().getId();
+        RelationsDto relation = relationService.confirmRelation(senderId, receiverId);
+        return ResponseEntity.ok(relation);
     }
 }
