@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.service;
 
+import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.*;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.Signup;
@@ -32,6 +33,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
+    private final UserAdapter userAdapter;
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -88,11 +90,12 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public User getCurrentUser() {
+    public UserDto getCurrentUser() {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userRepository.findByUsername(principal.getUsername())
+        final User user = userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+        return userAdapter.toDto(user);
     }
 
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {

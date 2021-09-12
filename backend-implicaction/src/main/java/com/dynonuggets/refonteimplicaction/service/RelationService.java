@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.RelationAdapter;
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.model.User;
@@ -68,5 +69,11 @@ public class RelationService {
         return relations.stream()
                 .map(relationAdapter::toDto)
                 .collect(toList());
+    }
+
+    public void deleteRelation(Long senderId, Long receiverId) {
+        Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
+                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
+        relationRepository.delete(relation);
     }
 }
