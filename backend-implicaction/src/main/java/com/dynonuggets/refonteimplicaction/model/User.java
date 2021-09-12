@@ -69,9 +69,9 @@ public class User {
     private String phoneNumber;
     private LocalDate birthday;
     private String hobbies;
-    @Column(name = "first_name")
+    @Column(name = "firstname")
     private String firstName;
-    @Column(name = "last_name")
+    @Column(name = "lastname")
     private String lastName;
     private String purpose;
     private String presentation;

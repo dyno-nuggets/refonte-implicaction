@@ -76,7 +76,7 @@ class UserAdapterTest {
     }
 
     @Test
-    public void toDtoTest() {
+    void toDtoTest() {
         UserDto userDto = userAdapter.toDto(user);
 
         assertThat(userDto.getId()).isEqualTo(user.getId());
