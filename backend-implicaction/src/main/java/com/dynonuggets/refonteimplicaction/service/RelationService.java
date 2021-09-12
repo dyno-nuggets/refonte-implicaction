@@ -63,8 +63,8 @@ public class RelationService {
                 .collect(toList());
     }
 
-    public List<RelationsDto> getAllPendingBySenderId(Pageable pageable, Long userId) {
-        final List<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId, pageable);
+    public List<RelationsDto> getAllPendingBySenderId(Long userId) {
+        final List<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId);
         return relations.stream()
                 .map(relationAdapter::toDto)
                 .collect(toList());
@@ -122,6 +122,11 @@ public class RelationService {
             }
             return userAdapter.toDto(relation.getSender());
         });
+    }
+
+    public Page<UserDto> getSentFriendRequest(Long userId, Pageable pageable) {
+        Page<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId, pageable);
+        return relations.map(relation -> userAdapter.toDto(relation.getSender()));
     }
 
     public Page<UserDto> getReceivedFriendRequest(Long userId, Pageable pageable) {
