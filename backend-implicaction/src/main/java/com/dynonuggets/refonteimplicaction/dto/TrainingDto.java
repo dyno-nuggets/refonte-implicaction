@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+
 import java.time.LocalDate;
 
 @Data
@@ -15,4 +16,5 @@ public class TrainingDto {
     private UserDto user;
     private String label;
     private LocalDate date;
+    private String institution;
 }

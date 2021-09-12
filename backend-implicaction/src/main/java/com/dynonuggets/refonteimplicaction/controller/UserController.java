@@ -51,6 +51,17 @@ public class UserController {
         return ResponseEntity.ok(userDtos);
     }
 
+    @GetMapping(path = "/friends/sent", params = {"page", "size"})
+    public ResponseEntity<Page<UserDto>> getSentFriendRequest(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Long userId = authService.getCurrentUser().getId();
+        Page<UserDto> usersDto = relationService.getSentFriendRequest(userId, pageable);
+        return ResponseEntity.ok(usersDto);
+    }
+
     @GetMapping(path = "/friends/received", params = {"page", "size"})
     public ResponseEntity<Page<UserDto>> getReceivedFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,

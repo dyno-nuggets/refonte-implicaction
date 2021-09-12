@@ -2,7 +2,6 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import lombok.AllArgsConstructor;
