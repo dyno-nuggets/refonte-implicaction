@@ -18,9 +18,8 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
     boolean isInRelation(@Param("user1") Long userId1, Long userId2);
 
     @Query("select r from Relation r " +
-            "where (r.sender.id = ?1 or r.receiver.id = ?1) " +
-            "and r.confirmedAt is not null")
-    List<Relation> findAllByUserId(Long userId, Pageable pageable);
+            "where (r.sender.id = ?1 or r.receiver.id = ?1)")
+    List<Relation> findAllByUserId(Long userId);
 
     List<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 

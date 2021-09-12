@@ -28,14 +28,9 @@ public class RelationController {
         return ResponseEntity.ok(relationsDto);
     }
 
-    @GetMapping(value = "/list/{userId}", params = {"page", "size"})
-    public ResponseEntity<List<RelationsDto>> getAllConfirmedRelations(
-            @PathVariable("userId") Long userId,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<RelationsDto> relations = relationService.getAllForUserId(pageable, userId);
+    @GetMapping(value = "/list/{userId}")
+    public ResponseEntity<List<RelationsDto>> getAllForUserId(@PathVariable("userId") Long userId) {
+        List<RelationsDto> relations = relationService.getAllForUserId(userId);
         return ResponseEntity.ok(relations);
     }
 

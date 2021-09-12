@@ -17,7 +17,12 @@ export class Uris {
     static readonly BY_ID = 'users';
   };
 
+  /**
+   * RELATIONS
+   */
   static readonly RELATIONS = class {
     static readonly ALL_CONFIRMED_BY_USER_ID = 'relations';
+    static readonly ALL_BY_USER_ID = 'relations/list';
+    static readonly REQUEST = 'relations/request';
   };
 }

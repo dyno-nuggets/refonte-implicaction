@@ -26,6 +26,11 @@ public class RelationService {
     private final RelationAdapter relationAdapter;
 
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
+        // TODO: gérer avec une exception plus appropriée
+        if (senderId.equals(receiverId)) {
+            throw new ImplicactionException("Cannot create relation with same user as sender and receiver");
+        }
+
         final User sender = userRepository.findById(senderId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with id " + receiverId));
         final User receiver = userRepository.findById(receiverId)
@@ -44,8 +49,8 @@ public class RelationService {
         return relationAdapter.toDto(save);
     }
 
-    public List<RelationsDto> getAllForUserId(Pageable pageable, Long userId) {
-        final List<Relation> relations = relationRepository.findAllByUserId(userId, pageable);
+    public List<RelationsDto> getAllForUserId(Long userId) {
+        final List<Relation> relations = relationRepository.findAllByUserId(userId);
         return relations.stream()
                 .map(relationAdapter::toDto)
                 .collect(toList());

@@ -4,7 +4,7 @@
       <h2>Experiences professionnelles</h2>
     </div>
     <ul>
-      <ng-container *ngIf="user.experiences else emptyInfo">
+      <ng-container *ngIf="user.experiences?.length else emptyInfo">
         <li
           *ngFor="let experience of user.experiences; last as isLast;"
           class="list-unstyled"
