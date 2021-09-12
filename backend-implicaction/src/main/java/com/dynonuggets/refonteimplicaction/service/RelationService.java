@@ -63,7 +63,7 @@ public class RelationService {
                 .collect(toList());
     }
 
-    public List<RelationsDto> getAllPendingBySenderId(Long userId) {
+    public List<RelationsDto> getAllPendingBySenderId(Pageable pageable, Long userId) {
         final List<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId);
         return relations.stream()
                 .map(relationAdapter::toDto)

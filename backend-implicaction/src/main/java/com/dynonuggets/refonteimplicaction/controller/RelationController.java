@@ -2,7 +2,6 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import lombok.AllArgsConstructor;
@@ -36,8 +35,13 @@ public class RelationController {
     }
 
     @GetMapping(value = "/pending/{userId}", params = {"page", "size"})
-    public ResponseEntity<List<RelationsDto>> getAllPendingRelations(@PathVariable("userId") Long userId) {
-        List<RelationsDto> relations = relationService.getAllPendingBySenderId(userId);
+    public ResponseEntity<List<RelationsDto>> getAllPendingRelations(
+            @PathVariable("userId") Long userId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        List<RelationsDto> relations = relationService.getAllPendingBySenderId(pageable, userId);
         return ResponseEntity.ok(relations);
     }
 
@@ -52,6 +56,7 @@ public class RelationController {
         return ResponseEntity.ok(relations);
     }
 
+    @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/{senderId}/decline")
     public ResponseEntity deleteRelationBySender(@PathVariable("senderId") Long senderId) {
         final Long receiverId = authService.getCurrentUser().getId();
@@ -59,6 +64,7 @@ public class RelationController {
         return ResponseEntity.noContent().build();
     }
 
+    @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/{userId}/cancel")
     public ResponseEntity cancelRelationByUser(@PathVariable("userId") Long userId1) {
         final Long userId2 = authService.getCurrentUser().getId();
