@@ -91,13 +91,14 @@ public class RelationService {
     }
 
     /**
-     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres, sans tenir compte de la notion
+     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres, en tenant compte de la notion
      * de sender / receiver
      */
-    public void confirmRelation(Long senderId, Long receiverId) {
+    public RelationsDto confirmRelation(Long senderId, Long receiverId) {
         Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
                 .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
         relation.setConfirmedAt(Instant.now());
-        relationRepository.save(relation);
+        Relation relationUpdate = relationRepository.save(relation);
+        return relationAdapter.toDto(relationUpdate);
     }
 }
