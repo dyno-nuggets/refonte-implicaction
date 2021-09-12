@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 // supprime les warnings sur les noms des méthodes ne respectant pas la convention de nommage (cf named queries)
 @SuppressWarnings("squid:S00100")
@@ -24,4 +25,6 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
     List<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 
     List<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
+
+    Optional<Relation> findBySender_IdAndReceiver_Id(Long senderId, Long receiverId);
 }

@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.handler;
 
 import com.dynonuggets.refonteimplicaction.dto.ExceptionResponse;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(response);
     }
 
-    @ExceptionHandler(value = UserNotFoundException.class)
+    @ExceptionHandler(value = {NotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<ExceptionResponse> userNotFoundException(Exception ex) {
         ExceptionResponse response = ExceptionResponse.builder()
                 .errorMessage(ex.getMessage())

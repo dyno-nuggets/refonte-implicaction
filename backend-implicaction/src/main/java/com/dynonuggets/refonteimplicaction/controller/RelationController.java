@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
-import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import lombok.AllArgsConstructor;
@@ -23,7 +23,7 @@ public class RelationController {
 
     @PostMapping("/request/{receiverId}")
     public ResponseEntity<RelationsDto> requestRelation(@PathVariable("receiverId") Long receiverId) {
-        final User registredUser = authService.getCurrentUser();
+        final UserDto registredUser = authService.getCurrentUser();
         RelationsDto relationsDto = relationService.requestRelation(registredUser.getId(), receiverId);
         return ResponseEntity.ok(relationsDto);
     }
@@ -54,5 +54,13 @@ public class RelationController {
         Pageable pageable = PageRequest.of(page, size);
         List<RelationsDto> relations = relationService.getAllPendingByReceiverId(pageable, userId);
         return ResponseEntity.ok(relations);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @DeleteMapping(value = "/{senderId}/decline")
+    public ResponseEntity deleteRelationBySender(@PathVariable("senderId") Long senderId) {
+        final Long receiverId = authService.getCurrentUser().getId();
+        relationService.deleteRelation(senderId, receiverId);
+        return ResponseEntity.noContent().build();
     }
 }
