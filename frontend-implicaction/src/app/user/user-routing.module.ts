@@ -10,11 +10,15 @@ const routes: Routes = [
     component: UserProfileComponent
   },
   {
-    path: ':action',
+    path: 'friends/:type',
     component: UserListComponent
   },
   {
-    path: ':userId/:action',
+    path: ':userId/friends',
+    component: UserListComponent
+  },
+  {
+    path: 'list',
     component: UserListComponent
   },
 ];

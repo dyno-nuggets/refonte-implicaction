@@ -90,6 +90,39 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Renvoie l'url de tous les amis d'un utilisateur
+   */
+  getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.FRIENDS, [userId]);
+
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      uri,
+      (qs: QueryStringParameters) => {
+        qs.push('page', pageable.page);
+        qs.push('size', pageable.size);
+      });
+  }
+
+  /**
+   * Renvoie l'url de tous les amis en filtrant par un type
+   * @param action permet de sélectionner les amis à récupérer
+   */
+  getAllFriendsByTypeEndPoint(type: string, pageable: Pageable): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.FRIENDS, [type]);
+
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      uri,
+      (qs: QueryStringParameters) => {
+        qs.push('page', pageable.page);
+        qs.push('size', pageable.size);
+      });
+  }
+
+  createRelationEndpoint(receiverId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
+  }
+
+  /**
    * Relations
    */
 
@@ -106,9 +139,5 @@ export class ApiEndpointsService {
 
   getAllRelationsByUserIdEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId]);
-  }
-
-  createRelationEndpoint(receiverId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
   }
 }

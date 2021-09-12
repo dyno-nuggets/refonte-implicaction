@@ -15,6 +15,7 @@ export class Uris {
   static readonly USERS = class {
     static readonly ALL = 'users';
     static readonly BY_ID = 'users';
+    static readonly FRIENDS = 'users';
   };
 
   /**

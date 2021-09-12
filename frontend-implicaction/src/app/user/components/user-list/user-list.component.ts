@@ -5,7 +5,7 @@ import {Constants} from '../../../config/constants';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RelationService} from '../../services/relation.service';
 import {AuthService} from '../../../shared/services/auth.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router';
 
 @Component({
   selector: 'app-user-list',
@@ -30,32 +30,55 @@ export class UserListComponent implements OnInit {
     private userService: UserService,
     private toastService: ToasterService,
     private relationService: RelationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   ) {
   }
 
   ngOnInit(): void {
     this.userId = this.authService.getUserId();
-    this.paginate({
-      first: 0,
-      rows: this.pageable.size,
-    });
 
-    this.route.paramMap.subscribe(paramMap => {
-      this.action = paramMap.get('action');
-      switch (this.action) {
-        case 'list':
-          this.getUsers();
-          break;
-        case 'friends':
-          this.getFriends();
-          break;
-        case 'received':
-          this.getReceivedRequests();
-          break;
-        case 'sent':
-          this.getSentRequests();
-          break;
+    // this.route.paramMap.subscribe(paramMap => {
+    //   this.action = paramMap.get('action');
+    //   switch (this.action) {
+    //     case 'list':
+    //       this.getUsers();
+    //       break;
+    //     case 'friends':
+    //       this.getFriends();
+    //       break;
+    //     case 'received':
+    //     case 'sent':
+    //       this.getFriendRequests(this.action);
+    //       break;
+    //   }
+    // });
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        // Show progress spinner or progress bar
+        console.log('Route change detected');
+      }
+
+      if (event instanceof NavigationEnd) {
+        // charger le tableau de type
+        const url = event.url;
+        console.log(url);
+
+        if (url === '/users/list') {
+          // this.getUsers();
+          this.paginate({
+            first: 0,
+            rows: this.pageable.size,
+          });
+        }
+      }
+
+      if (event instanceof NavigationError) {
+        // Hide progress spinner or progress bar
+
+        // Present error to user
+        console.log(event.error);
       }
     });
   }
@@ -115,17 +138,10 @@ export class UserListComponent implements OnInit {
     //   .subscribe(friends => this.users = friends);
   }
 
-  private getReceivedRequests(): void {
+  private getFriendRequests(type: string): void {
     this.users = [];
     // this.relationService
     //   .getReceivedRequests(this.userId)
     //   .subscribe(senders => this.users = senders);
-  }
-
-  private getSentRequests(): void {
-    this.users = [];
-    // this.relationService
-    //   .getSentRequests(this.userId)
-    //   .subscribe(receivers => this.users = receivers);
   }
 }
