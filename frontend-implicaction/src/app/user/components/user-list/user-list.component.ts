@@ -133,20 +133,24 @@ export class UserListComponent implements OnInit {
       .removeUserFromFriends(user.id)
       .subscribe(
         () => {
-          // CAS 1: c'est la liste des utilisateurs qui est affichée -> on supprime le user du tableau d'ami correspondant
-          if (this.listType !== USER_LIST_TYPE.ALL_USERS) {
-            if (this.isFriend(user)) {
+          if (this.isFriend(user)) {
+            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
               this.friends = this.friends.filter(u => u.id !== user.id);
-              message = `L'utilisateur ${user.nicename} a bien été supprimé de vos amis`;
-            } else if (this.isSender(user)) {
-              this.friendAsSenders = this.friendAsSenders.filter(u => u.id !== user.id);
-              message = `Vous avez annulé la demande d'ami avec ${user.nicename}`;
-            } else if (this.isReceiver(user)) {
-              this.friendAsReceivers = this.friendAsReceivers.filter(u => u.id !== user.id);
-              message = `Vous avez refusé la demande d'ami de ${user.nicename}`;
             }
-          } else {
-            // CAS 2: on relance la pagination
+            message = `L'utilisateur ${user.nicename} a bien été supprimé de vos amis`;
+          } else if (this.isSender(user)) {
+            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+              this.friendAsSenders = this.friendAsSenders.filter(u => u.id !== user.id);
+            }
+            message = `Vous avez annulé la demande d'ami avec ${user.nicename}`;
+          } else if (this.isReceiver(user)) {
+            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+              this.friendAsReceivers = this.friendAsReceivers.filter(u => u.id !== user.id);
+            }
+            message = `Vous avez refusé la demande d'ami de ${user.nicename}`;
+          }
+          // il faut relancer la pagination dans le cas de l'affichage des amis / demandes
+          if (this.listType !== USER_LIST_TYPE.ALL_USERS) {
             const first = this.pageable.page * this.pageable.size;
             const rows = this.pageable.size;
             this.paginate({first, rows});
