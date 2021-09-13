@@ -127,6 +127,23 @@ export class UserListComponent implements OnInit {
       );
   }
 
+  removeUserFromFriends(user: User): void {
+    this.userService
+      .removeUserFromFriends(user.id)
+      .subscribe(
+        () => {
+          // si la page active est la page des amis on recharge la page
+          if (this.listType === USER_LIST_TYPE.FRIENDS) {
+            const first = this.pageable.page * this.pageable.size;
+            const rows = this.pageable.size;
+            this.paginate({first, rows});
+          }
+        },
+        () => this.toastService.error('Erreur', 'Une erreur est survenue'),
+        () => this.toastService.success('Succès', `L'utilisateur a bien été supprimé de vos amis.`)
+      );
+  }
+
   private getAllFriends(): void {
     this.relationService
       // TODO: peut être optimisé en ne recherchant que les relations avec les utilisateurs affichés

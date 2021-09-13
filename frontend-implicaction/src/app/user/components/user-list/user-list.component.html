@@ -40,6 +40,7 @@
             <!-- CAS 1 : est un ami -->
             <ng-container *ngIf="isFriend(user); else optionSender">
               <button
+                (click)="removeUserFromFriends(user)"
                 class="btn btn-danger text-light rounded-pill"
                 data-bs-placement="top"
                 data-bs-toggle="tooltip"

@@ -124,6 +124,10 @@ export class ApiEndpointsService {
   }
 
   confirmUserAsFriendEndpoint(senderId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.END_POINT, [senderId, 'confirm']);
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [senderId, 'confirm']);
+  }
+
+  cancelRelationByUserEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [userId, 'cancel']);
   }
 }
