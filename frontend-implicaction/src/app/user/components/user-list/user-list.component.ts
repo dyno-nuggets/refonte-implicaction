@@ -7,7 +7,6 @@ import {RelationService} from '../../services/relation.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {Pageable} from '../../../shared/models/pageable';
 
 enum USER_LIST_TYPE {
   ALL_USERS = '/users/list',
@@ -76,7 +75,7 @@ export class UserListComponent implements OnInit {
   paginate({first, rows}): void {
     this.pageable.page = first / rows;
     this.pageable.size = rows;
-    let user$: Observable<Pageable<User>>;
+    let user$: Observable<any>;
 
     // on détermine quel observable à écouter en fonction dy type d'utilisateurs à afficher
     if (this.listType === USER_LIST_TYPE.ALL_USERS) {
@@ -91,9 +90,10 @@ export class UserListComponent implements OnInit {
     }
 
     user$.subscribe(
-      userPageable => {
-        this.pageable = userPageable;
-        this.users = userPageable.content;
+      data => {
+        this.pageable.page = data.pageable.pageNumber;
+        this.pageable.size = data.pageable.pageSize;
+        this.users = data.content;
       },
       () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')
     );
@@ -106,6 +106,24 @@ export class UserListComponent implements OnInit {
         relation => this.friendAsSenders.push(relation.receiver),
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
         () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.nicename}`)
+      );
+  }
+
+  confirmUserAsFriend(sender: User): void {
+    this.userService
+      .confirmUserAsFriend(sender.id)
+      .subscribe(
+        relation => {
+          if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+            this.friends.push(relation.sender);
+          } else {
+            const first = this.pageable.page * this.pageable.size;
+            const rows = this.pageable.size;
+            this.paginate({first, rows});
+          }
+        },
+        () => this.toastService.error('Oops', 'Une erreur est survenue'),
+        () => this.toastService.success('Demande acceptée', `Vous avez accepté la demande d'ami`)
       );
   }
 

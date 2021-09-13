@@ -67,6 +67,7 @@
             <ng-template #optionReceiver>
               <ng-container *ngIf="isReceiver(user); else optionNoRelation">
                 <button
+                  (click)="confirmUserAsFriend(user)"
                   class="btn btn-success rounded-pill mx-2 mx-sm-1"
                   data-bs-placement="top"
                   data-bs-toggle="tooltip"

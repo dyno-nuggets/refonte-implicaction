@@ -5,6 +5,7 @@ import {Observable} from 'rxjs';
 import {User} from '../../shared/models/user';
 import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
+import {Relation} from '../models/relation';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class UserService {
 
   }
 
-  getAll(pageable: Pageable): Observable<Pageable<User>> {
+  getAll(pageable: Pageable): Observable<any> {
     return (this.apiHttpService
       .get(this.apiEndpointsService.getAllUserEndpoint(pageable)) as Observable<Pageable<User>>);
   }
@@ -28,15 +29,19 @@ export class UserService {
     return this.http.get(this.apiEndpointsService.getUserByIdEndpoint(userId));
   }
 
-  getUserFriends(userId: string, pageable: Pageable): Observable<Pageable<User>> {
+  getUserFriends(userId: string, pageable: Pageable): Observable<any> {
     return this.http.get<Pageable<User>>(this.apiEndpointsService.getAllFriendsByUserIdEndPoint(userId, pageable));
   }
 
-  getUserFriendRequestReceived(pageable: Pageable): Observable<Pageable<User>> {
-    return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestReceived(pageable));
+  getUserFriendRequestReceived(pageable: Pageable): Observable<any> {
+    return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestReceivedEndpoint(pageable));
   }
 
-  getUserFriendRequestSent(pageable: Pageable): Observable<Pageable<User>> {
-    return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestSent(pageable));
+  getUserFriendRequestSent(pageable: Pageable): Observable<any> {
+    return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestSentEndPoint(pageable));
+  }
+
+  confirmUserAsFriend(senderId: string): Observable<Relation> {
+    return this.http.get(this.apiEndpointsService.confirmUserAsFriendEndpoint(senderId));
   }
 }

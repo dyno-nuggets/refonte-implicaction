@@ -24,7 +24,7 @@ export class Uris {
    * RELATIONS
    */
   static readonly RELATIONS = class {
-    static readonly ALL_CONFIRMED_BY_USER_ID = 'relations';
+    static readonly END_POINT = 'relations';
     static readonly ALL_BY_USER_ID = 'relations/list';
     static readonly REQUEST = 'relations/request';
   };

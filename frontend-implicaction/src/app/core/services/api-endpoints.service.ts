@@ -103,11 +103,11 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
-  getFriendRequestReceived(pageable: Pageable): string {
+  getFriendRequestReceivedEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_RECEIVED, pageable);
   }
 
-  getFriendRequestSent(pageable: Pageable): string {
+  getFriendRequestSentEndPoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_SENT, pageable);
   }
 
@@ -121,5 +121,9 @@ export class ApiEndpointsService {
 
   getAllRelationsByUserIdEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId]);
+  }
+
+  confirmUserAsFriendEndpoint(senderId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.END_POINT, [senderId, 'confirm']);
   }
 }
