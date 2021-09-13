@@ -99,7 +99,7 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  requestAsFriend(user: User): void {
+  requestUserAsFriend(user: User): void {
     this.relationService
       .requestFriend(user.id)
       .subscribe(

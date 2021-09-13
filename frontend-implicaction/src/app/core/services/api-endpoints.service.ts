@@ -15,7 +15,7 @@ export class ApiEndpointsService {
   }
 
   // URL
-  private static createUrl(action: string, isMockAPI: boolean = false): string {
+  private static createUrl(action: string, isMockAPI = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
       isMockAPI ? Constants.API_MOCK_ENDPOINT : Constants.API_ENDPOINT,
       action
@@ -98,7 +98,7 @@ export class ApiEndpointsService {
     const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GET_FRIENDS, [userId, 'friends'])
       // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
-      .replace(Constants.API_ENDPOINT, '');
+      .replace(`${Constants.API_ENDPOINT}/`, '');
 
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
