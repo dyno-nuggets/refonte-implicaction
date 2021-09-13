@@ -40,7 +40,7 @@
             <!-- CAS 1 : est un ami -->
             <ng-container *ngIf="isFriend(user); else optionSender">
               <button
-                (click)="removeUserFromFriends(user)"
+                (click)="removeUserRelation(user)"
                 class="btn btn-danger text-light rounded-pill"
                 data-bs-placement="top"
                 data-bs-toggle="tooltip"
@@ -54,6 +54,7 @@
             <ng-template #optionSender>
               <ng-container *ngIf="isSender(user); else optionReceiver">
                 <button
+                  (click)="removeUserRelation(user)"
                   class="btn btn-danger text-light rounded-pill"
                   data-bs-placement="top"
                   data-bs-toggle="tooltip"
@@ -78,6 +79,7 @@
                   <i-feather class="icon" name="user-check"></i-feather>
                 </button>
                 <button
+                  (click)="removeUserRelation(user)"
                   class="btn btn-danger rounded-pill mx-2 mx-sm-1"
                   data-bs-placement="top"
                   data-bs-toggle="tooltip"
