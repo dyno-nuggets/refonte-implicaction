@@ -23,6 +23,7 @@ export class ApiEndpointsService {
     return urlBuilder.toString();
   }
 
+  // URL WITH QUERY PARAMETERS
   private static createUrlWithQueryParameters(
     action: string,
     queryStringHandler?:
@@ -50,6 +51,15 @@ export class ApiEndpointsService {
     }
     const urlBuilder: UrlBuilder = new UrlBuilder(Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
     return urlBuilder.toString();
+  }
+
+  private static createUrlWithPageable(uri: string, pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      uri,
+      (qs: QueryStringParameters) => {
+        qs.push('page', pageable.page);
+        qs.push('size', pageable.size);
+      });
   }
 
   /**
@@ -81,41 +91,24 @@ export class ApiEndpointsService {
    */
 
   getAllUserEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithQueryParameters(
-      Uris.USERS.ALL,
-      (qs: QueryStringParameters) => {
-        qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
-      });
+    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.ALL, pageable);
   }
 
-  /**
-   * Renvoie l'url de tous les amis d'un utilisateur
-   */
   getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable): string {
-    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.FRIENDS, [userId]);
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GET_FRIENDS, [userId, 'friends'])
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
+      // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
+      .replace(Constants.API_ENDPOINT, '');
 
-    return ApiEndpointsService.createUrlWithQueryParameters(
-      uri,
-      (qs: QueryStringParameters) => {
-        qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
-      });
+    return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
-  /**
-   * Renvoie l'url de tous les amis en filtrant par un type
-   * @param action permet de sélectionner les amis à récupérer
-   */
-  getAllFriendsByTypeEndPoint(type: string, pageable: Pageable): string {
-    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.FRIENDS, [type]);
+  getFriendRequestReceived(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_RECEIVED, pageable);
+  }
 
-    return ApiEndpointsService.createUrlWithQueryParameters(
-      uri,
-      (qs: QueryStringParameters) => {
-        qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
-      });
+  getFriendRequestSent(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_SENT, pageable);
   }
 
   createRelationEndpoint(receiverId: string): string {
@@ -125,17 +118,6 @@ export class ApiEndpointsService {
   /**
    * Relations
    */
-
-  getAllConfirmedFriendsBySenderIdEndpoint(userId: string, pageable: Pageable): string {
-    let endpoint = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_CONFIRMED_BY_USER_ID, [userId, 'confirmed']);
-    endpoint = ApiEndpointsService.createUrlWithQueryParameters(
-      endpoint,
-      (qs: QueryStringParameters) => {
-        qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
-      });
-    return endpoint;
-  }
 
   getAllRelationsByUserIdEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId]);

@@ -1,13 +1,36 @@
 <div class="row">
   <div class="col-2 list-group">
-    <a class="list-group-item list-group-item-action" routerLink="/users/list" routerLinkActive="active">Tous les
-      utilisateurs</a>
-    <a class="list-group-item list-group-item-action" routerLink="/users/{{userId}}/friends" routerLinkActive="active">Mes
-      amis</a>
-    <a class="list-group-item list-group-item-action" routerLink="/users/friends/received" routerLinkActive="active">Demandes
-      reçues</a>
-    <a class="list-group-item list-group-item-action" routerLink="/users/friends/sent" routerLinkActive="active">Demandes
-      envoyées</a>
+    <a
+      class="list-group-item list-group-item-action"
+      routerLink="/users/list"
+      routerLinkActive="active"
+    >
+      Tous les utilisateurs
+    </a>
+    <a
+      [routerLinkActiveOptions]="{exact: true}"
+      class="list-group-item list-group-item-action"
+      routerLink="/users/friends"
+      routerLinkActive="active"
+    >
+      Mes amis
+    </a>
+    <a
+      [routerLinkActiveOptions]="{exact: true}"
+      class="list-group-item list-group-item-action"
+      routerLink="/users/friends/received"
+      routerLinkActive="active"
+    >
+      Demandes reçues
+    </a>
+    <a
+      [routerLinkActiveOptions]="{exact: true}"
+      class="list-group-item list-group-item-action"
+      routerLink="/users/friends/sent"
+      routerLinkActive="active"
+    >
+      Demandes envoyées
+    </a>
   </div>
   <div class="col-9 ms-5">
     <div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 mb-2">
@@ -82,6 +105,7 @@
     </div>
     <p-paginator
       (onPageChange)="paginate($event)"
+      *ngIf="pageable.totalPages > 1"
       [rowsPerPageOptions]="[10, 25, 50]"
       [rows]="rowsPerPage"
       [totalRecords]="pageable.totalElements"

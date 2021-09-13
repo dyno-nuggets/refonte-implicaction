@@ -25,10 +25,6 @@ export class RelationService {
     return this.http.get<Pageable<User>>(this.apiEndpointService.getAllFriendsByUserIdEndPoint(userId, pageable));
   }
 
-  getFriendsRequests(type: string, pageable: Pageable): Observable<Pageable<User>> {
-    return this.http.get<Pageable<User>>(this.apiEndpointService.getAllFriendsByTypeEndPoint(type, pageable));
-  }
-
   requestFriend(receiverId: string): Observable<Relation> {
     return this.http.post(this.apiEndpointService.createRelationEndpoint(receiverId), null);
   }

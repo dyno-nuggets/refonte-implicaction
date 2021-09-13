@@ -63,20 +63,6 @@ public class RelationService {
                 .collect(toList());
     }
 
-    public List<RelationsDto> getAllPendingBySenderId(Pageable pageable, Long userId) {
-        final List<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId);
-        return relations.stream()
-                .map(relationAdapter::toDto)
-                .collect(toList());
-    }
-
-    public List<RelationsDto> getAllPendingByReceiverId(Pageable pageable, Long userId) {
-        final List<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId);
-        return relations.stream()
-                .map(relationAdapter::toDto)
-                .collect(toList());
-    }
-
     /**
      * Supprime la relation entre le sender et le receiver dont les ids sont passé en paramètres
      */
@@ -126,7 +112,7 @@ public class RelationService {
 
     public Page<UserDto> getSentFriendRequest(Long userId, Pageable pageable) {
         Page<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId, pageable);
-        return relations.map(relation -> userAdapter.toDto(relation.getSender()));
+        return relations.map(relation -> userAdapter.toDto(relation.getReceiver()));
     }
 
     public Page<UserDto> getReceivedFriendRequest(Long userId, Pageable pageable) {

@@ -10,12 +10,16 @@ const routes: Routes = [
     component: UserProfileComponent
   },
   {
-    path: 'friends/:type',
-    component: UserListComponent
+    path: 'friends/received',
+    component: UserListComponent,
   },
   {
-    path: ':userId/friends',
-    component: UserListComponent
+    path: 'friends/sent',
+    component: UserListComponent,
+  },
+  {
+    path: 'friends',
+    component: UserListComponent,
   },
   {
     path: 'list',
