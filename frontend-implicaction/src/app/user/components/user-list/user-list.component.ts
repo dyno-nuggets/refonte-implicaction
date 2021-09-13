@@ -127,6 +127,9 @@ export class UserListComponent implements OnInit {
       );
   }
 
+  /**
+   * permet de refuser, annuler une demande d'ami ou de supprimer un ami
+   */
   removeUserRelation(user: User): void {
     let message = '';
     this.userService
