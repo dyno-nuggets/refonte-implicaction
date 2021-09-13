@@ -44,4 +44,8 @@ export class UserService {
   confirmUserAsFriend(senderId: string): Observable<Relation> {
     return this.http.get(this.apiEndpointsService.confirmUserAsFriendEndpoint(senderId));
   }
+
+  removeUserFromFriends(userId: string): Observable<any> {
+    return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(userId));
+  }
 }
