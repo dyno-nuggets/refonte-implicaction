@@ -132,7 +132,7 @@ export class UserListComponent implements OnInit {
       .removeUserFromFriends(user.id)
       .subscribe(
         () => {
-          // si la page active est la page des amis on recharche la page
+          // si la page active est la page des amis on recharge la page
           if (this.listType === USER_LIST_TYPE.FRIENDS) {
             const first = this.pageable.page * this.pageable.size;
             const rows = this.pageable.size;
