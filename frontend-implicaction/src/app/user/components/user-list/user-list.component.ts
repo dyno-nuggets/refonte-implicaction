@@ -127,20 +127,40 @@ export class UserListComponent implements OnInit {
       );
   }
 
-  removeUserFromFriends(user: User): void {
+  /**
+   * permet de refuser, annuler une demande d'ami ou de supprimer un ami
+   */
+  removeUserRelation(user: User): void {
+    let message = '';
     this.userService
       .removeUserFromFriends(user.id)
       .subscribe(
         () => {
-          // si la page active est la page des amis on recharge la page
-          if (this.listType === USER_LIST_TYPE.FRIENDS) {
+          if (this.isFriend(user)) {
+            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+              this.friends = this.friends.filter(u => u.id !== user.id);
+            }
+            message = `L'utilisateur ${user.nicename} a bien été supprimé de vos amis`;
+          } else if (this.isSender(user)) {
+            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+              this.friendAsSenders = this.friendAsSenders.filter(u => u.id !== user.id);
+            }
+            message = `Vous avez annulé la demande d'ami avec ${user.nicename}`;
+          } else if (this.isReceiver(user)) {
+            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+              this.friendAsReceivers = this.friendAsReceivers.filter(u => u.id !== user.id);
+            }
+            message = `Vous avez refusé la demande d'ami de ${user.nicename}`;
+          }
+          // il faut relancer la pagination dans le cas de l'affichage des amis / demandes
+          if (this.listType !== USER_LIST_TYPE.ALL_USERS) {
             const first = this.pageable.page * this.pageable.size;
             const rows = this.pageable.size;
             this.paginate({first, rows});
           }
         },
         () => this.toastService.error('Erreur', 'Une erreur est survenue'),
-        () => this.toastService.success('Succès', `L'utilisateur a bien été supprimé de vos amis.`)
+        () => this.toastService.success('Succès', message)
       );
   }
 
