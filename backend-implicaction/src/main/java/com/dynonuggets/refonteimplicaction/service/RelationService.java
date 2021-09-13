@@ -30,7 +30,6 @@ public class RelationService {
     private final RelationAdapter relationAdapter;
     private final UserAdapter userAdapter;
     private final UserService userService;
-    private final AuthService authService;
 
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
         // TODO: gérer avec une exception plus appropriée
