@@ -27,4 +27,16 @@ export class UserService {
   getUserById(userId: string): Observable<User> {
     return this.http.get(this.apiEndpointsService.getUserByIdEndpoint(userId));
   }
+
+  getUserFriends(userId: string, pageable: Pageable): Observable<Pageable<User>> {
+    return this.http.get<Pageable<User>>(this.apiEndpointsService.getAllFriendsByUserIdEndPoint(userId, pageable));
+  }
+
+  getUserFriendRequestReceived(pageable: Pageable): Observable<Pageable<User>> {
+    return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestReceived(pageable));
+  }
+
+  getUserFriendRequestSent(pageable: Pageable): Observable<Pageable<User>> {
+    return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestSent(pageable));
+  }
 }

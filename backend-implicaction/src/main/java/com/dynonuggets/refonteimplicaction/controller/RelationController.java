@@ -5,8 +5,6 @@ import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,28 +29,6 @@ public class RelationController {
     @GetMapping(value = "/list/{userId}")
     public ResponseEntity<List<RelationsDto>> getAllForUserId(@PathVariable("userId") Long userId) {
         List<RelationsDto> relations = relationService.getAllForUserId(userId);
-        return ResponseEntity.ok(relations);
-    }
-
-    @GetMapping(value = "/pending/{userId}", params = {"page", "size"})
-    public ResponseEntity<List<RelationsDto>> getAllPendingRelations(
-            @PathVariable("userId") Long userId,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<RelationsDto> relations = relationService.getAllPendingBySenderId(pageable, userId);
-        return ResponseEntity.ok(relations);
-    }
-
-    @GetMapping(value = "/received/{userId}", params = {"page", "size"})
-    public ResponseEntity<List<RelationsDto>> getAllReceivedRelations(
-            @PathVariable("userId") Long userId,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        List<RelationsDto> relations = relationService.getAllPendingByReceiverId(pageable, userId);
         return ResponseEntity.ok(relations);
     }
 

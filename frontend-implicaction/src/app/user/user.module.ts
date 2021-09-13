@@ -24,7 +24,7 @@ import {TrainingDetailComponent} from './components/training-detail/training-det
     PersonalCardComponent,
     UserListComponent,
     TrainingListComponent,
-    TrainingDetailComponent
+    TrainingDetailComponent,
   ],
   imports: [
     CommonModule,

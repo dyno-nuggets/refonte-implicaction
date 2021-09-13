@@ -28,11 +28,7 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
             "and r.confirmedAt is not null")
     Page<Relation> findAllFriendsByUserId(Long userId, Pageable pageable);
 
-    List<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId);
-
     Page<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
-
-    List<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId);
 
     Page<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
 

@@ -15,6 +15,9 @@ export class Uris {
   static readonly USERS = class {
     static readonly ALL = 'users';
     static readonly BY_ID = 'users';
+    static readonly GET_FRIENDS = 'users';
+    static readonly GET_FRIEND_REQUEST_RECEIVED = 'users/friends/received';
+    static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';
   };
 
   /**
