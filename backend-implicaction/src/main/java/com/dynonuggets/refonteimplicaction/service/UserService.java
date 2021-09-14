@@ -26,20 +26,24 @@ public class UserService {
     private final AuthService authService;
     private final UserAdapter userAdapter;
 
+    /**
+     * @param isCurrentUserRelation recherche les relations avec l'utilisateur courant
+     * @return la liste paginée de tous les utilisateurs
+     */
     @Transactional(readOnly = true)
-    public Page<UserDto> getAll(Pageable pageable, boolean isBuildRelation) {
+    public Page<UserDto> getAll(Pageable pageable, boolean isCurrentUserRelation) {
         final Long currentUserId = authService.getCurrentUser().getId();
 
         final Page<UserDto> users = userRepository.findAll(pageable)
                 .map(userAdapter::toDto);
 
-        if (isBuildRelation) {
+        if (isCurrentUserRelation) {
             final List<Long> userIds = users.map(UserDto::getId)
                     .get()
                     .collect(Collectors.toList());
-
+            // on recherche les relations de tous les utilisateurs remontés avec l'utilisateur courant ...
             List<Relation> relations = relationRepository.findAllRelatedToUserByUserIdIn(currentUserId, userIds);
-
+            // ... et on associe chaque relation avec un statut
             relations.forEach(relation -> users.stream()
                     .filter(user -> isSenderOrReceiver(relation, user.getId()) && !currentUserId.equals(user.getId()))
                     .findFirst()

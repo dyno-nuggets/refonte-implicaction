@@ -33,7 +33,7 @@ public class RelationService {
      * Crée une nouvelle relation entre le senderId et le receiverId
      *
      * @return la nouvelle relation créée avec confirmedAt à null
-     * @throws UserNotFoundException si l'un des deux utilisateur au moins n'existe pas
+     * @throws UserNotFoundException si l'un des deux utilisateurs au moins n'existe pas
      * @throws ImplicactionException si sender et receiver correspondent au même utilisateur
      */
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
