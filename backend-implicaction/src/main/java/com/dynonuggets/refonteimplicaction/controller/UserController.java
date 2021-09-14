@@ -30,7 +30,7 @@ public class UserController {
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserDto> users = userService.getAll(pageable);
+        Page<UserDto> users = userService.getAll(pageable, true);
         return ResponseEntity.ok(users);
     }
 
@@ -47,7 +47,7 @@ public class UserController {
             @PathVariable("userId") Long userId
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserDto> userDtos = relationService.getAllFriendsByUserId(pageable, userId);
+        Page<UserDto> userDtos = relationService.getAllFriendsByUserId(userId, pageable);
         return ResponseEntity.ok(userDtos);
     }
 
@@ -69,7 +69,7 @@ public class UserController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         Long userId = authService.getCurrentUser().getId();
-        Page<UserDto> usersDto = relationService.getReceivedFriendRequest(userId ,pageable);
+        Page<UserDto> usersDto = relationService.getReceivedFriendRequest(userId, pageable);
         return ResponseEntity.ok(usersDto);
     }
 }

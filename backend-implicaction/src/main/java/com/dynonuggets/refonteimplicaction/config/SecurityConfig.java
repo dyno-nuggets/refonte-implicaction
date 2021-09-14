@@ -50,7 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity.cors().disable()
                 .csrf().disable()
                 .authorizeRequests()
-                // désactive l'authentification pour les requêtes dont l'url commence par /api/auth/
                 .antMatchers(AUTH_WHITELIST)
                 .permitAll()
                 .anyRequest()

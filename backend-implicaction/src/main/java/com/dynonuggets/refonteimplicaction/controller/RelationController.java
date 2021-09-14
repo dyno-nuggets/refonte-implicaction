@@ -8,8 +8,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 @RestController
 @AllArgsConstructor
@@ -24,12 +22,6 @@ public class RelationController {
         final UserDto registredUser = authService.getCurrentUser();
         RelationsDto relationsDto = relationService.requestRelation(registredUser.getId(), receiverId);
         return ResponseEntity.ok(relationsDto);
-    }
-
-    @GetMapping(value = "/list/{userId}")
-    public ResponseEntity<List<RelationsDto>> getAllForUserId(@PathVariable("userId") Long userId) {
-        List<RelationsDto> relations = relationService.getAllForUserId(userId);
-        return ResponseEntity.ok(relations);
     }
 
     @SuppressWarnings("rawtypes")

@@ -33,5 +33,5 @@ public class UserDto {
     private String contribution;
     private String firstName;
     private String lastName;
-
+    private RelationTypeEnum relationTypeOfCurrentUser;
 }
