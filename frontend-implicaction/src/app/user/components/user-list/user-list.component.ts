@@ -7,8 +7,9 @@ import {RelationService} from '../../services/relation.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
+import {RelationType} from '../../models/relation-type.enum';
 
-enum USER_LIST_TYPE {
+enum UserListType {
   ALL_USERS = '/users/list',
   FRIENDS = '/users/friends',
   FRIENDS_RECEIVED = '/users/friends/received',
@@ -23,12 +24,10 @@ enum USER_LIST_TYPE {
 export class UserListComponent implements OnInit {
 
   users: User[] = [];
-  userId: string;
-  friends: User[] = [];
-  friendAsSenders: User[] = [];
-  friendAsReceivers: User[] = [];
+  currentUserId: string;
   action: string;
-  listType: USER_LIST_TYPE;
+  listType: UserListType;
+  relationType = RelationType;
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
@@ -41,51 +40,50 @@ export class UserListComponent implements OnInit {
     private relationService: RelationService,
     private router: Router,
   ) {
+    // on détermine le type de données à afficher en fonction de l'url
     switch (router.url) {
-      case USER_LIST_TYPE.FRIENDS:
-        this.listType = USER_LIST_TYPE.FRIENDS;
+      case UserListType.FRIENDS:
+        this.listType = UserListType.FRIENDS;
         break;
-      case USER_LIST_TYPE.FRIENDS_RECEIVED:
-        this.listType = USER_LIST_TYPE.FRIENDS_RECEIVED;
+      case UserListType.FRIENDS_RECEIVED:
+        this.listType = UserListType.FRIENDS_RECEIVED;
         break;
-      case USER_LIST_TYPE.FRIENDS_SENT:
-        this.listType = USER_LIST_TYPE.FRIENDS_SENT;
+      case UserListType.FRIENDS_SENT:
+        this.listType = UserListType.FRIENDS_SENT;
         break;
       default:
-        this.listType = USER_LIST_TYPE.ALL_USERS;
+        this.listType = UserListType.ALL_USERS;
     }
   }
 
+  private static isFriend = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.FRIEND;
+
+  private static isSender = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.SENDER;
+
+  private static isReceiver = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.RECEIVER;
+
   ngOnInit(): void {
-    this.userId = this.authService.getUserId();
+    this.currentUserId = this.authService.getUserId();
+    // chargement des données
     this.paginate({
       first: 0,
       rows: this.pageable.size,
     });
   }
 
-  isFriend = (user: User): boolean => this.listType === USER_LIST_TYPE.FRIENDS || this.friends.find(u => user.id === u.id) !== undefined;
-
-  // tslint:disable-next-line:max-line-length
-  isSender = (user: User): boolean => this.listType === USER_LIST_TYPE.FRIENDS_SENT || this.friendAsSenders.find(u => user.id === u.id) !== undefined;
-
-  // tslint:disable-next-line:max-line-length
-  isReceiver = (user: User): boolean => this.listType === USER_LIST_TYPE.FRIENDS_RECEIVED || this.friendAsReceivers.find(u => user.id === u.id) !== undefined;
-
   paginate({first, rows}): void {
     this.pageable.page = first / rows;
     this.pageable.size = rows;
     let user$: Observable<any>;
 
-    // on détermine quel observable à écouter en fonction dy type d'utilisateurs à afficher
-    if (this.listType === USER_LIST_TYPE.ALL_USERS) {
+    // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
+    if (this.listType === UserListType.ALL_USERS) {
       user$ = this.userService.getAll(this.pageable);
-      this.getAllFriends();
-    } else if (this.listType === USER_LIST_TYPE.FRIENDS) {
-      user$ = this.userService.getUserFriends(this.userId, this.pageable);
-    } else if (this.listType === USER_LIST_TYPE.FRIENDS_RECEIVED) {
+    } else if (this.listType === UserListType.FRIENDS) {
+      user$ = this.userService.getUserFriends(this.currentUserId, this.pageable);
+    } else if (this.listType === UserListType.FRIENDS_RECEIVED) {
       user$ = this.userService.getUserFriendRequestReceived(this.pageable);
-    } else if (this.listType === USER_LIST_TYPE.FRIENDS_SENT) {
+    } else if (this.listType === UserListType.FRIENDS_SENT) {
       user$ = this.userService.getUserFriendRequestSent(this.pageable);
     }
 
@@ -103,7 +101,7 @@ export class UserListComponent implements OnInit {
     this.relationService
       .requestFriend(user.id)
       .subscribe(
-        relation => this.friendAsSenders.push(relation.receiver),
+        () => user.relationTypeOfCurrentUser = RelationType.SENDER,
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
         () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.nicename}`)
       );
@@ -113,9 +111,9 @@ export class UserListComponent implements OnInit {
     this.userService
       .confirmUserAsFriend(sender.id)
       .subscribe(
-        relation => {
-          if (this.listType === USER_LIST_TYPE.ALL_USERS) {
-            this.friends.push(relation.sender);
+        () => {
+          if (this.listType === UserListType.ALL_USERS) {
+            sender.relationTypeOfCurrentUser = RelationType.FRIEND;
           } else {
             const first = this.pageable.page * this.pageable.size;
             const rows = this.pageable.size;
@@ -136,24 +134,16 @@ export class UserListComponent implements OnInit {
       .removeUserFromFriends(user.id)
       .subscribe(
         () => {
-          if (this.isFriend(user)) {
-            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
-              this.friends = this.friends.filter(u => u.id !== user.id);
-            }
+          if (UserListComponent.isFriend(user)) {
             message = `L'utilisateur ${user.nicename} a bien été supprimé de vos amis`;
-          } else if (this.isSender(user)) {
-            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
-              this.friendAsSenders = this.friendAsSenders.filter(u => u.id !== user.id);
-            }
+          } else if (UserListComponent.isSender(user)) {
             message = `Vous avez annulé la demande d'ami avec ${user.nicename}`;
-          } else if (this.isReceiver(user)) {
-            if (this.listType === USER_LIST_TYPE.ALL_USERS) {
-              this.friendAsReceivers = this.friendAsReceivers.filter(u => u.id !== user.id);
-            }
+          } else if (UserListComponent.isReceiver(user)) {
             message = `Vous avez refusé la demande d'ami de ${user.nicename}`;
           }
+          user.relationTypeOfCurrentUser = RelationType.NONE;
           // il faut relancer la pagination dans le cas de l'affichage des amis / demandes
-          if (this.listType !== USER_LIST_TYPE.ALL_USERS) {
+          if (this.listType !== UserListType.ALL_USERS) {
             const first = this.pageable.page * this.pageable.size;
             const rows = this.pageable.size;
             this.paginate({first, rows});
@@ -162,24 +152,5 @@ export class UserListComponent implements OnInit {
         () => this.toastService.error('Erreur', 'Une erreur est survenue'),
         () => this.toastService.success('Succès', message)
       );
-  }
-
-  private getAllFriends(): void {
-    this.relationService
-      // TODO: peut être optimisé en ne recherchant que les relations avec les utilisateurs affichés
-      .getAllByUserId(this.userId)
-      .subscribe(
-        relations => {
-          relations.forEach(relation => {
-              if (relation.confirmedAt) {
-                this.friends.push(relation.sender.id !== this.userId ? relation.sender : relation.receiver);
-              } else if (relation.sender.id === this.userId) {
-                this.friendAsSenders.push(relation.receiver);
-              } else {
-                this.friendAsReceivers.push(relation.sender);
-              }
-            },
-            () => this.toastService.error('Oops', 'Une erreur est survenue lors du chargement de la liste des utilisateurs.'));
-        });
   }
 }

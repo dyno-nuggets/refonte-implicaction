@@ -38,7 +38,7 @@
         <app-user-card [user]="user">
           <div class="mt-4 mb-2">
             <!-- CAS 1 : est un ami -->
-            <ng-container *ngIf="isFriend(user); else optionSender">
+            <ng-container *ngIf="user.relationTypeOfCurrentUser === relationType.FRIEND; else optionSender">
               <button
                 (click)="removeUserRelation(user)"
                 class="btn btn-danger text-light rounded-pill"
@@ -52,7 +52,7 @@
             </ng-container>
             <!-- CAS 2 : est à l'origine d'une demande non acceptée -->
             <ng-template #optionSender>
-              <ng-container *ngIf="isSender(user); else optionReceiver">
+              <ng-container *ngIf="user.relationTypeOfCurrentUser === relationType.SENDER; else optionReceiver">
                 <button
                   (click)="removeUserRelation(user)"
                   class="btn btn-danger text-light rounded-pill"
@@ -67,7 +67,7 @@
             </ng-template>
             <!-- CAS 3 : est receveur d'une demande non acceptée -->
             <ng-template #optionReceiver>
-              <ng-container *ngIf="isReceiver(user); else optionNoRelation">
+              <ng-container *ngIf="user.relationTypeOfCurrentUser === relationType.RECEIVER; else optionNoRelation">
                 <button
                   (click)="confirmUserAsFriend(user)"
                   class="btn btn-success rounded-pill mx-2 mx-sm-1"
@@ -108,8 +108,8 @@
       </ng-container>
     </div>
     <p-paginator
-      (onPageChange)="paginate($event)"
       *ngIf="pageable.totalPages > 1"
+      (onPageChange)="paginate($event)"
       [rowsPerPageOptions]="[10, 25, 50]"
       [rows]="rowsPerPage"
       [totalRecords]="pageable.totalElements"

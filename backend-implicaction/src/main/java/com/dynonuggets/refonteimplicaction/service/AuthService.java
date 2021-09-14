@@ -27,7 +27,6 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final UserService userService;
     private final SignUpRepository signUpRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
@@ -78,7 +77,8 @@ public class AuthService {
         Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
-        final UserDto user = userService.getUserByUsername(username);
+        final User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found."));
 
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
@@ -100,7 +100,8 @@ public class AuthService {
 
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
-        final UserDto user = userService.getUserByUsername(username);
+        final User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found."));
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
         String token = jwtProvider.generateTokenWithUsername(username);

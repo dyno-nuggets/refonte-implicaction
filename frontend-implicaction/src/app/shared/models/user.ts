@@ -1,5 +1,6 @@
 import {WorkExperience} from './work-experience';
 import {Training} from './training';
+import {RelationType} from '../../user/models/relation-type.enum';
 
 export interface User {
   id?: string;
@@ -21,4 +22,5 @@ export interface User {
   rank?: string;
   experiences?: WorkExperience[];
   trainings?: Training[];
+  relationTypeOfCurrentUser?: RelationType;
 }

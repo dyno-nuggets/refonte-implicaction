@@ -17,9 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.util.List;
 
-import static java.util.stream.Collectors.toList;
+import static com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum.*;
 
 @Service
 @AllArgsConstructor
@@ -29,8 +28,14 @@ public class RelationService {
     private final RelationRepository relationRepository;
     private final RelationAdapter relationAdapter;
     private final UserAdapter userAdapter;
-    private final UserService userService;
 
+    /**
+     * Crée une nouvelle relation entre le senderId et le receiverId
+     *
+     * @return la nouvelle relation créée avec confirmedAt à null
+     * @throws UserNotFoundException si l'un des deux utilisateur au moins n'existe pas
+     * @throws ImplicactionException si sender et receiver correspondent au même utilisateur
+     */
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
         // TODO: gérer avec une exception plus appropriée
         if (senderId.equals(receiverId)) {
@@ -55,15 +60,10 @@ public class RelationService {
         return relationAdapter.toDto(save);
     }
 
-    public List<RelationsDto> getAllForUserId(Long userId) {
-        final List<Relation> relations = relationRepository.findAllByUserId(userId);
-        return relations.stream()
-                .map(relationAdapter::toDto)
-                .collect(toList());
-    }
-
     /**
      * Supprime la relation entre le sender et le receiver dont les ids sont passé en paramètres
+     *
+     * @throws NotFoundException si l'un des deux utilisateurs au moins n'existe pas
      */
     public void deleteRelation(Long senderId, Long receiverId) {
         Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
@@ -74,6 +74,8 @@ public class RelationService {
     /**
      * Supprime la relation entre les utilisateurs dont les ids sont passés en paramètres, sans tenir compte de la notion
      * de sender / receiver
+     *
+     * @throws NotFoundException si l'un des deux utilisateurs au moins n'existe pas
      */
     public void cancelRelation(Long userId1, Long userId2) {
         Relation relation = relationRepository.findRelationBetween(userId1, userId2)
@@ -82,8 +84,10 @@ public class RelationService {
     }
 
     /**
-     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres, en tenant compte de la notion
-     * de sender / receiver
+     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres
+     *
+     * @return la relation entre senderId et receiverId
+     * @throws NotFoundException si l'un des deux utilisateurs au moins n'existe pas
      */
     public RelationsDto confirmRelation(Long senderId, Long receiverId) {
         Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
@@ -94,28 +98,39 @@ public class RelationService {
     }
 
     /**
-     * Renvoie tous les utilisateurs qui sont amis avec l'utilisateur en paramètres
+     * @return tous les utilisateurs qui sont amis avec userId
      */
-    public Page<UserDto> getAllFriendsByUserId(Pageable pageable, Long userId) {
-        // renvoie une exception si l'utilisateur n'existe pas
-        userService.getUserById(userId);
+    public Page<UserDto> getAllFriendsByUserId(Long userId, Pageable pageable) {
         Page<Relation> relations = relationRepository.findAllFriendsByUserId(userId, pageable);
-
         return relations.map(relation -> {
-            if (relation.getSender().getId().equals(userId)) {
-                return userAdapter.toDto(relation.getReceiver());
-            }
-            return userAdapter.toDto(relation.getSender());
+            final User friend = userId.equals(relation.getReceiver().getId()) ? relation.getSender() : relation.getReceiver();
+            final UserDto userDto = userAdapter.toDto(friend);
+            userDto.setRelationTypeOfCurrentUser(FRIEND);
+            return userDto;
         });
     }
 
+    /**
+     * @return tous les utilisateurs à qui userId a envoyé une demande d'ami qui n'a pas encore été confirmée
+     */
     public Page<UserDto> getSentFriendRequest(Long userId, Pageable pageable) {
         Page<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId, pageable);
-        return relations.map(relation -> userAdapter.toDto(relation.getReceiver()));
+        return relations.map(relation -> {
+            final UserDto userDto = userAdapter.toDto(relation.getReceiver());
+            userDto.setRelationTypeOfCurrentUser(SENDER);
+            return userDto;
+        });
     }
 
+    /**
+     * @return tous les utilisateurs qui ont envoyé une demande d'ami à userId
+     */
     public Page<UserDto> getReceivedFriendRequest(Long userId, Pageable pageable) {
         Page<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId, pageable);
-        return relations.map(relation -> userAdapter.toDto(relation.getSender()));
+        return relations.map(relation -> {
+            final UserDto userDto = userAdapter.toDto(relation.getSender());
+            userDto.setRelationTypeOfCurrentUser(RECEIVER);
+            return userDto;
+        });
     }
 }
