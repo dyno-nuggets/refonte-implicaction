@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-2 list-group">
+  <div class="col-12 col-md-3 col-sm-12 mb-2">
     <a
       class="list-group-item list-group-item-action"
       routerLink="/users/list"
@@ -32,9 +32,9 @@
       Demandes envoyées
     </a>
   </div>
-  <div class="col-9 ms-5">
+  <div class="col-lg-9 col-md-9 col-sm-12">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
-      <div class="row row-cols-xs-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-6 mb-2">
+      <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2">
         <!-- TODO: extraire le html du composant user-card -->
         <app-user-card
           *ngFor="let user of users"
