@@ -12,6 +12,7 @@ import {UserListComponent} from './components/user-list/user-list.component';
 import {PaginatorModule} from 'primeng/paginator';
 import {TrainingListComponent} from './components/training-list/training-list.component';
 import {TrainingDetailComponent} from './components/training-detail/training-detail.component';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
@@ -31,6 +32,7 @@ import {TrainingDetailComponent} from './components/training-detail/training-det
     UserRoutingModule,
     FeatherModule,
     PaginatorModule,
+    SharedModule,
   ]
 })
 export class UserModule {

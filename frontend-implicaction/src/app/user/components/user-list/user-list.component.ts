@@ -8,6 +8,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {RelationType} from '../../models/relation-type.enum';
+import {finalize} from 'rxjs/operators';
 
 enum UserListType {
   ALL_USERS = '/users/list',
@@ -23,15 +24,17 @@ enum UserListType {
 })
 export class UserListComponent implements OnInit {
 
+  readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
+
   users: User[] = [];
   currentUserId: string;
   action: string;
   listType: UserListType;
   relationType = RelationType;
+  isLoading = true;
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
-  rowsPerPage = 10;
 
   constructor(
     private authService: AuthService,
@@ -67,11 +70,12 @@ export class UserListComponent implements OnInit {
     // chargement des données
     this.paginate({
       first: 0,
-      rows: this.pageable.size,
+      rows: this.ROWS_PER_PAGE_OPTIONS[0],
     });
   }
 
   paginate({first, rows}): void {
+    this.isLoading = true;
     this.pageable.page = first / rows;
     this.pageable.size = rows;
     let user$: Observable<any>;
@@ -87,14 +91,16 @@ export class UserListComponent implements OnInit {
       user$ = this.userService.getUserFriendRequestSent(this.pageable);
     }
 
-    user$.subscribe(
-      data => {
-        this.pageable.page = data.pageable.pageNumber;
-        this.pageable.size = data.pageable.pageSize;
-        this.users = data.content;
-      },
-      () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')
-    );
+    user$.pipe(finalize(() => this.isLoading = false))
+      .subscribe(
+        data => {
+          this.pageable.totalPages = data.totalPages;
+          this.pageable.size = data.size;
+          this.pageable.totalElements = data.totalElements;
+          this.users = data.content;
+        },
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')
+      );
   }
 
   requestUserAsFriend(user: User): void {
