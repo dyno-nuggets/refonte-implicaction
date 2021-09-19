@@ -12,6 +12,10 @@ import {ToasterService} from '../../../core/services/toaster.service';
 })
 export class SignupComponent implements OnInit {
 
+  signupForm: FormGroup;
+  signupRequestPayload: SignupRequestPayload;
+  isError: boolean;
+
   constructor(
     private authService: AuthService,
     private toaster: ToasterService,
@@ -24,14 +28,11 @@ export class SignupComponent implements OnInit {
         username: '',
         email: '',
         password: '',
-        nicename: ''
+        nicename: '',
+        role: ''
       };
     }
   }
-
-  signupForm: FormGroup;
-  signupRequestPayload: SignupRequestPayload;
-  isError: boolean;
 
   ngOnInit(): void {
     this.signupForm = new FormGroup({

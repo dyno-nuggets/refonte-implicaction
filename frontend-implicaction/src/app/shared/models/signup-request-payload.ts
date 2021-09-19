@@ -3,4 +3,5 @@ export interface SignupRequestPayload {
   email: string;
   password: string;
   nicename: string;
+  role: string;
 }

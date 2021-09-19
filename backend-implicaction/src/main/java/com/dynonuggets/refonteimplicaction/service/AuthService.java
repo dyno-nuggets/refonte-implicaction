@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.*;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.model.Role;
 import com.dynonuggets.refonteimplicaction.model.Signup;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
@@ -19,7 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
+
+import static java.util.stream.Collectors.toSet;
 
 @Service
 @AllArgsConstructor
@@ -80,12 +84,18 @@ public class AuthService {
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found."));
 
+        final Set<String> roleNames = user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(toSet());
+
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshToken)
                 .expiresAt(expiresAt)
                 .username(username)
                 .userId(user.getId())
+                .roles(roleNames)
                 .build();
     }
 
