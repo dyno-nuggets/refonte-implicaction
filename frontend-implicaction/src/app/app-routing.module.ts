@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {LoggedInGuard} from './core/guards/logged-in.guard';
+import {AuthGuard} from './core/guards/auth.guard.service';
+import {RoleEnum} from './shared/enums/role-enum.enum';
+import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
 
 const routes: Routes = [
   {
@@ -10,12 +12,22 @@ const routes: Routes = [
   {
     path: 'admin',
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
-    canActivate: [LoggedInGuard]
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: [RoleEnum.ADMIN]
+    }
   },
   {
     path: 'users',
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
-    canActivate: [LoggedInGuard]
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: [RoleEnum.USER, RoleEnum.ADMIN]
+    }
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent
   },
 ];
 

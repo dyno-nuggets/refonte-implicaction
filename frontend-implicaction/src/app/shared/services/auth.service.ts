@@ -7,6 +7,7 @@ import {catchError, map, tap} from 'rxjs/operators';
 import {SignupRequestPayload} from '../models/signup-request-payload';
 import {LoginRequestPayload} from '../models/login-request-payload';
 import {LoginResponse} from '../models/login-response';
+import {RoleEnum} from '../enums/role-enum.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -49,6 +50,7 @@ export class AuthService {
           this.localStorage.store('refreshToken', loginResponse.refreshToken);
           this.localStorage.store('expiresAt', loginResponse.expiresAt);
           this.localStorage.store('userId', loginResponse.userId);
+          this.localStorage.store('roles', loginResponse.roles);
 
           this.loggedIn.emit(true);
           this.username.emit(loginResponse.username);
@@ -76,6 +78,7 @@ export class AuthService {
     this.localStorage.clear('username');
     this.localStorage.clear('refreshToken');
     this.localStorage.clear('expiresAt');
+    this.localStorage.clear('roles');
 
     this.loggedIn.emit(false);
     this.username.emit(null);
@@ -115,5 +118,9 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.getJwtToken() != null;
+  }
+
+  getRoles(): RoleEnum[] {
+    return this.localStorage.retrieve('roles');
   }
 }

@@ -4,12 +4,14 @@ import {SignupComponent} from './components/signup/signup.component';
 import {AuthRoutingModule} from './auth-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {LoginComponent} from './components/login/login.component';
+import {UnauthorizedComponent} from './components/unauthorized/unauthorized.component';
 
 
 @NgModule({
   declarations: [
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    UnauthorizedComponent
   ],
   exports: [
     SignupComponent

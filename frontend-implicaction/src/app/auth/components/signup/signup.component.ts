@@ -4,6 +4,7 @@ import {SignupRequestPayload} from '../../../shared/models/signup-request-payloa
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
+import {RoleEnum} from '../../../shared/enums/role-enum.enum';
 
 @Component({
   selector: 'app-signup',
@@ -29,7 +30,7 @@ export class SignupComponent implements OnInit {
         email: '',
         password: '',
         nicename: '',
-        role: ''
+        roles: [RoleEnum.USER]
       };
     }
   }

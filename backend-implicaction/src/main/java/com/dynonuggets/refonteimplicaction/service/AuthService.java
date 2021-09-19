@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.Role;
 import com.dynonuggets.refonteimplicaction.model.Signup;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,6 +39,7 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
+    private RoleRepository roleRepository;
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -62,6 +65,7 @@ public class AuthService {
      *                               <li>Si la clé est déjà activée</li>
      *                               </ul>
      */
+    @Transactional(readOnly = true)
     public void verifyAccount(String activationKey) throws ImplicactionException {
         Signup signup = signUpRepository.findByActivationKey(activationKey).orElseThrow(() ->
                 new ImplicactionException("Activation Key Not Found: " + activationKey));
@@ -71,6 +75,7 @@ public class AuthService {
         activateSignup(signup);
     }
 
+    @Transactional
     public AuthenticationResponseDto login(LoginRequestDto loginRequestDto) throws ImplicactionException {
         final String username = loginRequestDto.getUsername();
         Authentication authenticate = authenticationManager.authenticate(
@@ -108,6 +113,7 @@ public class AuthService {
         return userAdapter.toDto(user);
     }
 
+    @Transactional(readOnly = true)
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
         final User user = userRepository.findByUsername(username)
@@ -139,6 +145,7 @@ public class AuthService {
     }
 
     private User registerUser(ReqisterRequestDto reqisterRequest, String activationKey) {
+        final List<Role> roles = roleRepository.findAllByNameIn(reqisterRequest.getRoles());
         User user = User.builder()
                 .username(reqisterRequest.getUsername())
                 .email(reqisterRequest.getEmail())
@@ -146,6 +153,7 @@ public class AuthService {
                 .registered(Instant.now())
                 .activationKey(activationKey)
                 .nicename(reqisterRequest.getNicename())
+                .roles(roles)
                 .build();
         return userRepository.save(user);
     }

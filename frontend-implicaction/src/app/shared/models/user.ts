@@ -1,6 +1,7 @@
 import {WorkExperience} from './work-experience';
 import {Training} from './training';
 import {RelationType} from '../../user/models/relation-type.enum';
+import {RoleEnum} from '../enums/role-enum.enum';
 
 export interface User {
   id?: string;
@@ -23,4 +24,5 @@ export interface User {
   experiences?: WorkExperience[];
   trainings?: Training[];
   relationTypeOfCurrentUser?: RelationType;
+  roles?: RoleEnum[];
 }
