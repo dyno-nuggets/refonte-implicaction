@@ -69,4 +69,26 @@ public class UserAdapter {
                 .build();
     }
 
+    public User toModel(UserDto userDto) {
+        return User.builder()
+                .id(userDto.getId())
+                .username(userDto.getUsername())
+                .nicename(userDto.getNicename())
+                .email(userDto.getEmail())
+                .url(userDto.getUrl())
+                .registered(userDto.getRegistered())
+                .status(userDto.getStatus())
+                .displayName(userDto.getDisplayName())
+                .phoneNumber(userDto.getPhoneNumber())
+                .birthday(userDto.getBirthday())
+                .hobbies(userDto.getHobbies())
+                .purpose(userDto.getPurpose())
+                .presentation(userDto.getPresentation())
+                .expectation(userDto.getExpectation())
+                .contribution(userDto.getContribution())
+                .firstName(userDto.getFirstName())
+                .lastName(userDto.getLastName())
+                .build();
+    }
+
 }

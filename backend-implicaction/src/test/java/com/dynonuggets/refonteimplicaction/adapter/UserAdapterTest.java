@@ -36,7 +36,7 @@ class UserAdapterTest {
 
         training = new ArrayList<>();
 
-        training.add(new Training(2L, user, "label", LocalDate.now()));
+        training.add(new Training(2L, user, "label", LocalDate.now(), "supdevinci"));
 
         user = User.builder()
                 .id(10L)
