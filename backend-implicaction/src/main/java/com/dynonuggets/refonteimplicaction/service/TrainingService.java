@@ -37,13 +37,13 @@ public class TrainingService {
                 })
                 .collect(toList());
 
+        // On isole les formations à supprimer en comparant avec les id celles envoyées à celles en base
         List<Training> allByUserTrainings = trainingRepository.findAllByUser_Id(userId);
 
         List<Long> toDeleteIds = allByUserTrainings.stream()
                 .map(Training::getId)
                 .filter(id -> !toUpdateTrainings.stream().map(Training::getId).collect(toList()).contains(id))
                 .collect(toList());
-
         trainingRepository.deleteAllById(toDeleteIds);
 
         List<Training> trainingsUpdates = trainingRepository.saveAll(toUpdateTrainings);
