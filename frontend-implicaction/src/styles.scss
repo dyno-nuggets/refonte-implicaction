@@ -26,22 +26,15 @@ button .icon {
 }
 
 h2 {
-  font: normal bold 18px 'Open Sans', 'Arial', serif;
-  line-height: 25px;
-  display: flex;
-  align-items: center;
-  text-align: left;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-
+  font-weight: bold;
+  font-style: normal;
+  font-family: Open Sans, Arial, serif;
   color: $primary;
 }
 
 h3 {
   font: normal bold 18px 'Open Sans', Arial, serif;
   line-height: 25px;
-  display: flex;
-  align-items: center;
   text-transform: uppercase;
   color: $secondary;
 }
@@ -49,16 +42,12 @@ h3 {
 h4 {
   font: normal 500 18px Roboto, Arial, serif;
   line-height: 21px;
-  display: flex;
-  align-items: center;
   color: $secondary;
 }
 
 p {
   font: normal 16px Roboto, 'Arial', serif;
   line-height: 19px;
-  display: flex;
-  align-items: center;
 }
 
 .date-text {

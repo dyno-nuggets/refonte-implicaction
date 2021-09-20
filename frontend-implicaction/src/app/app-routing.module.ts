@@ -3,11 +3,16 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './core/guards/auth.guard.service';
 import {RoleEnum} from './shared/enums/role-enum.enum';
 import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
+import {IndexComponent} from './home/components/index/index.component';
 
 const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
+  {
+    path: '',
+    component: IndexComponent
   },
   {
     path: 'admin',
