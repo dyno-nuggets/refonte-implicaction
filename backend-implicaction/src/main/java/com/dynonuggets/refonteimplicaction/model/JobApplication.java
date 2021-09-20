@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -32,7 +33,8 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
-    private ApplicationStatus status;
+    private Status status;
 
-    // ajouter date
+    @Column(name = "submitted_at")
+    private Instant submitedAt;
 }

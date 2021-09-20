@@ -41,7 +41,11 @@ public class JobPosting {
     @Column(name = "keywords")
     private String keywords;
 
-    // type de contrat
+    @ManyToOne
+    @JoinColumn(name = "contract_type_id", nullable = false)
+    private ContractType contractType;
 
-    // statut
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
+    private Status status;
 }
