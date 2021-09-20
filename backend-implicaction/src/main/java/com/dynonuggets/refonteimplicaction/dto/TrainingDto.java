@@ -13,8 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class TrainingDto {
     private Long id;
-    private UserDto user;
     private String label;
     private LocalDate date;
-    private String institution;
+    private String school;
 }

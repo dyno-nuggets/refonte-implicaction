@@ -36,7 +36,7 @@ class TrainingAdapterTest {
         experiences.add(experience);
 
         trainings = new ArrayList<>();
-        training = new Training(2L, user, "label", LocalDate.now());
+        training = new Training(2L, user, "label", LocalDate.now(), "supdevinci");
         trainings.add(training);
 
         user = User.builder()
@@ -72,10 +72,12 @@ class TrainingAdapterTest {
     }
 
     @Test
-    public void trainingToDtoWithoutUser() {
+    void trainingToDtoWithoutUser() {
         TrainingDto trainingDto = trainingAdapter.toDtoWithoutUser(training);
         assertThat(trainingDto.getId()).isEqualTo(training.getId());
         assertThat(trainingDto.getDate()).isEqualTo(training.getDate());
         assertThat(trainingDto.getLabel()).isEqualTo(training.getLabel());
+        assertThat(trainingDto.getSchool()).isEqualTo(training.getSchool());
+
     }
 }
