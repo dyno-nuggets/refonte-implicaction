@@ -5,6 +5,7 @@ import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
@@ -15,9 +16,19 @@ import java.security.*;
 import java.security.cert.CertificateException;
 import java.time.Instant;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtProvider {
+
+    private static final String AUTHORITIES_KEY = "scopes";
+
+    @Value("${jwt.certificate.password}")
+    private String keyStorePassword;
+    @Value("${jwt.certificate.name}")
+    private String certificateName;
+    @Value("${jwt.certificate.type}")
+    private String keyStoreType;
 
     private KeyStore keyStore;
 
@@ -31,10 +42,10 @@ public class JwtProvider {
     @PostConstruct
     public void init() {
         try {
-            keyStore = KeyStore.getInstance("JKS");
+            keyStore = KeyStore.getInstance(keyStoreType);
             InputStream ressourceAsStream = getClass().getResourceAsStream("/implicaction.jks");
             // TODO: cachez ce secret que je ne saurais voir
-            keyStore.load(ressourceAsStream, ".fxG3KPB.".toCharArray());
+            keyStore.load(ressourceAsStream, keyStorePassword.toCharArray());
         } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
@@ -42,9 +53,13 @@ public class JwtProvider {
 
     public String generateToken(Authentication authentication) throws ImplicactionException {
         User principal = (User) authentication.getPrincipal();
+        final String authorities = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.joining(","));
         Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
         return Jwts.builder()
                 .setSubject(principal.getUsername())
+                .claim(AUTHORITIES_KEY, authorities)
                 .signWith(getPrivateKey())
                 .setExpiration(expirationDate)
                 .compact();
@@ -80,7 +95,7 @@ public class JwtProvider {
 
     private PublicKey getPublicKey() throws ImplicactionException {
         try {
-            return keyStore.getCertificate("implicaction")
+            return keyStore.getCertificate(certificateName)
                     .getPublicKey();
         } catch (KeyStoreException e) {
             throw new ImplicactionException("Exception occured while retrieving public key");
@@ -90,7 +105,7 @@ public class JwtProvider {
     private Key getPrivateKey() throws ImplicactionException {
         try {
             // TODO: cachez ce secret que je ne saurais voir
-            return keyStore.getKey("implicaction", ".fxG3KPB.".toCharArray());
+            return keyStore.getKey("implicaction", keyStorePassword.toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new ImplicactionException("Exception occured while retrieving public key from keystore");
         }

@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @AllArgsConstructor
@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "relation")
 public class Relation {
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")
     private Long id;
     @ManyToOne

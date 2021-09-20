@@ -7,7 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @AllArgsConstructor
@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "signup")
 public class Signup {
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "signup_id")
     private Long signupId;
     @OneToOne(fetch = LAZY, optional = false)

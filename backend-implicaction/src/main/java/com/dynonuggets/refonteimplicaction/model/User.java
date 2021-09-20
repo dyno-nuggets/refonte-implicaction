@@ -8,13 +8,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @AllArgsConstructor
@@ -25,7 +23,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "user")
 public class User {
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
     @Column(name = "user_login", unique = true)
@@ -54,15 +52,6 @@ public class User {
     private List<WorkExperience> experiences;
     @OneToMany(fetch = LAZY, mappedBy = "user")
     private List<Training> trainings;
-    @ManyToMany
-    @JoinTable(name = "user_group",
-            joinColumns = {
-                    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "group_id", referencedColumnName = "id", nullable = false, updatable = false)
-            })
-    private Set<Group> groups = new HashSet<>();
     @OneToOne(mappedBy = "user", fetch = LAZY, cascade = ALL)
     private Signup signup;
     @Column(name = "phone_number")
@@ -77,5 +66,10 @@ public class User {
     private String presentation;
     private String expectation;
     private String contribution;
-
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
+    )
+    private List<Role> roles;
 }

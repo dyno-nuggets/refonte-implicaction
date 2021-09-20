@@ -4,6 +4,7 @@ import {SignupRequestPayload} from '../../../shared/models/signup-request-payloa
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
+import {RoleEnum} from '../../../shared/enums/role-enum.enum';
 
 @Component({
   selector: 'app-signup',
@@ -11,6 +12,10 @@ import {ToasterService} from '../../../core/services/toaster.service';
   styleUrls: ['./signup.component.scss']
 })
 export class SignupComponent implements OnInit {
+
+  signupForm: FormGroup;
+  signupRequestPayload: SignupRequestPayload;
+  isError: boolean;
 
   constructor(
     private authService: AuthService,
@@ -24,14 +29,11 @@ export class SignupComponent implements OnInit {
         username: '',
         email: '',
         password: '',
-        nicename: ''
+        nicename: '',
+        roles: [RoleEnum.USER]
       };
     }
   }
-
-  signupForm: FormGroup;
-  signupRequestPayload: SignupRequestPayload;
-  isError: boolean;
 
   ngOnInit(): void {
     this.signupForm = new FormGroup({
