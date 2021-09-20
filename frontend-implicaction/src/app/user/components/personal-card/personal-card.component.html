@@ -1,78 +1,88 @@
-<app-user-card [user]="user">
-  <div class="row">
-    <div class="row m-0 p-1">
-      <div class="col-5 text-start fw-bold ps-2">
-        <i-feather class="icon me-2 text-primary" name="Mail"></i-feather>
-        <span class="align-middle">Email</span>
+<div class="col mb-3">
+  <div class="card align-items-center pt-5 shadow-sm border-0 user-card">
+    <img
+      [alt]="user.nicename"
+      class="rounded-circle img-fluid shadow-sm user-avatar"
+      src="assets/img/default-user.png"
+    />
+    <div class="card-body text-center w-100">
+      <h5 class="card-title overflow-ellipsis">{{user.nicename}}</h5>
+      <div class="row">
+        <div class="row m-0 p-1">
+          <div class="col-5 text-start fw-bold ps-2">
+            <i-feather class="icon me-2 text-primary" name="Mail"></i-feather>
+            <span class="align-middle">Email</span>
+          </div>
+          <div class="col-7 text-end m-0">{{user.email}}</div>
+        </div>
+        <div class="row m-0 p-1">
+          <div class="col-7 text-start fw-bold ps-2">
+            <i-feather class="icon me-2 text-primary" name="Phone"></i-feather>
+            <span class="align-middle">Télephone</span>
+          </div>
+          <div class="col-5 text-end m-0">{{user.phoneNumber}}</div>
+        </div>
+        <div class="row m-0 p-1">
+          <div class="col-7 text-start fw-bold ps-2">
+            <i-feather class="icon me-2 text-primary" name="Calendar"></i-feather>
+            <span class="align-middle">Anniversaire</span>
+          </div>
+          <div class="col-5 text-end m-0">{{user.birthday}}</div>
+        </div>
       </div>
-      <div class="col-7 text-end m-0">{{user.email}}</div>
-    </div>
-    <div class="row m-0 p-1">
-      <div class="col-7 text-start fw-bold ps-2">
-        <i-feather class="icon me-2 text-primary" name="Phone"></i-feather>
-        <span class="align-middle">Télephone</span>
+      <div class="text-start">
+        <div class="row mt-5">
+          <h2>Loisirs / Hobbies</h2>
+          <p>
+            <app-user-info [value]="user.hobbies"></app-user-info>
+          </p>
+        </div>
+        <div class="row mt-3">
+          <h2>Présentation</h2>
+          <p>
+            <app-user-info [value]="user.presentation"></app-user-info>
+          </p>
+        </div>
+        <div class="row mt-3">
+          <h2>Quel est mon objectif professionnel</h2>
+          <p>
+            <app-user-info [value]="user.purpose"></app-user-info>
+          </p>
+        </div>
+        <div class="row mt-3">
+          <h2>Ce que je peux apporter au réseau</h2>
+          <p>
+            <app-user-info [value]="user.expectation"></app-user-info>
+          </p>
+        </div>
+        <div class="row mt-3">
+          <h2>Ce que j'attends du réseau</h2>
+          <p>
+            <app-user-info [value]="user.contribution"></app-user-info>
+          </p>
+        </div>
+        <div class="row mt-3">
+          <h2>Mon parcours au sein de l’institution</h2>
+          <div class="row m-0 p-1">
+            <div class="col-8 text-start fw-bold ps-2">
+              <i-feather class="icon me-2 text-primary" name="Shield"></i-feather>
+              <span class="align-middle">Armée d'origine</span>
+            </div>
+            <div class="col-4 text-end m-0">
+              <app-user-info [value]="user.armyCorps"></app-user-info>
+            </div>
+          </div>
+          <div class="row m-0 p-1">
+            <div class="col-8 text-start fw-bold ps-2">
+              <i-feather class="icon me-2 text-primary" name="Award"></i-feather>
+              <span class="align-middle">Corps Statuaire</span>
+            </div>
+            <div class="col-4 text-end m-0">
+              <app-user-info [value]="user.rank"></app-user-info>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="col-5 text-end m-0">{{user.phoneNumber}}</div>
-    </div>
-    <div class="row m-0 p-1">
-      <div class="col-7 text-start fw-bold ps-2">
-        <i-feather class="icon me-2 text-primary" name="Calendar"></i-feather>
-        <span class="align-middle">Anniversaire</span>
-      </div>
-      <div class="col-5 text-end m-0">{{user.birthday}}</div>
     </div>
   </div>
-  <div class="text-start">
-    <div class="row mt-5">
-      <h2>Loisirs / Hobbies</h2>
-      <p>
-        <app-user-info [value]="user.hobbies"></app-user-info>
-      </p>
-    </div>
-    <div class="row mt-3">
-      <h2>Présentation</h2>
-      <p>
-        <app-user-info [value]="user.presentation"></app-user-info>
-      </p>
-    </div>
-    <div class="row mt-3">
-      <h2>Quel est mon objectif professionnel</h2>
-      <p>
-        <app-user-info [value]="user.purpose"></app-user-info>
-      </p>
-    </div>
-    <div class="row mt-3">
-      <h2>Ce que je peux apporter au réseau</h2>
-      <p>
-        <app-user-info [value]="user.expectation"></app-user-info>
-      </p>
-    </div>
-    <div class="row mt-3">
-      <h2>Ce que j'attends du réseau</h2>
-      <p>
-        <app-user-info [value]="user.contribution"></app-user-info>
-      </p>
-    </div>
-    <div class="row mt-3">
-      <h2>Mon parcours au sein de l’institution</h2>
-      <div class="row m-0 p-1">
-        <div class="col-8 text-start fw-bold ps-2">
-          <i-feather class="icon me-2 text-primary" name="Shield"></i-feather>
-          <span class="align-middle">Armée d'origine</span>
-        </div>
-        <div class="col-4 text-end m-0">
-          <app-user-info [value]="user.armyCorps"></app-user-info>
-        </div>
-      </div>
-      <div class="row m-0 p-1">
-        <div class="col-8 text-start fw-bold ps-2">
-          <i-feather class="icon me-2 text-primary" name="Award"></i-feather>
-          <span class="align-middle">Corps Statuaire</span>
-        </div>
-        <div class="col-4 text-end m-0">
-          <app-user-info [value]="user.rank"></app-user-info>
-        </div>
-      </div>
-    </div>
-  </div>
-</app-user-card>
+</div>
