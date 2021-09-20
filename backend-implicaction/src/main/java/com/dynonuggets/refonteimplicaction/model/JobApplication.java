@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @AllArgsConstructor
@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 public class JobApplication {
 
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
@@ -33,4 +33,6 @@ public class JobApplication {
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private ApplicationStatus status;
+
+    // ajouter date
 }

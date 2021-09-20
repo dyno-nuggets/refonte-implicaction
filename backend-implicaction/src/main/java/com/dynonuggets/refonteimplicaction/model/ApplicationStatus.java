@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -17,7 +17,7 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "application_status")
 public class ApplicationStatus {
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
     @Column(name = "label", nullable = false)

@@ -7,7 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import static javax.persistence.GenerationType.SEQUENCE;
+import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -17,11 +17,12 @@ import static javax.persistence.GenerationType.SEQUENCE;
 @Table(name = "company")
 public class Company {
     @Id
-    @GeneratedValue(strategy = SEQUENCE)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
     private String logo;
     private String description;
+    private String url;
 }
