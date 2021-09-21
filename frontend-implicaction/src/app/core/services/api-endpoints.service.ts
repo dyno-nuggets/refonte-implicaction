@@ -131,6 +131,18 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [userId, 'cancel']);
   }
 
+  /**
+   * Trainings
+   */
+
+  updateTrainingByUserIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'trainings']);
+  }
+
+  /**
+   * Experiences
+   */
+
   updateExperiencesByUserIdEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
   }

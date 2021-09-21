@@ -14,6 +14,7 @@ import {TrainingListComponent} from './components/training-list/training-list.co
 import {TrainingDetailComponent} from './components/training-detail/training-detail.component';
 import {CalendarModule} from 'primeng/calendar';
 import {SharedModule} from '../shared/shared.module';
+import {CalendarModule} from 'primeng/calendar';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import {SharedModule} from '../shared/shared.module';
     PaginatorModule,
     CalendarModule,
     SharedModule,
+    CalendarModule,
   ]
 })
 export class UserModule {
