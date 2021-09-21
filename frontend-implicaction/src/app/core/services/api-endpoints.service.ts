@@ -115,6 +115,14 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
   }
 
+  updateTrainingByUserIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'trainings']);
+  }
+
+  updateExperiencesByUserIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
+  }
+
   /**
    * Relations
    */
@@ -129,21 +137,5 @@ export class ApiEndpointsService {
 
   cancelRelationByUserEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [userId, 'cancel']);
-  }
-
-  /**
-   * Trainings
-   */
-
-  updateTrainingByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'trainings']);
-  }
-
-  /**
-   * Experiences
-   */
-
-  updateExperiencesByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
   }
 }
