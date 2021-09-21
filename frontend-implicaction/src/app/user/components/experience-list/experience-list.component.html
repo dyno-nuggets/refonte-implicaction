@@ -11,9 +11,9 @@
       </div>
     </div>
     <ul>
-      <ng-container *ngIf="experienceCopies?.length else emptyInfo">
+      <ng-container *ngIf="experiences?.length else emptyInfo">
         <li
-          *ngFor="let experience of experienceCopies; last as isLast;"
+          *ngFor="let experience of (isEditing ? experienceCopies : experiences); last as isLast;"
           class="list-unstyled"
         >
           <app-experience-detail [experience]="experience" [isEditing]="isEditing"></app-experience-detail>

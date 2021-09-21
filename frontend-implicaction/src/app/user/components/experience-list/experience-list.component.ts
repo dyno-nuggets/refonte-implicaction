@@ -26,7 +26,6 @@ export class ExperienceListComponent implements OnInit, AfterContentChecked {
   }
 
   ngAfterContentChecked(): void {
-    this.experienceCopies = this.experiences;
   }
 
   ngOnInit(): void {
@@ -34,6 +33,7 @@ export class ExperienceListComponent implements OnInit, AfterContentChecked {
   }
 
   toggleModeEdition(): void {
+    this.experienceCopies = this.experiences.map(x => Object.assign({}, x));
     this.isEditing = !this.isEditing;
   }
 
