@@ -13,7 +13,7 @@ export class Uris {
    * USERS
    */
   static readonly USERS = class {
-    static readonly ALL = 'users';
+    static readonly BASE_URI = 'users';
     static readonly BY_ID = 'users';
     static readonly GET_FRIENDS = 'users';
     static readonly GET_FRIEND_REQUEST_RECEIVED = 'users/friends/received';

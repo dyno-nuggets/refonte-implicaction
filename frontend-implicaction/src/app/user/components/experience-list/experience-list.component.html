@@ -1,19 +1,23 @@
 <div class="col">
   <div class="card py-4 px-4 shadow-sm border-0">
-    <div class="mb-3">
+    <div class="d-flex flex-row justify-content-between mb-3">
       <h2>Experiences professionnelles</h2>
+      <div>
+        <i-feather (click)="toggleModeEdition()" *ngIf="!isEditing; else saveIcon" class="icon" name="edit"></i-feather>
+        <ng-template #saveIcon>
+          <i-feather (click)="rollbackExperiences()" class="icon" name="rotate-ccw"></i-feather>
+          <i-feather (click)="updateExperiences()" class="icon" name="save"></i-feather>
+        </ng-template>
+      </div>
     </div>
     <ul>
-      <ng-container *ngIf="user.experiences?.length else emptyInfo">
+      <ng-container *ngIf="experienceCopies?.length else emptyInfo">
         <li
-          *ngFor="let experience of user.experiences; last as isLast;"
+          *ngFor="let experience of experienceCopies; last as isLast;"
           class="list-unstyled"
         >
-          <app-experience-detail [experience]="experience"></app-experience-detail>
-          <hr
-            *ngIf="!isLast"
-            class="mx-4"
-          />
+          <app-experience-detail [experience]="experience" [isEditing]="isEditing"></app-experience-detail>
+          <hr *ngIf="!isLast" class="mx-4"/>
         </li>
       </ng-container>
       <ng-template #emptyInfo>

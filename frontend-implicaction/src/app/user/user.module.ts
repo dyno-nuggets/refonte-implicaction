@@ -12,6 +12,7 @@ import {UserListComponent} from './components/user-list/user-list.component';
 import {PaginatorModule} from 'primeng/paginator';
 import {TrainingListComponent} from './components/training-list/training-list.component';
 import {TrainingDetailComponent} from './components/training-detail/training-detail.component';
+import {CalendarModule} from 'primeng/calendar';
 import {SharedModule} from '../shared/shared.module';
 
 
@@ -32,6 +33,7 @@ import {SharedModule} from '../shared/shared.module';
     UserRoutingModule,
     FeatherModule,
     PaginatorModule,
+    CalendarModule,
     SharedModule,
   ]
 })
