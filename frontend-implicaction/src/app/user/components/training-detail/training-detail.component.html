@@ -1,33 +1,32 @@
-<div class="row mb-2">
-  <div class="col-1 d-flex align-items-start">
+<div class="row col align-items-center mb-2">
+  <div class="col-1 d-flex align-items-end">
     <img alt="briefcase" class="img-fluid" src="assets/img/training-icon.png">
   </div>
-  <div class="col d-flex align-items-start flex-column align-self-center ps-1">
+  <div class="col align-items-start align-self-center ps-1">
     <h3 *ngIf="!isEditing; else trainingLabelEdition" class="pb-1">{{training.label}}</h3>
     <ng-template #trainingLabelEdition>
       <div class="form-floating mb-4">
-        <input type="text"
-               class="form-control form-control-lg rounded-pill px-4"
-               id="trainingLabel"
-               [(ngModel)]="training.label">
+        <input
+          [(ngModel)]="training.label"
+          class="form-control form-control-lg rounded-pill px-4"
+          placeholder="Nom de la formation"
+        />
         <label
-          for="trainingLabel"
           class="form-label"
         >
           Label du training
         </label>
       </div>
     </ng-template>
-
     <h4 *ngIf="!isEditing; else trainingSchoolEdition" class="pt-1">{{training.school}}</h4>
     <ng-template #trainingSchoolEdition>
       <div class="form-floating mb-4">
-        <input type="text"
-               class="form-control form-control-lg rounded-pill px-4"
-               id="trainingSchool"
-               [(ngModel)]="training.school">
+        <input
+          [(ngModel)]="training.school"
+          class="form-control form-control-lg rounded-pill px-4"
+          placeholder="Nom de l'établissement"
+        >
         <label
-          for="trainingSchool"
           class="form-label"
         >
           Nom de l'école
@@ -44,23 +43,12 @@
           <span class="form-label px-4">Date</span>
           <p-calendar
             [(ngModel)]="training.date"
-            dateFormat="yy-mm-dd"
             [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+            dateFormat="yy-mm-dd"
           >
-
           </p-calendar>
         </div>
       </ng-template>
-      <div>
-        <div class="text-center text-lg-start mt-4 pt-2">
-          <button
-            type="submit"
-            class="btn btn-primary btn-lg ml-auto"
-          >
-            Supprimer
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </div>
