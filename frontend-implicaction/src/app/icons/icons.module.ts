@@ -17,6 +17,7 @@ import {
   RotateCcw,
   Save,
   Shield,
+  Trash2,
   User,
   UserCheck,
   UserMinus,
@@ -47,7 +48,8 @@ const icons = {
   UserX,
   Save,
   Edit,
-  RotateCcw
+  RotateCcw,
+  Trash2
 };
 
 @NgModule({

@@ -46,4 +46,13 @@ export class TrainingListComponent implements OnInit {
         () => this.toastService.success('Succès', 'Le changement des données a bien été effectué'),
       );
   }
+
+  deleteEvent(training: Training): void {
+    console.log(this.trainingCopies);
+    const trainingIndex = this.trainingCopies.indexOf(training);
+    if (trainingIndex > -1) {
+      this.trainingCopies.splice(trainingIndex, 1);
+      console.log(this.trainingCopies);
+    }
+  }
 }

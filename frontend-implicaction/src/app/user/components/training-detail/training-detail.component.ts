@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Training} from '../../../shared/models/training';
 
 @Component({
@@ -14,10 +14,17 @@ export class TrainingDetailComponent implements OnInit {
   @Input()
   isEditing: boolean;
 
+  @Output()
+  deleteEvent = new EventEmitter<Training>();
+
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  deleteTraining(training: Training): void {
+    this.deleteEvent.next(training);
   }
 
 }

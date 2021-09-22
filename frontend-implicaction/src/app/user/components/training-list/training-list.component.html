@@ -32,7 +32,8 @@
           *ngFor="let training of (isEditing ? trainingCopies : trainings); trackBy: trackByTrainingId; last as isLast;"
           class="list-unstyled"
         >
-          <app-training-detail [training]="training" [isEditing]="isEditing"></app-training-detail>
+          <app-training-detail [training]="training" [isEditing]="isEditing"
+                               (deleteEvent)="deleteEvent(training)"></app-training-detail>
           <hr *ngIf="!isLast" class="mx-4"/>
         </li>
       </ng-container>
