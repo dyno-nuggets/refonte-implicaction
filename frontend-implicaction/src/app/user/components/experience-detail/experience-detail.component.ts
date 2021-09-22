@@ -10,11 +10,12 @@ export class ExperienceDetailComponent implements OnInit {
 
   @Input()
   experience: WorkExperience;
+  @Input()
+  isEditing: boolean;
 
   constructor() {
   }
 
   ngOnInit(): void {
   }
-
 }

@@ -7,19 +7,22 @@ import {
   Briefcase,
   Calendar,
   Camera,
+  Edit,
   Github,
   Heart,
   Inbox,
   Mail,
   Phone,
   Plus,
+  RotateCcw,
+  Save,
   Shield,
   User,
   UserCheck,
   UserMinus,
   UserPlus,
   Users,
-  UserX,
+  UserX
 } from 'angular-feather/icons';
 
 // Select some icons (use an object, not an array)
@@ -41,7 +44,10 @@ const icons = {
   UserMinus,
   UserPlus,
   UserCheck,
-  UserX
+  UserX,
+  Save,
+  Edit,
+  RotateCcw
 };
 
 @NgModule({

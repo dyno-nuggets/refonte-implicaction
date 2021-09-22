@@ -91,7 +91,7 @@ export class ApiEndpointsService {
    */
 
   getAllUserEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.ALL, pageable);
+    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
   getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable): string {
@@ -129,5 +129,9 @@ export class ApiEndpointsService {
 
   cancelRelationByUserEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [userId, 'cancel']);
+  }
+
+  updateExperiencesByUserIdEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
   }
 }

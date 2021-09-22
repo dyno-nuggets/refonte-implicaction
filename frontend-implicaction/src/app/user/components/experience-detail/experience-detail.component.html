@@ -1,16 +1,70 @@
-<div class="row mb-2">
+<div class="row col align-items-center mb-2">
   <div class="col-1 d-flex align-items-end">
     <img alt="briefcase" class="img-fluid" src="assets/img/job-icon.png">
   </div>
-  <div class="col d-flex align-items-start flex-column align-self-center ps-1">
-    <h3 class="pb-1">{{experience.companyLabel}}</h3>
-    <h4 class="pt-1">{{experience.label}}</h4>
+  <div class="col align-items-start align-self-center ps-1">
+    <h3 *ngIf="!isEditing; else compagnyLabelEdition" class="pb-1">{{experience.companyName}}</h3>
+    <ng-template #compagnyLabelEdition>
+      <div class="form-floating mb-4">
+        <input
+          [(ngModel)]="experience.companyName"
+          class="form-control form-control-lg rounded-pill px-4"
+          placeholder="Nom de la compagnie"
+        />
+        <label class="form-label px-4">Nom de la compagnie</label>
+      </div>
+    </ng-template>
+    <h4 *ngIf="!isEditing; else experienceLabelEdition" class="pt-1">{{experience.label}}</h4>
+    <ng-template #experienceLabelEdition>
+      <div class="form-floating mb-4">
+        <input
+          [(ngModel)]="experience.label"
+          class="form-control form-control-lg rounded-pill px-4"
+          placeholder="Nom de l'expérience"
+        />
+        <label class="form-label px-4">Nom de l'expérience</label>
+      </div>
+    </ng-template>
   </div>
 </div>
 <div class="mb-2">
-  <p class="text-secondary">{{experience.description}}</p>
+  <p *ngIf="!isEditing; else experienceDescriptionEdition" class="text-secondary">{{experience.description}}</p>
+  <ng-template #experienceDescriptionEdition>
+    <div class="form-floating mb-4">
+      <textarea
+        [(ngModel)]="experience.description"
+        class="form-control w-100 px-4 text-description"
+        rows="4"
+      >
+      </textarea>
+      <label class="form-label px-4">Description</label>
+    </div>
+  </ng-template>
 </div>
-<div class="mb-2">
-  <i-feather class="icon me-2" name="Calendar"></i-feather>
+<div *ngIf="!isEditing; else startedAtEdition" class="mb-2">
+  <i-feather class="icon me-2" name="calendar"></i-feather>
   <span class="align-middle mt-2 date-text">{{experience.startedAt}} - {{experience.finishedAt}}</span>
 </div>
+<ng-template #startedAtEdition>
+  <div class="row">
+    <div class="col form-floating mb-4">
+      <span class="form-label px-4">Date début</span>
+      <p-calendar
+        [(ngModel)]="experience.startedAt"
+        [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+        dateFormat="yy-mm-dd"
+      >
+      </p-calendar>
+    </div>
+    <div class="col form-floating mb-4">
+      <span class="form-label px-4">Date fin</span>
+      <p-calendar
+        [(ngModel)]="experience.finishedAt"
+        [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+        dateFormat="yy-mm-dd"
+        timeSeparator="-"
+      >
+      </p-calendar>
+    </div>
+  </div>
+</ng-template>

@@ -32,7 +32,7 @@ class UserAdapterTest {
     public void setUp() {
         experiences = new ArrayList<>();
 
-        experiences.add(new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description"));
+        experiences.add(new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description", "companyName"));
 
         training = new ArrayList<>();
 

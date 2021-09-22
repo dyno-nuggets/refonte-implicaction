@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
+
 import java.time.LocalDate;
 
 
@@ -18,4 +19,5 @@ public class WorkExperienceDto {
     private LocalDate finishedAt;
     private String label;
     private String description;
+    private String companyName;
 }
