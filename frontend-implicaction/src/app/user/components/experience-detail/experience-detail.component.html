@@ -54,14 +54,14 @@
   </ng-template>
 </div>
 <div *ngIf="!isEditing; else startedAtEdition" class="mb-2">
-  <i-feather class="icon me-2" name="Calendar"></i-feather>
+  <i-feather class="icon me-2" name="calendar"></i-feather>
   <span class="align-middle mt-2 date-text">{{experience.startedAt}}
     - {{experience.finishedAt}}</span>
 </div>
 <ng-template #startedAtEdition>
   <div class="row">
     <div class="col form-floating mb-4">
-      <span class="form-label px-4">Date de début</span>
+      <span class="form-label px-4">Date début</span>
       <p-calendar
         [(ngModel)]="experience.startedAt"
         [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
@@ -70,7 +70,7 @@
       </p-calendar>
     </div>
     <div class="col form-floating mb-4">
-      <span class="form-label px-4">Date de fin</span>
+      <span class="form-label px-4">Date fin</span>
       <p-calendar
         [(ngModel)]="experience.finishedAt"
         [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"

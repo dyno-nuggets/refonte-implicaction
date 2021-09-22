@@ -3,8 +3,13 @@
     <div class="d-flex flex-row justify-content-between mb-3">
       <h2>Experiences professionnelles</h2>
       <div>
-        <i-feather (click)="toggleModeEdition()" *ngIf="!isEditing; else saveIcon" class="cursor-pointer"
-                   name="edit"></i-feather>
+        <i-feather
+          (click)="toggleModeEdition()"
+          *ngIf="!isEditing; else saveIcon"
+          class="cursor-pointer"
+          name="edit"
+        >
+        </i-feather>
         <ng-template #saveIcon>
           <i-feather (click)="toggleModeEdition()" class="cursor-pointer" name="rotate-ccw"></i-feather>
           <i-feather (click)="updateExperiences()" class="cursor-pointer" name="save"></i-feather>
