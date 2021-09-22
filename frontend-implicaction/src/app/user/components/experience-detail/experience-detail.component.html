@@ -43,8 +43,7 @@
 </div>
 <div *ngIf="!isEditing; else startedAtEdition" class="mb-2">
   <i-feather class="icon me-2" name="calendar"></i-feather>
-  <span class="align-middle mt-2 date-text">{{experience.startedAt}}
-    - {{experience.finishedAt}}</span>
+  <span class="align-middle mt-2 date-text">{{experience.startedAt}} - {{experience.finishedAt}}</span>
 </div>
 <ng-template #startedAtEdition>
   <div class="row">
