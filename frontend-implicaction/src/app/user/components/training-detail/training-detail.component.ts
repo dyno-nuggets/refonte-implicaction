@@ -8,8 +8,11 @@ import {Training} from '../../../shared/models/training';
 })
 export class TrainingDetailComponent implements OnInit {
 
+
   @Input()
   training: Training;
+  @Input()
+  isEditing: boolean;
 
   constructor() {
   }
