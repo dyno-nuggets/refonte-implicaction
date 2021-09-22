@@ -1,7 +1,5 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
-import com.dynonuggets.refonteimplicaction.model.ContractType;
-import com.dynonuggets.refonteimplicaction.model.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +18,7 @@ public class JobPostingDto {
     private String location;
     private String salary;
     private String keywords;
-    private ContractType contractType;
-    private Status status;
+    private ContractTypeDto contractType;
+    private StatusDto status;
 
 }
