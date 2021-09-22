@@ -15,6 +15,7 @@ public class WorkExperienceAdapter {
                 .finishedAt(workExperience.getFinishedAt())
                 .label(workExperience.getLabel())
                 .description(workExperience.getDescription())
+                .companyName(workExperience.getCompanyName())
                 .build();
     }
 
@@ -25,6 +26,7 @@ public class WorkExperienceAdapter {
                 .startedAt(workExperienceDto.getStartedAt())
                 .finishedAt(workExperienceDto.getFinishedAt())
                 .description(workExperienceDto.getDescription())
+                .companyName(workExperienceDto.getCompanyName())
                 .build();
     }
 }

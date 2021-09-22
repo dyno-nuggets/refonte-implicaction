@@ -29,4 +29,5 @@ public class WorkExperience {
     private LocalDate finishedAt;
     private String label;
     private String description;
+    private String companyName;
 }

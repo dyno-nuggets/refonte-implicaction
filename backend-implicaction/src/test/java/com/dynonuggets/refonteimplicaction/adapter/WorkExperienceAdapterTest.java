@@ -31,7 +31,7 @@ class WorkExperienceAdapterTest {
     @BeforeEach
     public void setUp() {
         experiences = new ArrayList<>();
-        experience = new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description");
+        experience = new WorkExperience(1L, user, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description", "companyName");
         experiences.add(experience);
 
         training = new ArrayList<>();

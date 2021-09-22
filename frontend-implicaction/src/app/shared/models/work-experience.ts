@@ -4,5 +4,5 @@ export interface WorkExperience {
   finishedAt?: string;
   description?: string;
   label?: string;
-  companyLabel?: string;
+  companyName?: string;
 }

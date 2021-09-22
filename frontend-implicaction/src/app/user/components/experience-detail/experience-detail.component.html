@@ -3,11 +3,11 @@
     <img alt="briefcase" class="img-fluid" src="assets/img/job-icon.png">
   </div>
   <div class="col align-items-start align-self-center ps-1">
-    <h3 *ngIf="!isEditing; else compagnyLabelEdition" class="pb-1">{{experience.companyLabel}}</h3>
+    <h3 *ngIf="!isEditing; else compagnyLabelEdition" class="pb-1">{{experience.companyName}}</h3>
     <ng-template #compagnyLabelEdition>
       <div class="form-floating mb-4">
         <input
-          [(ngModel)]="experience.companyLabel"
+          [(ngModel)]="experience.companyName"
           class="form-control form-control-lg rounded-pill px-4"
           placeholder="Nom de la compagnie"
         />
