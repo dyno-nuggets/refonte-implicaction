@@ -40,6 +40,13 @@
           </app-training-detail>
           <hr *ngIf="!isLast" class="mx-4"/>
         </li>
+        <button
+          *ngIf="isEditing"
+          (click)="addElement()"
+          class="btn btn-primary mt-2"
+        >
+          Ajouter un élément
+        </button>
       </ng-container>
       <ng-template #emptyInfo>
         <span class="fst-italic">Non renseigné.</span>

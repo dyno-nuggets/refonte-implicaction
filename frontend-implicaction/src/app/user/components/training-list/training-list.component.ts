@@ -53,4 +53,9 @@ export class TrainingListComponent implements OnInit {
       this.trainingCopies.splice(trainingIndex, 1);
     }
   }
+
+  addElement(): void {
+    const tr = {} as Training;
+    this.trainingCopies.push(tr);
+  }
 }
