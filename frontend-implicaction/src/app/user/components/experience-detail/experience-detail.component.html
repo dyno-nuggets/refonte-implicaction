@@ -2,7 +2,7 @@
   <div class="col-1 d-flex align-items-end">
     <img alt="briefcase" class="img-fluid" src="assets/img/job-icon.png">
   </div>
-  <div class="col align-items-start align-self-center ps-1">
+  <div class="col-10 align-items-start align-self-center ps-1">
     <h3 *ngIf="!isEditing; else compagnyLabelEdition" class="pb-1">{{experience.companyName}}</h3>
     <ng-template #compagnyLabelEdition>
       <div class="form-floating mb-4">
@@ -26,18 +26,22 @@
       </div>
     </ng-template>
   </div>
+  <div *ngIf="isEditing" class="col-1 align-self-start text-end">
+    <i-feather (click)="deleteExperience(experience)" class="cursor-pointer text-danger" name="trash-2"></i-feather>
+  </div>
 </div>
 <div class="mb-2">
   <p *ngIf="!isEditing; else experienceDescriptionEdition" class="text-secondary">{{experience.description}}</p>
   <ng-template #experienceDescriptionEdition>
-    <div class="form-floating mb-4">
+    <div class="col-11 mb-4">
+      <label [for]="guid" class="form-label px-4">Description</label>
       <textarea
         [(ngModel)]="experience.description"
-        class="form-control w-100 px-4 text-description"
+        [id]="guid"
+        class=" form-control w-100 px-4 text-description"
         rows="4"
       >
       </textarea>
-      <label class="form-label px-4">Description</label>
     </div>
   </ng-template>
 </div>
@@ -46,17 +50,17 @@
   <span class="align-middle mt-2 date-text">{{experience.startedAt}} - {{experience.finishedAt}}</span>
 </div>
 <ng-template #startedAtEdition>
-  <div class="row">
-    <div class="col form-floating mb-4">
+  <div class="row col-11 p-0 m-0 ">
+    <div class="col form-floating p-0 pe-2 mb-4">
       <span class="form-label px-4">Date début</span>
       <p-calendar
         [(ngModel)]="experience.startedAt"
-        [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+        [inputStyleClass]="'form-control form-control-lg rounded-pill px-4 w-100'"
         dateFormat="yy-mm-dd"
       >
       </p-calendar>
     </div>
-    <div class="col form-floating mb-4">
+    <div class="col form-floating p-0 ps-2 mb-4">
       <span class="form-label px-4">Date fin</span>
       <p-calendar
         [(ngModel)]="experience.finishedAt"
@@ -68,3 +72,4 @@
     </div>
   </div>
 </ng-template>
+
