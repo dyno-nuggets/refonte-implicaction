@@ -36,8 +36,9 @@
     <div class="mb-2">
       <i-feather *ngIf="!isEditing" class="icon me-2" name="calendar"></i-feather>
 
-      <span *ngIf="!isEditing; else trainingDateEdition"
-            class="align-middle mt-2 date-text"
+      <span
+        *ngIf="!isEditing; else trainingDateEdition"
+        class="align-middle mt-2 date-text"
       >
         {{training.date}}
       </span>
