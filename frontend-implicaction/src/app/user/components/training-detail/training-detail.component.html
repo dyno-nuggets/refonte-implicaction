@@ -34,10 +34,13 @@
       </div>
     </ng-template>
     <div class="mb-2">
-      <i-feather *ngIf="!isEditing" class="icon me-2" name="Calendar"></i-feather>
+      <i-feather *ngIf="!isEditing" class="icon me-2" name="calendar"></i-feather>
 
       <span *ngIf="!isEditing; else trainingDateEdition"
-            class="align-middle mt-2 date-text">{{training.date}}</span>
+            class="align-middle mt-2 date-text"
+      >
+        {{training.date}}
+      </span>
       <ng-template #trainingDateEdition>
         <div class="form-floating mb-4">
           <span class="form-label px-4">Date</span>

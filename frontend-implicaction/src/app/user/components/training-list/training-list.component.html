@@ -3,11 +3,25 @@
     <div class="mb-3 d-flex justify-content-between">
       <h2>Formations</h2>
       <div>
-        <i-feather *ngIf="!isEditing; else saveBlock" (click)="toggleModeEdition()" name="edit"
-                   class="cursor-pointer"></i-feather>
+        <i-feather
+          *ngIf="!isEditing; else saveBlock"
+          (click)="toggleModeEdition()"
+          name="edit"
+          class="cursor-pointer"
+        >
+        </i-feather>
         <ng-template #saveBlock>
-          <i-feather (click)="toggleModeEdition()" name="rotate-ccw" class="cursor-pointer"></i-feather>
-          <i-feather (click)="updateTrainings()" name="save" class="cursor-pointer"></i-feather>
+          <i-feather
+            (click)="toggleModeEdition()"
+            name="rotate-ccw"
+            class="cursor-pointer"
+          >
+          </i-feather>
+          <i-feather
+            (click)="updateTrainings()"
+            name="save"
+            class="cursor-pointer">
+          </i-feather>
         </ng-template>
       </div>
     </div>
