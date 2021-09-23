@@ -38,6 +38,13 @@ export class ExperienceListComponent implements OnInit {
   }
 
   updateExperiences(): void {
+    const isInvalid = this.experienceCopies.some(training => !training.label);
+
+    if (isInvalid) {
+      this.toasterService.error('Oops', 'Veuillez remplir correctement les champs');
+      return;
+    }
+
     this.userService
       .updateExperiences(this.currentUserId, this.experienceCopies)
       .pipe(finalize(() => this.isEditing = false))
@@ -55,5 +62,9 @@ export class ExperienceListComponent implements OnInit {
     if (index >= 0) {
       this.experienceCopies.splice(index, 1);
     }
+  }
+
+  addElement(): void {
+    this.experienceCopies.push({});
   }
 }

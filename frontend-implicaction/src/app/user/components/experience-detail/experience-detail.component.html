@@ -10,6 +10,7 @@
           [(ngModel)]="experience.companyName"
           class="form-control form-control-lg rounded-pill px-4"
           placeholder="Nom de la compagnie"
+          required
         />
         <label class="form-label px-4">Nom de la compagnie</label>
       </div>
@@ -21,13 +22,19 @@
           [(ngModel)]="experience.label"
           class="form-control form-control-lg rounded-pill px-4"
           placeholder="Nom de l'expérience"
+          required
         />
         <label class="form-label px-4">Nom de l'expérience</label>
       </div>
     </ng-template>
   </div>
   <div *ngIf="isEditing" class="col-1 align-self-start text-end">
-    <i-feather (click)="deleteExperience(experience)" class="cursor-pointer text-danger" name="trash-2"></i-feather>
+    <i-feather
+      (click)="deleteExperience(experience)"
+      class="cursor-pointer text-danger me-3"
+      name="trash-2"
+    >
+    </i-feather>
   </div>
 </div>
 <div class="mb-2">
@@ -55,17 +62,24 @@
       <p-calendar
         [(ngModel)]="experience.startedAt"
         [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+        [yearNavigator]="true"
+        [yearRange]="yearRange"
+        appendTo="body"
         dateFormat="yy-mm-dd"
+        required
       >
       </p-calendar>
     </div>
     <div class="col form-floating p-0 ps-2 mb-4">
-      <span class="form-label px-4">Date fin</span>
+      <span class="form-label px-4" style="overflow: visible !important;">Date fin</span>
       <p-calendar
         [(ngModel)]="experience.finishedAt"
         [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+        [yearNavigator]="true"
+        appendTo="body"
         dateFormat="yy-mm-dd"
         timeSeparator="-"
+        yearRange="1900:2022"
       >
       </p-calendar>
     </div>
