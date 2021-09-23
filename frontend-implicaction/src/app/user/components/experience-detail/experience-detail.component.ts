@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {WorkExperience} from '../../../shared/models/work-experience';
 
 @Component({
@@ -13,9 +13,16 @@ export class ExperienceDetailComponent implements OnInit {
   @Input()
   isEditing: boolean;
 
+  @Output()
+  deleteEmitter = new EventEmitter<WorkExperience>();
+
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  deleteExperience(experience: WorkExperience): void {
+    this.deleteEmitter.next(experience);
   }
 }
