@@ -13,6 +13,7 @@ export class TrainingDetailComponent implements OnInit {
   training: Training;
   @Input()
   isEditing: boolean;
+  yearRange = `1900:${new Date().getFullYear() + 1}`;
 
   @Output()
   deleteEvent = new EventEmitter<Training>();
