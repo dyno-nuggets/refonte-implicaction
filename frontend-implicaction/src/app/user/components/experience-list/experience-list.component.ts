@@ -33,7 +33,7 @@ export class ExperienceListComponent implements OnInit {
 
   toggleModeEdition(): void {
     // on clone individuellement chaque élément de la liste pour ne pas impacter la liste experiences et pouvoir rollback
-    this.experienceCopies = this.experiences.map(x => Object.assign({}, x));
+    this.experienceCopies = this.experiences?.length ? this.experiences?.map(x => Object.assign({}, x)) : [{}];
     this.isEditing = !this.isEditing;
   }
 
