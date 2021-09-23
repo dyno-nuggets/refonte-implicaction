@@ -1,9 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Getter
 @Setter
 @Table(name = "job_posting")

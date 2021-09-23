@@ -9,12 +9,8 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class CompanyDto {
-
+public class StatusDto {
     private Long id;
-    private String name;
-    private String logo;
-    private String description;
-    private String url;
-
+    private String label;
+    private String type;
 }

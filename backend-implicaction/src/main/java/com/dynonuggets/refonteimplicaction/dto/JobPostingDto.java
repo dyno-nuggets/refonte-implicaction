@@ -18,5 +18,7 @@ public class JobPostingDto {
     private String location;
     private String salary;
     private String keywords;
-    
+    private ContractTypeDto contractType;
+    private StatusDto status;
+
 }
