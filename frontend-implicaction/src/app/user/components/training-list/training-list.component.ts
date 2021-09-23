@@ -60,7 +60,6 @@ export class TrainingListComponent implements OnInit {
   }
 
   addElement(): void {
-    const tr = {} as Training;
-    this.trainingCopies.push(tr);
+    this.trainingCopies.push({});
   }
 }
