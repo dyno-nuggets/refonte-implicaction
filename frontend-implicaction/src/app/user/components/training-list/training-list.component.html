@@ -26,7 +26,7 @@
         </ng-template>
       </div>
     </div>
-    <ul>
+    <ul [ngClass]="{'formation-edition': isEditing}">
       <ng-container *ngIf="trainings?.length; else emptyInfo">
         <li
           *ngFor="let training of (isEditing ? trainingCopies : trainings); trackBy: trackByTrainingId; last as isLast;"
@@ -38,7 +38,7 @@
             (deleteEvent)="deleteEvent(training)"
           >
           </app-training-detail>
-          <hr *ngIf="!isLast" class="mx-4"/>
+          <hr *ngIf="!isLast" class="mx-4 mb-5"/>
         </li>
         <button
           *ngIf="isEditing"

@@ -11,11 +11,12 @@
       <ng-template #trainingLabelEdition>
         <div class="form-floating mb-4">
           <input
-            [(ngModel)]="training.label"
-            class="form-control form-control-lg rounded-pill px-4"
-            placeholder="Nom de la formation"
-          />
-          <label class="form-label">Nom de la formation</label>
+            required
+          [(ngModel)]="training.label"
+          class="form-control form-control-lg rounded-pill px-4"
+          placeholder="Nom de la formation"
+        />
+        <label class="form-label">Nom de la formation</label>
         </div>
       </ng-template>
       <h4 *ngIf="!isEditing; else trainingSchoolEdition" class="pt-1">{{training.school}}</h4>
@@ -32,24 +33,24 @@
       <div class="mb-2">
         <i-feather *ngIf="!isEditing" class="icon me-2" name="calendar"></i-feather>
 
-        <span
-          *ngIf="!isEditing; else trainingDateEdition"
-          class="align-middle mt-2 date-text"
-        >
+      <span
+        *ngIf="!isEditing; else trainingDateEdition"
+        class="align-middle mt-2 date-text"
+      >
         {{training.date}}
       </span>
         <ng-template #trainingDateEdition>
           <div class="form-floating mb-4">
             <span class="form-label px-4">Date</span>
             <p-calendar
-              [(ngModel)]="training.date"
-              [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
-              dateFormat="yy-mm-dd"
-            >
-            </p-calendar>
-          </div>
-        </ng-template>
-      </div>
+              required
+            [(ngModel)]="training.date"
+            [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+            dateFormat="yy-mm-dd"
+          >
+          </p-calendar>
+        </div>
+      </ng-template></div>
     </div>
   </div>
 </div>

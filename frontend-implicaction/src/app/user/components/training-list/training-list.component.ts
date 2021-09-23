@@ -36,7 +36,12 @@ export class TrainingListComponent implements OnInit {
     this.trainingCopies = this.trainings.map(x => Object.assign({}, x));
   }
 
-  updateTrainings(): any {
+  updateTrainings(): void {
+    const isInvalid = this.trainingCopies.some(training => !training.label);
+    if (isInvalid) {
+      this.toastService.error('Oops', 'Veuillez remplir correctement les formations');
+      return;
+    }
     this.userService
       .updateTraining(this.currentUserId, this.trainingCopies)
       .pipe(finalize(() => this.isEditing = false))

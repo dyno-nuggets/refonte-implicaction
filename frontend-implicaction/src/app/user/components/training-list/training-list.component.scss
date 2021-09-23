@@ -3,3 +3,9 @@ h2 {
   line-height: 25px;
   font-size: 18px;
 }
+
+.formation-edition {
+  overflow-x: hidden !important;
+  height: 500px;
+  overflow-y: scroll;
+}
