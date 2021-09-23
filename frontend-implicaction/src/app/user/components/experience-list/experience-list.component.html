@@ -16,7 +16,7 @@
         </ng-template>
       </div>
     </div>
-    <ul>
+    <ul [ngClass]="{'formation-edition': isEditing}">
       <ng-container *ngIf="experiences?.length else emptyInfo">
         <li
           *ngFor="let experience of (isEditing ? experienceCopies : experiences); trackBy: trackByExperienceId; last as isLast;"
@@ -28,8 +28,15 @@
             [isEditing]="isEditing"
           >
           </app-experience-detail>
-          <hr *ngIf="!isLast" class="mx-4"/>
+          <hr *ngIf="!isLast" class="mx-4 mb-5"/>
         </li>
+        <button
+          (click)="addElement()"
+          *ngIf="isEditing"
+          class="btn btn-primary mt-2"
+        >
+          Ajouter un élément
+        </button>
       </ng-container>
       <ng-template #emptyInfo>
         <span class="fst-italic">Non renseigné.</span>

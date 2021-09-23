@@ -12,6 +12,7 @@ export class ExperienceDetailComponent implements OnInit {
   experience: WorkExperience;
   @Input()
   isEditing: boolean;
+  yearRange = `1900:${new Date().getFullYear() + 1}`;
 
   @Output()
   deleteEmitter = new EventEmitter<WorkExperience>();
