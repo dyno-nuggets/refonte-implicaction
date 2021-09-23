@@ -67,6 +67,7 @@
         appendTo="body"
         dateFormat="yy-mm-dd"
         required
+        timeSeparator="-"
       >
       </p-calendar>
     </div>
@@ -76,10 +77,11 @@
         [(ngModel)]="experience.finishedAt"
         [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
         [yearNavigator]="true"
+        [yearRange]="yearRange"
         appendTo="body"
         dateFormat="yy-mm-dd"
+        required
         timeSeparator="-"
-        yearRange="1900:2022"
       >
       </p-calendar>
     </div>
