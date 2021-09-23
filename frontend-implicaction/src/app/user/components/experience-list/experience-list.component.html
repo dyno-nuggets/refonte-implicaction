@@ -23,7 +23,7 @@
           class="list-unstyled"
         >
           <app-experience-detail
-            (onDelete)="deleteExperience($event)"
+            (deleteEmitter)="deleteExperience($event)"
             [experience]="experience"
             [isEditing]="isEditing"
           >

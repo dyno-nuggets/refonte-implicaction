@@ -49,7 +49,7 @@ export class ExperienceListComponent implements OnInit {
   }
 
   deleteExperience(experience: WorkExperience): void {
-    // compare champ par champ les element de la liste avec l'expérience a supprimer et on recupère l'id dans la liste
+    // compare champ par champ les elements de la liste avec l'expérience a supprimer et on recupère l'id dans la liste
     const index = this.experienceCopies.findIndex(exp => JSON.stringify(exp) === JSON.stringify(experience));
 
     if (index >= 0) {
