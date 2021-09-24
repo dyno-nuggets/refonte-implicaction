@@ -5,6 +5,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RoleEnum} from '../../../shared/enums/role-enum.enum';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-signup',
@@ -16,6 +17,7 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   signupRequestPayload: SignupRequestPayload;
   isError: boolean;
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -29,8 +31,9 @@ export class SignupComponent implements OnInit {
         username: '',
         email: '',
         password: '',
-        nicename: '',
-        roles: [RoleEnum.USER]
+        firstname: '',
+        lastname: '',
+        roles: [RoleEnum.USER, RoleEnum.JOB_SEEKER]
       };
     }
   }
@@ -41,7 +44,8 @@ export class SignupComponent implements OnInit {
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', Validators.required),
       repeatPassword: new FormControl('', Validators.required),
-      nicename: new FormControl('', Validators.required)
+      firstname: new FormControl('', Validators.required),
+      lastname: new FormControl('', Validators.required),
     });
   }
 
@@ -51,13 +55,17 @@ export class SignupComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
+
     this.signupRequestPayload.email = this.signupForm.get('email')?.value;
     this.signupRequestPayload.username = this.signupForm.get('username')?.value;
     this.signupRequestPayload.password = this.signupForm.get('password')?.value;
-    this.signupRequestPayload.nicename = this.signupForm.get('nicename')?.value;
+    this.signupRequestPayload.firstname = this.signupForm.get('firstname')?.value;
+    this.signupRequestPayload.lastname = this.signupForm.get('lastname')?.value;
 
     this.authService
       .signup(this.signupRequestPayload)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         () => this.router.navigate(['/auth/login'], {queryParams: {registered: 'true'}}),
         () => this.isError = true

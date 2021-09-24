@@ -24,7 +24,7 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
                 .username("test user")
                 .password("secret password")
                 .email("user@email.com")
-                .registered(Instant.now())
+                .registeredAt(Instant.now())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -40,11 +40,11 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
                 .username("test get user")
                 .password("secret password")
                 .email("userget@email.com")
-                .registered(Instant.now())
+                .registeredAt(Instant.now())
                 .build();
 
         userRepository.save(user);
-        
+
         Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
         assertThat(byUsername).isPresent();
         assertThat(byUsername.get()).usingRecursiveComparison()
