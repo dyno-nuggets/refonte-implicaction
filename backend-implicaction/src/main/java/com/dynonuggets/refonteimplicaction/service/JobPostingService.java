@@ -11,6 +11,8 @@ import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.model.Status;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -42,5 +44,10 @@ public class JobPostingService {
 
         JobPosting jobSaved = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(jobSaved);
+    }
+
+    public Page<JobPostingDto> getAll(Pageable pageable) {
+        return jobPostingRepository.findAll(pageable)
+                .map(jobPostingAdapter::toDto);
     }
 }
