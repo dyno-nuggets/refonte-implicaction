@@ -1,7 +1,6 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.model.Training;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.model.WorkExperience;
@@ -18,8 +17,6 @@ class TrainingAdapterTest {
     User user;
     List<WorkExperience> experiences;
     List<Training> trainings;
-    List<WorkExperienceDto> expectedExperienceDtos;
-    List<TrainingDto> expectedTrainingDtos;
     UserAdapter userAdapter;
     WorkExperienceAdapter workExperienceAdapter;
     TrainingAdapter trainingAdapter;
@@ -48,7 +45,7 @@ class TrainingAdapterTest {
 
         trainingAdapter = new TrainingAdapter();
         workExperienceAdapter = new WorkExperienceAdapter();
-        userAdapter = new UserAdapter(new WorkExperienceAdapter(), new TrainingAdapter(), new CompanyAdapter());
+        userAdapter = new UserAdapter(new WorkExperienceAdapter(), trainingAdapter, new CompanyAdapter());
         relationAdapter = new RelationAdapter(userAdapter);
     }
 
