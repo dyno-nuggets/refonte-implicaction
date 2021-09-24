@@ -1,5 +1,10 @@
 <app-header></app-header>
 <main class="mx-5">
   <router-outlet></router-outlet>
-  <p-toast position="bottom-right"></p-toast>
+  <p-toast
+    [hideTransformOptions]="'translateX(0)'"
+    [showTransformOptions]="'translateX(100%)'"
+    position="bottom-right"
+  >
+  </p-toast>
 </main>

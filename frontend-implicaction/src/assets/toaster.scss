@@ -1,0 +1,50 @@
+@mixin create-icone($icone, $color) {
+  .p-toast-message-icon[class *= 'pi-']:before {
+    font-family: "FontAwesome", serif;
+    content: '#{$icone}' !important;
+    color: $color;
+    font-size: 26px;
+  }
+}
+
+:host ::ng-deep {
+
+  .p-toast-message-content {
+    background-color: white;
+    border-width: 0 0 0 2px;
+  }
+
+  .p-toast-summary {
+    color: $secondary;
+  }
+
+  .p-toast-detail {
+    color: $light-gray;
+  }
+
+  .p-toast {
+
+    width: 22rem;
+    opacity: 0.97;
+
+  }
+
+  .p-toast-message-success.p-toast-message {
+    border-left: 3px solid $success;
+    @include create-icone('\f058', $success);
+
+    .p-toast-icon-close {
+      color: $secondary;
+    }
+  }
+
+  .p-toast-message-error.p-toast-message {
+
+    border-left: 3px solid $danger;
+    @include create-icone('\f057', $danger);
+
+    .p-toast-icon-close {
+      color: $secondary;
+    }
+  }
+}
