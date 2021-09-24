@@ -11,7 +11,8 @@ export interface User {
   registered?: string;
   activationKey?: string;
   status?: string;
-  nicename?: string;
+  firstname?: string;
+  lastname?: string;
   birthday?: string;
   phoneNumber?: string;
   hobbies?: string;

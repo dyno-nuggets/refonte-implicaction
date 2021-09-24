@@ -3,11 +3,12 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.*;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.model.JobSeeker;
 import com.dynonuggets.refonteimplicaction.model.Role;
-import com.dynonuggets.refonteimplicaction.model.Signup;
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
@@ -33,13 +35,13 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final SignUpRepository signUpRepository;
     private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
     private RoleRepository roleRepository;
+    private JobSeekerRepository jobSeekerRepository;
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -49,11 +51,10 @@ public class AuthService {
      * @throws ImplicactionException si l'envoi du mail échoue
      */
     @Transactional
-    public void signupAndSendConfirmation(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
+    public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
         // TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
         final String activationKey = generateActivationKey();
         final User user = registerUser(reqisterRequest, activationKey);
-        registerSignup(activationKey, user);
         mailService.sendUserActivationMail(activationKey, user);
     }
 
@@ -65,14 +66,30 @@ public class AuthService {
      *                               <li>Si la clé est déjà activée</li>
      *                               </ul>
      */
-    @Transactional(readOnly = true)
+    @Transactional
     public void verifyAccount(String activationKey) throws ImplicactionException {
-        Signup signup = signUpRepository.findByActivationKey(activationKey).orElseThrow(() ->
-                new ImplicactionException("Activation Key Not Found: " + activationKey));
-        if (Boolean.TRUE.equals(signup.getActive())) {
+        User user = userRepository.findByActivationKey(activationKey)
+                .orElseThrow(() -> new ImplicactionException("Activation Key Not Found: " + activationKey));
+        if (user.getActivatedAt() != null) {
             throw new ImplicactionException("Account With Associated Activation Key Already Activated - " + activationKey);
         }
-        activateSignup(signup);
+
+        user.setActivatedAt(Instant.now());
+        user.setActive(true);
+        user = userRepository.save(user);
+
+        final List<String> userRoles = user.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(toList());
+
+        // à l'activation du compte on map l'utilisateur à un job_seeker
+        if (userRoles.contains(RoleEnum.JOB_SEEKER.getLabel())) {
+            JobSeeker jobSeeker = JobSeeker.builder()
+                    .user(user)
+                    .build();
+            jobSeekerRepository.save(jobSeeker);
+        }
     }
 
     @Transactional
@@ -132,27 +149,19 @@ public class AuthService {
                 .build();
     }
 
-    private void registerSignup(String activationKey, User user) {
-        User userFromDb = userRepository.findByUsername(user.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("Le nom d'utilisateur n'existe pas."));
-        Signup signup = Signup.builder()
-                .user(userFromDb)
-                .registered(user.getRegistered())
-                .active(false)
-                .activationKey(activationKey)
-                .build();
-        signUpRepository.save(signup);
-    }
-
     private User registerUser(ReqisterRequestDto reqisterRequest, String activationKey) {
         final List<Role> roles = roleRepository.findAllByNameIn(reqisterRequest.getRoles());
+
         User user = User.builder()
                 .username(reqisterRequest.getUsername())
                 .email(reqisterRequest.getEmail())
                 .password(passwordEncoder.encode(reqisterRequest.getPassword()))
-                .registered(Instant.now())
+                .firstname(reqisterRequest.getFirstname())
+                .lastname(reqisterRequest.getLastname())
+                .registeredAt(Instant.now())
+                .active(false)
                 .activationKey(activationKey)
-                .nicename(reqisterRequest.getNicename())
+                .registeredAt(Instant.now())
                 .roles(roles)
                 .build();
         return userRepository.save(user);
@@ -160,11 +169,5 @@ public class AuthService {
 
     private String generateActivationKey() {
         return UUID.randomUUID().toString();
-    }
-
-    private void activateSignup(Signup signup) {
-        signup.setActivated(Instant.now());
-        signup.setActive(true);
-        signUpRepository.save(signup);
     }
 }

@@ -18,9 +18,13 @@ public class Company {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
+
     @Column(name = "name", nullable = false)
     private String name;
+
     private String logo;
+
     private String description;
+
     private String url;
 }

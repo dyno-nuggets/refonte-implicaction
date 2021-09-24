@@ -10,8 +10,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
-import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -26,46 +24,52 @@ public class User {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    @Column(name = "user_login", unique = true)
+
+    @Column(name = "username", unique = true)
     @NotBlank(message = "login is required")
     private String username;
-    @Column(name = "user_pass")
+
+    @Column(name = "password")
     @NotBlank(message = "password is required")
     private String password;
-    @Column(name = "user_nicename")
-    private String nicename;
-    @Column(name = "user_email", unique = true)
+
+    @Column(name = "email", unique = true)
     @NotEmpty(message = "Email is required")
     @Email
     private String email;
-    @Column(name = "user_url")
+
+    private String firstname;
+
+    private String lastname;
+
+    private LocalDate birthday;
+
     private String url;
-    @Column(name = "user_registered")
-    private Instant registered;
-    @Column(name = "user_activation_key")
-    private String activationKey;
-    @Column(name = "user_status")
-    private Integer status;
-    @Column(name = "display_name")
-    private String displayName;
-    @OneToMany(fetch = LAZY, mappedBy = "user")
-    private List<WorkExperience> experiences;
-    @OneToMany(fetch = LAZY, mappedBy = "user")
-    private List<Training> trainings;
-    @OneToOne(mappedBy = "user", fetch = LAZY, cascade = ALL)
-    private Signup signup;
+
+    private String hobbies;
+
+    private String purpose;
+
+    private String presentation;
+
+    private String expectation;
+
+    private String contribution;
+
     @Column(name = "phone_number")
     private String phoneNumber;
-    private LocalDate birthday;
-    private String hobbies;
-    @Column(name = "firstname")
-    private String firstName;
-    @Column(name = "lastname")
-    private String lastName;
-    private String purpose;
-    private String presentation;
-    private String expectation;
-    private String contribution;
+
+    @Column(name = "registered_at")
+    private Instant registeredAt;
+
+    @Column(name = "activated_at")
+    private Instant activatedAt;
+
+    @Column(name = "activation_key")
+    private String activationKey;
+
+    private boolean active;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

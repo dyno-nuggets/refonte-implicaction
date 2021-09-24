@@ -20,7 +20,7 @@ class RelationAdapterTest {
 
     @BeforeEach
     public void setUp() {
-        userAdapter = new UserAdapter(new WorkExperienceAdapter(), new TrainingAdapter());
+        userAdapter = new UserAdapter(new WorkExperienceAdapter(), new TrainingAdapter(), new CompanyAdapter());
         relationAdapter = new RelationAdapter(userAdapter);
         receiver = User.builder()
                 .username("user1")

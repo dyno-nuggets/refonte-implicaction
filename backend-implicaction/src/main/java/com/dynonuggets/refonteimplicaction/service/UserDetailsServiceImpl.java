@@ -1,8 +1,6 @@
 package com.dynonuggets.refonteimplicaction.service;
 
-import com.dynonuggets.refonteimplicaction.model.Signup;
 import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.repository.SignUpRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,16 +20,13 @@ import static java.util.stream.Collectors.toSet;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
-    private final SignUpRepository signUpRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new UsernameNotFoundException("No user found with login " + username));
-        Signup signup = signUpRepository.findByUser_Username(username).orElseThrow(() ->
-                new UsernameNotFoundException("No signup found with login " + username));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), signup.getActive(),
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isActive(),
                 true, true, true, getAuthorities(user));
     }
 

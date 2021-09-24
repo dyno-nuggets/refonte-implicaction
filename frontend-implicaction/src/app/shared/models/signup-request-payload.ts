@@ -4,6 +4,7 @@ export interface SignupRequestPayload {
   username: string;
   email: string;
   password: string;
-  nicename: string;
+  firstname: string;
+  lastname: string;
   roles: RoleEnum[];
 }

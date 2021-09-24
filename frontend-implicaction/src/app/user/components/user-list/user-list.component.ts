@@ -109,7 +109,7 @@ export class UserListComponent implements OnInit {
       .subscribe(
         () => user.relationTypeOfCurrentUser = RelationType.SENDER,
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
-        () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.nicename}`)
+        () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.firstname}`)
       );
   }
 
@@ -141,11 +141,11 @@ export class UserListComponent implements OnInit {
       .subscribe(
         () => {
           if (UserListComponent.isFriend(user)) {
-            message = `L'utilisateur ${user.nicename} a bien été supprimé de vos amis`;
+            message = `L'utilisateur ${user.firstname} a bien été supprimé de vos amis`;
           } else if (UserListComponent.isSender(user)) {
-            message = `Vous avez annulé la demande d'ami avec ${user.nicename}`;
+            message = `Vous avez annulé la demande d'ami avec ${user.firstname}`;
           } else if (UserListComponent.isReceiver(user)) {
-            message = `Vous avez refusé la demande d'ami de ${user.nicename}`;
+            message = `Vous avez refusé la demande d'ami de ${user.firstname}`;
           }
           user.relationTypeOfCurrentUser = RelationType.NONE;
           // il faut relancer la pagination dans le cas de l'affichage des amis / demandes

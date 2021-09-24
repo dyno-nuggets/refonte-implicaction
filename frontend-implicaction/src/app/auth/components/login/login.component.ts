@@ -4,6 +4,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {LoginRequestPayload} from '../../../shared/models/login-request-payload';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +17,7 @@ export class LoginComponent implements OnInit {
   loginRequestPayload: LoginRequestPayload;
   showAlert: boolean;
   alert: { title: string, severity: string, body: string };
+  isLoading = false;
 
   constructor(
     private authService: AuthService,
@@ -56,11 +58,14 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
+
     this.loginRequestPayload.username = this.loginForm.get('username').value;
     this.loginRequestPayload.password = this.loginForm.get('password').value;
 
     this.authService
       .login(this.loginRequestPayload)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(isLoginSuccess => {
         if (isLoginSuccess) {
           this.showAlert = false;

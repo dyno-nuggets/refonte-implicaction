@@ -29,18 +29,18 @@ class RelationRepositoryTest extends AbstractContainerBaseTest {
         sender = User.builder()
                 .username("sender")
                 .email("sender@email.com")
-                .registered(Instant.now())
+                .registeredAt(Instant.now())
                 .build();
         receiver = User.builder()
                 .username("receiver")
                 .email("receiver@email.com")
-                .registered(Instant.now())
+                .registeredAt(Instant.now())
                 .build();
 
         unRelated = User.builder()
                 .username("unRelated")
                 .email("unrelated@email.com")
-                .registered(Instant.now())
+                .registeredAt(Instant.now())
                 .build();
 
         sender = userRepository.save(sender);

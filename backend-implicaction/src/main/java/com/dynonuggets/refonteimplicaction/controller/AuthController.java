@@ -25,7 +25,7 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody ReqisterRequestDto reqisterRequest) throws ImplicactionException {
-        authService.signupAndSendConfirmation(reqisterRequest);
+        authService.signup(reqisterRequest);
         return new ResponseEntity<>("User registration successful", OK);
     }
 

@@ -1,14 +1,14 @@
 <div class="col mb-3">
   <div class="card align-items-center pt-5 shadow-sm border-0 user-card">
     <img
-      [alt]="user.nicename"
+      [alt]="user.firstname"
       class="rounded-circle img-fluid shadow-sm user-avatar"
       src="assets/img/default-user.png"
     />
     <div class="card-body text-center w-100">
       <h5 class="card-title overflow-ellipsis">
         <a routerLink="/users/{{user.id}}/profile">
-          {{user.nicename}}
+          {{user.firstname}} {{user.lastname}}
         </a>
       </h5>
       <ng-content></ng-content>
