@@ -4,6 +4,7 @@ import {UserService} from '../../services/user.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
+import {Utils} from '../../../shared/classes/utils';
 
 @Component({
   selector: 'app-experience-list',
@@ -37,7 +38,7 @@ export class ExperienceListComponent implements OnInit {
     this.isEditing = !this.isEditing;
   }
 
-  updateExperiences(): void {
+  saveExperiences(): void {
     const isInvalid = this.experienceCopies.some(training => !training.label);
 
     if (isInvalid) {
@@ -56,8 +57,7 @@ export class ExperienceListComponent implements OnInit {
   }
 
   deleteExperience(experience: WorkExperience): void {
-    // compare champ par champ les elements de la liste avec l'expérience a supprimer et on recupère l'id dans la liste
-    const index = this.experienceCopies.findIndex(exp => JSON.stringify(exp) === JSON.stringify(experience));
+    const index = this.experienceCopies.indexOf(experience);
 
     if (index >= 0) {
       this.experienceCopies.splice(index, 1);
@@ -65,6 +65,8 @@ export class ExperienceListComponent implements OnInit {
   }
 
   addElement(): void {
-    this.experienceCopies.push({});
+    if (!Utils.isEqual(this.experienceCopies[this.experienceCopies.length - 1], {})) {
+      this.experienceCopies.push({});
+    }
   }
 }

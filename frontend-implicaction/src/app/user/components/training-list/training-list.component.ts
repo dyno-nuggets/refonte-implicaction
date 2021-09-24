@@ -4,6 +4,7 @@ import {UserService} from '../../services/user.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
+import {Utils} from '../../../shared/classes/utils';
 
 @Component({
     selector: 'app-training-list',
@@ -36,7 +37,7 @@ export class TrainingListComponent implements OnInit {
         this.trainingCopies = this.trainings?.length ? this.trainings.map(x => Object.assign({}, x)) : [{}];
     }
 
-    updateTrainings(): void {
+    saveTrainings(): void {
         const isInvalid = this.trainingCopies.some(training => !training.label);
         if (isInvalid) {
             this.toastService.error('Oops', 'Veuillez remplir correctement les formations');
@@ -60,6 +61,8 @@ export class TrainingListComponent implements OnInit {
     }
 
     addElement(): void {
-        this.trainingCopies.push({});
+        if (!Utils.isEqual(this.trainingCopies[this.trainingCopies.length - 1], {})) {
+            this.trainingCopies.push({});
+        }
     }
 }
