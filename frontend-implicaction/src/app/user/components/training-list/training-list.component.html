@@ -4,41 +4,53 @@
       <h2>Formations</h2>
       <div>
         <i-feather
-          *ngIf="!isEditing; else saveBlock"
           (click)="toggleModeEdition()"
-          name="edit"
+          *ngIf="!isEditing; else saveBlock"
           class="cursor-pointer"
+          name="edit"
         >
         </i-feather>
         <ng-template #saveBlock>
           <i-feather
             (click)="toggleModeEdition()"
-            name="rotate-ccw"
             class="cursor-pointer"
+            name="rotate-ccw"
           >
           </i-feather>
           <i-feather
             (click)="updateTrainings()"
-            name="save"
             class="cursor-pointer"
+            name="save"
           >
           </i-feather>
         </ng-template>
       </div>
     </div>
-    <ul>
-      <ng-container *ngIf="trainings?.length; else emptyInfo">
+    <ul [ngClass]="{'formation-edition': isEditing}">
+      <ng-container *ngIf="isEditing || trainings?.length; else emptyInfo">
         <li
           *ngFor="let training of (isEditing ? trainingCopies : trainings); trackBy: trackByTrainingId; last as isLast;"
           class="list-unstyled"
         >
-          <app-training-detail [training]="training" [isEditing]="isEditing"></app-training-detail>
-          <hr *ngIf="!isLast" class="mx-4"/>
+          <app-training-detail
+            (deleteEvent)="deleteEvent(training)"
+            [isEditing]="isEditing"
+            [training]="training"
+          >
+          </app-training-detail>
+          <hr *ngIf="!isLast" class="mx-4 mb-5"/>
         </li>
       </ng-container>
       <ng-template #emptyInfo>
         <span class="fst-italic">Non renseigné.</span>
       </ng-template>
     </ul>
+    <button
+      (click)="addElement()"
+      *ngIf="isEditing"
+      class="btn btn-primary mt-2"
+    >
+      Ajouter un élément
+    </button>
   </div>
 </div>

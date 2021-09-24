@@ -1,50 +1,60 @@
-<div class="row col align-items-center mb-2">
-  <div class="col-1 d-flex align-items-end">
-    <img alt="briefcase" class="img-fluid" src="assets/img/training-icon.png">
+<div>
+  <div *ngIf="isEditing" class="d-flex flex-row justify-content-end mb-3 text-danger">
+    <i-feather (click)="deleteTraining(training)" class="cursor-pointer" name="trash-2"></i-feather>
   </div>
-  <div class="col align-items-start align-self-center ps-1">
-    <h3 *ngIf="!isEditing; else trainingLabelEdition" class="pb-1">{{training.label}}</h3>
-    <ng-template #trainingLabelEdition>
-      <div class="form-floating mb-4">
-        <input
-          [(ngModel)]="training.label"
-          class="form-control form-control-lg rounded-pill px-4"
-          placeholder="Nom de la formation"
-        />
-        <label class="form-label">Label du training</label>
-      </div>
-    </ng-template>
-    <h4 *ngIf="!isEditing; else trainingSchoolEdition" class="pt-1">{{training.school}}</h4>
-    <ng-template #trainingSchoolEdition>
-      <div class="form-floating mb-4">
-        <input
-          [(ngModel)]="training.school"
-          class="form-control form-control-lg rounded-pill px-4"
-          placeholder="Nom de l'établissement"
-        >
-        <label class="form-label">Nom de l'école</label>
-      </div>
-    </ng-template>
-    <div class="mb-2">
-      <i-feather *ngIf="!isEditing" class="icon me-2" name="calendar"></i-feather>
-
-      <span
-        *ngIf="!isEditing; else trainingDateEdition"
-        class="align-middle mt-2 date-text"
-      >
-        {{training.date}}
-      </span>
-      <ng-template #trainingDateEdition>
+  <div class="row col align-items-center mb-2">
+    <div class="col-1 d-flex align-items-end">
+      <img alt="briefcase" class="img-fluid" src="assets/img/training-icon.png">
+    </div>
+    <div class="col align-items-start align-self-center ps-1">
+      <h3 *ngIf="!isEditing; else trainingLabelEdition" class="pb-1">{{training.label}}</h3>
+      <ng-template #trainingLabelEdition>
         <div class="form-floating mb-4">
-          <span class="form-label px-4">Date</span>
-          <p-calendar
-            [(ngModel)]="training.date"
-            [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
-            dateFormat="yy-mm-dd"
-          >
-          </p-calendar>
+          <input
+            [(ngModel)]="training.label"
+            class="form-control form-control-lg rounded-pill px-4"
+            placeholder="Nom de la formation"
+            required
+          />
+          <label class="form-label">Nom de la formation</label>
         </div>
       </ng-template>
+      <h4 *ngIf="!isEditing; else trainingSchoolEdition" class="pt-1">{{training.school}}</h4>
+      <ng-template #trainingSchoolEdition>
+        <div class="form-floating mb-4">
+          <input
+            [(ngModel)]="training.school"
+            class="form-control form-control-lg rounded-pill px-4"
+            placeholder="Nom de l'établissement"
+          >
+          <label class="form-label">Nom de l'établissement</label>
+        </div>
+      </ng-template>
+      <div class="mb-2">
+        <i-feather *ngIf="!isEditing" class="icon me-2" name="calendar"></i-feather>
+
+        <span
+          *ngIf="!isEditing; else trainingDateEdition"
+          class="align-middle mt-2 date-text"
+        >
+        {{training.date}}
+      </span>
+        <ng-template #trainingDateEdition>
+          <div class="form-floating mb-4">
+            <span class="form-label px-4">Date</span>
+            <p-calendar
+              [(ngModel)]="training.date"
+              [inputStyleClass]="'form-control form-control-lg rounded-pill px-4'"
+              [yearNavigator]="true"
+              [yearRange]="yearRange"
+              appendTo="body"
+              dateFormat="yy-mm-dd"
+              required
+            >
+            </p-calendar>
+          </div>
+        </ng-template>
+      </div>
     </div>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Training} from '../../../shared/models/training';
 
 @Component({
@@ -13,11 +13,19 @@ export class TrainingDetailComponent implements OnInit {
   training: Training;
   @Input()
   isEditing: boolean;
+  yearRange = `1900:${new Date().getFullYear() + 1}`;
+
+  @Output()
+  deleteEvent = new EventEmitter<Training>();
 
   constructor() {
   }
 
   ngOnInit(): void {
+  }
+
+  deleteTraining(training: Training): void {
+    this.deleteEvent.next(training);
   }
 
 }

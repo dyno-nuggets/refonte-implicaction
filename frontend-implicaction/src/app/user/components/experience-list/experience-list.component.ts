@@ -33,11 +33,18 @@ export class ExperienceListComponent implements OnInit {
 
   toggleModeEdition(): void {
     // on clone individuellement chaque élément de la liste pour ne pas impacter la liste experiences et pouvoir rollback
-    this.experienceCopies = this.experiences.map(x => Object.assign({}, x));
+    this.experienceCopies = this.experiences?.length ? this.experiences?.map(x => Object.assign({}, x)) : [{}];
     this.isEditing = !this.isEditing;
   }
 
   updateExperiences(): void {
+    const isInvalid = this.experienceCopies.some(training => !training.label);
+
+    if (isInvalid) {
+      this.toasterService.error('Oops', 'Veuillez remplir correctement les champs');
+      return;
+    }
+
     this.userService
       .updateExperiences(this.currentUserId, this.experienceCopies)
       .pipe(finalize(() => this.isEditing = false))
@@ -55,5 +62,9 @@ export class ExperienceListComponent implements OnInit {
     if (index >= 0) {
       this.experienceCopies.splice(index, 1);
     }
+  }
+
+  addElement(): void {
+    this.experienceCopies.push({});
   }
 }
