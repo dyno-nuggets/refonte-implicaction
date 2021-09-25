@@ -6,6 +6,7 @@ import {BadgeModule} from 'primeng/badge';
 import {IconsModule} from '../icons/icons.module';
 import {LoadingComponent} from './components/loading/loading.component';
 import {AlertComponent} from './components/alert/alert.component';
+import {SidebarContentDirective} from './directives/sidebar-content.directive';
 
 
 @NgModule({
@@ -13,11 +14,13 @@ import {AlertComponent} from './components/alert/alert.component';
     HeaderComponent,
     LoadingComponent,
     AlertComponent
+    SidebarContentDirective,
   ],
   exports: [
     HeaderComponent,
     LoadingComponent,
     AlertComponent
+    SidebarContentDirective,
   ],
   imports: [
     CommonModule,
