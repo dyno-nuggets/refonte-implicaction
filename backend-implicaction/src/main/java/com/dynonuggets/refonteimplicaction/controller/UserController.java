@@ -85,4 +85,10 @@ public class UserController {
         List<WorkExperienceDto> experienceUpdates = workExperienceService.updateByUserId(workExperienceDtos, userId);
         return ResponseEntity.ok(experienceUpdates);
     }
+
+    @PutMapping(path = "/{userId}/personalInfos")
+    public ResponseEntity<UserDto> updatePersonalInfos(@RequestBody UserDto userDto, @PathVariable Long userId) {
+        UserDto personalInfosUpdate = userService.updateByUserId(userDto, userId);
+        return ResponseEntity.ok(personalInfosUpdate);
+    }
 }
