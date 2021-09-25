@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RoleEnum} from '../../../shared/enums/role-enum.enum';
 import {finalize} from 'rxjs/operators';
+import {AlertService} from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-signup',
@@ -23,6 +24,7 @@ export class SignupComponent implements OnInit {
     private authService: AuthService,
     private toaster: ToasterService,
     private router: Router,
+    private alertService: AlertService
   ) {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
@@ -67,7 +69,10 @@ export class SignupComponent implements OnInit {
       .signup(this.signupRequestPayload)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
-        () => this.router.navigate(['/auth/login'], {queryParams: {registered: 'true'}}),
+        () => {
+          this.router.navigate(['/auth/login'])
+            .then(() => this.alertService.success('Félicitations', 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.'));
+        },
         () => this.isError = true
       );
   }

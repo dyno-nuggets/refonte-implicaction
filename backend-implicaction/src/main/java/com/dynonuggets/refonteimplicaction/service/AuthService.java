@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.*;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.model.JobSeeker;
 import com.dynonuggets.refonteimplicaction.model.Role;
 import com.dynonuggets.refonteimplicaction.model.RoleEnum;
@@ -12,6 +13,7 @@ import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,8 +32,12 @@ import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class AuthService {
+
+    private static final String USERNAME_ALREADY_EXISTS_MSG = "Un compte utilisateur existe déjà avec ce nom d'utilisateur.";
+    private static final String EMAIL_ALREADY_EXISTS_MSG = "Un compte utilisateur existe déjà avec cette adresse email.";
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -52,10 +58,22 @@ public class AuthService {
      */
     @Transactional
     public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
-        // TODO: notifier lors de l'existence d'un utilisateur ayant le même mail ou login
+        validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
         final User user = registerUser(reqisterRequest, activationKey);
         mailService.sendUserActivationMail(activationKey, user);
+    }
+
+    /**
+     * Vérifie la validité de la requête de sign-up
+     */
+    private void validateRegisterRequest(ReqisterRequestDto reqisterRequest) {
+        userRepository.findAllByUsernameOrEmail(reqisterRequest.getUsername(), reqisterRequest.getEmail())
+                .forEach(user -> {
+                    String message = user.getUsername().equals(reqisterRequest.getUsername()) ?
+                            USERNAME_ALREADY_EXISTS_MSG : EMAIL_ALREADY_EXISTS_MSG;
+                    throw new UnauthorizedException(message);
+                });
     }
 
     /**
