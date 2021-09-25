@@ -5,6 +5,7 @@ import {AuthRoutingModule} from './auth-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {LoginComponent} from './components/login/login.component';
 import {UnauthorizedComponent} from './components/unauthorized/unauthorized.component';
+import {SharedModule} from '../shared/shared.module';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import {UnauthorizedComponent} from './components/unauthorized/unauthorized.comp
   imports: [
     CommonModule,
     AuthRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    SharedModule,
   ]
 })
 export class AuthModule {

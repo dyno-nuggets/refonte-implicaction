@@ -106,15 +106,7 @@
         </form>
 
         <!-- ALERT MESSAGES -->
-        <ng-container *ngIf="showAlert">
-          <div
-            class="alert alert-{{alert.severity}} mt-4"
-            role="alert"
-          >
-            <h4 class="alert-heading">{{alert.title}}</h4>
-            <p>{{alert.body}}</p>
-          </div>
-        </ng-container>
+        <app-alert></app-alert>
       </div>
     </div>
   </div>

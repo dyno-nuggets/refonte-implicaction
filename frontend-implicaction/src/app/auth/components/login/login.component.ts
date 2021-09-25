@@ -5,6 +5,7 @@ import {LoginRequestPayload} from '../../../shared/models/login-request-payload'
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
+import {AlertService} from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,6 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
   loginRequestPayload: LoginRequestPayload;
-  showAlert: boolean;
-  alert: { title: string, severity: string, body: string };
   isLoading = false;
 
   constructor(
@@ -24,6 +23,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private toaster: ToasterService,
+    private alertService: AlertService
   ) {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
@@ -32,17 +32,6 @@ export class LoginComponent implements OnInit {
         username: '',
         password: ''
       };
-
-      this.activatedRoute
-        .queryParams
-        .subscribe(params => {
-          this.showAlert = params.registered && params.registered === 'true';
-          this.alert = {
-            title: 'Félicitation',
-            body: 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.',
-            severity: 'success'
-          };
-        });
     }
   }
 
@@ -68,20 +57,14 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(isLoginSuccess => {
         if (isLoginSuccess) {
-          this.showAlert = false;
-          this.redirectAndToastSuccess();
+          this.redirectSuccess();
         } else {
-          this.showAlert = true;
-          this.alert = {
-            title: 'Erreur',
-            body: `Nom d'utilisateur ou mot de passe incorrect.`,
-            severity: 'danger'
-          };
+          this.alertService.error('Erreur', `Nom d'utilisateur ou mot de passe incorrect.`);
         }
       });
   }
 
-  private redirectAndToastSuccess(): void {
+  private redirectSuccess(): void {
     this.activatedRoute
       .queryParams
       .subscribe(
