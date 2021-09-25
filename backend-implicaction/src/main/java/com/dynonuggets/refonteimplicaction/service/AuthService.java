@@ -58,7 +58,7 @@ public class AuthService {
      */
     @Transactional
     public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
-        validateRequest(reqisterRequest);
+        validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
         final User user = registerUser(reqisterRequest, activationKey);
         mailService.sendUserActivationMail(activationKey, user);
@@ -67,7 +67,7 @@ public class AuthService {
     /**
      * Vérifie la validité de la requête de sign-up
      */
-    private void validateRequest(ReqisterRequestDto reqisterRequest) {
+    private void validateRegisterRequest(ReqisterRequestDto reqisterRequest) {
         userRepository.findAllByUsernameOrEmail(reqisterRequest.getUsername(), reqisterRequest.getEmail())
                 .forEach(user -> {
                     String message = user.getUsername().equals(reqisterRequest.getUsername()) ?

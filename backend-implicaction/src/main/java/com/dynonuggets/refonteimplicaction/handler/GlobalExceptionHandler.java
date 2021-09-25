@@ -35,12 +35,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)
-    public ResponseEntity<ExceptionResponse> badCredentialsException(Exception ex) {
+    public ResponseEntity<ExceptionResponse> badCredentialsException() {
         return generateResponse(BAD_CREDENTIAL_MSG, UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = DisabledException.class)
-    public ResponseEntity<ExceptionResponse> disabledException(Exception ex) {
+    public ResponseEntity<ExceptionResponse> disabledException() {
         return generateResponse(USER_DISABLED_MSG, UNAUTHORIZED);
     }
 

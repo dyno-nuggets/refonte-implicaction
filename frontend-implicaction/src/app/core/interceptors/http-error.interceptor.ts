@@ -14,6 +14,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   private static handleServerSideError(error: HttpErrorResponse): boolean {
     let handled = false;
 
+    // on ignore les erreurs 401 et 403 qui sont gérées par le jwt-interceptor
     switch (error.status) {
       case 401:
         handled = true;

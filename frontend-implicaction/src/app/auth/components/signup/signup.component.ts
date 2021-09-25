@@ -70,8 +70,8 @@ export class SignupComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         () => {
-          this.router.navigate(['/auth/login'], {queryParams: {registered: 'true'}})
-            .then(() => this.alertService.success('Félicitation', 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.'));
+          this.router.navigate(['/auth/login'])
+            .then(() => this.alertService.success('Félicitations', 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.'));
         },
         () => this.isError = true
       );
