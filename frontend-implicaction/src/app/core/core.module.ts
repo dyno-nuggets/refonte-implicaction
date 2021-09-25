@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {Constants} from '../config/constants';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
+import {HttpErrorInterceptor} from './interceptors/http-error.interceptor';
 
 /**
  * Cette classe abstraite utilisée pour la construction de modules, empêche l'importation du module dans un autre endroit
@@ -26,6 +27,11 @@ export abstract class EnsureImportedOnceModule {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
       multi: true
     }
   ]
