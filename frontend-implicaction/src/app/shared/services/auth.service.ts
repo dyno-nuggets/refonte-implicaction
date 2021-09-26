@@ -113,7 +113,8 @@ export class AuthService {
   }
 
   getUserId(): string {
-    return this.localStorage.retrieve('userId');
+    // il faut appeler la méthode toString sinon getUserId renvoie un valeur de type number =-/
+    return this.localStorage.retrieve('userId').toString();
   }
 
   isLoggedIn(): boolean {

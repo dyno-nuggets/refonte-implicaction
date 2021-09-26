@@ -3,6 +3,7 @@ import {UserService} from '../../services/user.service';
 import {User} from '../../../shared/models/user';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
+import {ExperiencesContexteService} from '../../../shared/services/experiences-contexte.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -15,7 +16,8 @@ export class UserProfileComponent implements OnInit {
   constructor(
     private userService: UserService,
     private toasterService: ToasterService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private ecs: ExperiencesContexteService
   ) {
   }
 
@@ -25,7 +27,10 @@ export class UserProfileComponent implements OnInit {
       this.userService
         .getUserById(userId)
         .subscribe(
-          user => this.user = user,
+          user => {
+            this.user = user;
+            this.ecs.setExperiences(user.experiences);
+          },
           () => this.toasterService.error('oops', 'Une erreur est survenue !')
         );
     });

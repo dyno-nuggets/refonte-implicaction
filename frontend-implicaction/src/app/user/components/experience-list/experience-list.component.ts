@@ -1,72 +1,73 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {WorkExperience} from '../../../shared/models/work-experience';
 import {UserService} from '../../services/user.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {finalize} from 'rxjs/operators';
-import {Utils} from '../../../shared/classes/utils';
+import {SidebarService} from '../../../shared/services/sidebar.service';
+import {ExperienceFormComponent} from '../experience-form/experience-form.component';
+import {ExperiencesContexteService} from '../../../shared/services/experiences-contexte.service';
+import {ActivatedRoute} from '@angular/router';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-experience-list',
   templateUrl: './experience-list.component.html',
   styleUrls: ['./experience-list.component.scss']
 })
-export class ExperienceListComponent implements OnInit {
+export class ExperienceListComponent implements OnInit, OnDestroy {
 
   @Input()
   experiences: WorkExperience[];
-  experienceCopies: WorkExperience[];
-  currentUserId: string;
   isEditing = false;
+  canEdit = false;
+
+  private currentUserId: string;
+  private subscription: Subscription;
 
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private toasterService: ToasterService
+    private toasterService: ToasterService,
+    private sidebarService: SidebarService,
+    private ecs: ExperiencesContexteService,
+    private route: ActivatedRoute
   ) {
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
   trackByExperienceId = (index: number, experience: WorkExperience) => experience.id;
 
   ngOnInit(): void {
     this.currentUserId = this.authService.getUserId();
-  }
-
-  toggleModeEdition(): void {
-    // on clone individuellement chaque élément de la liste pour ne pas impacter la liste experiences et pouvoir rollback
-    this.experienceCopies = this.experiences?.length ? this.experiences?.map(x => Object.assign({}, x)) : [{}];
-    this.isEditing = !this.isEditing;
-  }
-
-  saveExperiences(): void {
-    const isInvalid = this.experienceCopies.some(training => !training.label);
-
-    if (isInvalid) {
-      this.toasterService.error('Oops', 'Veuillez remplir correctement les champs');
-      return;
-    }
-
-    this.userService
-      .updateExperiences(this.currentUserId, this.experienceCopies)
-      .pipe(finalize(() => this.isEditing = false))
-      .subscribe(
-        experienceUpdates => this.experiences = [...experienceUpdates],
-        () => this.toasterService.error('Oops', 'Une erreur est survenu lors de la mise à jour des données'),
-        () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
-      );
+    this.route
+      .paramMap
+      .subscribe(paramMap => {
+        const userId = paramMap.get('userId');
+        this.canEdit = userId === this.currentUserId;
+      });
+    this.subscription = this.ecs
+      .observeExperiences()
+      .subscribe(experiences => this.experiences = experiences);
   }
 
   deleteExperience(experience: WorkExperience): void {
-    const index = this.experienceCopies.indexOf(experience);
+    // TODO: utiliser l'ecs pour supprimer l'expérience côté font après avoir envoyé la requête de suppression au back
+    const index = this.experiences.indexOf(experience);
 
     if (index >= 0) {
-      this.experienceCopies.splice(index, 1);
+      this.experiences.splice(index, 1);
     }
   }
 
   addElement(): void {
-    if (!Utils.isEqual(this.experienceCopies[this.experienceCopies.length - 1], {})) {
-      this.experienceCopies.push({});
-    }
+    this.sidebarService
+      .open({
+        title: 'Ajouter une expérience professionelle',
+        component: ExperienceFormComponent,
+        width: 650
+      });
   }
 }

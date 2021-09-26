@@ -10,10 +10,6 @@ import com.dynonuggets.refonteimplicaction.repository.WorkExperienceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
 @Service
 @AllArgsConstructor
 public class WorkExperienceService {
@@ -22,31 +18,25 @@ public class WorkExperienceService {
     private final WorkExperienceAdapter workExperienceAdapter;
     private final UserRepository userRepository;
 
-    public List<WorkExperienceDto> updateByUserId(List<WorkExperienceDto> workExperienceDtos, Long userId) {
+    public WorkExperienceDto updateByUserId(WorkExperienceDto experienceDto, Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour les expériences professionnelles; L'user avec l'id " + userId + " n'existe pas."));
+                .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour une expérience professionnelle; L'user avec l'id " + userId + " n'existe pas."));
 
-        List<WorkExperience> toUpdateExperiences = workExperienceDtos.stream()
-                .map(workExperienceDto -> {
-                    WorkExperience workExperience = workExperienceAdapter.toModel(workExperienceDto);
-                    workExperience.setUser(user);
-                    return workExperience;
-                })
-                .collect(toList());
 
-        // On isole les expériences professionnelles à supprimer en comparant avec les id celles envoyées à celles en base
-        List<WorkExperience> allByUserExperiences = workExperienceRepository.findAllByUser_Id(userId);
+        WorkExperience workExperience = workExperienceAdapter.toModel(experienceDto);
+        workExperience.setUser(user);
 
-        List<Long> toDeleteIds = allByUserExperiences.stream()
-                .map(WorkExperience::getId)
-                .filter(id -> !toUpdateExperiences.stream().map(WorkExperience::getId).collect(toList()).contains(id))
-                .collect(toList());
-        workExperienceRepository.deleteAllById(toDeleteIds);
+        final WorkExperience experienceSaved = workExperienceRepository.save(workExperience);
 
-        List<WorkExperience> experiencesUpdates = workExperienceRepository.saveAll(toUpdateExperiences);
+        return workExperienceAdapter.toDtoWithoutUser(experienceSaved);
+    }
 
-        return experiencesUpdates.stream()
-                .map(workExperienceAdapter::toDtoWithoutUser)
-                .collect(toList());
+    public WorkExperienceDto createByUserId(WorkExperienceDto workExperienceDto, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("Impossible créer l'expérience professionnelle; L'user avec l'id " + userId + " n'existe pas."));
+        WorkExperience workExperience = workExperienceAdapter.toModel(workExperienceDto);
+        workExperience.setUser(user);
+        final WorkExperience created = workExperienceRepository.save(workExperience);
+        return workExperienceAdapter.toDtoWithoutUser(created);
     }
 }

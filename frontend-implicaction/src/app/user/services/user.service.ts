@@ -55,7 +55,11 @@ export class UserService {
     return this.http.put<Training[]>(this.apiEndpointsService.updateTrainingByUserIdEndpoint(userId), trainings);
   }
 
-  updateExperiences(userId: string, experiences: WorkExperience[]): Observable<WorkExperience[]> {
-    return this.http.put<WorkExperience[]>(this.apiEndpointsService.updateExperiencesByUserIdEndpoint(userId), experiences);
+  updateExperience(userId: string, experience: WorkExperience): Observable<WorkExperience> {
+    return this.http.put<WorkExperience>(this.apiEndpointsService.updateExperiencesByUserIdEndpoint(userId), experience);
+  }
+
+  createExperience(userId: string, experience: WorkExperience): Observable<WorkExperience> {
+    return this.http.post<WorkExperience>(this.apiEndpointsService.createWorkExperienceEndpoint(userId), experience);
   }
 }
