@@ -86,9 +86,9 @@ public class UserController {
         return ResponseEntity.ok(experienceUpdates);
     }
 
-    @PutMapping(path = "/{userId}/personalInfos")
-    public ResponseEntity<UserDto> updatePersonalInfos(@RequestBody UserDto userDto, @PathVariable Long userId) {
-        UserDto personalInfosUpdate = userService.updateByUserId(userDto, userId);
-        return ResponseEntity.ok(personalInfosUpdate);
+    @PutMapping(path = "/{userId}")
+    public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
+        UserDto userUpdate = userService.updateByUserId(userDto, userId);
+        return ResponseEntity.ok(userUpdate);
     }
 }
