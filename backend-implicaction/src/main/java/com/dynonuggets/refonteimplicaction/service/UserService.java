@@ -65,17 +65,16 @@ public class UserService {
         User databaseUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour" +
                         " les informations personelles; L'user avec l'id " + id + " n'existe pas."));
-        User user = userAdapter.toModel(userDto);
         // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
         // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
-        databaseUser.setEmail(user.getEmail());
-        databaseUser.setPhoneNumber(user.getPhoneNumber());
-        databaseUser.setBirthday(user.getBirthday());
-        databaseUser.setHobbies(user.getHobbies());
-        databaseUser.setPresentation(user.getPresentation());
-        databaseUser.setPurpose(user.getPurpose());
-        databaseUser.setContribution(user.getContribution());
-        databaseUser.setExpectation(user.getExpectation());
+        databaseUser.setEmail(userDto.getEmail());
+        databaseUser.setPhoneNumber(userDto.getPhoneNumber());
+        databaseUser.setBirthday(userDto.getBirthday());
+        databaseUser.setHobbies(userDto.getHobbies());
+        databaseUser.setPresentation(userDto.getPresentation());
+        databaseUser.setPurpose(userDto.getPurpose());
+        databaseUser.setContribution(userDto.getContribution());
+        databaseUser.setExpectation(userDto.getExpectation());
 
         User userUpdate = userRepository.save(databaseUser);
         return userAdapter.toDto(userUpdate);
