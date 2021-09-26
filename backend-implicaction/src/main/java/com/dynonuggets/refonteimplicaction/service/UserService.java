@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.JobSeeker;
 import com.dynonuggets.refonteimplicaction.model.Relation;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
@@ -58,6 +59,25 @@ public class UserService {
         JobSeeker jobSeeker = jobSeekerRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
         return userAdapter.toDto(jobSeeker);
+    }
+
+    public UserDto updateByUserId(UserDto userDto, Long id) {
+        User databaseUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour" +
+                        " les informations personelles; L'user avec l'id " + id + " n'existe pas."));
+        // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
+        // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
+        databaseUser.setEmail(userDto.getEmail());
+        databaseUser.setPhoneNumber(userDto.getPhoneNumber());
+        databaseUser.setBirthday(userDto.getBirthday());
+        databaseUser.setHobbies(userDto.getHobbies());
+        databaseUser.setPresentation(userDto.getPresentation());
+        databaseUser.setPurpose(userDto.getPurpose());
+        databaseUser.setContribution(userDto.getContribution());
+        databaseUser.setExpectation(userDto.getExpectation());
+
+        User userUpdate = userRepository.save(databaseUser);
+        return userAdapter.toDto(userUpdate);
     }
 
     private boolean isSenderOrReceiver(Relation relation, Long userId) {
