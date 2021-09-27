@@ -2,6 +2,29 @@
 @import "../assets/variables";
 @import "../assets/toaster";
 
+$sidebar-content-width: var(--sidebar-content-width, 1800px);
+
 main.container {
   height: 100vh;
+}
+
+
+:host ::ng-deep {
+  .p-sidebar-right {
+    width: $sidebar-content-width;
+  }
+}
+
+.content-container {
+  margin-top: 50px;
+  padding: 40px;
+
+  .sidebar-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 22px;
+    color: $primary;
+    text-transform: uppercase;
+    margin-bottom: 50px;
+  }
 }

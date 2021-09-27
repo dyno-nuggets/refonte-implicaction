@@ -5,7 +5,6 @@ import {LoginRequestPayload} from '../../../shared/models/login-request-payload'
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
-import {AlertService} from '../../../shared/services/alert.service';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +21,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private toaster: ToasterService,
-    private alertService: AlertService
+    private toaster: ToasterService
   ) {
     if (this.authService.isLoggedIn()) {
       this.router.navigate(['/']);
@@ -58,8 +56,6 @@ export class LoginComponent implements OnInit {
       .subscribe(isLoginSuccess => {
         if (isLoginSuccess) {
           this.redirectSuccess();
-        } else {
-          this.alertService.error('Erreur', `Nom d'utilisateur ou mot de passe incorrect.`);
         }
       });
   }

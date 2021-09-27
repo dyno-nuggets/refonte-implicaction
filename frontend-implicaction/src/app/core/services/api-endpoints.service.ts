@@ -123,6 +123,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
   }
 
+  createWorkExperienceEndpoint(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
+  }
+
   /**
    * Relations
    */

@@ -80,10 +80,16 @@ public class UserController {
         return ResponseEntity.ok(trainingUpdates);
     }
 
+    @PostMapping(path = "/{userId}/experiences")
+    public ResponseEntity<WorkExperienceDto> createExperience(@RequestBody WorkExperienceDto workExperienceDto, @PathVariable Long userId) {
+        WorkExperienceDto created = workExperienceService.createByUserId(workExperienceDto, userId);
+        return ResponseEntity.ok(created);
+    }
+
     @PutMapping(path = "/{userId}/experiences")
-    public ResponseEntity<List<WorkExperienceDto>> updateALlExperiences(@RequestBody List<WorkExperienceDto> workExperienceDtos, @PathVariable Long userId) {
-        List<WorkExperienceDto> experienceUpdates = workExperienceService.updateByUserId(workExperienceDtos, userId);
-        return ResponseEntity.ok(experienceUpdates);
+    public ResponseEntity<WorkExperienceDto> updateExperience(@RequestBody WorkExperienceDto experienceDto, @PathVariable Long userId) {
+        WorkExperienceDto experienceUpdate = workExperienceService.updateByUserId(experienceDto, userId);
+        return ResponseEntity.ok(experienceUpdate);
     }
 
     @PutMapping(path = "/{userId}")

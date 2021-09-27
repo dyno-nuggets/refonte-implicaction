@@ -1,0 +1,22 @@
+textarea {
+  &.rounded-pill {
+    border-radius: 25px !important;
+    resize: none;
+  }
+
+  &.description-input {
+    height: 150px;
+  }
+}
+
+.sidebar-options {
+  margin-top: 50px;
+}
+
+:root ::ng-deep {
+  .p-inputtext {
+    height: calc(3.5rem + 2px) !important;
+    line-height: 1.25 !important;
+    padding: 1rem 0.75rem !important;
+  }
+}

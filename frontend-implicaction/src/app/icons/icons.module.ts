@@ -8,6 +8,7 @@ import {
   Calendar,
   Camera,
   Edit,
+  Edit2,
   Github,
   Heart,
   Inbox,
@@ -23,7 +24,7 @@ import {
   UserMinus,
   UserPlus,
   Users,
-  UserX
+  UserX,
 } from 'angular-feather/icons';
 
 // Select some icons (use an object, not an array)
@@ -49,7 +50,8 @@ const icons = {
   Save,
   Edit,
   RotateCcw,
-  Trash2
+  Trash2,
+  Edit2,
 };
 
 @NgModule({

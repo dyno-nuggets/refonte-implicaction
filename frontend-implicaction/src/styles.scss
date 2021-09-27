@@ -9,6 +9,18 @@ input.ng-invalid.ng-touched {
   cursor: pointer;
 }
 
+.hover-secondary:hover {
+  color: $secondary;
+}
+
+.hover-info:hover {
+  color: $info;
+}
+
+.hover-danger:hover {
+  color: $danger;
+}
+
 .overflow-ellipsis {
   white-space: nowrap;
   overflow: hidden;

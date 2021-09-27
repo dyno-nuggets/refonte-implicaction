@@ -7,4 +7,22 @@
     position="bottom-right"
   >
   </p-toast>
+  <p-sidebar
+    (onHide)="sidebarService.close()"
+    [(visible)]="sidebarService.isOpen"
+    [blockScroll]="true"
+    [transitionOptions]="'350ms'"
+    position="right"
+  >
+    <div class="content-container">
+      <div class="row no-gutters header align-items-center">
+        <div class="col-10 sidebar-title">{{sidebarProps?.title}}</div>
+      </div>
+      <div class="content">
+        <ng-template appSidebarContent>
+          <!-- le contenu du composant en input sera injecté et affiché ici -->
+        </ng-template>
+      </div>
+    </div>
+  </p-sidebar>
 </main>

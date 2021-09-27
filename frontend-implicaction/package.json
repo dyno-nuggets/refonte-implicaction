@@ -24,6 +24,7 @@
     "angular-feather": "^6.1.0",
     "bootstrap": "^5.1.0",
     "ngx-webstorage": "^7.0.1",
+    "popper.js": "^1.16.1",
     "primeicons": "^4.1.0",
     "primeng": "^11.4.5",
     "rxjs": "~6.6.0",
