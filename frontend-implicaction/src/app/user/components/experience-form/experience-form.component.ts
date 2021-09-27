@@ -7,7 +7,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {Observable} from 'rxjs';
-import {ExperiencesContexteService} from '../../../shared/services/experiences-contexte.service';
+import {UserContexteService} from '../../../shared/services/user-contexte.service';
 
 @Component({
   selector: 'app-experience-form',
@@ -22,6 +22,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
   currentUserId: string;
   experience: WorkExperience;
   isUpdate: boolean;
+  isSubmitted = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -29,53 +30,57 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
-    private ecs: ExperiencesContexteService
+    private userContexteService: UserContexteService
   ) {
     super();
   }
 
   ngOnInit(): void {
-    this.experience = this.sidebarInput ? {...this.sidebarInput.experience} : {};
-    this.isUpdate = !!this.experience.id;
-    this.initForm();
+    this.experience = this.sidebarInput ? {...this.sidebarInput.experience} : undefined;
+    this.isUpdate = !!this.sidebarInput?.experience?.id;
+    this.initForm(this.experience);
     this.currentUserId = this.authService.getUserId();
   }
 
   onSubmit(): void {
-    if (this.formExperience.valid) {
-      const experience: WorkExperience = {...this.formExperience.value};
-      let experience$: Observable<WorkExperience>;
-      let operation: string;
-      if (experience.id) {
-        experience$ = this.userService.updateExperience(this.currentUserId, experience);
-        operation = 'la mise à jour';
-      } else {
-        experience$ = this.userService.createExperience(this.currentUserId, experience);
-        operation = `l'ajout`;
-      }
-      experience$.subscribe(
-        experienceFromDb => {
-          if (this.isUpdate) {
-            this.ecs.updateExperience(experienceFromDb);
-          } else {
-            this.ecs.addExperience(experienceFromDb);
-          }
-        },
-        () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${operation} de votre expérience`),
-        () => this.sidebarService.close()
-      );
+    this.isSubmitted = true;
+
+    if (this.formExperience.invalid) {
+      return;
     }
+
+    const experience: WorkExperience = {...this.formExperience.value};
+    let experience$: Observable<WorkExperience>;
+    if (this.isUpdate) {
+      // on set manuellement l'id de l'expérience car cette information n'est pas stockée dans le formulaire
+      experience.id = this.sidebarInput.experience.id;
+      experience$ = this.userService.updateExperience(this.currentUserId, experience);
+    } else {
+      experience$ = this.userService.createExperience(this.currentUserId, experience);
+    }
+    experience$.subscribe(
+      experienceFromDb => {
+        if (this.isUpdate) {
+          this.userContexteService.updateExperience(experienceFromDb);
+        } else {
+          this.userContexteService.addExperience(experienceFromDb);
+        }
+      },
+      () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
+      () => this.sidebarService.close()
+    );
   }
 
-  private initForm(): void {
+  private initForm(experience: WorkExperience): void {
     this.formExperience = this.formBuilder
       .group({
-        id: [this.experience.id ?? null],
-        companyName: [this.experience.companyName, Validators.required],
-        label: [this.experience.label, Validators.required],
-        description: [this.experience.description],
-        startedAt: [this.experience.startedAt ? new Date(this.experience.startedAt) : '', Validators.required],
-        finishedAt: [this.experience.finishedAt ? new Date(this.experience.finishedAt) : '', Validators.required]
+        companyName: [experience?.companyName ?? '', Validators.required],
+        label: [experience?.label ?? '', Validators.required],
+        description: [experience?.description ?? ''],
+        startedAt: [
+          experience?.startedAt ? new Date(this.experience.startedAt) : '', Validators.required
+        ],
+        finishedAt: experience?.finishedAt ? new Date(this.experience.finishedAt) : ''
       });
   }
 }

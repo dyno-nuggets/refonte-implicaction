@@ -5,7 +5,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
-import {ExperiencesContexteService} from '../../../shared/services/experiences-contexte.service';
+import {UserContexteService} from '../../../shared/services/user-contexte.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 
@@ -29,7 +29,7 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
-    private ecs: ExperiencesContexteService,
+    private userContexteService: UserContexteService,
     private route: ActivatedRoute
   ) {
   }
@@ -48,13 +48,13 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
         const userId = paramMap.get('userId');
         this.canEdit = userId === this.currentUserId;
       });
-    this.subscription = this.ecs
-      .observeExperiences()
-      .subscribe(experiences => this.experiences = experiences);
+    this.subscription = this.userContexteService
+      .observeUser()
+      .subscribe(user => this.experiences = user.experiences);
   }
 
   deleteExperience(experience: WorkExperience): void {
-    // TODO: utiliser l'ecs pour supprimer l'expérience côté font après avoir envoyé la requête de suppression au back
+    // TODO: utiliser l'userContexteService pour supprimer l'expérience côté font après avoir envoyé la requête de suppression au back
     const index = this.experiences.indexOf(experience);
 
     if (index >= 0) {

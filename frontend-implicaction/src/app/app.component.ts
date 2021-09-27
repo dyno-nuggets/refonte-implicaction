@@ -45,6 +45,7 @@ export class AppComponent implements OnInit, OnDestroy {
     const viewContainerRef = this.sidebarContent.viewContainerRef;
     viewContainerRef.clear();
 
+    // instanciation dynamique du contenu de la sidebar
     const componentRef = viewContainerRef.createComponent<SidebarContentComponent>(componentFactory);
     componentRef.instance.sidebarInput = content.input;
   }

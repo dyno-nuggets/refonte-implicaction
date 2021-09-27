@@ -4,11 +4,11 @@
 >
   <div class="form-floating mb-4">
     <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formExperience.controls['companyName'].touched) && formExperience.controls['companyName'].errors}"
       class="form-control form-control-lg rounded-pill px-4"
       formControlName="companyName"
       id="companyNameInput"
       placeholder="Nom de la compagnie"
-      required
     />
     <label
       class="form-label px-4"
@@ -16,14 +16,20 @@
     >
       Nom de la compagnie
     </label>
+    <div
+      *ngIf="(isSubmitted || formExperience.controls['companyName'].touched) && formExperience.controls['companyName'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir un nom de compagnie.
+    </div>
   </div>
   <div class="form-floating mb-4">
     <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formExperience.controls['companyName'].touched) && formExperience.controls['companyName'].errors}"
       class="form-control form-control-lg rounded-pill px-4"
       formControlName="label"
       id="labelInput"
       placeholder="Nom de l'expérience"
-      required
     />
     <label
       class="form-label px-4"
@@ -31,6 +37,12 @@
     >
       Nom de l'expérience
     </label>
+    <div
+      *ngIf="formExperience.controls['label'].touched && formExperience.controls['label'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir uun intitulé pour cette expérience.
+    </div>
   </div>
   <div class="form-floating">
     <textarea
@@ -54,11 +66,18 @@
         [yearNavigator]="true"
         [yearRange]="YEAR_RANGE"
         appendTo="body"
-        dateFormat="yy-mm-dd" formControlName="startedAt"
+        dateFormat="yy-mm-dd"
+        formControlName="startedAt"
         id="startedAtInput"
         inputStyleClass="form-control rounded-pill"
       >
       </p-calendar>
+      <div
+        *ngIf="formExperience.controls['startedAt'].touched && formExperience.controls['startedAt'].errors"
+        class="text-danger"
+      >
+        Vous devez fournir une date de début pour cette expérience.
+      </div>
     </div>
     <div class="col-6">
       <label
@@ -71,16 +90,22 @@
         [yearNavigator]="true"
         [yearRange]="YEAR_RANGE"
         appendTo="body"
-        dateFormat="yy-mm-dd" formControlName="finishedAt"
+        dateFormat="yy-mm-dd"
+        formControlName="finishedAt"
         id="finishedAtInput"
         inputStyleClass="form-control rounded-pill"
       >
       </p-calendar>
+      <div
+        *ngIf="formExperience.controls['finishedAt'].touched && formExperience.controls['finishedAt'].errors"
+        class="text-danger"
+      >
+        Vous devez fournir une date de fin pour cette expérience.
+      </div>
     </div>
   </div>
   <div class="d-flex justify-content-center rounded-pill sidebar-options">
     <button
-      [disabled]="formExperience.invalid"
       class="btn btn-primary w-50"
       type="submit"
     >

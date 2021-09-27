@@ -43,8 +43,8 @@ public class JwtProvider {
     public void init() {
         try {
             keyStore = KeyStore.getInstance(keyStoreType);
+            // TODO: cacher le nom du certificat à l'aide d'une variable ds le .properties
             InputStream ressourceAsStream = getClass().getResourceAsStream("/implicaction.jks");
-            // TODO: cachez ce secret que je ne saurais voir
             keyStore.load(ressourceAsStream, keyStorePassword.toCharArray());
         } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();

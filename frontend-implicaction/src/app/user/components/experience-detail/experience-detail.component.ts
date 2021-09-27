@@ -2,7 +2,6 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {WorkExperience} from '../../../shared/models/work-experience';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
-import {Utils} from '../../../shared/classes/utils';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 
@@ -18,7 +17,6 @@ export class ExperienceDetailComponent implements OnInit {
   @Output()
   deleteEmitter = new EventEmitter<WorkExperience>();
   yearRange = `1900:${new Date().getFullYear() + 1}`;
-  descriptionWithBr: string;
   canEdit = false;
 
   private currentUserId: string;
@@ -39,9 +37,6 @@ export class ExperienceDetailComponent implements OnInit {
         const userId = paramMap.get('userId');
         this.canEdit = userId === this.currentUserId;
       });
-    // les sauts de ligne sont enregistrés en '\n', pour afficher un saut de ligne dans le html il faut remplacer
-    //  ce caractère par une balise <br>
-    this.descriptionWithBr = Utils.replaceNewLineByBrMarkup(this.experience.description);
   }
 
   deleteExperience(experience: WorkExperience): void {

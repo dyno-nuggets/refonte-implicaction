@@ -9,8 +9,9 @@ export class SidebarService {
 
   private static readonly DEFAULT_WIDTH = 1050;
 
-  sidebarContent = new BehaviorSubject<SidebarProps>(null);
   isOpen = false;
+
+  private sidebarContent = new BehaviorSubject<SidebarProps>(null);
 
   constructor() {
   }

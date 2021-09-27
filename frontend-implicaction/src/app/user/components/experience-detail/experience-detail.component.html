@@ -18,7 +18,7 @@
     </i-feather>
     <i-feather
       (click)="deleteExperience(experience)"
-      class="cursor-pointer hover-danger me-xl-3"
+      class="cursor-pointer hover-danger"
       data-placement="bottom"
       data-toggle="tooltip"
       name="trash-2"
@@ -28,7 +28,7 @@
   </div>
 </div>
 <div class="mb-2">
-  <p [innerHTML]="descriptionWithBr" class="text-secondary"></p>
+  <p [innerHTML]="experience.description | br" class="text-secondary"></p>
 </div>
 <div class="mb-2">
   <i-feather class="icon me-2" name="calendar"></i-feather>
