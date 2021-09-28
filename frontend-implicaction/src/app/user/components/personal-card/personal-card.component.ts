@@ -41,7 +41,7 @@ export class PersonalCardComponent implements OnInit {
 
   updatePersonalInfo(): void {
     this.userService
-      .updatePersonalInfo(this.currentUserId, this.userCopies)
+      .updatePersonalInfo(this.currentUserId, this.user)
       .pipe(finalize(() => this.isEditing = false))
       .subscribe(
         personalInfoUpdates => this.user = {...personalInfoUpdates},

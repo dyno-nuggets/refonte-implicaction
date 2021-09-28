@@ -11,13 +11,13 @@
     <div class="d-flex flex-column justify-content-center align-items-center pt-3">
       <div class="">
         <img
-          [alt]="user.nicename"
+          [alt]="user.firstname"
           class="rounded-circle img-fluid shadow-sm user-avatar"
           src="assets/img/default-user.png"
         />
       </div>
       <div class="card-body text-center w-100">
-        <div class="display-6 fw-normal card-title overflow-ellipsis mb-5">{{user.nicename}}</div>
+        <div class="display-6 fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}}</div>
         <div class="row">
           <div class="d-flex flex-row m-0 p-1">
             <div class="align-self-center text-start fw-bold ps-2 me-4">
@@ -155,47 +155,6 @@
                 ></textarea>
               </div>
             </ng-template>
-          </div>
-          <div class="row mt-3">
-            <h2>Mon parcours au sein de l’institution</h2>
-            <div class="row m-0 p-1">
-              <div class="col-8 text-start fw-bold ps-2 mb-3">
-                <i-feather class="icon me-2 text-primary" name="Shield"></i-feather>
-                <span class="align-middle">Armée d'origine</span>
-              </div>
-              <div *ngIf="!isEditing; else armyCorpsEdition" class="">
-                <p>
-                  <app-user-info [value]="user.armyCorps"></app-user-info>
-                </p>
-              </div>
-              <ng-template #armyCorpsEdition>
-                <div class="">
-                  <input
-                    [(ngModel)]="user.armyCorps"
-                    class="form-control form-control-lg rounded-pill px-4"
-                  />
-                </div>
-              </ng-template>
-            </div>
-            <div class="row m-0 p-1">
-              <div class="col-8 text-start fw-bold ps-2 mb-3">
-                <i-feather class="icon me-2 text-primary" name="Award"></i-feather>
-                <span class="align-middle">Corps Statuaire</span>
-              </div>
-              <div *ngIf="!isEditing; else rankEdition" class="">
-                <p>
-                  <app-user-info [value]="user.rank"></app-user-info>
-                </p>
-              </div>
-              <ng-template #rankEdition>
-                <div class="">
-                  <input
-                    [(ngModel)]="user.rank"
-                    class="form-control form-control-lg rounded-pill px-4"
-                  />
-                </div>
-              </ng-template>
-            </div>
           </div>
         </div>
       </div>
