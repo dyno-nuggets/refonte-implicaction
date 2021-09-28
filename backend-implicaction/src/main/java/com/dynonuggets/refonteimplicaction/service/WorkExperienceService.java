@@ -22,6 +22,7 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 public class WorkExperienceService {
 
+    private final AuthService authService;
     private final WorkExperienceRepository workExperienceRepository;
     private final WorkExperienceAdapter workExperienceAdapter;
     private final UserRepository userRepository;
@@ -56,14 +57,17 @@ public class WorkExperienceService {
         return workExperienceAdapter.toDtoWithoutUser(created);
     }
 
-    public void deleteExperience(Long idToDelete, Long currentUserId) {
+    public void deleteExperience(Long idToDelete) {
+
+        final Long currentUserId = authService.getCurrentUser().getId();
+
         WorkExperience workExperience = workExperienceRepository.findById(idToDelete)
                 .orElseThrow(() -> new NotFoundException("Aucune expérience avec l'Id : " + idToDelete + " trouvée."));
 
         if (!workExperience.getUser().getId().equals(currentUserId)) {
             throw new UnauthorizedException("Impossible de supprimer les expériences d'un autre utilisateur.");
-        } else {
-            workExperienceRepository.delete(workExperience);
         }
+
+        workExperienceRepository.delete(workExperience);
     }
 }
