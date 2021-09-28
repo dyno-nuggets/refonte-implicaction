@@ -4,6 +4,8 @@ import com.dynonuggets.refonteimplicaction.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.model.WorkExperience;
@@ -12,10 +14,15 @@ import com.dynonuggets.refonteimplicaction.repository.WorkExperienceRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 @Service
 @AllArgsConstructor
 public class WorkExperienceService {
 
+    private final AuthService authService;
     private final WorkExperienceRepository workExperienceRepository;
     private final WorkExperienceAdapter workExperienceAdapter;
     private final UserRepository userRepository;
@@ -48,5 +55,19 @@ public class WorkExperienceService {
         workExperience.setUser(user);
         final WorkExperience created = workExperienceRepository.save(workExperience);
         return workExperienceAdapter.toDtoWithoutUser(created);
+    }
+
+    public void deleteExperience(Long idToDelete) {
+
+        final Long currentUserId = authService.getCurrentUser().getId();
+
+        WorkExperience workExperience = workExperienceRepository.findById(idToDelete)
+                .orElseThrow(() -> new NotFoundException("Aucune expérience avec l'Id : " + idToDelete + " trouvée."));
+
+        if (!workExperience.getUser().getId().equals(currentUserId)) {
+            throw new UnauthorizedException("Impossible de supprimer les expériences d'un autre utilisateur.");
+        }
+
+        workExperienceRepository.delete(workExperience);
     }
 }
