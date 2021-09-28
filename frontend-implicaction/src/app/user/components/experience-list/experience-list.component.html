@@ -2,10 +2,10 @@
   <div class="card py-4 px-4 shadow-sm border-0">
     <div class="d-flex flex-row justify-content-between mb-4">
       <h2>Experiences professionnelles</h2>
-      <div *ngIf="canEdit">
+      <div *ngIf="!readOnly">
         <i-feather
-          (click)="addElement()"
-          class="cursor-pointer hover-secondary"
+          (click)="onAddExperience()"
+          class="cursor-pointer secondary-on-hover"
           data-placement="bottom"
           data-toggle="tooltip"
           name="plus"
@@ -21,8 +21,8 @@
           class="list-unstyled"
         >
           <app-experience-detail
-            (deleteEmitter)="deleteExperience($event)"
             [experience]="experience"
+            [readOnly]="readOnly"
           >
           </app-experience-detail>
           <hr *ngIf="!isLast" class="mx-4 mb-5"/>

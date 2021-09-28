@@ -2,12 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {WorkExperience} from '../../../shared/models/work-experience';
-import {UserService} from '../../services/user.service';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {Observable} from 'rxjs';
 import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {ExperienceService} from '../../services/experience.service';
 
 @Component({
   selector: 'app-experience-form',
@@ -26,7 +26,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
 
   constructor(
     private formBuilder: FormBuilder,
-    private userService: UserService,
+    private experienceService: ExperienceService,
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
@@ -54,9 +54,9 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     if (this.isUpdate) {
       // on set manuellement l'id de l'expérience car cette information n'est pas stockée dans le formulaire
       experience.id = this.sidebarInput.experience.id;
-      experience$ = this.userService.updateExperience(this.currentUserId, experience);
+      experience$ = this.experienceService.updateExperience(this.currentUserId, experience);
     } else {
-      experience$ = this.userService.createExperience(this.currentUserId, experience);
+      experience$ = this.experienceService.createExperience(this.currentUserId, experience);
     }
     experience$.subscribe(
       experienceFromDb => {

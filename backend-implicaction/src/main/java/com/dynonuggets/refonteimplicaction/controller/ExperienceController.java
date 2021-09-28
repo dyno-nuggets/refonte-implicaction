@@ -1,12 +1,10 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.service.WorkExperienceService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @AllArgsConstructor
@@ -14,12 +12,24 @@ import org.springframework.web.bind.annotation.RestController;
 public class ExperienceController {
 
 
-    private final WorkExperienceService workExperienceService;
+    private final WorkExperienceService experienceService;
+
+    @PostMapping
+    public ResponseEntity<WorkExperienceDto> createTraining(@RequestBody final WorkExperienceDto experienceDto) {
+        WorkExperienceDto created = experienceService.saveOrUpdateExperience(experienceDto);
+        return ResponseEntity.ok(created);
+    }
+
+    @PutMapping
+    public ResponseEntity<WorkExperienceDto> updateTraining(@RequestBody final WorkExperienceDto trainingDto) {
+        WorkExperienceDto updated = experienceService.saveOrUpdateExperience(trainingDto);
+        return ResponseEntity.ok(updated);
+    }
 
     @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/{experienceId}")
     public ResponseEntity deleteExperienceById(@PathVariable("experienceId") Long experienceId) {
-        workExperienceService.deleteExperience(experienceId);
+        experienceService.deleteExperience(experienceId);
         return ResponseEntity.noContent().build();
     }
 }

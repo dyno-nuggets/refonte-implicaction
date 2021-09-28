@@ -115,16 +115,36 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
   }
 
-  updateTrainingByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'trainings']);
+  /**
+   * Experiences
+   */
+
+  deleteExperienceEndpoint(experienceId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.EXPERIENCE.BASE_URI, [experienceId]);
   }
 
-  updateExperiencesByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
+  /**
+   * Trainings
+   */
+
+  updateExperienceEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.EXPERIENCE.BASE_URI);
   }
 
-  createWorkExperienceEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'experiences']);
+  createExperienceEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.EXPERIENCE.BASE_URI);
+  }
+
+  createTrainingEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.TRAINING.BASE_URI);
+  }
+
+  updateTrainingEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.TRAINING.BASE_URI);
+  }
+
+  deleteTrainingEndpoint(trainingId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.TRAINING.BASE_URI, [trainingId]);
   }
 
   /**

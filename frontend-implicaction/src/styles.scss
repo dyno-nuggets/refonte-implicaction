@@ -9,15 +9,15 @@ input.ng-invalid.ng-touched {
   cursor: pointer;
 }
 
-.hover-secondary:hover {
+.secondary-on-hover:hover {
   color: $secondary;
 }
 
-.hover-info:hover {
+.info-on-hover:hover {
   color: $info;
 }
 
-.hover-danger:hover {
+.danger-on-hover:hover {
   color: $danger;
 }
 

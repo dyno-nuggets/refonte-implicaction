@@ -5,6 +5,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
 import {UserContexteService} from '../../../shared/services/user-contexte.service';
 import {Subscription} from 'rxjs';
+import {AuthService} from '../../../shared/services/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -14,9 +15,12 @@ import {Subscription} from 'rxjs';
 export class UserProfileComponent implements OnInit, OnDestroy {
 
   user: User = {};
+  canEdit = false;
+
   private subscription: Subscription;
 
   constructor(
+    private authService: AuthService,
     private userService: UserService,
     private toasterService: ToasterService,
     private route: ActivatedRoute,
@@ -36,6 +40,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         .subscribe(
           user => {
             this.user = user;
+            this.canEdit = user.id.toString() === this.authService.getUserId();
             this.userContexteService.setUser(user);
           },
           () => this.toasterService.error('oops', 'Une erreur est survenue !')
