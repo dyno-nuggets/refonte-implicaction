@@ -106,6 +106,7 @@ public class UserAdapter {
                 .presentation(model.getPresentation())
                 .expectation(model.getExpectation())
                 .contribution(model.getContribution())
+                .purpose(model.getPurpose())
                 .phoneNumber(model.getPhoneNumber())
                 .activationKey(model.getActivationKey())
                 .active(model.isActive())

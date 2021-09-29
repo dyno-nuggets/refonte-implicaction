@@ -62,11 +62,16 @@
             </div>
             <ng-template #birthdayEdition>
               <div class="flex-fill px-3">
-                <input
+                <p-calendar
                   [(ngModel)]="user.birthday"
-                  class="form-control form-control-lg rounded-pill px-4"
+                  [yearNavigator]="true"
+                  [yearRange]="YEAR_RANGE"
+                  dateFormat="yy-mm-dd"
+                  id="birthdayInput"
+                  inputStyleClass="form-control form-control-lg rounded-pill px-4 fs-5"
                   placeholder="Date de naissance"
-                />
+                >
+                </p-calendar>
               </div>
             </ng-template>
           </div>

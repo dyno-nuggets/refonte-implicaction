@@ -11,7 +11,7 @@ import {finalize} from 'rxjs/operators';
   styleUrls: ['./personal-card.component.scss']
 })
 export class PersonalCardComponent implements OnInit {
-
+  readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
   @Input()
   user: User;
   userCopies: User;
