@@ -174,4 +174,11 @@ export class ApiEndpointsService {
   cancelRelationByUserEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [userId, 'cancel']);
   }
+
+  /**
+   * Jobs
+   */
+  getAllJobEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.BASE_URI, pageable);
+  }
 }
