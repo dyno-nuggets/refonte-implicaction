@@ -13,6 +13,7 @@ import {
   Heart,
   Inbox,
   Mail,
+  MapPin,
   Phone,
   Plus,
   RotateCcw,
@@ -54,6 +55,7 @@ const icons = {
   Trash2,
   Edit2,
   Search
+  MapPin,
 };
 
 @NgModule({
