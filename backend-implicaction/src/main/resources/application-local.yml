@@ -1,0 +1,19 @@
+# db properties
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/implicaction
+    username: root
+    password: password
+
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: 5c354372a1d5da
+    password: 6b3338fa1cc8b9
+    protocol: smtp
+
+jwt:
+  certificate:
+    name: implicaction
+    password: .fxG3KPB.
