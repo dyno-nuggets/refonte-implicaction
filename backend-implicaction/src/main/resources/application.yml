@@ -17,7 +17,7 @@ spring:
     host: ${SMTP_HOST}
     port: ${SMTP_PORT}
     username: ${SMTP_USER}
-    password: ${SMTP_PAS}
+    password: ${SMTP_PASS}
     protocol: smtp
 
 jwt:
