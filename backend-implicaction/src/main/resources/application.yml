@@ -1,0 +1,28 @@
+# db properties
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASS}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    generate-ddl: true
+
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASS}
+    protocol: smtp
+
+jwt:
+  expiration.time: 900000
+  certificate:
+    type: JKS
+    name: ${CERTIF_NAME}
+    password: ${CERTIF_PASSWORD}
