@@ -28,7 +28,7 @@ public class TrainingService {
         final Long currentUserId = authService.getCurrentUser().getId();
         String operation = training.getId() != null ? "de modifier" : "d'ajouter";
         final User user = userRepository.findById(currentUserId)
-                .orElseThrow(() -> new UserNotFoundException("Impossible " + operation + " une formaiton, l'utilisateur n'existe pas."));
+                .orElseThrow(() -> new UserNotFoundException("Impossible " + operation + " une formation, l'utilisateur n'existe pas."));
         training.setUser(user);
         final Training save = trainingRepository.save(training);
         return trainingAdapter.toDtoWithoutUser(save);

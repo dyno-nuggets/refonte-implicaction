@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {WorkExperience} from '../../../shared/models/work-experience';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
@@ -13,13 +13,13 @@ import {ToasterService} from '../../../core/services/toaster.service';
 })
 export class ExperienceDetailComponent {
 
+  readonly yearRange = `1900:${new Date().getFullYear() + 1}`;
+
   @Input()
   experience: WorkExperience;
   @Input()
   readOnly = true;
-  @Output()
-  deleteEmitter = new EventEmitter<WorkExperience>();
-  yearRange = `1900:${new Date().getFullYear() + 1}`;
+
 
   constructor(
     private sidebarService: SidebarService,
@@ -38,6 +38,7 @@ export class ExperienceDetailComponent {
       .deleteExperience(experience.id)
       .subscribe(
         () => {
+          // on ne fait rien car la liste est mise à jour dans le complete
         },
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la suppression de la formation'),
         () => this.userContexteService.removeExperience(experience)

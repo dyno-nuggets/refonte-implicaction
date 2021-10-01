@@ -5,7 +5,6 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {UserContexteService} from '../../../shared/services/user-contexte.service';
-import {WorkExperience} from '../../../shared/models/work-experience';
 import {Training} from '../../../shared/models/training';
 import {Observable} from 'rxjs';
 import {TrainingService} from '../../services/training.service';
@@ -51,7 +50,7 @@ export class TrainingFormComponent extends SidebarContentComponent implements On
     }
 
     const training: Training = {...this.formTraining.value};
-    let training$: Observable<WorkExperience>;
+    let training$: Observable<Training>;
     if (this.isUpdate) {
       // on set manuellement l'id du training car cette information n'est pas stockée dans le formulaire
       training.id = this.sidebarInput.training.id;
@@ -60,11 +59,11 @@ export class TrainingFormComponent extends SidebarContentComponent implements On
       training$ = this.trainingService.createTraining(training);
     }
     training$.subscribe(
-      trainingFromDb => {
+      trainingUpdate => {
         if (this.isUpdate) {
-          this.userContexteService.updateTraining(trainingFromDb);
+          this.userContexteService.updateTraining(trainingUpdate);
         } else {
-          this.userContexteService.addTraining(trainingFromDb);
+          this.userContexteService.addTraining(trainingUpdate);
         }
       },
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),

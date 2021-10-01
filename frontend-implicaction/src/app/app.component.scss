@@ -8,10 +8,6 @@ main.container {
   height: 100vh;
 }
 
-.oscillate-on-hover:hover {
-  animation: mini-oscillation 0.15s ease-out;
-}
-
 :host ::ng-deep {
   .p-sidebar-right {
     width: $sidebar-content-width;

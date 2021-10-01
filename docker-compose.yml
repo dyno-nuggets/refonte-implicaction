@@ -11,8 +11,8 @@ services:
       - "3306:3306"
     expose:
       - "3306"
-    volumes:
-      - my-db:/var/lib/mysql
+    volumes:ExperienceController.java
+    - my-db:/var/lib/mysql
   adminer:
     image: adminer
     restart: always

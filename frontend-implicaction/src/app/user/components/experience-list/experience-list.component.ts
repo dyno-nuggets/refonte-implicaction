@@ -38,15 +38,6 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
       .subscribe(user => this.experiences = user.experiences);
   }
 
-  deleteExperience(experience: WorkExperience): void {
-    // TODO: utiliser l'userContexteService pour supprimer l'expérience côté font après avoir envoyé la requête de suppression au back
-    const index = this.experiences.indexOf(experience);
-
-    if (index >= 0) {
-      this.experiences.splice(index, 1);
-    }
-  }
-
   onAddExperience(): void {
     this.sidebarService
       .open({

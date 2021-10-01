@@ -15,20 +15,20 @@ public class ExperienceController {
     private final WorkExperienceService experienceService;
 
     @PostMapping
-    public ResponseEntity<WorkExperienceDto> createTraining(@RequestBody final WorkExperienceDto experienceDto) {
+    public ResponseEntity<WorkExperienceDto> createExperience(@RequestBody final WorkExperienceDto experienceDto) {
         WorkExperienceDto created = experienceService.saveOrUpdateExperience(experienceDto);
         return ResponseEntity.ok(created);
     }
 
     @PutMapping
-    public ResponseEntity<WorkExperienceDto> updateTraining(@RequestBody final WorkExperienceDto trainingDto) {
+    public ResponseEntity<WorkExperienceDto> updateExperience(@RequestBody final WorkExperienceDto trainingDto) {
         WorkExperienceDto updated = experienceService.saveOrUpdateExperience(trainingDto);
         return ResponseEntity.ok(updated);
     }
 
     @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/{experienceId}")
-    public ResponseEntity deleteExperienceById(@PathVariable("experienceId") Long experienceId) {
+    public ResponseEntity deleteExperienceById(@PathVariable("experienceId") final Long experienceId) {
         experienceService.deleteExperience(experienceId);
         return ResponseEntity.noContent().build();
     }
