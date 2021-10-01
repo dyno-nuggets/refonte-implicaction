@@ -1,20 +1,15 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
-import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@Controller
+@RestController
 @AllArgsConstructor
 @RequestMapping("/api/users")
 public class UserController {
@@ -72,24 +67,6 @@ public class UserController {
         Long userId = authService.getCurrentUser().getId();
         Page<UserDto> usersDto = relationService.getReceivedFriendRequest(userId, pageable);
         return ResponseEntity.ok(usersDto);
-    }
-
-    @PutMapping(path = "/{userId}/trainings")
-    public ResponseEntity<List<TrainingDto>> updateAllTrainings(@RequestBody List<TrainingDto> trainingDtos, @PathVariable Long userId) {
-        List<TrainingDto> trainingUpdates = trainingService.updateByUserId(trainingDtos, userId);
-        return ResponseEntity.ok(trainingUpdates);
-    }
-
-    @PostMapping(path = "/{userId}/experiences")
-    public ResponseEntity<WorkExperienceDto> createExperience(@RequestBody WorkExperienceDto workExperienceDto, @PathVariable Long userId) {
-        WorkExperienceDto created = workExperienceService.createByUserId(workExperienceDto, userId);
-        return ResponseEntity.ok(created);
-    }
-
-    @PutMapping(path = "/{userId}/experiences")
-    public ResponseEntity<WorkExperienceDto> updateExperience(@RequestBody WorkExperienceDto experienceDto, @PathVariable Long userId) {
-        WorkExperienceDto experienceUpdate = workExperienceService.updateByUserId(experienceDto, userId);
-        return ResponseEntity.ok(experienceUpdate);
     }
 
     @PutMapping(path = "/{userId}")

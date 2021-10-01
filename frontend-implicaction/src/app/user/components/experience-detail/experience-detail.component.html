@@ -4,12 +4,15 @@
   </div>
   <div class="col-10 align-items-start align-self-center ps-1">
     <h3 class="pb-1">{{experience.companyName}}</h3>
-    <h4 class="pt-1">{{experience.label}}</h4>
+    <h4 class="pt-1 text-info">{{experience.label}}</h4>
   </div>
-  <div class="col-1 d-flex p-0 flex-row flex-wrap align-items-end">
+  <div
+    *ngIf="!readOnly"
+    class="col-1 d-flex p-0 flex-row flex-wrap align-items-end"
+  >
     <i-feather
       (click)="editExperience(experience)"
-      class="cursor-pointer me-xl-2 hover-secondary"
+      class="cursor-pointer me-xl-2 secondary-on-hover"
       data-placement="bottom"
       data-toggle="tooltip"
       name="edit-2"
@@ -18,7 +21,7 @@
     </i-feather>
     <i-feather
       (click)="deleteExperience(experience)"
-      class="cursor-pointer hover-danger"
+      class="cursor-pointer danger-on-hover"
       data-placement="bottom"
       data-toggle="tooltip"
       name="trash-2"
@@ -28,7 +31,7 @@
   </div>
 </div>
 <div class="mb-2">
-  <p [innerHTML]="experience.description | br" class="text-secondary"></p>
+  <p [innerHTML]="experience.description | br"></p>
 </div>
 <div class="mb-2">
   <i-feather class="icon me-2" name="calendar"></i-feather>

@@ -6,7 +6,6 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
 import {UserContexteService} from '../../../shared/services/user-contexte.service';
-import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -17,11 +16,9 @@ import {Subscription} from 'rxjs';
 export class ExperienceListComponent implements OnInit, OnDestroy {
 
   @Input()
+  readOnly = true;
   experiences: WorkExperience[];
-  isEditing = false;
-  canEdit = false;
 
-  private currentUserId: string;
   private subscription: Subscription;
 
   constructor(
@@ -30,44 +27,27 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
     private userContexteService: UserContexteService,
-    private route: ActivatedRoute
   ) {
-  }
-
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
   }
 
   trackByExperienceId = (index: number, experience: WorkExperience) => experience.id;
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserId();
-    this.route
-      .paramMap
-      .subscribe(paramMap => {
-        const userId = paramMap.get('userId');
-        this.canEdit = userId === this.currentUserId;
-      });
     this.subscription = this.userContexteService
       .observeUser()
       .subscribe(user => this.experiences = user.experiences);
   }
 
-  deleteExperience(experience: WorkExperience): void {
-    // TODO: utiliser l'userContexteService pour supprimer l'expérience côté font après avoir envoyé la requête de suppression au back
-    const index = this.experiences.indexOf(experience);
-
-    if (index >= 0) {
-      this.experiences.splice(index, 1);
-    }
-  }
-
-  addElement(): void {
+  onAddExperience(): void {
     this.sidebarService
       .open({
-        title: 'Ajouter une expérience professionelle',
+        title: 'Ajouter une expérience professionnelle',
         component: ExperienceFormComponent,
         width: 650
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

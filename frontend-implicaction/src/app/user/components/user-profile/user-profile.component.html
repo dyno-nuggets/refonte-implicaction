@@ -4,10 +4,10 @@
   </div>
   <div class="col-12 col-lg-9 col-md-12 col-sm-12 ps-0 ps-lg-5">
     <div class="mb-5">
-      <app-experience-list [experiences]="user.experiences"></app-experience-list>
+      <app-experience-list [readOnly]="!canEdit"></app-experience-list>
     </div>
     <div class="mb-5">
-      <app-training-list [trainings]="user.trainings"></app-training-list>
+      <app-training-list [readOnly]="!canEdit"></app-training-list>
     </div>
   </div>
 </div>

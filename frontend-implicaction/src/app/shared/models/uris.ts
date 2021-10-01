@@ -21,6 +21,20 @@ export class Uris {
   };
 
   /**
+   * EXPERIENCES
+   */
+  static readonly EXPERIENCE = class {
+    static readonly BASE_URI = 'experiences';
+  };
+
+  /**
+   * TRAININGS
+   */
+  static readonly TRAINING = class {
+    static readonly BASE_URI = 'trainings';
+  };
+
+  /**
    * RELATIONS
    */
   static readonly RELATIONS = class {

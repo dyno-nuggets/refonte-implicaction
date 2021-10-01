@@ -2,6 +2,8 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Training;
 import com.dynonuggets.refonteimplicaction.model.User;
@@ -11,10 +13,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
-import static java.util.stream.Collectors.toList;
-
 @Service
 @AllArgsConstructor
 public class TrainingService {
@@ -22,34 +20,28 @@ public class TrainingService {
     private final TrainingRepository trainingRepository;
     private final TrainingAdapter trainingAdapter;
     private final UserRepository userRepository;
+    private final AuthService authService;
 
     @Transactional
-    public List<TrainingDto> updateByUserId(List<TrainingDto> trainingDtos, Long userId) {
+    public TrainingDto saveOrUpdateTraining(final TrainingDto trainingDto) {
+        Training training = trainingAdapter.toModel(trainingDto);
+        final Long currentUserId = authService.getCurrentUser().getId();
+        String operation = training.getId() != null ? "de modifier" : "d'ajouter";
+        final User user = userRepository.findById(currentUserId)
+                .orElseThrow(() -> new UserNotFoundException("Impossible " + operation + " une formation, l'utilisateur n'existe pas."));
+        training.setUser(user);
+        final Training save = trainingRepository.save(training);
+        return trainingAdapter.toDtoWithoutUser(save);
+    }
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour les formations; L'user avec l'id " + userId + " n'existe pas."));
-
-        List<Training> toUpdateTrainings = trainingDtos.stream()
-                .map(trainingDto -> {
-                    Training training = trainingAdapter.toModel(trainingDto);
-                    training.setUser(user);
-                    return training;
-                })
-                .collect(toList());
-
-        // On isole les formations à supprimer en comparant avec les id celles envoyées à celles en base
-        List<Training> allByUserTrainings = trainingRepository.findAllByUser_Id(userId);
-
-        List<Long> toDeleteIds = allByUserTrainings.stream()
-                .map(Training::getId)
-                .filter(id -> !toUpdateTrainings.stream().map(Training::getId).collect(toList()).contains(id))
-                .collect(toList());
-        trainingRepository.deleteAllById(toDeleteIds);
-
-        List<Training> trainingsUpdates = trainingRepository.saveAll(toUpdateTrainings);
-
-        return trainingsUpdates.stream()
-                .map(trainingAdapter::toDtoWithoutUser)
-                .collect(toList());
+    @Transactional
+    public void deleteTraining(Long trainingId) {
+        Training training = trainingRepository.findById(trainingId)
+                .orElseThrow(() -> new NotFoundException("Impossible de supprimer le training, " + trainingId + " n'existe pas."));
+        final Long currentUserId = authService.getCurrentUser().getId();
+        if (!training.getUser().getId().equals(currentUserId)) {
+            throw new UnauthorizedException("Impossible de supprimer la formation, utilisateur non autorisé.");
+        }
+        trainingRepository.delete(training);
     }
 }
