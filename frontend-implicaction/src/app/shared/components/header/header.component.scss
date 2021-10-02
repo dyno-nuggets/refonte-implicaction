@@ -23,3 +23,12 @@ header {
   height: 20px;
   width: 20px;
 }
+
+.dropdown-user li * {
+  color: $secondary;
+
+  &:hover {
+    background-color: $primary;
+    color: white;
+  }
+}
