@@ -26,8 +26,11 @@
           >
             <img alt="mdo" class="rounded-circle avatar" src="assets/img/default-user.png">
           </a>
-          <ul aria-labelledby="dropdownUser" class="dropdown-menu text-small shadow m-0">
+          <ul aria-labelledby="dropdownUser" class="dropdown-menu text-small dropdown-user shadow m-0">
+            <li><span class="dropdown-item fw-bold ">@{{username}}</span></li>
             <li>
+              <hr class="dropdown-divider">
+            </li>
             <li><a class="dropdown-item cursor-pointer" routerLink="/users/{{userId}}/profile">Profil</a></li>
             <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
             <li>
