@@ -7,9 +7,11 @@ import {
   Briefcase,
   Calendar,
   Camera,
+  Compass,
   Edit,
   Edit2,
   Github,
+  Globe,
   Heart,
   Inbox,
   Mail,
@@ -56,6 +58,8 @@ const icons = {
   Edit2,
   Search
   MapPin,
+  Compass,
+  Globe
 };
 
 @NgModule({

@@ -1,0 +1,33 @@
+@import "src/assets/variables";
+
+h2 {
+  text-transform: uppercase;
+  line-height: 25px;
+  font-size: 18px;
+}
+
+.user-avatar {
+  width: 100px;
+  height: auto;
+}
+
+.user-card {
+  background-color: green; //$secondary-bg-color;
+  border-radius: 10px;
+}
+
+.cdi {
+  background-color: #E57231;
+}
+
+.cdd {
+  background-color: #A131E5;
+}
+
+.span-contract {
+  border-radius: 20px;
+  padding: 4px 12px;
+  color: white;
+  display: inline-block;
+  width: 50px;
+}

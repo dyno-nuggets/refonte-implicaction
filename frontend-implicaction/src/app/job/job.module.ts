@@ -7,6 +7,7 @@ import {SharedModule} from '../shared/shared.module';
 import {JobDetailsComponent} from './components/job-details/job-details.component';
 import {JobRoutingModule} from './job-routing.module';
 import {FeatherModule} from 'angular-feather';
+import {CardModule} from 'primeng/card';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import {FeatherModule} from 'angular-feather';
     SharedModule,
     JobRoutingModule,
     FeatherModule,
-    PaginatorModule
+    PaginatorModule,
+    CardModule
   ]
 })
 export class JobModule {
