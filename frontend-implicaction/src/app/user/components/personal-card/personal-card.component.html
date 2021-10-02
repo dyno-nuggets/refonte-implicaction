@@ -1,6 +1,6 @@
 <div class="col mb-3">
   <div class="card shadow-sm border-0 user-card px-4 py-4">
-    <div class="d-flex justify-content-end">
+    <div *ngIf="!readOnly" class="d-flex justify-content-end">
       <i-feather
         (click)="toggleModeEdition()"
         *ngIf="!isEditing; else rollbackAndSaveIcon"
