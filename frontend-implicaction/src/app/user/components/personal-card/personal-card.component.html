@@ -1,85 +1,180 @@
 <div class="col mb-3">
-  <div class="card align-items-center pt-5 shadow-sm border-0 user-card">
-    <img
-      alt="{{user.firstname}} {{user.lastname}}"
-      class="rounded-circle img-fluid shadow-sm user-avatar"
-      src="assets/img/default-user.png"
-    />
-    <div class="card-body text-center w-100">
-      <h5 class="card-title overflow-ellipsis">{{user.firstname}} {{user.lastname}}</h5>
-      <div class="row">
-        <div class="row m-0 p-1">
-          <div class="col-5 text-start fw-bold ps-2">
-            <i-feather class="icon me-2 text-primary" name="Mail"></i-feather>
-            <span class="align-middle">Email</span>
-          </div>
-          <div class="col-7 text-end m-0">{{user.email}}</div>
-        </div>
-        <div class="row m-0 p-1">
-          <div class="col-7 text-start fw-bold ps-2">
-            <i-feather class="icon me-2 text-primary" name="Phone"></i-feather>
-            <span class="align-middle">Télephone</span>
-          </div>
-          <div class="col-5 text-end m-0">{{user.phoneNumber}}</div>
-        </div>
-        <div class="row m-0 p-1">
-          <div class="col-7 text-start fw-bold ps-2">
-            <i-feather class="icon me-2 text-primary" name="Calendar"></i-feather>
-            <span class="align-middle">Anniversaire</span>
-          </div>
-          <div class="col-5 text-end m-0">{{user.birthday}}</div>
-        </div>
+  <div class="card shadow-sm border-0 user-card px-4 py-4">
+    <div class="d-flex justify-content-end">
+      <i-feather
+        (click)="toggleModeEdition()"
+        *ngIf="!isEditing; else rollbackAndSaveIcon"
+        class="cursor-pointer secondary-on-hover"
+        name="edit-2"
+      >
+      </i-feather>
+      <ng-template #rollbackAndSaveIcon>
+        <i-feather
+          (click)="toggleModeEdition()"
+          class="cursor-pointer danger-on-hover me-2"
+          name="rotate-ccw"
+        >
+        </i-feather>
+        <i-feather
+          (click)="updatePersonalInfo()"
+          class="cursor-pointer success-on-hover"
+          name="save"
+        >
+        </i-feather>
+      </ng-template>
+    </div>
+    <div class="d-flex flex-column justify-content-center align-items-center pt-3">
+      <div>
+        <img
+          alt="photo de {{user.firstname}}"
+          class="rounded-circle img-fluid shadow-sm user-avatar"
+          src="assets/img/default-user.png"
+        />
       </div>
-      <div class="text-start">
-        <div class="row mt-5">
-          <h2>Loisirs / Hobbies</h2>
-          <p>
-            <app-user-info [value]="user.hobbies"></app-user-info>
-          </p>
-        </div>
-        <div class="row mt-3">
-          <h2>Présentation</h2>
-          <p>
-            <app-user-info [value]="user.presentation"></app-user-info>
-          </p>
-        </div>
-        <div class="row mt-3">
-          <h2>Quel est mon objectif professionnel</h2>
-          <p>
-            <app-user-info [value]="user.purpose"></app-user-info>
-          </p>
-        </div>
-        <div class="row mt-3">
-          <h2>Ce que je peux apporter au réseau</h2>
-          <p>
-            <app-user-info [value]="user.expectation"></app-user-info>
-          </p>
-        </div>
-        <div class="row mt-3">
-          <h2>Ce que j'attends du réseau</h2>
-          <p>
-            <app-user-info [value]="user.contribution"></app-user-info>
-          </p>
-        </div>
-        <div class="row mt-3">
-          <h2>Mon parcours au sein de l’institution</h2>
-          <div class="row m-0 p-1">
-            <div class="col-8 text-start fw-bold ps-2">
-              <i-feather class="icon me-2 text-primary" name="Shield"></i-feather>
-              <span class="align-middle">Armée d'origine</span>
+      <div class="card-body text-center w-100">
+        <div class="display-6 fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}} {{user.lastname}}</div>
+        <div class="row">
+          <div class="d-flex flex-row m-0 p-1">
+            <div class="align-self-center text-start fw-bold ps-2 me-4">
+              <i-feather class="icon text-primary" name="mail"></i-feather>
             </div>
-            <div class="col-4 text-end m-0">
-              <app-user-info [value]="user.armyCorps"></app-user-info>
+            <div *ngIf="!isEditing; else emailEdition" class="text-start m-0">
+              <app-user-info [value]="user.email"></app-user-info>
             </div>
+            <ng-template #emailEdition>
+              <div class="flex-fill px-3">
+                <input
+                  [(ngModel)]="user.email"
+                  class="form-control form-control-lg rounded-pill px-4"
+                  placeholder="Email"
+                />
+              </div>
+            </ng-template>
           </div>
-          <div class="row m-0 p-1">
-            <div class="col-8 text-start fw-bold ps-2">
-              <i-feather class="icon me-2 text-primary" name="Award"></i-feather>
-              <span class="align-middle">Corps Statuaire</span>
+          <div class="d-flex flex-row m-0 p-1">
+            <div class="align-self-center text-start fw-bold ps-2 me-4">
+              <i-feather class="icon text-primary" name="Phone"></i-feather>
             </div>
-            <div class="col-4 text-end m-0">
-              <app-user-info [value]="user.rank"></app-user-info>
+            <div *ngIf="!isEditing; else phoneEdition" class="text-center m-0">
+              <app-user-info [value]="user.phoneNumber"></app-user-info>
             </div>
+            <ng-template #phoneEdition>
+              <div class="flex-fill px-3">
+                <input
+                  [(ngModel)]="user.phoneNumber"
+                  class="form-control form-control-lg rounded-pill px-4"
+                  placeholder="Téléphone"
+                />
+              </div>
+            </ng-template>
+          </div>
+          <div class="d-flex flex-row m-0 p-1">
+            <div class="align-self-center text-start fw-bold ps-2 me-4">
+              <i-feather class="icon text-primary" name="calendar"></i-feather>
+            </div>
+            <div *ngIf="!isEditing; else birthdayEdition" class="text-start m-0">
+              <app-user-info [value]="user.birthday"></app-user-info>
+            </div>
+            <ng-template #birthdayEdition>
+              <div class="flex-fill px-3">
+                <p-calendar
+                  [(ngModel)]="user.birthday"
+                  [yearNavigator]="true"
+                  [yearRange]="YEAR_RANGE"
+                  dateFormat="yy-mm-dd"
+                  id="birthdayInput"
+                  inputStyleClass="form-control form-control-lg rounded-pill px-4 fs-5"
+                  placeholder="Date de naissance"
+                >
+                </p-calendar>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+        <div class="text-start">
+          <div class="row mt-5">
+            <h2>Loisirs / Hobbies</h2>
+            <div *ngIf="!isEditing; else hobbiesEdition" class="">
+              <p>
+                <app-user-info [value]="user.hobbies"></app-user-info>
+              </p>
+            </div>
+            <ng-template #hobbiesEdition>
+              <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.hobbies"
+                  class="form-control form-control-lg w-100 px-4 text-description"
+                  rows="4"
+                ></textarea>
+              </div>
+            </ng-template>
+          </div>
+          <div class="row mt-3">
+            <h2>Présentation</h2>
+            <div *ngIf="!isEditing; else presentationEdition" class="">
+              <p>
+                <app-user-info [value]="user.presentation"></app-user-info>
+              </p>
+            </div>
+            <ng-template #presentationEdition>
+              <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.presentation"
+                  class="form-control form-control-lg w-100 px-4 text-description"
+                  rows="4"
+                ></textarea>
+              </div>
+            </ng-template>
+          </div>
+          <div class="row mt-3">
+            <h2>Quel est mon objectif professionnel</h2>
+            <div *ngIf="!isEditing; else purposeEdition" class="">
+              <p>
+                <app-user-info [value]="user.purpose"></app-user-info>
+              </p>
+            </div>
+            <ng-template #purposeEdition>
+              <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.purpose"
+                  class="form-control form-control-lg w-100 px-4 text-description"
+                ></textarea>
+              </div>
+            </ng-template>
+          </div>
+          <div class="row mt-3">
+            <h2>Ce que j'attends du réseau</h2>
+            <div *ngIf="!isEditing; else expectationEdition" class="">
+              <p>
+                <app-user-info [value]="user.expectation"></app-user-info>
+              </p>
+            </div>
+            <ng-template #expectationEdition>
+              <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.expectation"
+                  class="form-control form-control-lg w-100 px-4 text-description"
+                  rows="4"
+                ></textarea>
+              </div>
+            </ng-template>
+          </div>
+          <div class="row mt-3">
+            <h2>Ce que je peux apporter au réseau</h2>
+            <div *ngIf="!isEditing; else contributionEdition" class="">
+              <p>
+                <app-user-info [value]="user.contribution"></app-user-info>
+              </p>
+            </div>
+            <ng-template #contributionEdition>
+              <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.contribution"
+                  class="form-control form-control-lg w-100 px-4 text-description"
+                  rows="4"
+                ></textarea>
+              </div>
+            </ng-template>
           </div>
         </div>
       </div>

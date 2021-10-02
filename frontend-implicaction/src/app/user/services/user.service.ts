@@ -48,4 +48,8 @@ export class UserService {
   removeUserFromFriends(userId: string): Observable<any> {
     return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(userId));
   }
+
+  updatePersonalInfo(userId: string, personalInfos: User): Observable<User> {
+    return this.http.put<User>(this.apiEndpointsService.updatePersonalInfoByUserIdEndpoint(userId), personalInfos);
+  }
 }

@@ -21,6 +21,10 @@ input.ng-invalid.ng-touched {
   color: $danger;
 }
 
+.success-on-hover:hover {
+  color: $success;
+}
+
 .overflow-ellipsis {
   white-space: nowrap;
   overflow: hidden;
@@ -71,4 +75,14 @@ p {
 
 .description-color {
   color: $secondary;
+}
+
+p-calendar span {
+  display: flex !important;
+}
+
+textarea, input {
+  &:hover {
+    border-color: $info !important;
+  }
 }

@@ -7,11 +7,27 @@ h2 {
 }
 
 .user-avatar {
-  width: 100px;
+  width: 150px;
   height: auto;
 }
 
 .user-card {
   background-color: $secondary-bg-color;
   border-radius: 10px;
+}
+
+.text-description {
+  resize: none;
+  height: 100px !important;
+  border-radius: 25px;
+}
+
+.form-label {
+  display: block;
+}
+
+::ng-deep {
+  .p-inputtext {
+    color: #212529 !important;
+  }
 }
