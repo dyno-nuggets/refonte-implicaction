@@ -11,6 +11,9 @@ import {Pageable} from '../../shared/models/pageable';
 @Injectable()
 export class ApiEndpointsService {
 
+  constructor() {
+  }
+
   // URL
   private static createUrl(action: string, isMockAPI = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
@@ -183,6 +186,10 @@ export class ApiEndpointsService {
         this.pushPageableParameters(pageable, qs);
         qs.push('searchKey', searchKey);
       });
+  }
+
+  getJobByIdEndpoint(jobId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId]);
   }
 
   /**
