@@ -1,11 +1,24 @@
 <div class="col mb-3">
   <div class="card shadow-sm border-0 user-card px-4 py-4">
     <div class="d-flex justify-content-end">
-      <i-feather (click)="toggleModeEdition()" *ngIf="!isEditing; else rollbackAndSaveIcon" class="cursor-pointer"
-                 name="edit"></i-feather>
+      <i-feather
+        (click)="toggleModeEdition()"
+        *ngIf="!isEditing; else rollbackAndSaveIcon"
+        class="cursor-pointer secondary-on-hover"
+        name="edit-2"></i-feather>
       <ng-template #rollbackAndSaveIcon>
-        <i-feather (click)="toggleModeEdition()" class="cursor-pointer" name="rotate-ccw"></i-feather>
-        <i-feather (click)="updatePersonalInfo()" class="cursor-pointer" name="save"></i-feather>
+        <i-feather
+          (click)="toggleModeEdition()"
+          class="cursor-pointer danger-on-hover me-2"
+          name="rotate-ccw"
+        >
+        </i-feather>
+        <i-feather
+          (click)="updatePersonalInfo()"
+          class="cursor-pointer success-on-hover"
+          name="save"
+        >
+        </i-feather>
       </ng-template>
     </div>
     <div class="d-flex flex-column justify-content-center align-items-center pt-3">
@@ -57,7 +70,7 @@
             <div class="align-self-center text-start fw-bold ps-2 me-4">
               <i-feather class="icon text-primary" name="Calendar"></i-feather>
             </div>
-            <div *ngIf="!isEditing; else birthdayEdition" class="col-10 text-start m-0">
+            <div *ngIf="!isEditing; else birthdayEdition" class="text-start m-0">
               <app-user-info [value]="user.birthday"></app-user-info>
             </div>
             <ng-template #birthdayEdition>

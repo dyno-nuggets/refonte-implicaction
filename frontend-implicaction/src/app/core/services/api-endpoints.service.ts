@@ -148,7 +148,7 @@ export class ApiEndpointsService {
   }
 
   updatePersonalInfoByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId, 'infos']);
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId]);
   }
 
   /**

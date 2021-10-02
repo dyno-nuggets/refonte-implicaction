@@ -25,3 +25,9 @@ h2 {
 .form-label {
   display: block;
 }
+
+::ng-deep {
+  .p-inputtext {
+    color: #212529 !important;
+  }
+}
