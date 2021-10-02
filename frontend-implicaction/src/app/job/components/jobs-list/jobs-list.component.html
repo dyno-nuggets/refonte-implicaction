@@ -1,0 +1,20 @@
+<div class="row">
+  <ng-container *ngIf="!isLoading; else loadingTemplate">
+    <div class="col-12 col-lg-3 p-0">
+      <h6 class="text-dark fw-bold">Filtres</h6>
+    </div>
+    <div class="col-12 col-lg-9 p-0 row bg-white card p-2">
+      <div *ngFor="let job of jobs; last as isLast;" [ngClass]="{'last-element': isLast}">
+        <app-job-card [job]="job"></app-job-card>
+      </div>
+    </div>
+
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <div class="d-flex justify-content-center spinner">
+      <div class="align-self-center">
+        <app-loading></app-loading>
+      </div>
+    </div>
+  </ng-template>
+</div>
