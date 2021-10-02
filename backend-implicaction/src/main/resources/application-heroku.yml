@@ -1,3 +1,6 @@
 spring:
   datasource:
     url: jdbc:${CLEARDB_DATABASE_URL}
+
+server:
+  port: ${PORT:8080}
