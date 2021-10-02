@@ -10,10 +10,10 @@ export class ToasterService {
   }
 
   success(title: string, message: string): void {
-    this.messageService.add({severity: 'success', sticky: true, summary: title, detail: message});
+    this.messageService.add({severity: 'success', summary: title, detail: message});
   }
 
   error(title: string, message: string): void {
-    this.messageService.add({severity: 'error', sticky: true, summary: title, detail: message});
+    this.messageService.add({severity: 'error', summary: title, detail: message});
   }
 }

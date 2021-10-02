@@ -14,7 +14,7 @@ export class PersonalCardComponent implements OnInit {
   readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
   @Input()
   user: User;
-  userCopies: User;
+  userCopie: User;
   currentUserId: string;
   isEditing = false;
 
@@ -32,9 +32,9 @@ export class PersonalCardComponent implements OnInit {
   toggleModeEdition(): void {
     if (!this.isEditing) {
       // on clone le user afin de pouvoir rollback
-      this.userCopies = {...this.user};
+      this.userCopie = {...this.user};
     } else {
-      this.user = {...this.userCopies};
+      this.user = {...this.userCopie};
     }
     this.isEditing = !this.isEditing;
   }
@@ -44,7 +44,7 @@ export class PersonalCardComponent implements OnInit {
       .updatePersonalInfo(this.currentUserId, this.user)
       .pipe(finalize(() => this.isEditing = false))
       .subscribe(
-        personalInfoUpdates => this.user = {...personalInfoUpdates},
+        user => this.user = {...user},
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
         () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
       );

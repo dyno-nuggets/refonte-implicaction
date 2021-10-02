@@ -6,8 +6,6 @@ import {User} from '../../shared/models/user';
 import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
 import {Relation} from '../models/relation';
-import {WorkExperience} from '../../shared/models/work-experience';
-import {Training} from '../../shared/models/training';
 
 @Injectable({
   providedIn: 'root'
@@ -50,6 +48,7 @@ export class UserService {
   removeUserFromFriends(userId: string): Observable<any> {
     return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(userId));
   }
+
   updatePersonalInfo(userId: string, personalInfos: User): Observable<User> {
     return this.http.put<User>(this.apiEndpointsService.updatePersonalInfoByUserIdEndpoint(userId), personalInfos);
   }

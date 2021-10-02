@@ -5,7 +5,9 @@
         (click)="toggleModeEdition()"
         *ngIf="!isEditing; else rollbackAndSaveIcon"
         class="cursor-pointer secondary-on-hover"
-        name="edit-2"></i-feather>
+        name="edit-2"
+      >
+      </i-feather>
       <ng-template #rollbackAndSaveIcon>
         <i-feather
           (click)="toggleModeEdition()"
@@ -22,19 +24,19 @@
       </ng-template>
     </div>
     <div class="d-flex flex-column justify-content-center align-items-center pt-3">
-      <div class="">
+      <div>
         <img
-          [alt]="user.firstname"
+          alt="photo de {{user.firstname}}"
           class="rounded-circle img-fluid shadow-sm user-avatar"
           src="assets/img/default-user.png"
         />
       </div>
       <div class="card-body text-center w-100">
-        <div class="display-6 fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}}</div>
+        <div class="display-6 fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}} {{user.lastname}}</div>
         <div class="row">
           <div class="d-flex flex-row m-0 p-1">
             <div class="align-self-center text-start fw-bold ps-2 me-4">
-              <i-feather class="icon text-primary" name="Mail"></i-feather>
+              <i-feather class="icon text-primary" name="mail"></i-feather>
             </div>
             <div *ngIf="!isEditing; else emailEdition" class="text-start m-0">
               <app-user-info [value]="user.email"></app-user-info>
@@ -68,7 +70,7 @@
           </div>
           <div class="d-flex flex-row m-0 p-1">
             <div class="align-self-center text-start fw-bold ps-2 me-4">
-              <i-feather class="icon text-primary" name="Calendar"></i-feather>
+              <i-feather class="icon text-primary" name="calendar"></i-feather>
             </div>
             <div *ngIf="!isEditing; else birthdayEdition" class="text-start m-0">
               <app-user-info [value]="user.birthday"></app-user-info>
