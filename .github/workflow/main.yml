@@ -3,10 +3,10 @@ name: Workflow Maven
 on:
   push:
     branches:
-    - workflow*
+    - workflow-mvn
   pull_request:
     branches:
-    - main
+    - develop
 
 jobs:
   test:
