@@ -1,0 +1,7 @@
+FROM adoptopenjdk/openjdk11
+
+RUN apt-get update
+RUN apt-get install -y maven
+COPY . /usr/local/service
+EXPOSE 8080
+ENTRYPOINT ["tail", "-f", "/dev/null"]
