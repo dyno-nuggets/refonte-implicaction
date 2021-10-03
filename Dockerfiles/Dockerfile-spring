@@ -5,5 +5,4 @@ RUN apt-get install -y maven
 WORKDIR /usr/local/service
 COPY . .
 EXPOSE 8080
-CMD mvn spring:boot: run
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
+RUN mvn -f /usr/local/service/pom.xml spring-boot:run
