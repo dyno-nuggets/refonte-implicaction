@@ -15,16 +15,26 @@ services:
       - "3306"
     volumes:
       - my-db:/var/lib/mysql
-#  adminer:
-#    image: adminer
-#    restart: always
-#    ports:
-#      - "9001:8080"
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - "9001:8080"
   spring:
     depends_on: ["db"]
     build:
       context: .
       dockerfile: Dockerfiles/Dockerfile-spring
+    environment:
+      DB_URI: mysql://db:3306/implicaction
+      DB_USER: root
+      DB_PASS: password
+      SMTP_HOST: smtp.mailtrap.io
+      SMTP_PORT: 2525
+      SMTP_USER: 5c354372a1d5da
+      SMTP_PASS: 6b3338fa1cc8b9
+      CERTIF_NAME: implicaction
+      CERTIF_PASSWORD: .fxG3KPB.
     ports:
       - "8080:8080"    
 volumes:

@@ -2,6 +2,8 @@ FROM adoptopenjdk/openjdk11
 
 RUN apt-get update
 RUN apt-get install -y maven
-COPY . /usr/local/service
+WORKDIR /usr/local/service
+COPY . .
 EXPOSE 8080
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+CMD mvn spring:boot: run
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
