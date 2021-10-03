@@ -8,11 +8,14 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASS}
 
+
+
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
     generate-ddl: true
+
 
   mail:
     host: ${SMTP_HOST}

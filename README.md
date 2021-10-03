@@ -24,7 +24,7 @@ l'adresse http://localhost:9000. Utiliser les identifiants suivants :
 ### lancement de l'application
 
 ```shell
-mvn spring-boot:run
+mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
 * l'application est accessbible à l'adresse http://localhost:8080.

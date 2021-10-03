@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class ContractTypeTest {
+class ContractTypeAdapterTest {
 
     ContractType contractType;
     ContractTypeDto contractTypeDto;
