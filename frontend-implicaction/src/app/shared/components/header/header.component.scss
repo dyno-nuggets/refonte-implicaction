@@ -24,7 +24,7 @@ header {
   width: 20px;
 }
 
-.dropdown-user li * {
+.dropdown-user li a {
   color: $secondary;
 
   &:hover {
