@@ -1,0 +1,18 @@
+spring:
+
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: 5c354372a1d5da
+    password: 6b3338fa1cc8b9
+    protocol: smtp
+
+jwt:
+  certificate:
+    name: implicaction
+    password: .fxG3KPB.
+
+app:
+  url: http://localhost:8080
+  contact:
+    mail: contact@implicaction.eu
