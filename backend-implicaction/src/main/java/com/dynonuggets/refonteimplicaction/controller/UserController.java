@@ -1,7 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.service.*;
+import com.dynonuggets.refonteimplicaction.service.AuthService;
+import com.dynonuggets.refonteimplicaction.service.RelationService;
+import com.dynonuggets.refonteimplicaction.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +19,6 @@ public class UserController {
     private final UserService userService;
     private final RelationService relationService;
     private final AuthService authService;
-    private final TrainingService trainingService;
-    private final WorkExperienceService workExperienceService;
 
     @GetMapping(params = {"page", "size"})
     public ResponseEntity<Page<UserDto>> getAll(
@@ -73,5 +73,15 @@ public class UserController {
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
         UserDto userUpdate = userService.updateByUserId(userDto, userId);
         return ResponseEntity.ok(userUpdate);
+    }
+
+    @GetMapping(path = "/pending", params = {"page", "size"})
+    public ResponseEntity<Page<UserDto>> getAllPendingUsers(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserDto> pendingUsers = userService.getAllPendingActivationUsers(pageable);
+        return ResponseEntity.ok(pendingUsers);
     }
 }

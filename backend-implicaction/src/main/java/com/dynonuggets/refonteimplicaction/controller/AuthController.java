@@ -29,10 +29,11 @@ public class AuthController {
         return new ResponseEntity<>("User registration successful", OK);
     }
 
+    @SuppressWarnings("rawtypes")
     @GetMapping("accountVerification/{activationKey}")
-    public ResponseEntity<String> verifyAccount(@PathVariable String activationKey) throws ImplicactionException {
+    public ResponseEntity verifyAccount(@PathVariable String activationKey) throws ImplicactionException {
         authService.verifyAccount(activationKey);
-        return new ResponseEntity<>("Account Activated Success", OK);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")

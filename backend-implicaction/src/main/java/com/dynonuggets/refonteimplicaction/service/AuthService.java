@@ -60,8 +60,7 @@ public class AuthService {
     public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
         validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
-        final User user = registerUser(reqisterRequest, activationKey);
-        mailService.sendUserActivationMail(activationKey, user);
+        registerUser(reqisterRequest, activationKey);
     }
 
     /**
@@ -79,10 +78,7 @@ public class AuthService {
     /**
      * Vérifie existence et l'activation d'une clé d'activation et l'active si elle ne l'est pas déjà
      *
-     * @throws ImplicactionException <ul>
-     *                               <li>Si la clé n'existe pas</li>
-     *                               <li>Si la clé est déjà activée</li>
-     *                               </ul>
+     * @throws ImplicactionException Si la clé n'existe pas, ou si la clé est déjà activée
      */
     @Transactional
     public void verifyAccount(String activationKey) throws ImplicactionException {
@@ -102,12 +98,14 @@ public class AuthService {
                 .collect(toList());
 
         // à l'activation du compte on map l'utilisateur à un job_seeker
-        if (userRoles.contains(RoleEnum.JOB_SEEKER.getLabel())) {
+        if (userRoles.contains(RoleEnum.JOB_SEEKER.getLongName())) {
             JobSeeker jobSeeker = JobSeeker.builder()
                     .user(user)
                     .build();
             jobSeekerRepository.save(jobSeeker);
         }
+
+        mailService.sendUserActivationMail(user);
     }
 
     @Transactional

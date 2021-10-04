@@ -5,12 +5,17 @@ import {UsersRoutingModule} from './users-routing.module';
 import {TableModule} from 'primeng/table';
 import {InputTextModule} from 'primeng/inputtext';
 import {TableUsersComponent} from './components/users-table/table-users.component';
+import {PendingUserTableComponent} from './components/pending-user-table/pending-user-table.component';
 
 
 @NgModule({
   declarations: [
     UsersComponent,
-    TableUsersComponent
+    TableUsersComponent,
+    PendingUserTableComponent
+  ],
+  exports: [
+    PendingUserTableComponent
   ],
   imports: [
     CommonModule,

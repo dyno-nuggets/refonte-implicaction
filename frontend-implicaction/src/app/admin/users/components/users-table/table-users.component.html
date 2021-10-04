@@ -1,15 +1,14 @@
 <p-table
-  styleClass="p-datatable-striped"
-  currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
-  [rowsPerPageOptions]="[10, 25, 50]"
+  (onLazyLoad)="loadUsers($event)"
+  [lazy]="true"
+  [loading]="loading"
   [paginator]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
   [rows]="rowsPerPage"
   [showCurrentPageReport]="true"
-  [value]="pageable.content"
-  [loading]="loading"
   [totalRecords]="pageable.totalElements"
-  [lazy]="true"
-  (onLazyLoad)="loadUsers($event)"
+  [value]="pageable.content"
+  currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
 >
   <ng-template pTemplate="header">
     <tr>
@@ -19,7 +18,7 @@
       <th scope="col"></th>
     </tr>
   </ng-template>
-  <ng-template pTemplate="body" let-user>
+  <ng-template let-user pTemplate="body">
     <tr>
       <td class="overflow-ellipsis">{{user.username}}</td>
       <td class="overflow-ellipsis">{{user.email}}</td>

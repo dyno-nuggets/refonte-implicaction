@@ -8,8 +8,6 @@ spring:
     username: ${DB_USER}
     password: ${DB_PASS}
 
-
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -23,6 +21,8 @@ spring:
     username: ${SMTP_USER}
     password: ${SMTP_PASS}
     protocol: smtp
+  application:
+    name: Implicaction
 
 jwt:
   expiration.time: 900000
@@ -30,3 +30,8 @@ jwt:
     type: JKS
     name: ${CERTIF_NAME}
     password: ${CERTIF_PASSWORD}
+
+app:
+  url: ${APP_URL}
+  contact:
+    mail: ${CONTACT_EMAIL}

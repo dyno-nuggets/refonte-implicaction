@@ -93,6 +93,12 @@ public class UserAdapter {
     }
 
     public UserDto toDto(final User model) {
+
+        final List<String> roles = isNotEmpty(model.getRoles()) ? model.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(toList()) : emptyList();
+
         return UserDto.builder()
                 .id(model.getId())
                 .username(model.getUsername())
@@ -110,6 +116,7 @@ public class UserAdapter {
                 .phoneNumber(model.getPhoneNumber())
                 .activationKey(model.getActivationKey())
                 .active(model.isActive())
+                .roles(roles)
                 .build();
     }
 
@@ -119,7 +126,7 @@ public class UserAdapter {
                 .stream()
                 .map(roleLabel -> {
                     final RoleEnum role = RoleEnum.valueOf(roleLabel);
-                    return new Role(role.getId(), role.getLabel(), emptySet());
+                    return new Role(role.getId(), role.getName(), emptySet());
                 })
                 .collect(toList());
 

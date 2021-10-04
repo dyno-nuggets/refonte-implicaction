@@ -1,4 +1,4 @@
-import {RoleEnum} from '../enums/role-enum.enum';
+import {RoleEnumCode} from '../enums/role.enum';
 
 export interface SignupRequestPayload {
   username: string;
@@ -6,5 +6,5 @@ export interface SignupRequestPayload {
   password: string;
   firstname: string;
   lastname: string;
-  roles: RoleEnum[];
+  roles: RoleEnumCode[];
 }

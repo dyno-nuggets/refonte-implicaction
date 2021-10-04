@@ -2,7 +2,7 @@
 
 ## dépendances
 
-* [java](https://java.com/fr/download/help/download_options.html) (11 ou supérieure)
+* [java](https://java.com/fr/download/help/download_options.html) (v11)
 * [node](https://nodejs.org/en/) (14 ou supérieure)
 * [docker](https://docs.docker.com/engine/install/) (v17.09 min) pour les tests
 
