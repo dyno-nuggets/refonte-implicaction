@@ -5,7 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
-@ActiveProfiles(profiles = "local")
+@ActiveProfiles(profiles = "test")
 class RefonteImplicactionApplicationTests {
 
     @Test
