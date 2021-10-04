@@ -13,13 +13,11 @@ export class JobService {
 
   constructor(
     private http: HttpClient,
-    private apiHttpService: ApiHttpService,
     private apiEndpointsService: ApiEndpointsService
   ) {
   }
 
   getAll(pageable: Pageable): Observable<any> {
-    return (this.apiHttpService
-      .get(this.apiEndpointsService.getAllJobEndpoint(pageable)) as Observable<Pageable<JobPosting>>);
+    return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable));
   }
 }

@@ -48,7 +48,7 @@ export class JobsListComponent implements OnInit {
           this.pageable.totalElements = data.totalElements;
           this.jobs = data.content;
         },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des jobs')
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );
   }
 
