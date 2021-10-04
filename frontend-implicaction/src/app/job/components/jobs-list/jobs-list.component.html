@@ -8,7 +8,14 @@
         <app-job-card [job]="job"></app-job-card>
       </div>
     </div>
-
+    <p-paginator
+      (onPageChange)="paginate($event)"
+      *ngIf="pageable.totalPages > 0"
+      [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
+      [rows]="pageable.size"
+      [totalRecords]="pageable.totalElements"
+    >
+    </p-paginator>
   </ng-container>
   <ng-template #loadingTemplate>
     <div class="d-flex justify-content-center spinner">

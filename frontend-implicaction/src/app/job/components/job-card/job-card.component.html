@@ -18,10 +18,11 @@
   <div class="job-body row col justify-content-between mt-3">
     <div class="job-truc col-12 col-lg-7 col-xl-9">
       <h3 class="text-wrap pb-1 text-dark fw-bold m-0">{{job.title}}</h3>
-      <p class="text-justify">{{job.description}}</p>
+      <p [innerHTML]="job.description | slice:0:255" class="text-justify"></p>
+      <p><a routerLink="/jobs/{{job.id}}">Voir plus</a></p>
     </div>
-    <div class="job-options mb-2 col-auto">
-      <button class="btn btn-primary fw-bold">
+    <div class="job-infos mb-2 col-auto flex-fill">
+      <button class="btn btn-primary fw-bold w-100">
         <i-feather class="icon me-2" name="plus"></i-feather>
         Ajouter au jobBoard
       </button>

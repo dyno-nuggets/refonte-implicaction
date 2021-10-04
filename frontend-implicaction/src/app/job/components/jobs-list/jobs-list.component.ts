@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Constants} from '../../../config/constants';
 import {JobPosting} from '../../../shared/models/job-posting';
-import {Observable} from 'rxjs';
 import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
@@ -39,11 +38,9 @@ export class JobsListComponent implements OnInit {
     this.isLoading = true;
     this.pageable.page = first / rows;
     this.pageable.size = rows;
-    let jobs: Observable<any>;
-
-    jobs = this.jobsService.getAll(this.pageable);
-
-    jobs.pipe(finalize(() => this.isLoading = false))
+    this.jobsService
+      .getAll(this.pageable)
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
