@@ -35,6 +35,8 @@ services:
       SMTP_PASS: 6b3338fa1cc8b9
       CERTIF_NAME: implicaction
       CERTIF_PASSWORD: .fxG3KPB.
+      APP_URL: http://localhost:8080
+      CONTACT_EMAIL: contact@implicaction.eu
     ports:
       - "8080:8080"    
 volumes:
