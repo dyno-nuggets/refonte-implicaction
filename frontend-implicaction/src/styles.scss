@@ -10,6 +10,16 @@ input.ng-invalid.ng-touched {
   cursor: pointer;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
+.background-transparent {
+  &:hover {
+    background: transparent;
+  }
+}
+
 .secondary-on-hover:hover {
   color: $secondary;
 }
