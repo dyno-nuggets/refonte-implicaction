@@ -31,6 +31,14 @@ const routes: Routes = [
     }
   },
   {
+    path: 'jobs',
+    loadChildren: () => import('./job/job.module').then(m => m.JobModule),
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: [RoleEnumCode.USER, RoleEnumCode.ADMIN]
+    }
+  },
+  {
     path: 'unauthorized',
     component: UnauthorizedComponent
   },

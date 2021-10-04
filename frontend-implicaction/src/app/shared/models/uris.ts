@@ -44,4 +44,11 @@ export class Uris {
     static readonly ALL_BY_USER_ID = 'relations/list';
     static readonly REQUEST = 'relations/request';
   };
+
+  /**
+   * JOBS
+   */
+  static readonly JOBS = class {
+    static readonly BASE_URI = 'job-postings';
+  };
 }

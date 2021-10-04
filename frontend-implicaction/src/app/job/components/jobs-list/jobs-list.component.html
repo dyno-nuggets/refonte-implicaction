@@ -1,0 +1,28 @@
+<div class="row">
+  <ng-container *ngIf="!isLoading; else loadingTemplate">
+    <div class="col-12 col-lg-3 p-0">
+      <h6 class="text-dark fw-bold">Filtres</h6>
+    </div>
+    <div class="col-12 col-lg-9 p-0 row bg-white card p-2">
+      <p *ngIf="!jobs.length" class="fst-italic mt-3">Il n'y a aucune offre d'emploi pour le moment.</p>
+      <div *ngFor="let job of jobs; last as isLast;" [ngClass]="{'last-element': isLast}">
+        <app-job-card [job]="job"></app-job-card>
+      </div>
+    </div>
+    <p-paginator
+      (onPageChange)="paginate($event)"
+      *ngIf="pageable.totalPages > 0"
+      [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
+      [rows]="pageable.size"
+      [totalRecords]="pageable.totalElements"
+    >
+    </p-paginator>
+  </ng-container>
+  <ng-template #loadingTemplate>
+    <div class="d-flex justify-content-center spinner">
+      <div class="align-self-center">
+        <app-loading></app-loading>
+      </div>
+    </div>
+  </ng-template>
+</div>
