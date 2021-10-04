@@ -1,6 +1,5 @@
 FROM adoptopenjdk/openjdk11 AS build
-RUN apt-get update
-RUN apt-get install -y maven
+RUN apt-get update && apt-get install -y maven
 WORKDIR /usr/local/service
 COPY . .
 RUN mvn -f /usr/local/service/pom.xml package -Dmaven.test.skip=true

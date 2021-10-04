@@ -24,13 +24,13 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: run mysql 8
-        run: docker-compose -f "${{env.file}}" up -d
+      # - name: run mysql 8
+        # run: docker-compose -f "${{env.file}}" up -d
       - name: Test with Maven
-        run: mvn --batch-mode --update-snapshots verify
-      - name: Stop containers
-        if: always()
-        run: docker-compose -f "${{env.file}}" down
+        run: mvn test -Dspring.profiles.active=test
+      # - name: Stop containers
+      #   if: always()
+      #   run: docker-compose -f "${{env.file}}" down
   build:
     runs-on: ubuntu-latest
     needs: test
