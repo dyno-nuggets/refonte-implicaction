@@ -47,7 +47,7 @@ const routes: Routes = [
     loadChildren: () => import('./job/job.module').then(m => m.JobModule),
     canActivate: [AuthGuard],
     data: {
-      allowedRoles: [RoleEnum.USER, RoleEnum.ADMIN]
+      allowedRoles: [RoleEnumCode.USER, RoleEnumCode.ADMIN]
     }
   },
 ];
