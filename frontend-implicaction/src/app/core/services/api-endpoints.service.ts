@@ -86,12 +86,20 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BY_ID, [userId]);
   }
 
+  getActivateUserEndpoint(activationKey: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.AUTH.ACTIVATE_USER, [activationKey]);
+  }
+
   /**
    * Users
    */
 
   getAllUserEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
+  }
+
+  getAllPendingActivationUsersEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_ALL_PENDING_USERS, pageable);
   }
 
   getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable): string {

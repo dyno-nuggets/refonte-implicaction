@@ -21,7 +21,7 @@ export class TableUsersComponent {
 
   constructor(
     private userService: UserService,
-    private toastServices: ToasterService,
+    private toastService: ToasterService,
   ) {
   }
 
@@ -36,8 +36,13 @@ export class TableUsersComponent {
         finalize(() => this.loading = false)
       )
       .subscribe(
-        users => this.pageable = users,
-        () => this.toastServices.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
+        data => {
+          this.pageable.totalPages = data.totalPages;
+          this.pageable.size = data.size;
+          this.pageable.totalElements = data.totalElements;
+          this.pageable.content = data.content;
+        },
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
       );
   }
 }

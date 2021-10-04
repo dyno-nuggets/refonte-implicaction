@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
@@ -43,7 +44,7 @@ public class UserService {
         if (isCurrentUserRelation) {
             final List<Long> userIds = users.map(UserDto::getId)
                     .get()
-                    .collect(Collectors.toList());
+                    .collect(toList());
             // on recherche les relations de tous les utilisateurs remontés avec l'utilisateur courant ...
             List<Relation> relations = relationRepository.findAllRelatedToUserByUserIdIn(currentUserId, userIds);
             // ... et on associe chaque relation avec un statut
@@ -84,6 +85,11 @@ public class UserService {
         return userId.equals(relation.getReceiver().getId()) || userId.equals(relation.getSender().getId());
     }
 
+    public Page<UserDto> getAllPendingActivationUsers(Pageable pageable) {
+        return userRepository.findAllByActivatedAtIsNull(pageable)
+                .map(userAdapter::toDto);
+    }
+
     private RelationTypeEnum getRelationType(Relation relation, Long userId) {
         if (relation.getConfirmedAt() != null) {
             return RelationTypeEnum.FRIEND;
@@ -96,4 +102,5 @@ public class UserService {
         }
         return RelationTypeEnum.NONE;
     }
+
 }

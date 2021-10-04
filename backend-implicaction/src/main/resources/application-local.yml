@@ -17,3 +17,8 @@ jwt:
   certificate:
     name: implicaction
     password: .fxG3KPB.
+
+app:
+  url: http://localhost:8080
+  contact:
+    mail: contact@implicaction.eu

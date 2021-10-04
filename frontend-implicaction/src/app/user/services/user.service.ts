@@ -52,4 +52,8 @@ export class UserService {
   updatePersonalInfo(userId: string, personalInfos: User): Observable<User> {
     return this.http.put<User>(this.apiEndpointsService.updatePersonalInfoByUserIdEndpoint(userId), personalInfos);
   }
+
+  getAllPendingActivationUsers(pageable: Pageable): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
+  }
 }

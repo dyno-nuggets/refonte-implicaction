@@ -7,6 +7,7 @@ export class Uris {
     static readonly SIGNUP = 'auth/signup';
     static readonly REFRESH_TOKEN = 'auth/refresh/token';
     static readonly LOGOUT = 'auth/logout';
+    static readonly ACTIVATE_USER = 'auth/accountVerification';
   };
 
   /**
@@ -18,6 +19,7 @@ export class Uris {
     static readonly GET_FRIENDS = 'users';
     static readonly GET_FRIEND_REQUEST_RECEIVED = 'users/friends/received';
     static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';
+    static readonly GET_ALL_PENDING_USERS = 'users/pending';
   };
 
   /**

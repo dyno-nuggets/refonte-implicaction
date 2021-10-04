@@ -1,13 +1,13 @@
 import {EventEmitter, Injectable, Output} from '@angular/core';
 import {Observable, of, throwError} from 'rxjs';
 import {LocalStorageService} from 'ngx-webstorage';
-import {ApiHttpService} from '../../core/services/api-http.service';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {catchError, map, tap} from 'rxjs/operators';
 import {SignupRequestPayload} from '../models/signup-request-payload';
 import {LoginRequestPayload} from '../models/login-request-payload';
 import {LoginResponse} from '../models/login-response';
-import {RoleEnum} from '../enums/role-enum.enum';
+import {RoleEnumCode} from '../enums/role.enum';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -22,14 +22,14 @@ export class AuthService {
   userId: EventEmitter<string> = new EventEmitter();
 
   constructor(
-    private apiHttpService: ApiHttpService,
+    private http: HttpClient,
     private apiEndpointsService: ApiEndpointsService,
     private localStorage: LocalStorageService
   ) {
   }
 
   signup(signupRequestPayload: SignupRequestPayload): Observable<any> {
-    return this.apiHttpService
+    return this.http
       .post(
         this.apiEndpointsService.getSignUpEndpoint(),
         signupRequestPayload,
@@ -38,11 +38,11 @@ export class AuthService {
   }
 
   login(loginRequestPayload: LoginRequestPayload): Observable<boolean> {
-    return (this.apiHttpService
-      .post(
+    return this.http
+      .post<LoginResponse>(
         this.apiEndpointsService.getLoginEndpoint(),
         loginRequestPayload
-      ) as Observable<LoginResponse>)
+      )
       .pipe(
         map(loginResponse => {
           this.localStorage.store('authenticationToken', loginResponse.authenticationToken);
@@ -67,7 +67,7 @@ export class AuthService {
       username: this.getUserName()
     };
 
-    this.apiHttpService
+    this.http
       .post(this.apiEndpointsService.getLogoutEndpoint(), refreshTokenPayload, {responseType: 'text'})
       .subscribe(
         () => {
@@ -96,7 +96,7 @@ export class AuthService {
       username: this.getUserName()
     };
 
-    return (this.apiHttpService
+    return (this.http
       .post(this.apiEndpointsService.getJwtRefreshTokenEndpoint(), refreshTokenPayload) as Observable<LoginResponse>)
       .pipe(tap(response => {
         this.localStorage.store('authenticationToken', response.authenticationToken);
@@ -121,7 +121,11 @@ export class AuthService {
     return this.getJwtToken() != null;
   }
 
-  getRoles(): RoleEnum[] {
+  getRoles(): RoleEnumCode[] {
     return this.localStorage.retrieve('roles');
+  }
+
+  activateUser(activationKey: string): Observable<void> {
+    return this.http.get<void>(this.apiEndpointsService.getActivateUserEndpoint(activationKey));
   }
 }

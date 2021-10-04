@@ -1,0 +1,13 @@
+::ng-deep {
+  .p-datatable .p-datatable-tbody > tr > td {
+    border-width: 0 !important;
+  }
+
+  .p-datatable-thead {
+
+    th {
+      background-color: transparent !important;
+      border: 0 !important;
+    }
+  }
+}

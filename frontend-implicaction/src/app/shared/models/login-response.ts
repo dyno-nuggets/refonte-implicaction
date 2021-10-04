@@ -1,4 +1,4 @@
-import {RoleEnum} from '../enums/role-enum.enum';
+import {RoleEnumCode} from '../enums/role.enum';
 
 export interface LoginResponse {
   authenticationToken: string;
@@ -6,5 +6,5 @@ export interface LoginResponse {
   expiresAt: Date;
   username: string;
   userId: string;
-  roles: RoleEnum[];
+  roles: RoleEnumCode[];
 }

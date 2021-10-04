@@ -3,8 +3,9 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.dto.NotificationEmailDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.User;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,25 +13,27 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import static com.dynonuggets.refonteimplicaction.util.Constants.ACTIVATION_ENDPOINT;
-import static com.dynonuggets.refonteimplicaction.util.Constants.IMPLICACTION_MAIL_ADDRESS;
-
 @Service
-@AllArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 public class MailService {
 
     private final MailContentBuilder mailContentBuilder;
     private final JavaMailSender mailSender;
 
+    @Value("${app.url}")
+    private String contactUrl;
+    @Value("${app.contact.mail}")
+    private String contactMail;
+
     @Async
     public void sendMail(NotificationEmailDto notificationEmail) throws ImplicactionException {
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
-            messageHelper.setFrom(IMPLICACTION_MAIL_ADDRESS);
+            messageHelper.setFrom(contactMail);
             messageHelper.setTo(notificationEmail.getRecipient());
             messageHelper.setSubject(notificationEmail.getSubject());
-            messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()));
+            messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()), true);
         };
         try {
             mailSender.send(messagePreparator);
@@ -40,12 +43,12 @@ public class MailService {
         }
     }
 
-    public void sendUserActivationMail(final String activationKey, final User user) throws ImplicactionException {
+    public void sendUserActivationMail(final User user) throws ImplicactionException {
+        String messageBody = String.format("Félicitation, vous pouvez désormais vous connecter à l'adresse suivante %s/auth/login", contactUrl);
         NotificationEmailDto notificationEmail = NotificationEmailDto.builder()
-                .subject("Please activate your account")
+                .subject("[Implicaction] Votre compte vient d'être activé")
                 .recipient(user.getEmail())
-                .body("Thank you for signing up to Implicaction, please click on the below url to activate your account : "
-                        + ACTIVATION_ENDPOINT + "/" + activationKey)
+                .body(messageBody)
                 .build();
         sendMail(notificationEmail);
     }
