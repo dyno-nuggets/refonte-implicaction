@@ -21,7 +21,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: run mysql 8
-        run: docker-compose -f "${{env.file}}" -d
+        run: docker-compose -f "${{env.file}}" up -d
       - name: Test with Maven
         run: mvn --batch-mode --update-snapshots verify
       - name: Stop containers
