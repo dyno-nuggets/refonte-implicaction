@@ -1,22 +1,23 @@
 <div class="card mb-4">
   <div class="list-group list-group-flush">
     <a
-      routerLink="/admin"
-      class="list-group-item active"
+      [routerLinkActiveOptions]="{exact: true}"
+      class="list-group-item"
+      routerLink="/admin/dashboard"
+      routerLinkActive="active"
     >
       Dashboard
     </a>
 
     <ng-container *ngFor="let menuItem of menuItems">
       <a
-        class="list-group-item d-flex justify-content-between"
-        routerLinkActive="text-primary"
+        [routerLinkActiveOptions]="{exact: true}"
         [routerLink]="menuItem.link"
+        class="list-group-item d-flex justify-content-between"
+        routerLinkActive="active"
       >
         <div *ngIf="menuItem.classIcon">
-          <span
-            aria-hidden="true"
-            [class]="menuItem.classIcon"></span>
+          <span [class]="menuItem.classIcon" aria-hidden="true"></span>
           {{menuItem.label}}
         </div>
         <span

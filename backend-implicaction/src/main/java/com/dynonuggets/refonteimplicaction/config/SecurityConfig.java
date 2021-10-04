@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.config;
 
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] AUTH_WHITELIST = {
             "/",
             "/error",
-            "/auth/**",
+            "/api/auth/signup",
+            "/api/auth/login",
+            "/api/auth/refresh/token",
             // swagger
             "/v2/api-docs",
             // -- swagger ui
@@ -30,7 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/v2/api-docs",
             "/webjars/**",
-            "/api/auth/**",
             // -- angular
             "/index.html",
             "/*.js",
@@ -42,7 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/**.ttf",
             "/**.woff"
     };
-    private static final String[] ADMIN_PROTECTED = {};
+    private static final String[] ADMIN_PROTECTED = {
+            "/api/auth/accountVerification/**"
+    };
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -53,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(ADMIN_PROTECTED).hasRole("hasRole('ADMIN')")
+                .antMatchers(ADMIN_PROTECTED).hasRole(RoleEnum.ADMIN.getName())
                 .anyRequest()
                 .authenticated();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

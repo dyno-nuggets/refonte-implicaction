@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ActiveProfiles(profiles = "local")
+@ActiveProfiles(profiles = "test")
 class RelationRepositoryTest extends AbstractContainerBaseTest {
 
     User sender;

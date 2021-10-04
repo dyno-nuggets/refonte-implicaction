@@ -4,10 +4,11 @@ import org.testcontainers.containers.MySQLContainer;
 
 abstract class AbstractContainerBaseTest {
 
+    @SuppressWarnings("rawtypes")
     static final MySQLContainer MY_SQL_CONTAINER;
 
     static {
-        MY_SQL_CONTAINER = new MySQLContainer<>("mysql:latest")
+        MY_SQL_CONTAINER = new MySQLContainer<>("mysql:8")
                 .withDatabaseName("implicaction")
                 .withReuse(true);
         MY_SQL_CONTAINER.start();

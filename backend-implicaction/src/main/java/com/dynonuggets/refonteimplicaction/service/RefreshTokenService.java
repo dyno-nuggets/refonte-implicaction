@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.dto.RefreshTokenDto;
-import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.model.RefreshToken;
 import com.dynonuggets.refonteimplicaction.repository.RefreshTokenRepository;
 import lombok.AllArgsConstructor;
@@ -26,9 +26,9 @@ public class RefreshTokenService {
         return toTokenDto(refreshTokenRepository.save(refreshToken));
     }
 
-    public void validateRefreshToken(String token) throws ImplicactionException {
+    public void validateRefreshToken(String token) throws UnauthorizedException {
         refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new ImplicactionException("Invalid refresh token"));
+                .orElseThrow(() -> new UnauthorizedException("Votre session a expirée, veuillez vous devez vous identifier."));
     }
 
     public void deleteRefreshToken(String token) {
