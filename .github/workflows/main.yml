@@ -27,7 +27,7 @@ jobs:
       - name: Test with Maven
         run: mvn test -Dspring.profiles.active=test
   build-and-deploy:
-    # if: github.ref == 'ref/head/develop'
+    if: github.ref == 'ref/head/develop' || startsWith('refs/tags/v', github.ref)
     name: Building and deploying on Docker Hub
     needs: test
     runs-on: ubuntu-latest
