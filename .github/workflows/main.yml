@@ -51,8 +51,6 @@ jobs:
       - name: Build images
         run: docker-compose -f docker-compose.build-prod.yml build
       - name: Push db
-        uses: docker/build-push-action@v2
         run: docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:${{ steps.previoustag.outputs.tag }}
       - name: Push app
-        uses: docker/build-push-action@v2
-        run: ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
+        run: docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
