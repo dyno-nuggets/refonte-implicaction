@@ -1,0 +1,10 @@
+FROM adoptopenjdk/openjdk11 AS build
+RUN apt-get update && apt-get install -y maven
+WORKDIR /usr/local/service
+COPY . .
+RUN mvn -f /usr/local/service/pom.xml package -Dmaven.test.skip=true
+
+FROM adoptopenjdk/openjdk11
+COPY --from=build /usr/local/service/backend-implicaction/target/backend-implicaction-*.jar /usr/app/app.jar
+EXPOSE 8080
+CMD ["java","-jar","/usr/app/app.jar"]
