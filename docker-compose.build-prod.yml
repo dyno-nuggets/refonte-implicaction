@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfiles/Dockerfile-mysql
+    image: thomasderuel/dyno-nuggets-db:latest
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'password'
@@ -22,6 +23,8 @@ services:
       - "9001:8080"
   spring:
     depends_on: ["db"]
+    restart: always
+    image: thomasderuel/dyno-nuggets-app:latest
     build:
       context: .
       dockerfile: Dockerfiles/Dockerfile-spring
