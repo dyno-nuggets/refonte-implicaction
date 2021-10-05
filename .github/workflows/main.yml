@@ -5,9 +5,10 @@ on:
   pull_request:
     branches:
     - develop
-
+    types: [opened, synchronize, reopened, closed]
 jobs:
   test:
+    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     env:
       file: docker-compose.build-test.yml
@@ -21,7 +22,7 @@ jobs:
       - name: Test with Maven
         run: mvn test -Dspring.profiles.active=test
   build-and-deploy:
-    if: github.ref == 'ref/head/develop' || startsWith('refs/tags/v', github.ref)
+    if: github.event.pull_request.merged == true
     name: Building and deploying on Docker Hub
     needs: test
     runs-on: ubuntu-latest
