@@ -28,7 +28,7 @@ jobs:
         run: mvn test -Dspring.profiles.active=test
   build-and-deploy:
     # if: github.ref == 'ref/head/develop'
-    name: Build and deploy on Docker image
+    name: Building and deploying on Docker Hub
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -51,6 +51,12 @@ jobs:
       - name: Build images
         run: docker-compose -f docker-compose.build-prod.yml build
       - name: Push db
-        run: docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:${{ steps.previoustag.outputs.tag }}
+        run: |
+          docker image tag ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:latest \
+          ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:${{ steps.previoustag.outputs.tag }}
+          docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:${{ steps.previoustag.outputs.tag }}
       - name: Push app
-        run: docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
+        run: |
+          docker image tag ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:latest \
+          ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
+          docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
