@@ -3,12 +3,9 @@ name: Workflow Maven
 on:
   push:
   pull_request:
-    branches:
-    - develop
     types: [opened, synchronize, reopened, closed]
 jobs:
   test:
-    if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     env:
       file: docker-compose.build-test.yml
