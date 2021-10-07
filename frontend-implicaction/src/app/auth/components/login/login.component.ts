@@ -5,6 +5,7 @@ import {LoginRequestPayload} from '../../../shared/models/login-request-payload'
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
+import {Univers} from '../../../shared/enums/univers';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginComponent implements OnInit {
     private toaster: ToasterService
   ) {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigate([Univers.HOME.url]);
     } else {
       this.loginRequestPayload = {
         username: '',
@@ -65,7 +66,7 @@ export class LoginComponent implements OnInit {
       .queryParams
       .subscribe(
         params => this.router
-          .navigateByUrl(params.returnUrl || '/')
+          .navigateByUrl(params.returnUrl || Univers.HOME.url)
           .then(() => this.toaster.success('Success', 'Login Successful')),
         error => console.log(error)
       );

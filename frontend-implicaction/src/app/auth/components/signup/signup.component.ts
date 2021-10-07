@@ -7,6 +7,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
 import {AlertService} from '../../../shared/services/alert.service';
 import {RoleEnumCode} from '../../../shared/enums/role.enum';
+import {Univers} from '../../../shared/enums/univers';
 
 @Component({
   selector: 'app-signup',
@@ -27,7 +28,7 @@ export class SignupComponent implements OnInit {
     private alertService: AlertService
   ) {
     if (this.authService.isLoggedIn()) {
-      this.router.navigate(['/']);
+      this.router.navigate([Univers.HOME.url]);
     } else {
       this.signupRequestPayload = {
         username: '',
