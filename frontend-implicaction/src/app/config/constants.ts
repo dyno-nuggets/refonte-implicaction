@@ -7,7 +7,7 @@ export class Constants {
     page: 0,
     size: 10,
     totalElements: 0,
-    first: true,
+    first: 0,
     content: [],
     rowsPerPages: [10, 25, 50],
     totalPages: 0,

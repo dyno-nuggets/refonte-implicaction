@@ -5,7 +5,7 @@ export interface Pageable<T = any> {
   rowsPerPages?: number[];
   totalPages?: number;
   totalElements?: number;
-  first?: boolean;
+  first?: number;
   last?: boolean;
   empty?: boolean;
 }

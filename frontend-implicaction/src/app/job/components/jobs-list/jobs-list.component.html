@@ -12,6 +12,7 @@
     <p-paginator
       (onPageChange)="paginate($event)"
       *ngIf="pageable.totalPages > 0"
+      [first]="pageable.first"
       [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
       [rows]="pageable.size"
       [totalRecords]="pageable.totalElements"
