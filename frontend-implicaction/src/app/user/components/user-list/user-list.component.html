@@ -1,8 +1,9 @@
 <div class="row">
   <div class="col-12 col-md-3 col-sm-12 mb-2">
     <a
+      [routerLinkActiveOptions]="{exact: true}"
       class="list-group-item list-group-item-action"
-      routerLink="/users/list"
+      routerLink="/{{univers.USERS.url}}"
       routerLinkActive="active"
     >
       Tous les utilisateurs
@@ -10,7 +11,7 @@
     <a
       [routerLinkActiveOptions]="{exact: true}"
       class="list-group-item list-group-item-action"
-      routerLink="/users/friends"
+      routerLink="/{{univers.USERS.url}}/friends"
       routerLinkActive="active"
     >
       Mes amis
@@ -18,7 +19,7 @@
     <a
       [routerLinkActiveOptions]="{exact: true}"
       class="list-group-item list-group-item-action"
-      routerLink="/users/friends/received"
+      routerLink="/{{univers.USERS.url}}/friends/received"
       routerLinkActive="active"
     >
       Demandes reçues
@@ -26,7 +27,7 @@
     <a
       [routerLinkActiveOptions]="{exact: true}"
       class="list-group-item list-group-item-action"
-      routerLink="/users/friends/sent"
+      routerLink="/{{univers.USERS.url}}/friends/sent"
       routerLinkActive="active"
     >
       Demandes envoyées
@@ -35,7 +36,6 @@
   <div class="col-lg-9 col-md-9 col-sm-12">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
       <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2">
-        <!-- TODO: extraire le html du composant user-card -->
         <app-user-card
           *ngFor="let user of pageable.content"
           [user]="user"

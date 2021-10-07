@@ -25,11 +25,12 @@ spring:
     name: Implicaction
 
 jwt:
-  expiration.time: 900000
-  certificate:
+  expiration_time: 900000
+  key_store:
     type: JKS
-    name: ${CERTIF_NAME}
-    password: ${CERTIF_PASSWORD}
+    file: ${KS_PATH}
+    name: ${KS_NAME}
+    password: ${KS_PASSWORD}
 
 app:
   url: ${APP_URL}

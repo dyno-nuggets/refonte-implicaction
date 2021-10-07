@@ -97,8 +97,9 @@ défaut.
 * SMTP_PORT : port du serveur smtp
 * SMTP_USER : user du serveur smtp
 * SMTP_PASS : password du serveur smtp
-* CERTIF_NAME : nom du certificat de sécurité (par défaut mettre implicaction)
-* CERTIF_PASSWORD : mot de passe du certificat
+* KS_PATH(*) : chemin vers le fichier JKS
+* KS_NAME(*) : nom du certificat de sécurité (par défaut mettre implicaction)
+* KS_PASSWORD(*) : mot de passe du certificat
 * APP_URL : url de l'applicaction
 * CONTACT_EMAIL : adresse mail du contact
 

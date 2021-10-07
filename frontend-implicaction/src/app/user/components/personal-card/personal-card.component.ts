@@ -28,7 +28,6 @@ export class PersonalCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserId();
   }
 
   toggleModeEdition(): void {

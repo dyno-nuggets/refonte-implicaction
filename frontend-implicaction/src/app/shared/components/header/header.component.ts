@@ -3,6 +3,9 @@ import {AuthService} from '../../services/auth.service';
 import {Router} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {ToasterService} from '../../../core/services/toaster.service';
+import {User} from '../../models/user';
+import {Univers} from '../../enums/univers';
+import {RoleEnumCode} from '../../enums/role.enum';
 
 @Component({
   selector: 'app-header',
@@ -12,8 +15,10 @@ import {ToasterService} from '../../../core/services/toaster.service';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   isLoggedIn: boolean;
-  username: string;
-  userId: string;
+  currentUser: User;
+  allowedUnivers: Univers[] = [];
+  isAdmin = false;
+  univers = Univers;
 
   private subscription: Subscription;
 
@@ -29,14 +34,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .loggedIn
       .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn)
       .add(
-        this.authService.username.subscribe(username => this.username = username)
-      )
-      .add(
-        this.authService.userId.subscribe(userId => this.userId = userId)
+        this.authService.currentUser.subscribe(currentUser => {
+          this.currentUser = currentUser;
+          this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
+          this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
+        })
       );
     this.isLoggedIn = this.authService.isLoggedIn();
-    this.username = this.authService.getUserName();
-    this.userId = this.authService.getUserId();
+    this.currentUser = this.authService.getCurrentUser();
+    this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
+    this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
   }
 
   logout(): void {

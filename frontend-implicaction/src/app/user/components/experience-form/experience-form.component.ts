@@ -39,7 +39,6 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     this.experience = this.sidebarInput ? {...this.sidebarInput.experience} : undefined;
     this.isUpdate = !!this.sidebarInput?.experience?.id;
     this.initForm(this.experience);
-    this.currentUserId = this.authService.getUserId();
   }
 
   onSubmit(): void {

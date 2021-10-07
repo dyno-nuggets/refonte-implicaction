@@ -36,7 +36,8 @@ export class AuthGuard implements CanActivate {
 
   private checkPermission(allowedUserRoles: RoleEnumCode[]): boolean {
     return this.authService
-      .getRoles()
+      .getCurrentUser()
+      ?.roles
       ?.some(role => allowedUserRoles.includes(role)) ?? false;
   }
 

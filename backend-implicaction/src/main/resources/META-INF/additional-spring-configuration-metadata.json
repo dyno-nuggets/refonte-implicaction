@@ -1,9 +1,34 @@
 {
   "properties": [
     {
-      "name": "jwt.expiration.time",
-      "type": "java.lang.Long",
-      "description": "expiration time for the jwt token."
+      "name": "jwt.key_store.file",
+      "type": "java.lang.String",
+      "description": "Description for jwt.key_store.file."
+    },
+    {
+      "name": "jwt.expiration_time",
+      "type": "java.lang.String",
+      "description": "Description for jwt.expiration_time."
+    },
+    {
+      "name": "jwt.key_store.name",
+      "type": "java.lang.String",
+      "description": "Description for jwt.key_store.name."
+    },
+    {
+      "name": "jwt.key_store.password",
+      "type": "java.lang.String",
+      "description": "Description for jwt.key_store.password."
+    },
+    {
+      "name": "app.url",
+      "type": "java.lang.String",
+      "description": "Description for app.url."
+    },
+    {
+      "name": "app.contact.mail",
+      "type": "java.lang.String",
+      "description": "Description for app.contact.mail."
     }
   ]
 }

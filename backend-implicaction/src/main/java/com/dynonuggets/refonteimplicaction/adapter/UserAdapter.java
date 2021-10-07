@@ -37,10 +37,7 @@ public class UserAdapter {
                 .map(trainingAdapter::toDtoWithoutUser)
                 .collect(toList()) : emptyList();
 
-        final List<String> roles = isNotEmpty(model.getRoles()) ? model.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(toList()) : emptyList();
+        final List<String> roles = rolesToDtos(model);
 
         return UserDto.builder()
                 .id(model.getId())
@@ -68,10 +65,7 @@ public class UserAdapter {
     public UserDto toDto(final Recruiter recruiter) {
         final User model = recruiter.getUser();
 
-        final List<String> roles = isNotEmpty(model.getRoles()) ? model.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(toList()) : emptyList();
+        final List<String> roles = rolesToDtos(model);
 
         final CompanyDto companyDto = companyAdapter.toDto(recruiter.getCompany());
 
@@ -94,10 +88,7 @@ public class UserAdapter {
 
     public UserDto toDto(final User model) {
 
-        final List<String> roles = isNotEmpty(model.getRoles()) ? model.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(toList()) : emptyList();
+        final List<String> roles = rolesToDtos(model);
 
         return UserDto.builder()
                 .id(model.getId())
@@ -144,4 +135,20 @@ public class UserAdapter {
                 .build();
     }
 
+    public UserDto toDtoLight(User model) {
+        final List<String> roles = rolesToDtos(model);
+
+        return UserDto.builder()
+                .id(model.getId())
+                .username(model.getUsername())
+                .roles(roles)
+                .build();
+    }
+
+    private List<String> rolesToDtos(User model) {
+        return isNotEmpty(model.getRoles()) ? model.getRoles()
+                .stream()
+                .map(Role::getName)
+                .collect(toList()) : emptyList();
+    }
 }

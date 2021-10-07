@@ -1,14 +1,14 @@
 <nav class="py-2 bg-light border-bottom">
   <div class="container d-flex">
     <ul class="nav me-auto">
-      <li><a [routerLink]="['/']" class="nav-link px-2">Accueil</a></li>
-      <li><a class="nav-link px-2 link-dark" href="#">A propos</a></li>
-      <li><a class="nav-link px-2 link-dark" href="#">Espace entreprise</a></li>
-      <li>
-        <a [routerLink]="['/users/list']" class="nav-link px-2 link-dark" routerLinkActive="active">Communauté</a>
-      </li>
-      <li>
-        <a [routerLink]="['/jobs']" class="nav-link px-2 link-dark" routerLinkActive="active">Offres d'emploi</a>
+      <li *ngFor="let univers of allowedUnivers">
+        <a
+          [routerLink]="[univers.url]"
+          class="nav-link px-2"
+          routerLinkActive="active"
+        >
+          {{univers.title}}
+        </a>
       </li>
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
@@ -27,19 +27,42 @@
              class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
              data-bs-toggle="dropdown" id="dropdownUser2"
           >
-            <img alt="mdo" class="rounded-circle avatar" src="assets/img/default-user.png">
+            <img
+              alt="avatar de {{currentUser.username}}"
+              class="rounded-circle avatar"
+              src="assets/img/default-user.png"
+            >
           </a>
-          <ul aria-labelledby="dropdownUser" class="dropdown-menu text-small dropdown-user shadow m-0">
-            <li><span class="dropdown-item fw-bold cursor-default background-transparent">@{{username}}</span></li>
+          <ul
+            aria-labelledby="dropdownUser"
+            class="dropdown-menu text-small dropdown-user shadow m-0"
+          >
+            <li *ngIf="currentUser">
+              <span class="dropdown-item fw-bold cursor-default background-transparent">@{{currentUser.username}}</span>
+            </li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item cursor-pointer" routerLink="/users/{{userId}}/profile">Profil</a></li>
+            <li *ngIf="currentUser">
+              <a
+                class="dropdown-item cursor-pointer"
+                routerLink="/{{univers.USERS.url}}/{{currentUser.id}}/profile"
+              >
+                Profil
+              </a>
+            </li>
             <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
             <li>
               <hr class="dropdown-divider">
             </li>
-            <li><a class="dropdown-item cursor-pointer" routerLink="/admin">Admin</a></li>
+            <li *ngIf="isAdmin">
+              <a
+                [routerLink]="univers.ADMIN.url"
+                class="dropdown-item cursor-pointer"
+              >
+                Admin
+              </a>
+            </li>
             <li><a (click)="logout()" class="dropdown-item cursor-pointer">Se déconnecter</a></li>
           </ul>
         </li>

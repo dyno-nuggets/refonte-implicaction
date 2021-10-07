@@ -23,16 +23,18 @@ public class JwtProvider {
 
     private static final String AUTHORITIES_KEY = "scopes";
 
-    @Value("${jwt.certificate.password}")
+    @Value("${jwt.key_store.password}")
     private String keyStorePassword;
-    @Value("${jwt.certificate.name}")
-    private String certificateName;
-    @Value("${jwt.certificate.type}")
+    @Value("${jwt.key_store.name}")
+    private String keyStoreName;
+    @Value("${jwt.key_store.type}")
     private String keyStoreType;
+    @Value("${jwt.key_store.file}")
+    private String keyStoreFile;
 
     private KeyStore keyStore;
 
-    @Value("${jwt.expiration.time}")
+    @Value("${jwt.expiration_time}")
     private Long jwtExpirationInMillis;
 
     public Long getJwtExpirationInMillis() {
@@ -43,8 +45,7 @@ public class JwtProvider {
     public void init() {
         try {
             keyStore = KeyStore.getInstance(keyStoreType);
-            // TODO: cacher le nom du certificat à l'aide d'une variable ds le .properties
-            InputStream ressourceAsStream = getClass().getResourceAsStream("/implicaction.jks");
+            InputStream ressourceAsStream = getClass().getResourceAsStream(keyStoreFile);
             keyStore.load(ressourceAsStream, keyStorePassword.toCharArray());
         } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
@@ -95,8 +96,7 @@ public class JwtProvider {
 
     private PublicKey getPublicKey() throws ImplicactionException {
         try {
-            return keyStore.getCertificate(certificateName)
-                    .getPublicKey();
+            return keyStore.getCertificate(keyStoreName).getPublicKey();
         } catch (KeyStoreException e) {
             throw new ImplicactionException("Exception occured while retrieving public key");
         }
@@ -104,8 +104,7 @@ public class JwtProvider {
 
     private Key getPrivateKey() throws ImplicactionException {
         try {
-            // TODO: cachez ce secret que je ne saurais voir
-            return keyStore.getKey("implicaction", keyStorePassword.toCharArray());
+            return keyStore.getKey(keyStoreName, keyStorePassword.toCharArray());
         } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             throw new ImplicactionException("Exception occured while retrieving public key from keystore");
         }

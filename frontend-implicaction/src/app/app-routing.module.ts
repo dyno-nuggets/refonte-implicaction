@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './core/guards/auth.guard.service';
 import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
 import {IndexComponent} from './home/components/index/index.component';
-import {RoleEnumCode} from './shared/enums/role.enum';
+import {Univers} from './shared/enums/univers';
 
 const routes: Routes = [
   {
@@ -15,27 +15,27 @@ const routes: Routes = [
     component: IndexComponent
   },
   {
-    path: 'admin',
+    path: Univers.ADMIN.url,
     loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
     canActivate: [AuthGuard],
     data: {
-      allowedRoles: [RoleEnumCode.ADMIN]
+      allowedRoles: Univers.ADMIN.roles
     }
   },
   {
-    path: 'users',
+    path: Univers.USERS.url,
     loadChildren: () => import('./user/user.module').then(m => m.UserModule),
     canActivate: [AuthGuard],
     data: {
-      allowedRoles: [RoleEnumCode.USER, RoleEnumCode.ADMIN]
+      allowedRoles: Univers.USERS.roles
     }
   },
   {
-    path: 'jobs',
+    path: Univers.JOBS.url,
     loadChildren: () => import('./job/job.module').then(m => m.JobModule),
     canActivate: [AuthGuard],
     data: {
-      allowedRoles: [RoleEnumCode.USER, RoleEnumCode.ADMIN]
+      allowedRoles: Univers.USERS.roles
     }
   },
   {

@@ -25,11 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toSet;
 
 @Service
 @Slf4j
@@ -122,18 +120,11 @@ public class AuthService {
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found."));
 
-        final Set<String> roleNames = user.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(toSet());
-
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshToken)
                 .expiresAt(expiresAt)
-                .username(username)
-                .userId(user.getId())
-                .roles(roleNames)
+                .currentUser(userAdapter.toDtoLight(user))
                 .build();
     }
 
@@ -160,8 +151,7 @@ public class AuthService {
                 .authenticationToken(token)
                 .refreshToken(refreshTokenRequestDto.getRefreshToken())
                 .expiresAt(expiresAt)
-                .username(username)
-                .userId(user.getId())
+                .currentUser(userAdapter.toDtoLight(user))
                 .build();
     }
 
