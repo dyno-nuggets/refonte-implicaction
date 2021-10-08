@@ -20,5 +20,4 @@ export class RoleEnum extends EnumCodeLabelAbstract<RoleEnumCode> {
   static from(code: RoleEnumCode): RoleEnum {
     return this.fromCode(code);
   }
-
 }

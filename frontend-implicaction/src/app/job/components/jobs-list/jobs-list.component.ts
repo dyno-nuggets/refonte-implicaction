@@ -4,6 +4,8 @@ import {JobPosting} from '../../../shared/models/job-posting';
 import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
+import {JobFilter} from '../../models/job-filter';
+import {JobSortEnum} from '../../enums/job-sort.enum';
 
 @Component({
   selector: 'app-jobs-list',
@@ -16,6 +18,10 @@ export class JobsListComponent implements OnInit {
 
   jobs: JobPosting[] = [];
   isLoading = true;
+  jobFilter: JobFilter = {};
+  orderByEnums = [JobSortEnum.DATE_DESC, JobSortEnum.DATE_ASC];
+  selectedOrder = JobSortEnum.DATE_DESC;
+  searchKey = '';
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
@@ -28,6 +34,9 @@ export class JobsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.pageable.sortOrder = this.selectedOrder.sortOrder;
+    this.pageable.sortBy = this.selectedOrder.sortBy;
+
     this.paginate({
       first: 0,
       rows: this.ROWS_PER_PAGE_OPTIONS[0],
@@ -35,18 +44,18 @@ export class JobsListComponent implements OnInit {
     });
   }
 
-  paginate({first, rows, page}): void {
+  paginate({first, rows, page} = this.pageable): void {
     this.isLoading = true;
     this.pageable.page = page;
-    this.pageable.size = rows;
+    this.pageable.rows = rows;
     this.pageable.first = first;
     this.jobsService
-      .getAll(this.pageable)
+      .getAll(this.pageable, this.searchKey)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.size = data.size;
+          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.jobs = data.content;
         },
@@ -54,4 +63,10 @@ export class JobsListComponent implements OnInit {
       );
   }
 
+  onFilterChange({value}): void {
+    const filterEnum = JobSortEnum.from(value);
+    this.pageable.sortBy = filterEnum.sortBy;
+    this.pageable.sortOrder = filterEnum.sortOrder;
+    this.paginate();
+  }
 }

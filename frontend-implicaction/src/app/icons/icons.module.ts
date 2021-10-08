@@ -17,6 +17,7 @@ import {
   Plus,
   RotateCcw,
   Save,
+  Search,
   Shield,
   Trash2,
   User,
@@ -52,6 +53,7 @@ const icons = {
   RotateCcw,
   Trash2,
   Edit2,
+  Search
 };
 
 @NgModule({

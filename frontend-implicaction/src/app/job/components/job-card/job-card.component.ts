@@ -18,5 +18,4 @@ export class JobCardComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

@@ -30,7 +30,7 @@ export class TableUsersComponent {
     const page = event.first / event.rows;
 
     this.userService
-      .getAll({page, size: event.rows})
+      .getAll({page, rows: event.rows})
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -38,7 +38,7 @@ export class TableUsersComponent {
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.size = data.size;
+          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },

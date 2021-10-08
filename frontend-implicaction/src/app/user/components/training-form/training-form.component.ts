@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
-import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {UserContextService} from '../../../shared/services/user-context.service';
 import {Training} from '../../../shared/models/training';
 import {Observable} from 'rxjs';
 import {TrainingService} from '../../services/training.service';
@@ -30,7 +30,7 @@ export class TrainingFormComponent extends SidebarContentComponent implements On
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
-    private userContexteService: UserContexteService
+    private userContexteService: UserContextService
   ) {
     super();
   }

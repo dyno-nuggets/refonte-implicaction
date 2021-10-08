@@ -6,7 +6,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {Observable} from 'rxjs';
-import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {UserContextService} from '../../../shared/services/user-context.service';
 import {ExperienceService} from '../../services/experience.service';
 
 @Component({
@@ -30,7 +30,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
-    private userContexteService: UserContexteService
+    private userContextService: UserContextService
   ) {
     super();
   }
@@ -60,9 +60,9 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     experience$.subscribe(
       experienceFromDb => {
         if (this.isUpdate) {
-          this.userContexteService.updateExperience(experienceFromDb);
+          this.userContextService.updateExperience(experienceFromDb);
         } else {
-          this.userContexteService.addExperience(experienceFromDb);
+          this.userContextService.addExperience(experienceFromDb);
         }
       },
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),

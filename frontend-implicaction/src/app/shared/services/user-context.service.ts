@@ -7,12 +7,9 @@ import {Training} from '../models/training';
 @Injectable({
   providedIn: 'root'
 })
-export class UserContexteService {
+export class UserContextService {
 
   private behaviorSubject = new BehaviorSubject<User>({});
-
-  constructor() {
-  }
 
   setUser(user: User): void {
     this.behaviorSubject.next(user);

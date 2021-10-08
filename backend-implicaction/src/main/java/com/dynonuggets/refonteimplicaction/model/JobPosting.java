@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -46,4 +47,7 @@ public class JobPosting {
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
 }

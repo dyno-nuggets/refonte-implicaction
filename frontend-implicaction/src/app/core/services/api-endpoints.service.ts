@@ -11,9 +11,6 @@ import {Pageable} from '../../shared/models/pageable';
 @Injectable()
 export class ApiEndpointsService {
 
-  constructor() {
-  }
-
   // URL
   private static createUrl(action: string, isMockAPI = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
@@ -58,7 +55,7 @@ export class ApiEndpointsService {
       uri,
       (qs: QueryStringParameters) => {
         qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
+        qs.push('size', pageable.rows);
       });
   }
 
@@ -178,7 +175,17 @@ export class ApiEndpointsService {
   /**
    * Jobs
    */
-  getAllJobEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.BASE_URI, pageable);
+  getAllJobEndpoint(pageable: Pageable, searchKey: string): string {
+    const params = ['page', 'size', 'sortBy', 'sortOrder'];
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.JOBS.BASE_URI,
+      (qs: QueryStringParameters) => {
+        params.forEach(param => {
+          if (pageable[param] !== undefined) {
+            qs.push(param, pageable[param]);
+          }
+        });
+        qs.push('searchKey', searchKey);
+      });
   }
 }

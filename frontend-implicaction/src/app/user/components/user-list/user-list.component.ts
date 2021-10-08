@@ -80,7 +80,7 @@ export class UserListComponent implements OnInit {
     this.isLoading = true;
     this.pageable.page = page;
     this.pageable.first = first;
-    this.pageable.size = rows;
+    this.pageable.rows = rows;
     let user$: Observable<any>;
 
     // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
@@ -98,7 +98,7 @@ export class UserListComponent implements OnInit {
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.size = data.size;
+          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },
@@ -126,7 +126,7 @@ export class UserListComponent implements OnInit {
           } else {
             this.paginate({
               first: this.pageable.first,
-              rows: this.pageable.size,
+              rows: this.pageable.rows,
               page: this.pageable.page
             });
           }
@@ -157,7 +157,7 @@ export class UserListComponent implements OnInit {
           if (this.listType !== UserListType.ALL_USERS) {
             this.paginate({
               first: this.pageable.first,
-              rows: this.pageable.size,
+              rows: this.pageable.rows,
               page: this.pageable.page
             });
           }
