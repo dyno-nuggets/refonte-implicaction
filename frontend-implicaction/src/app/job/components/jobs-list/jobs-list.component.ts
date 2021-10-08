@@ -31,13 +31,15 @@ export class JobsListComponent implements OnInit {
     this.paginate({
       first: 0,
       rows: this.ROWS_PER_PAGE_OPTIONS[0],
+      page: this.pageable.page
     });
   }
 
-  paginate({first, rows}): void {
+  paginate({first, rows, page}): void {
     this.isLoading = true;
-    this.pageable.page = first / rows;
+    this.pageable.page = page;
     this.pageable.size = rows;
+    this.pageable.first = first;
     this.jobsService
       .getAll(this.pageable)
       .pipe(finalize(() => this.isLoading = false))

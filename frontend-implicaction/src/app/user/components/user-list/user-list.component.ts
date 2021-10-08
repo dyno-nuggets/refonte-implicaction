@@ -26,7 +26,6 @@ export class UserListComponent implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
 
-  users: User[] = [];
   currentUserId: string;
   action: string;
   listType: UserListType;
@@ -71,12 +70,14 @@ export class UserListComponent implements OnInit {
     this.paginate({
       first: 0,
       rows: this.ROWS_PER_PAGE_OPTIONS[0],
+      page: this.pageable.page
     });
   }
 
-  paginate({first, rows}): void {
+  paginate({first, rows, page}): void {
     this.isLoading = true;
-    this.pageable.page = first / rows;
+    this.pageable.page = page;
+    this.pageable.first = first;
     this.pageable.size = rows;
     let user$: Observable<any>;
 
@@ -97,7 +98,7 @@ export class UserListComponent implements OnInit {
           this.pageable.totalPages = data.totalPages;
           this.pageable.size = data.size;
           this.pageable.totalElements = data.totalElements;
-          this.users = data.content;
+          this.pageable.content = data.content;
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')
       );
@@ -121,9 +122,11 @@ export class UserListComponent implements OnInit {
           if (this.listType === UserListType.ALL_USERS) {
             sender.relationTypeOfCurrentUser = RelationType.FRIEND;
           } else {
-            const first = this.pageable.page * this.pageable.size;
-            const rows = this.pageable.size;
-            this.paginate({first, rows});
+            this.paginate({
+              first: this.pageable.first,
+              rows: this.pageable.size,
+              page: this.pageable.page
+            });
           }
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
@@ -150,9 +153,11 @@ export class UserListComponent implements OnInit {
           user.relationTypeOfCurrentUser = RelationType.NONE;
           // il faut relancer la pagination dans le cas de l'affichage des amis / demandes
           if (this.listType !== UserListType.ALL_USERS) {
-            const first = this.pageable.page * this.pageable.size;
-            const rows = this.pageable.size;
-            this.paginate({first, rows});
+            this.paginate({
+              first: this.pageable.first,
+              rows: this.pageable.size,
+              page: this.pageable.page
+            });
           }
         },
         () => this.toastService.error('Erreur', 'Une erreur est survenue'),
