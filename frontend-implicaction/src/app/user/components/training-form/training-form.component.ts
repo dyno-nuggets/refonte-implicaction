@@ -39,7 +39,6 @@ export class TrainingFormComponent extends SidebarContentComponent implements On
     this.training = this.sidebarInput ? {...this.sidebarInput.training} : undefined;
     this.isUpdate = !!this.sidebarInput?.training?.id;
     this.initForm(this.training);
-    this.currentUserId = this.authService.getUserId();
   }
 
   onSubmit(): void {

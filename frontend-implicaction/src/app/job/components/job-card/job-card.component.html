@@ -1,9 +1,9 @@
 <div class="job-container border-bottom job-card-container p-2">
   <div class="job-header d-flex flex-wrap align-items-center mb-2">
     <img
+      alt="company-logo"
       class="d-none d-sm-inline-block me-1"
       src="assets/img/job-posting-img.png"
-      alt="company-logo"
     >
     <span class="fw-bold grey overflow-ellipsis pe-2 text-uppercase">{{job.company?.name}}</span>
     <span>
@@ -19,7 +19,7 @@
     <div class="job-infos col-12 col-lg-7 col-xl-9">
       <h3 class="text-wrap pb-1 text-dark fw-bold m-0">{{job.title}}</h3>
       <p [innerHTML]="job.description | slice:0:255" class="text-justify"></p>
-      <p><a routerLink="/jobs/{{job.id}}">Voir plus</a></p>
+      <p><a routerLink="/{{univers.JOBS.url}}/{{job.id}}">Voir plus</a></p>
     </div>
     <div class="job-options mb-2 col-auto flex-fill">
       <button class="btn btn-primary fw-bold w-100">

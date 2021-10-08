@@ -40,7 +40,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         .subscribe(
           user => {
             this.user = user;
-            this.canEdit = user.id.toString() === this.authService.getUserId();
+            this.canEdit = user.id === this.authService.getCurrentUser()?.id;
             this.userContexteService.setUser(user);
           },
           () => this.toasterService.error('oops', 'Une erreur est survenue !')

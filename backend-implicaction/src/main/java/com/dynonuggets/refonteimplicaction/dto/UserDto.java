@@ -28,7 +28,6 @@ public class UserDto {
     private Instant registeredAt;
     private String presentation;
     private String contribution;
-    private boolean registered;
     private LocalDate birthday;
     private String phoneNumber;
     private String activationKey;

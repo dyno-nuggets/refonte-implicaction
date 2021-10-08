@@ -102,5 +102,4 @@ public class UserService {
         }
         return RelationTypeEnum.NONE;
     }
-
 }

@@ -9,6 +9,7 @@ import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {RelationType} from '../../models/relation-type.enum';
 import {finalize} from 'rxjs/operators';
+import {Univers} from '../../../shared/enums/univers';
 
 enum UserListType {
   ALL_USERS = '/users/list',
@@ -26,11 +27,12 @@ export class UserListComponent implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
 
-  currentUserId: string;
+  currentUser: User;
   action: string;
   listType: UserListType;
   relationType = RelationType;
   isLoading = true;
+  univers = Univers;
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;
@@ -65,7 +67,7 @@ export class UserListComponent implements OnInit {
   private static isReceiver = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.RECEIVER;
 
   ngOnInit(): void {
-    this.currentUserId = this.authService.getUserId();
+    this.currentUser = this.authService.getCurrentUser();
     // chargement des données
     this.paginate({
       first: 0,
@@ -85,7 +87,7 @@ export class UserListComponent implements OnInit {
     if (this.listType === UserListType.ALL_USERS) {
       user$ = this.userService.getAll(this.pageable);
     } else if (this.listType === UserListType.FRIENDS) {
-      user$ = this.userService.getUserFriends(this.currentUserId, this.pageable);
+      user$ = this.userService.getUserFriends(this.currentUser?.id, this.pageable);
     } else if (this.listType === UserListType.FRIENDS_RECEIVED) {
       user$ = this.userService.getUserFriendRequestReceived(this.pageable);
     } else if (this.listType === UserListType.FRIENDS_SENT) {

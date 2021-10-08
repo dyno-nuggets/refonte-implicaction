@@ -22,7 +22,7 @@ const routes: Routes = [
     component: UserListComponent,
   },
   {
-    path: 'list',
+    path: '',
     component: UserListComponent
   },
 ];

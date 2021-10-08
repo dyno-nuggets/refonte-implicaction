@@ -6,8 +6,8 @@ import {catchError, map, tap} from 'rxjs/operators';
 import {SignupRequestPayload} from '../models/signup-request-payload';
 import {LoginRequestPayload} from '../models/login-request-payload';
 import {LoginResponse} from '../models/login-response';
-import {RoleEnumCode} from '../enums/role.enum';
 import {HttpClient} from '@angular/common/http';
+import {User} from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +17,7 @@ export class AuthService {
   @Output()
   loggedIn: EventEmitter<boolean> = new EventEmitter();
   @Output()
-  username: EventEmitter<string> = new EventEmitter();
-  @Output()
-  userId: EventEmitter<string> = new EventEmitter();
+  currentUser: EventEmitter<User> = new EventEmitter();
 
   constructor(
     private http: HttpClient,
@@ -46,15 +44,13 @@ export class AuthService {
       .pipe(
         map(loginResponse => {
           this.localStorage.store('authenticationToken', loginResponse.authenticationToken);
-          this.localStorage.store('username', loginResponse.username);
+          // le localStorage ne  peut pas enregistrer d'objet alors il faut le serialiser
+          this.localStorage.store('currentUser', JSON.stringify(loginResponse.currentUser));
           this.localStorage.store('refreshToken', loginResponse.refreshToken);
           this.localStorage.store('expiresAt', loginResponse.expiresAt);
-          this.localStorage.store('userId', loginResponse.userId);
-          this.localStorage.store('roles', loginResponse.roles);
 
           this.loggedIn.emit(true);
-          this.username.emit(loginResponse.username);
-          this.userId.emit(loginResponse.userId);
+          this.currentUser.emit(loginResponse.currentUser);
           return true;
         }),
         catchError(() => of(false))
@@ -64,7 +60,7 @@ export class AuthService {
   logout(): Observable<boolean> {
     const refreshTokenPayload = {
       refreshToken: this.getRefreshToken(),
-      username: this.getUserName()
+      username: this.getCurrentUser()
     };
 
     this.http
@@ -75,14 +71,12 @@ export class AuthService {
         (error) => throwError(error)
       );
     this.localStorage.clear('authenticationToken');
-    this.localStorage.clear('username');
+    this.localStorage.clear('currentUser');
     this.localStorage.clear('refreshToken');
     this.localStorage.clear('expiresAt');
-    this.localStorage.clear('roles');
 
     this.loggedIn.emit(false);
-    this.username.emit(null);
-    this.userId.emit(null);
+    this.currentUser.emit(null);
     return of(true);
   }
 
@@ -93,11 +87,11 @@ export class AuthService {
   refreshToken(): Observable<LoginResponse> {
     const refreshTokenPayload = {
       refreshToken: this.getRefreshToken(),
-      username: this.getUserName()
+      username: this.getCurrentUser()
     };
 
-    return (this.http
-      .post(this.apiEndpointsService.getJwtRefreshTokenEndpoint(), refreshTokenPayload) as Observable<LoginResponse>)
+    return this.http
+      .post<LoginResponse>(this.apiEndpointsService.getJwtRefreshTokenEndpoint(), refreshTokenPayload)
       .pipe(tap(response => {
         this.localStorage.store('authenticationToken', response.authenticationToken);
         this.localStorage.store('expiresAt', response.expiresAt);
@@ -108,21 +102,12 @@ export class AuthService {
     return this.localStorage.retrieve('refreshToken');
   }
 
-  getUserName(): string {
-    return this.localStorage.retrieve('username');
-  }
-
-  getUserId(): string {
-    // il faut appeler la méthode toString sinon getUserId renvoie un valeur de type number =-/
-    return this.localStorage.retrieve('userId').toString();
+  getCurrentUser(): User {
+    return JSON.parse(this.localStorage.retrieve('currentUser'));
   }
 
   isLoggedIn(): boolean {
     return this.getJwtToken() != null;
-  }
-
-  getRoles(): RoleEnumCode[] {
-    return this.localStorage.retrieve('roles');
   }
 
   activateUser(activationKey: string): Observable<void> {
