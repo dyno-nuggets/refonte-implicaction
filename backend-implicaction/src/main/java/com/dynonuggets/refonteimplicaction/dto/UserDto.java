@@ -20,12 +20,12 @@ public class UserDto {
     private String lastname;
     private String email;
     private String url;
-    private Integer status;
     private String hobbies;
     private List<TrainingDto> trainings;
     private List<WorkExperienceDto> experiences;
     private String purpose;
     private Instant registeredAt;
+    private Instant activatedAt;
     private String presentation;
     private String contribution;
     private LocalDate birthday;
