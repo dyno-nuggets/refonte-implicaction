@@ -1,0 +1,14 @@
+@import "src/assets/variables";
+
+.cdi {
+  background-color: $warning;
+}
+
+.cdd {
+  background-color: $info;
+}
+
+.span-contract {
+  border-radius: 20px;
+  padding: 4px 12px;
+}
