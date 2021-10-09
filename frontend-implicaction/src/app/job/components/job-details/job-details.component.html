@@ -16,7 +16,7 @@
         </div>
         <div>
           <h5 class="card-subtitle text-primary text-uppercase fs-6 fw-bold mb-2">Description de l’entreprise</h5>
-          <p class="card-text">{{job.company?.description}}</p>
+          <p [innerHtml]="job.company?.description" class="card-text"></p>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
   <div class="col-12 col-lg-8 card mb-3 py-5 px-5">
     <h2 class="card-title text-primary text-uppercase">{{job.title}}</h2>
     <div class="d-flex flex-column flex-md-row align-items-md-center mt-3 mb-3">
-      <span class="cdi span-contract me-4">{{job.contractType?.label}}</span>
+      <app-contract-type [type]="job.contractType?.label" class="me-4"></app-contract-type>
       <div class="me-4">
         <i-feather class="icon me-1" name="calendar"></i-feather>
         {{job.createdAt | date: 'd.M.yyyy'}}

@@ -30,7 +30,6 @@ public class JobPostingAdapter {
                 .location(model.getLocation())
                 .salary(model.getSalary())
                 .keywords(model.getKeywords())
-                .createdAt(model.getCreatedAt())
                 .contractType(contractTypeDto)
                 .status(statusDto)
                 .createdAt(model.getCreatedAt())

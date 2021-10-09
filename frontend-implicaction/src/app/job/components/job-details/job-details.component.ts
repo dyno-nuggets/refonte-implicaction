@@ -25,9 +25,7 @@ export class JobDetailsComponent implements OnInit {
         this.jobService
           .getById(jobId)
           .subscribe(
-            job => {
-              this.job = job;
-            },
+            job => this.job = job,
             () => this.toasterService.error('oops', 'Une erreur est survenue !')
           );
       }

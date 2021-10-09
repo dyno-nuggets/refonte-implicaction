@@ -11,9 +11,6 @@ import {Pageable} from '../../shared/models/pageable';
 @Injectable()
 export class ApiEndpointsService {
 
-  constructor() {
-  }
-
   // URL
   private static createUrl(action: string, isMockAPI = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
