@@ -8,6 +8,7 @@ import {LoadingComponent} from './components/loading/loading.component';
 import {AlertComponent} from './components/alert/alert.component';
 import {SidebarContentDirective} from './directives/sidebar-content.directive';
 import {BrPipe} from './pipes/br.pipe';
+import { ContractTypeComponent } from './components/contract-type/contract-type.component';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import {BrPipe} from './pipes/br.pipe';
     AlertComponent,
     SidebarContentDirective,
     BrPipe,
+    ContractTypeComponent,
   ],
   exports: [
     HeaderComponent,
@@ -24,6 +26,7 @@ import {BrPipe} from './pipes/br.pipe';
     AlertComponent,
     SidebarContentDirective,
     BrPipe,
+    ContractTypeComponent,
   ],
   imports: [
     CommonModule,

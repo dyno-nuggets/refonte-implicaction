@@ -11,9 +11,7 @@
       <span class="pe-2">{{job.location}}</span>
       <span class="d-none d-sm-inline pe-2">•</span>
     </span>
-    <span class="text-white fw-bold span-contract {{job.contractType?.label | lowercase}}">
-      {{job.contractType?.label}}
-    </span>
+    <app-contract-type [type]="job.contractType?.label"></app-contract-type>
   </div>
   <div class="job-body row col justify-content-between mt-3">
     <div class="job-infos col-12 col-lg-7 col-xl-9">
