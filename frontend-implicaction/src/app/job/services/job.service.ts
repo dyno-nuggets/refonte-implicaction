@@ -21,6 +21,6 @@ export class JobService {
   }
 
   getById(jobId: string): Observable<JobPosting> {
-    return (this.http.get<JobPosting>(this.apiEndpointsService.getJobByIdEndpoint(jobId)));
+    return this.http.get<JobPosting>(this.apiEndpointsService.getJobByIdEndpoint(jobId));
   }
 }
