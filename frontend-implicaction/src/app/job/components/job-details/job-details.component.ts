@@ -21,16 +21,17 @@ export class JobDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(paramMap => {
-      const jobId = paramMap.get('jobId');
-      this.jobService
-        .getById(jobId)
-        .subscribe(
-          job => {
-            this.job = job;
-          },
-          () => this.toasterService.error('oops', 'Une erreur est survenue !')
-        );
-    });
+        const jobId = paramMap.get('jobId');
+        this.jobService
+          .getById(jobId)
+          .subscribe(
+            job => {
+              this.job = job;
+            },
+            () => this.toasterService.error('oops', 'Une erreur est survenue !')
+          );
+      }
+    );
   }
 
 }

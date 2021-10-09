@@ -56,7 +56,7 @@ const icons = {
   RotateCcw,
   Trash2,
   Edit2,
-  Search
+  Search,
   MapPin,
   Compass,
   Globe
