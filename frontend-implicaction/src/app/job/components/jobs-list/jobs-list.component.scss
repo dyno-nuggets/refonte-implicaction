@@ -4,6 +4,27 @@
   }
 }
 
+.no-outline {
+  border: hidden !important;
+}
+
+.no-outline:focus {
+  border: none;
+  background-color: transparent;
+  resize: none;
+  outline: none;
+  box-shadow: none;
+}
+
+::ng-deep {
+  .p-dropdown, p-dropdown:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+}
+
+
 .spinner {
   height: 50vh;
 }

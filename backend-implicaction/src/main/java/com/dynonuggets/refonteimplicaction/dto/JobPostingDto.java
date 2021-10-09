@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @Getter
@@ -20,5 +22,6 @@ public class JobPostingDto {
     private String keywords;
     private ContractTypeDto contractType;
     private StatusDto status;
+    private Instant createdAt;
 
 }

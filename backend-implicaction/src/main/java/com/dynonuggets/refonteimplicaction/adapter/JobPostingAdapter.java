@@ -32,6 +32,7 @@ public class JobPostingAdapter {
                 .keywords(model.getKeywords())
                 .contractType(contractTypeDto)
                 .status(statusDto)
+                .createdAt(model.getCreatedAt())
                 .build();
     }
 }

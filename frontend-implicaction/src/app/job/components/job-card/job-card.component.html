@@ -1,9 +1,11 @@
 <div class="job-container border-bottom job-card-container p-2">
   <div class="job-header d-flex flex-wrap align-items-center mb-2">
     <img
+      #companyLogo
+      (error)="companyLogo.src = 'assets/img/job-posting-img.png'"
+      [src]="job.company?.logo || 'assets/img/job-posting-img.png'"
       alt="company-logo"
-      class="d-none d-sm-inline-block me-1"
-      src="assets/img/job-posting-img.png"
+      class="d-none d-sm-inline-block me-1 company-logo"
     >
     <span class="fw-bold grey overflow-ellipsis pe-2 text-uppercase">{{job.company?.name}}</span>
     <span>
@@ -21,7 +23,7 @@
       <p [innerHTML]="job.description | slice:0:255" class="text-justify"></p>
       <p><a routerLink="/{{univers.JOBS.url}}/{{job.id}}">Voir plus</a></p>
     </div>
-    <div class="job-options mb-2 col-auto flex-fill">
+    <div class="job-options align-self-center mb-4 col-auto flex-fill">
       <button class="btn btn-primary fw-bold w-100">
         <i-feather class="icon me-2" name="plus"></i-feather>
         Ajouter au jobBoard

@@ -5,7 +5,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
-import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {UserContextService} from '../../../shared/services/user-context.service';
 import {Subscription} from 'rxjs';
 
 @Component({
@@ -26,7 +26,7 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
-    private userContexteService: UserContexteService,
+    private userContexteService: UserContextService,
   ) {
   }
 

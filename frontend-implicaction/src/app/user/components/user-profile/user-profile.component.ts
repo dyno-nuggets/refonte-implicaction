@@ -3,7 +3,7 @@ import {UserService} from '../../services/user.service';
 import {User} from '../../../shared/models/user';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
-import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {UserContextService} from '../../../shared/services/user-context.service';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../../shared/services/auth.service';
 
@@ -24,7 +24,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private toasterService: ToasterService,
     private route: ActivatedRoute,
-    private userContexteService: UserContexteService
+    private userContexteService: UserContextService
   ) {
   }
 

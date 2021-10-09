@@ -3,7 +3,7 @@ import {WorkExperience} from '../../../shared/models/work-experience';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
 import {ExperienceService} from '../../services/experience.service';
-import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {UserContextService} from '../../../shared/services/user-context.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 
 @Component({
@@ -25,7 +25,7 @@ export class ExperienceDetailComponent {
     private sidebarService: SidebarService,
     private toasterService: ToasterService,
     private experienceService: ExperienceService,
-    private userContexteService: UserContexteService
+    private userContextService: UserContextService
   ) {
   }
 
@@ -41,7 +41,7 @@ export class ExperienceDetailComponent {
           // on ne fait rien car la liste est mise à jour dans le complete
         },
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la suppression de la formation'),
-        () => this.userContexteService.removeExperience(experience)
+        () => this.userContextService.removeExperience(experience)
       );
   }
 

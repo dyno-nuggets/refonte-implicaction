@@ -55,7 +55,7 @@ export class ApiEndpointsService {
       uri,
       (qs: QueryStringParameters) => {
         qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
+        qs.push('size', pageable.rows);
       });
   }
 
@@ -175,7 +175,26 @@ export class ApiEndpointsService {
   /**
    * Jobs
    */
-  getAllJobEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.BASE_URI, pageable);
+
+  getAllJobEndpoint(pageable: Pageable, searchKey: string): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.JOBS.BASE_URI,
+      (qs: QueryStringParameters) => {
+        this.pushPageableParameters(pageable, qs);
+        qs.push('searchKey', searchKey);
+      });
+  }
+
+  /**
+   * Ajoute les attributs filtrés d'un pageable à un QueryStringParameters et retourne le QueryStringParameters modifié
+   */
+  private pushPageableParameters(pageable: Pageable, qs: QueryStringParameters): QueryStringParameters {
+    // on ne veut récupérer que les informations de filtrage du pageable
+    ['page', 'size', 'sortBy', 'sortOrder'].forEach(param => {
+      if (pageable[param] !== undefined) {
+        qs.push(param, pageable[param]);
+      }
+    });
+    return qs;
   }
 }

@@ -5,7 +5,7 @@ import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {Subscription} from 'rxjs';
 import {SidebarService} from '../../../shared/services/sidebar.service';
-import {UserContexteService} from '../../../shared/services/user-contexte.service';
+import {UserContextService} from '../../../shared/services/user-context.service';
 import {TrainingFormComponent} from '../training-form/training-form.component';
 
 @Component({
@@ -26,14 +26,14 @@ export class TrainingListComponent implements OnInit {
     private authService: AuthService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
-    private userContexteService: UserContexteService,
+    private userContextService: UserContextService,
   ) {
   }
 
   trackByTrainingId = (index: number, training: Training) => training.id;
 
   ngOnInit(): void {
-    this.subscription = this.userContexteService
+    this.subscription = this.userContextService
       .observeUser()
       .subscribe(user => this.trainings = user.trainings);
   }
@@ -45,9 +45,5 @@ export class TrainingListComponent implements OnInit {
         component: TrainingFormComponent,
         width: 650
       });
-  }
-
-  deleteTraining(training: Training): void {
-    return null;
   }
 }

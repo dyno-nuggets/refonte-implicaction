@@ -5,7 +5,7 @@ export class Constants {
   public static readonly API_MOCK_ENDPOINT: string = 'mock-domain/api';
   public static readonly PAGEABLE_DEFAULT: Pageable = {
     page: 0,
-    size: 10,
+    rows: 10,
     totalElements: 0,
     first: 0,
     content: [],
@@ -14,5 +14,6 @@ export class Constants {
     empty: true,
     last: true
   };
-  public static readonly DATE_REGEX = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/;
+  public static readonly DATE_REGEX = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+  public static readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
 }

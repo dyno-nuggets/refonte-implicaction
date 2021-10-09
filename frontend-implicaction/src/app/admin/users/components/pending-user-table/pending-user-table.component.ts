@@ -35,7 +35,7 @@ export class PendingUserTableComponent implements OnInit {
     const page = event.first / event.rows;
 
     this.userService
-      .getAllPendingActivationUsers({page, size: event.rows})
+      .getAllPendingActivationUsers({page, rows: event.rows})
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -43,7 +43,7 @@ export class PendingUserTableComponent implements OnInit {
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.size = data.size;
+          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },
@@ -61,8 +61,8 @@ export class PendingUserTableComponent implements OnInit {
       .activateUser(user.activationKey)
       .subscribe(
         () => {
-          const first = this.pageable.page * this.pageable.size;
-          const rows = this.pageable.size;
+          const first = this.pageable.page * this.pageable.rows;
+          const rows = this.pageable.rows;
           this.loadUsers({first, rows});
         },
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'utilisateur.`),
