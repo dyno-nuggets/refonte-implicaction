@@ -5,12 +5,9 @@
   <div class="col-12 col-lg-9 p-0 row bg-white">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
       <div class="card p-0">
-        <div class="card-header bg-white row py-2 m-0">
+        <div class="card-header bg-white row ps-0 py-2 m-0">
           <div class="input-group col-9">
-          <span
-            class="input-group-text border-0 bg-white"
-            id="basic-addon1"
-          >
+          <span class="input-group-text border-0 bg-white">
             <i-feather name="search"></i-feather>
           </span>
             <input
@@ -34,8 +31,13 @@
           </div>
         </div>
         <div class="card-body p-4">
-          <p *ngIf="!jobs.length" class="fst-italic mt-3">Il n'y a aucune offre d'emploi pour le moment.</p>
-          <div *ngFor="let job of jobs; last as isLast;" [ngClass]="{'last-element': isLast}">
+          <p
+            *ngIf="!pageable.content?.length"
+            class="fst-italic mt-3"
+          >
+            Il n'y a aucune offre d'emploi pour le moment.
+          </p>
+          <div *ngFor="let job of pageable.content; last as isLast;" [ngClass]="{'last-element': isLast}">
             <app-job-card [job]="job"></app-job-card>
           </div>
         </div>

@@ -11,6 +11,8 @@ import com.dynonuggets.refonteimplicaction.model.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.Instant;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobPostingAdapterTest {
@@ -49,6 +51,7 @@ class JobPostingAdapterTest {
                 .keywords("keywords")
                 .contractType(contractType)
                 .status(status)
+                .createdAt(Instant.now())
                 .build();
     }
 
@@ -65,5 +68,6 @@ class JobPostingAdapterTest {
         assertThat(jobPostingDto.getKeywords()).isEqualTo(jobPosting.getKeywords());
         assertThat(jobPostingDto.getStatus()).isEqualTo(statusDto);
         assertThat(jobPostingDto.getContractType()).isEqualTo(contractTypeDto);
+        assertThat(jobPostingDto.getCreatedAt()).isEqualTo(jobPosting.getCreatedAt());
     }
 }

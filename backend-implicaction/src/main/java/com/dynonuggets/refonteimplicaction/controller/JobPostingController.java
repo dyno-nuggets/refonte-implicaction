@@ -25,7 +25,7 @@ public class JobPostingController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<JobPostingDto>> getAll(
+    public ResponseEntity<Page<JobPostingDto>> getAllBySearchKey(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
@@ -33,7 +33,7 @@ public class JobPostingController {
             @RequestParam(value = "searchKey", defaultValue = "") String searchKey
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAll(pageable, searchKey);
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllBySearchKey(pageable, searchKey);
         return ResponseEntity.ok(jobPostingDtos);
     }
 }

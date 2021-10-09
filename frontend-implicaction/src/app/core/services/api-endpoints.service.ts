@@ -175,17 +175,26 @@ export class ApiEndpointsService {
   /**
    * Jobs
    */
+
   getAllJobEndpoint(pageable: Pageable, searchKey: string): string {
-    const params = ['page', 'size', 'sortBy', 'sortOrder'];
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,
       (qs: QueryStringParameters) => {
-        params.forEach(param => {
-          if (pageable[param] !== undefined) {
-            qs.push(param, pageable[param]);
-          }
-        });
+        this.pushPageableParameters(pageable, qs);
         qs.push('searchKey', searchKey);
       });
+  }
+
+  /**
+   * Ajoute les attributs filtrés d'un pageable à un QueryStringParameters et retourne le QueryStringParameters modifié
+   */
+  private pushPageableParameters(pageable: Pageable, qs: QueryStringParameters): QueryStringParameters {
+    // on ne veut récupérer que les informations de filtrage du pageable
+    ['page', 'size', 'sortBy', 'sortOrder'].forEach(param => {
+      if (pageable[param] !== undefined) {
+        qs.push(param, pageable[param]);
+      }
+    });
+    return qs;
   }
 }

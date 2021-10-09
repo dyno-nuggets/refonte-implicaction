@@ -46,7 +46,7 @@ public class JobPostingService {
         return jobPostingAdapter.toDto(jobSaved);
     }
 
-    public Page<JobPostingDto> getAll(Pageable pageable, String searchKey) {
+    public Page<JobPostingDto> getAllBySearchKey(Pageable pageable, String searchKey) {
         return jobPostingRepository.findAllBySearchKey(pageable, searchKey)
                 .map(jobPostingAdapter::toDto);
     }

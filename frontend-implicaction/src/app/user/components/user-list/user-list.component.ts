@@ -25,7 +25,7 @@ enum UserListType {
 })
 export class UserListComponent implements OnInit {
 
-  readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
+  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
   currentUser: User;
   action: string;
@@ -76,7 +76,7 @@ export class UserListComponent implements OnInit {
     });
   }
 
-  paginate({first, rows, page}): void {
+  paginate({first, rows, page} = this.pageable): void {
     this.isLoading = true;
     this.pageable.page = page;
     this.pageable.first = first;
@@ -124,11 +124,7 @@ export class UserListComponent implements OnInit {
           if (this.listType === UserListType.ALL_USERS) {
             sender.relationTypeOfCurrentUser = RelationType.FRIEND;
           } else {
-            this.paginate({
-              first: this.pageable.first,
-              rows: this.pageable.rows,
-              page: this.pageable.page
-            });
+            this.paginate();
           }
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
@@ -155,11 +151,7 @@ export class UserListComponent implements OnInit {
           user.relationTypeOfCurrentUser = RelationType.NONE;
           // il faut relancer la pagination dans le cas de l'affichage des amis / demandes
           if (this.listType !== UserListType.ALL_USERS) {
-            this.paginate({
-              first: this.pageable.first,
-              rows: this.pageable.rows,
-              page: this.pageable.page
-            });
+            this.paginate();
           }
         },
         () => this.toastService.error('Erreur', 'Une erreur est survenue'),

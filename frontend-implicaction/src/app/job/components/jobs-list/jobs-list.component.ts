@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Constants} from '../../../config/constants';
-import {JobPosting} from '../../../shared/models/job-posting';
 import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
-import {JobFilter} from '../../models/job-filter';
 import {JobSortEnum} from '../../enums/job-sort.enum';
 
 @Component({
@@ -14,17 +12,15 @@ import {JobSortEnum} from '../../enums/job-sort.enum';
 })
 export class JobsListComponent implements OnInit {
 
-  readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
+  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
-  jobs: JobPosting[] = [];
   isLoading = true;
-  jobFilter: JobFilter = {};
-  orderByEnums = [JobSortEnum.DATE_DESC, JobSortEnum.DATE_ASC];
+
+  // Pagination et tri
+  pageable = Constants.PAGEABLE_DEFAULT;
+  orderByEnums = JobSortEnum.all();
   selectedOrder = JobSortEnum.DATE_DESC;
   searchKey = '';
-
-  // Pagination
-  pageable = Constants.PAGEABLE_DEFAULT;
 
   constructor(
     private toastService: ToasterService,
@@ -57,7 +53,7 @@ export class JobsListComponent implements OnInit {
           this.pageable.totalPages = data.totalPages;
           this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
-          this.jobs = data.content;
+          this.pageable.content = data.content;
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );

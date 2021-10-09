@@ -13,8 +13,8 @@ export class JobSortEnum extends EnumCodeLabelAbstract<JobSortEnumCode> {
   /**
    * Représente
    * @param code code associé à la constante de tri
-   * @param label label à afficher
-   * @param sortBy nom de la colonne en base de données
+   * @param label label à afficher (ex: 'Nom de la compagnie par ordre alphabétique')
+   * @param sortBy correspond au nom de l'attribut du modèle dans le back (ex: company.name permet de trier par nom de compagnie)
    * @param sortOrder ASC pour tri ascendant, DESC pour descendant
    */
   constructor(readonly code: JobSortEnumCode, readonly label: string, readonly sortBy: string, readonly sortOrder: string) {
