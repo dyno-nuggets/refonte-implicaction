@@ -1,9 +1,11 @@
+@import "src/assets/variables";
+
 .cdi {
-  background-color: #E57231;
+  background-color: $cdi-bg-color;
 }
 
 .cdd {
-  background-color: #A131E5;
+  background-color: $cdd-bg-color;
 }
 
 .span-contract {
