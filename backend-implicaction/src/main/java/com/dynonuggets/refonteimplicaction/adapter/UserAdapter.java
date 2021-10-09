@@ -37,53 +37,22 @@ public class UserAdapter {
                 .map(trainingAdapter::toDtoWithoutUser)
                 .collect(toList()) : emptyList();
 
-        final List<String> roles = rolesToDtos(model);
+        UserDto userDto = toDto(model);
+        userDto.setTrainings(trainings);
+        userDto.setExperiences(experiences);
 
-        return UserDto.builder()
-                .id(model.getId())
-                .username(model.getUsername())
-                .firstname(model.getFirstname())
-                .lastname(model.getLastname())
-                .email(model.getEmail())
-                .url(model.getUrl())
-                .registeredAt(model.getRegisteredAt())
-                .active(model.isActive())
-                .activationKey(model.getActivationKey())
-                .phoneNumber(model.getPhoneNumber())
-                .birthday(model.getBirthday())
-                .hobbies(model.getHobbies())
-                .purpose(model.getPurpose())
-                .presentation(model.getPresentation())
-                .expectation(model.getExpectation())
-                .contribution(model.getContribution())
-                .roles(roles)
-                .experiences(experiences)
-                .trainings(trainings)
-                .build();
+        return userDto;
     }
 
     public UserDto toDto(final Recruiter recruiter) {
         final User model = recruiter.getUser();
 
-        final List<String> roles = rolesToDtos(model);
-
         final CompanyDto companyDto = companyAdapter.toDto(recruiter.getCompany());
 
-        return UserDto.builder()
-                .id(model.getId())
-                .username(model.getUsername())
-                .firstname(model.getFirstname())
-                .lastname(model.getLastname())
-                .email(model.getEmail())
-                .url(model.getUrl())
-                .registeredAt(model.getRegisteredAt())
-                .active(model.isActive())
-                .activationKey(model.getActivationKey())
-                .phoneNumber(model.getPhoneNumber())
-                .birthday(model.getBirthday())
-                .roles(roles)
-                .company(companyDto)
-                .build();
+        UserDto userDto = toDto(model);
+        userDto.setCompany(companyDto);
+
+        return userDto;
     }
 
     public UserDto toDto(final User model) {
@@ -99,6 +68,7 @@ public class UserAdapter {
                 .birthday(model.getBirthday())
                 .url(model.getUrl())
                 .registeredAt(model.getRegisteredAt())
+                .activatedAt(model.getActivatedAt())
                 .hobbies(model.getHobbies())
                 .presentation(model.getPresentation())
                 .expectation(model.getExpectation())
@@ -126,6 +96,14 @@ public class UserAdapter {
                 .username(dto.getUsername())
                 .firstname(dto.getFirstname())
                 .lastname(dto.getLastname())
+                .activatedAt(dto.getActivatedAt())
+                .activationKey(dto.getActivationKey())
+                .active(dto.isActive())
+                .contribution(dto.getContribution())
+                .expectation(dto.getExpectation())
+                .hobbies(dto.getHobbies())
+                .presentation(dto.getPresentation())
+                .purpose(dto.getPurpose())
                 .email(dto.getEmail())
                 .url(dto.getUrl())
                 .registeredAt(dto.getRegisteredAt())

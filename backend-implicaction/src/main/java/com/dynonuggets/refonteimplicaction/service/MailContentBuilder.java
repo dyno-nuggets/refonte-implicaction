@@ -10,7 +10,7 @@ import org.thymeleaf.context.Context;
 class MailContentBuilder {
 
     private static final String MAIL_TEMPLATE_FILE = "mail-template";
-    private final static String MESSAGE_VAR_NAME = "message";
+    private static final String MESSAGE_VAR_NAME = "message";
 
     private final TemplateEngine templateEngine;
 

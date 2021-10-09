@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.security;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class JwtProvider {
 
     private static final String AUTHORITIES_KEY = "scopes";
@@ -48,7 +50,7 @@ public class JwtProvider {
             InputStream ressourceAsStream = getClass().getResourceAsStream(keyStoreFile);
             keyStore.load(ressourceAsStream, keyStorePassword.toCharArray());
         } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
