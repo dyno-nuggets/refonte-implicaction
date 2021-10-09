@@ -8,5 +8,5 @@ import { Component, Input } from '@angular/core';
 export class ContractTypeComponent{
 
   @Input()
-  type:string;
+  type: string;
 }
