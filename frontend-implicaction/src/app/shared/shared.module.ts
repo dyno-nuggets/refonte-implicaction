@@ -20,6 +20,7 @@ import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse
     SidebarContentDirective,
     BrPipe,
     ContractTypeComponent,
+    ContractTypeComponent,
     DateTimelapseComponent,
   ],
   exports: [
@@ -28,6 +29,7 @@ import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse
     AlertComponent,
     SidebarContentDirective,
     BrPipe,
+    ContractTypeComponent,
     ContractTypeComponent,
     DateTimelapseComponent,
   ],
