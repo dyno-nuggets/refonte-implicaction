@@ -49,8 +49,8 @@ export class UserService {
     return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(userId));
   }
 
-  updatePersonalInfo(userId: string, personalInfos: User): Observable<User> {
-    return this.http.put<User>(this.apiEndpointsService.updatePersonalInfoByUserIdEndpoint(userId), personalInfos);
+  updatePersonalInfo(user: User): Observable<User> {
+    return this.http.put<User>(this.apiEndpointsService.updatePersonalInfoByUserIdEndpoint(), user);
   }
 
   getAllPendingActivationUsers(pageable: Pageable): Observable<any> {

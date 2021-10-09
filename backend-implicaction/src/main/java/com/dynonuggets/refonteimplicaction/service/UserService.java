@@ -62,22 +62,22 @@ public class UserService {
         return userAdapter.toDto(jobSeeker);
     }
 
-    public UserDto updateByUserId(UserDto userDto, Long id) {
-        User databaseUser = userRepository.findById(id)
+    public UserDto updateByUserId(UserDto userDto) {
+        User user = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour" +
-                        " les informations personelles; L'user avec l'id " + id + " n'existe pas."));
+                        " les informations personelles; L'user avec l'id " + userDto.getId() + " n'existe pas."));
         // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
         // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
-        databaseUser.setEmail(userDto.getEmail());
-        databaseUser.setPhoneNumber(userDto.getPhoneNumber());
-        databaseUser.setBirthday(userDto.getBirthday());
-        databaseUser.setHobbies(userDto.getHobbies());
-        databaseUser.setPresentation(userDto.getPresentation());
-        databaseUser.setPurpose(userDto.getPurpose());
-        databaseUser.setContribution(userDto.getContribution());
-        databaseUser.setExpectation(userDto.getExpectation());
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setBirthday(userDto.getBirthday());
+        user.setHobbies(userDto.getHobbies());
+        user.setPresentation(userDto.getPresentation());
+        user.setPurpose(userDto.getPurpose());
+        user.setContribution(userDto.getContribution());
+        user.setExpectation(userDto.getExpectation());
 
-        User userUpdate = userRepository.save(databaseUser);
+        User userUpdate = userRepository.save(user);
         return userAdapter.toDto(userUpdate);
     }
 

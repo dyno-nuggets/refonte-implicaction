@@ -11,9 +11,6 @@ import {Pageable} from '../../shared/models/pageable';
 @Injectable()
 export class ApiEndpointsService {
 
-  constructor() {
-  }
-
   // URL
   private static createUrl(action: string, isMockAPI = false): string {
     const urlBuilder: UrlBuilder = new UrlBuilder(
@@ -155,8 +152,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.TRAINING.BASE_URI, [trainingId]);
   }
 
-  updatePersonalInfoByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BASE_URI, [userId]);
+  updatePersonalInfoByUserIdEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.USERS.BASE_URI);
   }
 
   /**
