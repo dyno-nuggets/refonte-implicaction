@@ -1,4 +1,15 @@
 import {Component, OnInit} from '@angular/core';
+import {Univers} from '../../../../shared/enums/univers';
+import {RoleEnumCode} from '../../../../shared/enums/role.enum';
+import {AuthService} from '../../../../shared/services/auth.service';
+
+interface RoleBaseMenuItem {
+  label: string;
+  link: string;
+  classIcon?: string;
+  badge?: string;
+  roles: RoleEnumCode[];
+}
 
 @Component({
   selector: 'app-admin-menu',
@@ -7,16 +18,24 @@ import {Component, OnInit} from '@angular/core';
 })
 export class AdminMenuComponent implements OnInit {
 
-  menuItems: { label: string, link: string, classIcon?: string, badge?: string }[] = [
-    {label: 'Pages', link: '/admin/pages', classIcon: 'pi pi-file', badge: '12'},
-    {label: 'Posts', link: '/admin/posts', classIcon: 'pi pi-book', badge: '33'},
-    {label: 'Utilisateurs', link: '/admin/users', classIcon: 'pi pi-user', badge: '203'},
+  allowedMenuItems: RoleBaseMenuItem[] = [];
+
+  private menuItems: RoleBaseMenuItem[] = [
+    {label: 'Dashboard', link: `/${Univers.ADMIN.url}/dashboard`, classIcon: 'pi pi-file', roles: [RoleEnumCode.ADMIN]},
+    {label: 'Utilisateurs', link: `/${Univers.ADMIN.url}/users`, classIcon: 'pi pi-user', roles: [RoleEnumCode.ADMIN]},
   ];
 
-  constructor() {
+  constructor(private authService: AuthService) {
   }
 
   ngOnInit(): void {
+    const currentUserRoles = this.authService.getCurrentUser()?.roles;
+    this.allowedMenuItems = this.getAllowedMenuItems(currentUserRoles);
+  }
+
+  private getAllowedMenuItems(roles: RoleEnumCode[] = []): RoleBaseMenuItem[] {
+    return this.menuItems
+      .filter(item => !item.roles || item.roles.filter(roleAllowed => roles.includes(roleAllowed)).length > 0);
   }
 
 }
