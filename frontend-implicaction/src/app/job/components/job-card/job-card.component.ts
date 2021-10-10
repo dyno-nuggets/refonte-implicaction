@@ -13,6 +13,8 @@ export class JobCardComponent implements OnInit {
   job: JobPosting;
   univers = Univers;
 
+  date = new Date(2021, 9, 10, 3, 31);
+
   constructor() {
   }
 

@@ -29,6 +29,7 @@ import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse
     SidebarContentDirective,
     BrPipe,
     ContractTypeComponent,
+    DateTimelapseComponent,
   ],
   imports: [
     CommonModule,
