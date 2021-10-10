@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
-import {Pageable} from '../../shared/models/pageable';
 import {Observable} from 'rxjs';
 import {JobPosting} from '../../shared/models/job-posting';
+import {CriteriaFilter} from '../../shared/models/criteria-filter';
+import {Pageable} from '../../shared/models/pageable';
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +17,8 @@ export class JobService {
   ) {
   }
 
-  getAll(pageable: Pageable, searchKey: string): Observable<any> {
-    return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable, searchKey));
+  getAllByCriteria(pageable: Pageable, criteria: CriteriaFilter): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable, criteria));
   }
 
   getById(jobId: string): Observable<JobPosting> {

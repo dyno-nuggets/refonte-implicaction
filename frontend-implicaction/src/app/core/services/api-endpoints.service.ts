@@ -4,6 +4,7 @@ import {QueryStringParameters} from '../../shared/classes/query-string-parameter
 import {Constants} from '../../config/constants';
 import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
+import {CriteriaFilter} from '../../shared/models/criteria-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -180,12 +181,12 @@ export class ApiEndpointsService {
    * Jobs
    */
 
-  getAllJobEndpoint(pageable: Pageable, searchKey: string): string {
+  getAllJobEndpoint(pageable: Pageable, criteria: CriteriaFilter): string {
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,
       (qs: QueryStringParameters) => {
-        this.pushPageableParameters(pageable, qs);
-        qs.push('searchKey', searchKey);
+        this.buildQueryStringFromPageable(pageable, qs);
+        this.buildQueryStringFromCriteria(criteria, qs);
       });
   }
 
@@ -196,8 +197,17 @@ export class ApiEndpointsService {
   /**
    * Ajoute les attributs filtrés d'un pageable à un QueryStringParameters et retourne le QueryStringParameters modifié
    */
-  private pushPageableParameters(pageable: Pageable, qs: QueryStringParameters): QueryStringParameters {
+  private buildQueryStringFromCriteria(criteria: CriteriaFilter, qs: QueryStringParameters): QueryStringParameters {
     // on ne veut récupérer que les informations de filtrage du pageable
+    Object.keys(criteria).forEach(param => {
+      if (criteria[param]) {
+        qs.push(param, criteria[param]);
+      }
+    });
+    return qs;
+  }
+
+  private buildQueryStringFromPageable(pageable: Pageable, qs: QueryStringParameters): QueryStringParameters {
     ['page', 'size', 'sortBy', 'sortOrder'].forEach(param => {
       if (pageable[param] !== undefined) {
         qs.push(param, pageable[param]);

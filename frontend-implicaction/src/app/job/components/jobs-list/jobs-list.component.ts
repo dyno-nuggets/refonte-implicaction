@@ -4,6 +4,8 @@ import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
 import {JobSortEnum} from '../../enums/job-sort.enum';
+import {FilterContextService} from '../../../shared/services/filter-context.service';
+import {CriteriaFilter} from '../../../shared/models/criteria-filter';
 
 @Component({
   selector: 'app-jobs-list',
@@ -19,34 +21,36 @@ export class JobsListComponent implements OnInit {
   // Pagination et tri
   pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
-  selectedOrder = JobSortEnum.DATE_DESC;
-  searchKey = '';
+  criteria: CriteriaFilter = {};
+  selectedOrderCode: string;
 
   constructor(
     private toastService: ToasterService,
     private jobsService: JobService,
+    private filterContextService: FilterContextService
   ) {
-
   }
 
   ngOnInit(): void {
-    this.pageable.sortOrder = this.selectedOrder.sortOrder;
-    this.pageable.sortBy = this.selectedOrder.sortBy;
+    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
+    this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
 
-    this.paginate({
-      first: 0,
-      rows: this.ROWS_PER_PAGE_OPTIONS[0],
-      page: this.pageable.page
-    });
+    this.filterContextService
+      .observeFilter()
+      .subscribe(criteria => {
+        this.criteria = criteria;
+        this.paginate();
+      });
+
+    this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
+    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
+    this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
   }
 
-  paginate({first, rows, page} = this.pageable): void {
+  paginate(): void {
     this.isLoading = true;
-    this.pageable.page = page;
-    this.pageable.rows = rows;
-    this.pageable.first = first;
     this.jobsService
-      .getAll(this.pageable, this.searchKey)
+      .getAllByCriteria(this.pageable, this.criteria)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
@@ -59,10 +63,14 @@ export class JobsListComponent implements OnInit {
       );
   }
 
-  onFilterChange({value}): void {
-    const filterEnum = JobSortEnum.from(value);
-    this.pageable.sortBy = filterEnum.sortBy;
-    this.pageable.sortOrder = filterEnum.sortOrder;
+  onSortChange({value}): void {
+    const selectedOrderField = JobSortEnum.from(value);
+    this.pageable.sortBy = selectedOrderField.sortBy;
+    this.pageable.sortOrder = selectedOrderField.sortOrder;
     this.paginate();
+  }
+
+  onSearchChange(): void {
+    this.filterContextService.setFilter(this.criteria);
   }
 }

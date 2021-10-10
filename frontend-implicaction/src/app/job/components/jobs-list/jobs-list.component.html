@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12 col-lg-3 p-0">
-    <h6 class="text-dark fw-bold">Filtres</h6>
+    <app-job-filter></app-job-filter>
   </div>
   <div class="col-12 col-lg-9 p-0 row bg-white">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
@@ -11,8 +11,8 @@
             <i-feather name="search"></i-feather>
           </span>
             <input
-              (keydown.enter)="paginate()"
-              [(ngModel)]="searchKey"
+              (keydown.enter)="onSearchChange()"
+              [(ngModel)]="criteria.search"
               aria-describedby="search-input"
               aria-label="keyword"
               class="form-control no-outline"
@@ -20,8 +20,8 @@
               type="text"
             >
             <p-dropdown
-              (onChange)="onFilterChange($event)"
-              [(ngModel)]="selectedOrder"
+              (onChange)="onSortChange($event)"
+              [(ngModel)]="selectedOrderCode"
               [options]="orderByEnums"
               name="selectedOrder"
               optionLabel="label"
@@ -43,7 +43,7 @@
         </div>
       </div>
       <p-paginator
-        (onPageChange)="paginate($event)"
+        (onPageChange)="paginate()"
         *ngIf="pageable.totalPages > 0"
         [first]="pageable.first"
         [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
