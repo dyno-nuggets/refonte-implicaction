@@ -67,6 +67,7 @@ export class AuthService {
       .post(this.apiEndpointsService.getLogoutEndpoint(), refreshTokenPayload, {responseType: 'text'})
       .subscribe(
         () => {
+          // il n'y a rien à faire à la réception de la réponse car les opération de logout sont faites en dehors de l'observable
         },
         (error) => throwError(error)
       );
@@ -87,7 +88,7 @@ export class AuthService {
   refreshToken(): Observable<LoginResponse> {
     const refreshTokenPayload = {
       refreshToken: this.getRefreshToken(),
-      username: this.getCurrentUser()
+      username: this.getCurrentUser().username
     };
 
     return this.http
