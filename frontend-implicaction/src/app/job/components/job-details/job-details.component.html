@@ -1,9 +1,10 @@
 <div class="row justify-content-around">
   <div class="col-12 col-lg-3 card align-items-center py-5 px-2 height-fit-content">
-    <img
-      alt="job-logo"
-      class="card-img-top rounded-circle img-fluid shadow-sm user-avatar"
-      src="assets/img/job-icon.png"
+    <img #companyLogo
+         (error)="companyLogo.src = 'assets/img/job-posting-img.png'"
+         [src]="job.company?.logo || 'assets/img/job-posting-img.png'"
+         alt="job-logo"
+         class="card-img-top rounded-circle img-fluid shadow-sm user-avatar"
     />
     <div class="card-body">
       <h2 class="card-title text-primary text-uppercase text-center mb-4">{{job.company?.name}}</h2>
@@ -36,6 +37,12 @@
     </div>
     <div class="card-body mt-3 p-0">
       <p [innerHTML]="job.description" class="card-text"></p>
+    </div>
+    <div class="job-options align-self-end mb-4 col-auto flex-fill">
+      <button class="btn btn-primary fw-bold w-100">
+        <i-feather class="icon me-2" name="plus"></i-feather>
+        Ajouter au jobBoard
+      </button>
     </div>
   </div>
 </div>
