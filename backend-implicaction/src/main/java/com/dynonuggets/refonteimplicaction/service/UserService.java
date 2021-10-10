@@ -4,8 +4,10 @@ import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
+import com.dynonuggets.refonteimplicaction.model.JobSeeker;
 import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -26,6 +28,7 @@ public class UserService {
     private final RelationRepository relationRepository;
     private final AuthService authService;
     private final UserAdapter userAdapter;
+    private final JobSeekerRepository jobSeekerRepository;
 
     /**
      * @param isCurrentUserRelation recherche les relations avec l'utilisateur courant
@@ -54,7 +57,7 @@ public class UserService {
     }
 
     public UserDto getUserById(Long userId) {
-        User jobSeeker = userRepository.findById(userId)
+        JobSeeker jobSeeker = jobSeekerRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
         return userAdapter.toDto(jobSeeker);
     }
