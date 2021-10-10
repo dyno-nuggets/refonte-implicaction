@@ -1,10 +1,15 @@
-<nav class="py-2 bg-light border-bottom">
-  <div class="container d-flex">
-    <ul class="nav me-auto">
+<nav class="py-2 bg-light border-bottom ">
+  <div class=" d-flex justify-content-between mx-5">
+    <div>
+      <a class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" href="/">
+        <img alt="implic'action" class="img-fluid" src="assets/img/logo(2).png">
+      </a>
+    </div>
+    <ul class="d-flex justify-content-between nav align-items-center ">
       <li *ngFor="let univers of allowedUnivers">
         <a
           [routerLink]="[univers.url]"
-          class="nav-link px-2"
+          class="nav-link px-4"
           routerLinkActive="active"
         >
           {{univers.title}}
@@ -80,13 +85,3 @@
     </ng-template>
   </div>
 </nav>
-<header class="py-3 mb-4 border-bottom">
-  <div class="container d-flex flex-wrap justify-content-center">
-    <a class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" href="/">
-      <img alt="implic'action" class="img-fluid" src="assets/img/logo.png">
-    </a>
-    <form class="col-12 col-lg-auto mb-3 mb-lg-0">
-      <input aria-label="Search" class="form-control" placeholder="Search..." type="search">
-    </form>
-  </div>
-</header>
