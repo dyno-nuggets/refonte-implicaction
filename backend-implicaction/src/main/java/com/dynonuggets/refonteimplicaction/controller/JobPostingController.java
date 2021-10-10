@@ -36,4 +36,10 @@ public class JobPostingController {
         Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllBySearchKey(pageable, searchKey);
         return ResponseEntity.ok(jobPostingDtos);
     }
+
+    @GetMapping(path = "/{jobId}")
+    public ResponseEntity<JobPostingDto> getJobById(@PathVariable("jobId") Long jobId) {
+        JobPostingDto jobPostingDto = jobPostingService.getJobById(jobId);
+        return ResponseEntity.ok(jobPostingDto);
+    }
 }

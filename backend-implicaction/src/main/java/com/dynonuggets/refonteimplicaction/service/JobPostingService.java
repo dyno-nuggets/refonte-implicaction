@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.adapter.ContractTypeAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.StatusAdapter;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Company;
 import com.dynonuggets.refonteimplicaction.model.ContractType;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
@@ -49,5 +50,11 @@ public class JobPostingService {
     public Page<JobPostingDto> getAllBySearchKey(Pageable pageable, String searchKey) {
         return jobPostingRepository.findAllBySearchKey(pageable, searchKey)
                 .map(jobPostingAdapter::toDto);
+    }
+
+    public JobPostingDto getJobById(Long jobId) {
+        JobPosting jobPosting = jobPostingRepository.findById(jobId)
+                .orElseThrow(() -> new NotFoundException("No job found with id " + jobId));
+        return jobPostingAdapter.toDto(jobPosting);
     }
 }

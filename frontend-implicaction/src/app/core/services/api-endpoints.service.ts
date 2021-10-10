@@ -185,6 +185,10 @@ export class ApiEndpointsService {
       });
   }
 
+  getJobByIdEndpoint(jobId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId]);
+  }
+
   /**
    * Ajoute les attributs filtrés d'un pageable à un QueryStringParameters et retourne le QueryStringParameters modifié
    */

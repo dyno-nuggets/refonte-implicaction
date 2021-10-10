@@ -9,6 +9,7 @@ export interface JobPosting {
   salary?: string;
   title?: string;
   description?: string;
+  createdAt?: Date;
   contractType?: ContractType;
   company?: Company;
   status?: Status;

@@ -23,7 +23,8 @@ public class Company {
     private String name;
 
     private String logo;
-
+    
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
 
     private String url;
