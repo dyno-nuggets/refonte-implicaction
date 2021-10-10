@@ -9,18 +9,24 @@
     >
     <span class="fw-bold grey overflow-ellipsis pe-2 text-uppercase">{{job.company?.name}}</span>
     <span>
-      <span class="d-none d-sm-inline ps-2 pe-2">•</span>
+      <span class="d-none d-sm-inline pe-2">•</span>
       <span class="pe-2">{{job.location}}</span>
       <span class="d-none d-sm-inline pe-2">•</span>
     </span>
     <app-contract-type [type]="job.contractType?.label"></app-contract-type>
-    <app-date-timelapse [date]="date"></app-date-timelapse>
+    <ng-container *ngIf="job.createdAt">
+      <span class="d-none d-sm-inline ps-2">•</span>
+      <span class="ps-2">
+        <app-date-timelapse [date]="job.createdAt"></app-date-timelapse>
+      </span>
+    </ng-container>
   </div>
   <div class="job-body row col justify-content-between mt-3">
     <div class="job-infos col-12 col-lg-7 col-xl-9">
-      <h3 class="text-wrap pb-1 text-dark fw-bold m-0">{{job.title}}</h3>
+      <h3 class="text-wrap pb-1 text-dark fw-bold m-0 mb-1">
+        <a routerLink="/{{univers.JOBS.url}}/{{job.id}}">{{job.title}}</a>
+      </h3>
       <p [innerHTML]="job.description | slice:0:255" class="text-justify"></p>
-      <p><a routerLink="/{{univers.JOBS.url}}/{{job.id}}">Voir plus</a></p>
     </div>
     <div class="job-options align-self-center mb-4 col-auto flex-fill">
       <button class="btn btn-primary fw-bold w-100">

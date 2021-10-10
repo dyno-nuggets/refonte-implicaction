@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {UserService} from '../../../../user/services/user.service';
 import {Constants} from '../../../../config/constants';
 import {LazyLoadEvent} from 'primeng/api';
@@ -13,7 +13,7 @@ import {AuthService} from '../../../../shared/services/auth.service';
   templateUrl: './pending-user-table.component.html',
   styleUrls: ['./pending-user-table.component.scss']
 })
-export class PendingUserTableComponent implements OnInit {
+export class PendingUserTableComponent {
 
   loading = true;
   pageable = Constants.PAGEABLE_DEFAULT;
@@ -24,10 +24,6 @@ export class PendingUserTableComponent implements OnInit {
     private toastService: ToasterService,
     private authService: AuthService
   ) {
-  }
-
-  ngOnInit(): void {
-
   }
 
   loadUsers(event: LazyLoadEvent): void {
@@ -52,7 +48,7 @@ export class PendingUserTableComponent implements OnInit {
   }
 
   roleCodesToString(roles: RoleEnumCode[]): string {
-    return roles.map(role => RoleEnum.from(role)?.label).join(', ');
+    return roles ? roles.map(role => RoleEnum.from(role)?.label).join(', ') : '';
   }
 
   activateUser(user: User, event): void {
