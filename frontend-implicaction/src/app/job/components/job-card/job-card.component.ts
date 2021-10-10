@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {JobPosting} from '../../../shared/models/job-posting';
 import {Univers} from '../../../shared/enums/univers';
 
@@ -7,15 +7,10 @@ import {Univers} from '../../../shared/enums/univers';
   templateUrl: './job-card.component.html',
   styleUrls: ['./job-card.component.scss']
 })
-export class JobCardComponent implements OnInit {
+export class JobCardComponent {
 
   @Input()
   job: JobPosting;
   univers = Univers;
 
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 }

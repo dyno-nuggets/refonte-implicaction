@@ -8,7 +8,8 @@ import {LoadingComponent} from './components/loading/loading.component';
 import {AlertComponent} from './components/alert/alert.component';
 import {SidebarContentDirective} from './directives/sidebar-content.directive';
 import {BrPipe} from './pipes/br.pipe';
-import { ContractTypeComponent } from './components/contract-type/contract-type.component';
+import {ContractTypeComponent} from './components/contract-type/contract-type.component';
+import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { ContractTypeComponent } from './components/contract-type/contract-type.
     SidebarContentDirective,
     BrPipe,
     ContractTypeComponent,
+    DateTimelapseComponent,
   ],
   exports: [
     HeaderComponent,
@@ -27,6 +29,7 @@ import { ContractTypeComponent } from './components/contract-type/contract-type.
     SidebarContentDirective,
     BrPipe,
     ContractTypeComponent,
+    DateTimelapseComponent,
   ],
   imports: [
     CommonModule,

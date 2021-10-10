@@ -23,17 +23,16 @@
     </div>
   </div>
   <div class="col-12 col-lg-8 card mb-3 py-5 px-5">
-    <h2 class="card-title text-primary text-uppercase">{{job.title}}</h2>
+    <div class="d-flex align-items-center">
+      <h2 class="card-title text-primary text-uppercase p-0 m-0 me-2">{{job.title}}</h2>
+      <app-contract-type [type]="job.contractType?.label"></app-contract-type>
+    </div>
     <div class="d-flex flex-column flex-md-row align-items-md-center mt-3 mb-3">
-      <app-contract-type [type]="job.contractType?.label" class="me-4"></app-contract-type>
-      <div class="me-4">
-        <i-feather class="icon me-1" name="calendar"></i-feather>
-        {{job.createdAt | date: 'd.M.yyyy'}}
-      </div>
-      <div>
-        <i-feather class="icon me-1" name="map-pin"></i-feather>
-        {{job.location}}
-      </div>
+      <span>{{job.location}}</span>
+      <ng-container *ngIf="job.createdAt">
+        <span class="d-none d-sm-inline px-2">•</span>
+        <app-date-timelapse [date]="job.createdAt"></app-date-timelapse>
+      </ng-container>
     </div>
     <div class="card-body mt-3 p-0">
       <p [innerHTML]="job.description" class="card-text"></p>
