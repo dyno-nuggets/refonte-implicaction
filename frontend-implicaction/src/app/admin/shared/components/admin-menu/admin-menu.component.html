@@ -1,15 +1,7 @@
 <div class="card mb-4">
   <div class="list-group list-group-flush">
-    <a
-      [routerLinkActiveOptions]="{exact: true}"
-      class="list-group-item"
-      routerLink="/admin/dashboard"
-      routerLinkActive="active"
-    >
-      Dashboard
-    </a>
 
-    <ng-container *ngFor="let menuItem of menuItems">
+    <ng-container *ngFor="let menuItem of allowedMenuItems">
       <a
         [routerLinkActiveOptions]="{exact: true}"
         [routerLink]="menuItem.link"
