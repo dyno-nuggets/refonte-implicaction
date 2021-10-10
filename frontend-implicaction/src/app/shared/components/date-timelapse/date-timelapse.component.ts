@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 
-export interface Timelapse {
+interface Timelapse {
   singular?: string;
   plural?: string;
 }
@@ -13,12 +13,12 @@ export interface Timelapse {
 export class DateTimelapseComponent implements OnInit {
 
   /**
-   * Passé cette valeur on n'affiche plus le nombre de semaines mais "ce mois"
+   * Passé cette valeur en mois on n'affiche plus le nombre de semaines mais "ce mois"
    */
   private static readonly DATE_WITH_MONTH_THRESHOLD_IN_WEEKS = 3;
 
   /**
-   * Passé cette valeur on n'affiche plus le nombre de jours mais "cette semaine"
+   * Passé cette valeur en jours on n'affiche plus le nombre de jours mais "cette semaine"
    */
   private static readonly DATE_WITH_WEEK_THRESHOLD_IN_DAYS = 6;
 
@@ -32,16 +32,16 @@ export class DateTimelapseComponent implements OnInit {
    */
   private static readonly TODAY_AT_THRESHOLD_IN_HOURS = 12;
 
-  private static readonly SECONDS_IN_YEAR: number = 31557600;
-  private static readonly SECONDS_IN_MONTH: number = 2629800;
-  private static readonly SECONDS_IN_WEEK: number = 604800;
-  private static readonly SECONDS_IN_DAY: number = 86400;
-  private static readonly SECONDS_IN_HOUR: number = 3600;
-  private static readonly SECONDS_IN_MINUTE: number = 60;
+  private static readonly SECONDS_IN_YEAR = 31557600;
+  private static readonly SECONDS_IN_MONTH = 2629800;
+  private static readonly SECONDS_IN_WEEK = 604800;
+  private static readonly SECONDS_IN_DAY = 86400;
+  private static readonly SECONDS_IN_HOUR = 3600;
+  private static readonly SECONDS_IN_MINUTE = 60;
 
   @Input()
   date: Date;
-  display = '';
+  ellapsedTimeString = '';
   void;
   private readonly timelapses: { [name: string]: Timelapse } = {
     years: {
@@ -82,7 +82,7 @@ export class DateTimelapseComponent implements OnInit {
 
   ngOnInit(): void {
     const elapsedTimeInSecond = Math.round((Date.now() - new Date(this.date).getTime()) / 1000);
-    this.display = this.buildTimelapseString(elapsedTimeInSecond);
+    this.ellapsedTimeString = this.buildTimelapseString(elapsedTimeInSecond);
   }
 
   private buildTimelapseString(elapsedTimeInSecond: number): string {
@@ -95,23 +95,27 @@ export class DateTimelapseComponent implements OnInit {
       const elapsedTimeInMinute = Math.round(elapsedTimeInSecond / DateTimelapseComponent.SECONDS_IN_MINUTE);
       return this.buildTimelapseForMinutes(elapsedTimeInMinute);
     }
-    //
+    // HEURES
     if (elapsedTimeInSecond < DateTimelapseComponent.SECONDS_IN_DAY) {
       const elapsedTimeInHour = Math.round(elapsedTimeInSecond / DateTimelapseComponent.SECONDS_IN_HOUR);
       return this.buildTimelapseForHours(elapsedTimeInHour);
     }
+    // JOURS
     if (elapsedTimeInSecond < DateTimelapseComponent.SECONDS_IN_WEEK) {
       const elapsedTimeInDay = Math.round(elapsedTimeInSecond / DateTimelapseComponent.SECONDS_IN_DAY);
       return this.buildTimelapseForDays(elapsedTimeInDay);
     }
+    // SEMAINE
     if (elapsedTimeInSecond < DateTimelapseComponent.SECONDS_IN_MONTH) {
       const elapsedTimeInWeek = Math.round(elapsedTimeInSecond / DateTimelapseComponent.SECONDS_IN_WEEK);
       return this.buildTimelapseForWeeks(elapsedTimeInWeek);
     }
+    // MOIS
     if (elapsedTimeInSecond < DateTimelapseComponent.SECONDS_IN_YEAR) {
       const elapsedTimeInMonth = Math.round(elapsedTimeInSecond / DateTimelapseComponent.SECONDS_IN_MONTH);
       return this.buildTimelapseForMonths(elapsedTimeInMonth);
     }
+    // ANNEE
     const elaplsedTimeInYear = Math.round(elapsedTimeInSecond / DateTimelapseComponent.SECONDS_IN_YEAR);
     return this.buildTimelapseForYears(elaplsedTimeInYear);
   }
