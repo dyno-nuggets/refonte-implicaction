@@ -1,15 +1,15 @@
 <nav class="py-2 bg-light border-bottom ">
-  <div class=" d-flex justify-content-between mx-5">
+  <div class="navbar-expand-lg d-flex justify-content-between mx-5">
     <div>
-      <a class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" href="/">
+      <a class="align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" href="/">
         <img alt="implic'action" class="img-fluid" src="assets/img/logo(2).png">
       </a>
     </div>
-    <ul class="d-flex justify-content-between nav align-items-center ">
+    <ul class="d-none d-lg-inline-flex justify-content-between nav align-items-center ">
       <li *ngFor="let univers of allowedUnivers">
         <a
           [routerLink]="[univers.url]"
-          class="nav-link px-4"
+          class="nav-link px-3"
           routerLinkActive="active"
         >
           {{univers.title}}
@@ -83,5 +83,27 @@
         </li>
       </ul>
     </ng-template>
+    <button aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation"
+            class="navbar-toggler d-lg-none" data-bs-target="#navbarToggleExternalContent3"
+            data-bs-toggle="collapse" type="button">
+      <span class="fas fa-bars"></span>
+    </button>
   </div>
 </nav>
+
+<div class="collapse d-lg-none" id="navbarToggleExternalContent3">
+  <div class="bg-light shadow-3 p-4">
+    <ul class="nav d-flex flex-column align-items-center">
+      <li *ngFor="let univers of allowedUnivers">
+        <a
+          [routerLink]="[univers.url]"
+          class="nav-link px-4"
+          routerLinkActive="active"
+        >
+          {{univers.title}}
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+
