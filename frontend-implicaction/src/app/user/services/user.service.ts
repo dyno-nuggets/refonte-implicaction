@@ -21,8 +21,11 @@ export class UserService {
   }
 
   getAll(pageable: Pageable): Observable<any> {
-    return (this.apiHttpService
-      .get(this.apiEndpointsService.getAllUserEndpoint(pageable)) as Observable<Pageable<User>>);
+    return this.http.get(this.apiEndpointsService.getAllUserEndpoint(pageable));
+  }
+
+  getAllCommunity(pageable: Pageable): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllUserCommunityEndpoint(pageable));
   }
 
   getUserById(userId: string): Observable<User> {

@@ -20,13 +20,23 @@ public class UserController {
     private final RelationService relationService;
     private final AuthService authService;
 
-    @GetMapping(params = {"page", "size"})
+    @GetMapping
     public ResponseEntity<Page<UserDto>> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<UserDto> users = userService.getAll(pageable, true);
+        Page<UserDto> users = userService.getAll(pageable);
+        return ResponseEntity.ok(users);
+    }
+
+    @GetMapping(path = "/community")
+    public ResponseEntity<Page<UserDto>> getAllCommunity(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<UserDto> users = userService.getAllCommunity(pageable);
         return ResponseEntity.ok(users);
     }
 
