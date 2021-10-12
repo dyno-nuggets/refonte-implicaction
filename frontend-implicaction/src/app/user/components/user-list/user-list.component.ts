@@ -85,7 +85,7 @@ export class UserListComponent implements OnInit {
 
     // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
     if (this.listType === UserListType.ALL_USERS) {
-      user$ = this.userService.getAll(this.pageable);
+      user$ = this.userService.getAllCommunity(this.pageable);
     } else if (this.listType === UserListType.FRIENDS) {
       user$ = this.userService.getUserFriends(this.currentUser?.id, this.pageable);
     } else if (this.listType === UserListType.FRIENDS_RECEIVED) {

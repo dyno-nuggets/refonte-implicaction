@@ -31,28 +31,34 @@ public class UserService {
     private final JobSeekerRepository jobSeekerRepository;
 
     /**
-     * @param isCurrentUserRelation recherche les relations avec l'utilisateur courant
      * @return la liste paginée de tous les utilisateurs
      */
     @Transactional(readOnly = true)
-    public Page<UserDto> getAll(Pageable pageable, boolean isCurrentUserRelation) {
+    public Page<UserDto> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userAdapter::toDto);
+    }
+
+
+    /**
+     * @return la liste paginée de tous les utilisateurs (recruiters et job-seekers) dont l'inscription a été
+     * validée
+     */
+    @Transactional(readOnly = true)
+    public Page<UserDto> getAllCommunity(Pageable pageable) {
         final Long currentUserId = authService.getCurrentUser().getId();
 
-        final Page<UserDto> users = userRepository.findAll(pageable)
-                .map(userAdapter::toDto);
+        final Page<UserDto> users = userRepository.findAllForCommunity(pageable).map(userAdapter::toDto);
 
-        if (isCurrentUserRelation) {
-            final List<Long> userIds = users.map(UserDto::getId)
-                    .get()
-                    .collect(toList());
-            // on recherche les relations de tous les utilisateurs remontés avec l'utilisateur courant ...
-            List<Relation> relations = relationRepository.findAllRelatedToUserByUserIdIn(currentUserId, userIds);
-            // ... et on associe chaque relation avec un statut
-            relations.forEach(relation -> users.stream()
-                    .filter(user -> isSenderOrReceiver(relation, user.getId()) && !currentUserId.equals(user.getId()))
-                    .findFirst()
-                    .ifPresent(user -> user.setRelationTypeOfCurrentUser(getRelationType(relation, currentUserId))));
-        }
+        final List<Long> userIds = users.map(UserDto::getId)
+                .get()
+                .collect(toList());
+        // on recherche les relations de tous les utilisateurs remontés avec l'utilisateur courant ...
+        List<Relation> relations = relationRepository.findAllRelatedToUserByUserIdIn(currentUserId, userIds);
+        // ... et on associe chaque relation avec un statut
+        relations.forEach(relation -> users.stream()
+                .filter(user -> isSenderOrReceiver(relation, user.getId()) && !currentUserId.equals(user.getId()))
+                .findFirst()
+                .ifPresent(user -> user.setRelationTypeOfCurrentUser(getRelationType(relation, currentUserId))));
         return users;
     }
 
