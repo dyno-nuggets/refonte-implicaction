@@ -52,4 +52,11 @@ export class Uris {
   static readonly JOBS = class {
     static readonly BASE_URI = 'job-postings';
   };
+
+  /**
+   * COMPANIES
+   */
+  static readonly COMPANIES = class {
+    static readonly BASE_URI = 'companies';
+  };
 }

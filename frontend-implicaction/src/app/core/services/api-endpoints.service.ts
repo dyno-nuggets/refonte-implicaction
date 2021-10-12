@@ -202,6 +202,19 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Companies
+   */
+
+  getAllCompanyEndpoint(pageable: Pageable, searchKey: string): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.COMPANIES.BASE_URI,
+      (qs: QueryStringParameters) => {
+        this.pushPageableParameters(pageable, qs);
+        qs.push('searchKey', searchKey);
+      });
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */

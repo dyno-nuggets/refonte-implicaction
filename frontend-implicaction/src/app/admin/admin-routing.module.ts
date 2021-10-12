@@ -33,7 +33,16 @@ const routes: Routes = [
         outlet: 'admin-content'
       }
     ]
-  }
+  },
+  {
+    path: 'companies', component: AdminComponent, children: [
+      {
+        path: '',
+        loadChildren: () => import('./companies/companies.module').then(m => m.CompaniesModule),
+        outlet: 'admin-content'
+      }
+    ]
+  },
 ];
 
 @NgModule({

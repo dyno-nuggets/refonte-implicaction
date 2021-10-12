@@ -21,9 +21,29 @@ export class AdminMenuComponent implements OnInit {
   allowedMenuItems: RoleBaseMenuItem[] = [];
 
   private menuItems: RoleBaseMenuItem[] = [
-    {label: 'Dashboard', link: `/${Univers.ADMIN.url}/dashboard`, classIcon: 'pi pi-file', roles: [RoleEnumCode.ADMIN]},
-    {label: 'Utilisateurs', link: `/${Univers.ADMIN.url}/users`, classIcon: 'pi pi-user', roles: [RoleEnumCode.ADMIN]},
-    {label: 'Offres', link: `/${Univers.ADMIN.url}/jobs`, classIcon: 'far fa-newspaper', roles: [RoleEnumCode.ADMIN]},
+    {
+      label: 'Dashboard',
+      link: `/${Univers.ADMIN.url}/dashboard`,
+      classIcon: 'pi pi-file',
+      roles: [RoleEnumCode.ADMIN]
+    },
+    {
+      label: 'Utilisateurs',
+      link: `/${Univers.ADMIN.url}/users`,
+      classIcon: 'pi pi-user',
+      roles: [RoleEnumCode.ADMIN]
+    },
+    {
+      label: 'Entreprises',
+      link: `/${Univers.ADMIN.url}/companies`,
+      classIcon: 'pi pi-id-card',
+      roles: [RoleEnumCode.ADMIN]
+    },
+    {
+      label: 'Offres',
+      link: `/${Univers.ADMIN.url}/jobs`,
+      classIcon: 'far fa-newspaper',
+      roles: [RoleEnumCode.ADMIN]},
   ];
 
   constructor(private authService: AuthService) {
