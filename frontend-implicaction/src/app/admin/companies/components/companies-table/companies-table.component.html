@@ -12,10 +12,10 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th class="overflow-ellipsis col-4 col-sm-3 col-lg-2" scope="col">NOM</th>
-      <th class="overflow-ellipsis col-1 col-sm-2 col-lg-2" scope="col">URL</th>
-      <th class="overflow-ellipsis col-3 col-sm-4 col-lg-6" scope="col">DESCRIPTION</th>
-      <th class="overflow-ellipsis col-4 col-sm-3 col-lg-2" scope="col">ACTIONS</th>
+      <th class="overflow-ellipsis col-4 col-sm-3 col-lg-2" scope="col">{{"Nom" | uppercase}}</th>
+      <th class="overflow-ellipsis col-1 col-sm-2 col-lg-2" scope="col">{{"Url" | uppercase}}</th>
+      <th class="overflow-ellipsis col-3 col-sm-4 col-lg-6" scope="col">{{"Description" | uppercase}}</th>
+      <th class="overflow-ellipsis col-4 col-sm-3 col-lg-2 text-center" scope="col">{{"Actions" | uppercase}}</th>
     </tr>
   </ng-template>
   <ng-template let-company pTemplate="body">
@@ -24,12 +24,12 @@
       <td class="overflow-ellipsis col-1 col-sm-2 col-lg-2">{{company.url}}</td>
       <td class="overflow-ellipsis col-3 col-sm-4 col-lg-6">{{company.description}}</td>
       <td class="col-4 col-sm-3 col-lg-2">
-        <ul class="list-unstyled list-inline">
-          <li class="list-inline-item me-2">
-            <i class="fas fa-paint-brush border border-primary text-primary rounded-3 py-1 px-2"></i>
+        <ul class="list-unstyled list-inline d-flex justify-content-center m-0">
+          <li class="list-inline-item me-4">
+            <i class="fas fa-pen border border-primary text-primary rounded-3 table-action-button"></i>
           </li>
           <li class="list-inline-item">
-            <i class="fas fa-trash border border-danger text-danger rounded-3 py-1 px-2"></i>
+            <i class="fas fa-trash border border-danger text-danger rounded-3 table-action-button"></i>
           </li>
         </ul>
       </td>
