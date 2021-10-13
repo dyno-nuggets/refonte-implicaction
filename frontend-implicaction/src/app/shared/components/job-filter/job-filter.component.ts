@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ContractTypeCode, ContractTypeEnum} from '../../../job/models/contract-type-enum';
-import {FilterContextService} from '../../services/filter-context.service';
-import {CriteriaFilter} from '../../models/criteria-filter';
+import {JobCriteriaFilter} from '../../../job/models/job-criteria-filter';
+import {JobFilterContextService} from '../../../job/services/job-filter-context.service';
 
 @Component({
   selector: 'app-job-filter',
@@ -11,9 +11,9 @@ import {CriteriaFilter} from '../../models/criteria-filter';
 export class JobFilterComponent implements OnInit {
 
   contractTypes = ContractTypeEnum.all();
-  criteria: CriteriaFilter = {};
+  criteria: JobCriteriaFilter = {};
 
-  constructor(private filterContextService: FilterContextService) {
+  constructor(private filterContextService: JobFilterContextService) {
   }
 
   ngOnInit(): void {

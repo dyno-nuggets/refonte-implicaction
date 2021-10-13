@@ -1,19 +1,18 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {CriteriaFilter} from '../models/criteria-filter';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FilterContextService {
+export class FilterContextService<T> {
 
-  private behaviorSubject = new BehaviorSubject<CriteriaFilter>({});
+  private behaviorSubject = new BehaviorSubject<T>({} as T);
 
-  setFilter(criteria: CriteriaFilter): void {
+  setFilter(criteria: T): void {
     this.behaviorSubject.next(criteria);
   }
 
-  observeFilter(): Observable<CriteriaFilter> {
+  observeFilter(): Observable<T> {
     return this.behaviorSubject.asObservable();
   }
 }

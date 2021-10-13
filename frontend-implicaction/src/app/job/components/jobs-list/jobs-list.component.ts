@@ -4,8 +4,9 @@ import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
 import {JobSortEnum} from '../../enums/job-sort.enum';
-import {FilterContextService} from '../../../shared/services/filter-context.service';
-import {CriteriaFilter} from '../../../shared/models/criteria-filter';
+import {JobCriteriaFilter} from '../../models/job-criteria-filter';
+import {JobFilterContextService} from '../../services/job-filter-context.service';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-jobs-list',
@@ -21,13 +22,15 @@ export class JobsListComponent implements OnInit {
   // Pagination et tri
   pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
-  criteria: CriteriaFilter = {};
+  criteria: JobCriteriaFilter = {};
   selectedOrderCode: string;
 
   constructor(
     private toastService: ToasterService,
     private jobsService: JobService,
-    private filterContextService: FilterContextService
+    private filterService: JobFilterContextService,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
   }
 
@@ -35,12 +38,18 @@ export class JobsListComponent implements OnInit {
     this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
 
-    this.filterContextService
+    this.filterService
       .observeFilter()
       .subscribe(criteria => {
         this.criteria = criteria;
         this.paginate();
       });
+
+    this.route.queryParams
+      .subscribe(params => {
+          console.log(params);
+        }
+      );
 
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
     this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
@@ -58,6 +67,14 @@ export class JobsListComponent implements OnInit {
           this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
+          this.router.navigate(
+            [],
+            {
+              relativeTo: this.route,
+              queryParams: {},
+              queryParamsHandling: 'merge'
+            })
+          ;
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );
@@ -70,7 +87,20 @@ export class JobsListComponent implements OnInit {
     this.paginate();
   }
 
+  navigateToFoo(): void {
+    // changes the route without moving from the current view or
+    // triggering a navigation event,
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {...this.criteria},
+      queryParamsHandling: 'merge',
+      // preserve the existing query params in the route
+      skipLocationChange: true
+      // do not trigger navigation
+    });
+  }
+
   onSearchChange(): void {
-    this.filterContextService.setFilter(this.criteria);
+    this.filterService.setFilter(this.criteria);
   }
 }
