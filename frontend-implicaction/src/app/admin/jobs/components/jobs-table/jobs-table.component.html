@@ -12,72 +12,32 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th class="overflow-ellipsis text-wrap col-5 col-sm-3 col-lg-2" scope="col">{{ "Nom" | uppercase }}</th>
-      <th class="overflow-ellipsis text-wrap col-1 col-sm-1 col-lg-1 px-2" scope="col">{{ "Type" | uppercase}}</th>
-      <th class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2 px-2"
-          scope="col">{{"Localisation" | uppercase}}</th>
-      <th class="overflow-ellipsis text-wrap col-7 col-sm-4 col-lg-4 px-2"
-          scope="col">{{"Description" | uppercase}}</th>
-      <th class="overflow-ellipsis text-wrap text-center col-3 col-sm-3 col-md-2 col-lg-1 px-2" scope="col">
-        {{"Actions" | uppercase}}
+      <th class="col-sm-3 col-lg-2 overflow-ellipsis text-uppercase" scope="col">Nom</th>
+      <th class="col-sm-2 col-lg-2 overflow-ellipsis text-uppercase" scope="col">Type</th>
+      <th class="col-sm-2 col-lg-2 overflow-ellipsis text-uppercase" scope="col">Localisation</th>
+      <th class="col-sm-4 col-lg-6 overflow-ellipsis text-uppercase" scope="col">Description</th>
+      <th class="col-sm-4 col-lg-6 overflow-ellipsis text-uppercase d-flex justify-content-center" scope="col">
+        Opérations
       </th>
     </tr>
   </ng-template>
   <ng-template let-job pTemplate="body">
     <tr>
-      <td class="overflow-ellipsis text-wrap col-5 col-sm-3 col-lg-2">{{job.title}}</td>
-      <td class="overflow-ellipsis text-wrap col-1 col-sm-1 col-lg-1 px-2">{{job.contractType?.label}}</td>
-      <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2 px-2">{{job.location}}</td>
-      <td class="overflow-ellipsis col-sm-3 col-md-2 col-lg-1 px-2">{{job.description}}</td>
-      <td class="d-flex justify-content-center px-2">
+      <td class="overflow-ellipsis">{{job.title}}</td>
+      <td class="overflow-ellipsis">{{job.contractType?.label}}</td>
+      <td class="overflow-ellipsis">{{job.location}}</td>
+      <td class="overflow-ellipsis">{{job.description}}</td>
+      <td class="d-flex justify-content-center">
         <ul class="list-unstyled list-inline">
           <li class="list-inline-item">
-            <button
-              class="btn"
-              data-bs-placement="top"
-              data-bs-toggle="tooltip"
-              title="Editer"
-              type="button"
-            >
-              <i class="fas fa-pen border border-primary text-primary rounded-3 px-2 py-1"></i>
-            </button>
+            <span class="badge badge-pill badge-primary">New</span>
           </li>
           <li class="list-inline-item">
-            <button
-              class="btn"
-              data-bs-placement="top"
-              data-bs-toggle="tooltip"
-              title="Supprimer"
-              type="button"
-            >
-              <i class="fas fa-trash border border-danger text-danger rounded-3 px-2 py-1"></i>
-            </button>
+            <em class="pi pi-pencil"></em>
           </li>
           <li class="list-inline-item">
-            <button
-              class="btn"
-              data-bs-placement="top"
-              data-bs-toggle="tooltip"
-              title="Archiver"
-              type="button"
-            >
-              <i *ngIf="!isArchived; else archivedIcon"
-                 class="fas fa-box border border-info text-info rounded-3 px-2 py-1"></i>
-            </button>
+            <em class="pi pi-trash"></em>
           </li>
-          <ng-template #archivedIcon>
-            <li class="list-inline-item">
-              <button
-                class="btn"
-                data-bs-placement="top"
-                data-bs-toggle="tooltip"
-                title="Désarchiver"
-                type="button"
-              >
-                <i class="fas fa-box-open border border-danger text-danger rounded-3 px-2 py-1"></i>
-              </button>
-            </li>
-          </ng-template>
         </ul>
       </td>
     </tr>
