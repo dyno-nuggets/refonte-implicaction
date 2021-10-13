@@ -70,4 +70,14 @@ class JobPostingAdapterTest {
         assertThat(jobPostingDto.getContractType()).isEqualTo(contractTypeDto);
         assertThat(jobPostingDto.getCreatedAt()).isEqualTo(jobPosting.getCreatedAt());
     }
+
+    @Test
+    void toModelTest() {
+        final JobPostingDto dto = jobPostingAdapter.toDto(jobPosting);
+
+        final JobPosting _jobPosting = jobPostingAdapter.toModel(dto);
+
+        assertThat(_jobPosting).usingRecursiveComparison()
+                .isEqualTo(jobPosting);
+    }
 }

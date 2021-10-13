@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -56,5 +57,19 @@ public class JobPostingService {
     public Page<JobPostingDto> findAllWithCriteria(Pageable pageable, String search, String contractType) {
         return jobPostingRepository.findAllWithCriteria(pageable, search, contractType)
                 .map(jobPostingAdapter::toDto);
+    }
+
+    @Transactional
+    public JobPostingDto saveOrUpdateJobPosting(final JobPostingDto jobPostingDto) {
+        JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto);
+        final JobPosting save = jobPostingRepository.save(jobPosting);
+        return jobPostingAdapter.toDto(save);
+    }
+
+    @Transactional
+    public void deleteJobPosting(Long jobPostingId) {
+        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
+                .orElseThrow(() -> new NotFoundException("Impossible de supprimer le JobPosting, " + jobPostingId + " n'existe pas."));
+        jobPostingRepository.delete(jobPosting);
     }
 }

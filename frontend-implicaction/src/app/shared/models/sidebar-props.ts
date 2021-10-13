@@ -1,6 +1,7 @@
 import {WorkExperience} from './work-experience';
 import {Training} from './training';
 import {Type} from '@angular/core';
+import {JobPosting} from './job-posting';
 
 
 /**
@@ -9,6 +10,7 @@ import {Type} from '@angular/core';
 export interface SidebarInputs {
   experience?: WorkExperience;
   training?: Training;
+  job?: JobPosting;
 }
 
 /**

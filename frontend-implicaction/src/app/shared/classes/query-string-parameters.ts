@@ -11,7 +11,7 @@ export class QueryStringParameters {
 
   // tslint:disable-next-line:ban-types
   public push(key: string, value: Object): void {
-    value = encodeURIComponent(value.toString());
+    value = encodeURIComponent('');
     this.paramsAndValues.push([key, value].join('='));
   }
 

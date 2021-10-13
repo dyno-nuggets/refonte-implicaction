@@ -43,4 +43,17 @@ public class JobPostingController {
         JobPostingDto jobPostingDto = jobPostingService.getJobById(jobId);
         return ResponseEntity.ok(jobPostingDto);
     }
+
+    @PutMapping
+    public ResponseEntity<JobPostingDto> update(@RequestBody final JobPostingDto jobPostingDto) {
+        JobPostingDto updated = jobPostingService.saveOrUpdateJobPosting(jobPostingDto);
+        return ResponseEntity.ok(updated);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @DeleteMapping("/{jobId}")
+    public ResponseEntity delete(@PathVariable Long jobId) {
+        jobPostingService.deleteJobPosting(jobId);
+        return ResponseEntity.noContent().build();
+    }
 }
