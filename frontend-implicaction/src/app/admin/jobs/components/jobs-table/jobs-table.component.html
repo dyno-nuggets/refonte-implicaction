@@ -12,28 +12,34 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th class="overflow-ellipsis text-wrap col-5 col-sm-3 col-lg-2" scope="col">{{ "Nom" | uppercase }}</th>
-      <th class="overflow-ellipsis text-wrap col-1 col-sm-1 col-lg-1 px-2" scope="col">{{ "Type" | uppercase}}</th>
-      <th class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2 px-2"
-          scope="col">{{"Localisation" | uppercase}}</th>
-      <th class="overflow-ellipsis text-wrap col-7 col-sm-4 col-lg-4 px-2"
-          scope="col">{{"Description" | uppercase}}</th>
-      <th class="overflow-ellipsis text-wrap text-center col-3 col-sm-3 col-md-2 col-lg-1 px-2" scope="col">
+      <th class="overflow-ellipsis text-wrap col-3 col-sm-2 col-lg-3" scope="col">
+        {{ "Nom" | uppercase }}
+      </th>
+      <th class="overflow-ellipsis text-wrap col-1 col-sm-1 col-lg-1 px-2" scope="col">
+        {{ "Type" | uppercase}}
+      </th>
+      <th class="overflow-ellipsis text-wrap col-3 col-sm-2 col-lg-3 px-2" scope="col">
+        {{"Localisation" | uppercase}}
+      </th>
+      <th class="overflow-ellipsis text-wrap col-6 col-sm-4 col-lg-6 px-2" scope="col">
+        {{"Description" | uppercase}}
+      </th>
+      <th class="overflow-ellipsis text-wrap text-center col-3 col-sm-2 col-lg-3 px-2" scope="col">
         {{"Actions" | uppercase}}
       </th>
     </tr>
   </ng-template>
   <ng-template let-job pTemplate="body">
     <tr>
-      <td class="overflow-ellipsis text-wrap col-5 col-sm-3 col-lg-2">{{job.title}}</td>
+      <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{job.title}}</td>
       <td class="overflow-ellipsis text-wrap col-1 col-sm-1 col-lg-1 px-2">{{job.contractType?.label}}</td>
       <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2 px-2">{{job.location}}</td>
-      <td class="overflow-ellipsis col-sm-3 col-md-2 col-lg-1 px-2">{{job.description}}</td>
-      <td class="d-flex justify-content-center px-2">
-        <ul class="list-unstyled list-inline">
+      <td class="overflow-ellipsis col-4 col-sm-3 col-md-2 col-lg-3 px-2">{{job.description}}</td>
+      <td class="col-4 col-sm-4 col-lg-3 px-2">
+        <ul class="d-flex justify-content-center list-unstyled list-inline m-0">
           <li class="list-inline-item">
             <button
-              class="btn"
+              class="btn p-0"
               data-bs-placement="top"
               data-bs-toggle="tooltip"
               title="Editer"
@@ -44,7 +50,7 @@
           </li>
           <li class="list-inline-item">
             <button
-              class="btn"
+              class="btn p-0"
               data-bs-placement="top"
               data-bs-toggle="tooltip"
               title="Supprimer"
@@ -55,7 +61,7 @@
           </li>
           <li class="list-inline-item">
             <button
-              class="btn"
+              class="btn p-0"
               data-bs-placement="top"
               data-bs-toggle="tooltip"
               title="Archiver"
