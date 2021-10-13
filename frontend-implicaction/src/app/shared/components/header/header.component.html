@@ -1,11 +1,20 @@
-<nav class="py-2 bg-light border-bottom">
-  <div class="container d-flex">
-    <ul class="nav me-auto">
+<nav class="py-2 bg-white border-bottom ">
+  <div class="navbar-expand-lg d-flex justify-content-between mx-5">
+    <div>
+      <a
+        [routerLink]="univers.HOME.url"
+        class="align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none"
+      >
+        <img alt="implic'action" class="img-fluid" src="assets/img/logo(2).png">
+      </a>
+    </div>
+    <ul class="d-none d-lg-inline-flex justify-content-between nav align-items-center">
       <li *ngFor="let univers of allowedUnivers">
         <a
+          [routerLinkActiveOptions]="{exact: true}"
           [routerLink]="[univers.url]"
-          class="nav-link px-2"
-          routerLinkActive="active"
+          class="nav-link px-3"
+          routerLinkActive="theme-primary active fw-bold"
         >
           {{univers.title}}
         </a>
@@ -78,15 +87,34 @@
         </li>
       </ul>
     </ng-template>
+    <button
+      aria-controls="navbarToggleExternalContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+      class="navbar-toggler d-lg-none"
+      data-bs-target="#BurgerMenuUniversList"
+      data-bs-toggle="collapse"
+      type="button"
+    >
+      <span class="fas fa-bars"></span>
+    </button>
   </div>
 </nav>
-<header class="py-3 mb-4 border-bottom">
-  <div class="container d-flex flex-wrap justify-content-center">
-    <a class="d-flex align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none" href="/">
-      <img alt="implic'action" class="img-fluid" src="assets/img/logo.png">
-    </a>
-    <form class="col-12 col-lg-auto mb-3 mb-lg-0">
-      <input aria-label="Search" class="form-control" placeholder="Search..." type="search">
-    </form>
+
+<!--Elements du burger menu-->
+<div class="collapse d-lg-none" id="BurgerMenuUniversList">
+  <div class="bg-light shadow-3 p-4">
+    <ul class="nav d-flex flex-column align-items-center">
+      <li *ngFor="let univers of allowedUnivers">
+        <a
+          [routerLinkActiveOptions]="{exact: true}"
+          [routerLink]="[univers.url]"
+          class="nav-link px-4"
+          routerLinkActive="active"
+        >
+          {{univers.title}}
+        </a>
+      </li>
+    </ul>
   </div>
-</header>
+</div>
