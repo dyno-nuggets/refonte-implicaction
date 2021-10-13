@@ -1,0 +1,171 @@
+<form
+  (ngSubmit)="onSubmit()"
+  [formGroup]="formJob"
+>
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formJob.controls['location'].touched) && formJob.controls['location'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="location"
+      id="locationInput"
+      placeholder="location"
+    />
+    <label
+      class="form-label px-4"
+      for="locationInput"
+    >
+      Localisation de l'offre
+    </label>
+    <div
+      *ngIf="(isSubmitted || formJob.controls['location'].touched) && formJob.controls['location'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir une localisation pour cette offre.
+    </div>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formJob.controls['salary'].touched) && formJob.controls['salary'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="salary"
+      id="salaryInput"
+      placeholder="salary"
+    />
+    <label
+      class="form-label px-4"
+      for="salaryInput"
+    >
+      Salaire de l'offre
+    </label>
+    <div
+      *ngIf="(isSubmitted || formJob.controls['salary'].touched) && formJob.controls['salary'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir le salaire de cette offre
+    </div>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formJob.controls['title'].touched) && formJob.controls['title'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="title"
+      id="titleInput"
+      placeholder="title"
+    />
+    <label
+      class="form-label px-4"
+      for="titleInput"
+    >
+      Intitulé de l'offre
+    </label>
+    <div
+      *ngIf="(isSubmitted || formJob.controls['title'].touched) && formJob.controls['title'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir un intitulé d'offre.
+    </div>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formJob.controls['description'].touched) && formJob.controls['description'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="description"
+      id="descriptionInput"
+      placeholder="description"
+    />
+    <label
+      class="form-label px-4"
+      for="descriptionInput"
+    >
+      Description de l'offre
+    </label>
+    <div
+      *ngIf="(isSubmitted || formJob.controls['description'].touched) && formJob.controls['description'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir une description pour cette offre
+    </div>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formJob.controls['contractType'].touched) && formJob.controls['contractType'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="contractType"
+      id="contractTypeInput"
+      placeholder="contractType"
+    />
+    <label
+      class="form-label px-4"
+      for="contractTypeInput"
+    >
+      Type de contrat
+    </label>
+    <div
+      *ngIf="(isSubmitted || formJob.controls['contractType'].touched) && formJob.controls['contractType'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir un type de contrat pour cette offre
+    </div>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formJob.controls['company'].touched) && formJob.controls['company'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="company"
+      id="companyInput"
+      placeholder="company"
+    />
+    <label
+      class="form-label px-4"
+      for="companyInput"
+    >
+      Entreprise
+    </label>
+    <div
+      *ngIf="(isSubmitted || formJob.controls['company'].touched) && formJob.controls['company'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir une entreprise liée à cette offre
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-auto">
+      <label
+        class="ms-3"
+        for="dateInput"
+      >
+        Date de création du job
+      </label>
+    </div>
+    <p-calendar
+      [yearNavigator]="true"
+      [yearRange]="YEAR_RANGE"
+      appendTo="body"
+      dateFormat="yy-mm-dd"
+      formControlName="createdAt"
+      id="dateInput"
+      inputStyleClass="form-control rounded-pill"
+    >
+    </p-calendar>
+    <div
+      *ngIf="formJob.controls['createdAt'].touched && formJob.controls['createdAt'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir une date de création de l'offre.
+    </div>
+  </div>
+  <div class="d-flex justify-content-center rounded-pill sidebar-options">
+    <button
+      class="btn btn-primary w-50"
+      type="submit"
+    >
+      Enregistrer
+    </button>
+  </div>
+</form>

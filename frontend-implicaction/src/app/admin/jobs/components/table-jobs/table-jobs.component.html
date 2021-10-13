@@ -1,0 +1,54 @@
+<div class="mb-3 d-flex justify-content-between">
+  <h2>Offres d'emploi</h2>
+  <div>
+    <i-feather
+      (click)="onAddJobPosting()"
+      class="cursor-pointer secondary-on-hover"
+      data-placement="bottom"
+      data-toggle="tooltip"
+      name="plus"
+      title="Ajouter une offre d'emploi"
+    >
+    </i-feather>
+  </div>
+</div>
+<p-table
+  (onLazyLoad)="loadOffers($event)"
+  [lazy]="true"
+  [loading]="loading"
+  [paginator]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="true"
+  [totalRecords]="pageable.totalElements"
+  [value]="pageable.content"
+  currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th scope="col">Username</th>
+      <th scope="col">Email</th>
+      <th scope="col">Registered</th>
+      <th scope="col"></th>
+    </tr>
+  </ng-template>
+  <ng-template let-offer pTemplate="body">
+    <tr>
+      <td class="overflow-ellipsis">{{offer.location}}</td>
+      <td class="overflow-ellipsis">{{offer.title}}</td>
+      <td class="d-flex justify-content-end">
+        <ul class="list-unstyled list-inline">
+          <li class="list-inline-item">
+            <span class="badge badge-pill badge-primary">New</span>
+          </li>
+          <li class="list-inline-item">
+            <em class="pi pi-pencil"></em>
+          </li>
+          <li class="list-inline-item">
+            <em class="pi pi-trash"></em>
+          </li>
+        </ul>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
