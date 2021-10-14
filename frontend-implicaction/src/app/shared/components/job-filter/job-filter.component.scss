@@ -1,0 +1,12 @@
+@import "src/assets/variables";
+
+.form-check {
+  input[type="radio"]:checked {
+    background-color: $danger;
+    border-color: $danger;
+
+    &:hover {
+      border-color: $light-gray !important;
+    }
+  }
+}

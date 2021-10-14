@@ -10,6 +10,7 @@ import {SidebarContentDirective} from './directives/sidebar-content.directive';
 import {BrPipe} from './pipes/br.pipe';
 import {ContractTypeComponent} from './components/contract-type/contract-type.component';
 import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
+import {JobFilterComponent} from './components/job-filter/job-filter.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse
     ContractTypeComponent,
     ContractTypeComponent,
     DateTimelapseComponent,
+    JobFilterComponent,
   ],
   exports: [
     HeaderComponent,
@@ -32,6 +34,7 @@ import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse
     ContractTypeComponent,
     ContractTypeComponent,
     DateTimelapseComponent,
+    JobFilterComponent,
   ],
   imports: [
     CommonModule,

@@ -4,6 +4,9 @@ import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
 import {JobSortEnum} from '../../enums/job-sort.enum';
+import {JobCriteriaFilter} from '../../models/job-criteria-filter';
+import {JobFilterContextService} from '../../services/job-filter-context.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-jobs-list',
@@ -16,42 +19,49 @@ export class JobsListComponent implements OnInit {
 
   isLoading = true;
 
-  // Pagination et tri
+  // Pagination et filtres
   pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
-  selectedOrder = JobSortEnum.DATE_DESC;
-  searchKey = '';
+  criteria: JobCriteriaFilter = {};
+  selectedOrderCode: string;
 
   constructor(
     private toastService: ToasterService,
     private jobsService: JobService,
+    private filterService: JobFilterContextService,
+    private route: ActivatedRoute
   ) {
-
   }
 
   ngOnInit(): void {
-    this.pageable.sortOrder = this.selectedOrder.sortOrder;
-    this.pageable.sortBy = this.selectedOrder.sortBy;
+    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
+    this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
+    this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
 
-    this.paginate({
-      first: 0,
-      rows: this.ROWS_PER_PAGE_OPTIONS[0],
-      page: this.pageable.page
-    });
+    this.filterService
+      .observeFilter()
+      .subscribe(criteria => {
+        this.criteria = criteria;
+        const objectParam = this.buildQueryParams();
+        this.filterService.updateRouteQueryParams(objectParam);
+        this.paginate();
+      });
+
+    this.getFilterFromQueryParams()
+      .then(() => this.filterService.setFilter(this.criteria));
   }
 
-  paginate({first, rows, page} = this.pageable): void {
+  paginate({page, first, rows} = this.pageable): void {
     this.isLoading = true;
     this.pageable.page = page;
-    this.pageable.rows = rows;
     this.pageable.first = first;
+    this.pageable.rows = rows;
     this.jobsService
-      .getAll(this.pageable, this.searchKey)
+      .getAllByCriteria(this.pageable, this.criteria)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },
@@ -59,10 +69,48 @@ export class JobsListComponent implements OnInit {
       );
   }
 
-  onFilterChange({value}): void {
-    const filterEnum = JobSortEnum.from(value);
-    this.pageable.sortBy = filterEnum.sortBy;
-    this.pageable.sortOrder = filterEnum.sortOrder;
-    this.paginate();
+  onSortChange({value}): void {
+    const selectedOrderField = JobSortEnum.from(value);
+    this.pageable.sortBy = selectedOrderField.sortBy;
+    this.pageable.sortOrder = selectedOrderField.sortOrder;
+    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
+  }
+
+  onSearchChange(): void {
+    this.filterService.setFilter(this.criteria);
+  }
+
+  private async getFilterFromQueryParams(): Promise<void> {
+    // TODO: voir si y'a un moyen plus élégant avec typeof
+    const filterKeys = ['search', 'contractType'];
+    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
+    return new Promise(resolve => {
+      this.route
+        .queryParams
+        .subscribe(params => {
+          Object.entries(params)
+            .forEach(([key, value]) => {
+              if (filterKeys.includes(key)) {
+                this.criteria[key] = value;
+              } else if (pageableKeys.includes(key)) {
+                this.pageable[key] = value;
+              }
+            });
+          return resolve();
+        });
+    });
+  }
+
+  /**
+   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
+   */
+  private buildQueryParams(): any {
+    return {
+      ...this.criteria,
+      rows: this.pageable.rows,
+      page: this.pageable.page,
+      sortBy: this.pageable.sortBy,
+      sortOrder: this.pageable.sortOrder
+    };
   }
 }

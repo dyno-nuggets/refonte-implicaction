@@ -1,13 +1,13 @@
 import {TestBed} from '@angular/core/testing';
 
-import {SearchContextService} from './search-context.service';
+import {FilterContextService} from './filter-context.service';
 
-describe('SearchContextService', () => {
-  let service: SearchContextService;
+describe('FilterContextService', () => {
+  let service: FilterContextService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SearchContextService);
+    service = TestBed.inject(FilterContextService);
   });
 
   it('should be created', () => {

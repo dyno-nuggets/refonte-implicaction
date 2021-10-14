@@ -47,14 +47,14 @@ public class JobPostingService {
         return jobPostingAdapter.toDto(jobSaved);
     }
 
-    public Page<JobPostingDto> getAllBySearchKey(Pageable pageable, String searchKey) {
-        return jobPostingRepository.findAllBySearchKey(pageable, searchKey)
-                .map(jobPostingAdapter::toDto);
-    }
-
     public JobPostingDto getJobById(Long jobId) {
         JobPosting jobPosting = jobPostingRepository.findById(jobId)
                 .orElseThrow(() -> new NotFoundException("No job found with id " + jobId));
         return jobPostingAdapter.toDto(jobPosting);
+    }
+
+    public Page<JobPostingDto> findAllWithCriteria(Pageable pageable, String search, String contractType) {
+        return jobPostingRepository.findAllWithCriteria(pageable, search, contractType)
+                .map(jobPostingAdapter::toDto);
     }
 }

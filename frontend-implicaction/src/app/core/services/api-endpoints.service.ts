@@ -4,6 +4,7 @@ import {QueryStringParameters} from '../../shared/classes/query-string-parameter
 import {Constants} from '../../config/constants';
 import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
+import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -180,12 +181,19 @@ export class ApiEndpointsService {
    * Jobs
    */
 
-  getAllJobEndpoint(pageable: Pageable, searchKey: string): string {
+  getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter): string {
+    // on merge les filtres et les attributs de pagination
+    const objectParam = {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder
+    };
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,
       (qs: QueryStringParameters) => {
-        this.pushPageableParameters(pageable, qs);
-        qs.push('searchKey', searchKey);
+        this.buildQueryStringFromFilters(objectParam, qs);
       });
   }
 
@@ -194,15 +202,17 @@ export class ApiEndpointsService {
   }
 
   /**
-   * Ajoute les attributs filtrés d'un pageable à un QueryStringParameters et retourne le QueryStringParameters modifié
+   * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
+   * @return qs le QueryStringParameters modifié
    */
-  private pushPageableParameters(pageable: Pageable, qs: QueryStringParameters): QueryStringParameters {
-    // on ne veut récupérer que les informations de filtrage du pageable
-    ['page', 'size', 'sortBy', 'sortOrder'].forEach(param => {
-      if (pageable[param] !== undefined) {
-        qs.push(param, pageable[param]);
-      }
-    });
+  private buildQueryStringFromFilters(filter: any, qs: QueryStringParameters): QueryStringParameters {
+    Object.keys(filter)
+      .filter(value => !!filter[value])
+      .forEach(key => {
+        if (filter[key] !== undefined) {
+          qs.push(key, filter[key]);
+        }
+      });
     return qs;
   }
 }

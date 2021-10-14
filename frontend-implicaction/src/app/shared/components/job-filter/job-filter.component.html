@@ -1,0 +1,46 @@
+<div class="d-flex flex-column flex-sm-row flex-lg-column me-3">
+  <div class="col-6 mb-3">
+    <h6 class="text-dark fw-bold mb-3">Filtres</h6>
+    <div class="form-check mb-2">
+      <input
+        (change)="onContractTypeChange(null)"
+        [checked]="!criteria.contractType"
+        class="form-check-input"
+        id="allContractRadio"
+        name="contractType"
+        type="radio"
+      >
+      <label class="form-check-label w-100" for="allContractRadio">
+        Tous les contrats
+      </label>
+    </div>
+    <div
+      *ngFor="let type of contractTypes"
+      class="form-check mb-2"
+    >
+      <input
+        (change)="onContractTypeChange(type.code)"
+        [checked]="criteria.contractType === type.code"
+        [value]="type.code"
+        class="form-check-input"
+        id="{{type.code}}Radio"
+        name="contractType"
+        type="radio"
+      >
+      <label class="form-check-label" for="{{type.code}}Radio">
+        {{type.label}}
+      </label>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-11 me-1">
+    <div class="mb-3">
+      <label class="form-label text-dark fw-bold" for="localisationInput">Localisation</label>
+      <input class="form-control" id="localisationInput" placeholder="Localisation...">
+    </div>
+    <div class="mb-3">
+      <label class="form-label text-dark fw-bold" for="exampleFormControlInput1">Secteur d'activité</label>
+      <input class="form-control" id="exampleFormControlInput1" placeholder="Informatique, Banque, Assurance ..."
+             type="email">
+    </div>
+  </div>
+</div>
