@@ -6,6 +6,7 @@ import {JobService} from '../../services/job.service';
 import {JobSortEnum} from '../../enums/job-sort.enum';
 import {JobCriteriaFilter} from '../../models/job-criteria-filter';
 import {JobFilterContextService} from '../../services/job-filter-context.service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-jobs-list',
@@ -27,13 +28,15 @@ export class JobsListComponent implements OnInit {
   constructor(
     private toastService: ToasterService,
     private jobsService: JobService,
-    private filterService: JobFilterContextService
+    private filterService: JobFilterContextService,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
     this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
+    this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
 
     this.filterService
       .observeFilter()
@@ -44,9 +47,7 @@ export class JobsListComponent implements OnInit {
         this.paginate();
       });
 
-    this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
-    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
-    this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
+    this.getFilterFromQueryParams().then(() => this.filterService.setFilter(this.criteria));
   }
 
   paginate({page, first, rows} = this.pageable): void {
@@ -76,6 +77,27 @@ export class JobsListComponent implements OnInit {
 
   onSearchChange(): void {
     this.filterService.setFilter(this.criteria);
+  }
+
+  private async getFilterFromQueryParams(): Promise<void> {
+    // TODO: voir si y'a un moyen plus élégant avec typeof
+    const filterKeys = ['search', 'contractType'];
+    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
+    return new Promise(resolve => {
+      this.route
+        .queryParams
+        .subscribe(params => {
+          Object.entries(params)
+            .forEach(([key, value]) => {
+              if (filterKeys.includes(key)) {
+                this.criteria[key] = value;
+              } else if (pageableKeys.includes(key)) {
+                this.pageable[key] = value;
+              }
+            });
+          return resolve();
+        });
+    });
   }
 
   /**
