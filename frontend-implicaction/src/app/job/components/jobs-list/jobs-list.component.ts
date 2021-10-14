@@ -6,7 +6,6 @@ import {JobService} from '../../services/job.service';
 import {JobSortEnum} from '../../enums/job-sort.enum';
 import {JobCriteriaFilter} from '../../models/job-criteria-filter';
 import {JobFilterContextService} from '../../services/job-filter-context.service';
-import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-jobs-list',
@@ -19,7 +18,7 @@ export class JobsListComponent implements OnInit {
 
   isLoading = true;
 
-  // Pagination et tri
+  // Pagination et filtres
   pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
   criteria: JobCriteriaFilter = {};
@@ -28,9 +27,7 @@ export class JobsListComponent implements OnInit {
   constructor(
     private toastService: ToasterService,
     private jobsService: JobService,
-    private filterService: JobFilterContextService,
-    private router: Router,
-    private route: ActivatedRoute,
+    private filterService: JobFilterContextService
   ) {
   }
 
@@ -42,39 +39,29 @@ export class JobsListComponent implements OnInit {
       .observeFilter()
       .subscribe(criteria => {
         this.criteria = criteria;
+        const objectParam = this.buildQueryParams();
+        this.filterService.updateRouteQueryParams(objectParam);
         this.paginate();
       });
-
-    this.route.queryParams
-      .subscribe(params => {
-          console.log(params);
-        }
-      );
 
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
     this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
     this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
   }
 
-  paginate(): void {
+  paginate({page, first, rows} = this.pageable): void {
     this.isLoading = true;
+    this.pageable.page = page;
+    this.pageable.first = first;
+    this.pageable.rows = rows;
     this.jobsService
       .getAllByCriteria(this.pageable, this.criteria)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
-          this.router.navigate(
-            [],
-            {
-              relativeTo: this.route,
-              queryParams: {},
-              queryParamsHandling: 'merge'
-            })
-          ;
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );
@@ -84,23 +71,23 @@ export class JobsListComponent implements OnInit {
     const selectedOrderField = JobSortEnum.from(value);
     this.pageable.sortBy = selectedOrderField.sortBy;
     this.pageable.sortOrder = selectedOrderField.sortOrder;
-    this.paginate();
-  }
-
-  navigateToFoo(): void {
-    // changes the route without moving from the current view or
-    // triggering a navigation event,
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {...this.criteria},
-      queryParamsHandling: 'merge',
-      // preserve the existing query params in the route
-      skipLocationChange: true
-      // do not trigger navigation
-    });
+    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
   }
 
   onSearchChange(): void {
     this.filterService.setFilter(this.criteria);
+  }
+
+  /**
+   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
+   */
+  private buildQueryParams(): any {
+    return {
+      ...this.criteria,
+      rows: this.pageable.rows,
+      page: this.pageable.page,
+      sortBy: this.pageable.sortBy,
+      sortOrder: this.pageable.sortOrder
+    };
   }
 }

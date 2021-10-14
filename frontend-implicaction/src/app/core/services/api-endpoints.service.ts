@@ -182,11 +182,17 @@ export class ApiEndpointsService {
    */
 
   getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter): string {
+    const objectParam = {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder
+    };
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,
       (qs: QueryStringParameters) => {
-        this.buildQueryStringFromPageable(pageable, qs);
-        this.buildQueryStringFromCriteria(criteria, qs);
+        this.buildQueryStringFromObjectParam(objectParam, qs);
       });
   }
 
@@ -195,25 +201,17 @@ export class ApiEndpointsService {
   }
 
   /**
-   * Ajoute les attributs filtrés d'un pageable à un QueryStringParameters et retourne le QueryStringParameters modifié
+   * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
+   * @return qs le QueryStringParameters modifié
    */
-  private buildQueryStringFromCriteria(criteria: any, qs: QueryStringParameters): QueryStringParameters {
-    // on ne veut récupérer que les informations de filtrage du pageable
-    Object.keys(criteria)
-      .forEach(param => {
-        if (criteria[param]) {
-          qs.push(param, criteria[param]);
+  private buildQueryStringFromObjectParam(objectParam: any, qs: QueryStringParameters): QueryStringParameters {
+    Object.keys(objectParam)
+      .filter(value => !!objectParam[value])
+      .forEach(key => {
+        if (objectParam[key] !== undefined) {
+          qs.push(key, objectParam[key]);
         }
       });
-    return qs;
-  }
-
-  private buildQueryStringFromPageable(pageable: Pageable, qs: QueryStringParameters): QueryStringParameters {
-    ['page', 'size', 'sortBy', 'sortOrder'].forEach(param => {
-      if (pageable[param] !== undefined) {
-        qs.push(param, pageable[param]);
-      }
-    });
     return qs;
   }
 }
