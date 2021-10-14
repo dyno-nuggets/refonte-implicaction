@@ -47,7 +47,8 @@ export class JobsListComponent implements OnInit {
         this.paginate();
       });
 
-    this.getFilterFromQueryParams().then(() => this.filterService.setFilter(this.criteria));
+    this.getFilterFromQueryParams()
+      .then(() => this.filterService.setFilter(this.criteria));
   }
 
   paginate({page, first, rows} = this.pageable): void {

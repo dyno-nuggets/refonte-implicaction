@@ -58,7 +58,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         final Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
         final int firstResult = pageable.getPageNumber() * pageable.getPageSize();
 
-        // mise en place de la pagination
+        // lancement de la requête et mise en place de la pagination
         final List<JobPosting> results = entityManager.createQuery(query)
                 .setFirstResult(firstResult)
                 .setMaxResults(pageable.getPageSize())

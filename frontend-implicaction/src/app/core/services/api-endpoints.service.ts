@@ -182,6 +182,7 @@ export class ApiEndpointsService {
    */
 
   getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter): string {
+    // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
@@ -192,7 +193,7 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,
       (qs: QueryStringParameters) => {
-        this.buildQueryStringFromObjectParam(objectParam, qs);
+        this.buildQueryStringFromFilters(objectParam, qs);
       });
   }
 
@@ -204,12 +205,12 @@ export class ApiEndpointsService {
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */
-  private buildQueryStringFromObjectParam(objectParam: any, qs: QueryStringParameters): QueryStringParameters {
-    Object.keys(objectParam)
-      .filter(value => !!objectParam[value])
+  private buildQueryStringFromFilters(filter: any, qs: QueryStringParameters): QueryStringParameters {
+    Object.keys(filter)
+      .filter(value => !!filter[value])
       .forEach(key => {
-        if (objectParam[key] !== undefined) {
-          qs.push(key, objectParam[key]);
+        if (filter[key] !== undefined) {
+          qs.push(key, filter[key]);
         }
       });
     return qs;
