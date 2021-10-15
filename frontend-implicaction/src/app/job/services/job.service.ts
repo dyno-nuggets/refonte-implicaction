@@ -25,11 +25,11 @@ export class JobService {
     return this.http.get<JobPosting>(this.apiEndpointsService.getJobByIdEndpoint(jobId));
   }
 
-  createJobPosting(jobPosting: JobPosting): Observable<JobPosting> {
-    return this.http.post<JobPosting>(this.apiEndpointsService.createJobPostingEndpoint(), jobPosting);
+  createJob(job: JobPosting): Observable<JobPosting> {
+    return this.http.post<JobPosting>(this.apiEndpointsService.createJobPostingEndpoint(), job);
   }
 
-  updateJobPosting(jobPosting: JobPosting): Observable<JobPosting> {
+  updateJob(jobPosting: JobPosting): Observable<JobPosting> {
     return this.http.put<JobPosting>(this.apiEndpointsService.updateJobPostingEndpoint(), jobPosting);
   }
 

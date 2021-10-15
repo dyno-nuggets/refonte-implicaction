@@ -28,6 +28,9 @@ public class JobPosting {
     @Column(name = "title", nullable = false)
     private String title;
 
+    @Column(name = "short_description", columnDefinition = "LONGTEXT")
+    private String shortDescription;
+
     @Column(name = "description", columnDefinition = "LONGTEXT")
     private String description;
 

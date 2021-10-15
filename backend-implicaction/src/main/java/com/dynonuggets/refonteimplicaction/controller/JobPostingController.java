@@ -18,8 +18,9 @@ public class JobPostingController {
 
     private final JobPostingService jobPostingService;
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<JobPostingDto> create(@RequestBody JobPostingDto jobPostingDto) throws ImplicactionException {
+        System.out.println(jobPostingDto);
         JobPostingDto jobCreated = jobPostingService.createJob(jobPostingDto);
         return ResponseEntity.ok(jobCreated);
     }

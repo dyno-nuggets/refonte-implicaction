@@ -8,6 +8,7 @@ import {JobsPostingsRoutingModule} from './jobs-postings-routing.module';
 import {CalendarModule} from 'primeng/calendar';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FeatherModule} from 'angular-feather';
+import {EditorModule} from 'primeng/editor';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {FeatherModule} from 'angular-feather';
     TableModule,
     CalendarModule,
     ReactiveFormsModule,
-    FeatherModule
+    FeatherModule,
+    EditorModule
   ]
 })
 export class JobsPostingsModule {

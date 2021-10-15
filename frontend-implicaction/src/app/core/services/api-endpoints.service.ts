@@ -226,6 +226,14 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Contracts
+   */
+
+  getAllContractsEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.CONTRACTS.BASE_URI, pageable);
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */

@@ -1,6 +1,6 @@
-import {Status} from './status';
 import {Company} from './company';
-import {ContractType} from './contractType';
+import {ContractEnum} from '../enums/contract.enum';
+import {StatusEnum} from '../enums/status.enum';
 
 export interface JobPosting {
   id?: string;
@@ -8,9 +8,10 @@ export interface JobPosting {
   location?: string;
   salary?: string;
   title?: string;
+  shortDescription?: string;
   description?: string;
   createdAt?: Date;
-  contractType?: ContractType;
+  contractType?: ContractEnum;
   company?: Company;
-  status?: Status;
+  status?: StatusEnum;
 }

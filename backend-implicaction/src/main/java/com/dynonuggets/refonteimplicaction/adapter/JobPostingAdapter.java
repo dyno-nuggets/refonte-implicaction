@@ -29,6 +29,7 @@ public class JobPostingAdapter {
                 .id(model.getId())
                 .company(companyDto)
                 .title(model.getTitle())
+                .shortDescription(model.getShortDescription())
                 .description(model.getDescription())
                 .location(model.getLocation())
                 .salary(model.getSalary())
@@ -39,23 +40,24 @@ public class JobPostingAdapter {
                 .build();
     }
 
-    public JobPosting toModel(JobPostingDto jobPostingDto) {
+    public JobPosting toModel(JobPostingDto dto) {
 
-        Company company = companyAdapter.toModel(jobPostingDto.getCompany());
-        ContractType contractType = contractAdapter.toModel(jobPostingDto.getContractType());
-        Status status = statusAdapter.toModel(jobPostingDto.getStatus());
+        Company company = companyAdapter.toModel(dto.getCompany());
+        ContractType contractType = contractAdapter.toModel(dto.getContractType());
+        Status status = statusAdapter.toModel(dto.getStatus());
 
         return JobPosting.builder()
-                .id(jobPostingDto.getId())
+                .id(dto.getId())
                 .company(company)
-                .title(jobPostingDto.getTitle())
-                .description(jobPostingDto.getDescription())
-                .location(jobPostingDto.getLocation())
-                .salary(jobPostingDto.getSalary())
-                .keywords(jobPostingDto.getKeywords())
+                .title(dto.getTitle())
+                .shortDescription(dto.getShortDescription())
+                .description(dto.getDescription())
+                .location(dto.getLocation())
+                .salary(dto.getSalary())
+                .keywords(dto.getKeywords())
                 .contractType(contractType)
                 .status(status)
-                .createdAt(jobPostingDto.getCreatedAt())
+                .createdAt(dto.getCreatedAt())
                 .build();
     }
 }
