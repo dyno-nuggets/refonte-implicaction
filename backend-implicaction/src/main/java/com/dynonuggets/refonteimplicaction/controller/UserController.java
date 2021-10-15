@@ -23,9 +23,9 @@ public class UserController {
     @GetMapping
     public ResponseEntity<Page<UserDto>> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "rows", defaultValue = "10") int rows
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, rows);
         Page<UserDto> users = userService.getAll(pageable);
         return ResponseEntity.ok(users);
     }
@@ -33,9 +33,9 @@ public class UserController {
     @GetMapping(path = "/community")
     public ResponseEntity<Page<UserDto>> getAllCommunity(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "rows", defaultValue = "10") int rows
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, rows);
         Page<UserDto> users = userService.getAllCommunity(pageable);
         return ResponseEntity.ok(users);
     }
@@ -46,34 +46,34 @@ public class UserController {
         return ResponseEntity.ok(userdto);
     }
 
-    @GetMapping(path = "/{userId}/friends", params = {"page", "size"})
+    @GetMapping(path = "/{userId}/friends")
     public ResponseEntity<Page<UserDto>> getAllFriends(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "0") int size,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
             @PathVariable("userId") Long userId
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, rows);
         Page<UserDto> userDtos = relationService.getAllFriendsByUserId(userId, pageable);
         return ResponseEntity.ok(userDtos);
     }
 
-    @GetMapping(path = "/friends/sent", params = {"page", "size"})
+    @GetMapping(path = "/friends/sent")
     public ResponseEntity<Page<UserDto>> getSentFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "rows", defaultValue = "10") int rows
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, rows);
         Long userId = authService.getCurrentUser().getId();
         Page<UserDto> usersDto = relationService.getSentFriendRequest(userId, pageable);
         return ResponseEntity.ok(usersDto);
     }
 
-    @GetMapping(path = "/friends/received", params = {"page", "size"})
+    @GetMapping(path = "/friends/received")
     public ResponseEntity<Page<UserDto>> getReceivedFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "rows", defaultValue = "10") int rows
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, rows);
         Long userId = authService.getCurrentUser().getId();
         Page<UserDto> usersDto = relationService.getReceivedFriendRequest(userId, pageable);
         return ResponseEntity.ok(usersDto);
@@ -85,12 +85,12 @@ public class UserController {
         return ResponseEntity.ok(userUpdate);
     }
 
-    @GetMapping(path = "/pending", params = {"page", "size"})
+    @GetMapping(path = "/pending")
     public ResponseEntity<Page<UserDto>> getAllPendingUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "rows", defaultValue = "10") int rows
     ) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, rows);
         Page<UserDto> pendingUsers = userService.getAllPendingActivationUsers(pageable);
         return ResponseEntity.ok(pendingUsers);
     }
