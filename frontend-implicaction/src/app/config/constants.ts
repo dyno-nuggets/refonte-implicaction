@@ -5,7 +5,7 @@ export class Constants {
   public static readonly API_MOCK_ENDPOINT: string = 'mock-domain/api';
   public static readonly PAGEABLE_DEFAULT: Pageable = {
     page: 0,
-    rows: 10,
+    size: 10,
     totalElements: 0,
     first: 0,
     content: [],

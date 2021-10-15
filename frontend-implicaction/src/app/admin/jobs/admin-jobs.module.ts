@@ -1,21 +1,21 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {JobsTableComponent} from './components/jobs-table/jobs-table.component';
-import {JobsComponent} from './jobs.component';
-import {JobsRoutingModule} from './jobs-routing.module';
+import {AdminJobsComponent} from './admin-jobs.component';
+import {AdminJobsRoutingModule} from './admin-jobs-routing.module';
 import {TableModule} from 'primeng/table';
 
 
 @NgModule({
   declarations: [
-    JobsComponent,
+    AdminJobsComponent,
     JobsTableComponent,
   ],
   imports: [
     CommonModule,
-    JobsRoutingModule,
+    AdminJobsRoutingModule,
     TableModule,
   ]
 })
-export class JobsModule {
+export class AdminJobsModule {
 }

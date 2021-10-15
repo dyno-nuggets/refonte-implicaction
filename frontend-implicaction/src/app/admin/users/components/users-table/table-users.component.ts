@@ -27,10 +27,10 @@ export class TableUsersComponent {
 
   loadUsers(event: LazyLoadEvent): void {
     this.loading = true;
-    const page = event.first / event.rows;
+    const page = event.first / event.size;
 
     this.userService
-      .getAll({page, rows: event.rows})
+      .getAll({page, size: event.size})
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -38,7 +38,7 @@ export class TableUsersComponent {
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.rows = data.size;
+          this.pageable.size = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },

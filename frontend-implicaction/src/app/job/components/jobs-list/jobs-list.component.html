@@ -54,7 +54,7 @@
         *ngIf="pageable.totalPages > 0"
         [first]="pageable.first"
         [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
-        [rows]="pageable.rows"
+        [rows]="pageable.size"
         [totalRecords]="pageable.totalElements"
       >
       </p-paginator>

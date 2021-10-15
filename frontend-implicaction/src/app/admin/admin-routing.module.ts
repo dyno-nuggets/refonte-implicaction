@@ -29,7 +29,7 @@ const routes: Routes = [
     path: 'jobs', component: AdminComponent, children: [
       {
         path: '',
-        loadChildren: () => import('./jobs/jobs.module').then(m => m.JobsModule),
+        loadChildren: () => import('./jobs/admin-jobs.module').then(m => m.AdminJobsModule),
         outlet: 'admin-content'
       }
     ]

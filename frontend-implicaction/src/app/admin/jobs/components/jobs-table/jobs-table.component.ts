@@ -6,6 +6,7 @@ import {JobService} from '../../../../job/services/job.service';
 import {LazyLoadEvent} from 'primeng/api';
 import {finalize, take} from 'rxjs/operators';
 import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
+import {JobCriteriaFilter} from '../../../../job/models/job-criteria-filter';
 
 @Component({
   selector: 'app-jobs-table',
@@ -22,7 +23,7 @@ export class JobsTableComponent implements OnInit {
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
   selectedOrder = JobSortEnum.DATE_DESC;
-  searchKey = '';
+  jobCriteria: JobCriteriaFilter;
 
   constructor(
     private jobService: JobService,
@@ -38,7 +39,7 @@ export class JobsTableComponent implements OnInit {
     const page = event.first / event.rows;
 
     this.jobService
-      .getAll({page, rows: event.rows}, this.searchKey)
+      .getAllByCriteria({page, rows: event.rows}, this.jobCriteria)
       .pipe(
         take(1),
         finalize(() => this.loading = false)
