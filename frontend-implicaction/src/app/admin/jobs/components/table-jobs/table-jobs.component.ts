@@ -20,7 +20,6 @@ export class TableJobsComponent {
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
   rowsPerPage = this.pageable.rowsPerPages[0];
-  searchKey: '';
 
   constructor(
     private jobService: JobService,
@@ -35,7 +34,7 @@ export class TableJobsComponent {
     const page = event.first / event.rows;
 
     this.jobService
-      .getAll({page, rows: event.rows}, this.searchKey)
+      .getAllByCriteria({page, rows: event.rows}, {})
       .pipe(
         take(1),
         finalize(() => this.loading = false)
