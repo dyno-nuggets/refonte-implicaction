@@ -1,5 +1,5 @@
-<nav class="py-2 bg-white border-bottom ">
-  <div class="navbar-expand-lg d-flex justify-content-between mx-5">
+<nav class="py-2 bg-white border-bottom">
+  <div class="navbar-expand-lg d-flex align-items-center justify-content-between mx-5">
     <div>
       <a
         [routerLink]="univers.HOME.url"
@@ -9,76 +9,94 @@
       </a>
     </div>
     <ul class="d-none d-lg-inline-flex justify-content-between nav align-items-center">
-      <li *ngFor="let univers of allowedUnivers">
+      <li *ngFor="let u of allowedUnivers">
         <a
-          [routerLinkActiveOptions]="{exact: true}"
-          [routerLink]="[univers.url]"
+          [routerLinkActiveOptions]="{exact: u === univers.HOME}"
+          [routerLink]="[u.url]"
           class="nav-link px-3"
           routerLinkActive="theme-primary active fw-bold"
         >
-          {{univers.title}}
+          {{u.title}}
         </a>
       </li>
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
-      <ul class="nav align-items-center user-options">
-        <li class="nav-item">
-          <i-feather class="icon" name="bell"></i-feather>
-        </li>
-        <li class="nav-item">
-          <i-feather class="icon" name="users"></i-feather>
-        </li>
-        <li class="nav-item">
-          <i-feather class="icon" name="inbox"></i-feather>
-        </li>
-        <li class="nav-item">
-          <a aria-expanded="false"
-             class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
-             data-bs-toggle="dropdown" id="dropdownUser2"
-          >
-            <img
-              alt="avatar de {{currentUser.username}}"
-              class="rounded-circle avatar"
-              src="assets/img/default-user.png"
+      <div class="d-flex justify-content-end">
+        <ul class="nav align-items-center user-options">
+          <li class="nav-item">
+            <i-feather class="icon" name="bell"></i-feather>
+          </li>
+          <li class="nav-item">
+            <i-feather class="icon" name="users"></i-feather>
+          </li>
+          <li class="nav-item">
+            <i-feather class="icon" name="inbox"></i-feather>
+          </li>
+          <li class="nav-item">
+            <a
+              aria-expanded="false"
+              class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
+              data-bs-toggle="dropdown"
+              id="dropdownUser2"
             >
-          </a>
-          <ul
-            aria-labelledby="dropdownUser"
-            class="dropdown-menu text-small dropdown-user shadow m-0"
+              <img
+                alt="avatar de {{currentUser.username}}"
+                class="rounded-circle avatar"
+                src="assets/img/default-user.png"
+              >
+            </a>
+            <ul
+              aria-labelledby="dropdownUser"
+              class="dropdown-menu text-small dropdown-user shadow m-0"
+            >
+              <li *ngIf="currentUser">
+                <span
+                  class="dropdown-item fw-bold cursor-default background-transparent">@{{currentUser.username}}</span>
+              </li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li *ngIf="currentUser && !isAdmin">
+                <a
+                  class="dropdown-item cursor-pointer"
+                  routerLink="/{{univers.USERS.url}}/{{currentUser.id}}/profile"
+                >
+                  Profil
+                </a>
+              </li>
+              <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
+              <li>
+                <hr class="dropdown-divider">
+              </li>
+              <li *ngIf="isAdmin">
+                <a
+                  [routerLink]="univers.ADMIN.url"
+                  class="dropdown-item cursor-pointer"
+                >
+                  Admin
+                </a>
+              </li>
+              <li><a (click)="logout()" class="dropdown-item cursor-pointer">Se déconnecter</a></li>
+            </ul>
+          </li>
+        </ul>
+        <div class="align-items-end">
+          <button
+            aria-controls="navbarToggleExternalContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            class="navbar-toggler d-lg-none"
+            data-bs-target="#BurgerMenuUniversList"
+            data-bs-toggle="collapse"
+            type="button"
           >
-            <li *ngIf="currentUser">
-              <span class="dropdown-item fw-bold cursor-default background-transparent">@{{currentUser.username}}</span>
-            </li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li *ngIf="currentUser && !isAdmin">
-              <a
-                class="dropdown-item cursor-pointer"
-                routerLink="/{{univers.USERS.url}}/{{currentUser.id}}/profile"
-              >
-                Profil
-              </a>
-            </li>
-            <li><a class="dropdown-item cursor-pointer">Réglages</a></li>
-            <li>
-              <hr class="dropdown-divider">
-            </li>
-            <li *ngIf="isAdmin">
-              <a
-                [routerLink]="univers.ADMIN.url"
-                class="dropdown-item cursor-pointer"
-              >
-                Admin
-              </a>
-            </li>
-            <li><a (click)="logout()" class="dropdown-item cursor-pointer">Se déconnecter</a></li>
-          </ul>
-        </li>
-      </ul>
+            <span class="fas fa-bars"></span>
+          </button>
+        </div>
+      </div>
     </ng-container>
     <ng-template #registrationOptions>
-      <ul class="nav align-items-center  user-options">
+      <ul class="nav align-items-center user-options">
         <li class="nav-item">
           <a class="btn btn-outline-primary" routerLink="/auth/login">Se connecter</a>
         </li>
@@ -87,32 +105,21 @@
         </li>
       </ul>
     </ng-template>
-    <button
-      aria-controls="navbarToggleExternalContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-      class="navbar-toggler d-lg-none"
-      data-bs-target="#BurgerMenuUniversList"
-      data-bs-toggle="collapse"
-      type="button"
-    >
-      <span class="fas fa-bars"></span>
-    </button>
   </div>
 </nav>
 
 <!--Elements du burger menu-->
 <div class="collapse d-lg-none" id="BurgerMenuUniversList">
-  <div class="bg-light shadow-3 p-4">
+  <div class="bg-light shadow-3">
     <ul class="nav d-flex flex-column align-items-center">
-      <li *ngFor="let univers of allowedUnivers">
+      <li *ngFor="let u of allowedUnivers">
         <a
-          [routerLinkActiveOptions]="{exact: true}"
-          [routerLink]="[univers.url]"
+          [routerLinkActiveOptions]="{exact: u === univers.HOME}"
+          [routerLink]="[u.url]"
           class="nav-link px-4"
-          routerLinkActive="active"
+          routerLinkActive="theme-primary active fw-bold"
         >
-          {{univers.title}}
+          {{u.title}}
         </a>
       </li>
     </ul>
