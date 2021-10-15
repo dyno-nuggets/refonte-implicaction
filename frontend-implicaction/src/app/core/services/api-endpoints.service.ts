@@ -56,7 +56,7 @@ export class ApiEndpointsService {
       uri,
       (qs: QueryStringParameters) => {
         qs.push('page', pageable.page);
-        qs.push('size', pageable.size);
+        qs.push('rows', pageable.rows);
       });
   }
 
@@ -185,7 +185,7 @@ export class ApiEndpointsService {
     // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
-      size: pageable.size,
+      rows: pageable.rows,
       page: pageable.page,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder

@@ -53,11 +53,11 @@ export class JobsListComponent implements OnInit {
       .then(() => this.filterService.setFilter(this.criteria));
   }
 
-  paginate({page, first, size} = this.pageable): void {
+  paginate({page, first, rows} = this.pageable): void {
     this.isLoading = true;
     this.pageable.page = page;
     this.pageable.first = first;
-    this.pageable.size = size;
+    this.pageable.rows = rows;
     this.jobsService
       .getAllByCriteria(this.pageable, this.criteria)
       .pipe(finalize(() => this.isLoading = false))
@@ -109,7 +109,7 @@ export class JobsListComponent implements OnInit {
   private buildQueryParams(): any {
     return {
       ...this.criteria,
-      size: this.pageable.size,
+      size: this.pageable.rows,
       page: this.pageable.page,
       sortBy: this.pageable.sortBy,
       sortOrder: this.pageable.sortOrder

@@ -2,7 +2,6 @@ import {Component} from '@angular/core';
 import {UserService} from '../../../../user/services/user.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';
-import {LazyLoadEvent} from 'primeng/api';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 
@@ -25,12 +24,12 @@ export class TableUsersComponent {
   ) {
   }
 
-  loadUsers(event: LazyLoadEvent): void {
+  loadUsers({first, rows}): void {
     this.loading = true;
-    const page = event.first / event.size;
+    const page = first / rows;
 
     this.userService
-      .getAll({page, size: event.size})
+      .getAll({page, rows})
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -38,7 +37,7 @@ export class TableUsersComponent {
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
-          this.pageable.size = data.size;
+          this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },
