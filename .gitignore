@@ -396,5 +396,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/java,maven,macos,windows,linux,intellij+all,node,angular,visualstudiocode,sonarqube,sonar
 /frontend-implicaction/node/
-/frontend-implicaction/node/
 /.jpb/
