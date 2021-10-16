@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {ToasterService} from '../../../../core/services/toaster.service';
@@ -13,11 +13,10 @@ import {JobCriteriaFilter} from '../../../../job/models/job-criteria-filter';
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.scss']
 })
-export class JobsTableComponent implements OnInit {
+export class JobsTableComponent {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   loading = true; // indique si les données sont en chargement
-  isArchived = false;
 
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
@@ -29,9 +28,6 @@ export class JobsTableComponent implements OnInit {
     private jobService: JobService,
     private toastService: ToasterService,
   ) {
-  }
-
-  ngOnInit(): void {
   }
 
   loadJobs(event: LazyLoadEvent): void {
