@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {UserService} from '../../../../user/services/user.service';
 import {Constants} from '../../../../config/constants';
-import {LazyLoadEvent} from 'primeng/api';
 import {finalize, take} from 'rxjs/operators';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {RoleEnum, RoleEnumCode} from '../../../../shared/enums/role.enum';
@@ -26,12 +25,12 @@ export class PendingUserTableComponent {
   ) {
   }
 
-  loadUsers(event: LazyLoadEvent): void {
+  loadUsers({first, rows}): void {
     this.loading = true;
-    const page = event.first / event.rows;
+    const page = first / rows;
 
     this.userService
-      .getAllPendingActivationUsers({page, rows: event.rows})
+      .getAllPendingActivationUsers({page, rows})
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -51,15 +50,12 @@ export class PendingUserTableComponent {
     return roles ? roles.map(role => RoleEnum.from(role)?.label).join(', ') : '';
   }
 
-  activateUser(user: User, event): void {
-    console.log(event);
+  activateUser(user: User): void {
     this.authService
       .activateUser(user.activationKey)
       .subscribe(
         () => {
-          const first = this.pageable.page * this.pageable.rows;
-          const rows = this.pageable.rows;
-          this.loadUsers({first, rows});
+          this.loadUsers({first: this.pageable.first, rows: this.pageable.rows});
         },
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'utilisateur.`),
         () => this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais actif.`),

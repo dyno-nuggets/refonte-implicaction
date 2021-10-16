@@ -56,7 +56,7 @@ export class ApiEndpointsService {
       uri,
       (qs: QueryStringParameters) => {
         qs.push('page', pageable.page);
-        qs.push('size', pageable.rows);
+        qs.push('rows', pageable.rows);
       });
   }
 

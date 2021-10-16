@@ -109,7 +109,7 @@ export class JobsListComponent implements OnInit {
   private buildQueryParams(): any {
     return {
       ...this.criteria,
-      rows: this.pageable.rows,
+      size: this.pageable.rows,
       page: this.pageable.page,
       sortBy: this.pageable.sortBy,
       sortOrder: this.pageable.sortOrder
