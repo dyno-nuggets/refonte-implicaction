@@ -21,7 +21,6 @@ export class CompaniesTableComponent {
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
   selectedOrder = JobSortEnum.DATE_DESC;
-  searchKey = '';
 
   constructor(
     private companyService: CompanyService,
@@ -34,7 +33,7 @@ export class CompaniesTableComponent {
     const page = event.first / event.rows;
 
     this.companyService
-      .getAll({page, rows: event.rows}, this.searchKey)
+      .getAll({page, rows: event.rows})
       .pipe(
         take(1),
         finalize(() => this.loading = false)

@@ -19,8 +19,8 @@ public class CompanyService {
      * @return la liste paginée des entreprises selon le paramètre
      * de recherche "searchKey" reçu
      */
-    public Page<CompanyDto> getAllBySearchKey(Pageable pageable, String searchKey) {
-        return companyRepository.findAllBySearchKey(pageable, searchKey)
+    public Page<CompanyDto> getAll(Pageable pageable) {
+        return companyRepository.findAll(pageable)
                 .map(companyAdapter::toDto);
     }
 }

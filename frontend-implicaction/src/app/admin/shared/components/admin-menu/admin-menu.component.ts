@@ -34,16 +34,17 @@ export class AdminMenuComponent implements OnInit {
       roles: [RoleEnumCode.ADMIN]
     },
     {
+      label: 'Offres',
+      link: `/${Univers.ADMIN.url}/jobs`,
+      classIcon: 'far fa-newspaper',
+      roles: [RoleEnumCode.ADMIN]
+    },
+    {
       label: 'Entreprises',
       link: `/${Univers.ADMIN.url}/companies`,
       classIcon: 'pi pi-id-card',
       roles: [RoleEnumCode.ADMIN]
     },
-    {
-      label: 'Offres',
-      link: `/${Univers.ADMIN.url}/jobs`,
-      classIcon: 'far fa-newspaper',
-      roles: [RoleEnumCode.ADMIN]},
   ];
 
   constructor(private authService: AuthService) {
