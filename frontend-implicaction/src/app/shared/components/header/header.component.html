@@ -1,6 +1,6 @@
 <nav class="py-2 bg-white border-bottom">
-  <div class="navbar-expand-lg d-flex align-items-center justify-content-between mx-5">
-    <div>
+  <div class="navbar-expand-lg d-flex flex-column flex-sm-row align-items-center justify-content-between mx-md-5">
+    <div class="mb-2 mb-sm-0">
       <a
         [routerLink]="univers.HOME.url"
         class="align-items-center mb-3 mb-lg-0 me-lg-auto text-dark text-decoration-none"
@@ -22,7 +22,7 @@
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
       <div class="d-flex justify-content-end">
-        <ul class="nav align-items-center user-options">
+        <ul class="nav align-items-center user-options me-sm-5 me-md-0">
           <li class="nav-item">
             <i-feather class="icon" name="bell"></i-feather>
           </li>
@@ -80,7 +80,7 @@
             </ul>
           </li>
         </ul>
-        <div class="align-items-end">
+        <div class="position-absolute end-0">
           <button
             aria-controls="navbarToggleExternalContent"
             aria-expanded="false"
@@ -112,7 +112,7 @@
 <div class="collapse d-lg-none" id="BurgerMenuUniversList">
   <div class="bg-light shadow-3">
     <ul class="nav d-flex flex-column align-items-center">
-      <li *ngFor="let u of allowedUnivers">
+      <li *ngFor="let u of allowedUnivers" class="d-block w-100 text-center">
         <a
           [routerLinkActiveOptions]="{exact: u === univers.HOME}"
           [routerLink]="[u.url]"

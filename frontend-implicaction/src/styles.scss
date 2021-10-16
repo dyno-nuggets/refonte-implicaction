@@ -101,3 +101,7 @@ textarea, input {
 .theme-primary {
   color: $primary;
 }
+
+input:focus::placeholder {
+  color: transparent;
+}
