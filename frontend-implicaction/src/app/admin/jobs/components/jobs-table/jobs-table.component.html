@@ -58,15 +58,12 @@
               type="button"
             >
               <i
-                *ngIf="!isArchived; else archivedIcon"
-                class="fas fa-box border border-info text-info rounded-3 px-2 py-1"
+                [ngClass]="isArchived ? 'fa-box-open border-warning text-warning' : 'fa-box border-info text-info'"
+                class="fas border rounded-3 px-2 py-1"
               >
               </i>
             </button>
           </li>
-          <ng-template #archivedIcon>
-            <i class="fas fa-box-open border border-warning text-warning rounded-3 px-2 py-1"></i>
-          </ng-template>
         </ul>
       </td>
     </tr>
