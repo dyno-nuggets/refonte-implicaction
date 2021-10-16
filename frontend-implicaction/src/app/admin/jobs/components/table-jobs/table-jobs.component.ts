@@ -59,7 +59,7 @@ export class TableJobsComponent {
         width: 650
       });
   }
-  
+
   editJob(job: JobPosting): void {
     this.sidebarService
       .open({
