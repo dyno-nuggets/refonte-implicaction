@@ -7,6 +7,7 @@ import {JobSortEnum} from '../../enums/job-sort.enum';
 import {JobCriteriaFilter} from '../../models/job-criteria-filter';
 import {JobFilterContextService} from '../../services/job-filter-context.service';
 import {ActivatedRoute} from '@angular/router';
+import {SortDirectionEnum} from '../../../shared/enums/sort-direction.enum';
 
 @Component({
   selector: 'app-jobs-list',
@@ -24,6 +25,7 @@ export class JobsListComponent implements OnInit {
   orderByEnums = JobSortEnum.all();
   criteria: JobCriteriaFilter = {};
   selectedOrderCode: string;
+  sortDirection = SortDirectionEnum;
 
   constructor(
     private toastService: ToasterService,
@@ -34,7 +36,7 @@ export class JobsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortOrder;
+    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortDirection;
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
     this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
 
@@ -72,7 +74,7 @@ export class JobsListComponent implements OnInit {
   onSortChange({value}): void {
     const selectedOrderField = JobSortEnum.from(value);
     this.pageable.sortBy = selectedOrderField.sortBy;
-    this.pageable.sortOrder = selectedOrderField.sortOrder;
+    this.pageable.sortOrder = selectedOrderField.sortDirection;
     this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
   }
 

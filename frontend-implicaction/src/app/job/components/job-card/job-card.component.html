@@ -1,4 +1,4 @@
-<div class="job-container border-bottom job-card-container p-2">
+<div class="border-bottom job-card-container p-2">
   <div class="job-header d-flex flex-wrap align-items-center mb-2">
     <img
       #companyLogo
@@ -22,14 +22,14 @@
     </ng-container>
   </div>
   <div class="job-body row col justify-content-between mt-3">
-    <div class="job-infos col-12 col-lg-7 col-xl-9">
+    <div class="job-infos col-12 col-lg-7 col-xl-8">
       <h3 class="text-wrap pb-1 text-dark fw-bold m-0 mb-1">
         <a routerLink="/{{univers.JOBS.url}}/{{job.id}}">{{job.title}}</a>
       </h3>
       <p [innerHTML]="job.description | slice:0:255" class="text-justify"></p>
     </div>
-    <div class="job-options align-self-end mb-4 col-auto flex-fill">
-      <button class="btn btn-primary fw-bold w-100">
+    <div class="job-options align-self-end mb-4 col-12 col-lg-5 col-xl-4 col-xxl-auto">
+      <button class="btn btn-primary fw-bold w-100 px-xxl-5">
         <i-feather class="icon me-2" name="plus"></i-feather>
         Ajouter au jobBoard
       </button>

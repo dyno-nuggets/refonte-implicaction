@@ -5,11 +5,11 @@
   <div class="col-12 col-lg-9 p-0 row bg-white">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
       <div class="card p-0">
-        <div class="card-header bg-white row ps-0 py-2 m-0">
-          <div class="input-group col-9">
-          <span class="input-group-text border-0 bg-white">
-            <i-feather name="search"></i-feather>
-          </span>
+        <div class="card-header bg-white clo-9 d-flex flex-column-reverse flex-sm-row ps-0 py-2 m-0">
+          <div class="input-group">
+            <span class="input-group-text border-0 bg-white">
+              <i-feather name="search"></i-feather>
+            </span>
             <input
               (keydown.enter)="onSearchChange()"
               [(ngModel)]="criteria.search"
@@ -19,6 +19,13 @@
               placeholder="Rechercher un offre ..."
               type="text"
             >
+          </div>
+          <div class="d-flex justify-content-between justify-content-sm-end align-items-center">
+            <i
+              [ngClass]="pageable.sortOrder === sortDirection.ASC ? 'fa-sort-amount-up-alt' : 'fa-sort-amount-down-alt'"
+              class="fas fa-sort-amount-down-alt ms-3"
+            >
+            </i>
             <p-dropdown
               (onChange)="onSortChange($event)"
               [(ngModel)]="selectedOrderCode"
