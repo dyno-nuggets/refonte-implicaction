@@ -38,15 +38,15 @@
       <td class="overflow-ellipsis">{{offer.title}}</td>
       <td class="d-flex justify-content-end">
         <ul class="list-unstyled list-inline">
-          <li class="list-inline-item">
-            <span class="badge badge-pill badge-primary">New</span>
-          </li>
-          <li class="list-inline-item">
-            <em class="pi pi-pencil"></em>
-          </li>
-          <li class="list-inline-item">
-            <em class="pi pi-trash"></em>
-          </li>
+          <i-feather
+            (click)="editJob(offer)"
+            class="cursor-pointer me-xl-2 secondary-on-hover"
+            data-placement="bottom"
+            data-toggle="tooltip"
+            name="edit-2"
+            title="Editer cette expérience"
+          >
+          </i-feather>
         </ul>
       </td>
     </tr>

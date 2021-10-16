@@ -7,6 +7,7 @@ import {Constants} from '../../../../config/constants';
 import {JobService} from '../../../../job/services/job.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {JobPostingFormComponent} from '../job-posting-form/job-posting-form.component';
+import {JobPosting} from '../../../../shared/models/job-posting';
 
 @Component({
   selector: 'app-table-jobs',
@@ -58,4 +59,15 @@ export class TableJobsComponent {
         width: 650
       });
   }
+  
+  editJob(job: JobPosting): void {
+    this.sidebarService
+      .open({
+        title: `Editer une nouvelle offre d'emploi`,
+        input: {job},
+        component: JobPostingFormComponent,
+        width: 650
+      });
+  }
+
 }
