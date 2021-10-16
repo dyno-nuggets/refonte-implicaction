@@ -112,7 +112,7 @@
 <div class="collapse d-lg-none" id="BurgerMenuUniversList">
   <div class="bg-light shadow-3">
     <ul class="nav d-flex flex-column align-items-center">
-      <li *ngFor="let u of allowedUnivers">
+      <li *ngFor="let u of allowedUnivers" class="d-block w-100 text-center">
         <a
           [routerLinkActiveOptions]="{exact: u === univers.HOME}"
           [routerLink]="[u.url]"

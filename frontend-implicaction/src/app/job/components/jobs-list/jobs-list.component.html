@@ -5,9 +5,9 @@
   <div class="col-12 col-lg-9 p-0 row bg-white">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
       <div class="card p-0">
-        <div class="card-header bg-white clo-9 d-flex flex-column-reverse flex-sm-row ps-0 py-2 m-0">
-          <div class="input-group">
-            <span class="input-group-text border-0 bg-white">
+        <div class="card-header bg-white clo-9 d-flex flex-column flex-sm-row ps-0 py-2 m-0">
+          <div class="input-group p-1">
+            <span class="d-none d-sm-inline input-group-text border-0 bg-white">
               <i-feather name="search"></i-feather>
             </span>
             <input
@@ -15,14 +15,14 @@
               [(ngModel)]="criteria.search"
               aria-describedby="search-input"
               aria-label="keyword"
-              class="form-control no-outline"
+              class="form-control no-outline text-center text-sm-start"
               placeholder="Rechercher un offre ..."
               type="text"
             >
           </div>
-          <div class="d-flex justify-content-between justify-content-sm-end align-items-center">
+          <div class="d-flex justify-content-center justify-content-sm-end align-items-center">
             <i
-              [ngClass]="pageable.sortOrder === sortDirection.ASC ? 'fa-sort-amount-up-alt' : 'fa-sort-amount-down-alt'"
+              [ngClass]="pageable.sortOrder === sortDirection.ASC ? 'fa-sort-amount-up-alt' : 'fa-sort-amount-down'"
               class="fas fa-sort-amount-down-alt ms-3"
             >
             </i>

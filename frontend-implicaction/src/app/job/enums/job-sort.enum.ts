@@ -11,8 +11,8 @@ export enum JobSortEnumCode {
  * Représente les différents paramètres de tri des jobs
  */
 export class JobSortEnum extends EnumCodeLabelAbstract<JobSortEnumCode> {
-  static readonly DATE_DESC = new JobSortEnum(JobSortEnumCode.DATE_DESC, 'Les plus récents', 'createdAt', SortDirectionEnum.DESC);
-  static readonly DATE_ASC = new JobSortEnum(JobSortEnumCode.DATE_ASC, 'Les plus anciens', 'createdAt', SortDirectionEnum.ASC);
+  static readonly DATE_DESC = new JobSortEnum(JobSortEnumCode.DATE_DESC, 'Les plus récentes', 'createdAt', SortDirectionEnum.DESC);
+  static readonly DATE_ASC = new JobSortEnum(JobSortEnumCode.DATE_ASC, 'Les plus anciennes', 'createdAt', SortDirectionEnum.ASC);
 
   /**
    * @param code code associé à la constante de tri
