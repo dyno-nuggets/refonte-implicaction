@@ -3,7 +3,6 @@ import {Pageable} from '../../../../shared/models/pageable';
 import {finalize, take} from 'rxjs/operators';
 import {LazyLoadEvent} from 'primeng/api';
 import {Constants} from '../../../../config/constants';
-import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
 import {CompanyService} from '../../../../company/services/company.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 
@@ -19,8 +18,6 @@ export class CompaniesTableComponent {
 
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
-  orderByEnums = JobSortEnum.all();
-  selectedOrder = JobSortEnum.DATE_DESC;
 
   constructor(
     private companyService: CompanyService,

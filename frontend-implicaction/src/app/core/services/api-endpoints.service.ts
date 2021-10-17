@@ -206,17 +206,10 @@ export class ApiEndpointsService {
    */
 
   getAllCompanyEndpoint(pageable: Pageable): string {
-    // on merge les filtres et les attributs de pagination
-    const objectParam = {
-      rows: pageable.rows,
-      page: pageable.page,
-      sortBy: pageable.sortBy,
-      sortOrder: pageable.sortOrder
-    };
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.COMPANIES.BASE_URI,
       (qs: QueryStringParameters) => {
-        this.buildQueryStringFromFilters(objectParam, qs);
+        this.buildQueryStringFromFilters(pageable, qs);
       });
   }
 

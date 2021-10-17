@@ -16,8 +16,7 @@ public class CompanyService {
     private final CompanyAdapter companyAdapter;
 
     /**
-     * @return la liste paginée des entreprises selon le paramètre
-     * de recherche "searchKey" reçu
+     * @return la liste paginée des entreprises
      */
     public Page<CompanyDto> getAll(Pageable pageable) {
         return companyRepository.findAll(pageable)
