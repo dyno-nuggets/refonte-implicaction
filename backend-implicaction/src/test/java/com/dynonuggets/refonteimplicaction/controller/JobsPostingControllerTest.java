@@ -15,6 +15,7 @@ import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -62,26 +63,24 @@ class JobsPostingControllerTest {
 
         Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
         Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        ResultActions actions;
 
         when(jobPostingService.findAllWithCriteria(pageable, search, contractType)).thenReturn(jobPostingPageMockResponse);
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings")
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
+        actions = mvc.perform(MockMvcRequestBuilders.get("/api/job-postings").accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
+                .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.totalPages").value(1))
-                .andExpect(jsonPath("$.totalElements").value(2))
-                .andExpect(jsonPath("$.content[0].id", Matchers.is(Math.toIntExact(jobPostings.get(0).getId()))))
-                .andExpect(jsonPath("$.content[0].createdAt", Matchers.is(jobPostings.get(0).getCreatedAt().toString())))
-                .andExpect(jsonPath("$.content[0].description", Matchers.is(jobPostings.get(0).getDescription())))
-                .andExpect(jsonPath("$.content[0].location", Matchers.is(jobPostings.get(0).getLocation())))
-                .andExpect(jsonPath("$.content[0].keywords", Matchers.is(jobPostings.get(0).getKeywords())))
-                .andExpect(jsonPath("$.content[0].salary", Matchers.is(jobPostings.get(0).getSalary())))
-                .andExpect(jsonPath("$.content[1].id", Matchers.is(Math.toIntExact(jobPostings.get(1).getId()))))
-                .andExpect(jsonPath("$.content[1].createdAt", Matchers.is(jobPostings.get(1).getCreatedAt().toString())))
-                .andExpect(jsonPath("$.content[1].description", Matchers.is(jobPostings.get(1).getDescription())))
-                .andExpect(jsonPath("$.content[1].location", Matchers.is(jobPostings.get(1).getLocation())))
-                .andExpect(jsonPath("$.content[1].keywords", Matchers.is(jobPostings.get(1).getKeywords())))
-                .andExpect(jsonPath("$.content[1].salary", Matchers.is(jobPostings.get(1).getSalary())))
-                .andReturn();
+                .andExpect(jsonPath("$.totalPages").value(jobPostingPageMockResponse.getTotalPages()))
+                .andExpect(jsonPath("$.totalElements").value(jobPostings.size()));
+
+        for (int i = 0; i < jobPostings.size(); i++) {
+            actions.andExpect(jsonPath("$.content[" + i + "].id", Matchers.is(Math.toIntExact(jobPostings.get(i).getId()))))
+                    .andExpect(jsonPath("$.content[" + i + "].createdAt", Matchers.is(jobPostings.get(i).getCreatedAt().toString())))
+                    .andExpect(jsonPath("$.content[" + i + "].description", Matchers.is(jobPostings.get(i).getDescription())))
+                    .andExpect(jsonPath("$.content[" + i + "].location", Matchers.is(jobPostings.get(i).getLocation())))
+                    .andExpect(jsonPath("$.content[" + i + "].keywords", Matchers.is(jobPostings.get(i).getKeywords())))
+                    .andExpect(jsonPath("$.content[" + i + "].salary", Matchers.is(jobPostings.get(i).getSalary())));
+        }
+        actions.andReturn();
     }
 
     @Test
