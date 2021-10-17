@@ -16,6 +16,6 @@ export class CompanyService {
   }
 
   getAll(pageable: Pageable): Observable<any> {
-    return this.http.get(this.apiEndpointsService.getAllCompaniesEndpoint(pageable));
+    return this.http.get(this.apiEndpointsService.getAllCompanyEndpoint(pageable));
   }
 }

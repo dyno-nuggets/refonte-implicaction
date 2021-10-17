@@ -7,6 +7,9 @@ import {LazyLoadEvent} from 'primeng/api';
 import {finalize, take} from 'rxjs/operators';
 import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
 import {JobCriteriaFilter} from '../../../../job/models/job-criteria-filter';
+import {JobPosting} from '../../../../shared/models/job-posting';
+import {JobPostingFormComponent} from '../job-posting-form/job-posting-form.component';
+import {SidebarService} from '../../../../shared/services/sidebar.service';
 
 @Component({
   selector: 'app-jobs-table',
@@ -27,6 +30,7 @@ export class JobsTableComponent {
   constructor(
     private jobService: JobService,
     private toastService: ToasterService,
+    private sidebarService: SidebarService
   ) {
   }
 
@@ -49,5 +53,15 @@ export class JobsTableComponent {
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
       );
+  }
+
+  editJob(job: JobPosting): void {
+    this.sidebarService
+      .open({
+        title: `Editer une nouvelle offre d'emploi`,
+        input: {job},
+        component: JobPostingFormComponent,
+        width: 650
+      });
   }
 }
