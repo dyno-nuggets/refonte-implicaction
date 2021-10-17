@@ -24,7 +24,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
   formJob: FormGroup;
   currentUserId: string;
-  jobPosting: JobPosting;
+  job: JobPosting;
   isUpdate: boolean;
   isSubmitted = false;
   contracts = ContractEnum.all();
@@ -46,9 +46,9 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       .subscribe(data => {
         this.companies = data.content;
       });
-    this.jobPosting = this.sidebarInput ? {...this.sidebarInput.job} : undefined;
+    this.job = this.sidebarInput ? {...this.sidebarInput.job} : undefined;
     this.isUpdate = !!this.sidebarInput?.job?.id;
-    this.initForm(this.jobPosting);
+    this.initForm(this.job);
   }
 
   private initForm(jobPosting: JobPosting): void {
@@ -76,7 +76,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     job.contractType = ContractEnum.from(this.formJob.controls.contractType.value);
     let job$: Observable<JobPosting>;
     if (this.isUpdate) {
-      job.status = this.jobPosting.status;
+      job.status = this.job.status;
       job.id = this.sidebarInput.job.id;
       job$ = this.jobService.updateJob(job);
     } else {

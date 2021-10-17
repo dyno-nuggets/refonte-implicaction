@@ -81,14 +81,14 @@
           >
             <option
               value=""
-              [selected]="!jobPosting"
+              [selected]="!job"
             >
               Sélectionnez le type de contrat
             </option>
             <option
               *ngFor="let contract of contracts"
               [ngValue]="contract.code"
-              [selected]="jobPosting?.contractType?.code === contract.code"
+              [selected]="job?.contractType?.code === contract.code"
             >
               {{contract.label}}
             </option>
@@ -107,18 +107,22 @@
   <div class="form-floating mb-4">
     <div class="row">
       <div class="col-12">
-        <select class="w-100 custom-select form-select-sm px-4" (change)="onCompanyChange($event)"
-                formControlName="company" id="companySelect">
+        <select
+          class="w-100 custom-select form-select-sm px-4"
+          (change)="onCompanyChange($event)"
+          formControlName="company"
+          id="companySelect"
+        >
           <option
             value=""
-            [selected]="!jobPosting"
+            [selected]="!job"
           >
             Sélectionnez une entreprise
           </option>
           <option
             *ngFor="let company of companies"
             [ngValue]="company"
-            [selected]="jobPosting?.company?.id == company.id"
+            [selected]="job?.company?.id == company.id"
           >
             {{company.name}}
           </option>

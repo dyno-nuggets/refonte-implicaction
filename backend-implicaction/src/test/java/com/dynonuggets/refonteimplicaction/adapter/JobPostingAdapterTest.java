@@ -77,9 +77,9 @@ class JobPostingAdapterTest {
     void toModelTest() {
         final JobPostingDto dto = jobPostingAdapter.toDto(jobPosting);
 
-        final JobPosting _jobPosting = jobPostingAdapter.toModel(dto);
+        final JobPosting expectedJobPosting = jobPostingAdapter.toModel(dto);
 
-        assertThat(_jobPosting).usingRecursiveComparison()
-                .isEqualTo(jobPosting);
+        assertThat(jobPosting).usingRecursiveComparison()
+                .isEqualTo(expectedJobPosting);
     }
 }
