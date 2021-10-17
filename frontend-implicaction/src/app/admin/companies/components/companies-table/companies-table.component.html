@@ -1,0 +1,64 @@
+<p-table
+  (onLazyLoad)="loadCompanies($event)"
+  [lazy]="true"
+  [loading]="loading"
+  [paginator]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [rows]="pageable.rows"
+  [showCurrentPageReport]="true"
+  [totalRecords]="pageable.totalElements"
+  [value]="pageable.content"
+  currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>
+      <th class="overflow-ellipsis text-uppercase col-4 col-sm-4 col-lg-2 px-2" scope="col">Nom</th>
+      <th class="overflow-ellipsis text-uppercase col-1 col-sm-2 col-lg-2 px-2" scope="col">Url</th>
+      <th class="overflow-ellipsis text-uppercase col-3 col-sm-4 col-lg-5 px-2" scope="col">Description</th>
+      <th class="overflow-ellipsis text-uppercase text-center col-4 col-sm-2 col-lg-2 px-2" scope="col">Actions</th>
+    </tr>
+  </ng-template>
+  <ng-template let-company pTemplate="body">
+    <tr>
+      <td class="col-0 col-lg-1">
+        <img
+          #companyLogo
+          (error)="companyLogo.src = 'assets/img/job-posting-img.png'"
+          [src]="company?.logo || 'assets/img/job-posting-img.png'"
+          alt="job-logo"
+          class="card-img-top rounded-circle img-fluid shadow-sm user-avatar"
+        />
+      </td>
+      <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{company.name}}</td>
+      <td class="overflow-ellipsis text-wrap col-1 col-sm-2 col-lg-2 px-2">{{company.url}}</td>
+      <td class="overflow-ellipsis col-3 col-sm-4 col-lg-5 px-2">{{company.description}}</td>
+      <td class="col-4 col-sm-3 col-lg-2 px-2 text-center">
+        <ul class="fa-ul d-flex flex-column flex-lg-row justify-content-center list-unstyled list-inline mb-0">
+          <li class="fa-li list-inline-item m-0 me-lg-2">
+            <button
+              class="btn"
+              data-bs-placement="top"
+              data-bs-toggle="tooltip"
+              title="Editer"
+              type="button"
+            >
+              <i class="fas fa-pen border border-primary text-primary rounded-3 px-2 py-1"></i>
+            </button>
+          </li>
+          <li class="fa-li list-inline-item m-0 me-lg-2">
+            <button
+              class="btn"
+              data-bs-placement="top"
+              data-bs-toggle="tooltip"
+              title="Supprimer"
+              type="button"
+            >
+              <i class="fas fa-trash border border-danger text-danger rounded-3 px-2 py-1"></i>
+            </button>
+          </li>
+        </ul>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

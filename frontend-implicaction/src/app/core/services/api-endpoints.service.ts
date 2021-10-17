@@ -202,6 +202,18 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Companies
+   */
+
+  getAllCompanyEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.COMPANIES.BASE_URI,
+      (qs: QueryStringParameters) => {
+        this.buildQueryStringFromFilters(pageable, qs);
+      });
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */
