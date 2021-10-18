@@ -25,7 +25,7 @@ public class JobPostingController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<JobPostingDto>> getAllBySearchKey(
+    public ResponseEntity<Page<JobPostingDto>> getAllByCriteria(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
