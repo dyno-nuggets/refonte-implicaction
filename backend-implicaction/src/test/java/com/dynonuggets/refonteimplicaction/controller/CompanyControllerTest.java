@@ -30,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = CompanyController.class)
 class CompanyControllerTest {
 
+
+    private final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+
     @Autowired
     protected MockMvc mvc;
     List<CompanyDto> companyDtos;
@@ -53,44 +56,35 @@ class CompanyControllerTest {
     @Test
     void getCompanysListShouldListAllCompanies() throws Exception {
 
-        int first = 0;
-        int rows = 10;
-        String sortOrder = "ASC";
-        String sortBy = "id";
-
         Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
-        Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         ResultActions actions;
 
-        when(companyService.getAll(pageable)).thenReturn(companyDtoPage);
+        // test des données de pagination
+        when(companyService.getAll(DEFAULT_PAGEABLE)).thenReturn(companyDtoPage);
         actions = mvc.perform(MockMvcRequestBuilders.get("/api/companies").accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(companyDtoPage.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(companyDtos.size()));
 
+        // test des propriétés de chaque éléments de la liste reçue
         for (int i = 0; i < companyDtos.size(); i++) {
-            actions.andExpect(jsonPath("$.content[" + i + "].id", Matchers.is(Math.toIntExact(companyDtos.get(i).getId()))))
-                    .andExpect(jsonPath("$.content[" + i + "].description", Matchers.is(companyDtos.get(i).getDescription())))
-                    .andExpect(jsonPath("$.content[" + i + "].name", Matchers.is(companyDtos.get(i).getName())))
-                    .andExpect(jsonPath("$.content[" + i + "].logo", Matchers.is(companyDtos.get(i).getLogo())))
-                    .andExpect(jsonPath("$.content[" + i + "].url", Matchers.is(companyDtos.get(i).getUrl())));
+            final String contentPath = String.format("$.content[%d]", i);
+            actions.andExpect(jsonPath(contentPath + ".id", Matchers.is(Math.toIntExact(companyDtos.get(i).getId()))))
+                    .andExpect(jsonPath(contentPath + ".description", Matchers.is(companyDtos.get(i).getDescription())))
+                    .andExpect(jsonPath(contentPath + ".name", Matchers.is(companyDtos.get(i).getName())))
+                    .andExpect(jsonPath(contentPath + ".logo", Matchers.is(companyDtos.get(i).getLogo())))
+                    .andExpect(jsonPath(contentPath + ".url", Matchers.is(companyDtos.get(i).getUrl())));
         }
         actions.andReturn();
     }
 
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
-        int first = 0;
-        int rows = 10;
-        String sortOrder = "ASC";
-        String sortBy = "id";
 
-        Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-
-        when(companyService.getAll(pageable)).thenReturn(new PageImpl<>(Collections.emptyList()));
+        when(companyService.getAll(DEFAULT_PAGEABLE)).thenReturn(new PageImpl<>(Collections.emptyList()));
         mvc.perform(MockMvcRequestBuilders.get("/api/companies")
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
+                        .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andReturn();
     }
