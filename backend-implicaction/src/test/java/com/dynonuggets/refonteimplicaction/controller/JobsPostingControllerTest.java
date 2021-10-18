@@ -142,5 +142,3 @@ class JobsPostingControllerTest {
         verify(jobPostingService, times(0)).getJobById(anyLong());
     }
 }
-
-
