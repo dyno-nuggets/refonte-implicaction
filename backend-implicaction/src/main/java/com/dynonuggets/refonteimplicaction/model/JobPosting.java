@@ -31,7 +31,7 @@ public class JobPosting {
     @Column(name = "short_description", columnDefinition = "TEXT")
     private String shortDescription;
 
-    @Column(name = "description", columnDefinition = "LONGTEXT")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "location")
