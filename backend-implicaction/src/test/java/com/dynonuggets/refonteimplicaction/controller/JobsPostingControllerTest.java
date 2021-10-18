@@ -31,9 +31,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = JobPostingController.class)
 class JobsPostingControllerTest {
 
+    private final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+    private final String BASE_URI = "/api/job-postings";
+
     @Autowired
-    protected MockMvc mvc;
-    List<JobPostingDto> jobPostings;
+    private MockMvc mvc;
     @InjectMocks
     private JobPostingController jobPostingController;
     @MockBean
@@ -42,6 +44,8 @@ class JobsPostingControllerTest {
     private JwtProvider jwtProvider;
     @MockBean
     private JobPostingService jobPostingService;
+
+    private List<JobPostingDto> jobPostings;
 
     @BeforeEach
     protected void setUp() {
@@ -54,31 +58,27 @@ class JobsPostingControllerTest {
     @Test
     void getJobPostingsListShouldListAllJobs() throws Exception {
 
-        int first = 0;
-        int rows = 10;
-        String sortOrder = "ASC";
-        String sortBy = "id";
         String search = "";
         String contractType = "";
 
         Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
-        Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         ResultActions actions;
 
-        when(jobPostingService.findAllWithCriteria(pageable, search, contractType)).thenReturn(jobPostingPageMockResponse);
-        actions = mvc.perform(MockMvcRequestBuilders.get("/api/job-postings").accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
+        when(jobPostingService.findAllWithCriteria(DEFAULT_PAGEABLE, search, contractType)).thenReturn(jobPostingPageMockResponse);
+        actions = mvc.perform(MockMvcRequestBuilders.get(BASE_URI).accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(jobPostingPageMockResponse.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(jobPostings.size()));
 
         for (int i = 0; i < jobPostings.size(); i++) {
-            actions.andExpect(jsonPath("$.content[" + i + "].id", Matchers.is(Math.toIntExact(jobPostings.get(i).getId()))))
-                    .andExpect(jsonPath("$.content[" + i + "].createdAt", Matchers.is(jobPostings.get(i).getCreatedAt().toString())))
-                    .andExpect(jsonPath("$.content[" + i + "].description", Matchers.is(jobPostings.get(i).getDescription())))
-                    .andExpect(jsonPath("$.content[" + i + "].location", Matchers.is(jobPostings.get(i).getLocation())))
-                    .andExpect(jsonPath("$.content[" + i + "].keywords", Matchers.is(jobPostings.get(i).getKeywords())))
-                    .andExpect(jsonPath("$.content[" + i + "].salary", Matchers.is(jobPostings.get(i).getSalary())));
+            final String contentPath = String.format("$.content[%d]", i);
+            actions.andExpect(jsonPath(contentPath + ".id", Matchers.is(Math.toIntExact(jobPostings.get(i).getId()))))
+                    .andExpect(jsonPath(contentPath + ".createdAt", Matchers.is(jobPostings.get(i).getCreatedAt().toString())))
+                    .andExpect(jsonPath(contentPath + ".description", Matchers.is(jobPostings.get(i).getDescription())))
+                    .andExpect(jsonPath(contentPath + ".location", Matchers.is(jobPostings.get(i).getLocation())))
+                    .andExpect(jsonPath(contentPath + ".keywords", Matchers.is(jobPostings.get(i).getKeywords())))
+                    .andExpect(jsonPath(contentPath + ".salary", Matchers.is(jobPostings.get(i).getSalary())));
         }
         actions.andReturn();
     }
@@ -92,12 +92,11 @@ class JobsPostingControllerTest {
         String search = "";
         String contractType = "";
 
-        Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
-        Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        Pageable DEFAULT_PAGEABLE = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
 
-        when(jobPostingService.findAllWithCriteria(pageable, search, contractType)).thenReturn(new PageImpl<>(Collections.emptyList()));
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings")
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
+        when(jobPostingService.findAllWithCriteria(DEFAULT_PAGEABLE, search, contractType)).thenReturn(new PageImpl<>(Collections.emptyList()));
+        mvc.perform(MockMvcRequestBuilders.get(BASE_URI)
+                        .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andReturn();
     }
@@ -116,8 +115,8 @@ class JobsPostingControllerTest {
                 .build();
 
         when(jobPostingService.getJobById(jobPostingDto.getId())).thenReturn(jobPostingDto);
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings/" + jobPostingDto.getId())
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
+        mvc.perform(MockMvcRequestBuilders.get(BASE_URI + "/" + jobPostingDto.getId())
+                        .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.is(Math.toIntExact(jobPostings.get(0).getId()))))
                 .andExpect(jsonPath("$.description", Matchers.is(jobPostings.get(0).getDescription())))
@@ -140,8 +139,8 @@ class JobsPostingControllerTest {
                 .build();
 
         when(jobPostingService.getJobById(jobPostingDto.getId())).thenReturn(jobPostingDto);
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings/" + jobPostingDto.getId())
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
+        mvc.perform(MockMvcRequestBuilders.get(BASE_URI + "/" + jobPostingDto.getId())
+                        .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andReturn();
     }

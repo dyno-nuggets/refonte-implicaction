@@ -30,8 +30,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = CompanyController.class)
 class CompanyControllerTest {
 
-
     private final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+    private final String BASE_URI = "/api/companies";
 
     @Autowired
     protected MockMvc mvc;
@@ -61,7 +61,7 @@ class CompanyControllerTest {
 
         // test des données de pagination
         when(companyService.getAll(DEFAULT_PAGEABLE)).thenReturn(companyDtoPage);
-        actions = mvc.perform(MockMvcRequestBuilders.get("/api/companies").accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
+        actions = mvc.perform(MockMvcRequestBuilders.get(BASE_URI).accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(companyDtoPage.getTotalPages()))
@@ -83,7 +83,7 @@ class CompanyControllerTest {
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
 
         when(companyService.getAll(DEFAULT_PAGEABLE)).thenReturn(new PageImpl<>(Collections.emptyList()));
-        mvc.perform(MockMvcRequestBuilders.get("/api/companies")
+        mvc.perform(MockMvcRequestBuilders.get(BASE_URI)
                         .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andReturn();
