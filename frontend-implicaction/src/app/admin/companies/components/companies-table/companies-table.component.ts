@@ -2,9 +2,12 @@ import {Component} from '@angular/core';
 import {Pageable} from '../../../../shared/models/pageable';
 import {finalize, take} from 'rxjs/operators';
 import {LazyLoadEvent} from 'primeng/api';
+import {Company} from '../../../../shared/models/company';
 import {Constants} from '../../../../config/constants';
 import {CompanyService} from '../../../../company/services/company.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
+import {SidebarService} from '../../../../shared/services/sidebar.service';
+import {CompaniesFormComponent} from '../companies-form/companies-form.component';
 
 @Component({
   selector: 'app-companies-table',
@@ -22,6 +25,7 @@ export class CompaniesTableComponent {
   constructor(
     private companyService: CompanyService,
     private toastService: ToasterService,
+    private sidebarService: SidebarService,
   ) {
   }
 
@@ -44,6 +48,16 @@ export class CompaniesTableComponent {
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
       );
+  }
+
+  onEditCompany(company: Company): void {
+    this.sidebarService
+      .open({
+        title: 'Editer une entreprise',
+        component: CompaniesFormComponent,
+        input: {company},
+        width: 650
+      });
   }
 }
 
