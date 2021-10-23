@@ -201,6 +201,18 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId]);
   }
 
+  createJobPostingEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOBS.BASE_URI);
+  }
+
+  updateJobPostingEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOBS.BASE_URI);
+  }
+
+  deleteJobPostingEndpoint(JobId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId]);
+  }
+
   /**
    * Companies
    */

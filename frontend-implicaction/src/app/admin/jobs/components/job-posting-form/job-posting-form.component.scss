@@ -1,0 +1,18 @@
+textarea {
+  &.rounded-pill {
+    border-radius: 25px !important;
+    resize: none;
+  }
+
+  &.description-input {
+    height: 150px;
+  }
+}
+
+.custom-select {
+  height: 57px;
+}
+
+.editor {
+  height: 320px;
+}

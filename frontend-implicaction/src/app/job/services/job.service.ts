@@ -24,4 +24,16 @@ export class JobService {
   getById(jobId: string): Observable<JobPosting> {
     return this.http.get<JobPosting>(this.apiEndpointsService.getJobByIdEndpoint(jobId));
   }
+
+  createJob(job: JobPosting): Observable<JobPosting> {
+    return this.http.post<JobPosting>(this.apiEndpointsService.createJobPostingEndpoint(), job);
+  }
+
+  updateJob(jobPosting: JobPosting): Observable<JobPosting> {
+    return this.http.put<JobPosting>(this.apiEndpointsService.updateJobPostingEndpoint(), jobPosting);
+  }
+
+  deleteJobPosting(jobPostingId: string): Observable<any> {
+    return this.http.delete(this.apiEndpointsService.deleteJobPostingEndpoint(jobPostingId));
+  }
 }

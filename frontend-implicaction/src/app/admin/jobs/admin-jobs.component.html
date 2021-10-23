@@ -1,6 +1,17 @@
 <div class="pending-table card">
-  <div class="card-header pb-0 bg-primary text-light">
+  <div class="card-header pb-0 bg-primary text-light mb-3 d-flex justify-content-between">
     <h5 class="panel-title">Toutes les offres d'emplois</h5>
+    <div>
+      <i-feather
+        (click)="onAddJob()"
+        class="cursor-pointer secondary-on-hover"
+        data-placement="bottom"
+        data-toggle="tooltip"
+        name="plus"
+        title="Ajouter une offre"
+      >
+      </i-feather>
+    </div>
   </div>
   <app-jobs-table></app-jobs-table>
 </div>

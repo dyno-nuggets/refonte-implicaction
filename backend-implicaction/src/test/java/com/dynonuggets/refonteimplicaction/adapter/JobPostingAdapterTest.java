@@ -45,6 +45,7 @@ class JobPostingAdapterTest {
                 .id(7L)
                 .company(company)
                 .title("title")
+                .shortDescription("short_description")
                 .description("description")
                 .location("location")
                 .salary("salary")
@@ -62,6 +63,7 @@ class JobPostingAdapterTest {
 
         assertThat(jobPostingDto.getId()).isEqualTo(jobPosting.getId());
         assertThat(jobPostingDto.getTitle()).isEqualTo(jobPosting.getTitle());
+        assertThat(jobPostingDto.getShortDescription()).isEqualTo(jobPosting.getShortDescription());
         assertThat(jobPostingDto.getDescription()).isEqualTo(jobPosting.getDescription());
         assertThat(jobPostingDto.getLocation()).isEqualTo(jobPosting.getLocation());
         assertThat(jobPostingDto.getSalary()).isEqualTo(jobPosting.getSalary());
@@ -69,5 +71,15 @@ class JobPostingAdapterTest {
         assertThat(jobPostingDto.getStatus()).isEqualTo(statusDto);
         assertThat(jobPostingDto.getContractType()).isEqualTo(contractTypeDto);
         assertThat(jobPostingDto.getCreatedAt()).isEqualTo(jobPosting.getCreatedAt());
+    }
+
+    @Test
+    void toModelTest() {
+        final JobPostingDto dto = jobPostingAdapter.toDto(jobPosting);
+
+        final JobPosting expectedJobPosting = jobPostingAdapter.toModel(dto);
+
+        assertThat(jobPosting).usingRecursiveComparison()
+                .isEqualTo(expectedJobPosting);
     }
 }
