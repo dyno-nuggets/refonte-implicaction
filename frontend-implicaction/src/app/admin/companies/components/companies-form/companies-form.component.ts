@@ -20,7 +20,6 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
 
   formCompany: FormGroup;
   currentUserId: string;
-  // change to company
   company: Company;
   isUpdate: boolean;
   isSubmitted = false;
