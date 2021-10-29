@@ -12,6 +12,7 @@ import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
 import {ContractEnum} from '../../../../shared/enums/contract.enum';
 import {StatusEnum} from '../../../../shared/enums/status.enum';
+import {JobContextService} from '../../../../shared/services/job-context.service';
 
 @Component({
   selector: 'app-job-posting-form',
@@ -30,6 +31,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   contracts = ContractEnum.all();
   companies: Company[] = [];
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
+  jobContextService: JobContextService;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -60,7 +62,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
         title: [jobPosting?.title ?? '', Validators.required],
         shortDescription: [jobPosting?.shortDescription ?? '', Validators.required],
         description: [jobPosting?.description ?? '', Validators.required],
-        contractType: [jobPosting?.contractType ?? '', Validators.required],
+        contractType: [jobPosting?.contractType ?? ''],
         company: [jobPosting?.company ?? '']
       });
 
@@ -73,9 +75,11 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       return;
     }
     const job: JobPosting = {...this.formJob.value};
-    job.contractType = ContractEnum.from(this.formJob.controls.contractType.value);
+
     let job$: Observable<JobPosting>;
     if (this.isUpdate) {
+      console.log(job);
+      console.log(ContractEnum.from(this.formJob.controls.contractType.value));
       job.status = this.job.status;
       job.id = this.sidebarInput.job.id;
       job$ = this.jobService.updateJob(job);
@@ -84,8 +88,8 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       job$ = this.jobService.createJob(job);
     }
     job$.subscribe(
-      () => {
-        // TODO mettre en place le context service
+      jobUpdate => {
+        this.jobContextService.updateJob(jobUpdate);
       },
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
       () => this.sidebarService.close()

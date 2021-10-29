@@ -87,8 +87,8 @@
             </option>
             <option
               *ngFor="let contract of contracts"
-              [ngValue]="contract.code"
-              [selected]="job?.contractType?.code === contract.code"
+              [ngValue]="contract"
+              [selected]="job?.contractType?.id === contract.id"
             >
               {{contract.label}}
             </option>
@@ -122,7 +122,7 @@
           <option
             *ngFor="let company of companies"
             [ngValue]="company"
-            [selected]="job?.company?.id == company.id"
+            [selected]="job?.company?.id === company.id"
           >
             {{company.name}}
           </option>
