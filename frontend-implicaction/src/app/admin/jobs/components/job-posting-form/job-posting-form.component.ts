@@ -73,7 +73,6 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       return;
     }
     const job: JobPosting = {...this.formJob.value};
-
     let job$: Observable<JobPosting>;
     if (this.isUpdate) {
       job.status = this.job.status;
