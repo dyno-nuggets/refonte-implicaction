@@ -90,6 +90,15 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     );
   }
 
+  private updateFields = (jobUpdate: JobPosting) => {
+    this.sidebarInput.job.contractType = jobUpdate.contractType;
+    this.sidebarInput.job.company = jobUpdate.company;
+    this.sidebarInput.job.description = jobUpdate.description;
+    this.sidebarInput.job.shortDescription = jobUpdate.shortDescription;
+    this.sidebarInput.job.location = jobUpdate.location;
+    this.sidebarInput.job.title = jobUpdate.title;
+  };
+
   onContractChange($event: Event): void {
 
   }
