@@ -24,6 +24,5 @@ export class JobContextService {
     const job = this.behaviorSubject.getValue();
     job.company = jobUpdate.company;
     job.contractType = jobUpdate.contractType;
-    this.behaviorSubject.next(jobUpdate);
   }
 }

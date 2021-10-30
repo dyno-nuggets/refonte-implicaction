@@ -12,7 +12,6 @@ import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
 import {ContractEnum} from '../../../../shared/enums/contract.enum';
 import {StatusEnum} from '../../../../shared/enums/status.enum';
-import {JobContextService} from '../../../../shared/services/job-context.service';
 
 @Component({
   selector: 'app-job-posting-form',
@@ -31,7 +30,6 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   contracts = ContractEnum.all();
   companies: Company[] = [];
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
-  jobContextService: JobContextService;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -78,8 +76,6 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
     let job$: Observable<JobPosting>;
     if (this.isUpdate) {
-      console.log(job);
-      console.log(ContractEnum.from(this.formJob.controls.contractType.value));
       job.status = this.job.status;
       job.id = this.sidebarInput.job.id;
       job$ = this.jobService.updateJob(job);
@@ -88,9 +84,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       job$ = this.jobService.createJob(job);
     }
     job$.subscribe(
-      jobUpdate => {
-        this.jobContextService.updateJob(jobUpdate);
-      },
+      jobUpdate => this.updateFields(jobUpdate),
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
       () => this.sidebarService.close()
     );

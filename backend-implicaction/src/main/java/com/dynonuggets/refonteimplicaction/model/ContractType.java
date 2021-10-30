@@ -20,4 +20,7 @@ public class ContractType {
 
     @Column(name = "label", nullable = false)
     private String label;
+
+    @Column(name = "code", nullable = false)
+    private String code;
 }
