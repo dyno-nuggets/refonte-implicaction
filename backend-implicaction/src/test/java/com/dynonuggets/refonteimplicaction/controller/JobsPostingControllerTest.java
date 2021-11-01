@@ -1,10 +1,11 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import com.dynonuggets.refonteimplicaction.service.UserDetailsServiceImpl;
-import org.hamcrest.Matchers;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,24 +17,28 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = JobPostingController.class)
 class JobsPostingControllerTest {
 
+    private final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+    private final String BASE_URI = "/api/job-postings";
+    private final String GET_JOB_URI = BASE_URI + "/{id}";
+
     @Autowired
-    protected MockMvc mvc;
-    List<JobPostingDto> jobPostings;
+    private MockMvc mvc;
     @InjectMocks
     private JobPostingController jobPostingController;
     @MockBean
@@ -42,6 +47,8 @@ class JobsPostingControllerTest {
     private JwtProvider jwtProvider;
     @MockBean
     private JobPostingService jobPostingService;
+
+    private List<JobPostingDto> jobPostings;
 
     @BeforeEach
     protected void setUp() {
@@ -53,59 +60,44 @@ class JobsPostingControllerTest {
     @WithMockUser
     @Test
     void getJobPostingsListShouldListAllJobs() throws Exception {
-
-        int first = 0;
-        int rows = 10;
-        String sortOrder = "ASC";
-        String sortBy = "id";
         String search = "";
         String contractType = "";
 
         Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
-        Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         ResultActions actions;
 
-        when(jobPostingService.findAllWithCriteria(pageable, search, contractType)).thenReturn(jobPostingPageMockResponse);
-        actions = mvc.perform(MockMvcRequestBuilders.get("/api/job-postings").accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        given(jobPostingService.findAllWithCriteria(DEFAULT_PAGEABLE, search, contractType)).willReturn(jobPostingPageMockResponse);
+
+        actions = mvc.perform(get(BASE_URI).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(jobPostingPageMockResponse.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(jobPostings.size()));
 
         for (int i = 0; i < jobPostings.size(); i++) {
-            actions.andExpect(jsonPath("$.content[" + i + "].id", Matchers.is(Math.toIntExact(jobPostings.get(i).getId()))))
-                    .andExpect(jsonPath("$.content[" + i + "].createdAt", Matchers.is(jobPostings.get(i).getCreatedAt().toString())))
-                    .andExpect(jsonPath("$.content[" + i + "].description", Matchers.is(jobPostings.get(i).getDescription())))
-                    .andExpect(jsonPath("$.content[" + i + "].location", Matchers.is(jobPostings.get(i).getLocation())))
-                    .andExpect(jsonPath("$.content[" + i + "].keywords", Matchers.is(jobPostings.get(i).getKeywords())))
-                    .andExpect(jsonPath("$.content[" + i + "].salary", Matchers.is(jobPostings.get(i).getSalary())));
+            final String contentPath = String.format("$.content[%d]", i);
+            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(jobPostings.get(i).getId()))))
+                    .andExpect(jsonPath(contentPath + ".createdAt", is(jobPostings.get(i).getCreatedAt().toString())))
+                    .andExpect(jsonPath(contentPath + ".description", is(jobPostings.get(i).getDescription())))
+                    .andExpect(jsonPath(contentPath + ".location", is(jobPostings.get(i).getLocation())))
+                    .andExpect(jsonPath(contentPath + ".keywords", is(jobPostings.get(i).getKeywords())))
+                    .andExpect(jsonPath(contentPath + ".salary", is(jobPostings.get(i).getSalary())));
         }
         actions.andReturn();
+        verify(jobPostingService, times(1)).findAllWithCriteria(any(), anyString(), anyString());
     }
 
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
-        int first = 0;
-        int rows = 10;
-        String sortOrder = "ASC";
-        String sortBy = "id";
-        String search = "";
-        String contractType = "";
-
-        Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
-        Pageable pageable = PageRequest.of(first, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-
-        when(jobPostingService.findAllWithCriteria(pageable, search, contractType)).thenReturn(new PageImpl<>(Collections.emptyList()));
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings")
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isForbidden())
+        mvc.perform(get(BASE_URI)).andDo(print())
+                .andExpect(status().isForbidden())
                 .andReturn();
+        verify(jobPostingService, times(0)).findAllWithCriteria(any(), anyString(), anyString());
     }
 
     @Test
     @WithMockUser
     void getJobByIdShouldReturnOneJob() throws Exception {
-
         JobPostingDto jobPostingDto = JobPostingDto.builder()
                 .id(1L)
                 .createdAt(Instant.now())
@@ -115,35 +107,39 @@ class JobsPostingControllerTest {
                 .salary("1111$")
                 .build();
 
-        when(jobPostingService.getJobById(jobPostingDto.getId())).thenReturn(jobPostingDto);
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings/" + jobPostingDto.getId())
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.is(Math.toIntExact(jobPostings.get(0).getId()))))
-                .andExpect(jsonPath("$.description", Matchers.is(jobPostings.get(0).getDescription())))
-                .andExpect(jsonPath("$.location", Matchers.is(jobPostings.get(0).getLocation())))
-                .andExpect(jsonPath("$.keywords", Matchers.is(jobPostings.get(0).getKeywords())))
-                .andExpect(jsonPath("$.salary", Matchers.is(jobPostings.get(0).getSalary())))
+        given(jobPostingService.getJobById(jobPostingDto.getId())).willReturn(jobPostingDto);
+
+        mvc.perform(get(GET_JOB_URI, jobPostingDto.getId()).contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(jobPostings.get(0).getId()))))
+                .andExpect(jsonPath("$.description", is(jobPostings.get(0).getDescription())))
+                .andExpect(jsonPath("$.location", is(jobPostings.get(0).getLocation())))
+                .andExpect(jsonPath("$.keywords", is(jobPostings.get(0).getKeywords())))
+                .andExpect(jsonPath("$.salary", is(jobPostings.get(0).getSalary())))
                 .andReturn();
+        verify(jobPostingService, times(1)).getJobById(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void getJobByIdWhithUnexistingIdShouldThrowException() throws Exception {
+        final long jobId = 123L;
+        final NotFoundException exception = new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobId));
+        given(jobPostingService.getJobById(anyLong())).willThrow(exception);
+
+        mvc.perform(get(GET_JOB_URI, jobId)).andExpect(status().isNotFound());
+
+        verify(jobPostingService, times(1)).getJobById(anyLong());
     }
 
     @Test
     void getJobByIdWithoutJwtShouldBeForbidden() throws Exception {
-
-        JobPostingDto jobPostingDto = JobPostingDto.builder()
-                .id(1L)
-                .createdAt(Instant.now())
-                .description("description")
-                .location("Paris")
-                .keywords("toto,yoyo")
-                .salary("1111$")
-                .build();
-
-        when(jobPostingService.getJobById(jobPostingDto.getId())).thenReturn(jobPostingDto);
-        mvc.perform(MockMvcRequestBuilders.get("/api/job-postings/" + jobPostingDto.getId())
-                .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isForbidden())
+        final long jobId = 123L;
+        mvc.perform(get(GET_JOB_URI, jobId)
+                        .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                .andExpect(status().isForbidden())
                 .andReturn();
+        verify(jobPostingService, times(0)).getJobById(anyLong());
     }
 }
 

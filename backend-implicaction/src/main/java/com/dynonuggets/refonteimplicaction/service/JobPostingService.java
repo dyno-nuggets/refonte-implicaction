@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,7 @@ public class JobPostingService {
 
     public JobPostingDto getJobById(Long jobId) {
         JobPosting jobPosting = jobPostingRepository.findById(jobId)
-                .orElseThrow(() -> new NotFoundException("No job found with id " + jobId));
+                .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobId)));
         return jobPostingAdapter.toDto(jobPosting);
     }
 
