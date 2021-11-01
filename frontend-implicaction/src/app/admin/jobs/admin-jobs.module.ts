@@ -8,6 +8,7 @@ import {EditorModule} from 'primeng/editor';
 import {JobPostingFormComponent} from './components/job-posting-form/job-posting-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FeatherModule} from 'angular-feather';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {FeatherModule} from 'angular-feather';
     TableModule,
     EditorModule,
     ReactiveFormsModule,
-    FeatherModule
+    FeatherModule,
+    DropdownModule
   ]
 })
 export class AdminJobsModule {
