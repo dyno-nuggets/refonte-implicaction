@@ -96,7 +96,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     this.sidebarInput.job.shortDescription = jobUpdate.shortDescription;
     this.sidebarInput.job.location = jobUpdate.location;
     this.sidebarInput.job.title = jobUpdate.title;
-  };
+  }
 
   onContractChange($event: Event): void {
 
