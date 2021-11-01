@@ -8,6 +8,7 @@ import {JobDetailsComponent} from './components/job-details/job-details.componen
 import {JobRoutingModule} from './job-routing.module';
 import {FeatherModule} from 'angular-feather';
 import {CardModule} from 'primeng/card';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import {CardModule} from 'primeng/card';
     JobRoutingModule,
     FeatherModule,
     PaginatorModule,
-    CardModule
+    CardModule,
+    DropdownModule
   ]
 })
 export class JobModule {
