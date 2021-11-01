@@ -24,7 +24,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(controllers = CompanyController.class)
@@ -77,6 +78,8 @@ class CompanyControllerTest {
                     .andExpect(jsonPath(contentPath + ".url", Matchers.is(companyDtos.get(i).getUrl())));
         }
         actions.andReturn();
+
+        verify(companyService, times(1)).getAll(any());
     }
 
     @Test
@@ -87,5 +90,7 @@ class CompanyControllerTest {
                         .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isForbidden())
                 .andReturn();
+
+        verify(companyService, times(0)).getAll(any());
     }
 }
