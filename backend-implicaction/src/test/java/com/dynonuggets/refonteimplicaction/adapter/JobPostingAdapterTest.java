@@ -36,10 +36,10 @@ class JobPostingAdapterTest {
         jobPostingAdapter = new JobPostingAdapter(companyAdapter, contractTypeAdapter, statusAdapter);
         company = new Company(1L, "urlModel", "logo", "name", "description");
         status = new Status(2L, "label", "type");
-        contractType = new ContractType(3L, "label");
+        contractType = new ContractType(3L, "label", "code");
         companyDto = new CompanyDto(1L, "urlModel", "logo", "name", "description");
         statusDto = new StatusDto(2L, "label", "type");
-        contractTypeDto = new ContractTypeDto(3L, "label");
+        contractTypeDto = new ContractTypeDto(3L, "label", "code");
 
         jobPosting = JobPosting.builder()
                 .id(7L)

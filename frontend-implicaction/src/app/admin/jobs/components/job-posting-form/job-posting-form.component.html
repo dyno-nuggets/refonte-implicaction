@@ -73,26 +73,16 @@
     <div class="form-floating col-6">
       <div class="row">
         <div class="col-12">
-          <select
-            class="w-100 custom-select form-select-sm"
-            (change)="onContractChange($event)"
+          <p-dropdown
+            [options]="contracts"
             formControlName="contractType"
-            id="contractSelect"
+            placeholder="Sélectionnez le type de contrat"
+            optionLabel="label"
+            styleClass="w-100 custom-select form-select-lg"
+            required="true"
+            emptyMessage="Aucun contrat"
           >
-            <option
-              value=""
-              [selected]="!job"
-            >
-              Sélectionnez le type de contrat
-            </option>
-            <option
-              *ngFor="let contract of contracts"
-              [ngValue]="contract.code"
-              [selected]="job?.contractType?.code === contract.code"
-            >
-              {{contract.label}}
-            </option>
-          </select>
+          </p-dropdown>
         </div>
       </div>
 
@@ -104,31 +94,17 @@
       </div>
     </div>
   </div>
-  <div class="form-floating mb-4">
-    <div class="row">
-      <div class="col-12">
-        <select
-          class="w-100 custom-select form-select-sm px-4"
-          (change)="onCompanyChange($event)"
-          formControlName="company"
-          id="companySelect"
-        >
-          <option
-            value=""
-            [selected]="!job"
-          >
-            Sélectionnez une entreprise
-          </option>
-          <option
-            *ngFor="let company of companies"
-            [ngValue]="company"
-            [selected]="job?.company?.id == company.id"
-          >
-            {{company.name}}
-          </option>
-        </select>
-      </div>
-    </div>
+  <div class="form-floating">
+    <p-dropdown
+      [options]="companies"
+      formControlName="company"
+      placeholder="Sélectionnez l'entreprise"
+      optionLabel="name"
+      styleClass="w-100 custom-select form-select-lg"
+      required="true"
+      emptyMessage="Aucune entreprise"
+    >
+    </p-dropdown>
     <div
       *ngIf="(isSubmitted || formJob.controls['company'].touched) && formJob.controls['company'].errors"
       class="text-danger"

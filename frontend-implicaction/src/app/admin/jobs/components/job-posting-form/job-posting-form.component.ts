@@ -60,7 +60,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
         title: [jobPosting?.title ?? '', Validators.required],
         shortDescription: [jobPosting?.shortDescription ?? '', Validators.required],
         description: [jobPosting?.description ?? '', Validators.required],
-        contractType: [jobPosting?.contractType ?? '', Validators.required],
+        contractType: [jobPosting?.contractType ?? ''],
         company: [jobPosting?.company ?? '']
       });
 
@@ -73,7 +73,6 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       return;
     }
     const job: JobPosting = {...this.formJob.value};
-    job.contractType = ContractEnum.from(this.formJob.controls.contractType.value);
     let job$: Observable<JobPosting>;
     if (this.isUpdate) {
       job.status = this.job.status;
@@ -84,12 +83,19 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       job$ = this.jobService.createJob(job);
     }
     job$.subscribe(
-      () => {
-        // TODO mettre en place le context service
-      },
+      jobUpdate => this.updateFields(jobUpdate),
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
       () => this.sidebarService.close()
     );
+  }
+
+  private updateFields = (jobUpdate: JobPosting) => {
+    this.sidebarInput.job.contractType = jobUpdate.contractType;
+    this.sidebarInput.job.company = jobUpdate.company;
+    this.sidebarInput.job.description = jobUpdate.description;
+    this.sidebarInput.job.shortDescription = jobUpdate.shortDescription;
+    this.sidebarInput.job.location = jobUpdate.location;
+    this.sidebarInput.job.title = jobUpdate.title;
   }
 
   onContractChange($event: Event): void {

@@ -15,6 +15,7 @@ public class ContractTypeAdapter {
         return ContractTypeDto.builder()
                 .id(model.getId())
                 .label(model.getLabel())
+                .code(model.getCode())
                 .build();
     }
 
@@ -22,6 +23,7 @@ public class ContractTypeAdapter {
         return ContractType.builder()
                 .id(dto.getId())
                 .label(dto.getLabel())
+                .code(dto.getCode())
                 .build();
     }
 }

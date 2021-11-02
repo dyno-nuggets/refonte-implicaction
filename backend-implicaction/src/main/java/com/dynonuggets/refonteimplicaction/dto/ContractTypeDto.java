@@ -14,4 +14,5 @@ public class ContractTypeDto {
 
     private Long id;
     private String label;
+    private String code;
 }
