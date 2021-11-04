@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {ToasterService} from '../../../../core/services/toaster.service';
@@ -19,7 +19,7 @@ import {ActivatedRoute} from '@angular/router';
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.scss']
 })
-export class JobsTableComponent {
+export class JobsTableComponent implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   loading = true; // indique si les données sont en chargement
