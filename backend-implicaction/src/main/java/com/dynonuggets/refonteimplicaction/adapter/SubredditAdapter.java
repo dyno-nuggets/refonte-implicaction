@@ -5,6 +5,8 @@ import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+
 @Component
 @AllArgsConstructor
 public class SubredditAdapter {
@@ -21,6 +23,7 @@ public class SubredditAdapter {
         return SubredditDto.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .numberOfPosts(isNotEmpty(model.getPosts()) ? model.getPosts().size() : 0)
                 .description(model.getDescription())
                 .build();
     }

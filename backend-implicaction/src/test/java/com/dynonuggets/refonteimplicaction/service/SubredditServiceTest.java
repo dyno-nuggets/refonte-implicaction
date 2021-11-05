@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class GroupServiceTest {
+class SubredditServiceTest {
 
     @Mock
     SubredditRepository subredditRepository;
