@@ -11,8 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Job.*;
+
 @RestController
-@RequestMapping("/api/job-postings")
+@RequestMapping(BASE_URI)
 @AllArgsConstructor
 public class JobPostingController {
 
@@ -38,7 +40,7 @@ public class JobPostingController {
         return ResponseEntity.ok(jobPostingDtos);
     }
 
-    @GetMapping(path = "/{jobId}")
+    @GetMapping(path = GET_JOB_URI)
     public ResponseEntity<JobPostingDto> getJobById(@PathVariable("jobId") Long jobId) {
         JobPostingDto jobPostingDto = jobPostingService.getJobById(jobId);
         return ResponseEntity.ok(jobPostingDto);
@@ -51,7 +53,7 @@ public class JobPostingController {
     }
 
     @SuppressWarnings("rawtypes")
-    @DeleteMapping("/{jobId}")
+    @DeleteMapping(DELETE_JOB_URI)
     public ResponseEntity delete(@PathVariable Long jobId) {
         jobPostingService.deleteJobPosting(jobId);
         return ResponseEntity.noContent().build();

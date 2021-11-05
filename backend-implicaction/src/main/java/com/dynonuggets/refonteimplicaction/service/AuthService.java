@@ -1,7 +1,10 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.dto.*;
+import com.dynonuggets.refonteimplicaction.dto.AuthenticationResponseDto;
+import com.dynonuggets.refonteimplicaction.dto.LoginRequestDto;
+import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
+import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.model.JobSeeker;
@@ -129,12 +132,11 @@ public class AuthService {
     }
 
     @Transactional(readOnly = true)
-    public UserDto getCurrentUser() {
+    public User getCurrentUser() {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final User user = userRepository.findByUsername(principal.getUsername())
+        return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
-        return userAdapter.toDto(user);
     }
 
     @Transactional(readOnly = true)

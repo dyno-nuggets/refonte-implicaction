@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
-import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class RelationController {
 
     @PostMapping("/request/{receiverId}")
     public ResponseEntity<RelationsDto> requestRelation(@PathVariable("receiverId") Long receiverId) {
-        final UserDto registredUser = authService.getCurrentUser();
+        final User registredUser = authService.getCurrentUser();
         RelationsDto relationsDto = relationService.requestRelation(registredUser.getId(), receiverId);
         return ResponseEntity.ok(relationsDto);
     }
