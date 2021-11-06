@@ -51,21 +51,6 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     this.initForm(this.job);
   }
 
-  private initForm(jobPosting: JobPosting): void {
-    this.formJob = this.formBuilder
-      .group({
-        keywords: [jobPosting?.keywords ?? ''],
-        location: [jobPosting?.location ?? '', Validators.required],
-        salary: [jobPosting?.salary ?? '', Validators.required],
-        title: [jobPosting?.title ?? '', Validators.required],
-        shortDescription: [jobPosting?.shortDescription ?? '', Validators.required],
-        description: [jobPosting?.description ?? '', Validators.required],
-        contractType: [jobPosting?.contractType ?? ''],
-        company: [jobPosting?.company ?? '']
-      });
-
-  }
-
   onSubmit(): void {
     this.isSubmitted = true;
 
@@ -83,19 +68,14 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       job$ = this.jobService.createJob(job);
     }
     job$.subscribe(
-      jobUpdate => this.updateFields(jobUpdate),
+      jobUpdate => {
+        if (this.isUpdate) {
+          this.updateFields(jobUpdate);
+        }
+      },
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
       () => this.sidebarService.close()
     );
-  }
-
-  private updateFields = (jobUpdate: JobPosting) => {
-    this.sidebarInput.job.contractType = jobUpdate.contractType;
-    this.sidebarInput.job.company = jobUpdate.company;
-    this.sidebarInput.job.description = jobUpdate.description;
-    this.sidebarInput.job.shortDescription = jobUpdate.shortDescription;
-    this.sidebarInput.job.location = jobUpdate.location;
-    this.sidebarInput.job.title = jobUpdate.title;
   }
 
   onContractChange($event: Event): void {
@@ -104,5 +84,30 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
   onCompanyChange($event: Event): void {
 
+  }
+
+  private initForm(jobPosting: JobPosting): void {
+    this.formJob = this.formBuilder
+      .group({
+        keywords: [jobPosting?.keywords ?? ''],
+        location: [jobPosting?.location ?? '', Validators.required],
+        salary: [jobPosting?.salary ?? '', Validators.required],
+        title: [jobPosting?.title ?? '', Validators.required],
+        shortDescription: [jobPosting?.shortDescription ?? '', Validators.required],
+        description: [jobPosting?.description ?? '', Validators.required],
+        contractType: [jobPosting?.contractType ?? ''],
+        company: [jobPosting?.company ?? '']
+      });
+
+  }
+
+  private updateFields(jobUpdate: JobPosting): void {
+    this.sidebarInput.job.contractType = jobUpdate.contractType;
+    this.sidebarInput.job.company = jobUpdate.company;
+    this.sidebarInput.job.description = jobUpdate.description;
+    this.sidebarInput.job.shortDescription = jobUpdate.shortDescription;
+    this.sidebarInput.job.location = jobUpdate.location;
+    this.sidebarInput.job.title = jobUpdate.title;
+    this.sidebarInput.job.salary = jobUpdate.salary;
   }
 }

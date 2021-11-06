@@ -105,3 +105,7 @@ textarea, input {
 input:focus::placeholder {
   color: transparent;
 }
+
+.btn-check:focus + .btn, .btn:focus {
+  box-shadow: none;
+}
