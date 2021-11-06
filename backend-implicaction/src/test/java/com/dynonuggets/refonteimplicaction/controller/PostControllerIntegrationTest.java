@@ -13,12 +13,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -31,7 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = PostController.class)
 class PostControllerIntegrationTest {
 
-    Gson gson = new GsonBuilder().serializeNulls().create();
+    final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+
+    final Gson gson = new GsonBuilder().serializeNulls().create();
 
     @Autowired
     private MockMvc mvc;
@@ -190,5 +196,39 @@ class PostControllerIntegrationTest {
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
         verify(postService, never()).getPost(any());
+    }
+
+    @Test
+    @WithMockUser
+    void should_list_all_post_when_authenticated() throws Exception {
+        // given
+        PostResponse postRequest1 = new PostResponse(1L, "Post Name", "http://url.site", "Description", "User 1",
+                "Subreddit Name", 0, 0, "il y a 2 jours", false, false);
+        PostResponse postRequest2 = new PostResponse(2L, "Post Name 2", "http://url2.site2", "Description2", "User 2",
+                "Subreddit Name 2", 0, 0, "il y a 2 jours", false, false);
+
+        final List<PostResponse> postResponses = asList(postRequest1, postRequest2);
+        final Page<PostResponse> expectedPages = new PageImpl<>(postResponses);
+        final long expectedSize = expectedPages.getTotalElements();
+
+        given(postService.getAllPosts(DEFAULT_PAGEABLE)).willReturn(expectedPages);
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(POST_BASE_URI));
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.numberOfElements", is((int) expectedSize)))
+                .andExpect(jsonPath("$.last", is(true)))
+                .andExpect(jsonPath("$.totalPages", is(1)));
+
+        for (int i = 0; i < expectedSize; i++) {
+            String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(postResponses.get(i).getId().intValue())))
+                    .andExpect(jsonPath(contentPath + ".name", is(postResponses.get(i).getName())))
+                    .andExpect(jsonPath(contentPath + ".url", is(postResponses.get(i).getUrl())));
+        }
+        verify(postService, times(1)).getAllPosts(any());
     }
 }

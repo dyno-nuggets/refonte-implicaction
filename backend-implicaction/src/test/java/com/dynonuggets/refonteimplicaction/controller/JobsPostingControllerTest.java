@@ -8,7 +8,6 @@ import com.dynonuggets.refonteimplicaction.service.UserDetailsServiceImpl;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,7 +35,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class JobsPostingControllerTest {
 
     private final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
-
 
     @Autowired
     private MockMvc mvc;

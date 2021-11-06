@@ -11,6 +11,8 @@ import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -33,12 +35,21 @@ public class PostService {
                 .orElseThrow(() -> new NotFoundException(String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditName())));
         Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());
         Post save = postRepository.save(post);
-        return postAdapter.toPostResponse(save, commentService.commentCount(save), voteService.isPostUpVoted(save), voteService.isPostDownVoted(save));
+        return getPostResponse(save);
     }
 
     public PostResponse getPost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
+        return getPostResponse(post);
+    }
+
+    public Page<PostResponse> getAllPosts(Pageable pageable) {
+        final Page<Post> allPosts = postRepository.findAll(pageable);
+        return allPosts.map(this::getPostResponse);
+    }
+
+    private PostResponse getPostResponse(Post post) {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
     }
 }

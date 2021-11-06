@@ -17,10 +17,12 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.time.Instant;
 import java.util.Optional;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -126,4 +128,25 @@ class PostServiceTest {
         assertTrue(exception.getMessage().contains(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
         assertThat(exception).isInstanceOf(NotFoundException.class);
     }
+
+    @Test
+    void should_list_all_posts() {
+        // given
+        User currentUser = User.builder().id(1345L).username("gustave").build();
+        Subreddit subreddit = new Subreddit(123L, "Sub 1", "Description Sub 1", null, Instant.now(), currentUser);
+        Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+        Page<Post> posts = new PageImpl<>(asList(
+                new Post(1L, "Post 1", null, "Description 1", 0, currentUser, Instant.now(), subreddit),
+                new Post(2L, "Post 2", null, "Description 2", 0, currentUser, Instant.now(), subreddit),
+                new Post(3L, "Post 3", null, "Description 3", 0, currentUser, Instant.now(), subreddit)
+        ));
+        given(postRepository.findAll(any(Pageable.class))).willReturn(posts);
+
+        // when
+        Page<PostResponse> actual = postService.getAllPosts(pageable);
+
+        // then
+        assertThat(actual.getSize()).isEqualTo(posts.getSize());
+    }
+
 }
