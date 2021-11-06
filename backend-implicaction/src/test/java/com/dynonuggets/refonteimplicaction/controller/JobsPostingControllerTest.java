@@ -8,7 +8,6 @@ import com.dynonuggets.refonteimplicaction.service.UserDetailsServiceImpl;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +21,8 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Job.BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Job.GET_JOB_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -34,17 +35,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class JobsPostingControllerTest {
 
     private final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
-    private final String BASE_URI = "/api/job-postings";
-    private final String GET_JOB_URI = BASE_URI + "/{id}";
+
 
     @Autowired
     private MockMvc mvc;
-    @InjectMocks
-    private JobPostingController jobPostingController;
+
     @MockBean
     private UserDetailsServiceImpl userDetailsService;
+
     @MockBean
     private JwtProvider jwtProvider;
+
     @MockBean
     private JobPostingService jobPostingService;
 
@@ -109,7 +110,7 @@ class JobsPostingControllerTest {
 
         given(jobPostingService.getJobById(jobPostingDto.getId())).willReturn(jobPostingDto);
 
-        mvc.perform(get(GET_JOB_URI, jobPostingDto.getId()).contentType(MediaType.APPLICATION_JSON)).andDo(print())
+        mvc.perform(get(BASE_URI + GET_JOB_URI, jobPostingDto.getId()).contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(Math.toIntExact(jobPostings.get(0).getId()))))
                 .andExpect(jsonPath("$.description", is(jobPostings.get(0).getDescription())))
@@ -127,7 +128,7 @@ class JobsPostingControllerTest {
         final NotFoundException exception = new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobId));
         given(jobPostingService.getJobById(anyLong())).willThrow(exception);
 
-        mvc.perform(get(GET_JOB_URI, jobId)).andExpect(status().isNotFound());
+        mvc.perform(get(BASE_URI + GET_JOB_URI, jobId)).andExpect(status().isNotFound());
 
         verify(jobPostingService, times(1)).getJobById(anyLong());
     }
@@ -135,8 +136,7 @@ class JobsPostingControllerTest {
     @Test
     void getJobByIdWithoutJwtShouldBeForbidden() throws Exception {
         final long jobId = 123L;
-        mvc.perform(get(GET_JOB_URI, jobId)
-                        .accept(MediaType.ALL).contentType(MediaType.APPLICATION_JSON)).andDo(print())
+        mvc.perform(get(BASE_URI + GET_JOB_URI, jobId).contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();
         verify(jobPostingService, times(0)).getJobById(anyLong());
