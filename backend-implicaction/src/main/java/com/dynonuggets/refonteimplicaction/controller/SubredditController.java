@@ -11,11 +11,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Subreddit.BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.SUBREDDIT_BASE_URI;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
-@RequestMapping(BASE_URI)
+@RequestMapping(SUBREDDIT_BASE_URI)
 @AllArgsConstructor
 @Slf4j
 public class SubredditController {

@@ -1,7 +1,6 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
 import com.dynonuggets.refonteimplicaction.model.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -29,11 +28,6 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @BeforeEach
-    void setUp() {
-
-    }
 
     @Test
     void shouldSaveUser() {
