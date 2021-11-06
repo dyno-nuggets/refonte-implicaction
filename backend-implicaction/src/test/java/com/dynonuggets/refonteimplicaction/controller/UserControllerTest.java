@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -39,7 +40,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
 
-    private final String BASE_URI = "/api/users";
     @Autowired
     protected MockMvc mvc;
     List<UserDto> userDtos;
@@ -83,7 +83,7 @@ class UserControllerTest {
         ResultActions actions;
 
         when(userService.getAll(pageable)).thenReturn(userPageMockResponse);
-        actions = mvc.perform(get(BASE_URI).contentType(MediaType.APPLICATION_JSON))
+        actions = mvc.perform(get(USER_BASE_URI).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(userPageMockResponse.getTotalPages()))
@@ -113,7 +113,7 @@ class UserControllerTest {
 
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
-        mvc.perform(get(BASE_URI)
+        mvc.perform(get(USER_BASE_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();
@@ -140,7 +140,7 @@ class UserControllerTest {
                 .build();
 
         when(userService.getUserById(userDto.getId())).thenReturn(userDto);
-        mvc.perform(get(BASE_URI + userDto.getId())
+        mvc.perform(get(USER_BASE_URI + GET_USER_URI, userDto.getId())
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.is(Math.toIntExact(userDto.getId()))))
@@ -165,11 +165,11 @@ class UserControllerTest {
 
     @Test
     void getUserByIdWithoutJwtShouldBeForbidden() throws Exception {
-        mvc.perform(get(BASE_URI + userDto.getId())
+        mvc.perform(get(USER_BASE_URI + GET_USER_URI, 125L)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();
-        verify(userService, never()).getUserById(any());
+        verify(userService, never()).getUserById(125L);
     }
 
     @Test
@@ -217,7 +217,7 @@ class UserControllerTest {
         ResultActions actions;
 
         when(relationService.getAllFriendsByUserId(anyLong(), any())).thenReturn(userPageMockResponse);
-        actions = mvc.perform(get(BASE_URI + sender.getId() + "/friends")
+        actions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_URI, sender.getId())
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isOk());
 
@@ -245,7 +245,7 @@ class UserControllerTest {
     @Test
     void getAllFriendsForOneUserShouldReturnForbidden() throws Exception {
 
-        mvc.perform(get(BASE_URI + sender.getId() + "/friends")
+        mvc.perform(get(USER_BASE_URI + GET_FRIEND_URI, 125L)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();

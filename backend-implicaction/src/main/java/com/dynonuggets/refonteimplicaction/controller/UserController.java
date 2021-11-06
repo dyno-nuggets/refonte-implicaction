@@ -11,6 +11,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_FRIEND_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_USER_URI;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/users")
@@ -40,13 +43,13 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = GET_USER_URI)
     public ResponseEntity<UserDto> getUserProfile(@PathVariable("userId") Long userId) {
         UserDto userdto = userService.getUserById(userId);
         return ResponseEntity.ok(userdto);
     }
 
-    @GetMapping(path = "/{userId}/friends")
+    @GetMapping(path = GET_FRIEND_URI)
     public ResponseEntity<Page<UserDto>> getAllFriends(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows,
