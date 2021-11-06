@@ -1,0 +1,84 @@
+<form
+  (ngSubmit)="onSubmit()"
+  [formGroup]="formCompany"
+>
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formCompany.controls['name'].touched) && formCompany.controls['name'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="name"
+      id="nameInput"
+      placeholder="Nom de l'entreprise"
+    />
+    <label
+      class="form-label px-4"
+      for="nameInput"
+    >
+      Nom
+    </label>
+    <div
+      *ngIf="(isSubmitted || formCompany.controls['name'].touched) && formCompany.controls['name'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir un nom à cette entreprise.
+    </div>
+  </div>
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formCompany.controls['logo'].touched) && formCompany.controls['logo'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="logo"
+      id="logoInput"
+      placeholder="Logo"
+    />
+    <label
+      class="form-label px-4"
+      for="logoInput"
+    >
+      Logo
+    </label>
+  </div>
+  <div class="form-floating mb-4">
+    <input
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formCompany.controls['url'].touched) && formCompany.controls['url'].errors}"
+      class="form-control form-control-lg rounded-pill px-4"
+      formControlName="url"
+      id="urlInput"
+      placeholder="Url du site de l'entreprise"
+    />
+    <label
+      class="form-label px-4"
+      for="urlInput"
+    >
+      Url du site de l'entreprise
+    </label>
+    <div
+      *ngIf="(isSubmitted || formCompany.controls['url'].touched) && formCompany.controls['url'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir un nom à cette entreprise.
+    </div>
+  </div>
+  <div class="form-floating mb-4">
+    <p-editor
+      [style]="{'height':'200px'}"
+      formControlName="description"
+      placeholder="Description"
+    >
+    </p-editor>
+    <div
+      *ngIf="(isSubmitted || formCompany.controls['description'].touched) && formCompany.controls['description'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir une description pour cette offre.
+    </div>
+  </div>
+  <div class="d-flex justify-content-center rounded-pill sidebar-options">
+    <button
+      class="btn btn-primary w-50"
+      type="submit"
+    >
+      Enregistrer
+    </button>
+  </div>
+</form>

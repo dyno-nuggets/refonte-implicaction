@@ -225,6 +225,14 @@ export class ApiEndpointsService {
       });
   }
 
+  createCompanyEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.COMPANIES.BASE_URI);
+  }
+
+  updateCompanyEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.COMPANIES.BASE_URI);
+  }
+
   /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
