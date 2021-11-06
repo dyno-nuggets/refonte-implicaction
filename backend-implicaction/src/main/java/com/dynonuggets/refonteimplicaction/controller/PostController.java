@@ -4,6 +4,10 @@ import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.service.PostService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,5 +37,17 @@ public class PostController {
     public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
         PostResponse response = postService.getPost(postId);
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<PostResponse>> getAllPosts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+    ) {
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        Page<PostResponse> postResponses = postService.getAllPosts(pageable);
+        return ResponseEntity.ok(postResponses);
     }
 }

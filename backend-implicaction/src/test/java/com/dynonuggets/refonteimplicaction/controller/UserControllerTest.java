@@ -77,7 +77,6 @@ class UserControllerTest {
         int first = 0;
         int rows = 10;
 
-
         Page<UserDto> userPageMockResponse = new PageImpl<>(userDtos);
         Pageable pageable = PageRequest.of(first, rows);
         ResultActions actions;
@@ -88,7 +87,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(userPageMockResponse.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(userDtos.size()));
-
 
         for (int i = 0; i < userDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
@@ -114,7 +112,7 @@ class UserControllerTest {
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
         mvc.perform(get(USER_BASE_URI)
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                        .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();
         verify(userService, never()).getAll(any());
@@ -140,8 +138,8 @@ class UserControllerTest {
                 .build();
 
         when(userService.getUserById(userDto.getId())).thenReturn(userDto);
-        mvc.perform(get(USER_BASE_URI + GET_USER_URI, userDto.getId())
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+        mvc.perform(get(USER_BASE_URI + GET_USER_URI, userDto.getId()).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", Matchers.is(Math.toIntExact(userDto.getId()))))
                 .andExpect(jsonPath("$.username", Matchers.is(userDto.getUsername())))
@@ -166,7 +164,7 @@ class UserControllerTest {
     @Test
     void getUserByIdWithoutJwtShouldBeForbidden() throws Exception {
         mvc.perform(get(USER_BASE_URI + GET_USER_URI, 125L)
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                        .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();
         verify(userService, never()).getUserById(125L);
@@ -210,7 +208,7 @@ class UserControllerTest {
                 .build();
 
 
-        ArrayList<UserDto> friendsList = new ArrayList<>();
+        List<UserDto> friendsList = new ArrayList<>();
         friendsList.add(receiver);
 
         Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
@@ -218,7 +216,7 @@ class UserControllerTest {
 
         when(relationService.getAllFriendsByUserId(anyLong(), any())).thenReturn(userPageMockResponse);
         actions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_URI, sender.getId())
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                        .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isOk());
 
         for (int i = 0; i < friendsList.size(); i++) {
@@ -246,7 +244,7 @@ class UserControllerTest {
     void getAllFriendsForOneUserShouldReturnForbidden() throws Exception {
 
         mvc.perform(get(USER_BASE_URI + GET_FRIEND_URI, 125L)
-                .contentType(MediaType.APPLICATION_JSON)).andDo(print())
+                        .contentType(MediaType.APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden())
                 .andReturn();
         verify(relationService, never()).getAllFriendsByUserId(anyLong(), any());
