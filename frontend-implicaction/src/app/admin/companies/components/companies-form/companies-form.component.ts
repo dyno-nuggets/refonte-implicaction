@@ -16,8 +16,6 @@ import {CompanyService} from '../../../../company/services/company.service';
 })
 export class CompaniesFormComponent extends SidebarContentComponent implements OnInit {
 
-  readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
-
   formCompany: FormGroup;
   currentUserId: string;
   company: Company;

@@ -8,9 +8,7 @@ import {CompaniesFormComponent} from './components/companies-form/companies-form
   styleUrls: ['./companies.component.scss']
 })
 export class CompaniesComponent {
-  constructor(
-    private sidebarService: SidebarService,
-  ) {
+  constructor(private sidebarService: SidebarService) {
   }
 
   onAddCompany(): void {
