@@ -75,12 +75,12 @@
         <div class="col-12">
           <p-dropdown
             [options]="contracts"
-            formControlName="contractType"
-            placeholder="Sélectionnez le type de contrat"
-            optionLabel="label"
-            styleClass="w-100 custom-select form-select-lg"
-            required="true"
             emptyMessage="Aucun contrat"
+            formControlName="contractType"
+            optionLabel="label"
+            placeholder="Sélectionnez le type de contrat"
+            required="true"
+            styleClass="w-100 custom-select form-select-lg"
           >
           </p-dropdown>
         </div>
@@ -97,12 +97,12 @@
   <div class="form-floating">
     <p-dropdown
       [options]="companies"
-      formControlName="company"
-      placeholder="Sélectionnez l'entreprise"
-      optionLabel="name"
-      styleClass="w-100 custom-select form-select-lg"
-      required="true"
       emptyMessage="Aucune entreprise"
+      formControlName="company"
+      optionLabel="name"
+      placeholder="Sélectionnez l'entreprise"
+      required="true"
+      styleClass="w-100 custom-select form-select-lg"
     >
     </p-dropdown>
     <div
@@ -115,9 +115,9 @@
 
   <div class="my-2">
     <p-editor
+      [style]="{'height':'200px'}"
       formControlName="shortDescription"
       placeholder="Description Courte"
-      [style]="{'height':'200px'}"
     >
     </p-editor>
 
@@ -131,9 +131,9 @@
 
   <div class="form-floating mb-4">
     <p-editor
+      [style]="{'height':'200px'}"
       formControlName="description"
       placeholder="Description"
-      [style]="{'height':'200px'}"
     >
     </p-editor>
     <div

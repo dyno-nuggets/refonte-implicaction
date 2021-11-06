@@ -8,6 +8,7 @@ import {JobPostingFormComponent} from './components/job-posting-form/job-posting
   styleUrls: ['./admin-jobs.component.scss']
 })
 export class AdminJobsComponent {
+
   constructor(
     private sidebarService: SidebarService,
   ) {

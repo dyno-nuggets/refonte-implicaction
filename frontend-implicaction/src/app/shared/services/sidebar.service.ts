@@ -13,9 +13,6 @@ export class SidebarService {
 
   private sidebarContent = new BehaviorSubject<SidebarProps>(null);
 
-  constructor() {
-  }
-
   getContent(): Observable<SidebarProps> {
     return this.sidebarContent.asObservable();
   }
