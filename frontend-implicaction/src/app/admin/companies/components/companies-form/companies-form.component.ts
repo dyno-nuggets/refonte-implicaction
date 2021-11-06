@@ -63,7 +63,7 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
     );
   }
 
-  private updateFields = (companyUpdate: Company) => {
+  private updateFields(companyUpdate: Company): void {
     this.sidebarInput.company.name = companyUpdate.name;
     this.sidebarInput.company.url = companyUpdate.url;
     this.sidebarInput.company.logo = companyUpdate.logo;
