@@ -1,3 +1,20 @@
+<p-toolbar styleClass="bg-secondary border-0 rounded mb-4">
+  <ng-template pTemplate="left">
+    <button
+      (click)="onAddCompany()"
+      class="btn btn-success fw-bold"
+    >
+      <i class="fas fa-plus px-1 text-white"></i>
+      Ajout
+    </button>
+    <!--    <button pButton pRipple [label]="Delete" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length"></button>-->
+  </ng-template>
+</p-toolbar>
+<div class="card-header pb-0 bg-primary text-light d-flex justify-content-between">
+  <h5 class="panel-title">Toutes les entreprises</h5>
+  <div>
+  </div>
+</div>
 <p-table
   (onLazyLoad)="loadCompanies($event)"
   [lazy]="true"
