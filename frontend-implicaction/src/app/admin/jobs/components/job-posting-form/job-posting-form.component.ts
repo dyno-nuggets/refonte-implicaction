@@ -101,7 +101,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
   }
 
-  private updateFields = (jobUpdate: JobPosting) => {
+  private updateFields(jobUpdate: JobPosting): void {
     this.sidebarInput.job.contractType = jobUpdate.contractType;
     this.sidebarInput.job.company = jobUpdate.company;
     this.sidebarInput.job.description = jobUpdate.description;
@@ -109,5 +109,5 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     this.sidebarInput.job.location = jobUpdate.location;
     this.sidebarInput.job.title = jobUpdate.title;
     this.sidebarInput.job.salary = jobUpdate.salary;
-  };
+  }
 }
