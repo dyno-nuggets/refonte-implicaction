@@ -2,9 +2,11 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.service.PostService;
 import com.dynonuggets.refonteimplicaction.service.UserDetailsServiceImpl;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.Test;
@@ -16,12 +18,12 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.JOB_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.POST_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -118,5 +120,75 @@ class PostControllerIntegrationTest {
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
         verify(postService, never()).save(any());
+    }
+
+    @Test
+    @WithMockUser
+    void should_get_post_when_authenticated_and_post_exists() throws Exception {
+        // given
+        PostResponse expectedResponse = PostResponse.builder()
+                .id(123L)
+                .username("toto")
+                .description("Wahou awesome")
+                .name("pretty cool post")
+                .build();
+        given(postService.getPost(anyLong())).willReturn(expectedResponse);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(POST_BASE_URI + GET_POST_URI, expectedResponse.getId()).contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(expectedResponse.getId()))))
+                .andExpect(jsonPath("$.name", is(expectedResponse.getName())))
+                .andExpect(jsonPath("$.url", is(expectedResponse.getUrl())))
+                .andExpect(jsonPath("$.description", is(expectedResponse.getDescription())))
+                .andExpect(jsonPath("$.username", is(expectedResponse.getUsername())))
+                .andExpect(jsonPath("$.subredditName", is(expectedResponse.getSubredditName())))
+                .andExpect(jsonPath("$.voteCount", is(expectedResponse.getVoteCount())))
+                .andExpect(jsonPath("$.commentCount", is(expectedResponse.getCommentCount())))
+                .andExpect(jsonPath("$.duration", is(expectedResponse.getDuration())))
+                .andExpect(jsonPath("$.upVote", is(expectedResponse.isUpVote())))
+                .andExpect(jsonPath("$.downVote", is(expectedResponse.isDownVote())));
+
+        verify(postService, times(1)).getPost(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void should_response_notfound_when_getting_post_and_authenticated_and_not_exists() throws Exception {
+        // given
+        long postId = 123L;
+        given(postService.getPost(anyLong())).willThrow(new NotFoundException(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(POST_BASE_URI + GET_POST_URI, postId).contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isNotFound());
+
+        verify(postService, times(1)).getPost(anyLong());
+    }
+
+    @Test
+    void should_response_forbidden_when_getting_post_and_not_authenticated() throws Exception {
+        // given
+        long postId = 123L;
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(POST_BASE_URI + GET_POST_URI, postId).contentType(MediaType.APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
+        verify(postService, never()).getPost(any());
     }
 }

@@ -86,15 +86,14 @@ class PostServiceTest {
         PostRequest postRequest = new PostRequest(null, "My Subreddit", "First Post", "http://url.site", "Test");
 
         // when
-        Exception exception = assertThrows(NotFoundException.class, () -> {
-            postService.save(postRequest);
-        });
+        Exception exception = assertThrows(NotFoundException.class, () -> postService.save(postRequest));
 
         String expectedMessage = String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, "My Subreddit");
         String actualMessage = exception.getMessage();
 
         // then
         assertTrue(actualMessage.contains(expectedMessage));
+        assertThat(exception).isInstanceOf(NotFoundException.class);
     }
 
     @Test
@@ -104,7 +103,7 @@ class PostServiceTest {
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
         PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", "Super Subreddit", 88000, 12, null, true, false);
-        given(postRepository.findById(123L)).willReturn(Optional.of(post));
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postAdapter.toPostResponse(any(Post.class), anyInt(), anyBoolean(), anyBoolean())).willReturn(expectedResponse);
 
         // when
@@ -113,5 +112,18 @@ class PostServiceTest {
         // then
         assertThat(actualResponse.getId()).isEqualTo(expectedResponse.getId());
         assertThat(actualResponse.getName()).isEqualTo(expectedResponse.getName());
+    }
+
+    @Test
+    void should_throw_exception_when_user_not_exists() {
+        // given
+        long postId = 123L;
+
+        // when
+        Exception exception = assertThrows(NotFoundException.class, () -> postService.getPost(postId));
+
+        // then
+        assertTrue(exception.getMessage().contains(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
+        assertThat(exception).isInstanceOf(NotFoundException.class);
     }
 }
