@@ -20,7 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Subreddit.BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.JOB_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.SUBREDDIT_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -28,8 +29,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = SubredditController.class)
 class SubredditControllerIntegrationTest {
@@ -67,11 +67,14 @@ class SubredditControllerIntegrationTest {
         given(subredditService.save(any())).willReturn(expected);
 
         // when
-        final ResultActions resultActions = mvc.perform(post(BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(
+                post(SUBREDDIT_BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+        );
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(Math.toIntExact(expected.getId()))))
                 .andExpect(jsonPath("$.name", is(expected.getName())))
                 .andExpect(jsonPath("$.description", is(expected.getDescription())));
@@ -88,11 +91,13 @@ class SubredditControllerIntegrationTest {
         String json = gson.toJson(sentDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(post(BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(
+                post(JOB_BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+        );
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isForbidden());
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
         verify(subredditService, never()).save(any());
     }
 
@@ -116,11 +121,14 @@ class SubredditControllerIntegrationTest {
         given(subredditService.getAll(DEFAULT_PAGEABLE)).willReturn(subreddits);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(BASE_URI).contentType(MediaType.APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(
+                get(SUBREDDIT_BASE_URI).contentType(MediaType.APPLICATION_JSON)
+        );
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.totalPages").value(subreddits.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(subreddits.getTotalElements()));
 
@@ -139,11 +147,13 @@ class SubredditControllerIntegrationTest {
     @Test
     void should_response_forbidden_when_listing_all_subreddit_whith_no_authentication() throws Exception {
         // when
-        final ResultActions resultActions = mvc.perform(get(BASE_URI).contentType(MediaType.APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(
+                get(JOB_BASE_URI).contentType(MediaType.APPLICATION_JSON)
+        );
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isForbidden());
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
         verify(subredditService, never()).getAll(any());
     }
 }
