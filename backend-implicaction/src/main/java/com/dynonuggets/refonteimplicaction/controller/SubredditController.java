@@ -11,7 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Group.BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Subreddit.BASE_URI;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController

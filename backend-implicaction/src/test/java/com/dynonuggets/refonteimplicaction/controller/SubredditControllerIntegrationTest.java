@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Group.BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.Subreddit.BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

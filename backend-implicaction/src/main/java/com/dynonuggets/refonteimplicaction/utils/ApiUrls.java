@@ -16,11 +16,11 @@ public class ApiUrls {
         }
     }
 
-    public static class Group {
+    public static class Subreddit {
 
-        public static final String BASE_URI = "/api/group";
+        public static final String BASE_URI = "/api/sub-reddit";
 
-        private Group() {
+        private Subreddit() {
             // empêche la construction d'un objet
         }
     }
