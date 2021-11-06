@@ -14,8 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +30,7 @@ public class PostService {
     private final CommentService commentService;
     private final VoteService voteService;
 
+    @Transactional
     public PostResponse save(PostRequest postRequest) {
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new NotFoundException(String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditName())));
@@ -38,12 +39,14 @@ public class PostService {
         return getPostResponse(save);
     }
 
+    @Transactional(readOnly = true)
     public PostResponse getPost(Long postId) {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
         return getPostResponse(post);
     }
 
+    @Transactional(readOnly = true)
     public Page<PostResponse> getAllPosts(Pageable pageable) {
         final Page<Post> allPosts = postRepository.findAll(pageable);
         return allPosts.map(this::getPostResponse);
