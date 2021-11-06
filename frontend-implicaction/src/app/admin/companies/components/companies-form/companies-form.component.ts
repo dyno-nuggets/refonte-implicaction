@@ -53,12 +53,21 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
       company$ = this.companyService.createCompany(company);
     }
     company$.subscribe(
-      () => {
-        // TODO mettre en place le context service
+      (companyUpdate) => {
+        if (this.isUpdate) {
+          this.updateFields(companyUpdate);
+        }
       },
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre entreprise.`),
       () => this.sidebarService.close()
     );
+  }
+
+  private updateFields = (companyUpdate: Company) => {
+    this.sidebarInput.company.name = companyUpdate.name;
+    this.sidebarInput.company.url = companyUpdate.url;
+    this.sidebarInput.company.logo = companyUpdate.logo;
+    this.sidebarInput.company.description = companyUpdate.description;
   }
 
   private initForm(company: Company): void {
