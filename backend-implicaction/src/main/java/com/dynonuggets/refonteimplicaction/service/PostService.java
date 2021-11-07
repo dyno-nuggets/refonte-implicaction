@@ -39,6 +39,7 @@ public class PostService {
 
         Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());
         Post save = postRepository.save(post);
+        
         return getPostResponse(save);
     }
 
