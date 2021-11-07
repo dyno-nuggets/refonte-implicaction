@@ -11,6 +11,9 @@ public class Message {
     // Post messages
     public static final String POST_NOT_FOUND_MESSAGE = "No post found with id [%s]";
 
+    // Comment messages
+    public static final String COMMENT_NOT_FOUND = "No comment found with id [%s]";
+
     private Message() {
         // Empeche la création d'une instance de la classe Message
     }

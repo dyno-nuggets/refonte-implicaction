@@ -31,7 +31,7 @@ public class PostService {
     private final VoteService voteService;
 
     @Transactional
-    public PostResponse save(PostRequest postRequest) {
+    public PostResponse saveOrUpdate(PostRequest postRequest) {
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
                 .orElseThrow(() -> new NotFoundException(String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditName())));
         Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());

@@ -15,10 +15,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_POST_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.POST_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.POSTS_BASE_URI;
 
 @RestController
-@RequestMapping(POST_BASE_URI)
+@RequestMapping(POSTS_BASE_URI)
 @AllArgsConstructor
 public class PostController {
 
@@ -26,8 +26,8 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest) {
-        PostResponse post = postService.save(postRequest);
-        URI location = UriComponentsBuilder.fromPath(POST_BASE_URI + GET_POST_URI)
+        PostResponse post = postService.saveOrUpdate(postRequest);
+        URI location = UriComponentsBuilder.fromPath(POSTS_BASE_URI + GET_POST_URI)
                 .buildAndExpand(post.getId())
                 .toUri();
         return ResponseEntity.created(location).body(post);

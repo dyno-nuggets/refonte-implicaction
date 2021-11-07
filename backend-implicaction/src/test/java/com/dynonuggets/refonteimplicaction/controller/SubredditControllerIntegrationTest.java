@@ -1,52 +1,35 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
-import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.service.SubredditService;
-import com.dynonuggets.refonteimplicaction.service.UserDetailsServiceImpl;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.JOB_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.SUBREDDIT_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.JOBS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.SUBREDDITS_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = SubredditController.class)
-class SubredditControllerIntegrationTest {
-
-    Gson gson = new GsonBuilder().serializeNulls().create();
-
-    @Autowired
-    private MockMvc mvc;
+class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private JwtProvider jwtProvider;
-
-    @MockBean
-    private SubredditService subredditService;
+    SubredditService subredditService;
 
     @Test
     @WithMockUser
@@ -68,7 +51,7 @@ class SubredditControllerIntegrationTest {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(SUBREDDIT_BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                post(SUBREDDITS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
         // then
@@ -78,11 +61,12 @@ class SubredditControllerIntegrationTest {
                 .andExpect(jsonPath("$.id", is(Math.toIntExact(expected.getId()))))
                 .andExpect(jsonPath("$.name", is(expected.getName())))
                 .andExpect(jsonPath("$.description", is(expected.getDescription())));
+
         verify(subredditService, times(1)).save(any());
     }
 
     @Test
-    void should_response_forbidden_when_create_subreddit_whith_no_authentication() throws Exception {
+    void should_response_forbidden_when_create_subreddit_with_no_authentication() throws Exception {
         // given
         final SubredditDto sentDto = SubredditDto.builder()
                 .name("coucou subreddit")
@@ -92,7 +76,7 @@ class SubredditControllerIntegrationTest {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(JOB_BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                post(JOBS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
         // then
@@ -121,9 +105,7 @@ class SubredditControllerIntegrationTest {
         given(subredditService.getAll(DEFAULT_PAGEABLE)).willReturn(subreddits);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(SUBREDDIT_BASE_URI).contentType(MediaType.APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(SUBREDDITS_BASE_URI).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print())
@@ -147,9 +129,7 @@ class SubredditControllerIntegrationTest {
     @Test
     void should_response_forbidden_when_listing_all_subreddit_whith_no_authentication() throws Exception {
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(JOB_BASE_URI).contentType(MediaType.APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(JOBS_BASE_URI).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());

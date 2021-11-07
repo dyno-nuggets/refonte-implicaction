@@ -54,13 +54,13 @@ class PostServiceTest {
     VoteService voteService;
 
     @Captor
-    private ArgumentCaptor<Post> postArgumentCaptor;
+    private ArgumentCaptor<Post> argumentCaptor;
 
     @InjectMocks
     private PostService postService;
 
     @Test
-    void should_save_post() {
+    void should_save_post_if_subreddit_exists() {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
@@ -72,13 +72,28 @@ class PostServiceTest {
         given(postAdapter.toPost(postRequest, subreddit, currentUser)).willReturn(expected);
 
         // when
-        postService.save(postRequest);
+        postService.saveOrUpdate(postRequest);
 
         // then
-        verify(postRepository, times(1)).save(postArgumentCaptor.capture());
-        final Post actual = postArgumentCaptor.getValue();
+        verify(postRepository, times(1)).save(argumentCaptor.capture());
+        final Post actual = argumentCaptor.getValue();
         assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getName()).isEqualTo(expected.getName());
+    }
+
+    @Test
+    void should_throw_exception_on_save_when_subreddit_not_exists() {
+        // given
+        String subredditName = "j'existe pas";
+        NotFoundException expectedException = new NotFoundException(String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, subredditName));
+        given(subredditRepository.findByName(anyString())).willThrow(expectedException);
+        PostRequest postRequest = PostRequest.builder().subredditName(subredditName).build();
+
+        // when
+        final NotFoundException actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
+
+        // then
+        assertThat(actualException.getMessage()).isEqualTo(expectedException.getMessage());
     }
 
     @Test
@@ -88,7 +103,7 @@ class PostServiceTest {
         PostRequest postRequest = new PostRequest(null, "My Subreddit", "First Post", "http://url.site", "Test");
 
         // when
-        Exception exception = assertThrows(NotFoundException.class, () -> postService.save(postRequest));
+        Exception exception = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
 
         String expectedMessage = String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, "My Subreddit");
         String actualMessage = exception.getMessage();

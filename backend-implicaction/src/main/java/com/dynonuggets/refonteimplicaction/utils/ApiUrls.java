@@ -3,18 +3,22 @@ package com.dynonuggets.refonteimplicaction.utils;
 public class ApiUrls {
 
     // JOB-POSTINGS
-    public static final String JOB_BASE_URI = "/api/job-postings";
+    public static final String JOBS_BASE_URI = "/api/job-postings";
     public static final String GET_JOB_URI = "/{jobId}";
     public static final String DELETE_JOB_URI = "/{jobId}";
 
     // POSTS
-    public static final String POST_BASE_URI = "/api/posts";
+    public static final String POSTS_BASE_URI = "/api/posts";
     public static final String GET_POST_URI = "/{postId}";
 
-    // SUBREDDIT
-    public static final String SUBREDDIT_BASE_URI = "/api/sub-reddit";
+    // SUBREDDITS
+    public static final String SUBREDDITS_BASE_URI = "/api/sub-reddit";
 
-    //USER
+    // COMMENTS
+    public static final String COMMENTS_BASE_URI = "/api/comments";
+    public static final String GET_COMMENT_URI = "/{commentId}";
+
+    //USERS
     public static final String USER_BASE_URI = "/api/users";
     public static final String GET_USER_URI = "/{userId}";
     public static final String GET_FRIEND_URI = "/{userId}/friends";
