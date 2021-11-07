@@ -10,6 +10,7 @@ public class ApiUrls {
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";
     public static final String GET_POST_URI = "/{postId}";
+    public static final String GET_POST_COMMENTS_URI = "/{postId}/comments";
 
     // SUBREDDITS
     public static final String SUBREDDITS_BASE_URI = "/api/sub-reddit";

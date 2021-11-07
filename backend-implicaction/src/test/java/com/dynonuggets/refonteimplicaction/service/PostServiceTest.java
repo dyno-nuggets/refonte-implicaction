@@ -132,7 +132,7 @@ class PostServiceTest {
     }
 
     @Test
-    void should_throw_exception_when_user_not_exists() {
+    void should_throw_exception_when_post_not_exists() {
         // given
         long postId = 123L;
 
@@ -141,7 +141,6 @@ class PostServiceTest {
 
         // then
         assertTrue(exception.getMessage().contains(String.format(POST_NOT_FOUND_MESSAGE, postId)));
-        assertThat(exception).isInstanceOf(NotFoundException.class);
     }
 
     @Test
