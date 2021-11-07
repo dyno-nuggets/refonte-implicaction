@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Post;
+import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
@@ -15,16 +16,19 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.*;
 
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.utils.Message.COMMENT_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -56,7 +60,7 @@ class CommentServiceTest {
     void should_return_post_count() {
         // given
         Post post = new Post();
-        final List<Comment> expectedComments = Arrays.asList(new Comment(), new Comment(), new Comment(), new Comment());
+        final List<Comment> expectedComments = asList(new Comment(), new Comment(), new Comment(), new Comment());
         given(commentRepository.findByPost(any())).willReturn(expectedComments);
 
         // when
@@ -133,5 +137,41 @@ class CommentServiceTest {
 
         // then
         assertThat(actualException.getMessage()).isEqualTo(String.format(COMMENT_NOT_FOUND, 123L));
+    }
+
+    @Test
+    void should_get_comments_for_post_when_exists() {
+        // given
+        User currentUser = User.builder().id(123L).username("Sankukai").build();
+        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
+        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
+        List<Comment> comments = asList(
+                new Comment(1L, "comment1", post, Instant.now(), currentUser),
+                new Comment(2L, "comment2", post, Instant.now(), currentUser),
+                new Comment(3L, "comment3", post, Instant.now(), currentUser)
+        );
+        Page<Comment> commentPage = new PageImpl<>(comments);
+        final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+        given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        given(commentRepository.findByPost(any(), any())).willReturn(commentPage);
+
+        // when
+        final Page<CommentDto> actualComments = commentService.getAllCommentsForPost(pageable, post.getId());
+
+        // then
+        assertThat(actualComments.getTotalElements()).isEqualTo(commentPage.getTotalElements());
+    }
+
+    @Test
+    void should_throw_exception_when_getting_comments_and_post_not_exists() {
+        // given
+        long postId = 123L;
+        final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
+
+        // when
+        Exception exception = assertThrows(NotFoundException.class, () -> commentService.getAllCommentsForPost(pageable, postId));
+
+        // then
+        assertTrue(exception.getMessage().contains(String.format(POST_NOT_FOUND_MESSAGE, postId)));
     }
 }

@@ -1,8 +1,10 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.service.CommentService;
 import com.dynonuggets.refonteimplicaction.service.PostService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,6 +34,9 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @MockBean
     PostService postService;
+
+    @MockBean
+    CommentService commentService;
 
     @Test
     @WithMockUser
@@ -215,5 +220,73 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         }
 
         verify(postService, times(1)).getAllPosts(any());
+    }
+
+    @Test
+    @WithMockUser
+    void should_return_page_of_comments_when_post_exists_and_authenticated() throws Exception {
+        // given
+        long postId = 123L;
+        final List<CommentDto> commentDtos = asList(
+                CommentDto.builder().id(1L).postId(postId).build(),
+                CommentDto.builder().id(2L).postId(postId).build()
+        );
+        final Page<CommentDto> expectedPages = new PageImpl<>(commentDtos);
+        final long expectedSize = expectedPages.getTotalElements();
+        given(commentService.getAllCommentsForPost(any(), anyLong())).willReturn(expectedPages);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(POSTS_BASE_URI + GET_POST_COMMENTS_URI, postId).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON))
+                .andExpect(jsonPath("$.numberOfElements", is((int) expectedSize)))
+                .andExpect(jsonPath("$.last", is(true)))
+                .andExpect(jsonPath("$.totalPages", is(1)));
+
+        for (int i = 0; i < expectedSize; i++) {
+            String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(commentDtos.get(i).getId().intValue())))
+                    .andExpect(jsonPath(contentPath + ".postId", is(commentDtos.get(i).getPostId().intValue())));
+        }
+
+        verify(commentService, times(1)).getAllCommentsForPost(any(), anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void should_return_notfound_when_getting_comments_and_post_not_exists_and_authenticated() throws Exception {
+        // given
+        long postId = 123L;
+        given(commentService.getAllCommentsForPost(any(), anyLong())).willThrow(new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(POSTS_BASE_URI + GET_POST_COMMENTS_URI, postId).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isNotFound());
+
+        verify(commentService, times(1)).getAllCommentsForPost(any(), anyLong());
+    }
+
+    @Test
+    void should_return_forbidden_when_getting_comments_and_not_authenticated() throws Exception {
+        // given
+        long postId = 123L;
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(POSTS_BASE_URI + GET_POST_COMMENTS_URI, postId).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
+        verify(commentService, never()).getAllCommentsForPost(any(), anyLong());
     }
 }

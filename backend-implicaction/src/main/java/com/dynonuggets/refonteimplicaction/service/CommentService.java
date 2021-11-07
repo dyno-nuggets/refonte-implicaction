@@ -9,6 +9,8 @@ import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +54,14 @@ public class CommentService {
                 .orElseThrow(() -> new NotFoundException(String.format(COMMENT_NOT_FOUND, commentId)));
 
         return commentAdapter.toDto(comment);
+    }
+
+    public Page<CommentDto> getAllCommentsForPost(Pageable pageable, Long postId) {
+        final Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
+
+        final Page<Comment> comments = commentRepository.findByPost(post, pageable);
+
+        return comments.map(commentAdapter::toDto);
     }
 }
