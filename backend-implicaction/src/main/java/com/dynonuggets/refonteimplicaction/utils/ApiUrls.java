@@ -19,6 +19,9 @@ public class ApiUrls {
     public static final String COMMENTS_BASE_URI = "/api/comments";
     public static final String GET_COMMENT_URI = "/{commentId}";
 
+    // VOTES
+    public static final String VOTE_BASE_URI = "/api/votes";
+
     //USERS
     public static final String USER_BASE_URI = "/api/users";
     public static final String GET_USER_URI = "/{userId}";

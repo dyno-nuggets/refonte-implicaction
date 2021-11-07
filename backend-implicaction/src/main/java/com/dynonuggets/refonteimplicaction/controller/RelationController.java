@@ -24,9 +24,8 @@ public class RelationController {
         return ResponseEntity.ok(relationsDto);
     }
 
-    @SuppressWarnings("rawtypes")
     @DeleteMapping(value = "/{senderId}/decline")
-    public ResponseEntity deleteRelationBySender(@PathVariable("senderId") Long senderId) {
+    public ResponseEntity<Void> deleteRelationBySender(@PathVariable("senderId") Long senderId) {
         final Long receiverId = authService.getCurrentUser().getId();
         relationService.deleteRelation(senderId, receiverId);
         return ResponseEntity.noContent().build();
