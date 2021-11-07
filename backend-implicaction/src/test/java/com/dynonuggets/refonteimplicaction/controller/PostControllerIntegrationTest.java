@@ -3,53 +3,35 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.service.PostService;
-import com.dynonuggets.refonteimplicaction.service.UserDetailsServiceImpl;
-import com.dynonuggets.refonteimplicaction.utils.Message;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.*;
-import org.springframework.http.MediaType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PostController.class)
-class PostControllerIntegrationTest {
-
-    final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
-
-    final Gson gson = new GsonBuilder().serializeNulls().create();
-
-    @Autowired
-    private MockMvc mvc;
+class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @MockBean
-    private UserDetailsServiceImpl userDetailsService;
-
-    @MockBean
-    private JwtProvider jwtProvider;
-
-    @MockBean
-    private PostService postService;
+    PostService postService;
 
     @Test
     @WithMockUser
@@ -79,18 +61,19 @@ class PostControllerIntegrationTest {
                 .voteCount(0)
                 .commentCount(0)
                 .build();
-        given(postService.save(any(PostRequest.class))).willReturn(expectedResponse);
+        given(postService.saveOrUpdate(any(PostRequest.class))).willReturn(expectedResponse);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(POST_BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+        final ResultActions resultActions;
+        resultActions = mvc.perform(
+                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id", is(Math.toIntExact(expectedResponse.getId()))))
+                .andExpect(jsonPath("$.id", is(expectedResponse.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(expectedResponse.getName())))
                 .andExpect(jsonPath("$.url", is(expectedResponse.getUrl())))
                 .andExpect(jsonPath("$.description", is(expectedResponse.getDescription())))
@@ -102,7 +85,7 @@ class PostControllerIntegrationTest {
                 .andExpect(jsonPath("$.upVote", is(expectedResponse.isUpVote())))
                 .andExpect(jsonPath("$.downVote", is(expectedResponse.isDownVote())));
 
-        verify(postService, times(1)).save(any());
+        verify(postService, times(1)).saveOrUpdate(any());
     }
 
     @Test
@@ -119,13 +102,13 @@ class PostControllerIntegrationTest {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(JOB_BASE_URI).content(json).accept(MediaType.APPLICATION_JSON).contentType(MediaType.APPLICATION_JSON)
+                post(JOBS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(postService, never()).save(any());
+        verify(postService, never()).saveOrUpdate(any());
     }
 
     @Test
@@ -138,18 +121,19 @@ class PostControllerIntegrationTest {
                 .description("Wahou awesome")
                 .name("pretty cool post")
                 .build();
+
         given(postService.getPost(anyLong())).willReturn(expectedResponse);
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(POST_BASE_URI + GET_POST_URI, expectedResponse.getId()).contentType(MediaType.APPLICATION_JSON)
+                get(POSTS_BASE_URI + GET_POST_URI, expectedResponse.getId()).contentType(APPLICATION_JSON)
         );
 
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id", is(Math.toIntExact(expectedResponse.getId()))))
+                .andExpect(jsonPath("$.id", is(expectedResponse.getId().intValue())))
                 .andExpect(jsonPath("$.name", is(expectedResponse.getName())))
                 .andExpect(jsonPath("$.url", is(expectedResponse.getUrl())))
                 .andExpect(jsonPath("$.description", is(expectedResponse.getDescription())))
@@ -169,11 +153,11 @@ class PostControllerIntegrationTest {
     void should_response_notfound_when_getting_post_and_authenticated_and_not_exists() throws Exception {
         // given
         long postId = 123L;
-        given(postService.getPost(anyLong())).willThrow(new NotFoundException(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
+        given(postService.getPost(anyLong())).willThrow(new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(POST_BASE_URI + GET_POST_URI, postId).contentType(MediaType.APPLICATION_JSON)
+                get(POSTS_BASE_URI + GET_POST_URI, postId).contentType(APPLICATION_JSON)
         );
 
         // then
@@ -189,7 +173,7 @@ class PostControllerIntegrationTest {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(POST_BASE_URI + GET_POST_URI, postId).contentType(MediaType.APPLICATION_JSON)
+                get(POSTS_BASE_URI + GET_POST_URI, postId).contentType(APPLICATION_JSON)
         );
 
         // then
@@ -214,11 +198,11 @@ class PostControllerIntegrationTest {
         given(postService.getAllPosts(DEFAULT_PAGEABLE)).willReturn(expectedPages);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(POST_BASE_URI));
+        final ResultActions resultActions = mvc.perform(get(POSTS_BASE_URI));
 
         // then
         resultActions.andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.numberOfElements", is((int) expectedSize)))
                 .andExpect(jsonPath("$.last", is(true)))
                 .andExpect(jsonPath("$.totalPages", is(1)));
@@ -229,6 +213,7 @@ class PostControllerIntegrationTest {
                     .andExpect(jsonPath(contentPath + ".name", is(postResponses.get(i).getName())))
                     .andExpect(jsonPath(contentPath + ".url", is(postResponses.get(i).getUrl())));
         }
+
         verify(postService, times(1)).getAllPosts(any());
     }
 }

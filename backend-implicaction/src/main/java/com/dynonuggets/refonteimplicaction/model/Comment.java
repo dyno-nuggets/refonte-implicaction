@@ -1,8 +1,7 @@
 package com.dynonuggets.refonteimplicaction.model;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -12,6 +11,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
+@Builder
 @Entity
 public class Comment {
     @Id
@@ -22,7 +24,7 @@ public class Comment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
-    private Instant createdDate;
+    private Instant createdAt;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

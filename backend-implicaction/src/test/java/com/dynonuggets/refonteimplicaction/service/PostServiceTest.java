@@ -9,7 +9,6 @@ import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,6 +21,8 @@ import org.springframework.data.domain.*;
 import java.time.Instant;
 import java.util.Optional;
 
+import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.SUBREDDIT_NOT_FOUND_MESSAGE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,13 +55,13 @@ class PostServiceTest {
     VoteService voteService;
 
     @Captor
-    private ArgumentCaptor<Post> postArgumentCaptor;
+    private ArgumentCaptor<Post> argumentCaptor;
 
     @InjectMocks
     private PostService postService;
 
     @Test
-    void should_save_post() {
+    void should_save_post_if_subreddit_exists() {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
@@ -72,30 +73,44 @@ class PostServiceTest {
         given(postAdapter.toPost(postRequest, subreddit, currentUser)).willReturn(expected);
 
         // when
-        postService.save(postRequest);
+        postService.saveOrUpdate(postRequest);
 
         // then
-        verify(postRepository, times(1)).save(postArgumentCaptor.capture());
-        final Post actual = postArgumentCaptor.getValue();
+        verify(postRepository, times(1)).save(argumentCaptor.capture());
+        final Post actual = argumentCaptor.getValue();
         assertThat(actual.getId()).isEqualTo(expected.getId());
         assertThat(actual.getName()).isEqualTo(expected.getName());
     }
 
     @Test
-    void should_throw_exception_when_save_post_and_subreddit_not_found() {
+    void should_throw_exception_on_save_when_subreddit_not_exists() {
         // given
-        given(subredditRepository.findByName(anyString())).willReturn(Optional.empty());
-        PostRequest postRequest = new PostRequest(null, "My Subreddit", "First Post", "http://url.site", "Test");
+        String subredditName = "j'existe pas";
+        NotFoundException expectedException = new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, subredditName));
+        given(subredditRepository.findByName(anyString())).willThrow(expectedException);
+        PostRequest postRequest = PostRequest.builder().subredditName(subredditName).build();
 
         // when
-        Exception exception = assertThrows(NotFoundException.class, () -> postService.save(postRequest));
-
-        String expectedMessage = String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, "My Subreddit");
-        String actualMessage = exception.getMessage();
+        final NotFoundException actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
 
         // then
-        assertTrue(actualMessage.contains(expectedMessage));
-        assertThat(exception).isInstanceOf(NotFoundException.class);
+        assertThat(actualException.getMessage()).isEqualTo(expectedException.getMessage());
+    }
+
+    @Test
+    void should_throw_exception_when_save_post_and_subreddit_not_found() {
+        // given
+        PostRequest postRequest = new PostRequest(null, "My Subreddit", "First Post", "http://url.site", "Test");
+
+        given(subredditRepository.findByName(anyString())).willReturn(Optional.empty());
+
+        // when
+        Exception actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
+
+        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, "My Subreddit");
+
+        // then
+        assertThat(actualException.getMessage()).isEqualTo(expectedMessage);
     }
 
     @Test
@@ -125,7 +140,7 @@ class PostServiceTest {
         Exception exception = assertThrows(NotFoundException.class, () -> postService.getPost(postId));
 
         // then
-        assertTrue(exception.getMessage().contains(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
+        assertTrue(exception.getMessage().contains(String.format(POST_NOT_FOUND_MESSAGE, postId)));
         assertThat(exception).isInstanceOf(NotFoundException.class);
     }
 
@@ -135,18 +150,19 @@ class PostServiceTest {
         User currentUser = User.builder().id(1345L).username("gustave").build();
         Subreddit subreddit = new Subreddit(123L, "Sub 1", "Description Sub 1", null, Instant.now(), currentUser);
         Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
-        Page<Post> posts = new PageImpl<>(asList(
+        Page<Post> expectedPages = new PageImpl<>(asList(
                 new Post(1L, "Post 1", null, "Description 1", 0, currentUser, Instant.now(), subreddit),
                 new Post(2L, "Post 2", null, "Description 2", 0, currentUser, Instant.now(), subreddit),
                 new Post(3L, "Post 3", null, "Description 3", 0, currentUser, Instant.now(), subreddit)
         ));
-        given(postRepository.findAll(any(Pageable.class))).willReturn(posts);
+
+        given(postRepository.findAll(any(Pageable.class))).willReturn(expectedPages);
 
         // when
-        Page<PostResponse> actual = postService.getAllPosts(pageable);
+        Page<PostResponse> actualPages = postService.getAllPosts(pageable);
 
         // then
-        assertThat(actual.getSize()).isEqualTo(posts.getSize());
+        assertThat(actualPages.getSize()).isEqualTo(expectedPages.getSize());
     }
 
 }

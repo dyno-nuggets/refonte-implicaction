@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
 @RestController
-@RequestMapping(JOB_BASE_URI)
+@RequestMapping(JOBS_BASE_URI)
 @AllArgsConstructor
 public class JobPostingController {
 
