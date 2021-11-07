@@ -100,7 +100,7 @@ class CommentServiceTest {
         // given
         long postId = 123L;
         CommentDto commentDto = CommentDto.builder().postId(postId).build();
-        NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, 123L));
+        NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId));
         given(postRepository.findById(postId)).willThrow(expectedException);
 
         // when

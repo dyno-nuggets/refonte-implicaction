@@ -1,10 +1,7 @@
 package com.dynonuggets.refonteimplicaction.model;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -15,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,4 +35,5 @@ public class Post {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "subreddit_id", referencedColumnName = "id")
     private Subreddit subreddit;
+
 }
