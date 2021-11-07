@@ -3,7 +3,6 @@
 
     <ng-container *ngFor="let menuItem of allowedMenuItems">
       <a
-        [routerLinkActiveOptions]="{exact: true}"
         [routerLink]="menuItem.link"
         class="list-group-item d-flex justify-content-between"
         routerLinkActive="active"

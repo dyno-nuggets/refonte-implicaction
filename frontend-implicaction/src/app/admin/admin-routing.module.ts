@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from './admin.component';
+import {JobFilterComponent} from '../shared/components/job-filter/job-filter.component';
 
 
 const routes: Routes = [
@@ -30,7 +31,13 @@ const routes: Routes = [
       {
         path: '',
         loadChildren: () => import('./jobs/admin-jobs.module').then(m => m.AdminJobsModule),
-        outlet: 'admin-content'
+        outlet: 'admin-content',
+
+      },
+      {
+        path: '',
+        component: JobFilterComponent,
+        outlet: 'admin-filter'
       }
     ]
   },
