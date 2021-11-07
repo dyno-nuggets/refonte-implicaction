@@ -8,7 +8,6 @@ import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -22,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dynonuggets.refonteimplicaction.utils.Message.COMMENT_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -95,7 +96,7 @@ class CommentServiceTest {
         // given
         long postId = 123L;
         CommentDto commentDto = CommentDto.builder().postId(postId).build();
-        NotFoundException expectedException = new NotFoundException(String.format(Message.POST_NOT_FOUND_MESSAGE, 123L));
+        NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, 123L));
         given(postRepository.findById(postId)).willThrow(expectedException);
 
         // when
@@ -128,9 +129,9 @@ class CommentServiceTest {
         long commentId = 123L;
 
         // when
-        Exception exception = assertThrows(NotFoundException.class, () -> commentService.getComment(commentId));
+        Exception actualException = assertThrows(NotFoundException.class, () -> commentService.getComment(commentId));
 
         // then
-        assertThat(exception.getMessage()).isEqualTo(String.format(Message.COMMENT_NOT_FOUND, 123L));
+        assertThat(actualException.getMessage()).isEqualTo(String.format(COMMENT_NOT_FOUND, 123L));
     }
 }

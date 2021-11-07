@@ -8,13 +8,15 @@ import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.SUBREDDIT_NOT_FOUND_MESSAGE;
 
 
 @Service
@@ -33,7 +35,8 @@ public class PostService {
     @Transactional
     public PostResponse saveOrUpdate(PostRequest postRequest) {
         Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
-                .orElseThrow(() -> new NotFoundException(String.format(Message.SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditName())));
+                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditName())));
+
         Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());
         Post save = postRepository.save(post);
         return getPostResponse(save);
@@ -42,7 +45,8 @@ public class PostService {
     @Transactional(readOnly = true)
     public PostResponse getPost(Long postId) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new NotFoundException(String.format(Message.POST_NOT_FOUND_MESSAGE, postId)));
+                .orElseThrow(() -> new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
+
         return getPostResponse(post);
     }
 

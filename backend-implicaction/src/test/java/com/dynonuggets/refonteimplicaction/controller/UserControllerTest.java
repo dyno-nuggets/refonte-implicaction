@@ -100,8 +100,8 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
-        mvc.perform(get(USER_BASE_URI)
-                        .contentType(APPLICATION_JSON)).andDo(print())
+        mvc.perform(get(USER_BASE_URI).contentType(APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isForbidden());
 
         verify(userService, never()).getAll(any());
