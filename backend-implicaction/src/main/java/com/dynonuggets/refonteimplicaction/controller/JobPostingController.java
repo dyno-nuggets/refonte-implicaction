@@ -52,9 +52,8 @@ public class JobPostingController {
         return ResponseEntity.ok(updated);
     }
 
-    @SuppressWarnings("rawtypes")
     @DeleteMapping(DELETE_JOB_URI)
-    public ResponseEntity delete(@PathVariable Long jobId) {
+    public ResponseEntity<Void> delete(@PathVariable Long jobId) {
         jobPostingService.deleteJobPosting(jobId);
         return ResponseEntity.noContent().build();
     }

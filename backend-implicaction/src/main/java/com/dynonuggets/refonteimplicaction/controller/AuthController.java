@@ -28,9 +28,8 @@ public class AuthController {
         return new ResponseEntity<>("User registration successful", OK);
     }
 
-    @SuppressWarnings("rawtypes")
     @GetMapping("accountVerification/{activationKey}")
-    public ResponseEntity verifyAccount(@PathVariable String activationKey) throws ImplicactionException {
+    public ResponseEntity<Void> verifyAccount(@PathVariable String activationKey) throws ImplicactionException {
         authService.verifyAccount(activationKey);
         return ResponseEntity.ok().build();
     }

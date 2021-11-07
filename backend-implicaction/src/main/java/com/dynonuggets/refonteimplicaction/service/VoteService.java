@@ -56,7 +56,6 @@ public class VoteService {
 
         final Optional<Vote> voteByPostAndUser = voteRepository.findTopByPostAndUserOrderByIdDesc(post, authService.getCurrentUser());
 
-
         voteByPostAndUser.ifPresent(vote -> {
                     // on ne peut pas voter 2 fois de la même manière
                     if (vote.getVoteType().equals(voteDto.getVoteType())) {
