@@ -57,6 +57,8 @@ export class ApiEndpointsService {
       (qs: QueryStringParameters) => {
         qs.push('page', pageable.page);
         qs.push('rows', pageable.rows);
+        qs.push('sortBy', pageable.page);
+        qs.push('sortOrder', pageable.rows);
       });
   }
 
@@ -218,11 +220,7 @@ export class ApiEndpointsService {
    */
 
   getAllCompanyEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithQueryParameters(
-      Uris.COMPANIES.BASE_URI,
-      (qs: QueryStringParameters) => {
-        this.buildQueryStringFromFilters(pageable, qs);
-      });
+    return ApiEndpointsService.createUrlWithPageable(Uris.COMPANIES.BASE_URI, pageable);
   }
 
   createCompanyEndpoint(): string {
