@@ -23,7 +23,7 @@ public class PostAdapter {
                 .description(postRequest.getDescription())
                 .voteCount(0)
                 .user(currentUser)
-                .createdDate(Instant.now())
+                .createdAt(Instant.now())
                 .subreddit(subreddit)
                 .build();
     }
@@ -39,7 +39,7 @@ public class PostAdapter {
                 .userId(post.getUser().getId())
                 .subredditName(subreddit != null ? subreddit.getName() : "")
                 .commentCount(commentCount)
-                .duration(DateUtils.getDurationAsString(post.getCreatedDate()))
+                .duration(DateUtils.getDurationAsString(post.getCreatedAt()))
                 .upVote(isPostUpVoted)
                 .downVote(isPostDownVoted)
                 .voteCount(post.getVoteCount())
