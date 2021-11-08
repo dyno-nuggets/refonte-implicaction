@@ -31,6 +31,7 @@ public class Post {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+    @Column(name = "created_at")
     private Instant createdAt;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "subreddit_id", referencedColumnName = "id")

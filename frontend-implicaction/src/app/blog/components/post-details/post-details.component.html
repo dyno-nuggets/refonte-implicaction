@@ -30,7 +30,7 @@
         <span class="post-comment d-flex align-items-center">
           <i class="far fa-comment-alt d-block px-2"></i>
           <span class="comment-count pe-1">{{post.commentCount}}</span>
-          <span class="comment-word">{{(post.commentCount ? ' commentaires' : ' commentaire')}}</span>
+          <span class="comment-word">{{(post.commentCount > 1 ? ' commentaires' : ' commentaire')}}</span>
         </span>
       </div>
     </div>
