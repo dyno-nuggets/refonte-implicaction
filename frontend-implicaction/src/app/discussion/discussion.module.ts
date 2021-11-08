@@ -1,29 +1,31 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PostListComponent} from './components/post-list/post-list.component';
-import {BlogComponent} from './blog.component';
-import {BlogRoutingModule} from './blog-routing.module';
+import {DiscussionComponent} from './discussion.component';
+import {DiscussionRoutingModule} from './discussion-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {PaginatorModule} from 'primeng/paginator';
 import {VoteboxComponent} from './components/votebox/votebox.component';
 import {AvatarModule} from 'primeng/avatar';
-import {PostDetailsComponent} from './components/post-details/post-details.component';
+import {PostTileComponent} from './components/post-tile/post-tile.component';
+import {PostDetailComponent} from './components/post-detail/post-detail.component';
 
 
 @NgModule({
   declarations: [
     PostListComponent,
-    PostDetailsComponent,
-    BlogComponent,
+    PostTileComponent,
+    DiscussionComponent,
     VoteboxComponent,
+    PostDetailComponent,
   ],
   imports: [
     CommonModule,
-    BlogRoutingModule,
+    DiscussionRoutingModule,
     SharedModule,
     PaginatorModule,
     AvatarModule
   ]
 })
-export class BlogModule {
+export class DiscussionModule {
 }

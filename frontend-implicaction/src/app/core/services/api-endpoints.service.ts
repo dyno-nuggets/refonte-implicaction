@@ -248,6 +248,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.POSTS.BASE_URI, pageable);
   }
 
+  getPostEndpoint(postId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId]);
+  }
+
   /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
