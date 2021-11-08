@@ -253,6 +253,14 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Votes
+   */
+
+  getVoteEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.VOTES.BASE_URI);
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */
