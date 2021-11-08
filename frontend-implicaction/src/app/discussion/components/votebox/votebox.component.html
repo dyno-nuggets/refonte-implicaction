@@ -1,11 +1,25 @@
 <div class="col-1 bg-primary w-100 pt-md-4">
   <div class="d-flex flex-md-column align-items-center">
-    <div class="px-3 px-md-0 py-md-2">
-      <i class="fa fa-arrow-up"></i>
+    <div
+      (click)="upVote()"
+      class="px-3 px-md-0 py-md-2 cursor-pointer"
+    >
+      <i
+        [ngClass]="{'text-success': post.upVote}"
+        class="fa fa-arrow-up"
+      >
+      </i>
     </div>
     <div class="vote-count">{{post.voteCount}}</div>
-    <div class="px-3 px-md-0 py-md-2">
-      <i class="fa fa-arrow-down"></i>
+    <div
+      (click)="downVote()"
+      class="px-3 px-md-0 py-md-2 cursor-pointer"
+    >
+      <i
+        [ngClass]="{'text-danger': post.downVote}"
+        class="fa fa-arrow-down"
+      >
+      </i>
     </div>
   </div>
 </div>
