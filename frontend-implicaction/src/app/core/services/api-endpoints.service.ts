@@ -234,6 +234,17 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Posts
+   */
+  getAllPostsEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.POSTS.BASE_URI,
+      (qs: QueryStringParameters) => {
+        this.buildQueryStringFromFilters(pageable, qs);
+      });
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */

@@ -40,10 +40,11 @@ class PostAdapterTest {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), subreddit);
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), subreddit);
+        final int expectedCommentCount = 10;
 
         // when
-        final PostResponse postResponse = postAdapter.toPostResponse(expected, 10, true, false);
+        final PostResponse postResponse = postAdapter.toPostResponse(expected, expectedCommentCount, true, false);
 
         // then
         assertThat(postResponse.getId()).isEqualTo(expected.getId());
@@ -52,7 +53,8 @@ class PostAdapterTest {
         assertThat(postResponse.getDescription()).isEqualTo(expected.getDescription());
         assertThat(postResponse.getUsername()).isEqualTo(expected.getUser().getUsername());
         assertThat(postResponse.getSubredditName()).isEqualTo(expected.getSubreddit().getName());
-        assertThat(postResponse.getCommentCount()).isEqualTo(10);
+        assertThat(postResponse.getCommentCount()).isEqualTo(expectedCommentCount);
+        assertThat(postResponse.getVoteCount()).isEqualTo(expected.getVoteCount());
         assertThat(postResponse.isDownVote()).isFalse();
         assertThat(postResponse.isUpVote()).isTrue();
     }
