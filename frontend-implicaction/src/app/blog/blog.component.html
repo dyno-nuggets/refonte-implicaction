@@ -1,0 +1,23 @@
+<div class="row p-0 m-0">
+  <div class="col-12 col-lg-9 row m-0 p-0">
+    <ng-container *ngIf="!isLoading; else loadingTemplate">
+      <app-post-list [posts]="pageable.content" class="p-0"></app-post-list>
+      <p-paginator
+        (onPageChange)="paginate($event)"
+        *ngIf="pageable.totalPages > 0"
+        [first]="pageable.first"
+        [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
+        [rows]="pageable.rows"
+        [totalRecords]="pageable.totalElements"
+      >
+      </p-paginator>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <div class="d-flex justify-content-center spinner">
+        <div class="align-self-center">
+          <app-loading></app-loading>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -119,7 +119,7 @@ class PostServiceTest {
         User currentUser = User.builder().id(123L).username("Sankukai").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
-        PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", "Super Subreddit", 88000, 12, null, true, false);
+        PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), "Super Subreddit", 88000, 12, null, true, false);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postAdapter.toPostResponse(any(Post.class), anyInt(), anyBoolean(), anyBoolean())).willReturn(expectedResponse);
 

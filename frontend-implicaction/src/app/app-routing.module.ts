@@ -35,13 +35,21 @@ const routes: Routes = [
     loadChildren: () => import('./job/job.module').then(m => m.JobModule),
     canActivate: [AuthGuard],
     data: {
-      allowedRoles: Univers.USERS.roles
+      allowedRoles: Univers.JOBS.roles
     }
   },
   {
     path: 'unauthorized',
     component: UnauthorizedComponent
   },
+  {
+    path: Univers.DISCUSSION.url,
+    loadChildren: () => import('./blog/blog.module').then(m => m.BlogModule),
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: Univers.DISCUSSION.roles
+    }
+  }
 ];
 
 @NgModule({

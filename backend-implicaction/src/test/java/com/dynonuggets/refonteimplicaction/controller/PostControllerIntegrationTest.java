@@ -191,9 +191,9 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_list_all_post_when_authenticated() throws Exception {
         // given
-        PostResponse postRequest1 = new PostResponse(1L, "Post Name", "http://url.site", "Description", "User 1",
+        PostResponse postRequest1 = new PostResponse(1L, "Post Name", "http://url.site", "Description", "User 1", 12L,
                 "Subreddit Name", 0, 0, "il y a 2 jours", false, false);
-        PostResponse postRequest2 = new PostResponse(2L, "Post Name 2", "http://url2.site2", "Description2", "User 2",
+        PostResponse postRequest2 = new PostResponse(2L, "Post Name 2", "http://url2.site2", "Description2", "User 2", 13L,
                 "Subreddit Name 2", 0, 0, "il y a 2 jours", false, false);
 
         final List<PostResponse> postResponses = asList(postRequest1, postRequest2);

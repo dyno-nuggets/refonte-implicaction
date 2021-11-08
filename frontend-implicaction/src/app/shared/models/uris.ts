@@ -66,4 +66,11 @@ export class Uris {
   static readonly CONTRACTS = class {
     static readonly BASE_URI = 'contracts';
   };
+
+  /**
+   * POSTS
+   */
+  static readonly POSTS = class {
+    static readonly BASE_URI = 'posts';
+  };
 }

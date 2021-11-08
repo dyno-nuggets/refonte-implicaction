@@ -1,0 +1,38 @@
+<div class="card mb-3 shadow-sm bg-body rounded">
+  <div class="row p-0 m-0">
+    <div
+      class="vote-box py-2 m-0 p-0 pb-md-0 pt-md-4col-12 col-md-1 bg-primary text-white d-flex flex-column align-items-center">
+      <app-votebox [post]="post"></app-votebox>
+    </div>
+    <div class="col-11 p-0">
+      <div class="card-body">
+        <div class="card-title d-flex align-items-center justify-content-start mb-3">
+          <p-avatar
+            image="assets/img/default-user.png"
+            shape="circle"
+            size="large"
+            styleClass="p-mr-2"
+          >
+          </p-avatar>
+          <div class="head-line ps-3">
+            <h3 class="theme-primary m-0">{{post.name}}</h3>
+            <a routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a> •  {{post.duration}}
+            <span class="d-none d-sm-inline ps-2"> </span>
+          </div>
+        </div>
+        <p
+          [innerHTML]="post.description"
+          class="card-text"
+        >
+        </p>
+      </div>
+      <div class="card-footer border-0 pb-4 bg-white d-flex justify-content-end">
+        <span class="post-comment d-flex align-items-center">
+          <i class="far fa-comment-alt d-block px-2"></i>
+          <span class="comment-count pe-1">{{post.commentCount}}</span>
+          <span class="comment-word">{{(post.commentCount > 1 ? ' commentaires' : ' commentaire')}}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
