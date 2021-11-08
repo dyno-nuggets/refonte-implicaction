@@ -55,10 +55,18 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithQueryParameters(
       uri,
       (qs: QueryStringParameters) => {
-        qs.push('page', pageable.page);
-        qs.push('rows', pageable.rows);
-        qs.push('sortBy', pageable.page);
-        qs.push('sortOrder', pageable.rows);
+        if (pageable.page) {
+          qs.push('page', pageable.page);
+        }
+        if (pageable.rows) {
+          qs.push('rows', pageable.rows);
+        }
+        if (pageable.sortBy) {
+          qs.push('sortBy', pageable.sortBy);
+        }
+        if (pageable.sortOrder) {
+          qs.push('sortOrder', pageable.sortOrder);
+        }
       });
   }
 
@@ -236,6 +244,7 @@ export class ApiEndpointsService {
    */
 
   getAllPostsEndpoint(pageable: Pageable): string {
+
     return ApiEndpointsService.createUrlWithPageable(Uris.POSTS.BASE_URI, pageable);
   }
 

@@ -5,7 +5,7 @@
       <app-votebox [post]="post"></app-votebox>
     </div>
     <div class="col-11 p-0">
-      <div class="card-body">
+      <div class="card-body ps-5 pt-4">
         <div class="card-title d-flex align-items-center justify-content-start mb-3">
           <p-avatar
             image="assets/img/default-user.png"
@@ -16,7 +16,7 @@
           </p-avatar>
           <div class="head-line ps-3">
             <h3 class="theme-primary m-0">{{post.name}}</h3>
-            <a routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a> •  {{post.duration}}
+            <a routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a> • {{post.duration}}
             <span class="d-none d-sm-inline ps-2"> </span>
           </div>
         </div>
