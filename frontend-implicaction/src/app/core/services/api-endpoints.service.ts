@@ -234,12 +234,9 @@ export class ApiEndpointsService {
   /**
    * Posts
    */
+
   getAllPostsEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithQueryParameters(
-      Uris.POSTS.BASE_URI,
-      (qs: QueryStringParameters) => {
-        this.buildQueryStringFromFilters(pageable, qs);
-      });
+    return ApiEndpointsService.createUrlWithPageable(Uris.POSTS.BASE_URI, pageable);
   }
 
   /**
