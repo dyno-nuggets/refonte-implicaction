@@ -7,11 +7,11 @@ import {ToasterService} from '../core/services/toaster.service';
 import {Pageable} from '../shared/models/pageable';
 
 @Component({
-  selector: 'app-blog',
-  templateUrl: './blog.component.html',
-  styleUrls: ['./blog.component.scss']
+  selector: 'app-discussion',
+  templateUrl: './discussion.component.html',
+  styleUrls: ['./discussion.component.scss']
 })
-export class BlogComponent implements OnInit {
+export class DiscussionComponent implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 

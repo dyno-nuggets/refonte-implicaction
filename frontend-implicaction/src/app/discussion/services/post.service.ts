@@ -3,6 +3,7 @@ import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Pageable} from '../../shared/models/pageable';
+import {Post} from '../model/post';
 
 @Injectable({
   providedIn: 'root'
@@ -17,5 +18,9 @@ export class PostService {
 
   getAllPosts(pageable: Pageable): Observable<any> {
     return this.http.get(this.endpointsService.getAllPostsEndpoint(pageable));
+  }
+
+  getById(postId: string): Observable<Post> {
+    return this.http.get(this.endpointsService.getPostEndpoint(postId));
   }
 }

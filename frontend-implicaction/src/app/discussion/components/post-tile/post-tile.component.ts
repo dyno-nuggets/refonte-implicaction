@@ -3,11 +3,11 @@ import {Post} from '../../model/post';
 import {Univers} from '../../../shared/enums/univers';
 
 @Component({
-  selector: 'app-post-details',
-  templateUrl: './post-details.component.html',
-  styleUrls: ['./post-details.component.scss']
+  selector: 'app-post-tile',
+  templateUrl: './post-tile.component.html',
+  styleUrls: ['./post-tile.component.scss']
 })
-export class PostDetailsComponent {
+export class PostTileComponent {
 
   @Input()
   post: Post = {};

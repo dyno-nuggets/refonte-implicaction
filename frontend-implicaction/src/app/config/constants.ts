@@ -9,6 +9,8 @@ export class Constants {
     totalElements: 0,
     first: 0,
     content: [],
+    sortOrder: 'ASC',
+    sortBy: 'id',
     rowsPerPages: [10, 25, 50],
     totalPages: 0,
     empty: true,
