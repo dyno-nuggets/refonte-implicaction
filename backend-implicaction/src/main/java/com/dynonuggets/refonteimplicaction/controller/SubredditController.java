@@ -11,6 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_ALL_BY_TOP_POSTING_URI;
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.SUBREDDITS_BASE_URI;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -37,6 +40,12 @@ public class SubredditController {
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         Page<SubredditDto> subredditDtos = subredditService.getAll(pageable);
+        return ResponseEntity.ok(subredditDtos);
+    }
+
+    @GetMapping(GET_ALL_BY_TOP_POSTING_URI)
+    public ResponseEntity<List<SubredditDto>> getAllByTopPosting(@RequestParam int limit) {
+        List<SubredditDto> subredditDtos = subredditService.getAllByTopPosting(limit);
         return ResponseEntity.ok(subredditDtos);
     }
 }

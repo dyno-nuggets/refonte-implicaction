@@ -11,6 +11,11 @@ import {PostTileComponent} from './components/post-tile/post-tile.component';
 import {PostDetailComponent} from './components/post-detail/post-detail.component';
 import {PostSkeletonComponent} from './components/post-skeleton/post-skeleton.component';
 import {SkeletonModule} from 'primeng/skeleton';
+import {OptionMenuComponent} from './components/option-menu/option-menu.component';
+import {GroupFormComponent} from './components/group-form/group-form.component';
+import {ReactiveFormsModule} from '@angular/forms';
+import {TopGroupListingComponent} from './components/top-group-listing/top-group-listing.component';
+import {TopGroupSkeletonComponent} from './components/top-group-skeleton/top-group-skeleton.component';
 
 
 @NgModule({
@@ -21,6 +26,10 @@ import {SkeletonModule} from 'primeng/skeleton';
     VoteboxComponent,
     PostDetailComponent,
     PostSkeletonComponent,
+    OptionMenuComponent,
+    GroupFormComponent,
+    TopGroupListingComponent,
+    TopGroupSkeletonComponent,
   ],
   imports: [
     CommonModule,
@@ -28,7 +37,8 @@ import {SkeletonModule} from 'primeng/skeleton';
     SharedModule,
     PaginatorModule,
     AvatarModule,
-    SkeletonModule
+    SkeletonModule,
+    ReactiveFormsModule
   ]
 })
 export class DiscussionModule {

@@ -27,7 +27,7 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
     final int DEFAULT_SIZE = 10;
 
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Test
     void shouldSaveUser() {

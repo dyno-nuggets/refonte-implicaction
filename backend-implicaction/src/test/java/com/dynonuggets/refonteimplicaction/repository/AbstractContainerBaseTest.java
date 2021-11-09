@@ -10,6 +10,8 @@ abstract class AbstractContainerBaseTest {
     static {
         MY_SQL_CONTAINER = new MySQLContainer<>("mysql:8")
                 .withDatabaseName("implicaction")
+                .withUsername("test")
+                .withPassword("test")
                 .withReuse(true);
         MY_SQL_CONTAINER.start();
     }
