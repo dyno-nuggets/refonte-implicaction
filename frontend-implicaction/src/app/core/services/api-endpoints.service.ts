@@ -261,6 +261,20 @@ export class ApiEndpointsService {
   }
 
   /**
+   * Groups
+   */
+
+  createGroupEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.GROUP.BASE_URI);
+  }
+
+  findByTopPostingEndpoint(limit: number): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.GROUP.TOP_POSTING, (qs: QueryStringParameters) => qs.push('limit', limit)
+    );
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */

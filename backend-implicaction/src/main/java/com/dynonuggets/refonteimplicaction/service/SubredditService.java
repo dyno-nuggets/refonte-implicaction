@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
@@ -35,5 +38,13 @@ public class SubredditService {
     public Page<SubredditDto> getAll(Pageable pageable) {
         final Page<Subreddit> subreddits = subredditRepository.findAll(pageable);
         return subreddits.map(subredditAdapter::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubredditDto> getAllByTopPosting(int limit) {
+        final List<Subreddit> topPostings = subredditRepository.findAllByTopPosting(Pageable.ofSize(limit));
+        return topPostings.stream()
+                .map(subredditAdapter::toDto)
+                .collect(toList());
     }
 }

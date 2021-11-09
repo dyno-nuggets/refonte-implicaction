@@ -80,4 +80,12 @@ export class Uris {
   static readonly VOTES = class {
     static readonly BASE_URI = 'votes';
   };
+
+  /**
+   * GROUPS
+   */
+  static GROUP = class {
+    static readonly BASE_URI = 'sub-reddits';
+    static readonly TOP_POSTING = 'sub-reddits/top-posting';
+  };
 }
