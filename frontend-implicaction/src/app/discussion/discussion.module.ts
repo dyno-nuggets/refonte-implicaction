@@ -9,6 +9,8 @@ import {VoteboxComponent} from './components/votebox/votebox.component';
 import {AvatarModule} from 'primeng/avatar';
 import {PostTileComponent} from './components/post-tile/post-tile.component';
 import {PostDetailComponent} from './components/post-detail/post-detail.component';
+import {PostSkeletonComponent} from './components/post-skeleton/post-skeleton.component';
+import {SkeletonModule} from 'primeng/skeleton';
 
 
 @NgModule({
@@ -18,13 +20,15 @@ import {PostDetailComponent} from './components/post-detail/post-detail.componen
     DiscussionComponent,
     VoteboxComponent,
     PostDetailComponent,
+    PostSkeletonComponent,
   ],
   imports: [
     CommonModule,
     DiscussionRoutingModule,
     SharedModule,
     PaginatorModule,
-    AvatarModule
+    AvatarModule,
+    SkeletonModule
   ]
 })
 export class DiscussionModule {
