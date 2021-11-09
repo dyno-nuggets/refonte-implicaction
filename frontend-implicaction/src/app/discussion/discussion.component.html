@@ -13,11 +13,9 @@
       </p-paginator>
     </ng-container>
     <ng-template #loadingTemplate>
-      <div class="d-flex justify-content-center spinner">
-        <div class="align-self-center">
-          <app-loading></app-loading>
-        </div>
-      </div>
+      <ng-container *ngFor="let i of [1,2,3]">
+        <app-post-skeleton></app-post-skeleton>
+      </ng-container>
     </ng-template>
   </div>
 </div>

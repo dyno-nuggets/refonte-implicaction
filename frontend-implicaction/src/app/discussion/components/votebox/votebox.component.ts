@@ -1,9 +1,9 @@
 import {Component, Input} from '@angular/core';
 import {Post} from '../../model/post';
 import {VoteService} from '../../services/vote.service';
-import {VotePayload, VoteType} from '../../model/VotePayload';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {throwError} from 'rxjs';
+import {VotePayload, VoteType} from '../../model/vote-payload';
 
 @Component({
   selector: 'app-votebox',

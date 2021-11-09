@@ -1,3 +1,5 @@
+<p *ngIf="!posts.length">Il n'y a aucun message dans cette discussion</p>
+
 <div *ngFor="let post of posts" class="row p-0 post">
   <app-post-tile [post]="post"></app-post-tile>
 </div>

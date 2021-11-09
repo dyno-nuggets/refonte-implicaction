@@ -3,6 +3,7 @@ import {Post} from '../../model/post';
 import {PostService} from '../../services/post.service';
 import {ActivatedRoute} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-post-detail',
@@ -12,6 +13,8 @@ import {ToasterService} from '../../../core/services/toaster.service';
 export class PostDetailComponent implements OnInit {
   @Input()
   post: Post = {};
+
+  isLoading = true;
 
   constructor(
     private postService: PostService,
@@ -25,6 +28,7 @@ export class PostDetailComponent implements OnInit {
         const postId = paramMap.get('postId');
         this.postService
           .getById(postId)
+          .pipe(finalize(() => this.isLoading = false))
           .subscribe(
             post => this.post = post,
             () => this.toasterService.error('oops', 'Une erreur est survenue !')
