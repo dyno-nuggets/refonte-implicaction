@@ -5,7 +5,7 @@
     </div>
     <div class="mt-3">
       <app-top-group-skeleton *ngIf="isLoading"></app-top-group-skeleton>
-      <ng-container *ngIf="groups; else noGroup">
+      <ng-container *ngIf="groups?.length; else noGroup">
         <ol>
           <li *ngFor="let group of groups">{{group.name}}</li>
         </ol>
