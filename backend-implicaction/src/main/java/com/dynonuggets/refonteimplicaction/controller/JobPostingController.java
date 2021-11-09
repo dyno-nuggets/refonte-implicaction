@@ -57,4 +57,10 @@ public class JobPostingController {
         jobPostingService.deleteJobPosting(jobId);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping(path = ARCHIVE_JOB_URI)
+    public ResponseEntity<JobPostingDto> archive(@PathVariable Long jobId) {
+        JobPostingDto updated = jobPostingService.archiveOrUnarchiveJobPosting(jobId);
+        return ResponseEntity.ok(updated);
+    }
 }
