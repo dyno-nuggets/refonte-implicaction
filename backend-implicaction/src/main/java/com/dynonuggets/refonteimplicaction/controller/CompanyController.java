@@ -22,14 +22,15 @@ public class CompanyController {
     private final CompanyService companyService;
 
     @GetMapping
-    public ResponseEntity<Page<CompanyDto>> getAll(
+    public ResponseEntity<Page<CompanyDto>> getAllByCriteria(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
+            @RequestParam(value = "name", defaultValue = "") String name
     ) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<CompanyDto> companyDtos = companyService.getAll(pageable);
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        Page<CompanyDto> companyDtos = companyService.findAllWithCriteria(pageable, name);
         return ResponseEntity.ok(companyDtos);
     }
 

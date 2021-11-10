@@ -2,6 +2,7 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AdminComponent} from './admin.component';
 import {JobFilterComponent} from '../shared/components/job-filter/job-filter.component';
+import {CompanyFilterComponent} from '../shared/components/company-filter/company-filter.component';
 
 
 const routes: Routes = [
@@ -47,6 +48,11 @@ const routes: Routes = [
         path: '',
         loadChildren: () => import('./companies/companies.module').then(m => m.CompaniesModule),
         outlet: 'admin-content'
+      },
+      {
+        path: '',
+        component: CompanyFilterComponent,
+        outlet: 'admin-filter'
       }
     ]
   },

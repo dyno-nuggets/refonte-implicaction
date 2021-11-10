@@ -5,6 +5,7 @@ import {Constants} from '../../config/constants';
 import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
+import {CompanyCriteriaFilter} from '../../job/models/company-criteria-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -230,6 +231,21 @@ export class ApiEndpointsService {
   /**
    * Companies
    */
+  getAllCompanyByCriteriaEndpoint(pageable: Pageable, criteria: CompanyCriteriaFilter): string {
+    // on merge les filtres et les attributs de pagination
+    const objectParam = {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder
+    };
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.COMPANIES.BASE_URI,
+      (qs: QueryStringParameters) => {
+        this.buildQueryStringFromFilters(objectParam, qs);
+      });
+  }
 
   getAllCompanyEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.COMPANIES.BASE_URI, pageable);

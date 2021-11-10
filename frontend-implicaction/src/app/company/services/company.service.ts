@@ -4,6 +4,7 @@ import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Pageable} from '../../shared/models/pageable';
 import {Observable} from 'rxjs';
 import {Company} from '../../shared/models/company';
+import {CompanyCriteriaFilter} from '../../job/models/company-criteria-filter';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,10 @@ export class CompanyService {
     private http: HttpClient,
     private apiEndpointsService: ApiEndpointsService
   ) {
+  }
+
+  getAllByCriteria(pageable: Pageable, criteria: CompanyCriteriaFilter): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllCompanyByCriteriaEndpoint(pageable, criteria));
   }
 
   getAll(pageable: Pageable): Observable<any> {

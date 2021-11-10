@@ -7,6 +7,11 @@ import {CompanyService} from '../../../../company/services/company.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {CompaniesFormComponent} from '../companies-form/companies-form.component';
+import {CompanyFilterContextService} from '../../../../company/services/company-filter-context.service';
+import {CompanyCriteriaFilter} from '../../../../job/models/company-criteria-filter';
+import {ActivatedRoute} from '@angular/router';
+import {CompanySortEnum} from '../../../../company/enums/company-sort.enum';
+import {SortDirectionEnum} from '../../../../shared/enums/sort-direction.enum';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 
@@ -22,17 +27,28 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
 
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
+  orderByEnums = CompanySortEnum.all();
+  criteria: CompanyCriteriaFilter;
+  selectedOrder = CompanySortEnum.NAME_ASC;
+  selectedOrderCode: string;
+  sortDirection = SortDirectionEnum;
 
   constructor(
     private companyService: CompanyService,
     private toastService: ToasterService,
     private sidebarService: SidebarService,
-    private companyContextService: CompanyContextServiceService
+    private companyContextService: CompanyContextServiceService,
+    private filterService: CompanyFilterContextService,
+    private route: ActivatedRoute
   ) {
     super();
   }
 
   ngOnInit(): void {
+    this.pageable.sortOrder = CompanySortEnum.NAME_ASC.sortDirection;
+    this.pageable.sortBy = CompanySortEnum.NAME_ASC.sortBy;
+    this.selectedOrderCode = CompanySortEnum.NAME_ASC.code;
+
     this.companyContextService
       .observe$
       .subscribe(company => {
@@ -40,6 +56,9 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
           this.paginate();
         }
       });
+
+    this.getFilterFromQueryParams()
+      .then(() => this.filterService.setFilter(this.criteria));
   }
 
   onEditCompany(company: Company): void {
@@ -66,7 +85,7 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
     this.pageable.sortBy = 'id';
     this.pageable.sortOrder = 'ASC';
     this.companyService
-      .getAll(this.pageable)
+      .getAllByCriteria(this.pageable, this.criteria)
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -80,6 +99,40 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
       );
+  }
+
+  private async getFilterFromQueryParams(): Promise<void> {
+    // TODO: voir si y'a un moyen plus élégant avec typeof
+    const filterKeys = ['name'];
+    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
+    return new Promise(resolve => {
+      this.route
+        .queryParams
+        .subscribe(params => {
+          Object.entries(params)
+            .forEach(([key, value]) => {
+              if (filterKeys.includes(key)) {
+                this.criteria[key] = value;
+              } else if (pageableKeys.includes(key)) {
+                this.pageable[key] = value;
+              }
+            });
+          return resolve();
+        });
+    });
+  }
+
+  /**
+   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
+   */
+  private buildQueryParams(): any {
+    return {
+      ...this.criteria,
+      size: this.pageable.rows,
+      page: this.pageable.page,
+      sortBy: this.pageable.sortBy,
+      sortOrder: this.pageable.sortOrder
+    };
   }
 }
 

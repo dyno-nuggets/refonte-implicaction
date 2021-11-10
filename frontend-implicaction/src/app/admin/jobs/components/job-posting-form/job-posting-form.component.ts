@@ -6,7 +6,7 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {SidebarContentComponent} from '../../../../shared/models/sidebar-props';
 import {Observable} from 'rxjs';
-import {CompanyService} from '../../../../job/services/company.service';
+import {CompanyService} from '../../../../company/services/company.service';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
