@@ -17,6 +17,9 @@ public class Message {
     // Vote messages
     public static final String USER_ALREADY_VOTE_FOR_POST = "Current user cannot vote more than once the same way for a single post";
 
+    // File messages
+    public static final String UNKNOWN_FILE_UPLOAD_MESSAGE = "Exception occured while uploading the file [%s]";
+
     private Message() {
         // Empeche la création d'une instance de la classe Message
     }

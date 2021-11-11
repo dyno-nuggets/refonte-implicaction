@@ -18,7 +18,12 @@ services:
     restart: always
     ports:
       - "9030:8080"
+  aws:
+    image: adobe/s3mock
+    ports:
+      - "9090:9090"
+    expose:
+      - "9090"
 
 volumes:
   my-db:
-
