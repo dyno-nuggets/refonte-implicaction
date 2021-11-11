@@ -9,10 +9,10 @@ import {Group} from '../../model/group';
 
 @Component({
   selector: 'app-group-form',
-  templateUrl: './group-form.component.html',
-  styleUrls: ['./group-form.component.scss']
+  templateUrl: './create-group-form.component.html',
+  styleUrls: ['./create-group-form.component.scss']
 })
-export class GroupFormComponent extends SidebarContentComponent implements OnInit {
+export class CreateGroupFormComponent extends SidebarContentComponent implements OnInit {
 
   createGroupForm: FormGroup;
   isSubmitted = false;

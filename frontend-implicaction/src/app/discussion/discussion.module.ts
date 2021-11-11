@@ -12,7 +12,7 @@ import {PostDetailComponent} from './components/post-detail/post-detail.componen
 import {PostSkeletonComponent} from './components/post-skeleton/post-skeleton.component';
 import {SkeletonModule} from 'primeng/skeleton';
 import {OptionMenuComponent} from './components/option-menu/option-menu.component';
-import {GroupFormComponent} from './components/group-form/group-form.component';
+import {CreateGroupFormComponent} from './components/create-group-form/create-group-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TopGroupListingComponent} from './components/top-group-listing/top-group-listing.component';
 import {TopGroupSkeletonComponent} from './components/top-group-skeleton/top-group-skeleton.component';
@@ -20,6 +20,7 @@ import {CommentListComponent} from './components/comment-list/comment-list.compo
 import {EditorModule} from 'primeng/editor';
 import {CommentTileComponent} from './components/comment-tile/comment-tile.component';
 import {CommentSkeletonComponent} from './components/comment-skeleton/comment-skeleton.component';
+import {CreatePostFormComponent} from './components/create-post-form/create-post-form.component';
 
 
 @NgModule({
@@ -31,9 +32,10 @@ import {CommentSkeletonComponent} from './components/comment-skeleton/comment-sk
     PostDetailComponent,
     PostSkeletonComponent,
     OptionMenuComponent,
-    GroupFormComponent,
+    CreateGroupFormComponent,
     TopGroupListingComponent,
     TopGroupSkeletonComponent,
+    CreatePostFormComponent,
     CommentListComponent,
     CommentTileComponent,
     CommentSkeletonComponent,

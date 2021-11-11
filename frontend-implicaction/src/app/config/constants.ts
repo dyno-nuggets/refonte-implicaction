@@ -16,6 +16,14 @@ export class Constants {
     empty: true,
     last: true
   };
+  /**
+   * Cette constante est utilisée pour outrepasser la pagination d'une réponse : la page contiendra tous les résultats entre 0 et la
+   * valeur maximale d'un entier en java
+   */
+  public static readonly ALL_VALUE_PAGEABLE: Pageable = {
+    page: 0,
+    rows: 2147483647, // correspond à Integer.MAX_VALUE
+  };
   public static readonly DATE_REGEX = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
   public static readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];

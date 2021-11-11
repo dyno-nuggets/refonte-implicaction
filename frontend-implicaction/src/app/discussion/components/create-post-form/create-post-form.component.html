@@ -1,0 +1,59 @@
+<form (ngSubmit)="createPost()" [formGroup]="createPostForm" class="post-form">
+  <div class="row">
+    <div class="col-6">
+      <p-avatar
+        image="assets/img/default-user.png"
+        shape="circle"
+        size="large"
+        styleClass="me-2"
+      >
+      </p-avatar>
+      {{currentUser.username}}
+    </div>
+    <div class="col-6">
+      <div class="form-floating">
+        <p-dropdown
+          [(ngModel)]="postPayload.subredditName"
+          [options]="groups"
+          [virtualScroll]="true"
+          formControlName="createPostForm"
+          optionLabel="name"
+          placeholder="sélectionner un groupe"
+          styleClass="w-100 custom-select rounded-pill form-select-lg bg-"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="form-floating mb-4">
+    <input
+      class="form-control px-4"
+      formControlName="name"
+      id="postNameInput"
+      placeholder="Titre de la discussion"
+    />
+    <label
+      class="form-label px-4"
+      for="postNameInput"
+    >
+      Titre de la discussion
+    </label>
+  </div>
+
+  <div class="my-2">
+    <p-editor
+      [style]="{'height':'200px'}"
+      formControlName="description"
+      placeholder="Contenu de la discussion"
+    >
+    </p-editor>
+  </div>
+  <div class="d-flex justify-content-center sidebar-options">
+    <button
+      class="btn btn-primary w-50"
+      type="submit"
+    >
+      Enregistrer
+    </button>
+  </div>
+</form>
