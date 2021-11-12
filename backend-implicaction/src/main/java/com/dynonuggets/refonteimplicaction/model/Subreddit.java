@@ -20,13 +20,20 @@ public class Subreddit {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     @NotBlank(message = "Community name is required")
     private String name;
+
     @NotBlank(message = "Description is required")
     private String description;
+
     @OneToMany(mappedBy = "subreddit")
     private List<Post> posts;
     private Instant createdAt;
+
     @ManyToOne(fetch = LAZY)
     private User user;
+
+    @ManyToOne(fetch = LAZY)
+    private FileModel image;
 }

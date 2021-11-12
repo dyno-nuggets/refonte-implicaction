@@ -64,7 +64,7 @@ class PostServiceTest {
     void should_save_post_if_subreddit_exists() {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
+        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, null, Instant.now(), null);
         PostRequest postRequest = new PostRequest(null, "First Subreddit", "First Post", "http://url.site", "Test");
 
@@ -117,7 +117,7 @@ class PostServiceTest {
     void should_get_post_when_exists() {
         // given
         User currentUser = User.builder().id(123L).username("Sankukai").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
+        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
         PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), "Super Subreddit", 88000, 12, null, true, false);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
@@ -147,7 +147,7 @@ class PostServiceTest {
     void should_list_all_posts() {
         // given
         User currentUser = User.builder().id(1345L).username("gustave").build();
-        Subreddit subreddit = new Subreddit(123L, "Sub 1", "Description Sub 1", null, Instant.now(), currentUser);
+        Subreddit subreddit = new Subreddit(123L, "Sub 1", "Description Sub 1", null, Instant.now(), currentUser, null);
         Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         Page<Post> expectedPages = new PageImpl<>(asList(
                 new Post(1L, "Post 1", null, "Description 1", 0, currentUser, Instant.now(), subreddit),

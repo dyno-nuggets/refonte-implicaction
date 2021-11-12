@@ -29,7 +29,7 @@ public class ApiUrls {
     public static final String GET_FRIEND_URI = "/{userId}/friends";
 
     // FILES
-    public static final String FILE_BASE_URI = "/api/fies";
+    public static final String FILE_BASE_URI = "/api/files";
 
     private ApiUrls() {
         // empêche la construction d'un objet ApiUrls

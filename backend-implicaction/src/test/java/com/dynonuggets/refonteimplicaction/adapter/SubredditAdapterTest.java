@@ -28,14 +28,14 @@ class SubredditAdapterTest {
 
         // then
         assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "createdAt")
+                .ignoringFields("user", "posts", "numberOfPosts", "createdAt", "image")
                 .isEqualTo(expected);
     }
 
     @Test
     void toDto() {
         // given
-        Subreddit expected = Subreddit.builder()
+        Subreddit expectedModel = Subreddit.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
@@ -44,13 +44,13 @@ class SubredditAdapterTest {
                 .build();
 
         // when
-        final SubredditDto actual = subredditAdapter.toDto(expected);
+        final SubredditDto actualDto = subredditAdapter.toDto(expectedModel);
 
         // then
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts")
-                .isEqualTo(expected);
+        assertThat(actualDto).usingRecursiveComparison()
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl")
+                .isEqualTo(expectedModel);
 
-        assertThat(actual.getNumberOfPosts()).isEqualTo(expected.getPosts().size());
+        assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
     }
 }

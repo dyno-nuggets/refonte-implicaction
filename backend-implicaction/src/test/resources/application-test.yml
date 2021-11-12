@@ -24,4 +24,4 @@ cloud:
       access-key: tata
       secret-key: titi
     region:
-      static: us-west-2
+      static: eu-west-2
