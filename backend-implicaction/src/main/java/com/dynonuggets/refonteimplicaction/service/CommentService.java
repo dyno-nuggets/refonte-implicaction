@@ -60,7 +60,7 @@ public class CommentService {
         final Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
-        final Page<Comment> comments = commentRepository.findByPost(post, pageable);
+        final Page<Comment> comments = commentRepository.findByPostOrderById(post, pageable);
 
         return comments.map(commentAdapter::toDto);
     }

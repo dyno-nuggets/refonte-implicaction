@@ -23,4 +23,8 @@ export class PostService {
   getById(postId: string): Observable<Post> {
     return this.http.get(this.endpointsService.getPostEndpoint(postId));
   }
+
+  getCommentsByPostId(pageable: Pageable, postId: string): Observable<any> {
+    return this.http.get(this.endpointsService.getPostCommentsEndpoint(pageable, postId));
+  }
 }

@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.CommentService;
+import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -46,7 +47,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
         CommentDto expectedDto = CommentDto.builder()
                 .id(123L)
                 .postId(243L)
-                .createdAt(Instant.now())
+                .duration(DateUtils.getDurationAsString(Instant.now()))
                 .text("voici mon commentaire sur ce point !")
                 .username("Marc Elbichon")
                 .build();
@@ -65,7 +66,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
                 .andExpect(jsonPath("$.postId", is(expectedDto.getPostId().intValue())))
-                .andExpect(jsonPath("$.createdAt", is(expectedDto.getCreatedAt().toString())))
+                .andExpect(jsonPath("$.duration", is(DateUtils.getDurationAsString(Instant.now()))))
                 .andExpect(jsonPath("$.text", is(expectedDto.getText())))
                 .andExpect(jsonPath("$.username", is(expectedDto.getUsername())));
 
@@ -99,7 +100,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
         CommentDto expectedDto = CommentDto.builder()
                 .id(123L)
                 .postId(243L)
-                .createdAt(Instant.now())
+                .duration(DateUtils.getDurationAsString(Instant.now()))
                 .text("voici mon commentaire sur ce point !")
                 .username("Marc Elbichon")
                 .build();
@@ -117,7 +118,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
                 .andExpect(jsonPath("$.postId", is(expectedDto.getPostId().intValue())))
-                .andExpect(jsonPath("$.createdAt", is(expectedDto.getCreatedAt().toString())))
+                .andExpect(jsonPath("$.duration", is(DateUtils.getDurationAsString(Instant.now()))))
                 .andExpect(jsonPath("$.text", is(expectedDto.getText())))
                 .andExpect(jsonPath("$.username", is(expectedDto.getUsername())));
 

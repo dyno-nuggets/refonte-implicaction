@@ -9,6 +9,7 @@ import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
+import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -75,8 +76,8 @@ class CommentServiceTest {
         // given
         Post post = Post.builder().id(789L).build();
         User user = User.builder().id(666L).username("lucifer").build();
-        CommentDto dtoToSave = new CommentDto(null, post.getId(), Instant.now(), "coucou", "lucifer");
-        Comment commentTosave = new Comment(123L, "coucou", post, dtoToSave.getCreatedAt(), user);
+        CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null);
+        Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user);
         CommentDto expectedDto = commentAdapter.toDto(commentTosave);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
@@ -111,7 +112,7 @@ class CommentServiceTest {
     }
 
     @Test
-    void should_return_post_when_exists() {
+    void should_return_comment_when_exists() {
         // given
         User user = User.builder().id(666L).username("lucifer").build();
         Post post = Post.builder().id(789L).build();
@@ -146,14 +147,14 @@ class CommentServiceTest {
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
         List<Comment> comments = asList(
-                new Comment(1L, "comment1", post, Instant.now(), currentUser),
+                new Comment(3L, "comment1", post, Instant.now(), currentUser),
                 new Comment(2L, "comment2", post, Instant.now(), currentUser),
-                new Comment(3L, "comment3", post, Instant.now(), currentUser)
+                new Comment(1L, "comment3", post, Instant.now(), currentUser)
         );
         Page<Comment> commentPage = new PageImpl<>(comments);
         final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
-        given(commentRepository.findByPost(any(), any())).willReturn(commentPage);
+        given(commentRepository.findByPostOrderById(any(), any())).willReturn(commentPage);
 
         // when
         final Page<CommentDto> actualComments = commentService.getAllCommentsForPost(pageable, post.getId());

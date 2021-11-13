@@ -1,0 +1,24 @@
+<div class="d-flex flex-row p-3">
+  <p-avatar
+    [image]="comment.userImageUrl || constants.USER_DEFAULT_IMAGE_SRC"
+    class="col-md-1 d-none d-md-block align-self-start"
+    shape="circle"
+    size="large"
+  >
+  </p-avatar>
+  <div class="w-100">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex flex-row align-items-center">
+        <a routerLink="/{{univers.USERS.url}}/{{comment.userId}}/profile">
+          <span class="me-2">{{comment.username}}</span>
+        </a>
+      </div>
+      <small>{{comment.duration}}</small>
+    </div>
+    <p
+      [innerHTML]="comment.text"
+      class="text-justify mb-0"
+    >
+    </p>
+  </div>
+</div>

@@ -16,6 +16,9 @@ import {GroupFormComponent} from './components/group-form/group-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TopGroupListingComponent} from './components/top-group-listing/top-group-listing.component';
 import {TopGroupSkeletonComponent} from './components/top-group-skeleton/top-group-skeleton.component';
+import {CommentListComponent} from './components/comment-list/comment-list.component';
+import {EditorModule} from 'primeng/editor';
+import {CommentTileComponent} from './components/comment-tile/comment-tile.component';
 
 
 @NgModule({
@@ -30,6 +33,8 @@ import {TopGroupSkeletonComponent} from './components/top-group-skeleton/top-gro
     GroupFormComponent,
     TopGroupListingComponent,
     TopGroupSkeletonComponent,
+    CommentListComponent,
+    CommentTileComponent,
   ],
   imports: [
     CommonModule,
@@ -38,7 +43,8 @@ import {TopGroupSkeletonComponent} from './components/top-group-skeleton/top-gro
     PaginatorModule,
     AvatarModule,
     SkeletonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    EditorModule
   ]
 })
 export class DiscussionModule {

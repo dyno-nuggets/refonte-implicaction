@@ -1,7 +1,9 @@
 <div class="row p-0 m-0">
   <div class="col-12 col-lg-9 row m-0 p-0">
     <ng-container *ngIf="!isLoading; else loadingTemplate">
-      <app-post-tile [post]="post"></app-post-tile>
+      <app-post-tile [post]="post">
+        <app-comment-list id="comments"></app-comment-list>
+      </app-post-tile>
     </ng-container>
     <ng-template #loadingTemplate>
       <app-post-skeleton></app-post-skeleton>

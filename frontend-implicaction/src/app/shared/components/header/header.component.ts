@@ -6,6 +6,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {User} from '../../models/user';
 import {Univers} from '../../enums/univers';
 import {RoleEnumCode} from '../../enums/role.enum';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-header',
@@ -19,6 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   allowedUnivers: Univers[] = [];
   isAdmin = false;
   univers = Univers;
+  currentUserImageSrc = Constants.USER_DEFAULT_IMAGE_SRC;
 
   private subscription: Subscription;
 
