@@ -1,8 +1,12 @@
 <div class="container mb-5" id="comments">
   <div class="row height d-flex justify-content-center align-items-center">
-    <div class="col-md-12">
+    <div class="col-md-12 p-0 ps-3">
       <div class="card border-0">
-        <form class="form-color p-3">
+        <form
+          (ngSubmit)="postComment()"
+          [formGroup]="createCommentForm"
+          class="form-color p-3"
+        >
           <div class="my-2 d-flex align-items-center">
             <p-avatar
               [image]="currentUserImageUrl"
@@ -14,6 +18,7 @@
             <p-editor
               [style]="{'height':'200px'}"
               class="col-12 col-md-11"
+              formControlName="text"
             >
             </p-editor>
           </div>
@@ -31,8 +36,8 @@
     </div>
   </div>
   <p-paginator
+    #paginator
     (onPageChange)="paginate($event)"
-    *ngIf="pageable.totalPages > 0"
     [alwaysShow]="false"
     [first]="pageable.first"
     [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"

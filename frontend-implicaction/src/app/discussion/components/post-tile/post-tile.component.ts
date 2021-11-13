@@ -11,6 +11,10 @@ export class PostTileComponent {
 
   @Input()
   post: Post = {};
-
   univers = Univers;
+
+  updateCommentCount(count: number): void {
+    this.post.commentCount = count;
+  }
+
 }

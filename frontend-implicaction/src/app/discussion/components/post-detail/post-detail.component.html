@@ -1,6 +1,6 @@
 <ng-container *ngIf="!isLoading; else loadingTemplate">
-  <app-post-tile [post]="post">
-    <app-comment-list id="comments"></app-comment-list>
+  <app-post-tile #postTile [post]="post">
+    <app-comment-list (countChange)="postTile.updateCommentCount($event)" id="comments"></app-comment-list>
   </app-post-tile>
 </ng-container>
 <ng-template #loadingTemplate>

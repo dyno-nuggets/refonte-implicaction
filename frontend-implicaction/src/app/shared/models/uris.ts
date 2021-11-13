@@ -88,4 +88,8 @@ export class Uris {
     static readonly BASE_URI = 'sub-reddits';
     static readonly TOP_POSTING = 'sub-reddits/top-posting';
   };
+
+  static COMMENTS = class {
+    static readonly BASE_URI = 'comments';
+  };
 }
