@@ -61,13 +61,17 @@ export class CommentListComponent extends BaseWithPaginationComponent<Comment> i
     });
 
     this.createCommentForm = new FormGroup({
-      text: new FormControl('', Validators.required)
+      text: new FormControl('', Validators.minLength(1))
     });
   }
 
   trackCommentById = (index: number, comment: Comment) => comment.id;
 
   postComment(): void {
+    if (this.createCommentForm.invalid || this.createCommentForm.get('text').value.length === 0) {
+      return;
+    }
+
     this.commentPayload.text = this.createCommentForm.get('text').value;
     this.commentService
       .postComment(this.commentPayload)
