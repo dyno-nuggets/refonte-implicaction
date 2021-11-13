@@ -2,8 +2,6 @@ package com.dynonuggets.refonteimplicaction.dto;
 
 import lombok.*;
 
-import java.time.Instant;
-
 @Data
 @Getter
 @Builder
@@ -12,7 +10,9 @@ import java.time.Instant;
 public class CommentDto {
     private Long id;
     private Long postId;
-    private Instant createdAt;
+    private String duration;
     private String text;
     private String username;
+    private Long userId;
+    private String userImageUrl;
 }

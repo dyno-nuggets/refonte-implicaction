@@ -252,6 +252,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId]);
   }
 
+  getPostCommentsEndpoint(pageable: any, postId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId, 'comments']);
+  }
+
   /**
    * Votes
    */

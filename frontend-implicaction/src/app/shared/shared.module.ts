@@ -11,6 +11,7 @@ import {BrPipe} from './pipes/br.pipe';
 import {ContractTypeComponent} from './components/contract-type/contract-type.component';
 import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 import {JobFilterComponent} from './components/job-filter/job-filter.component';
+import {BaseWithPaginationComponent} from './components/base-with-pagination-component/base-with-pagination.component';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import {JobFilterComponent} from './components/job-filter/job-filter.component';
     ContractTypeComponent,
     DateTimelapseComponent,
     JobFilterComponent,
+    BaseWithPaginationComponent,
   ],
   exports: [
     HeaderComponent,

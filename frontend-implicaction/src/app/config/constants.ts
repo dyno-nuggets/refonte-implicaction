@@ -17,5 +17,8 @@ export class Constants {
     last: true
   };
   public static readonly DATE_REGEX = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
   public static readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
+
+  public static readonly USER_DEFAULT_IMAGE_SRC = 'assets/img/default-user.png';
 }

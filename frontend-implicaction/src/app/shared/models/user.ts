@@ -28,4 +28,5 @@ export interface User {
   trainings?: Training[];
   relationTypeOfCurrentUser?: RelationType;
   roles?: RoleEnumCode[];
+  imageUrl?: string;
 }

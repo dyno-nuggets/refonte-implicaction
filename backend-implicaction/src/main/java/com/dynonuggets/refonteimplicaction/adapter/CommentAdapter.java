@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,7 +14,6 @@ public class CommentAdapter {
         return Comment.builder()
                 .id(dto.getId())
                 .text(dto.getText())
-                .createdAt(dto.getCreatedAt())
                 .post(post)
                 .user(user)
                 .build();
@@ -23,9 +23,10 @@ public class CommentAdapter {
         return CommentDto.builder()
                 .id(model.getId())
                 .postId(model.getPost().getId())
-                .createdAt(model.getCreatedAt())
+                .duration(DateUtils.getDurationAsString(model.getCreatedAt()))
                 .text(model.getText())
                 .username(model.getUser().getUsername())
+                .userId(model.getUser().getId())
                 .build();
     }
 }
