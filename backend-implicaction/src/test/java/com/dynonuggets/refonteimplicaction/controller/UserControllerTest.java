@@ -3,11 +3,11 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import com.dynonuggets.refonteimplicaction.service.UserService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -25,9 +26,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -79,20 +83,20 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         for (int i = 0; i < userDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", Matchers.is(Math.toIntExact(userDtos.get(i).getId()))))
-                    .andExpect(jsonPath(contentPath + ".username", Matchers.is(userDtos.get(i).getUsername())))
-                    .andExpect(jsonPath(contentPath + ".email", Matchers.is(userDtos.get(i).getEmail())))
-                    .andExpect(jsonPath(contentPath + ".firstname", Matchers.is(userDtos.get(i).getFirstname())))
-                    .andExpect(jsonPath(contentPath + ".lastname", Matchers.is(userDtos.get(i).getLastname())))
-                    .andExpect(jsonPath(contentPath + ".username", Matchers.is(userDtos.get(i).getUsername())))
-                    .andExpect(jsonPath(contentPath + ".url", Matchers.is(userDtos.get(i).getUrl())))
-                    .andExpect(jsonPath(contentPath + ".hobbies", Matchers.is(userDtos.get(i).getHobbies())))
-                    .andExpect(jsonPath(contentPath + ".purpose", Matchers.is(userDtos.get(i).getPurpose())))
-                    .andExpect(jsonPath(contentPath + ".presentation", Matchers.is(userDtos.get(i).getPresentation())))
-                    .andExpect(jsonPath(contentPath + ".username", Matchers.is(userDtos.get(i).getUsername())))
-                    .andExpect(jsonPath(contentPath + ".expectation", Matchers.is(userDtos.get(i).getExpectation())))
-                    .andExpect(jsonPath(contentPath + ".contribution", Matchers.is(userDtos.get(i).getContribution())))
-                    .andExpect(jsonPath(contentPath + ".registeredAt", Matchers.is(userDtos.get(i).getRegisteredAt().toString())));
+            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(userDtos.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".username", is(userDtos.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".email", is(userDtos.get(i).getEmail())))
+                    .andExpect(jsonPath(contentPath + ".firstname", is(userDtos.get(i).getFirstname())))
+                    .andExpect(jsonPath(contentPath + ".lastname", is(userDtos.get(i).getLastname())))
+                    .andExpect(jsonPath(contentPath + ".username", is(userDtos.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".url", is(userDtos.get(i).getUrl())))
+                    .andExpect(jsonPath(contentPath + ".hobbies", is(userDtos.get(i).getHobbies())))
+                    .andExpect(jsonPath(contentPath + ".purpose", is(userDtos.get(i).getPurpose())))
+                    .andExpect(jsonPath(contentPath + ".presentation", is(userDtos.get(i).getPresentation())))
+                    .andExpect(jsonPath(contentPath + ".username", is(userDtos.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".expectation", is(userDtos.get(i).getExpectation())))
+                    .andExpect(jsonPath(contentPath + ".contribution", is(userDtos.get(i).getContribution())))
+                    .andExpect(jsonPath(contentPath + ".registeredAt", is(userDtos.get(i).getRegisteredAt().toString())));
         }
 
         verify(userService, times(1)).getAll(any());
@@ -130,21 +134,21 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         mvc.perform(get(USER_BASE_URI + GET_USER_URI, userDto.getId()).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", Matchers.is(Math.toIntExact(userDto.getId()))))
-                .andExpect(jsonPath("$.username", Matchers.is(userDto.getUsername())))
-                .andExpect(jsonPath("$.email", Matchers.is(userDto.getEmail())))
-                .andExpect(jsonPath("$.firstname", Matchers.is(userDto.getFirstname())))
-                .andExpect(jsonPath("$.lastname", Matchers.is(userDto.getLastname())))
-                .andExpect(jsonPath("$.username", Matchers.is(userDto.getUsername())))
-                .andExpect(jsonPath("$.url", Matchers.is(userDto.getUrl())))
-                .andExpect(jsonPath("$.hobbies", Matchers.is(userDto.getHobbies())))
-                .andExpect(jsonPath("$.purpose", Matchers.is(userDto.getPurpose())))
-                .andExpect(jsonPath("$.presentation", Matchers.is(userDto.getPresentation())))
-                .andExpect(jsonPath("$.username", Matchers.is(userDto.getUsername())))
-                .andExpect(jsonPath("$.expectation", Matchers.is(userDto.getExpectation())))
-                .andExpect(jsonPath("$.contribution", Matchers.is(userDto.getContribution())))
-                .andExpect(jsonPath("$.registeredAt", Matchers.is(userDto.getRegisteredAt().toString())))
-                .andExpect(jsonPath("$.activatedAt", Matchers.is(userDto.getActivatedAt().toString())));
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(userDto.getId().intValue()))))
+                .andExpect(jsonPath("$.username", is(userDto.getUsername())))
+                .andExpect(jsonPath("$.email", is(userDto.getEmail())))
+                .andExpect(jsonPath("$.firstname", is(userDto.getFirstname())))
+                .andExpect(jsonPath("$.lastname", is(userDto.getLastname())))
+                .andExpect(jsonPath("$.username", is(userDto.getUsername())))
+                .andExpect(jsonPath("$.url", is(userDto.getUrl())))
+                .andExpect(jsonPath("$.hobbies", is(userDto.getHobbies())))
+                .andExpect(jsonPath("$.purpose", is(userDto.getPurpose())))
+                .andExpect(jsonPath("$.presentation", is(userDto.getPresentation())))
+                .andExpect(jsonPath("$.username", is(userDto.getUsername())))
+                .andExpect(jsonPath("$.expectation", is(userDto.getExpectation())))
+                .andExpect(jsonPath("$.contribution", is(userDto.getContribution())))
+                .andExpect(jsonPath("$.registeredAt", is(userDto.getRegisteredAt().toString())))
+                .andExpect(jsonPath("$.activatedAt", is(userDto.getActivatedAt().toString())));
 
         verify(userService, times(1)).getUserById(any());
 
@@ -205,20 +209,20 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         for (int i = 0; i < friendsList.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", Matchers.is(Math.toIntExact(friendsList.get(i).getId()))))
-                    .andExpect(jsonPath(contentPath + ".username", Matchers.is(friendsList.get(i).getUsername())))
-                    .andExpect(jsonPath(contentPath + ".email", Matchers.is(friendsList.get(i).getEmail())))
-                    .andExpect(jsonPath(contentPath + ".firstname", Matchers.is(friendsList.get(i).getFirstname())))
-                    .andExpect(jsonPath(contentPath + ".lastname", Matchers.is(friendsList.get(i).getLastname())))
-                    .andExpect(jsonPath(contentPath + ".username", Matchers.is(friendsList.get(i).getUsername())))
-                    .andExpect(jsonPath(contentPath + ".url", Matchers.is(friendsList.get(i).getUrl())))
-                    .andExpect(jsonPath(contentPath + ".hobbies", Matchers.is(friendsList.get(i).getHobbies())))
-                    .andExpect(jsonPath(contentPath + ".purpose", Matchers.is(friendsList.get(i).getPurpose())))
-                    .andExpect(jsonPath(contentPath + ".presentation", Matchers.is(friendsList.get(i).getPresentation())))
-                    .andExpect(jsonPath(contentPath + ".username", Matchers.is(friendsList.get(i).getUsername())))
-                    .andExpect(jsonPath(contentPath + ".expectation", Matchers.is(friendsList.get(i).getExpectation())))
-                    .andExpect(jsonPath(contentPath + ".contribution", Matchers.is(friendsList.get(i).getContribution())))
-                    .andExpect(jsonPath(contentPath + ".registeredAt", Matchers.is(friendsList.get(i).getRegisteredAt().toString())));
+            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
+                    .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
+                    .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
+                    .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
+                    .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
+                    .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
+                    .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
+                    .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
         }
 
         verify(relationService, times(1)).getAllFriendsByUserId(anyLong(), any());
@@ -231,5 +235,301 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(status().isForbidden());
 
         verify(relationService, never()).getAllFriendsByUserId(anyLong(), any());
+    }
+
+    @Test
+    @WithMockUser
+    void should_return_list_of_invitations_sent() throws Exception {
+        // given
+        UserDto receiver = UserDto.builder()
+                .id(3L)
+                .username("paul-sdv")
+                .firstname("Paul")
+                .lastname("Flu")
+                .email("paul@implicaction.fr")
+                .url("www.google.fr")
+                .hobbies("surf,gaming,judo")
+                .purpose("")
+                .registeredAt(Instant.now())
+                .activatedAt(Instant.now())
+                .roles(roles)
+                .active(true)
+                .build();
+
+        User userTest = User.builder()
+                .id(10L)
+                .build();
+
+        ArrayList<UserDto> friendsList = new ArrayList<>();
+        friendsList.add(receiver);
+
+        Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
+        ResultActions actions;
+
+        given(authService.getCurrentUser()).willReturn(userTest);
+        given(relationService.getSentFriendRequest(anyLong(), any())).willReturn(userPageMockResponse);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        // then
+        for (int i = 0; i < friendsList.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
+                    .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
+                    .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
+                    .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
+                    .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
+                    .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
+                    .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
+                    .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
+        }
+
+        verify(relationService, times(1)).getSentFriendRequest(anyLong(), any());
+    }
+
+    @Test
+    void should_response_forbidden_when_getting_all_sent_invitations_with_no_authentication() throws Exception {
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI)
+                .contentType(MediaType.APPLICATION_JSON)).andDo(print());
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+        verify(relationService, never()).getSentFriendRequest(anyLong(), any());
+
+    }
+
+    @Test
+    @WithMockUser
+    void should_return_list_of_invitations_received() throws Exception {
+        // given
+        UserDto sender = UserDto.builder()
+                .id(3L)
+                .username("paul-sdv")
+                .firstname("Paul")
+                .lastname("Flu")
+                .email("paul@implicaction.fr")
+                .url("www.google.fr")
+                .hobbies("surf,gaming,judo")
+                .purpose("")
+                .registeredAt(Instant.now())
+                .activatedAt(Instant.now())
+                .roles(roles)
+                .active(true)
+                .build();
+
+        User userTest = User.builder()
+                .id(10L)
+                .build();
+
+        ArrayList<UserDto> friendsList = new ArrayList<>();
+        friendsList.add(sender);
+
+        Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
+
+        given(authService.getCurrentUser()).willReturn(userTest);
+        given(relationService.getReceivedFriendRequest(anyLong(), any())).willReturn(userPageMockResponse);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI).contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        // then
+        for (int i = 0; i < friendsList.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
+                    .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
+                    .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
+                    .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
+                    .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
+                    .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
+                    .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
+                    .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
+        }
+
+        verify(relationService, times(1)).getReceivedFriendRequest(anyLong(), any());
+    }
+
+    @Test
+    void should_response_forbidden_when_getting_all_received_invitations_with_no_authentication() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI)
+                .contentType(MediaType.APPLICATION_JSON)).andDo(print());
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+        verify(relationService, never()).getReceivedFriendRequest(anyLong(), any());
+
+    }
+
+    @Test
+    void should_response_forbidden_when_updating_user_with_no_authentication() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(put(USER_BASE_URI)
+                .contentType(MediaType.APPLICATION_JSON)).andDo(print());
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+        verify(userService, never()).updateUser(any());
+
+    }
+
+    @Test
+    @WithMockUser
+    void should_return_list_of_pending() throws Exception {
+        // given
+        UserDto sender = UserDto.builder()
+                .id(3L)
+                .username("paul-sdv")
+                .firstname("Paul")
+                .lastname("Flu")
+                .email("paul@implicaction.fr")
+                .url("www.google.fr")
+                .hobbies("surf,gaming,judo")
+                .purpose("")
+                .registeredAt(Instant.now())
+                .activatedAt(Instant.now())
+                .roles(roles)
+                .active(true)
+                .build();
+
+        User userTest = User.builder()
+                .id(10L)
+                .build();
+
+        ArrayList<UserDto> friendsList = new ArrayList<>();
+        friendsList.add(sender);
+
+        Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
+
+        given(authService.getCurrentUser()).willReturn(userTest);
+        given(userService.getAllPendingActivationUsers(any())).willReturn(userPageMockResponse);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(USER_BASE_URI + GET_PENDING_USER_URI).contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        // then
+        for (int i = 0; i < friendsList.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
+                    .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
+                    .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
+                    .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
+                    .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
+                    .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
+                    .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
+                    .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
+        }
+
+        verify(userService, times(1)).getAllPendingActivationUsers(any());
+    }
+
+    @Test
+    void should_response_forbidden_when_getting_all_pending_user_with_no_authentication() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_PENDING_USER_URI)
+                .contentType(MediaType.APPLICATION_JSON)).andDo(print());
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+        verify(userService, never()).getAllPendingActivationUsers(any());
+
+    }
+
+    @Test
+    @WithMockUser
+    void should_return_list_of_community() throws Exception {
+        // given
+        UserDto sender = UserDto.builder()
+                .id(3L)
+                .username("paul-sdv")
+                .firstname("Paul")
+                .lastname("Flu")
+                .email("paul@implicaction.fr")
+                .url("www.google.fr")
+                .hobbies("surf,gaming,judo")
+                .purpose("")
+                .registeredAt(Instant.now())
+                .activatedAt(Instant.now())
+                .roles(roles)
+                .active(true)
+                .build();
+
+        User userTest = User.builder()
+                .id(10L)
+                .build();
+
+        ArrayList<UserDto> friendsList = new ArrayList<>();
+        friendsList.add(sender);
+
+        Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
+
+        given(authService.getCurrentUser()).willReturn(userTest);
+        given(userService.getAllCommunity(any())).willReturn(userPageMockResponse);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                get(USER_BASE_URI + GET_COMMUNITY_URI).contentType(APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+
+        // then
+        for (int i = 0; i < friendsList.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
+                    .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
+                    .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
+                    .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
+                    .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
+                    .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
+                    .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
+                    .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
+                    .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
+                    .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
+        }
+
+        verify(userService, times(1)).getAllCommunity(any());
+    }
+
+    @Test
+    void should_response_forbidden_when_getting_all_community_with_no_authentication() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_COMMUNITY_URI)
+                .contentType(MediaType.APPLICATION_JSON)).andDo(print());
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+        verify(userService, never()).getAllCommunity(any());
+
     }
 }
