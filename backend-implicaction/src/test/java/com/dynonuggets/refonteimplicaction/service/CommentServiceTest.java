@@ -9,6 +9,7 @@ import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
+import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -75,7 +76,7 @@ class CommentServiceTest {
         // given
         Post post = Post.builder().id(789L).build();
         User user = User.builder().id(666L).username("lucifer").build();
-        CommentDto dtoToSave = new CommentDto(null, post.getId(), "à l'instant", "coucou", "lucifer", 14L, null);
+        CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null);
         Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user);
         CommentDto expectedDto = commentAdapter.toDto(commentTosave);
 

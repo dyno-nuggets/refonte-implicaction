@@ -16,7 +16,7 @@ import {BaseWithPaginationComponent} from '../../../shared/components/base-with-
 })
 export class CommentListComponent extends BaseWithPaginationComponent<Comment> implements OnInit, OnDestroy {
 
-  currentUserImageUrl;
+  currentUserImageUrl = Constants.USER_DEFAULT_IMAGE_SRC;
   subscription: Subscription;
   postId: string;
 
