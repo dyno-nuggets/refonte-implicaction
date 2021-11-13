@@ -1,5 +1,22 @@
-<p *ngIf="!posts.length">Il n'y a aucun message dans cette discussion</p>
+<ng-container *ngIf="!isLoading; else loadingTemplate">
+  <p *ngIf="!pageable.content?.length">Il n'y a aucun message dans cette discussion</p>
 
-<div *ngFor="let post of posts" class="row p-0 post">
-  <app-post-tile [post]="post"></app-post-tile>
-</div>
+  <div *ngFor="let post of pageable.content" class="row p-0 post">
+    <app-post-tile [post]="post"></app-post-tile>
+  </div>
+  <p-paginator
+    (onPageChange)="paginate($event)"
+    *ngIf="pageable.totalPages > 0"
+    [alwaysShow]="false"
+    [first]="pageable.first"
+    [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
+    [rows]="pageable.rows"
+    [totalRecords]="pageable.totalElements"
+  >
+  </p-paginator>
+</ng-container>
+<ng-template #loadingTemplate>
+  <ng-container *ngFor="let i of [1,2,3]">
+    <app-post-skeleton></app-post-skeleton>
+  </ng-container>
+</ng-template>

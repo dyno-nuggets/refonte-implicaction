@@ -1,22 +1,6 @@
 <div class="row p-0 m-0 flex-column-reverse flex-md-row">
   <div class="col-md-9 row m-0 p-0">
-    <ng-container *ngIf="!isLoading; else loadingTemplate">
-      <app-post-list [posts]="pageable.content" class="p-0"></app-post-list>
-      <p-paginator
-        (onPageChange)="paginate($event)"
-        *ngIf="pageable.totalPages > 0"
-        [first]="pageable.first"
-        [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
-        [rows]="pageable.rows"
-        [totalRecords]="pageable.totalElements"
-      >
-      </p-paginator>
-    </ng-container>
-    <ng-template #loadingTemplate>
-      <ng-container *ngFor="let i of [1,2,3]">
-        <app-post-skeleton></app-post-skeleton>
-      </ng-container>
-    </ng-template>
+    <router-outlet name="discussion-content"></router-outlet>
   </div>
   <div class="col-md-3 flex-column flex-start row m-0 p-0">
     <app-option-menu class="ms-0 ms-md-3 ps-0 ps-md-3 me-0 pe-0 mb-4"></app-option-menu>
