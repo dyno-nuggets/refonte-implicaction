@@ -15,12 +15,13 @@ import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.COMPANIES_BASE_U
 
 @RestController
 @AllArgsConstructor
+@RequestMapping(COMPANIES_BASE_URI)
 public class CompanyController {
 
 
     private final CompanyService companyService;
 
-    @RequestMapping(path = COMPANIES_BASE_URI, method = {RequestMethod.GET})
+    @RequestMapping(method = {RequestMethod.GET})
     public ResponseEntity<Page<CompanyDto>> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
@@ -32,8 +33,8 @@ public class CompanyController {
         return ResponseEntity.ok(companyDtos);
     }
 
-    @RequestMapping(path = COMPANIES_BASE_URI, method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<CompanyDto> createAndUpdate(@RequestBody CompanyDto companyDto) throws ImplicactionException {
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity<CompanyDto> createOrUpdate(@RequestBody CompanyDto companyDto) throws ImplicactionException {
         CompanyDto companyCreated = companyService.saveOrUpdateCompany(companyDto);
         return ResponseEntity.ok(companyCreated);
     }
