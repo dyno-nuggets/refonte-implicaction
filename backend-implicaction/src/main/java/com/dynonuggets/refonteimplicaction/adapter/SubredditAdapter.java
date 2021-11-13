@@ -25,6 +25,7 @@ public class SubredditAdapter {
                 .name(model.getName())
                 .numberOfPosts(isNotEmpty(model.getPosts()) ? model.getPosts().size() : 0)
                 .description(model.getDescription())
+                .imageUrl(model.getImage() != null ? model.getImage().getUrl() : null)
                 .build();
     }
 }

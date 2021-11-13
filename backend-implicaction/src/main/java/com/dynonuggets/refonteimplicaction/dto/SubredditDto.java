@@ -13,4 +13,5 @@ public class SubredditDto {
     private String name;
     private String description;
     private Integer numberOfPosts;
+    private String imageUrl;
 }

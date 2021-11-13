@@ -34,40 +34,6 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
     SubredditService subredditService;
 
     @Test
-    @WithMockUser
-    void should_create_subreddit_when_authenticated() throws Exception {
-        // given
-        final SubredditDto sentDto = SubredditDto.builder()
-                .name("coucou subreddit")
-                .description("Elle est super bien ma description")
-                .build();
-        String json = gson.toJson(sentDto);
-
-        SubredditDto expected = SubredditDto.builder()
-                .id(123L)
-                .name("coucou subreddit")
-                .description("Elle est super bien ma description")
-                .build();
-
-        given(subredditService.save(any())).willReturn(expected);
-
-        // when
-        final ResultActions resultActions = mvc.perform(
-                post(SUBREDDITS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
-
-        // then
-        resultActions.andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id", is(Math.toIntExact(expected.getId()))))
-                .andExpect(jsonPath("$.name", is(expected.getName())))
-                .andExpect(jsonPath("$.description", is(expected.getDescription())));
-
-        verify(subredditService, times(1)).save(any());
-    }
-
-    @Test
     void should_response_forbidden_when_create_subreddit_with_no_authentication() throws Exception {
         // given
         final SubredditDto sentDto = SubredditDto.builder()
@@ -112,7 +78,7 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.totalPages").value(subreddits.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(subreddits.getTotalElements()));
 
@@ -162,7 +128,7 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.size()").value(limit));
 
         final String contentAsString = resultActions.andReturn().getResponse().getContentAsString();

@@ -23,7 +23,7 @@ public class ApiUrls {
     // VOTES
     public static final String VOTE_BASE_URI = "/api/votes";
 
-    //USERS
+    // USERS
     public static final String USER_BASE_URI = "/api/users";
     public static final String GET_USER_URI = "/{userId}";
     public static final String GET_FRIEND_URI = "/{userId}/friends";

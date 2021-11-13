@@ -143,7 +143,7 @@ class CommentServiceTest {
     void should_get_comments_for_post_when_exists() {
         // given
         User currentUser = User.builder().id(123L).username("Sankukai").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser);
+        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
         List<Comment> comments = asList(
                 new Comment(1L, "comment1", post, Instant.now(), currentUser),

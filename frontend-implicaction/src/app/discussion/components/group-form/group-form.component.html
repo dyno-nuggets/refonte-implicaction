@@ -2,9 +2,33 @@
   (ngSubmit)="onSubmit()"
   [formGroup]="createGroupForm"
 >
+
+  <div class="form-group mb-4">
+    <label class="mb-1" for="file">Icone du groupe</label>
+    <div class="d-flex justify-content-between align-items-center p-0 m-0">
+      <div class="flex-grow-1">
+        <input
+          (change)="onFileChange($event)"
+          class="form-control form-control-lg"
+          formControlName="file"
+          id="file"
+          type="file"
+        >
+      </div>
+      <p-avatar
+        [image]="imageSrc || 'assets/img/default-group.png'"
+        class="d-flex align-self-center"
+        shape="circle"
+        size="large"
+        styleClass="ms-2"
+      >
+      </p-avatar>
+    </div>
+  </div>
+
   <div class="form-floating mb-4">
     <input
-      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || createGroupForm.controls['name'].touched) && createGroupForm.controls['name'].errors}"
+      [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formControls.name.touched) && formControls.name.errors}"
       class="form-control form-control-lg px-4"
       formControlName="name"
       id="groupNameInput"
@@ -17,7 +41,7 @@
       Nom du groupe
     </label>
     <div
-      *ngIf="(isSubmitted || createGroupForm.controls['name'].touched) && createGroupForm.controls['name'].errors"
+      *ngIf="(isSubmitted || formControls.name.touched) && formControls.name.errors"
       class="text-danger"
     >
       Vous devez fournir un nom de groupe.

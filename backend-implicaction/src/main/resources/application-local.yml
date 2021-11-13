@@ -23,3 +23,14 @@ app:
   url: http://localhost:8080
   contact:
     mail: contact@implicaction.eu
+
+cloud:
+  aws:
+    credentials:
+      access-key: tata
+      secret-key: titi
+    stack:
+      auto: false
+    s3:
+      endpoint: http://127.0.0.1:4566
+      region: eu-west-2
