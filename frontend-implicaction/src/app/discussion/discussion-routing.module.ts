@@ -1,16 +1,31 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DiscussionComponent} from './discussion.component';
+import {PostListComponent} from './components/post-list/post-list.component';
 import {PostDetailComponent} from './components/post-detail/post-detail.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DiscussionComponent
+    component: DiscussionComponent,
+    children: [
+      {
+        path: '',
+        component: PostListComponent,
+        outlet: 'discussion-content'
+      }
+    ]
   },
   {
     path: ':postId',
-    component: PostDetailComponent
+    component: DiscussionComponent,
+    children: [
+      {
+        path: '',
+        component: PostDetailComponent,
+        outlet: 'discussion-content'
+      }
+    ]
   }
 ];
 
