@@ -32,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(path = GET_COMMUNITY)
+    @GetMapping(path = GET_COMMUNITY_URI)
     public ResponseEntity<Page<UserDto>> getAllCommunity(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows
@@ -59,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok(userDtos);
     }
 
-    @GetMapping(path = GET_REQUEST_SENT_URI)
+    @GetMapping(path = GET_FRIEND_REQUESTS_SENT_URI)
     public ResponseEntity<Page<UserDto>> getSentFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows
@@ -70,7 +70,7 @@ public class UserController {
         return ResponseEntity.ok(usersDto);
     }
 
-    @GetMapping(path = GET_REQUEST_RECEIVED_URI)
+    @GetMapping(path = GET_FRIEND_REQUESTS_RECEIVED_URI)
     public ResponseEntity<Page<UserDto>> getReceivedFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows

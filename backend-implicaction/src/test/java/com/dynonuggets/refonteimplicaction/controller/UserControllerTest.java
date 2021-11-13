@@ -83,7 +83,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         for (int i = 0; i < userDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(userDtos.get(i).getId()))))
+            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(userDtos.get(i).getId().intValue()))))
                     .andExpect(jsonPath(contentPath + ".username", is(userDtos.get(i).getUsername())))
                     .andExpect(jsonPath(contentPath + ".email", is(userDtos.get(i).getEmail())))
                     .andExpect(jsonPath(contentPath + ".firstname", is(userDtos.get(i).getFirstname())))
@@ -134,7 +134,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         mvc.perform(get(USER_BASE_URI + GET_USER_URI, userDto.getId()).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(Math.toIntExact(userDto.getId()))))
+                .andExpect(jsonPath("$.id", is(Math.toIntExact(userDto.getId().intValue()))))
                 .andExpect(jsonPath("$.username", is(userDto.getUsername())))
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())))
                 .andExpect(jsonPath("$.firstname", is(userDto.getFirstname())))
@@ -209,7 +209,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         for (int i = 0; i < friendsList.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId()))))
+            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
                     .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
                     .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
                     .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
@@ -240,7 +240,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void should_return_list_of_invitations_sent() throws Exception {
-        //given
+        // given
         UserDto receiver = UserDto.builder()
                 .id(3L)
                 .username("paul-sdv")
@@ -269,16 +269,16 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         given(authService.getCurrentUser()).willReturn(userTest);
         given(relationService.getSentFriendRequest(anyLong(), any())).willReturn(userPageMockResponse);
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_REQUEST_SENT_URI).contentType(APPLICATION_JSON))
+                get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
-        //then
+        // then
         for (int i = 0; i < friendsList.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId()))))
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
                     .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
                     .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
                     .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
@@ -299,11 +299,10 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     void should_response_forbidden_when_getting_all_sent_invitations_with_no_authentication() throws Exception {
-
-        //when
-        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_REQUEST_SENT_URI)
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print());
-        //then
+        // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(relationService, never()).getSentFriendRequest(anyLong(), any());
 
@@ -312,7 +311,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void should_return_list_of_invitations_received() throws Exception {
-        //given
+        // given
         UserDto sender = UserDto.builder()
                 .id(3L)
                 .username("paul-sdv")
@@ -340,16 +339,16 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         given(authService.getCurrentUser()).willReturn(userTest);
         given(relationService.getReceivedFriendRequest(anyLong(), any())).willReturn(userPageMockResponse);
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_REQUEST_RECEIVED_URI).contentType(APPLICATION_JSON))
+                get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
-        //then
+        // then
         for (int i = 0; i < friendsList.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId()))))
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
                     .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
                     .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
                     .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
@@ -371,10 +370,10 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_getting_all_received_invitations_with_no_authentication() throws Exception {
 
-        //when
-        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_REQUEST_RECEIVED_URI)
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print());
-        //then
+        // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(relationService, never()).getReceivedFriendRequest(anyLong(), any());
 
@@ -383,10 +382,10 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_updating_user_with_no_authentication() throws Exception {
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(put(USER_BASE_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print());
-        //then
+        // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(userService, never()).updateUser(any());
 
@@ -395,7 +394,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void should_return_list_of_pending() throws Exception {
-        //given
+        // given
         UserDto sender = UserDto.builder()
                 .id(3L)
                 .username("paul-sdv")
@@ -423,16 +422,16 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         given(authService.getCurrentUser()).willReturn(userTest);
         given(userService.getAllPendingActivationUsers(any())).willReturn(userPageMockResponse);
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(
                 get(USER_BASE_URI + GET_PENDING_USER_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
-        //then
+        // then
         for (int i = 0; i < friendsList.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId()))))
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
                     .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
                     .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
                     .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
@@ -454,10 +453,10 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_getting_all_pending_user_with_no_authentication() throws Exception {
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_PENDING_USER_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print());
-        //then
+        // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(userService, never()).getAllPendingActivationUsers(any());
 
@@ -466,7 +465,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void should_return_list_of_community() throws Exception {
-        //given
+        // given
         UserDto sender = UserDto.builder()
                 .id(3L)
                 .username("paul-sdv")
@@ -494,16 +493,16 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         given(authService.getCurrentUser()).willReturn(userTest);
         given(userService.getAllCommunity(any())).willReturn(userPageMockResponse);
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_COMMUNITY).contentType(APPLICATION_JSON))
+                get(USER_BASE_URI + GET_COMMUNITY_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
-        //then
+        // then
         for (int i = 0; i < friendsList.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId()))))
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(friendsList.get(i).getId().intValue()))))
                     .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
                     .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
                     .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
@@ -525,10 +524,10 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_getting_all_community_with_no_authentication() throws Exception {
 
-        //when
-        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_COMMUNITY)
+        // when
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_COMMUNITY_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print());
-        //then
+        // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(userService, never()).getAllCommunity(any());
 
