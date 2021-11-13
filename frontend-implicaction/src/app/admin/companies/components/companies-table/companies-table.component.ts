@@ -59,5 +59,14 @@ export class CompaniesTableComponent {
         width: 650
       });
   }
+
+  onAddCompany(): void {
+    this.sidebarService
+      .open({
+        title: 'Ajouter une entreprise',
+        component: CompaniesFormComponent,
+        width: 650
+      });
+  }
 }
 

@@ -6,6 +6,7 @@ import {CompaniesFormComponent} from './components/companies-form/companies-form
 import {ReactiveFormsModule} from '@angular/forms';
 import {TableModule} from 'primeng/table';
 import {EditorModule} from 'primeng/editor';
+import {ToolbarModule} from 'primeng/toolbar';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import {EditorModule} from 'primeng/editor';
     CompaniesRoutingModule,
     ReactiveFormsModule,
     TableModule,
-    EditorModule
+    EditorModule,
+    ToolbarModule
   ]
 })
 export class CompaniesModule {

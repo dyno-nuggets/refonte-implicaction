@@ -1,3 +1,15 @@
+<div class="d-flex justify-content-start mb-4">
+  <h2 class="panel-title">Toutes les entreprises</h2>
+  <div class="ms-auto">
+    <button
+      (click)="onAddCompany()"
+      class="btn btn-success fw-bold"
+    >
+      <i class="fas fa-plus px-1 text-white"></i>
+      Ajouter
+    </button>
+  </div>
+</div>
 <p-table
   (onLazyLoad)="loadCompanies($event)"
   [lazy]="true"
@@ -10,7 +22,7 @@
   [value]="pageable.content"
   currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
 >
-  <ng-template pTemplate="header">
+  <ng-template class="bg-primary" pTemplate="header">
     <tr>
       <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>
       <th class="overflow-ellipsis text-uppercase col-4 col-sm-4 col-lg-2 px-2" scope="col">Nom</th>
