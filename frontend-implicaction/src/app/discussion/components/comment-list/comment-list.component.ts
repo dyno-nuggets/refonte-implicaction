@@ -45,7 +45,7 @@ export class CommentListComponent extends BaseWithPaginationComponent<Comment> i
   }
 
   emitCountChange(): void {
-    this.countChange.emit(this.pageable.content?.length);
+    this.countChange.emit(this.pageable.totalElements);
   }
 
   ngOnInit(): void {

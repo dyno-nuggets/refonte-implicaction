@@ -19,6 +19,7 @@ import {TopGroupSkeletonComponent} from './components/top-group-skeleton/top-gro
 import {CommentListComponent} from './components/comment-list/comment-list.component';
 import {EditorModule} from 'primeng/editor';
 import {CommentTileComponent} from './components/comment-tile/comment-tile.component';
+import {CommentSkeletonComponent} from './components/comment-skeleton/comment-skeleton.component';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import {CommentTileComponent} from './components/comment-tile/comment-tile.compo
     TopGroupSkeletonComponent,
     CommentListComponent,
     CommentTileComponent,
+    CommentSkeletonComponent,
   ],
   imports: [
     CommonModule,
