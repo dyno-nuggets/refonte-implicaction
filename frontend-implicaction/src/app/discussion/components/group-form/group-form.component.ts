@@ -1,9 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {GroupService} from '../../services/group.service';
+import {Observable} from 'rxjs';
+import {Group} from '../../model/group';
 
 @Component({
   selector: 'app-group-form',
@@ -14,6 +16,9 @@ export class GroupFormComponent extends SidebarContentComponent implements OnIni
 
   createGroupForm: FormGroup;
   isSubmitted = false;
+  imageSrc: string;
+
+  formData = new FormData();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,22 +29,54 @@ export class GroupFormComponent extends SidebarContentComponent implements OnIni
     super();
   }
 
+  get formControls(): { [p: string]: AbstractControl } {
+    return this.createGroupForm.controls;
+  }
+
   ngOnInit(): void {
     this.createGroupForm = this.formBuilder
       .group({
         name: ['', Validators.required],
-        description: ['']
+        description: [''],
+        file: [''],
+        fileSource: ['']
       });
   }
 
-
   onSubmit(): void {
     const group = {...this.createGroupForm.value};
-    this.groupService.createGroup(group)
-      .subscribe(
-        () => this.sidebarService.close(),
-        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la création du groupe'),
-        () => this.toasterService.success('Succès', 'Le groupe a été créé avec succès')
-      );
+    let group$: Observable<Group>;
+    if (this.formControls.fileSource.value) {
+      this.formData.set('group', new Blob([JSON.stringify(group)], {type: 'application/json'}));
+      group$ = this.groupService.createGroup(this.formData);
+    } else {
+      group$ = this.groupService.createGroupWithoutPicture(group);
+    }
+    group$.subscribe(
+      () => this.sidebarService.close(),
+      () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la création du groupe'),
+      () => this.toasterService.success('Succès', 'Le groupe a été créé avec succès')
+    );
+  }
+
+  onFileChange(event): void {
+    const reader = new FileReader();
+
+    if (event.target.files && event.target.files.length) {
+      const [file] = event.target.files;
+      reader.readAsDataURL(file);
+      this.formData.append('file', file, file.filename);
+
+      reader.onload = () => {
+
+        this.imageSrc = reader.result as string;
+
+        this.createGroupForm.patchValue({
+          fileSource: reader.result
+        });
+
+      };
+
+    }
   }
 }

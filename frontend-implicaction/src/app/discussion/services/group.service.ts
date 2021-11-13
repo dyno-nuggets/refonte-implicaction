@@ -15,7 +15,11 @@ export class GroupService {
   ) {
   }
 
-  createGroup(group: Group): Observable<Group> {
+  createGroup(formData: FormData): Observable<Group> {
+    return this.http.post<Group>(this.apiEndpointService.createGroupEndpoint(), formData);
+  }
+
+  createGroupWithoutPicture(group: any): Observable<Group> {
     return this.http.post<Group>(this.apiEndpointService.createGroupEndpoint(), group);
   }
 

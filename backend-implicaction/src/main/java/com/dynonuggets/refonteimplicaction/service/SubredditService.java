@@ -31,10 +31,23 @@ public class SubredditService {
     private final FileRepository fileRepository;
 
     @Transactional
-    public SubredditDto save(MultipartFile file, SubredditDto subredditDto) {
-        final FileModel image = cloudService.uploadImage(file);
+    public SubredditDto save(MultipartFile image, SubredditDto subredditDto) {
+        final FileModel fileModel = cloudService.uploadImage(image);
+        final FileModel fileSave = fileRepository.save(fileModel);
+
         Subreddit subreddit = subredditAdapter.toModel(subredditDto);
-        subreddit.setImage(image);
+        subreddit.setImage(fileSave);
+        subreddit.setCreatedAt(Instant.now());
+        subreddit.setUser(authService.getCurrentUser());
+
+        final Subreddit save = subredditRepository.save(subreddit);
+
+        return subredditAdapter.toDto(save);
+    }
+
+    @Transactional
+    public SubredditDto save(SubredditDto subredditDto) {
+        Subreddit subreddit = subredditAdapter.toModel(subredditDto);
         subreddit.setCreatedAt(Instant.now());
         subreddit.setUser(authService.getCurrentUser());
         final Subreddit save = subredditRepository.save(subreddit);

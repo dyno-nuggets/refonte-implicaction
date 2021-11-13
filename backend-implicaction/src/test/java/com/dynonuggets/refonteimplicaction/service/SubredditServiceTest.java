@@ -2,8 +2,10 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
 import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +39,12 @@ class SubredditServiceTest {
     @Mock
     AuthService authService;
 
+    @Mock
+    S3CloudServiceImpl cloudService;
+
+    @Mock
+    FileRepository fileRepository;
+
     @InjectMocks
     SubredditService subredditService;
 
@@ -43,7 +52,7 @@ class SubredditServiceTest {
     private ArgumentCaptor<Subreddit> argumentCaptor;
 
     @Test
-    void should_save_subreddit() {
+    void should_save_subreddit_with_image() {
         // given
         final SubredditDto sentDto = SubredditDto.builder()
                 .name("coucou subreddit")
@@ -69,20 +78,76 @@ class SubredditServiceTest {
 
         final User currentUser = User.builder().id(123L).build();
 
+        final FileModel fileModel = FileModel.builder()
+                .id(123L)
+                .contentType("image/jpeg")
+                .url("http://url.com")
+                .filename("test.jpg")
+                .build();
+
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "user-file",
+                "test.jpg",
+                "image/jpeg",
+                "test data".getBytes()
+        );
+
+        when(cloudService.uploadImage(any())).thenReturn(fileModel);
+        when(fileRepository.save(fileModel)).thenReturn(fileModel);
         when(subredditAdapter.toModel(any())).thenReturn(sentModel);
         when(authService.getCurrentUser()).thenReturn(currentUser);
         when(subredditRepository.save(any())).thenReturn(saveModel);
         when(subredditAdapter.toDto(any())).thenReturn(expectedDto);
 
         // when
-        subredditService.save(sentDto);
+        subredditService.save(mockMultipartFile, sentDto);
 
         // then
+        verify(subredditRepository, times(1)).save(argumentCaptor.capture());
+
+        final Subreddit value = argumentCaptor.getValue();
+
+        assertThat(value.getId()).isNull();
+        assertThat(value.getName()).isEqualTo("coucou subreddit");
+        assertThat(value.getDescription()).isEqualTo("Elle est super bien ma description");
+        assertThat(value.getImage().getFilename()).isEqualTo("test.jpg");
+    }
+
+
+    @Test
+    void should_save_when_no_image() {
+        // given
+        final SubredditDto sentDto = SubredditDto.builder()
+                .name("coucou subreddit")
+                .description("Elle est super bien ma description")
+                .build();
+
+        final Subreddit sentModel = Subreddit.builder()
+                .name("coucou subreddit")
+                .description("Elle est super bien ma description")
+                .build();
+
+        final User currentUser = User.builder().id(123L).build();
+
+        final Subreddit saveModel = Subreddit.builder()
+                .id(123L)
+                .name("coucou subreddit")
+                .description("Elle est super bien ma description")
+                .build();
+
+        given(subredditAdapter.toModel(any())).willReturn(sentModel);
+        given(authService.getCurrentUser()).willReturn(currentUser);
+        given(subredditRepository.save(any())).willReturn(saveModel);
+
+        // when
+        subredditService.save(sentDto);
+
         verify(subredditRepository, times(1)).save(argumentCaptor.capture());
 
         assertThat(argumentCaptor.getValue().getId()).isNull();
         assertThat(argumentCaptor.getValue().getName()).isEqualTo("coucou subreddit");
         assertThat(argumentCaptor.getValue().getDescription()).isEqualTo("Elle est super bien ma description");
+        assertThat(argumentCaptor.getValue().getImage()).isNull();
     }
 
     @Test

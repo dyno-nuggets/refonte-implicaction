@@ -23,5 +23,5 @@ cloud:
     credentials:
       access-key: tata
       secret-key: titi
-    region:
-      static: eu-west-2
+    s3:
+      region: eu-west-2

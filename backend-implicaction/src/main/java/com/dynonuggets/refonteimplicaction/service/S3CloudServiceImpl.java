@@ -23,13 +23,10 @@ import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 @AllArgsConstructor
 public class S3CloudServiceImpl implements CloudService {
 
-    public static final String BUCKET_NAME = "implicaction";
-
+    private static final Integer MAX_IMAGE_SIZE_IN_BIT = 40000000;
+    private static final String BUCKET_NAME = "refonte-implicaction";
+    private static final List<String> IMAGE_CONTENT_TYPES = asList("image/jpeg", "image/png");
     private final AmazonS3Client client;
-
-    private final List<String> IMAGE_CONTENT_TYPES = asList("image/jpeg", "image/png");
-
-    private final Integer MAX_IMAGE_SIZE_IN_BIT = 40000000;
 
     @Override
     public FileModel uploadFile(MultipartFile file) {

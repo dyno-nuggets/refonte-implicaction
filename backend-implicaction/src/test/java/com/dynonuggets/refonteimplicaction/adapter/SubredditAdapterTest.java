@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ class SubredditAdapterTest {
     SubredditAdapter subredditAdapter = new SubredditAdapter();
 
     @Test
-    void toModel() {
+    void should_map_to_model() {
         // given
         SubredditDto expected = SubredditDto.builder()
                 .id(123L)
@@ -33,7 +34,7 @@ class SubredditAdapterTest {
     }
 
     @Test
-    void toDto() {
+    void should_map_to_dto_with_count_when_model_has_posts() {
         // given
         Subreddit expectedModel = Subreddit.builder()
                 .id(123L)
@@ -52,5 +53,29 @@ class SubredditAdapterTest {
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
+        assertThat(actualDto.getImageUrl()).isNull();
+    }
+
+    @Test
+    void should_map_to_dto_with_image_url_when_model_has_image() {
+        // given
+        Subreddit expectedModel = Subreddit.builder()
+                .id(123L)
+                .description("blablabla")
+                .name("blabla")
+                .image(FileModel.builder().url("http://url.com").build())
+                .createdAt(Instant.now())
+                .build();
+
+        // when
+        final SubredditDto actualDto = subredditAdapter.toDto(expectedModel);
+
+        // then
+        assertThat(actualDto).usingRecursiveComparison()
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl")
+                .isEqualTo(expectedModel);
+
+        assertThat(actualDto.getNumberOfPosts()).isZero();
+        assertThat(actualDto.getImageUrl()).isEqualTo(expectedModel.getImage().getUrl());
     }
 }

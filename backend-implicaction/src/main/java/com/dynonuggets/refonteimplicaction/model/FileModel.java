@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Entity
 @Getter
 @Setter
@@ -24,7 +22,4 @@ public class FileModel {
 
     @Column(name = "content_type")
     private String contentType;
-
-    @ManyToOne(fetch = LAZY)
-    private User uploader;
 }

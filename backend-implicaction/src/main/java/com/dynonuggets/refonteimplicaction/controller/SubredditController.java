@@ -8,14 +8,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_ALL_BY_TOP_POSTING_URI;
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.SUBREDDITS_BASE_URI;
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping(SUBREDDITS_BASE_URI)
@@ -25,9 +28,16 @@ public class SubredditController {
 
     private final SubredditService subredditService;
 
+    @ResponseBody
+    @PostMapping(consumes = {APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<SubredditDto> createSubreddit(@RequestPart("group") SubredditDto group, @RequestParam("file") MultipartFile image) {
+        final SubredditDto saveDto = subredditService.save(image, group);
+        return ResponseEntity.status(CREATED).body(saveDto);
+    }
+
     @PostMapping
-    public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto subredditDto) {
-        final SubredditDto saveDto = subredditService.save(subredditDto);
+    public ResponseEntity<SubredditDto> createSubreddit(@RequestBody SubredditDto group) {
+        final SubredditDto saveDto = subredditService.save(group);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 

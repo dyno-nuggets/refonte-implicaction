@@ -2,6 +2,11 @@ server:
   port: ${PORT:8080}
 
 spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:${DB_URI}
@@ -42,8 +47,8 @@ cloud:
     credentials:
       access-key: ${AWS_ACCESS_KEY}
       secret-key: ${AWS_SECRET_KEY}
-    region:
-      static: ${AWS_REGION}
     stack:
       auto: false
+    s3:
+      region: ${AWS_REGION}
 

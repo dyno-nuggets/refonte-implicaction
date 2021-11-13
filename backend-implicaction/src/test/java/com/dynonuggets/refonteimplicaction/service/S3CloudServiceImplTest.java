@@ -16,24 +16,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
-import static com.dynonuggets.refonteimplicaction.service.S3CloudServiceImpl.BUCKET_NAME;
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class S3CloudServiceImplTest {
 
-    public static final String S3_ENDPOINT = "http://localhost:8001";
+    static final String S3_ENDPOINT = "http://localhost:8001";
+    static final String BUCKET_NAME = "refonte-implicaction";
+    static final String SIGNING_REGION = "us-west-2";
+
     AmazonS3Client client;
     S3Mock api;
-
     CloudService cloudService;
-
 
     @BeforeEach
     void setUp() {
         api = new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
         api.start();
-        EndpointConfiguration endpoint = new EndpointConfiguration(S3_ENDPOINT, "us-west-2");
+        EndpointConfiguration endpoint = new EndpointConfiguration(S3_ENDPOINT, SIGNING_REGION);
         client = (AmazonS3Client) AmazonS3ClientBuilder
                 .standard()
                 .withPathStyleAccessEnabled(true)
@@ -41,7 +41,7 @@ class S3CloudServiceImplTest {
                 .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
                 .build();
 
-        client.createBucket(BUCKET_NAME);
+        client.createBucket("refonte-implicaction");
 
         cloudService = new S3CloudServiceImpl(client);
     }

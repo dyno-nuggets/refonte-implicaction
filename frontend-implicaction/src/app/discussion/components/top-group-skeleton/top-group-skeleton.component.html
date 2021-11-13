@@ -1,33 +1,17 @@
-<div class="custom-skeleton p-p-4">
-  <ol>
-    <li>
-      <div class="pt-2">
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </li>
-    <li>
-      <div class="pt-2">
-        <p-skeleton width="30%"></p-skeleton>
-      </div>
-    </li>
-    <li>
-      <div class="pt-2">
-        <p-skeleton width="55%"></p-skeleton>
-      </div>
-    </li>
-    <li>
-      <div class="pt-2">
-        <p-skeleton width="65%"></p-skeleton>
-      </div>
-    </li>
-    <li>
-      <div class="pt-2">
-        <p-skeleton width="75%"></p-skeleton>
-      </div>
-    </li>
-  </ol>
-
-  <div class="d-grid gap-2">
-    <button class="btn btn-primary">Voir tout</button>
+<div
+  *ngFor="let size of ['75%', '45%', '52%', '35%', '67%']"
+  class="d-flex align-items-center mt-2 mb-1"
+>
+  <p-skeleton
+    shape="circle"
+    size="2rem"
+  >
+  </p-skeleton>
+  <div class="ps-2" style="flex: 1">
+    <p-skeleton [width]="size"></p-skeleton>
   </div>
+</div>
+
+<div class="d-grid gap-2 mt-2">
+  <button class="btn btn-primary">Voir tout</button>
 </div>
