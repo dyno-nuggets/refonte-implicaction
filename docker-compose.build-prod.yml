@@ -41,6 +41,9 @@ services:
       KS_PASSWORD: .fxG3KPB.
       APP_URL: http://localhost:8080
       CONTACT_EMAIL: contact@implicaction.eu
+      AWS_ACCESS_KEY: ""
+      AWS_SECRET_KEY: ""
+      AWS_REGION: ""
     ports:
       - "8080:8080"    
 volumes:
