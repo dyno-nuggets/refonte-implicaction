@@ -27,6 +27,10 @@ public class ApiUrls {
     public static final String USER_BASE_URI = "/api/users";
     public static final String GET_USER_URI = "/{userId}";
     public static final String GET_FRIEND_URI = "/{userId}/friends";
+    public static final String GET_REQUEST_SENT_URI = "/friends/sent";
+    public static final String GET_REQUEST_RECEIVED_URI = "/friends/received";
+    public static final String GET_PENDING_USER_URI = "/pending";
+    public static final String GET_COMMUNITY = "/community";
 
     private ApiUrls() {
         // empêche la construction d'un objet ApiUrls

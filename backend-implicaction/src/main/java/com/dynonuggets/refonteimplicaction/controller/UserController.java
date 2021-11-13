@@ -11,8 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_FRIEND_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_USER_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
 @RestController
 @AllArgsConstructor
@@ -33,7 +32,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(path = "/community")
+    @GetMapping(path = GET_COMMUNITY)
     public ResponseEntity<Page<UserDto>> getAllCommunity(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows
@@ -60,7 +59,7 @@ public class UserController {
         return ResponseEntity.ok(userDtos);
     }
 
-    @GetMapping(path = "/friends/sent")
+    @GetMapping(path = GET_REQUEST_SENT_URI)
     public ResponseEntity<Page<UserDto>> getSentFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows
@@ -71,7 +70,7 @@ public class UserController {
         return ResponseEntity.ok(usersDto);
     }
 
-    @GetMapping(path = "/friends/received")
+    @GetMapping(path = GET_REQUEST_RECEIVED_URI)
     public ResponseEntity<Page<UserDto>> getReceivedFriendRequest(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows
@@ -84,11 +83,11 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@RequestBody UserDto userDto) {
-        UserDto userUpdate = userService.updateByUserId(userDto);
+        UserDto userUpdate = userService.updateUser(userDto);
         return ResponseEntity.ok(userUpdate);
     }
 
-    @GetMapping(path = "/pending")
+    @GetMapping(path = GET_PENDING_USER_URI)
     public ResponseEntity<Page<UserDto>> getAllPendingUsers(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows

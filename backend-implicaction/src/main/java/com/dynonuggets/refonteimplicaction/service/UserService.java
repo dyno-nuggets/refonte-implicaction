@@ -68,7 +68,7 @@ public class UserService {
         return userAdapter.toDto(jobSeeker);
     }
 
-    public UserDto updateByUserId(UserDto userDto) {
+    public UserDto updateUser(UserDto userDto) {
         User user = userRepository.findById(userDto.getId())
                 .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour" +
                         " les informations personelles; L'user avec l'id " + userDto.getId() + " n'existe pas."));
