@@ -3,9 +3,9 @@ import {Constants} from '../../../config/constants';
 import {Pageable} from '../../models/pageable';
 
 @Component({template: ''})
-export class BaseWithPaginationComponent<T = any> {
+export class BaseWithPaginationComponent<T> {
 
-  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
+  readonly DEFAULT_ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   isLoading = true;
 
   // Pagination

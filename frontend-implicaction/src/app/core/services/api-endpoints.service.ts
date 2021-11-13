@@ -253,7 +253,20 @@ export class ApiEndpointsService {
   }
 
   getPostCommentsEndpoint(pageable: any, postId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId, 'comments']);
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId, 'comments'])
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
+      // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
+      .replace(`${Constants.API_ENDPOINT}/`, '');
+
+    return ApiEndpointsService.createUrlWithPageable(uri, pageable);
+  }
+
+  /**
+   * Comments
+   */
+
+  postCommentEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.COMMENTS.BASE_URI);
   }
 
   /**
