@@ -19,12 +19,17 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     @NotEmpty
+    @Column(columnDefinition = "TEXT")
     private String text;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id", referencedColumnName = "id")
     private Post post;
+
     private Instant createdAt;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

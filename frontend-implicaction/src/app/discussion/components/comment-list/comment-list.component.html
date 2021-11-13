@@ -26,12 +26,19 @@
             <button class="btn btn-primary" type="submit">Commenter</button>
           </div>
         </form>
-        <div
-          *ngFor="let comment of pageable.content; trackBy: trackCommentById"
-          class="mt-2"
-        >
-          <app-comment-tile [comment]="comment"></app-comment-tile>
-        </div>
+
+        <ng-container *ngIf="!isLoading; else loadingTemplate">
+
+          <div
+            *ngFor="let comment of pageable.content; trackBy: trackCommentById"
+            class="mt-2"
+          >
+            <app-comment-tile [comment]="comment"></app-comment-tile>
+          </div>
+        </ng-container>
+        <ng-template #loadingTemplate>
+          <app-comment-skeleton *ngFor="let i of [1,2,3,4,5]"></app-comment-skeleton>
+        </ng-template>
       </div>
     </div>
   </div>
