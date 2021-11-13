@@ -2,6 +2,9 @@ package com.dynonuggets.refonteimplicaction.utils;
 
 public class ApiUrls {
 
+    // COMPANIES
+    public static final String COMPANIES_BASE_URI = "/api/companies";
+
     // JOB-POSTINGS
     public static final String JOBS_BASE_URI = "/api/job-postings";
     public static final String GET_JOB_URI = "/{jobId}";
