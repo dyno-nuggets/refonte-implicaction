@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
@@ -39,7 +40,7 @@ class PostAdapterTest {
     void toPostResponse() {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null);
+        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build());
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), subreddit);
         final int expectedCommentCount = 10;
 
@@ -55,6 +56,7 @@ class PostAdapterTest {
         assertThat(postResponse.getSubredditName()).isEqualTo(expected.getSubreddit().getName());
         assertThat(postResponse.getCommentCount()).isEqualTo(expectedCommentCount);
         assertThat(postResponse.getVoteCount()).isEqualTo(expected.getVoteCount());
+        assertThat(postResponse.getSubredditImageUrl()).isEqualTo(expected.getSubreddit().getImage().getUrl());
         assertThat(postResponse.isDownVote()).isFalse();
         assertThat(postResponse.isUpVote()).isTrue();
     }

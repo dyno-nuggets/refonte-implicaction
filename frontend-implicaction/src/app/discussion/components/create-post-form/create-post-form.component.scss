@@ -11,3 +11,9 @@
     width: 17px;
   }
 }
+
+:root ::ng-deep {
+  p-dropdown {
+    min-width: 80%;
+  }
+}

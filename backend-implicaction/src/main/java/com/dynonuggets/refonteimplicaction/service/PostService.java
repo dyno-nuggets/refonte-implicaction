@@ -38,8 +38,8 @@ public class PostService {
             throw new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME);
         }
 
-        Subreddit subreddit = subredditRepository.findById(postRequest.getGroupId())
-                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId())));
+        Subreddit subreddit = subredditRepository.findById(postRequest.getSubredditId())
+                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditId())));
 
         Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());
         Post save = postRepository.save(post);

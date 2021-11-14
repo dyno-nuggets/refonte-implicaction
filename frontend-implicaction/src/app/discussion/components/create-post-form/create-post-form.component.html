@@ -1,6 +1,6 @@
 <form (ngSubmit)="createPost()" [formGroup]="createPostForm" class="post-form">
-  <div class="row mb-3">
-    <div class="col-6 d-flex align-items-center">
+  <div class="row mb-3 d-flex">
+    <div class="col-md-6 d-flex align-items-center">
       <p-avatar
         image="assets/img/default-user.png"
         shape="circle"
@@ -12,7 +12,7 @@
         {{currentUser.username}}
       </div>
     </div>
-    <div class="col-6">
+    <div class="col-md-6 d-flex align-items-center justify-content-end">
       <p-dropdown
         [(ngModel)]="selectedGroup"
         [ngModelOptions]="{standalone: true}"
@@ -20,7 +20,7 @@
         [virtualScroll]="true"
         optionLabel="name"
         placeholder="sélectionner un groupe"
-        styleClass="w-100 custom-select rounded-pill ps-3"
+        styleClass="rounded-pill ps-3"
       >
         <ng-template pTemplate="selectedItem">
           <div *ngIf="selectedGroup" class="d-flex country-item-value">
@@ -34,7 +34,7 @@
           </div>
         </ng-template>
         <ng-template let-group pTemplate="item">
-          <div class="d-flex">
+          <div class="d-flex w-100">
             <img
               *ngIf="group.imageUrl"
               [src]="group.imageUrl"

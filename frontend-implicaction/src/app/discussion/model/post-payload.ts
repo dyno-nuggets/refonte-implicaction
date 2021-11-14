@@ -1,6 +1,6 @@
 export interface PostPayload {
   name: string;
-  groupId?: string;
+  subredditId?: string;
   url?: string;
   description?: string;
 }

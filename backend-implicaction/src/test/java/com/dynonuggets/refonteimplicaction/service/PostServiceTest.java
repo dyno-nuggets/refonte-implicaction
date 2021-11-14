@@ -87,7 +87,7 @@ class PostServiceTest {
         long subredditId = 1234L;
         NotFoundException expectedException = new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, subredditId));
         given(subredditRepository.findById(anyLong())).willThrow(expectedException);
-        PostRequest postRequest = PostRequest.builder().name("test").groupId(subredditId).build();
+        PostRequest postRequest = PostRequest.builder().name("test").subredditId(subredditId).build();
 
         // when
         final NotFoundException actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
@@ -118,7 +118,7 @@ class PostServiceTest {
         // when
         Exception actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
 
-        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId());
+        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditId());
 
         // then
         assertThat(actualException.getMessage()).isEqualTo(expectedMessage);
@@ -130,7 +130,7 @@ class PostServiceTest {
         User currentUser = User.builder().id(123L).username("Sankukai").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
-        PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), "Super Subreddit", 88000, 12, null, true, false);
+        PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), "Super Subreddit", 88000, 12, null, true, false, null);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postAdapter.toPostResponse(any(Post.class), anyInt(), anyBoolean(), anyBoolean())).willReturn(expectedResponse);
 

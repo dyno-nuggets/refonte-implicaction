@@ -108,3 +108,9 @@ input:focus::placeholder {
 .btn-check:focus + .btn, .btn:focus {
   box-shadow: none;
 }
+
+@media screen and (max-width: 768px) {
+  .p-sidebar-right {
+    width: 100vw !important;
+  }
+}
