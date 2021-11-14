@@ -57,17 +57,12 @@ public class JobPostingService {
     }
 
     @Transactional
-    public JobPostingDto archiveOrUnarchiveJobPosting(Long jobPostingId) {
+    public JobPostingDto toggleArchiveJobPosting(Long jobPostingId) {
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new NotFoundException("Impossible de supprimer l'offre, " + jobPostingId + " n'existe pas."));
-        if (jobPosting.getStatus() == statusRepository.getUnarchivedStatus()) {
-            jobPosting.setStatus(statusRepository.getArchivedStatus());
-        } else {
-            jobPosting.setStatus(statusRepository.getUnarchivedStatus());
-        }
+                .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobPostingId)));
+        jobPosting.setArchive(jobPosting.isArchive());
         final JobPosting save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
-
     }
 
 }

@@ -1,7 +1,6 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
-import com.dynonuggets.refonteimplicaction.dto.StatusDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,13 +35,9 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     JobPostingService jobPostingService;
 
     List<JobPostingDto> jobPostings;
-    StatusDto statusAvailable;
-    StatusDto statusArchived;
 
     @BeforeEach
     void setUp() {
-        statusAvailable = StatusDto.builder().id(1L).label("jobAvailable").type("job_posting").build();
-        statusArchived = StatusDto.builder().id(2L).label("jobArchived").type("job_posting").build();
         jobPostings = Arrays.asList(
                 JobPostingDto.builder().id(1L).createdAt(Instant.now()).description("description").location("Paris").keywords("toto,yoyo").salary("1111$").build(),
                 JobPostingDto.builder().id(2L).createdAt(Instant.now()).description("description2").location("New York").keywords("toto2,yoyo2").salary("2222$").build());
@@ -135,59 +130,57 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void archiveJobShouldChangeStatus() throws Exception {
-        JobPostingDto jobPostingDtoAvailable = JobPostingDto.builder()
+        //given
+        JobPostingDto givenDto = JobPostingDto.builder()
                 .id(1L)
-                .createdAt(Instant.now())
-                .description("description")
-                .location("Paris")
-                .keywords("toto,yoyo")
-                .salary("1111$")
-                .status(statusAvailable)
+                .isArchive(false)
                 .build();
 
-        JobPostingDto jobPostingDtoArchived = JobPostingDto.builder()
+        JobPostingDto expectedDto = JobPostingDto.builder()
                 .id(1L)
-                .createdAt(Instant.now())
-                .description("description")
-                .location("Paris")
-                .keywords("toto,yoyo")
-                .salary("1111$")
-                .status(statusArchived)
+                .isArchive(true)
                 .build();
 
-        given(jobPostingService.archiveOrUnarchiveJobPosting(jobPostingDtoAvailable.getId())).willReturn(jobPostingDtoArchived);
+        given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto);
 
-        mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobPostingDtoAvailable.getId()).contentType(APPLICATION_JSON)).andDo(print())
+        //when
+        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, givenDto.getId()).contentType(APPLICATION_JSON));
+
+        //then
+        resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", is(Math.toIntExact(jobPostingDtoAvailable.getId()))))
-                .andExpect(jsonPath("$.description", is(jobPostingDtoAvailable.getDescription())))
-                .andExpect(jsonPath("$.location", is(jobPostingDtoAvailable.getLocation())))
-                .andExpect(jsonPath("$.keywords", is(jobPostingDtoAvailable.getKeywords())))
-                .andExpect(jsonPath("$.salary", is(jobPostingDtoAvailable.getSalary())))
-                .andExpect(jsonPath("$.status.label", is(jobPostingDtoArchived.getStatus().getLabel())));
-
-        verify(jobPostingService, times(1)).archiveOrUnarchiveJobPosting(anyLong());
+                .andExpect(jsonPath("$.id", is((givenDto.getId().intValue()))))
+                .andExpect(jsonPath("$.archive", is(expectedDto.isArchive())));
+        verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
     }
 
     @Test
     @WithMockUser
     void archiveJobPostingWhithUnexistingIdShouldThrowException() throws Exception {
+        //given
         final long jobId = 123L;
         final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId));
-        given(jobPostingService.archiveOrUnarchiveJobPosting(anyLong())).willThrow(exception);
+        given(jobPostingService.toggleArchiveJobPosting(anyLong())).willThrow(exception);
 
-        mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId)).andExpect(status().isNotFound());
+        //when
+        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId));
 
-        verify(jobPostingService, times(1)).archiveOrUnarchiveJobPosting(anyLong());
+        //then
+        resultActions.andExpect(status().isNotFound());
+        verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
     }
 
     @Test
     void archiveJobByIdWithoutJwtShouldBeForbidden() throws Exception {
+        //given
         final long jobId = 123L;
-        mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isForbidden());
 
-        verify(jobPostingService, times(0)).archiveOrUnarchiveJobPosting(anyLong());
+        //when
+        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON));
+
+        //then
+        resultActions.andDo(print());
+        resultActions.andExpect(status().isForbidden());
+        verify(jobPostingService, never()).toggleArchiveJobPosting(anyLong());
     }
 }

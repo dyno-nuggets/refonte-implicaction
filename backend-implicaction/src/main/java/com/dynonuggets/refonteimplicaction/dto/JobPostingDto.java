@@ -24,5 +24,6 @@ public class JobPostingDto {
     private ContractTypeDto contractType;
     private StatusDto status;
     private Instant createdAt;
+    private boolean isArchive;
 
 }

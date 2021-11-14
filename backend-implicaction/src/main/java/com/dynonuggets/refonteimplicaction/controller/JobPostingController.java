@@ -59,8 +59,8 @@ public class JobPostingController {
     }
 
     @PatchMapping(path = ARCHIVE_JOB_URI)
-    public ResponseEntity<JobPostingDto> archive(@PathVariable Long jobId) {
-        JobPostingDto updated = jobPostingService.archiveOrUnarchiveJobPosting(jobId);
+    public ResponseEntity<JobPostingDto> toggleArchive(@PathVariable Long jobId) {
+        JobPostingDto updated = jobPostingService.toggleArchiveJobPosting(jobId);
         return ResponseEntity.ok(updated);
     }
 }

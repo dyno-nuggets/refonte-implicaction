@@ -256,3 +256,5 @@ CREATE TABLE `work_experience`
 ALTER TABLE `job_posting`
     ADD `short_description` longtext NULL AFTER `description`;
 -- 2021-09-25 14:15:20
+ALTER TABLE `job_posting`
+    ADD COLUMN `archive` tinyint(1) NULL DEFAULT '0' AFTER `created_at`;
