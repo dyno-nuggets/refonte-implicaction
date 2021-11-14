@@ -3,7 +3,7 @@ import {Group} from '../../model/group';
 import {GroupService} from '../../services/group.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
-import {GroupFormComponent} from '../group-form/group-form.component';
+import {CreateGroupFormComponent} from '../create-group-form/create-group-form.component';
 import {finalize} from 'rxjs/operators';
 
 @Component({
@@ -40,7 +40,7 @@ export class TopGroupListingComponent implements OnInit {
   openSidebarCreationGroup(): void {
     this.sidebarService
       .open({
-        component: GroupFormComponent,
+        component: CreateGroupFormComponent,
         title: 'Créer un groupe',
         width: 650
       });

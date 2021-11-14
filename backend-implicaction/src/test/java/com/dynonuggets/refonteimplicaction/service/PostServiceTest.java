@@ -21,8 +21,7 @@ import org.springframework.data.domain.*;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.utils.Message.SUBREDDIT_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,9 +65,9 @@ class PostServiceTest {
         User currentUser = User.builder().id(123L).username("test user").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, null, Instant.now(), null);
-        PostRequest postRequest = new PostRequest(null, "First Subreddit", "First Post", "http://url.site", "Test");
+        PostRequest postRequest = new PostRequest(123L, 123L, "First Subreddit", "http://url.site", "Test");
 
-        given(subredditRepository.findByName(anyString())).willReturn(Optional.of(subreddit));
+        given(subredditRepository.findById(anyLong())).willReturn(Optional.of(subreddit));
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(postAdapter.toPost(postRequest, subreddit, currentUser)).willReturn(expected);
 
@@ -85,10 +84,10 @@ class PostServiceTest {
     @Test
     void should_throw_exception_on_save_when_subreddit_not_exists() {
         // given
-        String subredditName = "j'existe pas";
-        NotFoundException expectedException = new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, subredditName));
-        given(subredditRepository.findByName(anyString())).willThrow(expectedException);
-        PostRequest postRequest = PostRequest.builder().subredditName(subredditName).build();
+        long subredditId = 1234L;
+        NotFoundException expectedException = new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, subredditId));
+        given(subredditRepository.findById(anyLong())).willThrow(expectedException);
+        PostRequest postRequest = PostRequest.builder().name("test").subredditId(subredditId).build();
 
         // when
         final NotFoundException actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
@@ -98,16 +97,28 @@ class PostServiceTest {
     }
 
     @Test
+    void should_throw_exception_on_save_when_name_is_empty() {
+        // given
+        PostRequest postRequest = PostRequest.builder().build();
+
+        // when
+        final IllegalArgumentException actualException = assertThrows(IllegalArgumentException.class, () -> postService.saveOrUpdate(postRequest));
+
+        // then
+        assertThat(actualException.getMessage()).isEqualTo(POST_SHOULD_HAVE_A_NAME);
+    }
+
+    @Test
     void should_throw_exception_when_save_post_and_subreddit_not_found() {
         // given
-        PostRequest postRequest = new PostRequest(null, "My Subreddit", "First Post", "http://url.site", "Test");
+        PostRequest postRequest = new PostRequest(123L, 123L, "First Post", "http://url.site", "Test");
 
-        given(subredditRepository.findByName(anyString())).willReturn(Optional.empty());
+        given(subredditRepository.findById(anyLong())).willReturn(Optional.empty());
 
         // when
         Exception actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
 
-        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, "My Subreddit");
+        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditId());
 
         // then
         assertThat(actualException.getMessage()).isEqualTo(expectedMessage);
@@ -119,7 +130,7 @@ class PostServiceTest {
         User currentUser = User.builder().id(123L).username("Sankukai").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
-        PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), "Super Subreddit", 88000, 12, null, true, false);
+        PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), "Super Subreddit", 88000, 12, null, true, false, null);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postAdapter.toPostResponse(any(Post.class), anyInt(), anyBoolean(), anyBoolean())).willReturn(expectedResponse);
 

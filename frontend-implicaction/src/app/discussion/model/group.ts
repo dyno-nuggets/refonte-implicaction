@@ -1,5 +1,5 @@
 export interface Group {
-  id?: number;
+  id?: string;
   name: string;
   description?: string;
   numberOfPosts?: number;

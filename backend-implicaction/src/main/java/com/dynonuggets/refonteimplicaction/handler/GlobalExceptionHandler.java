@@ -15,8 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNAUTHORIZED;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -42,6 +41,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = DisabledException.class)
     public ResponseEntity<ExceptionResponse> disabledException() {
         return generateResponse(USER_DISABLED_MSG, UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(value = IllegalArgumentException.class)
+    ResponseEntity<ExceptionResponse> illegalArgumentException(Exception ex) {
+        return generateResponse(ex.getMessage(), BAD_REQUEST);
     }
 
     private ResponseEntity<ExceptionResponse> generateResponse(final String message, final HttpStatus httpStatus) {

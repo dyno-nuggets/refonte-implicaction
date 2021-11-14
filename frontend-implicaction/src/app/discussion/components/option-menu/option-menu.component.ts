@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {SidebarService} from '../../../shared/services/sidebar.service';
-import {GroupFormComponent} from '../group-form/group-form.component';
+import {CreateGroupFormComponent} from '../create-group-form/create-group-form.component';
+import {CreatePostFormComponent} from '../create-post-form/create-post-form.component';
 
 @Component({
   selector: 'app-option-menu',
@@ -15,9 +16,18 @@ export class OptionMenuComponent {
   openSidebarCreationGroup(): void {
     this.sidebarService
       .open({
-        component: GroupFormComponent,
+        component: CreateGroupFormComponent,
         title: 'Créer un groupe',
         width: 650
+      });
+  }
+
+  openSidebarCreationPost(): void {
+    this.sidebarService
+      .open({
+        component: CreatePostFormComponent,
+        title: 'Créer une discussion',
+        width: 735
       });
   }
 }

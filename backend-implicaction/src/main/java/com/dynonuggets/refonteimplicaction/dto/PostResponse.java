@@ -20,4 +20,5 @@ public class PostResponse {
     private String duration;
     private boolean upVote;
     private boolean downVote;
+    private String subredditImageUrl;
 }

@@ -10,6 +10,7 @@ public class Message {
 
     // Post messages
     public static final String POST_NOT_FOUND_MESSAGE = "No post found with id [%s]";
+    public static final String POST_SHOULD_HAVE_A_NAME = "Unable to save post, a post should have a valid name";
 
     // Comment messages
     public static final String COMMENT_NOT_FOUND = "No comment found with id [%s]";

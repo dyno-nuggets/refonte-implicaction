@@ -30,6 +30,8 @@ public class PostAdapter {
 
     public PostResponse toPostResponse(Post post, int commentCount, boolean isPostUpVoted, boolean isPostDownVoted) {
         final Subreddit subreddit = post.getSubreddit();
+        final String subredditImageUrl = subreddit != null && subreddit.getImage() != null ? subreddit.getImage().getUrl() : null;
+        final String subredditName = subreddit != null ? subreddit.getName() : "";
         return PostResponse.builder()
                 .id(post.getId())
                 .name(post.getName())
@@ -37,12 +39,13 @@ public class PostAdapter {
                 .description(post.getDescription())
                 .username(post.getUser().getUsername())
                 .userId(post.getUser().getId())
-                .subredditName(subreddit != null ? subreddit.getName() : "")
+                .subredditName(subredditName)
                 .commentCount(commentCount)
                 .duration(DateUtils.getDurationAsString(post.getCreatedAt()))
                 .upVote(isPostUpVoted)
                 .downVote(isPostDownVoted)
                 .voteCount(post.getVoteCount())
+                .subredditImageUrl(subredditImageUrl)
                 .build();
     }
 
