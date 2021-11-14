@@ -18,11 +18,13 @@ import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.POST_SHOULD_HAVE_A_NAME;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -43,7 +45,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_create_post_when_authenticated() throws Exception {
         // given
         PostRequest postRequest = PostRequest.builder()
-                .subredditName("divers")
+                .groupId(125L)
                 .name("coucou post")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
@@ -69,8 +71,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(postService.saveOrUpdate(any(PostRequest.class))).willReturn(expectedResponse);
 
         // when
-        final ResultActions resultActions;
-        resultActions = mvc.perform(
+        final ResultActions resultActions = mvc.perform(
                 post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
@@ -94,10 +95,37 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     }
 
     @Test
+    @WithMockUser
+    void should_response_bad_request_when_postname_is_null() throws Exception {
+        // given
+        PostRequest postRequest = PostRequest.builder()
+                .groupId(125L)
+                .name("")
+                .url("http://url.com")
+                .description("Il est super cool ce post")
+                .build();
+
+        String json = gson.toJson(postRequest);
+
+        given(postService.saveOrUpdate(any(PostRequest.class))).willThrow(new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME));
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage", is(POST_SHOULD_HAVE_A_NAME)))
+                .andExpect(jsonPath("$.errorCode", is(BAD_REQUEST.value())));
+    }
+
+    @Test
     void should_response_forbidden_when_not_authenticated() throws Exception {
         // given
         PostRequest postRequest = PostRequest.builder()
-                .subredditName("divers")
+                .groupId(125L)
                 .name("coucou post")
                 .url("http://url.com")
                 .description("Il est super cool ce post")

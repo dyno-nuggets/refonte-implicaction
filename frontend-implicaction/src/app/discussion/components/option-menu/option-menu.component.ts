@@ -27,7 +27,7 @@ export class OptionMenuComponent {
       .open({
         component: CreatePostFormComponent,
         title: 'Créer une discussion',
-        width: 650
+        width: 735
       });
   }
 }

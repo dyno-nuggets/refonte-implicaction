@@ -261,6 +261,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
+  createPostEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.POSTS.BASE_URI);
+  }
+
   /**
    * Comments
    */
@@ -293,10 +297,6 @@ export class ApiEndpointsService {
 
   findAllGroupsEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
-  }
-
-  createPostEndpoint(): string {
-    return ApiEndpointsService.createUrl(Uris.GROUP.BASE_URI);
   }
 
   /**

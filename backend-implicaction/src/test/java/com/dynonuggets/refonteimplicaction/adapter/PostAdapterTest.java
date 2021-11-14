@@ -23,7 +23,7 @@ class PostAdapterTest {
         User currentUser = User.builder().id(123L).username("test user").build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null);
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), subreddit);
-        PostRequest postRequest = new PostRequest(123L, "First Subreddit", "Super Post", "http://url.site", "Test");
+        PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
 
         // when
         final Post actual = postAdapter.toPost(postRequest, subreddit, currentUser);

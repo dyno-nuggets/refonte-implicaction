@@ -10,13 +10,13 @@ import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.utils.Message.SUBREDDIT_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 
 
 @Service
@@ -34,12 +34,16 @@ public class PostService {
 
     @Transactional
     public PostResponse saveOrUpdate(PostRequest postRequest) {
-        Subreddit subreddit = subredditRepository.findByName(postRequest.getSubredditName())
-                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditName())));
+        if (StringUtils.isEmpty(postRequest.getName())) {
+            throw new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME);
+        }
+
+        Subreddit subreddit = subredditRepository.findById(postRequest.getGroupId())
+                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId())));
 
         Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());
         Post save = postRepository.save(post);
-        
+
         return getPostResponse(save);
     }
 

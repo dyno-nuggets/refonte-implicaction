@@ -1,0 +1,13 @@
+.dropdown-image {
+  width: 28px;
+}
+
+:host ::ng-deep .p-dropdown {
+  width: 14rem;
+}
+
+.country-item-value {
+  img.flag {
+    width: 17px;
+  }
+}
