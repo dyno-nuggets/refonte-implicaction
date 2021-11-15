@@ -33,16 +33,33 @@
       <th scope="col"></th>
       <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>
       <!--      <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>-->
+      <th class="col-1 col-sm-1 col-lg-1 px-4" scope="col">
+        <p-checkbox
+          (ngModelChange)="onChangeCheckboxes($event)"
+          [ngModel]="selectedUserIds"
+          name="users"
+          value="all"
+        >
+        </p-checkbox>
+      </th>
       <th class="overflow-ellipsis text-uppercase col-4 col-sm-4 col-lg-2 px-2" scope="col">Username</th>
-      <th class="overflow-ellipsis text-uppercase col-3 col-sm-3 col-lg-6 px-2" scope="col">Email</th>
+      <th class="overflow-ellipsis text-uppercase col-2 col-sm-2 col-lg-5 px-2" scope="col">Email</th>
       <th class="overflow-ellipsis text-uppercase col-1 col-sm-2 col-lg-2 px-2" scope="col">Registered</th>
       <th class="overflow-ellipsis text-uppercase text-center col-4 col-sm-3 col-lg-2 px-2" scope="col">Actions</th>
     </tr>
   </ng-template>
   <ng-template let-user pTemplate="body">
     <tr>
+      <td class="col-1 col-sm-1 col-lg-1 px-4">
+        <p-checkbox
+          [(ngModel)]="selectedUserIds"
+          name="users"
+          value="{{user.id}}"
+        >
+        </p-checkbox>
+      </td>
       <td class="overflow-ellipsis text-wrap col-4 col-sm-4 col-lg-2">{{user.username}}</td>
-      <td class="overflow-ellipsis text-wrap col-3 col-sm-3 col-lg-6 px-2">{{user.email}}</td>
+      <td class="overflow-ellipsis text-wrap col-2 col-sm-2 col-lg-5 px-2">{{user.email}}</td>
       <td class="overflow-ellipsis col-1 col-sm-2 col-lg-2 px-2">{{user.registeredAt | date: 'shortDate'}}</td>
       <td class="text-center col-1">
         <p-tableCheckbox [value]="user"></p-tableCheckbox>
