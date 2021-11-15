@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
@@ -95,5 +96,11 @@ public class UserController {
         Pageable pageable = PageRequest.of(page, rows);
         Page<UserDto> pendingUsers = userService.getAllPendingActivationUsers(pageable);
         return ResponseEntity.ok(pendingUsers);
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<UserDto> updateImageProfile(@RequestParam("file") MultipartFile file) {
+        final UserDto userDto = userService.updateImageProfile(file);
+        return ResponseEntity.ok(userDto);
     }
 }

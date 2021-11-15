@@ -40,7 +40,9 @@
               id="dropdownUser2"
             >
               <img
-                [src]="currentUserImageSrc"
+                #userImage
+                (error)="userImage.src = constant.USER_DEFAULT_IMAGE_SRC"
+                [src]="currentUser.imageUrl || constant.USER_DEFAULT_IMAGE_SRC"
                 alt="avatar de {{currentUser.username}}"
                 class="rounded-circle avatar"
               >

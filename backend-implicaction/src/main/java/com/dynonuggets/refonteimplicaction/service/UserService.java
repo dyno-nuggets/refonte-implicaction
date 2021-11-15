@@ -4,17 +4,21 @@ import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.JobSeeker;
 import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,6 +33,8 @@ public class UserService {
     private final AuthService authService;
     private final UserAdapter userAdapter;
     private final JobSeekerRepository jobSeekerRepository;
+    private final CloudService cloudService;
+    private final FileRepository fileRepository;
 
     /**
      * @return la liste paginée de tous les utilisateurs
@@ -107,5 +113,17 @@ public class UserService {
             return RelationTypeEnum.SENDER;
         }
         return RelationTypeEnum.NONE;
+    }
+
+    public UserDto updateImageProfile(MultipartFile file) {
+        final User currentUser = authService.getCurrentUser();
+        final User user = userRepository.findById(currentUser.getId())
+                .orElseThrow(() -> new UserNotFoundException(String.format(Message.USER_NOT_FOUND_MESSAGE, currentUser.getId())));
+
+        final FileModel fileModel = cloudService.uploadImage(file);
+        final FileModel fileSave = fileRepository.save(fileModel);
+        user.setImage(fileSave);
+        final User save = userRepository.save(user);
+        return userAdapter.toDto(save);
     }
 }

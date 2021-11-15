@@ -33,6 +33,7 @@ public class UserDto {
     private String activationKey;
     private String expectation;
     private boolean active;
+    private String imageUrl;
     private List<String> roles;
     private CompanyDto company;
     private RelationTypeEnum relationTypeOfCurrentUser;

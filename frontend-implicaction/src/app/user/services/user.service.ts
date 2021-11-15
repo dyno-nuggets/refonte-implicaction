@@ -59,4 +59,8 @@ export class UserService {
   getAllPendingActivationUsers(pageable: Pageable): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
+
+  updateUserImage(formData: FormData): Observable<User> {
+    return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(), formData);
+  }
 }

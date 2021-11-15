@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -35,35 +37,43 @@ class UserServiceTest {
 
     @Mock
     TrainingAdapter trainingAdapter;
+
     @Mock
     WorkExperienceAdapter experienceAdapter;
+
     private JobSeeker jobSeeker;
     private UserDto expectedUserDto;
     private User userSeeker;
     private List<Role> seekerRoles;
     private List<WorkExperience> experiences;
     private List<Training> trainings;
+
     @Mock
     private UserRepository userRepository;
+
     @Mock
     private RelationRepository relationRepository;
+
     @Mock
     private AuthService authService;
+
     @Mock
     private UserAdapter userAdapter;
+
     @Mock
     private JobSeekerRepository jobSeekerRepository;
+
+    @Mock
+    private S3CloudServiceImpl cloudService;
+
+    @Mock
+    private FileRepository fileRepository;
+
+    @InjectMocks
     private UserService userService;
 
     @BeforeEach
     void setMockOutput() {
-        userService = new UserService(
-                userRepository,
-                relationRepository,
-                authService,
-                userAdapter,
-                jobSeekerRepository
-        );
 
         seekerRoles = Stream.of(RoleEnum.USER, RoleEnum.JOB_SEEKER)
                 .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.getName(), Collections.emptySet()))

@@ -26,6 +26,10 @@ export class AuthService {
   ) {
   }
 
+  get currentUser$(): Observable<User> {
+    return this.currentUser.asObservable();
+  }
+
   signup(signupRequestPayload: SignupRequestPayload): Observable<any> {
     return this.http
       .post(
@@ -56,6 +60,7 @@ export class AuthService {
         catchError(() => of(false))
       );
   }
+
 
   logout(): Observable<boolean> {
     const refreshTokenPayload = {
@@ -97,6 +102,11 @@ export class AuthService {
         this.localStorage.store('authenticationToken', response.authenticationToken);
         this.localStorage.store('expiresAt', response.expiresAt);
       }));
+  }
+
+  setCurrentUser(user: User): void {
+    this.localStorage.store('currentUser', JSON.stringify(user));
+    this.currentUser.emit(user);
   }
 
   getRefreshToken(): string {

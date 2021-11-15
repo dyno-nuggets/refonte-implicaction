@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   allowedUnivers: Univers[] = [];
   isAdmin = false;
   univers = Univers;
-  currentUserImageSrc = Constants.USER_DEFAULT_IMAGE_SRC;
+  constant = Constants;
 
   private subscription: Subscription;
 
@@ -36,11 +36,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .loggedIn
       .subscribe(isLoggedIn => this.isLoggedIn = isLoggedIn)
       .add(
-        this.authService.currentUser.subscribe(currentUser => {
-          this.currentUser = currentUser;
-          this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
-          this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
-        })
+        this.authService
+          .currentUser$
+          .subscribe(currentUser => {
+            this.currentUser = currentUser;
+            this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
+            this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
+          })
       );
     this.isLoggedIn = this.authService.isLoggedIn();
     this.currentUser = this.authService.getCurrentUser();

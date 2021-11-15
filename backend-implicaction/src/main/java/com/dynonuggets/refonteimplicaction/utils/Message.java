@@ -2,6 +2,9 @@ package com.dynonuggets.refonteimplicaction.utils;
 
 public class Message {
 
+    // Users messages
+    public static final String USER_NOT_FOUND_MESSAGE = "No user found with id [%d]";
+
     // Jobs messages
     public static final String JOB_NOT_FOUND_MESSAGE = "No job found with id [%d]";
 
