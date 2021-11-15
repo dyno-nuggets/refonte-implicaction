@@ -12,11 +12,10 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">
+      <th class="text-center col-1">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        <!--        <p-checkbox value="val1"></p-checkbox>-->
       </th>
-      <th class="text-wrap text-uppercase col-3 col-sm-2 col-lg-3" scope="col">Nom</th>
+      <th class="text-wrap text-uppercase col-1 col-sm-2 col-lg-3" scope="col">Nom</th>
       <th class="text-wrap text-uppercase col-1 col-sm-1 col-lg-1 px-2" scope="col">Type</th>
       <th class="text-wrap text-uppercase col-3 col-sm-2 col-lg-3 px-2" scope="col">Localisation</th>
       <th class="text-wrap text-uppercase col-6 col-sm-4 col-lg-6 px-2" scope="col">Description</th>
@@ -25,9 +24,8 @@
   </ng-template>
   <ng-template let-job pTemplate="body">
     <tr>
-      <th class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">
-        <!--        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>-->
-        <p-tableCheckbox value="val1"></p-tableCheckbox>
+      <th class="text-center col-1">
+        <p-tableCheckbox [value]="job"></p-tableCheckbox>
       </th>
       <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{job.title}}</td>
       <td class="text-wrap col-1 col-sm-1 col-lg-1 px-2">{{job.contractType?.label}}</td>
