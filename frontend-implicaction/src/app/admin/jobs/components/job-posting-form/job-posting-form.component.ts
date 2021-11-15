@@ -42,7 +42,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   }
 
   ngOnInit(): void {
-    this.companyService.getAll(this.pageable)
+    this.companyService.getAll({...Constants.ALL_VALUE_PAGEABLE, sortBy: 'name'})
       .subscribe(data => {
         this.companies = data.content;
       });
@@ -57,8 +57,10 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     if (this.formJob.invalid) {
       return;
     }
+
     const job: JobPosting = {...this.formJob.value};
     let job$: Observable<JobPosting>;
+
     if (this.isUpdate) {
       job.status = this.job.status;
       job.id = this.sidebarInput.job.id;
@@ -67,6 +69,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
       job.status = StatusEnum.JOB_AVAILABLE;
       job$ = this.jobService.createJob(job);
     }
+
     job$.subscribe(
       jobUpdate => {
         if (this.isUpdate) {
