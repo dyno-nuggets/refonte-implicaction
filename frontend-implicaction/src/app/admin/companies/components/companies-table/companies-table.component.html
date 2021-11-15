@@ -24,6 +24,9 @@
 >
   <ng-template class="bg-primary" pTemplate="header">
     <tr>
+      <th class="text-center col-1">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>
       <th class="overflow-ellipsis text-uppercase col-4 col-sm-4 col-lg-2 px-2" scope="col">Nom</th>
       <th class="overflow-ellipsis text-uppercase col-1 col-sm-2 col-lg-2 px-2" scope="col">Url</th>
@@ -33,6 +36,9 @@
   </ng-template>
   <ng-template let-company pTemplate="body">
     <tr>
+      <td class="text-center col-1">
+        <p-tableCheckbox [value]="company"></p-tableCheckbox>
+      </td>
       <td class="col-0 col-lg-1">
         <img
           #companyLogo
