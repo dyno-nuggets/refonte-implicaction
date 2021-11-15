@@ -22,7 +22,6 @@ public class JobPostingDto {
     private String salary;
     private String keywords;
     private ContractTypeDto contractType;
-    private StatusDto status;
     private Instant createdAt;
     private boolean isArchive;
 

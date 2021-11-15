@@ -130,7 +130,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void archiveJobShouldChangeStatus() throws Exception {
-        //given
+        // given
         JobPostingDto givenDto = JobPostingDto.builder()
                 .id(1L)
                 .isArchive(false)
@@ -143,44 +143,44 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto);
 
-        //when
+        // when
         final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, givenDto.getId()).contentType(APPLICATION_JSON));
 
-        //then
+        // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((givenDto.getId().intValue()))))
-                .andExpect(jsonPath("$.archive", is(expectedDto.isArchive())));
+                .andExpect(jsonPath("$.archive", is(!givenDto.isArchive())));
         verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
     }
 
     @Test
     @WithMockUser
     void archiveJobPostingWhithUnexistingIdShouldThrowException() throws Exception {
-        //given
+        // given
         final long jobId = 123L;
         final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId));
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willThrow(exception);
 
-        //when
+        // when
         ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId));
 
-        //then
+        // then
         resultActions.andExpect(status().isNotFound());
         verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
     }
 
     @Test
     void archiveJobByIdWithoutJwtShouldBeForbidden() throws Exception {
-        //given
+        // given
         final long jobId = 123L;
 
-        //when
+        // when
         ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON));
 
-        //then
-        resultActions.andDo(print());
-        resultActions.andExpect(status().isForbidden());
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveJobPosting(anyLong());
     }
 }
