@@ -15,8 +15,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -71,16 +71,16 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
 
     @WithMockUser
     @Test
-    void getCompanysListShouldListAllCompaniesByCriteria() throws Exception {
-        //given
+    void getCompaniesListShouldListAllCompaniesByCriteria() throws Exception {
+        // given
         Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
 
-        //when
+        // when
         // test des données de pagination
-        given(companyService.findAllWithCriteria(DEFAULT_PAGEABLE, "société")).willReturn(companyDtoPage);
+        given(companyService.findAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
         ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
 
-        //then
+        // then
         actions.andDo(print())
                 .andExpect(status().isOk());
 
@@ -92,11 +92,8 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".name", is(companyDtos.get(i).getName())))
                     .andExpect(jsonPath(contentPath + ".logo", is(companyDtos.get(i).getLogo())))
                     .andExpect(jsonPath(contentPath + ".url", is(companyDtos.get(i).getUrl())));
-            assertTrue(companyDtos.get(i).getName().contains("Société") || companyDtos.get(i).getDescription().contains("Société"));
-
         }
-
-        verify(companyService, times(1)).getAll(any());
+        verify(companyService, times(1)).findAllWithCriteria(any(), anyString());
     }
 
     @Test
