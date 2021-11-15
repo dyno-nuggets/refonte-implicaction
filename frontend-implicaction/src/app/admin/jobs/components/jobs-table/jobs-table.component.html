@@ -24,9 +24,9 @@
   </ng-template>
   <ng-template let-job pTemplate="body">
     <tr>
-      <th class="text-center col-1">
+      <td class="text-center col-1">
         <p-tableCheckbox [value]="job"></p-tableCheckbox>
-      </th>
+      </td>
       <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{job.title}}</td>
       <td class="text-wrap col-1 col-sm-1 col-lg-1 px-2">{{job.contractType?.label}}</td>
       <td class="overflow-ellipsis text-lg-wrap col-4 col-sm-3 col-lg-2 px-2">{{job.location}}</td>
