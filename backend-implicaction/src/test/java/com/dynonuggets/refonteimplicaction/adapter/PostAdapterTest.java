@@ -39,7 +39,7 @@ class PostAdapterTest {
     @Test
     void toPostResponse() {
         // given
-        User currentUser = User.builder().id(123L).username("test user").build();
+        User currentUser = User.builder().id(123L).username("test user").image(FileModel.builder().url("http://url.com").build()).build();
         Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build());
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), subreddit);
         final int expectedCommentCount = 10;
@@ -57,6 +57,7 @@ class PostAdapterTest {
         assertThat(postResponse.getCommentCount()).isEqualTo(expectedCommentCount);
         assertThat(postResponse.getVoteCount()).isEqualTo(expected.getVoteCount());
         assertThat(postResponse.getSubredditImageUrl()).isEqualTo(expected.getSubreddit().getImage().getUrl());
+        assertThat(postResponse.getUserImageUrl()).isEqualTo(expected.getUser().getImage().getUrl());
         assertThat(postResponse.isDownVote()).isFalse();
         assertThat(postResponse.isUpVote()).isTrue();
     }

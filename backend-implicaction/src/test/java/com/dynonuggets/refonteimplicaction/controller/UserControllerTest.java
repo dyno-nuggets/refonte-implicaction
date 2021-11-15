@@ -271,7 +271,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
+                        get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
@@ -341,7 +341,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI).contentType(APPLICATION_JSON))
+                        get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
@@ -424,7 +424,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_PENDING_USER_URI).contentType(APPLICATION_JSON))
+                        get(USER_BASE_URI + GET_PENDING_USER_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
@@ -495,7 +495,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(USER_BASE_URI + GET_COMMUNITY_URI).contentType(APPLICATION_JSON))
+                        get(USER_BASE_URI + GET_COMMUNITY_URI).contentType(APPLICATION_JSON))
                 .andExpect(status().isOk());
 
 
@@ -523,13 +523,11 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     void should_response_forbidden_when_getting_all_community_with_no_authentication() throws Exception {
-
         // when
         final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_COMMUNITY_URI)
                 .contentType(MediaType.APPLICATION_JSON)).andDo(print());
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(userService, never()).getAllCommunity(any());
-
     }
 }

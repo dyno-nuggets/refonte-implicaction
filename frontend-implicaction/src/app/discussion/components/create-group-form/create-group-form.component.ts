@@ -68,15 +68,11 @@ export class CreateGroupFormComponent extends SidebarContentComponent implements
       this.formData.append('file', file, file.filename);
 
       reader.onload = () => {
-
         this.imageSrc = reader.result as string;
-
         this.createGroupForm.patchValue({
           fileSource: reader.result
         });
-
       };
-
     }
   }
 }

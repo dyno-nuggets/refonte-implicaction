@@ -31,8 +31,9 @@ services:
     expose:
       - "4566"
     volumes:
-      - "${TEMPDIR:-/tmp/localstack}:/tmp/localstack"
+      - localstack:/tmp/localstack
       - "/var/run/docker.sock:/var/run/docker.sock"
 
 volumes:
   my-db:
+  localstack:

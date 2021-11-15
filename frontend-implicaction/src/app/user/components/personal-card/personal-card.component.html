@@ -25,156 +25,174 @@
     </div>
     <div class="d-flex flex-column justify-content-center align-items-center pt-3">
       <div>
-        <img
-          alt="photo de {{user.firstname}}"
-          class="rounded-circle img-fluid shadow-sm user-avatar"
-          src="assets/img/default-user.png"
-        />
-      </div>
-      <div class="card-body text-center w-100">
-        <div class="display-6 fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}} {{user.lastname}}</div>
-        <div class="row">
-          <div class="d-flex flex-row m-0 p-1">
-            <div class="align-self-center text-start fw-bold ps-2 me-4">
-              <i-feather class="icon text-primary" name="mail"></i-feather>
-            </div>
-            <div *ngIf="!isEditing; else emailEdition" class="text-start m-0">
-              <app-user-info [value]="user.email"></app-user-info>
-            </div>
-            <ng-template #emailEdition>
-              <div class="flex-fill px-3">
-                <input
-                  [(ngModel)]="user.email"
-                  class="form-control form-control-lg rounded-pill px-4"
-                  placeholder="Email"
-                />
-              </div>
-            </ng-template>
-          </div>
-          <div class="d-flex flex-row m-0 p-1">
-            <div class="align-self-center text-start fw-bold ps-2 me-4">
-              <i-feather class="icon text-primary" name="Phone"></i-feather>
-            </div>
-            <div *ngIf="!isEditing; else phoneEdition" class="text-center m-0">
-              <app-user-info [value]="user.phoneNumber"></app-user-info>
-            </div>
-            <ng-template #phoneEdition>
-              <div class="flex-fill px-3">
-                <input
-                  [(ngModel)]="user.phoneNumber"
-                  class="form-control form-control-lg rounded-pill px-4"
-                  placeholder="Téléphone"
-                />
-              </div>
-            </ng-template>
-          </div>
-          <div class="d-flex flex-row m-0 p-1">
-            <div class="align-self-center text-start fw-bold ps-2 me-4">
-              <i-feather class="icon text-primary" name="calendar"></i-feather>
-            </div>
-            <div *ngIf="!isEditing; else birthdayEdition" class="text-start m-0">
-              <app-user-info [value]="user.birthday"></app-user-info>
-            </div>
-            <ng-template #birthdayEdition>
-              <div class="flex-fill px-3">
-                <p-calendar
-                  [(ngModel)]="user.birthday"
-                  [yearNavigator]="true"
-                  [yearRange]="YEAR_RANGE"
-                  dateFormat="yy-mm-dd"
-                  id="birthdayInput"
-                  inputStyleClass="form-control form-control-lg rounded-pill px-4 fs-5"
-                  placeholder="Date de naissance"
-                >
-                </p-calendar>
-              </div>
-            </ng-template>
-          </div>
+        <div class="d-flex justify-content-center">
+          <label [ngClass]="{'hoverable': isEditing}" for="fileInput">
+            <img
+              #userImage
+              (error)="userImage.src = constant.USER_DEFAULT_IMAGE_SRC"
+              [src]="user.imageUrl || constant.USER_DEFAULT_IMAGE_SRC"
+              alt="photo de {{user.firstname}}"
+              class="rounded-circle shadow-sm user-avatar"
+            >
+            <ng-container *ngIf="isEditing">
+              <div class="hover-text">Modifier</div>
+              <div class="background"></div>
+            </ng-container>
+          </label>
+          <br/>
+          <input
+            (change)="onFileChange($event)"
+            *ngIf="isEditing"
+            accept=".jpg, .png, .jpeg"
+            id="fileInput"
+            type="file"
+          >
         </div>
-        <div class="text-start">
-          <div class="row mt-5">
-            <h2>Loisirs / Hobbies</h2>
-            <div *ngIf="!isEditing; else hobbiesEdition" class="">
-              <p>
-                <app-user-info [value]="user.hobbies"></app-user-info>
-              </p>
+        <div class="card-body text-center w-100">
+          <div class="display-6 text-wrap fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}} {{user.lastname}}</div>
+          <div class="row">
+            <div class="d-flex flex-row m-0 p-1">
+              <div class="align-self-center text-start fw-bold ps-2 me-4">
+                <i-feather class="icon text-primary" name="mail"></i-feather>
+              </div>
+              <div *ngIf="!isEditing; else emailEdition" class="text-start m-0">
+                <app-user-info [value]="user.email"></app-user-info>
+              </div>
+              <ng-template #emailEdition>
+                <div class="flex-fill px-3">
+                  <input
+                    [(ngModel)]="user.email"
+                    class="form-control form-control-lg rounded-pill px-4"
+                    placeholder="Email"
+                  />
+                </div>
+              </ng-template>
             </div>
-            <ng-template #hobbiesEdition>
-              <div class="mb-4">
+            <div class="d-flex flex-row m-0 p-1">
+              <div class="align-self-center text-start fw-bold ps-2 me-4">
+                <i-feather class="icon text-primary" name="Phone"></i-feather>
+              </div>
+              <div *ngIf="!isEditing; else phoneEdition" class="text-center m-0">
+                <app-user-info [value]="user.phoneNumber"></app-user-info>
+              </div>
+              <ng-template #phoneEdition>
+                <div class="flex-fill px-3">
+                  <input
+                    [(ngModel)]="user.phoneNumber"
+                    class="form-control form-control-lg rounded-pill px-4"
+                    placeholder="Téléphone"
+                  />
+                </div>
+              </ng-template>
+            </div>
+            <div class="d-flex flex-row m-0 p-1">
+              <div class="align-self-center text-start fw-bold ps-2 me-4">
+                <i-feather class="icon text-primary" name="calendar"></i-feather>
+              </div>
+              <div *ngIf="!isEditing; else birthdayEdition" class="text-start m-0">
+                <app-user-info [value]="user.birthday"></app-user-info>
+              </div>
+              <ng-template #birthdayEdition>
+                <div class="flex-fill px-3">
+                  <p-calendar
+                    [(ngModel)]="user.birthday"
+                    [yearNavigator]="true"
+                    [yearRange]="YEAR_RANGE"
+                    dateFormat="yy-mm-dd"
+                    id="birthdayInput"
+                    inputStyleClass="form-control form-control-lg rounded-pill px-4 fs-5"
+                    placeholder="Date de naissance"
+                  >
+                  </p-calendar>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+          <div class="text-start">
+            <div class="row mt-5">
+              <h2>Loisirs / Hobbies</h2>
+              <div *ngIf="!isEditing; else hobbiesEdition" class="">
+                <p>
+                  <app-user-info [value]="user.hobbies"></app-user-info>
+                </p>
+              </div>
+              <ng-template #hobbiesEdition>
+                <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.hobbies"
                   class="form-control form-control-lg w-100 px-4 text-description"
                   rows="4"
                 ></textarea>
-              </div>
-            </ng-template>
-          </div>
-          <div class="row mt-3">
-            <h2>Présentation</h2>
-            <div *ngIf="!isEditing; else presentationEdition" class="">
-              <p>
-                <app-user-info [value]="user.presentation"></app-user-info>
-              </p>
+                </div>
+              </ng-template>
             </div>
-            <ng-template #presentationEdition>
-              <div class="mb-4">
+            <div class="row mt-3">
+              <h2>Présentation</h2>
+              <div *ngIf="!isEditing; else presentationEdition" class="">
+                <p>
+                  <app-user-info [value]="user.presentation"></app-user-info>
+                </p>
+              </div>
+              <ng-template #presentationEdition>
+                <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.presentation"
                   class="form-control form-control-lg w-100 px-4 text-description"
                   rows="4"
                 ></textarea>
-              </div>
-            </ng-template>
-          </div>
-          <div class="row mt-3">
-            <h2>Quel est mon objectif professionnel</h2>
-            <div *ngIf="!isEditing; else purposeEdition" class="">
-              <p>
-                <app-user-info [value]="user.purpose"></app-user-info>
-              </p>
+                </div>
+              </ng-template>
             </div>
-            <ng-template #purposeEdition>
-              <div class="mb-4">
+            <div class="row mt-3">
+              <h2>Quel est mon objectif professionnel</h2>
+              <div *ngIf="!isEditing; else purposeEdition" class="">
+                <p>
+                  <app-user-info [value]="user.purpose"></app-user-info>
+                </p>
+              </div>
+              <ng-template #purposeEdition>
+                <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.purpose"
                   class="form-control form-control-lg w-100 px-4 text-description"
                 ></textarea>
-              </div>
-            </ng-template>
-          </div>
-          <div class="row mt-3">
-            <h2>Ce que j'attends du réseau</h2>
-            <div *ngIf="!isEditing; else expectationEdition" class="">
-              <p>
-                <app-user-info [value]="user.expectation"></app-user-info>
-              </p>
+                </div>
+              </ng-template>
             </div>
-            <ng-template #expectationEdition>
-              <div class="mb-4">
+            <div class="row mt-3">
+              <h2>Ce que j'attends du réseau</h2>
+              <div *ngIf="!isEditing; else expectationEdition" class="">
+                <p>
+                  <app-user-info [value]="user.expectation"></app-user-info>
+                </p>
+              </div>
+              <ng-template #expectationEdition>
+                <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.expectation"
                   class="form-control form-control-lg w-100 px-4 text-description"
                   rows="4"
                 ></textarea>
-              </div>
-            </ng-template>
-          </div>
-          <div class="row mt-3">
-            <h2>Ce que je peux apporter au réseau</h2>
-            <div *ngIf="!isEditing; else contributionEdition" class="">
-              <p>
-                <app-user-info [value]="user.contribution"></app-user-info>
-              </p>
+                </div>
+              </ng-template>
             </div>
-            <ng-template #contributionEdition>
-              <div class="mb-4">
+            <div class="row mt-3">
+              <h2>Ce que je peux apporter au réseau</h2>
+              <div *ngIf="!isEditing; else contributionEdition" class="">
+                <p>
+                  <app-user-info [value]="user.contribution"></app-user-info>
+                </p>
+              </div>
+              <ng-template #contributionEdition>
+                <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.contribution"
                   class="form-control form-control-lg w-100 px-4 text-description"
                   rows="4"
                 ></textarea>
-              </div>
-            </ng-template>
+                </div>
+              </ng-template>
+            </div>
           </div>
         </div>
       </div>

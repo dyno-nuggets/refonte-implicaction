@@ -8,7 +8,7 @@ h2 {
 
 .user-avatar {
   width: 150px;
-  height: auto;
+  height: 150px;
 }
 
 .user-card {
@@ -30,4 +30,37 @@ h2 {
   .p-inputtext {
     color: #212529 !important;
   }
+}
+
+.hoverable {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  height: 150px;
+  width: 150px;
+}
+
+.hoverable .hover-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 150%);
+  z-index: 2;
+  color: white;
+}
+
+.hoverable .background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+#fileInput {
+  display: none;
 }

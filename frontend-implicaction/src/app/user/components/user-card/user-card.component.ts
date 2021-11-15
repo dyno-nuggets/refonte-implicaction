@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {User} from '../../../shared/models/user';
 
 @Component({
@@ -6,15 +6,9 @@ import {User} from '../../../shared/models/user';
   templateUrl: './user-card.component.html',
   styleUrls: ['./user-card.component.scss']
 })
-export class UserCardComponent implements OnInit {
+export class UserCardComponent {
 
   @Input()
   user: User;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
 }

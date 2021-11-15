@@ -59,6 +59,7 @@ public class UserAdapter {
 
         final List<String> roles = rolesToDtos(model);
 
+        final String imageUrl = model.getImage() != null ? model.getImage().getUrl() : null;
         return UserDto.builder()
                 .id(model.getId())
                 .username(model.getUsername())
@@ -78,6 +79,7 @@ public class UserAdapter {
                 .activationKey(model.getActivationKey())
                 .active(model.isActive())
                 .roles(roles)
+                .imageUrl(imageUrl)
                 .build();
     }
 
@@ -116,10 +118,12 @@ public class UserAdapter {
     public UserDto toDtoLight(User model) {
         final List<String> roles = rolesToDtos(model);
 
+        final String imageUrl = model.getImage() != null ? model.getImage().getUrl() : null;
         return UserDto.builder()
                 .id(model.getId())
                 .username(model.getUsername())
                 .roles(roles)
+                .imageUrl(imageUrl)
                 .build();
     }
 

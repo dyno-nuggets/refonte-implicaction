@@ -12,6 +12,7 @@ import {ContractTypeComponent} from './components/contract-type/contract-type.co
 import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 import {JobFilterComponent} from './components/job-filter/job-filter.component';
 import {BaseWithPaginationComponent} from './components/base-with-pagination-component/base-with-pagination.component';
+import {AvatarModule} from 'primeng/avatar';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import {BaseWithPaginationComponent} from './components/base-with-pagination-com
     CommonModule,
     RouterModule,
     BadgeModule,
-    IconsModule
+    IconsModule,
+    AvatarModule
   ]
 })
 export class SharedModule {

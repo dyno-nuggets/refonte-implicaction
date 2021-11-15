@@ -106,6 +106,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
+  updateImageProfileEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.USERS.UPDATE_IMAGE);
+  }
+
   getAllUserCommunityEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.COMMUNITY_LIST, pageable);
   }

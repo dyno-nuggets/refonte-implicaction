@@ -17,6 +17,7 @@ export class Uris {
     static readonly BASE_URI = 'users';
     static readonly COMMUNITY_LIST = 'users/community';
     static readonly BY_ID = 'users';
+    static readonly UPDATE_IMAGE = 'users/image';
     static readonly GET_FRIENDS = 'users';
     static readonly GET_FRIEND_REQUEST_RECEIVED = 'users/friends/received';
     static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';

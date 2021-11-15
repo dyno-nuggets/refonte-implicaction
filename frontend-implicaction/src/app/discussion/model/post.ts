@@ -6,6 +6,7 @@ export interface Post {
   voteCount?: number;
   username?: string;
   userId?: string;
+  userImageUrl?: string;
   subredditName?: string;
   commentCount?: number;
   duration?: string;
