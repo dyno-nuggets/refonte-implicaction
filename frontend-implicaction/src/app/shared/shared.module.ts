@@ -27,8 +27,8 @@ import {AvatarModule} from 'primeng/avatar';
     ContractTypeComponent,
     DateTimelapseComponent,
     JobFilterComponent,
-    CompanyFilterComponent,
     BaseWithPaginationComponent,
+    CompanyFilterComponent
   ],
   exports: [
     HeaderComponent,

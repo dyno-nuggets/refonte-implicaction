@@ -1,3 +1,3 @@
 export interface CompanyCriteriaFilter {
-  name?: string;
+  keyword?: string;
 }

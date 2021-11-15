@@ -10,8 +10,18 @@ export enum CompanySortEnumCode {
  * Représente les différents paramètres de tri des jobs
  */
 export class CompanySortEnum extends EnumCodeLabelAbstract<CompanySortEnumCode> {
-  static readonly NAME_DESC = new CompanySortEnum(CompanySortEnumCode.NAME_DESC, 'Trier par ordre décroissant de l\'alphabet', 'name', SortDirectionEnum.DESC);
-  static readonly NAME_ASC = new CompanySortEnum(CompanySortEnumCode.NAME_ASC, 'Trier par ordre alphabétique ', 'name', SortDirectionEnum.ASC);
+  static readonly NAME_DESC = new CompanySortEnum(
+    CompanySortEnumCode.NAME_DESC,
+    'Trier par ordre décroissant de l\'alphabet',
+    'name',
+    SortDirectionEnum.DESC
+  );
+  static readonly NAME_ASC = new CompanySortEnum(
+    CompanySortEnumCode.NAME_ASC,
+    'Trier par ordre alphabétique ',
+    'name',
+    SortDirectionEnum.ASC
+  );
 
   /**
    * @param code code associé à la constante de tri
@@ -23,7 +33,8 @@ export class CompanySortEnum extends EnumCodeLabelAbstract<CompanySortEnumCode> 
     readonly code: CompanySortEnumCode,
     readonly label: string,
     readonly sortBy: string,
-    readonly sortDirection: SortDirectionEnum) {
+    readonly sortDirection: SortDirectionEnum
+  ) {
     super(code, label);
   }
 

@@ -22,7 +22,7 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     private final EntityManager entityManager;
 
     @Override
-    public Page<Company> findAllWithCriteria(Pageable pageable, String name) {
+    public Page<Company> findAllWithCriteria(Pageable pageable, String keyword) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Company> query = criteriaBuilder.createQuery(Company.class);
         Root<Company> queryRoot = query.from(Company.class);
@@ -34,10 +34,10 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
         }
 
         // recherche par mot clé dans le nom et description
-        if (StringUtils.isNotEmpty(name)) {
-            name = "%" + name + "%";
-            Predicate namePredicate = criteriaBuilder.like(queryRoot.get("name"), name);
-            Predicate descriptionPredicate = criteriaBuilder.like(queryRoot.get("description"), name);
+        if (StringUtils.isNotEmpty(keyword)) {
+            keyword = "%" + keyword + "%";
+            Predicate namePredicate = criteriaBuilder.like(queryRoot.get("name"), keyword);
+            Predicate descriptionPredicate = criteriaBuilder.like(queryRoot.get("description"), keyword);
             predicates.add(criteriaBuilder.or(namePredicate, descriptionPredicate));
         }
 

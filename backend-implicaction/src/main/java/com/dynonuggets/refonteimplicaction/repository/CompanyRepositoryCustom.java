@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 public interface CompanyRepositoryCustom {
     /**
      * @param pageable l'objet de pagination
-     * @param name     la chaîne de caractère à rechercher dans les champs name, description
+     * @param keyword  la chaîne de caractère à rechercher dans les champs keyword, description
      * @return la liste de résultats paginée des Company correspondant aux critères
      */
-    Page<Company> findAllWithCriteria(final Pageable pageable, final String name);
+    Page<Company> findAllWithCriteria(final Pageable pageable, final String keyword);
 
 }

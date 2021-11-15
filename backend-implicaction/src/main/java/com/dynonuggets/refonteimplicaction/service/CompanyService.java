@@ -25,8 +25,8 @@ public class CompanyService {
                 .map(companyAdapter::toDto);
     }
 
-    public Page<CompanyDto> findAllWithCriteria(Pageable pageable, String name) {
-        return companyRepository.findAllWithCriteria(pageable, name)
+    public Page<CompanyDto> findAllWithCriteria(Pageable pageable, String keyword) {
+        return companyRepository.findAllWithCriteria(pageable, keyword)
                 .map(companyAdapter::toDto);
     }
 

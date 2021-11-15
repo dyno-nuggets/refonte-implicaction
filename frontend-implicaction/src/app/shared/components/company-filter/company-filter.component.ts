@@ -20,8 +20,8 @@ export class CompanyFilterComponent implements OnInit {
       .subscribe(criteria => this.criteria = criteria);
   }
 
-  onNameChange(name: string): void {
-    this.criteria.name = name;
+  onKeywordChange(keyword: string): void {
+    this.criteria.keyword = keyword;
     this.filterContextService.setFilter(this.criteria);
   }
 }

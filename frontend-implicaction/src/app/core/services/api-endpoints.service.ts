@@ -71,6 +71,17 @@ export class ApiEndpointsService {
       });
   }
 
+  private concatCriterias(criteria: CompanyCriteriaFilter, pageable: Pageable<any>) {
+    const objectParam = {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder
+    };
+    return objectParam;
+  }
+
   /**
    * Auth
    */
@@ -233,18 +244,12 @@ export class ApiEndpointsService {
    */
   getAllCompanyByCriteriaEndpoint(pageable: Pageable, criteria: CompanyCriteriaFilter): string {
     // on merge les filtres et les attributs de pagination
-    const objectParam = {
-      ...criteria,
-      rows: pageable.rows,
-      page: pageable.page,
-      sortBy: pageable.sortBy,
-      sortOrder: pageable.sortOrder
-    };
+    const objectParam = this.concatCriterias(criteria, pageable);
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.COMPANIES.BASE_URI,
-      (qs: QueryStringParameters) => {
-        this.buildQueryStringFromFilters(objectParam, qs);
-      });
+      (qs: QueryStringParameters) =>
+        this.buildQueryStringFromFilters(objectParam, qs)
+    );
   }
 
   getAllCompanyEndpoint(pageable: Pageable): string {

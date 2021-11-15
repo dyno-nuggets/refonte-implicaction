@@ -15,6 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -37,8 +38,9 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
     @BeforeEach
     protected void setUp() {
         companyDtos = Arrays.asList(
-                CompanyDto.builder().id(1L).description("description").name("Idemia").logo("logo").url("url").build(),
-                CompanyDto.builder().id(2L).description("description2").name("SG").logo("logo2").url("url2").build());
+                CompanyDto.builder().id(1L).description("Société").name("Idemia").logo("logo").url("url").build(),
+                CompanyDto.builder().id(2L).description("description2").name("Société générale").logo("logo2").url("url2").build());
+
     }
 
     @WithMockUser
@@ -62,6 +64,36 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".name", is(companyDtos.get(i).getName())))
                     .andExpect(jsonPath(contentPath + ".logo", is(companyDtos.get(i).getLogo())))
                     .andExpect(jsonPath(contentPath + ".url", is(companyDtos.get(i).getUrl())));
+        }
+
+        verify(companyService, times(1)).getAll(any());
+    }
+
+    @WithMockUser
+    @Test
+    void getCompanysListShouldListAllCompaniesByCriteria() throws Exception {
+        //given
+        Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
+
+        //when
+        // test des données de pagination
+        given(companyService.findAllWithCriteria(DEFAULT_PAGEABLE, "société")).willReturn(companyDtoPage);
+        ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
+
+        //then
+        actions.andDo(print())
+                .andExpect(status().isOk());
+
+        // test des propriétés de chaque éléments de la liste reçue
+        for (int i = 0; i < companyDtos.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(companyDtos.get(i).getId()))))
+                    .andExpect(jsonPath(contentPath + ".description", is(companyDtos.get(i).getDescription())))
+                    .andExpect(jsonPath(contentPath + ".name", is(companyDtos.get(i).getName())))
+                    .andExpect(jsonPath(contentPath + ".logo", is(companyDtos.get(i).getLogo())))
+                    .andExpect(jsonPath(contentPath + ".url", is(companyDtos.get(i).getUrl())));
+            assertTrue(companyDtos.get(i).getName().contains("Société") || companyDtos.get(i).getDescription().contains("Société"));
+
         }
 
         verify(companyService, times(1)).getAll(any());

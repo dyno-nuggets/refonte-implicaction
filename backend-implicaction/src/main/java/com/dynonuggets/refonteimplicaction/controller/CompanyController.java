@@ -27,10 +27,10 @@ public class CompanyController {
             @RequestParam(value = "rows", defaultValue = "10") int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
-            @RequestParam(value = "name", defaultValue = "") String name
+            @RequestParam(value = "keyword", defaultValue = "") String keyword
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<CompanyDto> companyDtos = companyService.findAllWithCriteria(pageable, name);
+        Page<CompanyDto> companyDtos = companyService.findAllWithCriteria(pageable, keyword);
         return ResponseEntity.ok(companyDtos);
     }
 

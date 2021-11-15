@@ -97,13 +97,29 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des compagnies')
       );
   }
 
+  onSortChange({value}): void {
+    const selectedOrderField = CompanySortEnum.from(value);
+    this.pageable.sortBy = selectedOrderField.sortBy;
+    this.pageable.sortOrder = selectedOrderField.sortDirection;
+    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
+  }
+
+  onSearchChange(): void {
+    this.filterService.setFilter(this.criteria);
+  }
+
+  /**
+   * méthode qui ajoute les paramètres de l'url dans la variable correspondante
+   * la variable correspond à un critère de recherche ou à la pagination
+   * @private
+   */
   private async getFilterFromQueryParams(): Promise<void> {
     // TODO: voir si y'a un moyen plus élégant avec typeof
-    const filterKeys = ['name'];
+    const filterKeys = ['keyword'];
     const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
     return new Promise(resolve => {
       this.route
