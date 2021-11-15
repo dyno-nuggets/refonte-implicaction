@@ -3,11 +3,12 @@
     <div class="mb-3">
       <label class="form-label text-dark fw-bold" for="nameInput">Rechercher</label>
       <input
+        #keyword
         (keyup.enter)="onKeywordChange(keyword.value)"
         class="form-control"
         id="nameInput"
         placeholder="Nom..."
-        #keyword>
+      >
     </div>
     <div class="mb-3">
       <label class="form-label text-dark fw-bold" for="exampleFormControlInput1">Secteur d'activité</label>

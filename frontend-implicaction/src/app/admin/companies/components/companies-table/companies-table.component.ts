@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Pageable} from '../../../../shared/models/pageable';
 import {finalize, take} from 'rxjs/operators';
 import {Company} from '../../../../shared/models/company';
-import {Constants} from '../../../../config/constants';
 import {CompanyService} from '../../../../company/services/company.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
@@ -22,11 +20,6 @@ import {BaseWithPaginationComponent} from '../../../../shared/components/base-wi
 })
 export class CompaniesTableComponent extends BaseWithPaginationComponent<Company> implements OnInit {
 
-  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
-  loading = true; // indique si les données sont en chargement
-
-  // Pagination
-  pageable: Pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = CompanySortEnum.all();
   criteria: CompanyCriteriaFilter;
   selectedOrder = CompanySortEnum.NAME_ASC;

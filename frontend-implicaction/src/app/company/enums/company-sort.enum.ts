@@ -7,7 +7,7 @@ export enum CompanySortEnumCode {
 }
 
 /**
- * Représente les différents paramètres de tri des jobs
+ * Représente les différents paramètres de tri des compagnies
  */
 export class CompanySortEnum extends EnumCodeLabelAbstract<CompanySortEnumCode> {
   static readonly NAME_DESC = new CompanySortEnum(
