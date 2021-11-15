@@ -23,6 +23,6 @@ public class JobPostingDto {
     private String keywords;
     private ContractTypeDto contractType;
     private Instant createdAt;
-    private boolean isArchive;
+    private boolean archive;
 
 }

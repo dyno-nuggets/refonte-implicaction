@@ -133,12 +133,12 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         // given
         JobPostingDto givenDto = JobPostingDto.builder()
                 .id(1L)
-                .isArchive(false)
+                .archive(false)
                 .build();
 
         JobPostingDto expectedDto = JobPostingDto.builder()
                 .id(1L)
-                .isArchive(true)
+                .archive(true)
                 .build();
 
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto);

@@ -46,10 +46,10 @@ public class JobPosting {
     @ManyToOne
     @JoinColumn(name = "contract_type_id", nullable = false)
     private ContractType contractType;
-    
+
     @Column(name = "created_at")
     private Instant createdAt;
 
     @Column(name = "archive")
-    private boolean isArchive;
+    private boolean archive;
 }
