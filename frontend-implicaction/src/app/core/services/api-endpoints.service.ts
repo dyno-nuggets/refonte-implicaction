@@ -71,7 +71,7 @@ export class ApiEndpointsService {
       });
   }
 
-  private concatCriterias(criteria: CompanyCriteriaFilter, pageable: Pageable<any>) {
+  private concatCriterias(criteria: CompanyCriteriaFilter, pageable: Pageable<any>): any {
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
