@@ -12,6 +12,9 @@
 >
   <ng-template pTemplate="header">
     <tr>
+      <th class="text-center col-1">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <th scope="col">Username</th>
       <th scope="col">Email</th>
       <th scope="col">Registered</th>
@@ -20,6 +23,9 @@
   </ng-template>
   <ng-template let-user pTemplate="body">
     <tr>
+      <td class="text-center col-1">
+        <p-tableCheckbox [value]="user"></p-tableCheckbox>
+      </td>
       <td class="overflow-ellipsis">{{user.username}}</td>
       <td class="overflow-ellipsis">{{user.email}}</td>
       <td class="overflow-ellipsis">{{user.registered | date: 'shortDate'}}</td>
