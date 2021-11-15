@@ -9,6 +9,7 @@ import {JobPostingFormComponent} from './components/job-posting-form/job-posting
 import {ReactiveFormsModule} from '@angular/forms';
 import {FeatherModule} from 'angular-feather';
 import {DropdownModule} from 'primeng/dropdown';
+import {CheckboxModule} from 'primeng/checkbox';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import {DropdownModule} from 'primeng/dropdown';
     EditorModule,
     ReactiveFormsModule,
     FeatherModule,
-    DropdownModule
+    DropdownModule,
+    CheckboxModule
   ]
 })
 export class AdminJobsModule {
