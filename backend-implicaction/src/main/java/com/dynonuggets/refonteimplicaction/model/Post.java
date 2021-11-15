@@ -20,21 +20,27 @@ public class Post {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
     @NotBlank(message = "Post Name cannot be empty or Null")
     private String name;
+
     @Nullable
     private String url;
+
     @Nullable
     @Column(columnDefinition = "TEXT")
     private String description;
+
     private Integer voteCount = 0;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
     @Column(name = "created_at")
     private Instant createdAt;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "subreddit_id", referencedColumnName = "id")
     private Subreddit subreddit;
-
 }

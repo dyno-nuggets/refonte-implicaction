@@ -68,14 +68,23 @@ export class PersonalCardComponent {
 
       reader.onload = () => {
         this.user.imageUrl = reader.result as string;
-        this.userCopie.imageUrl = this.user.imageUrl;
         const formData = new FormData();
         formData.set('file', file, file.filename);
         this.userService
           .updateUserImage(formData)
           .subscribe(
-            user => this.authService.setCurrentUser(user),
-            () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la modification de votre image de profil')
+            user => {
+              this.authService.setCurrentUser(user);
+              // on "valide" le changement d'image en mettant à jour la valeur userCopie.imageUrl de sorte que si on
+              // rollback les modifications de l'utilisateur, l'image soit tjs affichée
+              this.userCopie.imageUrl = this.user.imageUrl;
+            },
+            () => {
+              this.toasterService.error('Oops', 'Une erreur est survenue lors de la modification de votre image de profil');
+              // on on rollback l'image de l'utilisateur
+              this.user.imageUrl = this.userCopie.imageUrl;
+            },
+            () => this.toasterService.success('Succès', 'Votre image de profil a été mise à jour avec succès.')
           );
       };
     }

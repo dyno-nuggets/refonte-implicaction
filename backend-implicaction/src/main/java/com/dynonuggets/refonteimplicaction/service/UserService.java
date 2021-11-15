@@ -12,7 +12,6 @@ import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -117,13 +116,10 @@ public class UserService {
 
     public UserDto updateImageProfile(MultipartFile file) {
         final User currentUser = authService.getCurrentUser();
-        final User user = userRepository.findById(currentUser.getId())
-                .orElseThrow(() -> new UserNotFoundException(String.format(Message.USER_NOT_FOUND_MESSAGE, currentUser.getId())));
-
         final FileModel fileModel = cloudService.uploadImage(file);
         final FileModel fileSave = fileRepository.save(fileModel);
-        user.setImage(fileSave);
-        final User save = userRepository.save(user);
+        currentUser.setImage(fileSave);
+        final User save = userRepository.save(currentUser);
         return userAdapter.toDto(save);
     }
 }

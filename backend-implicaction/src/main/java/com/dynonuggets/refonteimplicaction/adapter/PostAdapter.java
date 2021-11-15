@@ -32,6 +32,8 @@ public class PostAdapter {
         final Subreddit subreddit = post.getSubreddit();
         final String subredditImageUrl = subreddit != null && subreddit.getImage() != null ? subreddit.getImage().getUrl() : null;
         final String subredditName = subreddit != null ? subreddit.getName() : "";
+        final String userImageUrl = post.getUser() != null && post.getUser().getImage() != null ? post.getUser().getImage().getUrl() : null;
+
         return PostResponse.builder()
                 .id(post.getId())
                 .name(post.getName())
@@ -46,6 +48,7 @@ public class PostAdapter {
                 .downVote(isPostDownVoted)
                 .voteCount(post.getVoteCount())
                 .subredditImageUrl(subredditImageUrl)
+                .userImageUrl(userImageUrl)
                 .build();
     }
 

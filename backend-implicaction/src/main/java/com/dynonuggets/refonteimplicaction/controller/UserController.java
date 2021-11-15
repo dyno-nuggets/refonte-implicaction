@@ -98,7 +98,7 @@ public class UserController {
         return ResponseEntity.ok(pendingUsers);
     }
 
-    @PostMapping("/image")
+    @PostMapping(SET_USER_IMAGE)
     public ResponseEntity<UserDto> updateImageProfile(@RequestParam("file") MultipartFile file) {
         final UserDto userDto = userService.updateImageProfile(file);
         return ResponseEntity.ok(userDto);

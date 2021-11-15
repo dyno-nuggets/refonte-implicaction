@@ -40,7 +40,13 @@
             </ng-container>
           </label>
           <br/>
-          <input (change)="onFileChange($event)" id="fileInput" type='file'>
+          <input
+            (change)="onFileChange($event)"
+            *ngIf="isEditing"
+            accept=".jpg, .png, .jpeg"
+            id="fileInput"
+            type="file"
+          >
         </div>
         <div class="card-body text-center w-100">
           <div class="display-6 text-wrap fw-normal card-title overflow-ellipsis mb-5">{{user.firstname}} {{user.lastname}}</div>
@@ -192,3 +198,4 @@
       </div>
     </div>
   </div>
+</div>
