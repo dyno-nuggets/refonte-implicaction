@@ -5,7 +5,6 @@ import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
-import com.dynonuggets.refonteimplicaction.repository.StatusRepository;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,7 +20,6 @@ public class JobPostingService {
 
     private final JobPostingRepository jobPostingRepository;
     private final JobPostingAdapter jobPostingAdapter;
-    private final StatusRepository statusRepository;
 
     public JobPostingDto createJob(JobPostingDto jobPostingDto) {
 
