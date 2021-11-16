@@ -16,14 +16,14 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_JOB_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.JOBS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -125,5 +125,62 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(status().isForbidden());
 
         verify(jobPostingService, times(0)).getJobById(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void archiveJobShouldChangeStatus() throws Exception {
+        // given
+        JobPostingDto givenDto = JobPostingDto.builder()
+                .id(1L)
+                .archive(false)
+                .build();
+
+        JobPostingDto expectedDto = JobPostingDto.builder()
+                .id(1L)
+                .archive(true)
+                .build();
+
+        given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto);
+
+        // when
+        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, givenDto.getId()).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is((givenDto.getId().intValue()))))
+                .andExpect(jsonPath("$.archive", is(!givenDto.isArchive())));
+        verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void archiveJobPostingWhithUnexistingIdShouldThrowException() throws Exception {
+        // given
+        final long jobId = 123L;
+        final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId));
+        given(jobPostingService.toggleArchiveJobPosting(anyLong())).willThrow(exception);
+
+        // when
+        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId));
+
+        // then
+        resultActions.andExpect(status().isNotFound());
+        verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
+    }
+
+    @Test
+    void archiveJobByIdWithoutJwtShouldBeForbidden() throws Exception {
+        // given
+        final long jobId = 123L;
+
+        // when
+        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isForbidden());
+        verify(jobPostingService, never()).toggleArchiveJobPosting(anyLong());
     }
 }

@@ -53,4 +53,14 @@ public class JobPostingService {
                 .orElseThrow(() -> new NotFoundException("Impossible de supprimer l'offre, " + jobPostingId + " n'existe pas."));
         jobPostingRepository.delete(jobPosting);
     }
+
+    @Transactional
+    public JobPostingDto toggleArchiveJobPosting(Long jobPostingId) {
+        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
+                .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobPostingId)));
+        jobPosting.setArchive(jobPosting.isArchive());
+        final JobPosting save = jobPostingRepository.save(jobPosting);
+        return jobPostingAdapter.toDto(save);
+    }
+
 }

@@ -6,6 +6,7 @@ public class ApiUrls {
     public static final String JOBS_BASE_URI = "/api/job-postings";
     public static final String GET_JOB_URI = "/{jobId}";
     public static final String DELETE_JOB_URI = "/{jobId}";
+    public static final String ARCHIVE_JOB_URI = "/{jobId}/archive";
 
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";

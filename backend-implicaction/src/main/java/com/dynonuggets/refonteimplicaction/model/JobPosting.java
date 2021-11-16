@@ -47,10 +47,9 @@ public class JobPosting {
     @JoinColumn(name = "contract_type_id", nullable = false)
     private ContractType contractType;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
-
     @Column(name = "created_at")
     private Instant createdAt;
+
+    @Column(name = "archive")
+    private boolean archive;
 }
