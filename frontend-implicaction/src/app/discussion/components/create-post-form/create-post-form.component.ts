@@ -25,6 +25,7 @@ export class CreatePostFormComponent extends SidebarContentComponent implements 
   groups: Group[];
   currentUser: User = {};
   selectedGroup: Group;
+  constant = Constants;
 
   constructor(
     private router: Router,

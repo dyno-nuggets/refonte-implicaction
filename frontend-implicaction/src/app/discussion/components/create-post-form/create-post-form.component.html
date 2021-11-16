@@ -2,7 +2,7 @@
   <div class="row mb-3 d-flex">
     <div class="col-md-6 d-flex align-items-center">
       <p-avatar
-        image="assets/img/default-user.png"
+        [image]="currentUser.imageUrl || constant.USER_DEFAULT_IMAGE_SRC"
         shape="circle"
         size="xlarge"
         styleClass="me-2"
