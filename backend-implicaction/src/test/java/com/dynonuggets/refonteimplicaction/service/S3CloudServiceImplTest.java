@@ -5,10 +5,15 @@ import com.amazonaws.auth.AnonymousAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.repository.FileRepository;
+import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import io.findify.s3mock.S3Mock;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.io.IOException;
@@ -19,6 +24,7 @@ import static com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguratio
 import static java.net.HttpURLConnection.HTTP_OK;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class S3CloudServiceImplTest {
 
     static final String S3_ENDPOINT = "http://localhost:8001";
@@ -28,6 +34,9 @@ class S3CloudServiceImplTest {
     AmazonS3Client client;
     S3Mock api;
     CloudService cloudService;
+
+    @Mock
+    private FileRepository fileRepository;
 
     @BeforeEach
     void setUp() {
@@ -43,7 +52,7 @@ class S3CloudServiceImplTest {
 
         client.createBucket("refonte-implicaction");
 
-        cloudService = new S3CloudServiceImpl(client);
+        cloudService = new S3CloudServiceImpl(client, fileRepository);
     }
 
     @Test
@@ -58,7 +67,6 @@ class S3CloudServiceImplTest {
         FileModel expectedFile = FileModel.builder()
                 .filename("test.txt")
                 .contentType("text/plain")
-
                 .build();
 
         // when
@@ -67,7 +75,7 @@ class S3CloudServiceImplTest {
         // then
 
         assertThat(actualFile).usingRecursiveComparison()
-                .ignoringFields("url")
+                .ignoringFields("url", "objectKey")
                 .isEqualTo(expectedFile);
 
         assertThat(actualFile.getUrl()).startsWith(S3_ENDPOINT + "/" + BUCKET_NAME);

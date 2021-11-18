@@ -171,7 +171,7 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.TRAINING.BASE_URI, [trainingId]);
   }
 
-  updatePersonalInfoByUserIdEndpoint(): string {
+  updateUserEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.USERS.BASE_URI);
   }
 

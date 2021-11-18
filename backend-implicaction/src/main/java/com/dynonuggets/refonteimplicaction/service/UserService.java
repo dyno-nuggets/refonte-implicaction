@@ -114,6 +114,7 @@ public class UserService {
         return RelationTypeEnum.NONE;
     }
 
+    @Transactional
     public UserDto updateImageProfile(MultipartFile file) {
         final User currentUser = authService.getCurrentUser();
         final FileModel fileModel = cloudService.uploadImage(file);

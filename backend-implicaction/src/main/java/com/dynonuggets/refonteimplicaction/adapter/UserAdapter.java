@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ public class UserAdapter {
     private final WorkExperienceAdapter experienceAdapter;
     private final TrainingAdapter trainingAdapter;
     private final CompanyAdapter companyAdapter;
+    private final FileService fileService;
 
     public UserDto toDto(JobSeeker jobSeeker) {
         final User model = jobSeeker.getUser();
@@ -59,7 +61,8 @@ public class UserAdapter {
 
         final List<String> roles = rolesToDtos(model);
 
-        final String imageUrl = model.getImage() != null ? model.getImage().getUrl() : null;
+        final String imageUrl = getImageUrl(model);
+
         return UserDto.builder()
                 .id(model.getId())
                 .username(model.getUsername())
@@ -81,6 +84,10 @@ public class UserAdapter {
                 .roles(roles)
                 .imageUrl(imageUrl)
                 .build();
+    }
+
+    private String getImageUrl(User model) {
+        return model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : null;
     }
 
     public User toModel(UserDto dto) {
@@ -118,7 +125,8 @@ public class UserAdapter {
     public UserDto toDtoLight(User model) {
         final List<String> roles = rolesToDtos(model);
 
-        final String imageUrl = model.getImage() != null ? model.getImage().getUrl() : null;
+        final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : null;
+
         return UserDto.builder()
                 .id(model.getId())
                 .username(model.getUsername())

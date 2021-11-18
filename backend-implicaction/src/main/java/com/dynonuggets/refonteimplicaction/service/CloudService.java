@@ -10,4 +10,6 @@ public interface CloudService {
     FileModel uploadFile(MultipartFile file) throws IOException;
 
     FileModel uploadImage(MultipartFile file);
+
+    byte[] getFileAsBytes(String objectKey) throws IOException;
 }

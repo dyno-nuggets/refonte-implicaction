@@ -2,8 +2,15 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.service.FileService;
+import com.dynonuggets.refonteimplicaction.utils.ApiUrls;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -12,9 +19,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class UserAdapterTest {
 
     User userRecruiter;
@@ -28,10 +39,24 @@ class UserAdapterTest {
     List<WorkExperience> experiences;
     List<Training> trainings;
     List<Role> seekerRoles;
+
+    @InjectMocks
     UserAdapter userAdapter;
+
+    @Mock
     WorkExperienceAdapter workExperienceAdapter;
+
+    @Mock
     TrainingAdapter trainingAdapter;
+
+    @Mock
     CompanyAdapter companyAdapter;
+
+    @Mock
+    FileService fileService;
+
+    @Value("${app.url}")
+    String appUrl;
 
     private void initRecruiter() {
         recruiterRoles = Stream.of(RoleEnum.USER, RoleEnum.RECRUITER)
@@ -123,15 +148,10 @@ class UserAdapterTest {
     public void setUp() {
         initRecruiter();
         initSeeker();
-
-        trainingAdapter = new TrainingAdapter();
-        workExperienceAdapter = new WorkExperienceAdapter();
-        userAdapter = new UserAdapter(workExperienceAdapter, trainingAdapter, new CompanyAdapter());
-        companyAdapter = new CompanyAdapter();
     }
 
     @Test
-    void toDtoTest() {
+    void toDtoTestWillNullImage() {
         final UserDto userDto = userAdapter.toDto(userRecruiter);
 
         assertThat(userDto.getId()).isEqualTo(userRecruiter.getId());
@@ -141,6 +161,24 @@ class UserAdapterTest {
         assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
         assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
         assertThat(userDto.getBirthday()).isEqualTo(userRecruiter.getBirthday());
+    }
+
+    @Test
+    void toDtoTestWillImage() {
+        // given
+        FileModel image = FileModel.builder().objectKey("azertyKey").build();
+        User user = User.builder().image(image).build();
+        final UserDto expectedDto = UserDto.builder()
+                .roles(emptyList())
+                .imageUrl(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()))
+                .build();
+        given(fileService.buildFileUri(anyString())).willReturn(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()));
+
+        // when
+        final UserDto userDto = userAdapter.toDto(user);
+
+        // then
+        assertThat(userDto).usingRecursiveComparison().isEqualTo(expectedDto);
     }
 
     @Test
@@ -210,7 +248,7 @@ class UserAdapterTest {
     }
 
     @Test
-    void toDtoLightTest() {
+    void toDtoLightWithNullImageTest() {
         UserDto expectedDto = UserDto.builder()
                 .id(userSeeker.getId())
                 .username(userSeeker.getUsername())
@@ -218,6 +256,28 @@ class UserAdapterTest {
                 .build();
         UserDto actualDto = userAdapter.toDtoLight(userSeeker);
 
+        assertThat(actualDto).usingRecursiveComparison()
+                .isEqualTo(expectedDto);
+    }
+
+    @Test
+    void toDtoLightWithImageTest() {
+        // given
+        FileModel image = FileModel.builder().objectKey("azertyKey").build();
+        User user = User.builder()
+                .image(image)
+                .build();
+        UserDto expectedDto = UserDto.builder()
+                .roles(emptyList())
+                .imageUrl(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()))
+                .build();
+
+        given(fileService.buildFileUri(anyString())).willReturn(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()));
+
+        // when
+        UserDto actualDto = userAdapter.toDtoLight(user);
+
+        // then
         assertThat(actualDto).usingRecursiveComparison()
                 .isEqualTo(expectedDto);
     }

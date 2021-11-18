@@ -24,7 +24,11 @@ public class Message {
     // File messages
     public static final String UNKNOWN_FILE_UPLOAD_MESSAGE = "Exception occured while uploading the file [%s]";
     public static final String FILE_SIZE_TOO_LARGE_MESSAGE = "Exception occured while uploading the file [%s] : maximum size (%d) exceeded";
-    public static final String UNAUTHORIZED_CONTENT_TYPE = "Exception occured while uploading the file [%s] : unauthorized content type";
+    public static final String UNAUTHORIZED_CONTENT_TYPE_MESSAGE = "Exception occured while uploading the file [%s] : unauthorized content type";
+    public static final String FILE_NOT_FOUND_MESSAGE = "No file found with id [%s]";
+
+    public static final String BAD_CREDENTIAL_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect.";
+    public static final String USER_DISABLED_MESSAGE = "Votre compte n'a pas encore été activé.";
 
     private Message() {
         // Empeche la création d'une instance de la classe Message

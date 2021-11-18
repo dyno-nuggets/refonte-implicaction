@@ -15,13 +15,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.time.LocalDateTime;
 
+import static com.dynonuggets.refonteimplicaction.utils.Message.BAD_CREDENTIAL_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.USER_DISABLED_MESSAGE;
 import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String BAD_CREDENTIAL_MSG = "Nom d'utilisateur ou mot de passe incorrect.";
-    private static final String USER_DISABLED_MSG = "Votre compte n'a pas encore été activé.";
 
     @ExceptionHandler(value = {UnauthorizedException.class, AuthenticationException.class})
     public ResponseEntity<ExceptionResponse> unauthorizedException(Exception ex) {
@@ -35,12 +35,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> badCredentialsException() {
-        return generateResponse(BAD_CREDENTIAL_MSG, UNAUTHORIZED);
+        return generateResponse(BAD_CREDENTIAL_MESSAGE, UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = DisabledException.class)
     public ResponseEntity<ExceptionResponse> disabledException() {
-        return generateResponse(USER_DISABLED_MSG, UNAUTHORIZED);
+        return generateResponse(USER_DISABLED_MESSAGE, UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)

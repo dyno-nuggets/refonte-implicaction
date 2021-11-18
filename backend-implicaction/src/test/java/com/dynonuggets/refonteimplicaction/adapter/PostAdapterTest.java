@@ -6,7 +6,12 @@ import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 
@@ -14,9 +19,14 @@ import static java.time.Instant.now;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class PostAdapterTest {
 
-    PostAdapter postAdapter = new PostAdapter();
+    @Mock
+    FileService fileService;
+
+    @InjectMocks
+    PostAdapter postAdapter;
 
     @Test
     void toPost() {
@@ -34,6 +44,33 @@ class PostAdapterTest {
                 // la date de création n'est pas testable car celle de expected est créée avant celle de actual
                 .ignoringFieldsOfTypes(Instant.class)
                 .isEqualTo(expected);
+    }
+
+    @Test
+    void should_return_post_with_no_subreddit_and_poster_has_no_image() {
+        User currentUser = User.builder().id(123L).username("test user").build();
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), null);
+        final int expectedCommentCount = 10;
+
+        // when
+        final PostResponse postResponse = postAdapter.toPostResponse(expected, expectedCommentCount, true, false);
+
+        // then
+        assertThat(postResponse.getSubredditName()).isEmpty();
+    }
+
+    @Test
+    void should_return_post_with_subreddit_image_null() {
+        User currentUser = User.builder().id(123L).username("test user").build();
+        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null);
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), subreddit);
+        final int expectedCommentCount = 10;
+
+        // when
+        final PostResponse postResponse = postAdapter.toPostResponse(expected, expectedCommentCount, true, false);
+
+        // then
+        assertThat(postResponse.getSubredditImageUrl()).isNull();
     }
 
     @Test
@@ -57,7 +94,6 @@ class PostAdapterTest {
         assertThat(postResponse.getCommentCount()).isEqualTo(expectedCommentCount);
         assertThat(postResponse.getVoteCount()).isEqualTo(expected.getVoteCount());
         assertThat(postResponse.getSubredditImageUrl()).isEqualTo(expected.getSubreddit().getImage().getUrl());
-        assertThat(postResponse.getUserImageUrl()).isEqualTo(expected.getUser().getImage().getUrl());
         assertThat(postResponse.isDownVote()).isFalse();
         assertThat(postResponse.isUpVote()).isTrue();
     }

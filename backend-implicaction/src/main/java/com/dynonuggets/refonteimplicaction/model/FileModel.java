@@ -22,4 +22,6 @@ public class FileModel {
 
     @Column(name = "content_type")
     private String contentType;
+
+    private String objectKey;
 }

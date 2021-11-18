@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.service.FileService;
 import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,13 +16,15 @@ import java.time.Instant;
 @AllArgsConstructor
 public class PostAdapter {
 
+    private FileService fileService;
+
     public Post toPost(PostRequest postRequest, Subreddit subreddit, User currentUser) {
         return Post.builder()
                 .id(postRequest.getId())
                 .name(postRequest.getName())
                 .url(postRequest.getUrl())
                 .description(postRequest.getDescription())
-                .voteCount(0)
+                .voteCount(0) // 0 car cette méthode n'est utilisée que lors de la création d'un post
                 .user(currentUser)
                 .createdAt(Instant.now())
                 .subreddit(subreddit)
@@ -32,7 +35,7 @@ public class PostAdapter {
         final Subreddit subreddit = post.getSubreddit();
         final String subredditImageUrl = subreddit != null && subreddit.getImage() != null ? subreddit.getImage().getUrl() : null;
         final String subredditName = subreddit != null ? subreddit.getName() : "";
-        final String userImageUrl = post.getUser() != null && post.getUser().getImage() != null ? post.getUser().getImage().getUrl() : null;
+        final String userImageKey = post.getUser().getImage() != null ? fileService.buildFileUri(post.getUser().getImage().getObjectKey()) : null;
 
         return PostResponse.builder()
                 .id(post.getId())
@@ -48,7 +51,7 @@ public class PostAdapter {
                 .downVote(isPostDownVoted)
                 .voteCount(post.getVoteCount())
                 .subredditImageUrl(subredditImageUrl)
-                .userImageUrl(userImageUrl)
+                .userImageUrl(userImageKey)
                 .build();
     }
 

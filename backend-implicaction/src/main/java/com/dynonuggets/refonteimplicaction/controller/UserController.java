@@ -16,7 +16,7 @@ import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/users")
+@RequestMapping(USER_BASE_URI)
 public class UserController {
 
     private final UserService userService;

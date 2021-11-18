@@ -5,6 +5,8 @@ import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.model.WorkExperience;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,9 +17,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WorkExperienceAdapterTest {
     User user;
     List<WorkExperience> experiences;
-    UserAdapter userAdapter;
+
+    @Mock
     WorkExperienceAdapter workExperienceAdapter;
+
+    @Mock
     WorkExperience experience;
+
+    @Mock
+    TrainingAdapter trainingAdapter;
+
+    @Mock
+    CompanyAdapter companyAdapter;
+
+    @InjectMocks
+    UserAdapter userAdapter;
+
+    @InjectMocks
     RelationAdapter relationAdapter;
 
     @BeforeEach
@@ -28,8 +44,6 @@ class WorkExperienceAdapterTest {
         experience.setUser(user);
 
         workExperienceAdapter = new WorkExperienceAdapter();
-        userAdapter = new UserAdapter(workExperienceAdapter, new TrainingAdapter(), new CompanyAdapter());
-        relationAdapter = new RelationAdapter(userAdapter);
     }
 
     @Test
