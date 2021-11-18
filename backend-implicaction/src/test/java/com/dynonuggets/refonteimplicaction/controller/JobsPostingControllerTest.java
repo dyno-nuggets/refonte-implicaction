@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
+import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -152,6 +153,43 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.id", is((givenDto.getId().intValue()))))
                 .andExpect(jsonPath("$.archive", is(!givenDto.isArchive())));
         verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
+    }
+
+    @Test
+    @WithMockUser
+    void archiveJobShouldChangeListStatus() throws Exception {
+        // given
+        List<JobPostingDto> givenDto = Arrays.asList(
+                JobPostingDto.builder()
+                        .id(1L)
+                        .archive(false)
+                        .build()
+        );
+
+        List<JobPostingDto> expectedDto = Arrays.asList(
+                JobPostingDto.builder()
+                        .id(1L)
+                        .archive(true)
+                        .build()
+        );
+        Gson gson = new Gson();
+        String json = gson.toJson(givenDto);
+
+        given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto.get(0));
+
+        // when
+        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+        for (int i = 0; i < givenDto.size(); i++) {
+            final String contentPath = String.format("$[%d]", i);
+            resultActions
+                    .andExpect(jsonPath(contentPath + ".id", is((givenDto.get(i).getId().intValue()))))
+                    .andExpect(jsonPath(contentPath + ".archive", is(!givenDto.get(i).isArchive())));
+            verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
+        }
     }
 
     @Test
