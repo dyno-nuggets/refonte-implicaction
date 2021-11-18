@@ -11,15 +11,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.COMPANIES_BASE_URI;
+
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/companies")
+@RequestMapping(COMPANIES_BASE_URI)
 public class CompanyController {
 
 
     private final CompanyService companyService;
 
-    @GetMapping
+    @RequestMapping(method = {RequestMethod.GET})
     public ResponseEntity<Page<CompanyDto>> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
@@ -31,14 +33,8 @@ public class CompanyController {
         return ResponseEntity.ok(companyDtos);
     }
 
-    @PostMapping
-    public ResponseEntity<CompanyDto> create(@RequestBody CompanyDto companyDto) throws ImplicactionException {
-        CompanyDto companyCreated = companyService.saveOrUpdateCompany(companyDto);
-        return ResponseEntity.ok(companyCreated);
-    }
-
-    @PutMapping
-    public ResponseEntity<CompanyDto> update(@RequestBody CompanyDto companyDto) throws ImplicactionException {
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
+    public ResponseEntity<CompanyDto> createOrUpdate(@RequestBody CompanyDto companyDto) throws ImplicactionException {
         CompanyDto companyCreated = companyService.saveOrUpdateCompany(companyDto);
         return ResponseEntity.ok(companyCreated);
     }
