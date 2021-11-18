@@ -34,6 +34,10 @@ public class ApiUrls {
     public static final String GET_COMMUNITY_URI = "/community";
     public static final String SET_USER_IMAGE = "/image";
 
+    // FILES
+    public static final String FILE_BASE_URI = "/api/files";
+    public static final String GET_FILE_BY_KEY = "/{objectKey}";
+
     private ApiUrls() {
         // empêche la construction d'un objet ApiUrls
     }

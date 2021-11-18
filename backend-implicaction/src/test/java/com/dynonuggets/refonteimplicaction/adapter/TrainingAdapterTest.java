@@ -17,12 +17,13 @@ class TrainingAdapterTest {
     User user;
     List<WorkExperience> experiences;
     List<Training> trainings;
-    UserAdapter userAdapter;
-    WorkExperienceAdapter workExperienceAdapter;
-    TrainingAdapter trainingAdapter;
+
+    TrainingAdapter trainingAdapter = new TrainingAdapter();
+
     WorkExperience experience;
+
+
     Training training;
-    RelationAdapter relationAdapter;
 
     @BeforeEach
     public void setUp() {
@@ -42,11 +43,6 @@ class TrainingAdapterTest {
                 .phoneNumber("0000000")
                 .birthday(LocalDate.now())
                 .build();
-
-        trainingAdapter = new TrainingAdapter();
-        workExperienceAdapter = new WorkExperienceAdapter();
-        userAdapter = new UserAdapter(new WorkExperienceAdapter(), trainingAdapter, new CompanyAdapter());
-        relationAdapter = new RelationAdapter(userAdapter);
     }
 
     @Test

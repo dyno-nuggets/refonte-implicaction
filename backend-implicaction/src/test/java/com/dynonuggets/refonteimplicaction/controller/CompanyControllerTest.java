@@ -17,8 +17,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -73,6 +72,6 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
         mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON)).andDo(print())
                 .andExpect(status().isForbidden());
 
-        verify(companyService, times(0)).getAll(any());
+        verify(companyService, never()).getAll(any());
     }
 }

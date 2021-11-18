@@ -5,23 +5,38 @@ import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@ExtendWith(MockitoExtension.class)
 class RelationAdapterTest {
 
-    RelationAdapter relationAdapter;
+    @Mock
+    WorkExperienceAdapter workExperienceAdapter;
+
+    @Mock
+    TrainingAdapter trainingAdapter;
+
+    @Mock
+    CompanyAdapter companyAdapter;
+
+    @InjectMocks
     UserAdapter userAdapter;
+
+    RelationAdapter relationAdapter;
+
     User receiver;
     User sender;
     Relation relation;
 
     @BeforeEach
     public void setUp() {
-        userAdapter = new UserAdapter(new WorkExperienceAdapter(), new TrainingAdapter(), new CompanyAdapter());
-        relationAdapter = new RelationAdapter(userAdapter);
         receiver = User.builder()
                 .username("user1")
                 .build();
@@ -33,6 +48,8 @@ class RelationAdapterTest {
                 .sender(sender)
                 .confirmedAt(Instant.now())
                 .build();
+
+        relationAdapter = new RelationAdapter(userAdapter);
     }
 
     @Test

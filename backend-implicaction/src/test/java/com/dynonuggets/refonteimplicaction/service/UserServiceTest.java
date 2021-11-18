@@ -10,6 +10,7 @@ import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -29,11 +31,18 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
+
+    JobSeeker jobSeeker;
+    UserDto expectedUserDto;
+    User userSeeker;
 
     @Mock
     TrainingAdapter trainingAdapter;
@@ -41,41 +50,34 @@ class UserServiceTest {
     @Mock
     WorkExperienceAdapter experienceAdapter;
 
-    private JobSeeker jobSeeker;
-    private UserDto expectedUserDto;
-    private User userSeeker;
-    private List<Role> seekerRoles;
-    private List<WorkExperience> experiences;
-    private List<Training> trainings;
+    @Mock
+    UserRepository userRepository;
 
     @Mock
-    private UserRepository userRepository;
+    RelationRepository relationRepository;
 
     @Mock
-    private RelationRepository relationRepository;
+    AuthService authService;
 
     @Mock
-    private AuthService authService;
+    UserAdapter userAdapter;
 
     @Mock
-    private UserAdapter userAdapter;
+    JobSeekerRepository jobSeekerRepository;
 
     @Mock
-    private JobSeekerRepository jobSeekerRepository;
+    S3CloudServiceImpl cloudService;
 
     @Mock
-    private S3CloudServiceImpl cloudService;
-
-    @Mock
-    private FileRepository fileRepository;
+    FileRepository fileRepository;
 
     @InjectMocks
-    private UserService userService;
+    UserService userService;
 
     @BeforeEach
     void setMockOutput() {
 
-        seekerRoles = Stream.of(RoleEnum.USER, RoleEnum.JOB_SEEKER)
+        List<Role> seekerRoles = Stream.of(RoleEnum.USER, RoleEnum.JOB_SEEKER)
                 .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.getName(), Collections.emptySet()))
                 .collect(toList());
 
@@ -101,12 +103,12 @@ class UserServiceTest {
                 .roles(seekerRoles)
                 .build();
 
-        experiences = Arrays.asList(
+        List<WorkExperience> experiences = Arrays.asList(
                 WorkExperience.builder().id(1L).startedAt(LocalDate.of(2002, 12, 10)).finishedAt(LocalDate.of(2003, 6, 12)).label("XP1").description("c'était super").companyName("compagnie 1").build(),
                 WorkExperience.builder().id(2L).startedAt(LocalDate.of(2003, 12, 24)).finishedAt(LocalDate.of(2007, 6, 14)).label("XP2").description("c'était cool").companyName("compagnie 2").build()
         );
 
-        trainings = Arrays.asList(
+        List<Training> trainings = Arrays.asList(
                 Training.builder().id(1L).label("Formation 1").date(LocalDate.of(2001, 10, 10)).school("School1").build(),
                 Training.builder().id(2L).label("Formation 2").date(LocalDate.of(2002, 10, 10)).school("School1").build()
         );
@@ -165,5 +167,32 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.getUserById(notFoundId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage(expectedMessage);
+    }
+
+    @Test
+    void should_update_image_profile() {
+        // given
+        User currentUser = User.builder().id(123L).build();
+        FileModel fileModel = FileModel.builder().objectKey("blabla").build();
+        FileModel fileModel2 = FileModel.builder().id(4L).objectKey(fileModel.getObjectKey()).build();
+        User currentUserAfterImageUpdate = User.builder().id(123L).image(fileModel2).build();
+        UserDto userDto = UserDto.builder().id(123L).imageUrl("http://file.url/" + fileModel2.getObjectKey()).build();
+        MockMultipartFile mockMultipartFile = new MockMultipartFile(
+                "user-file",
+                "test.png",
+                IMAGE_PNG_VALUE,
+                "test data".getBytes()
+        );
+        given(authService.getCurrentUser()).willReturn(currentUser);
+        given(cloudService.uploadImage(any())).willReturn(fileModel);
+        given(fileRepository.save(any())).willReturn(fileModel2);
+        given(userRepository.save(any())).willReturn(currentUserAfterImageUpdate);
+        given(userAdapter.toDto(any(User.class))).willReturn(userDto);
+
+        // when
+        final UserDto actualUser = userService.updateImageProfile(mockMultipartFile);
+
+        // then
+        assertThat(actualUser.getImageUrl()).isEqualTo(userDto.getImageUrl());
     }
 }

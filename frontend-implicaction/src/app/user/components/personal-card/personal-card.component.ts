@@ -50,7 +50,7 @@ export class PersonalCardComponent {
 
   updatePersonalInfo(): void {
     this.userService
-      .updatePersonalInfo(this.user)
+      .updateUser(this.user)
       .pipe(finalize(() => this.isEditing = false))
       .subscribe(
         user => this.user = user,

@@ -4,16 +4,28 @@ import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Subreddit;
+import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
+@ExtendWith(MockitoExtension.class)
 class SubredditAdapterTest {
 
-    SubredditAdapter subredditAdapter = new SubredditAdapter();
+    @Mock
+    FileService fileService;
+
+    @InjectMocks
+    SubredditAdapter subredditAdapter;
 
     @Test
     void should_map_to_model() {
@@ -63,9 +75,13 @@ class SubredditAdapterTest {
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
-                .image(FileModel.builder().url("http://url.com").build())
+                .image(FileModel.builder().url("http://url.com").objectKey("blablabla").build())
                 .createdAt(Instant.now())
                 .build();
+
+        String expectedUrl = "http://url/objectKey";
+
+        given(fileService.buildFileUri(anyString())).willReturn(expectedUrl);
 
         // when
         final SubredditDto actualDto = subredditAdapter.toDto(expectedModel);
@@ -76,6 +92,6 @@ class SubredditAdapterTest {
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isZero();
-        assertThat(actualDto.getImageUrl()).isEqualTo(expectedModel.getImage().getUrl());
+        assertThat(actualDto.getImageUrl()).contains(expectedUrl);
     }
 }

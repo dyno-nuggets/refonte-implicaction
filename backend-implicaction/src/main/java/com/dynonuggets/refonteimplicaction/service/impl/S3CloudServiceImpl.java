@@ -1,17 +1,25 @@
-package com.dynonuggets.refonteimplicaction.service;
+package com.dynonuggets.refonteimplicaction.service.impl;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.util.IOUtils;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.repository.FileRepository;
+import com.dynonuggets.refonteimplicaction.service.CloudService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,6 +35,7 @@ public class S3CloudServiceImpl implements CloudService {
     private static final String BUCKET_NAME = "refonte-implicaction";
     private static final List<String> IMAGE_CONTENT_TYPES = asList("image/jpeg", "image/png");
     private final AmazonS3Client client;
+    private final FileRepository fileRepository;
 
     @Override
     public FileModel uploadFile(MultipartFile file) {
@@ -50,6 +59,7 @@ public class S3CloudServiceImpl implements CloudService {
                     .filename(file.getOriginalFilename())
                     .contentType(contentType)
                     .url(client.getResourceUrl(BUCKET_NAME, key))
+                    .objectKey(key)
                     .build();
         } catch (IOException exception) {
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, String.format(UNKNOWN_FILE_UPLOAD_MESSAGE, originalFilename));
@@ -62,9 +72,19 @@ public class S3CloudServiceImpl implements CloudService {
             throw new ImplicactionException(String.format(FILE_SIZE_TOO_LARGE_MESSAGE, file.getOriginalFilename(), MAX_IMAGE_SIZE_IN_BIT));
         }
         if (!IMAGE_CONTENT_TYPES.contains(file.getContentType())) {
-            throw new ImplicactionException(String.format(UNAUTHORIZED_CONTENT_TYPE, file.getOriginalFilename()));
+            throw new ImplicactionException(String.format(UNAUTHORIZED_CONTENT_TYPE_MESSAGE, file.getOriginalFilename()));
         }
         return uploadFile(file);
+    }
+
+    @Override
+    public byte[] getFileAsBytes(String objectKey) throws IOException {
+        final FileModel fileModel = fileRepository.findByObjectKey(objectKey)
+                .orElseThrow(() -> new NotFoundException(String.format(FILE_NOT_FOUND_MESSAGE, objectKey)));
+
+        final S3Object fileObject = client.getObject(new GetObjectRequest(BUCKET_NAME, fileModel.getObjectKey()));
+        InputStream in = new BufferedInputStream(fileObject.getObjectContent());
+        return IOUtils.toByteArray(in);
     }
 
 }
