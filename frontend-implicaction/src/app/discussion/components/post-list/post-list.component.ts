@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Post} from '../../model/post';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination-component/base-with-pagination.component';
+import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {PostService} from '../../services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';

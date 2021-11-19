@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {finalize} from 'rxjs/operators';
 import {Comment} from '../../model/comment';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination-component/base-with-pagination.component';
+import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {CommentPayload} from '../../model/comment-payload';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CommentService} from '../../services/comment.service';

@@ -11,7 +11,7 @@
   </div>
 </div>
 <p-table
-  (onLazyLoad)="loadCompanies($event)"
+  (onLazyLoad)="paginate($event)"
   [lazy]="true"
   [loading]="loading"
   [paginator]="true"
