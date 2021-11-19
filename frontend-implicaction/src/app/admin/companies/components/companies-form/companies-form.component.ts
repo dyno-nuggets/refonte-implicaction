@@ -8,6 +8,7 @@ import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
 import {CompanyService} from '../../../../company/services/company.service';
+import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 
 @Component({
   selector: 'app-companies-form',
@@ -28,6 +29,7 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
     private companyService: CompanyService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
+    private companyContextService: CompanyContextServiceService
   ) {
     super();
   }
@@ -53,9 +55,11 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
       company$ = this.companyService.createCompany(company);
     }
     company$.subscribe(
-      (companyUpdate) => {
+      companySave => {
         if (this.isUpdate) {
-          this.updateFields(companyUpdate);
+          this.updateFields(companySave);
+        } else {
+          this.companyContextService.notify(companySave);
         }
       },
       () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre entreprise.`),
