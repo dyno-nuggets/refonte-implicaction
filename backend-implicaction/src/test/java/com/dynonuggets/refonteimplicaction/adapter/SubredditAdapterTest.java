@@ -65,7 +65,7 @@ class SubredditAdapterTest {
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
-        assertThat(actualDto.getImageUrl()).isNull();
+        assertThat(actualDto.getImageUrl()).isEqualTo(SubredditAdapter.DEFAULT_GROUP_IMAGE_URI);
     }
 
     @Test

@@ -28,7 +28,7 @@ export class CommentListComponent extends BaseWithPaginationComponent<Comment> i
   @Output()
   countChange: EventEmitter<number> = new EventEmitter();
 
-  currentUserImageUrl = Constants.USER_DEFAULT_IMAGE_SRC;
+  currentUserImageUrl = Constants.USER_IMAGE_DEFAULT_URI;
   subscription: Subscription;
   postId: string;
   createCommentForm: FormGroup;
@@ -49,7 +49,7 @@ export class CommentListComponent extends BaseWithPaginationComponent<Comment> i
   }
 
   ngOnInit(): void {
-    this.currentUserImageUrl = this.authService.getCurrentUser().imageUrl ?? Constants.USER_DEFAULT_IMAGE_SRC;
+    this.currentUserImageUrl = this.authService.getCurrentUser().imageUrl ?? Constants.USER_IMAGE_DEFAULT_URI;
     this.subscription = this.route.paramMap.subscribe(paramMap => {
       this.postId = paramMap.get('postId');
       this.commentPayload = {

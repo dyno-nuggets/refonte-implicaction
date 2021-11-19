@@ -21,6 +21,8 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 @AllArgsConstructor
 public class UserAdapter {
 
+    protected static final String DEFAULT_USER_IMAGE_URI = "assets/img/avatar-ia-user.png";
+
     private final WorkExperienceAdapter experienceAdapter;
     private final TrainingAdapter trainingAdapter;
     private final CompanyAdapter companyAdapter;
@@ -87,7 +89,7 @@ public class UserAdapter {
     }
 
     private String getImageUrl(User model) {
-        return model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : null;
+        return model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : DEFAULT_USER_IMAGE_URI;
     }
 
     public User toModel(UserDto dto) {

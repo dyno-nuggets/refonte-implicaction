@@ -161,10 +161,11 @@ class UserAdapterTest {
         assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
         assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
         assertThat(userDto.getBirthday()).isEqualTo(userRecruiter.getBirthday());
+        assertThat(userDto.getImageUrl()).isEqualTo(UserAdapter.DEFAULT_USER_IMAGE_URI);
     }
 
     @Test
-    void toDtoTestWillImage() {
+    void toDtoTestWithImage() {
         // given
         FileModel image = FileModel.builder().objectKey("azertyKey").build();
         User user = User.builder().image(image).build();
@@ -239,6 +240,7 @@ class UserAdapterTest {
                 .active(userRecruiter.isActive())
                 .roles(userRecruiter.getRoles().stream().map(Role::getName).collect(toList()))
                 .company(companyAdapter.toDto(company))
+                .imageUrl(UserAdapter.DEFAULT_USER_IMAGE_URI)
                 .build();
 
         final UserDto actualDto = userAdapter.toDto(recruiter);

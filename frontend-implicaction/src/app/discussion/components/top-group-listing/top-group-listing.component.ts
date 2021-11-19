@@ -5,6 +5,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {CreateGroupFormComponent} from '../create-group-form/create-group-form.component';
 import {finalize} from 'rxjs/operators';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-top-group-listing',
@@ -12,6 +13,8 @@ import {finalize} from 'rxjs/operators';
   styleUrls: ['./top-group-listing.component.scss']
 })
 export class TopGroupListingComponent implements OnInit {
+
+  readonly GROUP_IMG_DEFAULT_URI = Constants.GROUP_IMAGE_DEFAULT_URI;
 
   @Input()
   limit = 5;

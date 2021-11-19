@@ -18,7 +18,7 @@ class FileServiceTest {
     FileService fileService = new FileService();
 
     @Test
-    void buildFileUri() {
+    void build_file_uri_with_valid_object_key() {
         // given
         String fileKey = "blablabla";
         String expectedUri = appUrl + FILE_BASE_URI + GET_FILE_BY_KEY.replace("{objectKey}", fileKey);
@@ -28,5 +28,14 @@ class FileServiceTest {
 
         // then
         assertThat(actualUri).isEqualTo(expectedUri);
+    }
+
+    @Test
+    void build_file_uri_with_null_object_key() {
+        // when
+        String actualUri = fileService.buildFileUri(null);
+
+        // then
+        assertThat(actualUri).isNull();
     }
 }

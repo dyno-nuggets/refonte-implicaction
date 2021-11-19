@@ -8,7 +8,7 @@
       <ng-container *ngIf="groups?.length; else noGroup">
         <div *ngFor="let group of groups" class="d-flex align-items-center">
           <p-avatar
-            [image]="group.imageUrl || 'assets/img/default-group.png'"
+            [image]="group.imageUrl || GROUP_IMG_DEFAULT_URI"
             shape="circle"
             styleClass="me-2"
           >
