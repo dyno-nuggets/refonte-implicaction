@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
-import com.google.gson.Gson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
@@ -159,23 +159,23 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void archiveJobShouldChangeListStatus() throws Exception {
         // given
-        List<JobPostingDto> givenDto = Arrays.asList(
+        JobPostingDto job = JobPostingDto.builder()
+                .id(1L)
+                .archive(false)
+                .build();
+
+        List<Long> givenDto = Collections.singletonList(job.getId());
+
+        List<JobPostingDto> expectedDto = Arrays.asList(
                 JobPostingDto.builder()
                         .id(1L)
                         .archive(false)
                         .build()
         );
 
-        List<JobPostingDto> expectedDto = Arrays.asList(
-                JobPostingDto.builder()
-                        .id(1L)
-                        .archive(true)
-                        .build()
-        );
-        Gson gson = new Gson();
         String json = gson.toJson(givenDto);
 
-        given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto.get(0));
+        given(jobPostingService.toggleArchiveAll(Collections.singletonList(anyLong()))).willReturn(expectedDto);
 
         // when
         final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
@@ -183,12 +183,13 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk());
+
         for (int i = 0; i < givenDto.size(); i++) {
             final String contentPath = String.format("$[%d]", i);
             resultActions
-                    .andExpect(jsonPath(contentPath + ".id", is((givenDto.get(i).getId().intValue()))))
-                    .andExpect(jsonPath(contentPath + ".archive", is(!givenDto.get(i).isArchive())));
-            verify(jobPostingService, times(1)).toggleArchiveJobPosting(anyLong());
+                    .andExpect(jsonPath(contentPath + ".id", is(job.getId())))
+                    .andExpect(jsonPath("$.archive", is(!job.isArchive())));
+            verify(jobPostingService, times(givenDto.size())).toggleArchiveAll(givenDto);
         }
     }
 
