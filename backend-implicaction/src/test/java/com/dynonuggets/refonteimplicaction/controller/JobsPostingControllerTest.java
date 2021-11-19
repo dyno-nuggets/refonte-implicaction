@@ -166,10 +166,10 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
         List<Long> givenDto = Collections.singletonList(job.getId());
 
-        List<JobPostingDto> expectedDto = Arrays.asList(
+        List<JobPostingDto> expectedDto = Collections.singletonList(
                 JobPostingDto.builder()
                         .id(1L)
-                        .archive(false)
+                        .archive(true)
                         .build()
         );
 
@@ -221,5 +221,25 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         resultActions.andDo(print())
                 .andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveJobPosting(anyLong());
+    }
+
+    @Test
+    void archiveJobListWithoutJwtShouldBeForbidden() throws Exception {
+        // given
+        JobPostingDto job = JobPostingDto.builder()
+                .id(1L)
+                .archive(false)
+                .build();
+
+        List<Long> givenDto = Collections.singletonList(job.getId());
+        String json = gson.toJson(givenDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isForbidden());
+        verify(jobPostingService, never()).toggleArchiveAll(Collections.singletonList(anyLong()));
     }
 }
