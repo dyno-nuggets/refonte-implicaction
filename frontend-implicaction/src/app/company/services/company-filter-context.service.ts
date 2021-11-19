@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {FilterContextService} from '../../shared/services/filter-context.service';
-import {CompanyCriteriaFilter} from '../../job/models/company-criteria-filter';
+import {Criteria} from '../../shared/models/Criteria';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CompanyFilterContextService extends FilterContextService<CompanyCriteriaFilter> {
+export class CompanyFilterContextService extends FilterContextService<Criteria> {
 
 }

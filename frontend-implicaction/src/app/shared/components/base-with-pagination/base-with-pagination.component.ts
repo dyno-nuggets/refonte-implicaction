@@ -41,7 +41,6 @@ export class BaseWithPaginationComponent<T, C extends Criteria> {
 
   /**
    * Méthode à implémenter qui lance le chargement des données
-   * @protected
    */
   protected innerPaginate(): void {
   }
@@ -49,7 +48,6 @@ export class BaseWithPaginationComponent<T, C extends Criteria> {
   /**
    * Méthode qui ajoute les paramètres de l'url dans la variable correspondante
    * la variable correspond à un critère de recherche ou à la pagination
-   * @private
    */
   protected async getFilterFromQueryParams(): Promise<void> {
     // TODO: voir si y'a un moyen plus élégant avec typeof

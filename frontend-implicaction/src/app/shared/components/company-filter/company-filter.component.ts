@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {CompanyCriteriaFilter} from '../../../job/models/company-criteria-filter';
 import {CompanyFilterContextService} from '../../../company/services/company-filter-context.service';
+import {Criteria} from '../../models/Criteria';
 
 @Component({
   selector: 'app-company-filter',
@@ -9,7 +9,7 @@ import {CompanyFilterContextService} from '../../../company/services/company-fil
 })
 export class CompanyFilterComponent implements OnInit {
 
-  criteria: CompanyCriteriaFilter = {};
+  criteria: Criteria = {};
 
   constructor(private filterContextService: CompanyFilterContextService) {
   }
