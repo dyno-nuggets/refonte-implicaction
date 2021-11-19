@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BoardComponent} from './board.component';
+import {BrowserModule} from '@angular/platform-browser';
 
 
 @NgModule({
@@ -8,7 +9,8 @@ import {BoardComponent} from './board.component';
     BoardComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    BrowserModule
   ]
 })
 export class BoardModule {

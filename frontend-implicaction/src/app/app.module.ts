@@ -13,6 +13,7 @@ import {ToastModule} from 'primeng/toast';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MessageService} from 'primeng/api';
 import {SidebarModule} from 'primeng/sidebar';
+import {BoardModule} from './board/board.module';
 
 @NgModule({
   declarations: [
@@ -30,6 +31,7 @@ import {SidebarModule} from 'primeng/sidebar';
     BrowserAnimationsModule,
     ToastModule,
     SidebarModule,
+    BoardModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

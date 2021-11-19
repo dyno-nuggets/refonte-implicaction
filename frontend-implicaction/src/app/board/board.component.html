@@ -1,1 +1,11 @@
-<p>board works!</p>
+<div class="row d-flex justify-content-center">
+  <div
+    *ngFor="let column of columns"
+    class="col-12 col-md-5 col-lg shadow-sm me-5 bg-white"
+  >
+    <h3>{{column.status.label}}</h3>
+    <div class="card m-4 shadow-sm">
+      <div class="card-body vh-100"></div>
+    </div>
+  </div>
+</div>

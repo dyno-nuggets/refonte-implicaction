@@ -1,4 +1,12 @@
 import {Component} from '@angular/core';
+import {JobPosting} from '../shared/models/job-posting';
+import {JobStatus} from './enums/job-status';
+
+export class BoardColumn {
+  status: JobStatus;
+  jobs: JobPosting[] = [];
+}
+
 
 @Component({
   selector: 'app-board',
@@ -7,4 +15,8 @@ import {Component} from '@angular/core';
 })
 export class BoardComponent {
 
+  columns: BoardColumn[] = JobStatus.all()
+    .map(status => {
+      return {status, jobs: []};
+    });
 }
