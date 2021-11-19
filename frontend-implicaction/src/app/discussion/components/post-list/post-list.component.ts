@@ -4,6 +4,7 @@ import {BaseWithPaginationComponent} from '../../../shared/components/base-with-
 import {PostService} from '../../services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-post-list',
@@ -14,9 +15,10 @@ export class PostListComponent extends BaseWithPaginationComponent<Post> impleme
 
   constructor(
     private postService: PostService,
-    private toastService: ToasterService
+    private toastService: ToasterService,
+    protected route: ActivatedRoute
   ) {
-    super();
+    super(route);
   }
 
   ngOnInit(): void {

@@ -9,7 +9,6 @@ import {CompanyFilterContextService} from '../../../../company/services/company-
 import {CompanyCriteriaFilter} from '../../../../job/models/company-criteria-filter';
 import {ActivatedRoute} from '@angular/router';
 import {CompanySortEnum} from '../../../../company/enums/company-sort.enum';
-import {SortDirectionEnum} from '../../../../shared/enums/sort-direction.enum';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 
@@ -20,11 +19,9 @@ import {BaseWithPaginationComponent} from '../../../../shared/components/base-wi
 })
 export class CompaniesTableComponent extends BaseWithPaginationComponent<Company> implements OnInit {
 
-  orderByEnums = CompanySortEnum.all();
   criteria: CompanyCriteriaFilter;
   selectedOrder = CompanySortEnum.NAME_ASC;
   selectedOrderCode: string;
-  sortDirection = SortDirectionEnum;
 
   constructor(
     private companyService: CompanyService,
@@ -32,9 +29,9 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
     private sidebarService: SidebarService,
     private companyContextService: CompanyContextServiceService,
     private filterService: CompanyFilterContextService,
-    private route: ActivatedRoute
+    protected route: ActivatedRoute
   ) {
-    super();
+    super(route);
   }
 
   ngOnInit(): void {
@@ -73,6 +70,17 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
       });
   }
 
+  onSortChange({value}): void {
+    const selectedOrderField = CompanySortEnum.from(value);
+    this.pageable.sortBy = selectedOrderField.sortBy;
+    this.pageable.sortOrder = selectedOrderField.sortDirection;
+    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
+  }
+
+  onSearchChange(): void {
+    this.filterService.setFilter(this.criteria);
+  }
+
   protected innerPaginate(): void {
     // FIXME: il faut forcer les paramètres de tri car ils restent définis avec les valeurs du dernier composant visité
     this.pageable.sortBy = 'id';
@@ -81,7 +89,7 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
       .getAllByCriteria(this.pageable, this.criteria)
       .pipe(
         take(1),
-        finalize(() => this.loading = false)
+        finalize(() => this.isLoading = false)
       )
       .subscribe(
         data => {
@@ -92,17 +100,6 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des compagnies')
       );
-  }
-
-  onSortChange({value}): void {
-    const selectedOrderField = CompanySortEnum.from(value);
-    this.pageable.sortBy = selectedOrderField.sortBy;
-    this.pageable.sortOrder = selectedOrderField.sortDirection;
-    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
-  }
-
-  onSearchChange(): void {
-    this.filterService.setFilter(this.criteria);
   }
 
   /**

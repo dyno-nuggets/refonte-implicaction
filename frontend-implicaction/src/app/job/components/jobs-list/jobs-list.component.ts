@@ -33,9 +33,9 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> i
     private toastService: ToasterService,
     private jobsService: JobService,
     private filterService: JobFilterContextService,
-    private route: ActivatedRoute
+    protected route: ActivatedRoute
   ) {
-    super();
+    super(route);
   }
 
   ngOnInit(): void {

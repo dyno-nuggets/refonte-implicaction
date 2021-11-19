@@ -37,11 +37,11 @@ export class CommentListComponent extends BaseWithPaginationComponent<Comment> i
   constructor(
     private authService: AuthService,
     private postService: PostService,
-    private route: ActivatedRoute,
+    protected route: ActivatedRoute,
     private toasterService: ToasterService,
     private commentService: CommentService,
   ) {
-    super();
+    super(route);
   }
 
   emitCountChange(): void {
