@@ -11,7 +11,7 @@ import {BrPipe} from './pipes/br.pipe';
 import {ContractTypeComponent} from './components/contract-type/contract-type.component';
 import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 import {JobFilterComponent} from './components/job-filter/job-filter.component';
-import {BaseWithPaginationComponent} from './components/base-with-pagination-component/base-with-pagination.component';
+import {BaseWithPaginationComponent} from './components/base-with-pagination/base-with-pagination.component';
 import {AvatarModule} from 'primeng/avatar';
 
 

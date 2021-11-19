@@ -8,13 +8,15 @@ import {JobCriteriaFilter} from '../../models/job-criteria-filter';
 import {JobFilterContextService} from '../../services/job-filter-context.service';
 import {ActivatedRoute} from '@angular/router';
 import {SortDirectionEnum} from '../../../shared/enums/sort-direction.enum';
+import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {JobPosting} from '../../../shared/models/job-posting';
 
 @Component({
   selector: 'app-jobs-list',
   templateUrl: './jobs-list.component.html',
   styleUrls: ['./jobs-list.component.scss']
 })
-export class JobsListComponent implements OnInit {
+export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
@@ -33,6 +35,7 @@ export class JobsListComponent implements OnInit {
     private filterService: JobFilterContextService,
     private route: ActivatedRoute
   ) {
+    super();
   }
 
   ngOnInit(): void {
@@ -53,11 +56,18 @@ export class JobsListComponent implements OnInit {
       .then(() => this.filterService.setFilter(this.criteria));
   }
 
-  paginate({page, first, rows} = this.pageable): void {
-    this.isLoading = true;
-    this.pageable.page = page;
-    this.pageable.first = first;
-    this.pageable.rows = rows;
+  onSortChange({value}): void {
+    const selectedOrderField = JobSortEnum.from(value);
+    this.pageable.sortBy = selectedOrderField.sortBy;
+    this.pageable.sortOrder = selectedOrderField.sortDirection;
+    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
+  }
+
+  onSearchChange(): void {
+    this.filterService.setFilter(this.criteria);
+  }
+
+  protected innerPaginate(): void {
     this.jobsService
       .getAllByCriteria(this.pageable, this.criteria)
       .pipe(finalize(() => this.isLoading = false))
@@ -69,17 +79,6 @@ export class JobsListComponent implements OnInit {
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );
-  }
-
-  onSortChange({value}): void {
-    const selectedOrderField = JobSortEnum.from(value);
-    this.pageable.sortBy = selectedOrderField.sortBy;
-    this.pageable.sortOrder = selectedOrderField.sortDirection;
-    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
-  }
-
-  onSearchChange(): void {
-    this.filterService.setFilter(this.criteria);
   }
 
   private async getFilterFromQueryParams(): Promise<void> {

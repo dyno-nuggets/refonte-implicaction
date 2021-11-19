@@ -42,10 +42,6 @@ export class JobsTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortDirection;
-    this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
-    this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
-
     this.filterService
       .observeFilter()
       .subscribe(criteria => {
@@ -88,6 +84,37 @@ export class JobsTableComponent implements OnInit {
     this.filterService.setFilter(this.criteria);
   }
 
+  loadJobs(event: LazyLoadEvent): void {
+    this.loading = true;
+    const page = event.first / event.rows;
+
+    this.jobService
+      .getAllByCriteria({page, rows: event.rows}, this.criteria)
+      .pipe(
+        take(1),
+        finalize(() => this.loading = false)
+      )
+      .subscribe(
+        data => {
+          this.pageable.totalPages = data.totalPages;
+          this.pageable.rows = data.size;
+          this.pageable.totalElements = data.totalElements;
+          this.pageable.content = data.content;
+        },
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
+      );
+  }
+
+  editJob(job: JobPosting): void {
+    this.sidebarService
+      .open({
+        title: `Editer une nouvelle offre d'emploi`,
+        input: {job},
+        component: JobPostingFormComponent,
+        width: 650
+      });
+  }
+
   private async getFilterFromQueryParams(): Promise<void> {
     // TODO: voir si y'a un moyen plus élégant avec typeof
     const filterKeys = ['search', 'contractType'];
@@ -120,36 +147,5 @@ export class JobsTableComponent implements OnInit {
       sortBy: this.pageable.sortBy,
       sortOrder: this.pageable.sortOrder
     };
-  }
-
-  loadJobs(event: LazyLoadEvent): void {
-    this.loading = true;
-    const page = event.first / event.rows;
-
-    this.jobService
-      .getAllByCriteria({page, rows: event.rows}, this.criteria)
-      .pipe(
-        take(1),
-        finalize(() => this.loading = false)
-      )
-      .subscribe(
-        data => {
-          this.pageable.totalPages = data.totalPages;
-          this.pageable.rows = data.size;
-          this.pageable.totalElements = data.totalElements;
-          this.pageable.content = data.content;
-        },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
-      );
-  }
-
-  editJob(job: JobPosting): void {
-    this.sidebarService
-      .open({
-        title: `Editer une nouvelle offre d'emploi`,
-        input: {job},
-        component: JobPostingFormComponent,
-        width: 650
-      });
   }
 }

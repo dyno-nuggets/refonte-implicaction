@@ -3,8 +3,8 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {BaseWithPaginationComponent} from './base-with-pagination.component';
 
 describe('AbstractPaginationComponentComponent', () => {
-  let component: BaseWithPaginationComponent;
-  let fixture: ComponentFixture<BaseWithPaginationComponent>;
+  let component: BaseWithPaginationComponent<any>;
+  let fixture: ComponentFixture<BaseWithPaginationComponent<any>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

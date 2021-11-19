@@ -8,13 +8,14 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {CompaniesFormComponent} from '../companies-form/companies-form.component';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
+import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 
 @Component({
   selector: 'app-companies-table',
   templateUrl: './companies-table.component.html',
   styleUrls: ['./companies-table.component.scss']
 })
-export class CompaniesTableComponent implements OnInit {
+export class CompaniesTableComponent extends BaseWithPaginationComponent<Company> implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   loading = true; // indique si les données sont en chargement
@@ -28,6 +29,7 @@ export class CompaniesTableComponent implements OnInit {
     private sidebarService: SidebarService,
     private companyContextService: CompanyContextServiceService
   ) {
+    super();
   }
 
   ngOnInit(): void {
@@ -35,30 +37,9 @@ export class CompaniesTableComponent implements OnInit {
       .observe$
       .subscribe(company => {
         if (company) {
-          this.loadCompanies({first: this.pageable.first, rows: this.pageable.rows});
+          this.paginate();
         }
       });
-  }
-
-  loadCompanies({first, rows}): void {
-    this.loading = true;
-    const page = first / rows;
-
-    this.companyService
-      .getAll({page, rows})
-      .pipe(
-        take(1),
-        finalize(() => this.loading = false)
-      )
-      .subscribe(
-        data => {
-          this.pageable.totalPages = data.totalPages;
-          this.pageable.rows = data.size;
-          this.pageable.totalElements = data.totalElements;
-          this.pageable.content = data.content;
-        },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
-      );
   }
 
   onEditCompany(company: Company): void {
@@ -78,6 +59,27 @@ export class CompaniesTableComponent implements OnInit {
         component: CompaniesFormComponent,
         width: 650
       });
+  }
+
+  protected innerPaginate(): void {
+    // FIXME: il faut forcer les paramètres de tri car ils restent définis avec les valeurs du dernier composant visité
+    this.pageable.sortBy = 'id';
+    this.pageable.sortOrder = 'ASC';
+    this.companyService
+      .getAll(this.pageable)
+      .pipe(
+        take(1),
+        finalize(() => this.loading = false)
+      )
+      .subscribe(
+        data => {
+          this.pageable.totalPages = data.totalPages;
+          this.pageable.rows = data.size;
+          this.pageable.totalElements = data.totalElements;
+          this.pageable.content = data.content;
+        },
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
+      );
   }
 }
 
