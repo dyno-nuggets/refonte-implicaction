@@ -15,11 +15,15 @@ export class FilterContextService<T> {
   ) {
   }
 
-  setFilter(criteria: T): void {
+  get criteria(): T {
+    return this.behaviorSubject.value;
+  }
+
+  set criteria(criteria: T) {
     this.behaviorSubject.next(criteria);
   }
 
-  observeFilter(): Observable<T> {
+  observe(): Observable<T> {
     return this.behaviorSubject.asObservable();
   }
 

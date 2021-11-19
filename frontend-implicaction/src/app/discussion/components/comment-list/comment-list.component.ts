@@ -12,13 +12,14 @@ import {CommentPayload} from '../../model/comment-payload';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CommentService} from '../../services/comment.service';
 import {Paginator} from 'primeng/paginator';
+import {Criteria} from '../../../shared/models/Criteria';
 
 @Component({
   selector: 'app-comment-list',
   templateUrl: './comment-list.component.html',
   styleUrls: ['./comment-list.component.scss']
 })
-export class CommentListComponent extends BaseWithPaginationComponent<Comment> implements OnInit, OnDestroy {
+export class CommentListComponent extends BaseWithPaginationComponent<Comment, Criteria> implements OnInit, OnDestroy {
 
   readonly ROWS_PER_PAGE_OPTIONS = [25, 50, 100];
 

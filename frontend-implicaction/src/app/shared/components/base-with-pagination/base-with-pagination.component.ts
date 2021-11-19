@@ -2,12 +2,15 @@ import {Component} from '@angular/core';
 import {Constants} from '../../../config/constants';
 import {Pageable} from '../../models/pageable';
 import {ActivatedRoute} from '@angular/router';
+import {Criteria} from '../../models/Criteria';
 
 @Component({template: ''})
-export class BaseWithPaginationComponent<T> {
+export class BaseWithPaginationComponent<T, C extends Criteria> {
 
   readonly DEFAULT_ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
+
   isLoading = true;
+  criteria: C;
 
   // Pagination
   pageable: Pageable<T> = Constants.PAGEABLE_DEFAULT;
@@ -37,9 +40,48 @@ export class BaseWithPaginationComponent<T> {
   }
 
   /**
-   * méthode à implémenter qui lance les appels au service voulu
+   * Méthode à implémenter qui lance le chargement des données
    * @protected
    */
   protected innerPaginate(): void {
+  }
+
+  /**
+   * Méthode qui ajoute les paramètres de l'url dans la variable correspondante
+   * la variable correspond à un critère de recherche ou à la pagination
+   * @private
+   */
+  protected async getFilterFromQueryParams(): Promise<void> {
+    // TODO: voir si y'a un moyen plus élégant avec typeof
+    const filterKeys = ['keyword'];
+    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
+    return new Promise(resolve => {
+      this.route
+        .queryParams
+        .subscribe(params => {
+          Object.entries(params)
+            .forEach(([key, value]) => {
+              if (filterKeys.includes(key)) {
+                this.criteria[key] = value;
+              } else if (pageableKeys.includes(key)) {
+                this.pageable[key] = value;
+              }
+            });
+          return resolve();
+        });
+    });
+  }
+
+  /**
+   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
+   */
+  protected buildQueryParams(): any {
+    return {
+      ...this.criteria,
+      size: this.pageable.rows,
+      page: this.pageable.page,
+      sortBy: this.pageable.sortBy,
+      sortOrder: this.pageable.sortOrder
+    };
   }
 }

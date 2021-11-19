@@ -16,12 +16,12 @@ export class CompanyFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterContextService
-      .observeFilter()
+      .observe()
       .subscribe(criteria => this.criteria = criteria);
   }
 
   onKeywordChange(keyword: string): void {
     this.criteria.keyword = keyword;
-    this.filterContextService.setFilter(this.criteria);
+    this.filterContextService.criteria = this.criteria;
   }
 }

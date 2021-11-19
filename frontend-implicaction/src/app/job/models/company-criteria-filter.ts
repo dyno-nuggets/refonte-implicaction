@@ -1,3 +1,4 @@
-export interface CompanyCriteriaFilter {
-  keyword?: string;
+import {Criteria} from '../../shared/models/Criteria';
+
+export interface CompanyCriteriaFilter extends Criteria {
 }
