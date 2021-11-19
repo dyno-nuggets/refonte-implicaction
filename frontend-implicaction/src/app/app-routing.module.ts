@@ -4,6 +4,7 @@ import {AuthGuard} from './core/guards/auth.guard.service';
 import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
 import {IndexComponent} from './home/components/index/index.component';
 import {Univers} from './shared/enums/univers';
+import {BoardComponent} from './board/board.component';
 
 const routes: Routes = [
   {
@@ -48,6 +49,14 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: {
       allowedRoles: Univers.DISCUSSIONS.roles
+    }
+  },
+  {
+    path: Univers.BOARD.url,
+    component: BoardComponent,
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: Univers.BOARD.roles
     }
   }
 ];

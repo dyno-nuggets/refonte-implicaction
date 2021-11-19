@@ -6,6 +6,7 @@ export class Univers {
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', [RoleEnumCode.USER]);
   static readonly DISCUSSIONS = new Univers('Discussion', 'discussions', [RoleEnumCode.USER]);
   static readonly ADMIN = new Univers('Admin', 'admin', [RoleEnumCode.ADMIN]);
+  static readonly BOARD = new Univers('Job Board', 'board', [RoleEnumCode.ADMIN, RoleEnumCode.PREMIUM]);
 
   constructor(
     readonly title: string,
