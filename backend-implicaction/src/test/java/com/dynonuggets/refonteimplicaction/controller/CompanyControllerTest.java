@@ -46,12 +46,15 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     @Test
     void getCompanysListShouldListAllCompanies() throws Exception {
+        // given
         Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
+        given(companyService.getAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
 
-        // test des données de pagination
-        given(companyService.getAll(DEFAULT_PAGEABLE)).willReturn(companyDtoPage);
-        ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON))
-                .andDo(print())
+        // when
+        ResultActions resultActions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(companyDtoPage.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(companyDtos.size()));
@@ -59,14 +62,14 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
         // test des propriétés de chaque éléments de la liste reçue
         for (int i = 0; i < companyDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(companyDtos.get(i).getId()))))
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(companyDtos.get(i).getId()))))
                     .andExpect(jsonPath(contentPath + ".description", is(companyDtos.get(i).getDescription())))
                     .andExpect(jsonPath(contentPath + ".name", is(companyDtos.get(i).getName())))
                     .andExpect(jsonPath(contentPath + ".logo", is(companyDtos.get(i).getLogo())))
                     .andExpect(jsonPath(contentPath + ".url", is(companyDtos.get(i).getUrl())));
         }
 
-        verify(companyService, times(1)).getAll(any());
+        verify(companyService, times(1)).getAllWithCriteria(any(), anyString());
     }
 
     @WithMockUser
@@ -77,7 +80,7 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
 
         // when
         // test des données de pagination
-        given(companyService.findAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
+        given(companyService.getAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
         ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
 
         // then
@@ -93,7 +96,7 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".logo", is(companyDtos.get(i).getLogo())))
                     .andExpect(jsonPath(contentPath + ".url", is(companyDtos.get(i).getUrl())));
         }
-        verify(companyService, times(1)).findAllWithCriteria(any(), anyString());
+        verify(companyService, times(1)).getAllWithCriteria(any(), anyString());
     }
 
     @Test

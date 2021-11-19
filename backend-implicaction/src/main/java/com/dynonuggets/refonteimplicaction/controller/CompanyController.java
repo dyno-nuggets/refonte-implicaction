@@ -30,7 +30,7 @@ public class CompanyController {
             @RequestParam(value = "keyword", defaultValue = "") String keyword
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<CompanyDto> companyDtos = companyService.findAllWithCriteria(pageable, keyword);
+        Page<CompanyDto> companyDtos = companyService.getAllWithCriteria(pageable, keyword);
         return ResponseEntity.ok(companyDtos);
     }
 
