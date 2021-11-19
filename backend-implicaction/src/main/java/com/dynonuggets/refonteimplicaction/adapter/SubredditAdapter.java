@@ -12,6 +12,8 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 @AllArgsConstructor
 public class SubredditAdapter {
 
+    protected static final String DEFAULT_GROUP_IMAGE_URI = "assets/img/avatar-ia-group.png";
+
     private FileService fileService;
 
     public Subreddit toModel(final SubredditDto dto) {
@@ -23,7 +25,7 @@ public class SubredditAdapter {
     }
 
     public SubredditDto toDto(Subreddit model) {
-        final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getUrl()) : null;
+        final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : DEFAULT_GROUP_IMAGE_URI;
         return SubredditDto.builder()
                 .id(model.getId())
                 .name(model.getName())

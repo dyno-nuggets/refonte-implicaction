@@ -41,8 +41,8 @@
             >
               <img
                 #userImage
-                (error)="userImage.src = constant.USER_DEFAULT_IMAGE_SRC"
-                [src]="currentUser.imageUrl || constant.USER_DEFAULT_IMAGE_SRC"
+                (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
+                [src]="currentUser.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
                 alt="avatar de {{currentUser.username}}"
                 class="rounded-circle shadow-sm avatar"
               >

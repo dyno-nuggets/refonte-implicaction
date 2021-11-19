@@ -21,7 +21,7 @@ public class CompanyController {
 
     private final CompanyService companyService;
 
-    @RequestMapping(method = {RequestMethod.GET})
+    @GetMapping
     public ResponseEntity<Page<CompanyDto>> getAll(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,

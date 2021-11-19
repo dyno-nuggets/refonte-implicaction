@@ -29,8 +29,8 @@
           <label [ngClass]="{'hoverable': isEditing}" for="fileInput">
             <img
               #userImage
-              (error)="userImage.src = constant.USER_DEFAULT_IMAGE_SRC"
-              [src]="user.imageUrl || constant.USER_DEFAULT_IMAGE_SRC"
+              (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
+              [src]="user.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
               alt="photo de {{user.firstname}}"
               class="rounded-circle shadow-sm user-avatar"
             >

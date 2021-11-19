@@ -6,6 +6,7 @@ import {SidebarService} from '../../../shared/services/sidebar.service';
 import {GroupService} from '../../services/group.service';
 import {Observable} from 'rxjs';
 import {Group} from '../../model/group';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-group-form',
@@ -14,10 +15,11 @@ import {Group} from '../../model/group';
 })
 export class CreateGroupFormComponent extends SidebarContentComponent implements OnInit {
 
+  readonly GROUP_IMAGE_DEFAULT_URI = Constants.GROUP_IMAGE_DEFAULT_URI;
+
   createGroupForm: FormGroup;
   isSubmitted = false;
   imageSrc: string;
-
   formData = new FormData();
 
   constructor(

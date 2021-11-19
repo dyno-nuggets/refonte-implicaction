@@ -15,7 +15,7 @@ public class FileService {
     private String appUrl;
 
     public String buildFileUri(String fileKey) {
-        return appUrl + FILE_BASE_URI + GET_FILE_BY_KEY.replace("{objectKey}", fileKey);
+        return fileKey != null ? appUrl + FILE_BASE_URI + GET_FILE_BY_KEY.replace("{objectKey}", fileKey) : null;
     }
 
 }
