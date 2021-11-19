@@ -4,7 +4,8 @@ export enum RoleEnumCode {
   ADMIN = 'ROLE_ADMIN',
   USER = 'ROLE_USER',
   JOB_SEEKER = 'ROLE_JOB_SEEKER',
-  RECRUITER = 'ROLE_RECRUITER'
+  RECRUITER = 'ROLE_RECRUITER',
+  PREMIUM = 'ROLE_PREMIUM'
 }
 
 export class RoleEnum extends EnumCodeLabelAbstract<RoleEnumCode> {
