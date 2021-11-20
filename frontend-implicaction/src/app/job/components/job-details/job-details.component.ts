@@ -3,6 +3,7 @@ import {JobPosting} from '../../../shared/models/job-posting';
 import {JobService} from '../../services/job.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-job-details',
@@ -12,6 +13,7 @@ import {ActivatedRoute} from '@angular/router';
 export class JobDetailsComponent implements OnInit {
 
   job: JobPosting = {};
+  constant = Constants;
 
   constructor(
     private jobService: JobService,
