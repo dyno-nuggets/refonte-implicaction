@@ -2,7 +2,7 @@
   <div
     *ngFor="let column of columns; let last = last;"
     [ngClass]="{'me-5': !last}"
-    class="col-12 col-md-5 col-lg shadow-sm me-5 pt-4 px-3 bg-white vh-100"
+    class="col-12 col-md-5 col-lg shadow-sm me-5 mb-4 pt-4 px-3 bg-white vh-100"
   >
     <h3 class="mb-4">
       {{column.status.label}}
