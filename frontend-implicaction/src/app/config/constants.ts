@@ -33,5 +33,7 @@ export class Constants {
 
   public static readonly GROUP_IMAGE_DEFAULT_URI = 'assets/img/avatar-ia-group.png';
 
+  public static readonly COMPANY_IMAGE_DEFAULT_URI = 'assets/img/avatar-ia-group.png';
+
   readonly DEFAULT_YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
 }

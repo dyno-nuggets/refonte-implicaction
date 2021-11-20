@@ -1,1 +1,14 @@
-<p>board works!</p>
+<div class="row mx-auto">
+  <div
+    *ngFor="let column of columns; let last = last;"
+    [ngClass]="{'me-5': !last}"
+    class="col-12 col-md-5 col-lg shadow-sm me-5 mb-4 pt-4 px-3 bg-white vh-100"
+  >
+    <h3 class="mb-4">
+      {{column.status.label}}
+      <span class="badge rounded-pill bg-danger ms-4 px-3">{{column.applies.length}}</span>
+    </h3>
+
+    <app-apply-card *ngFor="let apply of column.applies" [apply]="apply"></app-apply-card>
+  </div>
+</div>
