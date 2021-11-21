@@ -1,14 +1,41 @@
-<div class="row mx-auto">
-  <div
-    *ngFor="let column of columns; let last = last;"
-    [ngClass]="{'me-5': !last}"
-    class="col-12 col-md-5 col-lg shadow-sm me-5 mb-4 pt-4 px-3 bg-white vh-100"
-  >
-    <h3 class="mb-4">
-      {{column.status.label}}
-      <span class="badge rounded-pill bg-danger ms-4 px-3">{{column.applies.length}}</span>
-    </h3>
+<div class="board">
 
-    <app-apply-card *ngFor="let apply of column.applies" [apply]="apply"></app-apply-card>
+  <div class="board-wrapper ">
+
+    <div
+      cdkDropListGroup
+      class="row mx-auto justify-content-around board-columns"
+    >
+      <div
+        *ngFor="let column of columns; let last = last"
+        [ngClass]="{'me-lg-3': !last}"
+        class="d-flex flex-column col-12 col-md-5 col-lg shadow-sm mb-4 pt-4 px-3 bg-white board-column"
+      >
+        <div class="column-title d-flex align-items-baseline">
+          <h3>{{column.status.label}}</h3>
+          <div class="align-self-start">
+            <span class="badge rounded-pill bg-danger ms-4 px-3">{{column.applies.length}}</span>
+          </div>
+        </div>
+
+        <div
+          (cdkDropListDropped)="drop($event, column.status.code)"
+          [cdkDropListData]="column.applies"
+          cdkDropList
+          class="applies-container mt-2"
+        >
+          <div
+            *ngFor="let item of column.applies"
+            cdkDrag
+            class="apply"
+          >
+            <app-apply-card [apply]="item"></app-apply-card>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
   </div>
+
 </div>

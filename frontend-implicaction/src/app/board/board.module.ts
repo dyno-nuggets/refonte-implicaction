@@ -6,6 +6,7 @@ import {TagModule} from 'primeng/tag';
 import {ApplyCardComponent} from './components/apply-card/apply-card.component';
 import {SharedModule} from '../shared/shared.module';
 import {RouterModule} from '@angular/router';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import {RouterModule} from '@angular/router';
     BrowserModule,
     TagModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    DragDropModule
   ]
 })
 export class BoardModule {
