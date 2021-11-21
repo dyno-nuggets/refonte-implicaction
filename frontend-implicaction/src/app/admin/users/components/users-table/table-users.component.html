@@ -1,5 +1,6 @@
 <p-table
   (onLazyLoad)="loadUsers($event)"
+  [(selection)]="selectedUsers"
   [lazy]="true"
   [loading]="loading"
   [paginator]="true"

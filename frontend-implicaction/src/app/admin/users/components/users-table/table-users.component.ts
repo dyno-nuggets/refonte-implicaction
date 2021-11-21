@@ -4,6 +4,7 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
+import {User} from '../../../../shared/models/user';
 
 @Component({
   selector: 'app-table-users',
@@ -13,6 +14,8 @@ import {Constants} from '../../../../config/constants';
 export class TableUsersComponent {
 
   loading = true; // indique si les données sont en chargement
+
+  selectedUsers: User[];
 
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
