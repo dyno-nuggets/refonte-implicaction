@@ -125,7 +125,7 @@ export class JobsTableComponent implements OnInit {
           this.paginate();
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
-        () => this.toastService.success('Succès', `Offre archivée`)
+        () => this.toastService.success('Succès', job.archive ? 'Offre désarchivée' : `Offre archivée`)
       );
   }
 

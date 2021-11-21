@@ -1,11 +1,8 @@
 import {EnumCodeLabelAbstract} from './enum-code-label-abstract.enum';
 
-export enum StatusEnumCode {
-  JOB_AVAILABLE = 'jobAvailable',
-}
+export enum StatusEnumCode {}
 
 export class StatusEnum extends EnumCodeLabelAbstract<StatusEnumCode> {
-  static readonly JOB_AVAILABLE = new StatusEnum(StatusEnumCode.JOB_AVAILABLE, 'jobAvailable', 'job_posting', 1);
 
   constructor(
     readonly code: StatusEnumCode,
