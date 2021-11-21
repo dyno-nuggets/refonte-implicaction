@@ -239,6 +239,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId]);
   }
 
+  archiveJobPostingEndpoint(JobId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId, 'archive']);
+  }
+
   /**
    * Companies
    */

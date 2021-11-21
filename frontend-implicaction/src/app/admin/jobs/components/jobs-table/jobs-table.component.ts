@@ -117,6 +117,18 @@ export class JobsTableComponent implements OnInit {
       });
   }
 
+  archiveJob(job: JobPosting): void {
+    this.jobService
+      .archiveJob(job.id)
+      .subscribe(
+        () => {
+          this.paginate();
+        },
+        () => this.toastService.error('Oops', 'Une erreur est survenue'),
+        () => this.toastService.success('Succès', `Offre archivée`)
+      );
+  }
+
   private async getFilterFromQueryParams(): Promise<void> {
     // TODO: voir si y'a un moyen plus élégant avec typeof
     const filterKeys = ['search', 'contractType'];

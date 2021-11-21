@@ -89,6 +89,8 @@ public class JobPostingService {
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobPostingId)));
         jobPosting.setArchive(!jobPosting.isArchive());
+                .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobPostingId)));
+        jobPosting.setArchive(!jobPosting.isArchive());
         final JobPosting save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
     }
