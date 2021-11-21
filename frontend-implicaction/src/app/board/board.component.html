@@ -12,14 +12,14 @@
         class="d-flex flex-column col-12 col-md-5 col-lg shadow-sm mb-4 pt-4 px-3 bg-white board-column"
       >
         <div class="column-title d-flex align-items-baseline">
-          <h3 class="">{{ column.status.label }}</h3>
+          <h3>{{column.status.label}}</h3>
           <div class="align-self-start">
             <span class="badge rounded-pill bg-danger ms-4 px-3">{{column.applies.length}}</span>
           </div>
         </div>
 
         <div
-          (cdkDropListDropped)="drop($event)"
+          (cdkDropListDropped)="drop($event, column.status.code)"
           [cdkDropListData]="column.applies"
           cdkDropList
           class="applies-container mt-2"

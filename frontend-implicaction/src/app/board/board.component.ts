@@ -33,7 +33,7 @@ export class BoardComponent implements OnInit {
         companyName: 'Net Answer',
         location: 'France, Paris(75)',
         jobId: '12',
-        status: ApplyStatusEnum.PENDING
+        statusCode: ApplyStatusEnum.PENDING.code
       }, {
         jobTitle: 'Responsable de la maintenance et de la sécurité',
         contractType: 'CDI',
@@ -41,7 +41,7 @@ export class BoardComponent implements OnInit {
         companyName: 'Net Answer',
         location: 'France, Paris(75)',
         jobId: '12',
-        status: ApplyStatusEnum.PENDING
+        statusCode: ApplyStatusEnum.PENDING.code
       }, {
         jobTitle: 'Responsable de la maintenance et de la sécurité',
         contractType: 'CDI',
@@ -49,7 +49,7 @@ export class BoardComponent implements OnInit {
         companyName: 'Net Answer',
         location: 'France, Paris(75)',
         jobId: '12',
-        status: ApplyStatusEnum.PENDING
+        statusCode: ApplyStatusEnum.PENDING.code
       }, {
         jobTitle: 'Responsable de la maintenance et de la sécurité',
         contractType: 'CDI',
@@ -57,18 +57,26 @@ export class BoardComponent implements OnInit {
         companyName: 'Net Answer',
         location: 'France, Paris(75)',
         jobId: '12',
-        status: ApplyStatusEnum.PENDING
+        statusCode: ApplyStatusEnum.PENDING.code
       });
   }
 
-  drop(event: CdkDragDrop<JobApply[], any>): void {
+  drop(event: CdkDragDrop<JobApply[], any>, statusCode: ApplyStatusCode): void {
     if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(event.previousContainer.data,
+      moveItemInArray(
         event.container.data,
         event.previousIndex,
-        event.currentIndex);
+        event.currentIndex
+      );
+    } else {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      const jobApply = event.container.data[event.currentIndex];
+      jobApply.statusCode = statusCode;
     }
   }
 }

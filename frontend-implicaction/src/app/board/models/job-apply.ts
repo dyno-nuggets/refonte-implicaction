@@ -1,4 +1,4 @@
-import {ApplyStatusEnum} from '../enums/apply-status-enum';
+import {ApplyStatusCode} from '../enums/apply-status-enum';
 
 export interface JobApply {
   id?: string;
@@ -7,6 +7,6 @@ export interface JobApply {
   location: string;
   companyName: string;
   companyImageUrl: string;
-  status: ApplyStatusEnum;
+  statusCode: ApplyStatusCode;
   contractType: string;
 }
