@@ -1,16 +1,14 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
+import com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 
 @Data
-@Builder
 @Getter
 @AllArgsConstructor
-public class StatusDto {
-    private Long id;
-    private String label;
-    private String type;
+public class ApplicationRequest {
+    private Long jobId;
+    private ApplyStatusEnum status;
 }
