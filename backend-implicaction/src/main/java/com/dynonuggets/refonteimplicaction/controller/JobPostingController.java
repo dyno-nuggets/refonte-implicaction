@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
 @RestController
@@ -61,6 +63,12 @@ public class JobPostingController {
     @PatchMapping(path = ARCHIVE_JOB_URI)
     public ResponseEntity<JobPostingDto> toggleArchive(@PathVariable Long jobId) {
         JobPostingDto updated = jobPostingService.toggleArchiveJobPosting(jobId);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PatchMapping(ARCHIVE_JOBS_URI)
+    public ResponseEntity<List<JobPostingDto>> toggleArchiveJobs(@RequestBody final List<Long> jobsId) {
+        List<JobPostingDto> updated = jobPostingService.toggleArchiveAll(jobsId);
         return ResponseEntity.ok(updated);
     }
 }

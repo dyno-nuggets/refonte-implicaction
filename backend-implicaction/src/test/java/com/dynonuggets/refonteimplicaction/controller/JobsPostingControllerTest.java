@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
@@ -156,6 +157,44 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     @WithMockUser
+    void archiveJobShouldChangeListStatus() throws Exception {
+        // given
+        JobPostingDto job = JobPostingDto.builder()
+                .id(1L)
+                .archive(false)
+                .build();
+
+        List<Long> givenDto = Collections.singletonList(job.getId());
+
+        List<JobPostingDto> expectedDto = Collections.singletonList(
+                JobPostingDto.builder()
+                        .id(1L)
+                        .archive(true)
+                        .build()
+        );
+
+        String json = gson.toJson(givenDto);
+
+        given(jobPostingService.toggleArchiveAll(anyList())).willReturn(expectedDto);
+
+        // when
+        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+
+        for (int i = 0; i < givenDto.size(); i++) {
+            final String contentPath = String.format("$[%d]", i);
+            resultActions
+                    .andExpect(jsonPath(contentPath + ".id", is(job.getId().intValue())))
+                    .andExpect(jsonPath(contentPath + ".archive", is(!job.isArchive())));
+            verify(jobPostingService, times(1)).toggleArchiveAll(givenDto);
+        }
+    }
+
+    @Test
+    @WithMockUser
     void archiveJobPostingWhithUnexistingIdShouldThrowException() throws Exception {
         // given
         final long jobId = 123L;
@@ -182,5 +221,25 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         resultActions.andDo(print())
                 .andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveJobPosting(anyLong());
+    }
+
+    @Test
+    void archiveJobListWithoutJwtShouldBeForbidden() throws Exception {
+        // given
+        JobPostingDto job = JobPostingDto.builder()
+                .id(1L)
+                .archive(false)
+                .build();
+
+        List<Long> givenDto = Collections.singletonList(job.getId());
+        String json = gson.toJson(givenDto);
+
+        // when
+        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isForbidden());
+        verify(jobPostingService, never()).toggleArchiveAll(Collections.singletonList(anyLong()));
     }
 }

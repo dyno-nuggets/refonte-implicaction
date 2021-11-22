@@ -28,6 +28,7 @@ public class JobPostingAdapter {
                 .keywords(model.getKeywords())
                 .contractType(model.getContractType())
                 .createdAt(model.getCreatedAt())
+                .archive(model.isArchive())
                 .build();
     }
 
@@ -46,6 +47,7 @@ public class JobPostingAdapter {
                 .keywords(dto.getKeywords())
                 .contractType(dto.getContractType())
                 .createdAt(dto.getCreatedAt())
+                .archive(dto.isArchive())
                 .build();
     }
 }

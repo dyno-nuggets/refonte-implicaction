@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -58,9 +60,18 @@ public class JobPostingService {
     public JobPostingDto toggleArchiveJobPosting(Long jobPostingId) {
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobPostingId)));
-        jobPosting.setArchive(jobPosting.isArchive());
+        jobPosting.setArchive(!jobPosting.isArchive());
         final JobPosting save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
     }
 
+    @Transactional
+    public List<JobPostingDto> toggleArchiveAll(List<Long> jobsId) {
+        List<JobPosting> jobs = jobPostingRepository.findAllById(jobsId);
+        jobs.forEach(job -> job.setArchive(!job.isArchive()));
+        return jobPostingRepository.saveAll(jobs)
+                .stream()
+                .map(jobPostingAdapter::toDto)
+                .collect(Collectors.toList());
+    }
 }

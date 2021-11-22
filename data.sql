@@ -662,4 +662,7 @@ VALUES (15, 'Ivalua', 'Alternance', '2022-09-30', 'Ingénieur informaticien c#',
         'En tant que chef d\'étage à moustaches, ma tâche consistait essentiellement à motiver le personnel en instaurant des moments privilégiés à la cantine autour d\'un céleri rémoulade ou d\'un couscous de la mer.',
         '2021-09-10', 'Chef d\'étage à moustaches', '2021-02-28', 15);
 
--- 2021-11-22 06:09:06
+
+ALTER TABLE `job_posting`
+    ADD `short_description` longtext NULL AFTER `description`;
+
