@@ -175,7 +175,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
         String json = gson.toJson(givenDto);
 
-        given(jobPostingService.toggleArchiveAll(Collections.singletonList(anyLong()))).willReturn(expectedDto);
+        given(jobPostingService.toggleArchiveAll(anyList())).willReturn(expectedDto);
 
         // when
         final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
@@ -187,9 +187,9 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         for (int i = 0; i < givenDto.size(); i++) {
             final String contentPath = String.format("$[%d]", i);
             resultActions
-                    .andExpect(jsonPath(contentPath + ".id", is(job.getId())))
-                    .andExpect(jsonPath("$.archive", is(!job.isArchive())));
-            verify(jobPostingService, times(givenDto.size())).toggleArchiveAll(givenDto);
+                    .andExpect(jsonPath(contentPath + ".id", is(job.getId().intValue())))
+                    .andExpect(jsonPath(contentPath + ".archive", is(!job.isArchive())));
+            verify(jobPostingService, times(1)).toggleArchiveAll(givenDto);
         }
     }
 

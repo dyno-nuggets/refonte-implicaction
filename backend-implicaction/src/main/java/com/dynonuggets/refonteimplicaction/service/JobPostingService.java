@@ -68,16 +68,10 @@ public class JobPostingService {
     @Transactional
     public List<JobPostingDto> toggleArchiveAll(List<Long> jobsId) {
         List<JobPosting> jobs = jobPostingRepository.findAllById(jobsId);
-        List<JobPosting> updated = jobs.stream()
-                .map(job -> {
-                    job.setArchive(!job.isArchive());
-                    return job;
-                })
-                .collect(Collectors.toList());
-        final List<JobPostingDto> save = jobPostingRepository.saveAll(updated)
+        jobs.forEach(job -> job.setArchive(!job.isArchive()));
+        return jobPostingRepository.saveAll(jobs)
                 .stream()
                 .map(jobPostingAdapter::toDto)
                 .collect(Collectors.toList());
-        return save;
     }
 }
