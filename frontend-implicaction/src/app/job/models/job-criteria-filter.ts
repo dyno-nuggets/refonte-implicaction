@@ -1,6 +1,6 @@
-import {ContractTypeCode} from './contract-type-enum';
+import {ContractEnumCode} from '../../shared/enums/contract.enum';
 
 export interface JobCriteriaFilter {
   search?: string;
-  contractType?: ContractTypeCode;
+  contractType?: ContractEnumCode;
 }

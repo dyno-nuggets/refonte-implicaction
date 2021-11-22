@@ -42,6 +42,10 @@ public class ApiUrls {
     public static final String FILE_BASE_URI = "/api/files";
     public static final String GET_FILE_BY_KEY = "/{objectKey}";
 
+    // APPLICATION
+    public static final String APPLY_BASE_URI = "/api/applies";
+    public static final String GET_APPLY_URI = "/{applyId}";
+
     private ApiUrls() {
         // empêche la construction d'un objet ApiUrls
     }

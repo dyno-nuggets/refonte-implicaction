@@ -1,5 +1,7 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
+import com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum;
+import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,13 +10,19 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class JobApplicationDto {
-    
+
     private Long id;
 
-    private JobPostingDto jobPosting;
+    private Long jobId;
 
-    private UserDto user;
+    private String jobTitle;
 
-    private ApplicationStatusDto status;
+    private String companyName;
+
+    private String companyImageUri;
+
+    private ApplyStatusEnum status;
+
+    private ContractTypeEnum contractType;
 
 }

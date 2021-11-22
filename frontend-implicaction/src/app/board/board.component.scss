@@ -1,0 +1,49 @@
+@import "src/assets/variables";
+
+h3 {
+  color: $light-gray;
+  text-transform: uppercase;
+}
+
+.board {
+  // Override Automatic Minimum Size
+  // https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size
+  min-width: 0;
+  min-height: 0;
+
+  @media screen and (min-width: 992px) {
+    .board-column {
+      min-height: 100vh !important;
+    }
+  }
+}
+
+.column-title {
+  inline-size: 250px;
+}
+
+.applies-container {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 200px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+  0 8px 10px 1px rgba(0, 0, 0, 0.14),
+  0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.tasks-container.cdk-drop-list-dragging .task:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

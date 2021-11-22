@@ -1,0 +1,31 @@
+<div class="card p-3 mb-2 shadow-sm">
+  <div class="d-flex justify-content-between">
+    <div class="d-flex flex-row align-items-center">
+      <img
+        #companyImg
+        (error)="companyImg.src = COMPANY_IMAGE_DEFAULT_URI"
+        [src]="apply.companyImageUrl || COMPANY_IMAGE_DEFAULT_URI"
+        alt="{{apply.companyName}}"
+        class="icon"
+      >
+      <div class="ms-2 c-details">
+        <h6 class="mb-0 theme-primary">{{apply.companyName}}</h6>
+        <span>{{apply.location}}</span>
+      </div>
+    </div>
+    <app-contract-type [type]="apply.contractType"></app-contract-type>
+  </div>
+  <div class="mt-3">
+    <h3 class="heading">
+      <a
+        class="text-decoration-none theme-primary"
+        routerLink="/{{univers.JOBS.url}}/{{apply.jobId}}"
+      >
+        {{apply.jobTitle}}
+      </a>
+    </h3>
+  </div>
+  <div class="card-footer d-grid gap-2 p-0 mt-2">
+    <button class="btn btn-primary" type="button">Postuler</button>
+  </div>
+</div>

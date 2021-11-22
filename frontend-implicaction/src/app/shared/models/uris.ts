@@ -90,7 +90,17 @@ export class Uris {
     static readonly TOP_POSTING = 'sub-reddits/top-posting';
   };
 
+  /**
+   * COMMENTS
+   */
   static COMMENTS = class {
     static readonly BASE_URI = 'comments';
+  };
+
+  /**
+   * JOB-APPLICATIONS
+   */
+  static JOB_APPLICATION = class {
+    static readonly BASE_URI = 'applies';
   };
 }

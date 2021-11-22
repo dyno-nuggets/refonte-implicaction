@@ -62,7 +62,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
         for (int i = 0; i < jobPostings.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(jobPostings.get(i).getId()))))
+            actions.andExpect(jsonPath(contentPath + ".id", is(jobPostings.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + ".createdAt", is(jobPostings.get(i).getCreatedAt().toString())))
                     .andExpect(jsonPath(contentPath + ".description", is(jobPostings.get(i).getDescription())))
                     .andExpect(jsonPath(contentPath + ".location", is(jobPostings.get(i).getLocation())))

@@ -13,7 +13,7 @@
       <span class="pe-2">{{job.location}}</span>
       <span class="d-none d-sm-inline pe-2">•</span>
     </span>
-    <app-contract-type [type]="job.contractType?.label"></app-contract-type>
+    <app-contract-type [type]="job.contractType"></app-contract-type>
     <ng-container *ngIf="job.createdAt">
       <span class="d-none d-sm-inline ps-2">•</span>
       <span class="ps-2">
@@ -33,7 +33,10 @@
       </p>
     </div>
     <div class="job-options align-self-end mb-4 col-12 col-lg-5 col-xl-4 col-xxl-auto">
-      <button class="btn btn-primary fw-bold w-100 px-xxl-5">
+      <button
+        (click)="addToJobBoard()"
+        class="btn btn-primary fw-bold w-100 px-xxl-5"
+      >
         <i-feather class="icon me-2" name="plus"></i-feather>
         Ajouter au jobBoard
       </button>

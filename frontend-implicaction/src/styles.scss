@@ -98,7 +98,7 @@ textarea, input {
 }
 
 .theme-primary {
-  color: $primary;
+  color: $primary !important;
 }
 
 input:focus::placeholder {

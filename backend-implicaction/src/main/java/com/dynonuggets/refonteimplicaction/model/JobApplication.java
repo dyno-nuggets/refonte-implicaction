@@ -1,9 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -15,6 +12,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "job_application")
 public class JobApplication {
 
@@ -25,16 +23,18 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
-    private JobPosting jobPosting;
+    private JobPosting job;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
+    @Enumerated(EnumType.STRING)
+    private ApplyStatusEnum status;
 
-    @Column(name = "submitted_at")
-    private Instant submitedAt;
+    @Column(name = "last_update")
+    private Instant lastUpdate;
+
+    @Column(columnDefinition = "boolean default false")
+    private boolean archive;
 }

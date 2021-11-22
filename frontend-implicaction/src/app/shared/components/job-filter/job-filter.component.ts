@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ContractTypeCode, ContractTypeEnum} from '../../../job/models/contract-type-enum';
 import {JobCriteriaFilter} from '../../../job/models/job-criteria-filter';
 import {JobFilterContextService} from '../../../job/services/job-filter-context.service';
 import {Subscription} from 'rxjs';
+import {ContractEnum, ContractEnumCode} from '../../enums/contract.enum';
 
 @Component({
   selector: 'app-job-filter',
@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 })
 export class JobFilterComponent implements OnInit, OnDestroy {
 
-  contractTypes = ContractTypeEnum.all();
+  contractTypes = ContractEnum.all();
   criteria: JobCriteriaFilter = {};
   subscription: Subscription;
 
@@ -24,7 +24,7 @@ export class JobFilterComponent implements OnInit, OnDestroy {
       .subscribe(criteria => this.criteria = criteria);
   }
 
-  onContractTypeChange(code: ContractTypeCode): void {
+  onContractTypeChange(code: ContractEnumCode): void {
     this.criteria.contractType = code;
     this.filterContextService.setFilter(this.criteria);
   }
