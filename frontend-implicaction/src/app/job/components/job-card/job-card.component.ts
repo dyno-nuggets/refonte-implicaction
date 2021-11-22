@@ -32,7 +32,7 @@ export class JobCardComponent {
         () => {
           this.router
             .navigate([Univers.BOARD.url])
-            .then(() => this.toasterService.success('Succès', `L'offre a bien été ajouté à votre board`));
+            .then(() => this.toasterService.success('Succès', `L'offre a bien été ajoutée à votre board`));
         },
         () => this.toasterService.error('Oops', `Une erreur est survenue lors de l'ajout de l'offre à votre board`)
       );
