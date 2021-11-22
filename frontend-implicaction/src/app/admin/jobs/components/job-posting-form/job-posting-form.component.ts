@@ -11,7 +11,6 @@ import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
 import {ContractEnum} from '../../../../shared/enums/contract.enum';
-import {StatusEnum} from '../../../../shared/enums/status.enum';
 
 @Component({
   selector: 'app-job-posting-form',
@@ -62,11 +61,9 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
     let job$: Observable<JobPosting>;
 
     if (this.isUpdate) {
-      job.status = this.job.status;
       job.id = this.sidebarInput.job.id;
       job$ = this.jobService.updateJob(job);
     } else {
-      job.status = StatusEnum.JOB_AVAILABLE;
       job$ = this.jobService.createJob(job);
     }
 
@@ -76,17 +73,15 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
           this.updateFields(jobUpdate);
         }
       },
-      () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
-      () => this.sidebarService.close()
+      () => {
+        const action = this.isUpdate ? 'la mise à jour' : `l'ajout`;
+        this.toasterService.error('Oops', `Une erreur est survenue lors de ${action} de votre expérience.`);
+      },
+      () => {
+        this.toasterService.success('Succès', `L'offre a été mise à jour avec succès.`);
+        this.sidebarService.close();
+      }
     );
-  }
-
-  onContractChange($event: Event): void {
-
-  }
-
-  onCompanyChange($event: Event): void {
-
   }
 
   private initForm(jobPosting: JobPosting): void {

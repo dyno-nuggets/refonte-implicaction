@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.dto.ApplicationRequest;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum;
+import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -34,7 +35,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     void should_create_apply() throws Exception {
         // given
         ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
-        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", ApplyStatusEnum.PENDING, "CDI");
+        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", ApplyStatusEnum.PENDING, ContractTypeEnum.CDI);
         given(applicationService.createApplyIfNotExists(any())).willReturn(response);
         String json = gson.toJson(request);
 

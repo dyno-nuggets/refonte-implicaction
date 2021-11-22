@@ -21,7 +21,7 @@ public class JobApplicationAdapter {
                 .companyName(companyName)
                 .companyImageUri(companyImageUrl)
                 .status(model.getStatus())
-                .contractType(job.getContractType().getCode())
+                .contractType(job.getContractType())
                 .build();
     }
 }

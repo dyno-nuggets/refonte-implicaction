@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 
+import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDI;
 import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
 import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,11 +47,10 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     void should_create_apply() {
         // given
         ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
-        final ContractType contractType = ContractType.builder().code("CDI").build();
-        JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, contractType, Instant.now(), false);
+        JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         final User currentUser = User.builder().id(45L).build();
         JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
-        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus(), "CDI");
+        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus(), CDI);
         given(jobRepository.findById(anyLong())).willReturn(java.util.Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepostitory.save(any())).willReturn(jobApplication);
@@ -65,7 +65,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         assertThat(actual.getStatus()).isEqualTo(jobApplication.getStatus());
         assertThat(actual.getJobId()).isEqualTo(jobApplication.getJob().getId());
         assertThat(actual.getJobTitle()).isEqualTo(jobApplication.getJob().getTitle());
-        assertThat(actual.getContractType()).isEqualTo(jobApplication.getJob().getContractType().getCode());
+        assertThat(actual.getContractType()).isEqualTo(jobApplication.getJob().getContractType());
         assertThat(actual.getCompanyName()).isEqualTo(jobApplication.getJob().getCompany().getName());
         assertThat(actual.getCompanyImageUri()).isEqualTo(jobApplication.getJob().getCompany().getLogo());
     }

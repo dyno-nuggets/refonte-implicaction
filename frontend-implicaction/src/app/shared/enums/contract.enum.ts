@@ -2,17 +2,20 @@ import {EnumCodeLabelAbstract} from './enum-code-label-abstract.enum';
 
 export enum ContractEnumCode {
   CDD = 'CDD',
-  CDI = 'CDI'
+  CDI = 'CDI',
+  INTERIM = 'INTERIM',
+  ALTERN = 'ALTERN'
 }
 
 export class ContractEnum extends EnumCodeLabelAbstract<ContractEnumCode> {
-  static readonly CDI = new ContractEnum(ContractEnumCode.CDI, 'CDI', 1);
-  static readonly CDD = new ContractEnum(ContractEnumCode.CDD, 'CDD', 2);
+  static readonly CDI = new ContractEnum(ContractEnumCode.CDI, 'CDI');
+  static readonly CDD = new ContractEnum(ContractEnumCode.CDD, 'CDD');
+  static readonly INTERIM = new ContractEnum(ContractEnumCode.INTERIM, 'Intérim');
+  static readonly ALTERN = new ContractEnum(ContractEnumCode.ALTERN, 'Alternance');
 
   constructor(
     readonly code: ContractEnumCode,
-    readonly label: string,
-    readonly id: number
+    readonly label: string
   ) {
     super(code, label);
   }
