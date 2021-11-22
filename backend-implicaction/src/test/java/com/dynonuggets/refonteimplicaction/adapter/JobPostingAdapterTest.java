@@ -1,37 +1,30 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
-import com.dynonuggets.refonteimplicaction.dto.ContractTypeDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.Company;
-import com.dynonuggets.refonteimplicaction.model.ContractType;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
+import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobPostingAdapterTest {
     CompanyDto companyDto;
-    ContractTypeDto contractTypeDto;
     Company company;
-    ContractType contractType;
     JobPosting jobPosting;
     JobPostingAdapter jobPostingAdapter;
     CompanyAdapter companyAdapter;
-    ContractTypeAdapter contractTypeAdapter;
 
     @BeforeEach
     public void setUp() {
         companyAdapter = new CompanyAdapter();
-        contractTypeAdapter = new ContractTypeAdapter();
-        jobPostingAdapter = new JobPostingAdapter(companyAdapter, contractTypeAdapter);
+        jobPostingAdapter = new JobPostingAdapter(companyAdapter);
         company = new Company(1L, "urlModel", "logo", "name", "description");
-        contractType = new ContractType(3L, "label", "code");
         companyDto = new CompanyDto(1L, "urlModel", "logo", "name", "description");
-        contractTypeDto = new ContractTypeDto(3L, "label", "code");
 
         jobPosting = JobPosting.builder()
                 .id(7L)
@@ -42,7 +35,7 @@ class JobPostingAdapterTest {
                 .location("location")
                 .salary("salary")
                 .keywords("keywords")
-                .contractType(contractType)
+                .contractType(CDD)
                 .createdAt(Instant.now())
                 .build();
     }
@@ -59,7 +52,7 @@ class JobPostingAdapterTest {
         assertThat(jobPostingDto.getLocation()).isEqualTo(jobPosting.getLocation());
         assertThat(jobPostingDto.getSalary()).isEqualTo(jobPosting.getSalary());
         assertThat(jobPostingDto.getKeywords()).isEqualTo(jobPosting.getKeywords());
-        assertThat(jobPostingDto.getContractType()).isEqualTo(contractTypeDto);
+        assertThat(jobPostingDto.getContractType()).isEqualTo(CDD);
         assertThat(jobPostingDto.getCreatedAt()).isEqualTo(jobPosting.getCreatedAt());
     }
 

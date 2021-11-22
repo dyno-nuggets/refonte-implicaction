@@ -43,9 +43,8 @@ public class JobPosting {
     @Column(name = "keywords")
     private String keywords;
 
-    @ManyToOne
-    @JoinColumn(name = "contract_type_id", nullable = false)
-    private ContractType contractType;
+    @Enumerated(EnumType.STRING)
+    private ContractTypeEnum contractType;
 
     @Column(name = "created_at")
     private Instant createdAt;

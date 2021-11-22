@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.repository.impl;
 
+import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepositoryCustom;
 import lombok.AllArgsConstructor;
@@ -45,7 +46,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
 
         // recherche par type de contrat
         if (StringUtils.isNotEmpty(contractType)) {
-            predicates.add(criteriaBuilder.like(queryRoot.get("contractType").get("label"), contractType));
+            predicates.add(criteriaBuilder.equal(queryRoot.get("contractType"), ContractTypeEnum.valueOf(contractType)));
         }
 
         // combinaison des différents prédicats

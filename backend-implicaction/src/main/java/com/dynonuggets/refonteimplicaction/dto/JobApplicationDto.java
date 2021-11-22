@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
 import com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum;
+import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,6 +23,6 @@ public class JobApplicationDto {
 
     private ApplyStatusEnum status;
 
-    private String contractType;
+    private ContractTypeEnum contractType;
 
 }
