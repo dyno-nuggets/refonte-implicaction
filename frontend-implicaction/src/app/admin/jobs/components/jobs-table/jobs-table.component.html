@@ -1,5 +1,5 @@
 <p-table
-  (onLazyLoad)="loadJobs($event)"
+  (onLazyLoad)="paginate($event)"
   [(selection)]="selectedJobs"
   [lazy]="true"
   [loading]="loading"
@@ -40,6 +40,7 @@
               class="btn"
               data-bs-placement="top"
               data-bs-toggle="tooltip"
+              (click)="editJob(job)"
               title="Editer"
               type="button"
             >

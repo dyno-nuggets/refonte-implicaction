@@ -3,7 +3,6 @@ import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {JobService} from '../../../../job/services/job.service';
-import {LazyLoadEvent} from 'primeng/api';
 import {finalize, take} from 'rxjs/operators';
 import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
 import {JobCriteriaFilter} from '../../../../job/models/job-criteria-filter';
@@ -59,8 +58,7 @@ export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, 
         this.paginate();
       });
 
-    this.getFilterFromQueryParams()
-      .then(() => this.filterService.criteria = this.criteria);
+    this.getFilterFromQueryParams().then(() => this.filterService.criteria = this.criteria);
   }
 
   onSortChange({value}): void {
