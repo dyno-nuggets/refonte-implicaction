@@ -304,6 +304,14 @@ export class ApiEndpointsService {
   }
 
   /**
+   * JOB APPLICATION
+   */
+
+  createJobApplicationEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
+  }
+
+  /**
    * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */

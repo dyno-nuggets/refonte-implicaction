@@ -1,7 +1,10 @@
 import {EnumCodeLabelAbstract} from '../../shared/enums/enum-code-label-abstract.enum';
 
 export enum ApplyStatusCode {
-  PENDING, SENT, CHASED, INTERVIEW
+  PENDING = 'PENDING',
+  SENT = 'SENT',
+  CHASED = 'CHASED',
+  INTERVIEW = 'INTERVIEW'
 }
 
 export class ApplyStatusEnum extends EnumCodeLabelAbstract<ApplyStatusCode> {

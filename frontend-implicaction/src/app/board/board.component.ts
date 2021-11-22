@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {ApplyStatusCode, ApplyStatusEnum} from './enums/apply-status-enum';
-import {JobApply} from './models/job-apply';
+import {JobApplication} from './models/job-application';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 
 export class BoardColumn {
   status: ApplyStatusEnum;
-  applies: JobApply[] = [];
+  applies: JobApplication[] = [];
 }
 
 
@@ -61,7 +61,7 @@ export class BoardComponent implements OnInit {
       });
   }
 
-  drop(event: CdkDragDrop<JobApply[], any>, statusCode: ApplyStatusCode): void {
+  drop(event: CdkDragDrop<JobApplication[], any>, statusCode: ApplyStatusCode): void {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,

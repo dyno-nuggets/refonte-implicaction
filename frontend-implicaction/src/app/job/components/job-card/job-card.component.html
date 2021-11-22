@@ -33,7 +33,10 @@
       </p>
     </div>
     <div class="job-options align-self-end mb-4 col-12 col-lg-5 col-xl-4 col-xxl-auto">
-      <button class="btn btn-primary fw-bold w-100 px-xxl-5">
+      <button
+        (click)="addToJobBoard()"
+        class="btn btn-primary fw-bold w-100 px-xxl-5"
+      >
         <i-feather class="icon me-2" name="plus"></i-feather>
         Ajouter au jobBoard
       </button>
