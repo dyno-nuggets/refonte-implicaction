@@ -27,6 +27,10 @@ public class Message {
     public static final String UNAUTHORIZED_CONTENT_TYPE_MESSAGE = "Exception occured while uploading the file [%s] : unauthorized content type";
     public static final String FILE_NOT_FOUND_MESSAGE = "No file found with id [%s]";
 
+    // JobApplication messages
+    public static final String APPLY_NOT_FOUND_MESSAGE = "No apply found with id [%d]";
+    public static final String APPLY_ALREADY_EXISTS_FOR_JOB = "Unable to apply, apply already exists with jobId [%d]";
+
     public static final String BAD_CREDENTIAL_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect.";
     public static final String USER_DISABLED_MESSAGE = "Votre compte n'a pas encore été activé.";
 

@@ -54,10 +54,10 @@ class PostServiceTest {
     VoteService voteService;
 
     @Captor
-    private ArgumentCaptor<Post> argumentCaptor;
+    ArgumentCaptor<Post> argumentCaptor;
 
     @InjectMocks
-    private PostService postService;
+    PostService postService;
 
     @Test
     void should_save_post_if_subreddit_exists() {
