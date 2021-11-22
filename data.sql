@@ -81,56 +81,6 @@ CREATE TABLE `file`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO `file` (`id`, `content_type`, `filename`, `url`, `uploader_id`, `object_key`)
-VALUES (1, 'image/png', 'logo-region-ile-de-france.png', 'http://127.0.0.1:4566/implicaction/bbee41f1-302b-4cef-a988-5da6ebd391e3png', NULL, NULL),
-       (2, 'image/png', '86686823.png', 'http://127.0.0.1:4566/implicaction/c0bc4be0-1ba1-48fa-9973-a7d8a1271829png', NULL, NULL),
-       (3, 'image/png', 'logo-region-ile-de-france.png', 'http://127.0.0.1:4566/implicaction/848ead18-cc7b-4c9f-9f4c-af9810ec2aaapng', NULL, NULL),
-       (4, 'image/png', 'logo-region-ile-de-france.png', 'http://127.0.0.1:4566/implicaction/5e7da068-2f0c-4023-80e3-e4c787259e12png', NULL, NULL),
-       (5, 'image/png', 'logo-region-ile-de-france.png', 'http://127.0.0.1:4566/implicaction/74d5d994-e64e-4fa8-b08e-b4bfadae13dcpng', NULL, NULL),
-       (6, 'image/png', 'logo-region-ile-de-france.png', 'http://127.0.0.1:4566/implicaction/39967eca-e89e-4d0d-be79-b71137f7ae31png', NULL, NULL),
-       (7, 'image/jpeg', 'leo.jpg', 'http://127.0.0.1:4566/refonte-implicaction/27540f66-e1b2-456b-b9ba-71c9646d740fjpg', NULL, NULL),
-       (8, 'image/jpeg', 'leo.jpg', 'http://127.0.0.1:4566/refonte-implicaction/0c8bfbb0-dcd4-42e1-a415-a3fd53f7767cjpg', NULL, NULL),
-       (9, 'image/png', 'Capture d’écran 2021-11-01 à 15.51.20.png', 'http://127.0.0.1:4566/refonte-implicaction/466da1e1-0be5-4ba4-b910-616cb50c84bapng', NULL, NULL),
-       (10, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/c9d5e86a-664a-4ae3-8c7d-ff722ed6ebccpng', NULL, NULL),
-       (11, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/26f0d285-71ad-4679-893a-9651c1c673a2png', NULL, NULL),
-       (12, 'image/png', 'Capture d’écran 2021-11-09 à 02.25.05.png', 'http://127.0.0.1:4566/refonte-implicaction/98c9b8a6-7d86-4422-8f72-ea0ca88b1d4apng', NULL, NULL),
-       (13, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/0e63fbc2-ffe6-439f-ac9d-73b2aec18b07png', NULL, NULL),
-       (14, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/5df078b9-4905-4586-aae3-b9f03c2ffed6png', NULL, NULL),
-       (15, 'image/png', 'Capture d’écran 2021-11-06 à 20.05.41.png', 'http://127.0.0.1:4566/refonte-implicaction/b3886aab-8330-43a2-9468-4a8359c9ef77png', NULL, NULL),
-       (16, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/d0f854df-ed4b-4e64-a3b6-32edf5b79c74png', NULL, NULL),
-       (17, 'image/png', 'Capture d’écran 2021-11-06 à 21.29.58.png', 'http://127.0.0.1:4566/refonte-implicaction/cb09561c-7d46-40ba-b576-8a545fd1f1dcpng', NULL, NULL),
-       (18, 'image/png', 'Capture d’écran 2021-11-07 à 22.38.03.png', 'http://127.0.0.1:4566/refonte-implicaction/c7b8c9dd-ea4f-4936-9d6c-04036f060e2bpng', NULL, NULL),
-       (19, 'image/png', 'Capture d’écran 2021-11-04 à 20.05.03.png', 'http://127.0.0.1:4566/refonte-implicaction/5ea2d5ee-242d-43a1-8c88-c6fdf97dd1cbpng', NULL, NULL),
-       (20, 'image/jpeg', 'chemise-en-or.jpg', 'http://127.0.0.1:4566/refonte-implicaction/eca116c0-8828-418e-bc9a-c72de7840bddjpg', NULL, NULL),
-       (21, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/10935eee-80f4-4c52-8143-7c178f94af53png', NULL, NULL),
-       (22, 'image/jpeg', 'chemise-en-or.jpg', 'http://127.0.0.1:4566/refonte-implicaction/b337ad50-54a8-499b-a41e-4be71f17b0fajpg', NULL, NULL),
-       (23, 'image/png', 'avatar-ia-group.png', 'http://127.0.0.1:4566/refonte-implicaction/04ad96b2-7ba9-46aa-b138-4bd1143ae1f3png', NULL, NULL),
-       (24, 'image/png', 'Capture d’écran 2021-11-14 à 17.54.51.png', 'http://127.0.0.1:4566/refonte-implicaction/2280c427-749b-455f-a8b5-e32660320431png', NULL, NULL),
-       (25, 'image/png', 'avatar-ia-group.png', 'http://127.0.0.1:4566/refonte-implicaction/01e92137-d597-4bbb-884a-061580eb39bepng', NULL, NULL),
-       (26, 'image/png', 'Capture d’écran 2021-11-14 à 17.54.51.png', 'http://127.0.0.1:4566/refonte-implicaction/1feebbf4-e5c3-4468-af51-28e1db745cc0png', NULL, NULL),
-       (27, 'image/png', 'avatar-ia-group.png', 'http://127.0.0.1:4566/refonte-implicaction/9079e251-2395-4390-93fc-07036ab67a12png', NULL, NULL),
-       (28, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/3ae4b530-f4ff-46ac-a78c-4807fff4f1e1png', NULL, NULL),
-       (29, 'image/png', 'avatar-ia-group.png', 'http://127.0.0.1:4566/refonte-implicaction/9466eea2-ce53-4088-a869-cc618c8a9c17png', NULL, NULL),
-       (30, 'image/png', '86686823.png', 'http://127.0.0.1:4566/refonte-implicaction/380bb348-bcd5-4ce0-a6d5-dc1593d4f83apng', NULL, NULL),
-       (31, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/2767989d-f2b3-4dc3-af18-3cde2237cfb7png', NULL, NULL),
-       (32, 'image/png', 'Capture d’écran 2021-11-06 à 21.29.58.png', 'http://127.0.0.1:4566/refonte-implicaction/53b013e2-2c60-428b-80bb-a0618b6b1a56png', NULL, NULL),
-       (33, 'image/png', '86686823.png', 'http://127.0.0.1:4566/refonte-implicaction/cb329652-8b0d-4ea2-9562-fb14c8d33248png', NULL, NULL),
-       (34, 'image/jpeg', 'leo.jpg', 'http://127.0.0.1:4566/refonte-implicaction/c0871c77-5613-4850-9d9e-0265bdc6bfdbjpg', NULL, NULL),
-       (35, 'image/png', 'Capture d’écran 2021-11-06 à 20.05.41.png', 'http://127.0.0.1:4566/refonte-implicaction/ba3f3a29-6f51-45fa-b4bf-7ff1ad79ddeapng', NULL, NULL),
-       (36, 'image/png', 'avatar-ia-group.png', 'http://127.0.0.1:4566/refonte-implicaction/a1d34111-e043-4bed-a858-28e5b0ccb9ffpng', NULL, NULL),
-       (37, 'image/png', 'Capture d’écran 2021-11-06 à 20.05.41.png', 'http://127.0.0.1:4566/refonte-implicaction/0f06ce7a-2c4d-4510-afcf-3c687b5da34cpng', NULL, NULL),
-       (38, 'image/png', 'Capture d’écran 2021-11-13 à 15.06.22.png', 'http://127.0.0.1:4566/refonte-implicaction/cc8e4587-509f-4d3a-b2c6-b90417c9b007png', NULL, NULL),
-       (39, 'image/png', 'Capture d’écran 2021-11-07 à 22.38.03.png', 'http://127.0.0.1:4566/refonte-implicaction/c5649ad8-46ef-4e54-9bd9-c87264fbdb89png', NULL, NULL),
-       (40, 'image/png', 'avatar-ia-group.png', 'http://127.0.0.1:4566/refonte-implicaction/4ba644cb-6ff5-4fa6-b126-a8e1a5484c4bpng', NULL, NULL),
-       (41, 'image/jpeg', 'photo identité.jpg', 'http://127.0.0.1:4566/refonte-implicaction/d181e095-69eb-4b45-a59b-a21b4e2f9434jpg', NULL, NULL),
-       (42, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/a855fc2f-b042-44f8-82f6-154bcc41af5dpng', NULL, NULL),
-       (43, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/17e03f88-4c10-47fd-b60c-e752acb2803bpng', NULL, '17e03f88-4c10-47fd-b60c-e752acb2803bpng'),
-       (44, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/0d9670e1-186e-422b-bd7c-e4039745199fpng', NULL, '0d9670e1-186e-422b-bd7c-e4039745199fpng'),
-       (45, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/9652ef92-dcb5-4ea8-8d44-147ab94b2426png', NULL, '9652ef92-dcb5-4ea8-8d44-147ab94b2426png'),
-       (46, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/4d1b359f-7d0e-4899-a509-ead0b5c58571png', NULL, '4d1b359f-7d0e-4899-a509-ead0b5c58571png'),
-       (47, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/e3605d5d-0e8c-4031-8d63-a3ba96e560bapng', NULL, 'e3605d5d-0e8c-4031-8d63-a3ba96e560bapng'),
-       (48, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/ebefbaad-1f12-4afb-ad7e-8c2c5c116928png', NULL, 'ebefbaad-1f12-4afb-ad7e-8c2c5c116928png'),
-       (49, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/3cdd42a0-efe4-43d3-834f-90663404fc32png', NULL, '3cdd42a0-efe4-43d3-834f-90663404fc32png');
 
 DROP TABLE IF EXISTS `hibernate_sequence`;
 CREATE TABLE `hibernate_sequence`
@@ -162,10 +112,6 @@ CREATE TABLE `job_application`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
-
-INSERT INTO `job_application` (`id`, `last_update`, `status`, `job_id`, `user_id`, `archive`, `submitted_at`, `status_id`)
-VALUES (1, '2021-11-22 05:27:39', 'PENDING', 125, 1, 0, NULL, 0),
-       (2, '2021-11-22 05:34:55', 'PENDING', 135, 1, 0, NULL, 0);
 
 DROP TABLE IF EXISTS `job_posting`;
 CREATE TABLE `job_posting`
@@ -531,14 +477,14 @@ CREATE TABLE `subreddit`
   COLLATE = utf8mb4_0900_ai_ci;
 
 INSERT INTO `subreddit` (`id`, `description`, `name`, `user_id`, `created_at`, `image_id`)
-VALUES (33, 'Region Ile de France desc', 'Region Ile de France', 6, '2021-11-12 22:34:32', 6),
+VALUES (33, 'Region Ile de France desc', 'Region Ile de France', 6, '2021-11-12 22:34:32', NULL),
        (34, '', 'test sans image', 6, '2021-11-12 23:38:39', NULL),
        (35, '', 'test', 6, '2021-11-13 01:02:10', NULL),
-       (36, '', 'léo', 6, '2021-11-13 02:57:30', 7),
-       (38, 'test', 'ecran', 1, '2021-11-14 02:55:42', 9),
-       (39, 'fdsqfdsqfqsf', 'on fait des modifs !', 1, '2021-11-14 03:54:47', 10),
-       (40, '', '', 1, '2021-11-14 09:05:51', 12),
-       (41, '', 'github', 1, '2021-11-14 15:55:15', 13);
+       (36, '', 'léo', 6, '2021-11-13 02:57:30', NULL),
+       (38, 'test', 'ecran', 1, '2021-11-14 02:55:42', NULL),
+       (39, 'fdsqfdsqfqsf', 'on fait des modifs !', 1, '2021-11-14 03:54:47', NULL),
+       (40, '', '', 1, '2021-11-14 09:05:51', NULL),
+       (41, '', 'github', 1, '2021-11-14 15:55:15', NULL);
 
 DROP TABLE IF EXISTS `training`;
 CREATE TABLE `training`
@@ -604,7 +550,7 @@ VALUES (1, '2021-09-24 23:11:23', '793d746c-36f8-4937-bda6-7d6222cf3f51', CONV('
         'Acquérir une expérience supplémentaire dans l\'élaboration de solutions informatiques', 'Matthieu', 'Equitation, programmation, snowboard', 'Audemard',
         '$2a$10$vmy1fqGnyW7ZN0RXww2j2uBue.A4/5CSEGX6rsROmWfpwr.0bTVWG', '0617243256',
         'Passionné par le développement, je cherche toujours à trouver les solutions les plus élégantes aux problèmes qui me sont donnés.', 'Avant tout je cherche à m\'épanouir dans mon métier',
-        '2021-09-24 23:10:48', NULL, 'matthieu', 49),
+        '2021-09-24 23:10:48', NULL, 'matthieu', NULL),
        (2, '2021-09-24 23:12:41', '35254265-fa9d-4514-ae23-f167a5f6a831', CONV('1', 2, 10) + 0, '2021-10-07', 'My knowledge as an Elf, having lived for thousands of years.', 'dylan@mail.com',
         'To help me throw the ring in Mount Doom.', 'Dylan', 'F1, Badminton, Pétanque, Anime', 'Brudey', '$2a$10$s7u8ams6mKx4HlzczmTpDu2r.GWNwxkQzfHar1Rq9YkovEE2rzdCu', '0920100451',
         'I was there, 3000 years ago.', 'Get the ring.', '2021-09-24 23:12:28', NULL, 'dylan', NULL),
