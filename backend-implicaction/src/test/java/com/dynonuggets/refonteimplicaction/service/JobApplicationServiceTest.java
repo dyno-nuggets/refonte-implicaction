@@ -5,7 +5,10 @@ import com.dynonuggets.refonteimplicaction.controller.ControllerIntegrationTestB
 import com.dynonuggets.refonteimplicaction.dto.ApplicationRequest;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.model.Company;
+import com.dynonuggets.refonteimplicaction.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import org.junit.jupiter.api.Test;
@@ -16,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
 
+import static com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum.PENDING;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDI;
 import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
 import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
@@ -46,7 +50,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     @Test
     void should_create_apply() {
         // given
-        ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
+        ApplicationRequest request = new ApplicationRequest(123L, PENDING);
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         final User currentUser = User.builder().id(45L).build();
         JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
@@ -74,7 +78,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     void should_throw_notfound_when_creating_with_no_found_job() {
         // given
         long jobId = 123L;
-        ApplicationRequest request = new ApplicationRequest(jobId, ApplyStatusEnum.PENDING);
+        ApplicationRequest request = new ApplicationRequest(jobId, PENDING);
         NotFoundException expectedException = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId));
         given(jobRepository.findById(anyLong())).willThrow(expectedException);
 
@@ -89,7 +93,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     void should_throw_exception_when_creating_with_already_applied_job() {
         // given
         long jobId = 123L;
-        ApplicationRequest request = new ApplicationRequest(jobId, ApplyStatusEnum.PENDING);
+        ApplicationRequest request = new ApplicationRequest(jobId, PENDING);
         IllegalArgumentException expectedException = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, jobId));
         given(jobRepository.findById(anyLong())).willThrow(expectedException);
 

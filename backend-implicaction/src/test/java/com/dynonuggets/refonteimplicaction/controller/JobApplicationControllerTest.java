@@ -3,8 +3,6 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.ApplicationRequest;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum;
-import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,6 +10,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum.PENDING;
+import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDI;
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.APPLY_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
 import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
@@ -34,8 +34,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_apply() throws Exception {
         // given
-        ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
-        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", ApplyStatusEnum.PENDING, ContractTypeEnum.CDI);
+        ApplicationRequest request = new ApplicationRequest(123L, PENDING);
+        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING, CDI);
         given(applicationService.createApplyIfNotExists(any())).willReturn(response);
         String json = gson.toJson(request);
 
@@ -62,7 +62,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_notfound_when_creating_apply_and_job_notfound() throws Exception {
         // given
-        ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
+        ApplicationRequest request = new ApplicationRequest(123L, PENDING);
         String json = gson.toJson(request);
         final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, request.getJobId()));
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
@@ -84,7 +84,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_bad_request_when_creating_apply_with_already_applied_job() throws Exception {
         // given
-        ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
+        ApplicationRequest request = new ApplicationRequest(123L, PENDING);
         String json = gson.toJson(request);
         final IllegalArgumentException exception = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, request.getJobId()));
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
@@ -105,7 +105,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_return_forbidden_when_creating_apply_and_no_auth() throws Exception {
         // given
-        ApplicationRequest request = new ApplicationRequest(123L, ApplyStatusEnum.PENDING);
+        ApplicationRequest request = new ApplicationRequest(123L, PENDING);
         String json = gson.toJson(request);
 
         // when

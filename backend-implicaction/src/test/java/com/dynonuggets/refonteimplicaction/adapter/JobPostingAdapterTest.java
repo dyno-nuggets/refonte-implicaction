@@ -3,13 +3,13 @@ package com.dynonuggets.refonteimplicaction.adapter;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.Company;
-import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
 
+import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobPostingAdapterTest {
@@ -35,7 +35,7 @@ class JobPostingAdapterTest {
                 .location("location")
                 .salary("salary")
                 .keywords("keywords")
-                .contractType(ContractTypeEnum.CDD)
+                .contractType(CDD)
                 .createdAt(Instant.now())
                 .build();
     }
@@ -52,7 +52,7 @@ class JobPostingAdapterTest {
         assertThat(jobPostingDto.getLocation()).isEqualTo(jobPosting.getLocation());
         assertThat(jobPostingDto.getSalary()).isEqualTo(jobPosting.getSalary());
         assertThat(jobPostingDto.getKeywords()).isEqualTo(jobPosting.getKeywords());
-        assertThat(jobPostingDto.getContractType()).isEqualTo(ContractTypeEnum.CDD);
+        assertThat(jobPostingDto.getContractType()).isEqualTo(CDD);
         assertThat(jobPostingDto.getCreatedAt()).isEqualTo(jobPosting.getCreatedAt());
     }
 
