@@ -8,8 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +22,11 @@ public class CompanyService {
      */
     public Page<CompanyDto> getAll(Pageable pageable) {
         return companyRepository.findAll(pageable)
+                .map(companyAdapter::toDto);
+    }
+
+    public Page<CompanyDto> getAllWithCriteria(Pageable pageable, String keyword) {
+        return companyRepository.findAllWithCriteria(pageable, keyword)
                 .map(companyAdapter::toDto);
     }
 

@@ -11,8 +11,10 @@ import {BrPipe} from './pipes/br.pipe';
 import {ContractTypeComponent} from './components/contract-type/contract-type.component';
 import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 import {JobFilterComponent} from './components/job-filter/job-filter.component';
+import {CompanyFilterComponent} from './components/company-filter/company-filter.component';
 import {BaseWithPaginationComponent} from './components/base-with-pagination/base-with-pagination.component';
 import {AvatarModule} from 'primeng/avatar';
+import {FormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -27,6 +29,7 @@ import {AvatarModule} from 'primeng/avatar';
     DateTimelapseComponent,
     JobFilterComponent,
     BaseWithPaginationComponent,
+    CompanyFilterComponent
   ],
   exports: [
     HeaderComponent,
@@ -44,7 +47,8 @@ import {AvatarModule} from 'primeng/avatar';
     RouterModule,
     BadgeModule,
     IconsModule,
-    AvatarModule
+    AvatarModule,
+    FormsModule
   ]
 })
 export class SharedModule {

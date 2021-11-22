@@ -16,16 +16,14 @@ import {JobPosting} from '../../../shared/models/job-posting';
   templateUrl: './jobs-list.component.html',
   styleUrls: ['./jobs-list.component.scss']
 })
-export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> implements OnInit {
+export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, JobCriteriaFilter> implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
   isLoading = true;
 
   // Pagination et filtres
-  pageable = Constants.PAGEABLE_DEFAULT;
   orderByEnums = JobSortEnum.all();
-  criteria: JobCriteriaFilter = {};
   selectedOrderCode: string;
   sortDirection = SortDirectionEnum;
 
@@ -33,9 +31,9 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> i
     private toastService: ToasterService,
     private jobsService: JobService,
     private filterService: JobFilterContextService,
-    private route: ActivatedRoute
+    protected route: ActivatedRoute
   ) {
-    super();
+    super(route);
   }
 
   ngOnInit(): void {
@@ -44,7 +42,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> i
     this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
 
     this.filterService
-      .observeFilter()
+      .observe()
       .subscribe(criteria => {
         this.criteria = criteria;
         const objectParam = this.buildQueryParams();
@@ -53,18 +51,18 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> i
       });
 
     this.getFilterFromQueryParams()
-      .then(() => this.filterService.setFilter(this.criteria));
+      .then(() => this.filterService.criteria = this.criteria);
   }
 
   onSortChange({value}): void {
     const selectedOrderField = JobSortEnum.from(value);
     this.pageable.sortBy = selectedOrderField.sortBy;
     this.pageable.sortOrder = selectedOrderField.sortDirection;
-    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
+    this.filterService.criteria = this.criteria; // on relance la recherche en updatant le filtre
   }
 
   onSearchChange(): void {
-    this.filterService.setFilter(this.criteria);
+    this.filterService.criteria = this.criteria;
   }
 
   protected innerPaginate(): void {
@@ -79,39 +77,5 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting> i
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );
-  }
-
-  private async getFilterFromQueryParams(): Promise<void> {
-    // TODO: voir si y'a un moyen plus élégant avec typeof
-    const filterKeys = ['search', 'contractType'];
-    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
-    return new Promise(resolve => {
-      this.route
-        .queryParams
-        .subscribe(params => {
-          Object.entries(params)
-            .forEach(([key, value]) => {
-              if (filterKeys.includes(key)) {
-                this.criteria[key] = value;
-              } else if (pageableKeys.includes(key)) {
-                this.pageable[key] = value;
-              }
-            });
-          return resolve();
-        });
-    });
-  }
-
-  /**
-   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
-   */
-  private buildQueryParams(): any {
-    return {
-      ...this.criteria,
-      size: this.pageable.rows,
-      page: this.pageable.page,
-      sortBy: this.pageable.sortBy,
-      sortOrder: this.pageable.sortOrder
-    };
   }
 }

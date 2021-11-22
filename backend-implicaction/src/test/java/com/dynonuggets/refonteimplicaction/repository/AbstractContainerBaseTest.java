@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.repository;
 
 import org.testcontainers.containers.MySQLContainer;
 
-abstract class AbstractContainerBaseTest {
+public abstract class AbstractContainerBaseTest {
 
     @SuppressWarnings("rawtypes")
     static final MySQLContainer MY_SQL_CONTAINER;

@@ -1,0 +1,14 @@
+<div class="d-flex flex-column flex-sm-row flex-lg-column me-3">
+  <div class="col-12 col-sm-6 col-lg-11 me-1">
+    <div class="mb-3">
+      <label class="form-label text-dark fw-bold" for="nameInput">Rechercher</label>
+      <input
+        #keyword
+        (keyup.enter)="onKeywordChange(keyword.value)"
+        class="form-control"
+        id="nameInput"
+        placeholder="Rechercher une entreprise"
+      >
+    </div>
+  </div>
+</div>

@@ -20,13 +20,13 @@ export class JobFilterComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscription = this.filterContextService
-      .observeFilter()
+      .observe()
       .subscribe(criteria => this.criteria = criteria);
   }
 
   onContractTypeChange(code: ContractEnumCode): void {
     this.criteria.contractType = code;
-    this.filterContextService.setFilter(this.criteria);
+    this.filterContextService.criteria = this.criteria;
   }
 
   ngOnDestroy(): void {

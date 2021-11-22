@@ -43,7 +43,7 @@ export class JobsTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterService
-      .observeFilter()
+      .observe()
       .subscribe(criteria => {
         this.criteria = criteria;
         const objectParam = this.buildQueryParams();
@@ -52,7 +52,7 @@ export class JobsTableComponent implements OnInit {
       });
 
     this.getFilterFromQueryParams()
-      .then(() => this.filterService.setFilter(this.criteria));
+      .then(() => this.filterService.criteria = this.criteria);
   }
 
   paginate({page, first, rows} = this.pageable): void {
@@ -77,11 +77,11 @@ export class JobsTableComponent implements OnInit {
     const selectedOrderField = JobSortEnum.from(value);
     this.pageable.sortBy = selectedOrderField.sortBy;
     this.pageable.sortOrder = selectedOrderField.sortDirection;
-    this.filterService.setFilter(this.criteria); // on relance la recherche en updatant le filtre
+    this.filterService.criteria = this.criteria; // on relance la recherche en updatant le filtre
   }
 
   onSearchChange(): void {
-    this.filterService.setFilter(this.criteria);
+    this.filterService.criteria = this.criteria;
   }
 
   loadJobs(event: LazyLoadEvent): void {

@@ -4,19 +4,22 @@ import {BaseWithPaginationComponent} from '../../../shared/components/base-with-
 import {PostService} from '../../services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
+import {ActivatedRoute} from '@angular/router';
+import {Criteria} from '../../../shared/models/Criteria';
 
 @Component({
   selector: 'app-post-list',
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss']
 })
-export class PostListComponent extends BaseWithPaginationComponent<Post> implements OnInit {
+export class PostListComponent extends BaseWithPaginationComponent<Post, Criteria> implements OnInit {
 
   constructor(
     private postService: PostService,
-    private toastService: ToasterService
+    private toastService: ToasterService,
+    protected route: ActivatedRoute
   ) {
-    super();
+    super(route);
   }
 
   ngOnInit(): void {
