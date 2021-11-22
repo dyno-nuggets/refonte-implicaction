@@ -8,7 +8,7 @@ import lombok.Getter;
 @Data
 @Getter
 @AllArgsConstructor
-public class ApplicationRequest {
+public class JobApplicationRequest {
     private Long jobId;
     private ApplyStatusEnum status;
 }

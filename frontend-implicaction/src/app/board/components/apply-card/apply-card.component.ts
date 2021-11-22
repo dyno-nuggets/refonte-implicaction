@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {JobApply} from '../../models/job-apply';
+import {JobApplication} from '../../models/job-application';
 import {Constants} from '../../../config/constants';
 import {Univers} from '../../../shared/enums/univers';
 
@@ -13,7 +13,7 @@ export class ApplyCardComponent {
   readonly COMPANY_IMAGE_DEFAULT_URI = Constants.COMPANY_IMAGE_DEFAULT_URI;
 
   @Input()
-  apply: JobApply;
+  apply: JobApplication;
 
   univers = Univers;
 

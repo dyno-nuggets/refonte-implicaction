@@ -96,14 +96,12 @@ VALUES (50);
 DROP TABLE IF EXISTS `job_application`;
 CREATE TABLE `job_application`
 (
-    `id`           bigint NOT NULL AUTO_INCREMENT,
-    `last_update`  datetime     DEFAULT NULL,
-    `status`       varchar(255) DEFAULT NULL,
-    `job_id`       bigint NOT NULL,
-    `user_id`      bigint NOT NULL,
-    `archive`      tinyint(1)   DEFAULT '0',
-    `submitted_at` datetime     DEFAULT NULL,
-    `status_id`    bigint NOT NULL,
+    `id`          bigint NOT NULL AUTO_INCREMENT,
+    `last_update` datetime     DEFAULT NULL,
+    `status`      varchar(255) DEFAULT NULL,
+    `job_id`      bigint NOT NULL,
+    `user_id`     bigint NOT NULL,
+    `archive`     tinyint(1)   DEFAULT '0',
     PRIMARY KEY (`id`),
     KEY `FKobel3nnbi451ftywx9q9m2qax` (`job_id`),
     KEY `FKcbu1yb4kyxowejebm87crxtr8` (`user_id`),

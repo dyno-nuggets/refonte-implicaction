@@ -1,6 +1,6 @@
 import {ApplyStatusCode} from '../enums/apply-status-enum';
 
-export interface JobApply {
+export interface JobApplication {
   id?: string;
   jobId: string;
   jobTitle: string;
