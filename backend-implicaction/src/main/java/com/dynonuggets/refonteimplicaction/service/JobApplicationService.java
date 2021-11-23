@@ -11,6 +11,7 @@ import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -28,6 +29,7 @@ public class JobApplicationService {
     private final JobApplicationAdapter applyAdapter;
     private final AuthService authService;
 
+    @Transactional
     public JobApplicationDto createApplyIfNotExists(JobApplicationRequest applyRequest) {
         final JobPosting job = jobRepository.findById(applyRequest.getJobId())
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, applyRequest.getJobId())));
@@ -51,6 +53,7 @@ public class JobApplicationService {
         return applyAdapter.toDto(applySave);
     }
 
+    @Transactional(readOnly = true)
     public List<JobApplicationDto> getAllAppliesForCurrentUser() {
         final User currentUser = authService.getCurrentUser();
 
