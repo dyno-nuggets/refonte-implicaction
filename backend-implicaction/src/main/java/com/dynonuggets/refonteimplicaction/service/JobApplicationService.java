@@ -32,14 +32,16 @@ public class JobApplicationService {
         final JobPosting job = jobRepository.findById(applyRequest.getJobId())
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, applyRequest.getJobId())));
 
-        if (applyRepository.findByJob(job).isPresent()) {
+        final User currentUser = authService.getCurrentUser();
+
+        if (applyRepository.findByJobAndUser_id(job, currentUser.getId()).isPresent()) {
             throw new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, job.getId()));
         }
 
         final JobApplication apply = JobApplication.builder()
                 .job(job)
                 .archive(false)
-                .user(authService.getCurrentUser())
+                .user(currentUser)
                 .status(applyRequest.getStatus())
                 .lastUpdate(Instant.now())
                 .build();

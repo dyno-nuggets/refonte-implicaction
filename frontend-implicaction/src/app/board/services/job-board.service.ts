@@ -19,4 +19,8 @@ export class JobBoardService {
   createApplication(request: JobApplicationRequest): Observable<JobApplication> {
     return this.http.post<JobApplication>(this.apiEndpointService.createJobApplicationEndpoint(), request);
   }
+
+  getAllForCurrentUser(): Observable<JobApplication[]> {
+    return this.http.get<JobApplication[]>(this.apiEndpointService.getAllApplicationForCurrentUser());
+  }
 }

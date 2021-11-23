@@ -4,7 +4,7 @@
       <img
         #companyImg
         (error)="companyImg.src = COMPANY_IMAGE_DEFAULT_URI"
-        [src]="apply.companyImageUrl || COMPANY_IMAGE_DEFAULT_URI"
+        [src]="apply.companyImageUri || COMPANY_IMAGE_DEFAULT_URI"
         alt="{{apply.companyName}}"
         class="icon"
       >

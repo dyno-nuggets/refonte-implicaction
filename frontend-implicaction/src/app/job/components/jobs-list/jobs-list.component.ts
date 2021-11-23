@@ -67,7 +67,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
 
   protected innerPaginate(): void {
     this.jobsService
-      .getAllByCriteria(this.pageable, this.criteria)
+      .getAllByCriteria(this.pageable, this.criteria, true)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {

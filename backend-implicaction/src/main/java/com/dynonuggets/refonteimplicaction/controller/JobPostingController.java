@@ -35,10 +35,12 @@ public class JobPostingController {
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
             @RequestParam(value = "search", defaultValue = "") String search,
-            @RequestParam(value = "contractType", defaultValue = "") String contractType
+            @RequestParam(value = "contractType", required = false) String contractType,
+            @RequestParam(value = "checkApply", required = false) String applyCheckAsString
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.findAllWithCriteria(pageable, search, contractType);
+        final boolean applyCheck = Boolean.parseBoolean(applyCheckAsString);
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, applyCheck);
         return ResponseEntity.ok(jobPostingDtos);
     }
 

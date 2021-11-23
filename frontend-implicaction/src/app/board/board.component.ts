@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {ApplyStatusCode, ApplyStatusEnum} from './enums/apply-status-enum';
 import {JobApplication} from './models/job-application';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
+import {JobBoardService} from './services/job-board.service';
+import {ToasterService} from '../core/services/toaster.service';
 
 export class BoardColumn {
   status: ApplyStatusEnum;
@@ -22,43 +24,23 @@ export class BoardComponent implements OnInit {
       return {status, applies: []};
     });
 
+  constructor(
+    private jobBoardService: JobBoardService,
+    private toasterService: ToasterService
+  ) {
+  }
+
   ngOnInit(): void {
-    this.columns
-      .find(column => column.status.code === ApplyStatusCode.PENDING)
-      .applies
-      .push({
-        jobTitle: 'Responsable de la maintenance et de la sécurité',
-        contractType: 'CDI',
-        companyImageUrl: 'https://www.netanswer.fr/wp-content/uploads/2017/01/logoNAli400.png',
-        companyName: 'Net Answer',
-        location: 'France, Paris(75)',
-        jobId: '12',
-        statusCode: ApplyStatusEnum.PENDING.code
-      }, {
-        jobTitle: 'Responsable de la maintenance et de la sécurité',
-        contractType: 'CDI',
-        companyImageUrl: 'https://www.netanswer.fr/wp-content/uploads/2017/01/logoNAli400.png',
-        companyName: 'Net Answer',
-        location: 'France, Paris(75)',
-        jobId: '12',
-        statusCode: ApplyStatusEnum.PENDING.code
-      }, {
-        jobTitle: 'Responsable de la maintenance et de la sécurité',
-        contractType: 'CDI',
-        companyImageUrl: 'https://www.netanswer.fr/wp-content/uploads/2017/01/logoNAli400.png',
-        companyName: 'Net Answer',
-        location: 'France, Paris(75)',
-        jobId: '12',
-        statusCode: ApplyStatusEnum.PENDING.code
-      }, {
-        jobTitle: 'Responsable de la maintenance et de la sécurité',
-        contractType: 'CDI',
-        companyImageUrl: 'https://www.netanswer.fr/wp-content/uploads/2017/01/logoNAli400.png',
-        companyName: 'Net Answer',
-        location: 'France, Paris(75)',
-        jobId: '12',
-        statusCode: ApplyStatusEnum.PENDING.code
-      });
+    this.jobBoardService
+      .getAllForCurrentUser()
+      .subscribe(
+        applies => applies.forEach(apply =>
+          this.columns
+            .find(column => column.status.code === apply.statusCode)
+            .applies
+            .push(apply)),
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la récupération des données.')
+      );
   }
 
   drop(event: CdkDragDrop<JobApplication[], any>, statusCode: ApplyStatusCode): void {

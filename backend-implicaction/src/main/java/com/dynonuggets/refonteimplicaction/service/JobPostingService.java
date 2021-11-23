@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
@@ -16,12 +17,16 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @AllArgsConstructor
 public class JobPostingService {
 
     private final JobPostingRepository jobPostingRepository;
     private final JobPostingAdapter jobPostingAdapter;
+    private final JobApplicationRepository jobApplicationRepository;
+    private final AuthService authService;
 
     public JobPostingDto createJob(JobPostingDto jobPostingDto) {
 
@@ -37,9 +42,26 @@ public class JobPostingService {
         return jobPostingAdapter.toDto(jobPosting);
     }
 
-    public Page<JobPostingDto> findAllWithCriteria(Pageable pageable, String search, String contractType) {
-        return jobPostingRepository.findAllWithCriteria(pageable, search, contractType)
-                .map(jobPostingAdapter::toDto);
+    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, boolean applyCheck) {
+        // récupération des jobs
+        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType);
+        if (applyCheck) {
+            final List<Long> jobIds = jobs.stream().map(JobPosting::getId).collect(toList());
+            final List<Long> jobAppliesIds = getAllAppliesWithJobIdsIn(jobIds, authService.getCurrentUser().getId());
+            return jobs.map(job -> {
+                final JobPostingDto jobDto = jobPostingAdapter.toDto(job);
+                jobDto.setApply(jobAppliesIds.contains(jobDto.getId()));
+                return jobDto;
+            });
+        }
+        return jobs.map(jobPostingAdapter::toDto);
+    }
+
+    private List<Long> getAllAppliesWithJobIdsIn(List<Long> jobIds, Long userId) {
+        return jobApplicationRepository.findAllByJob_IdInAndUser_Id(jobIds, userId)
+                .stream()
+                .map(apply -> apply.getJob().getId())
+                .collect(toList());
     }
 
     @Transactional

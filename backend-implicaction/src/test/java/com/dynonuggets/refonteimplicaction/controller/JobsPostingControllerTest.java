@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static org.hamcrest.Matchers.is;
@@ -40,29 +41,32 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @BeforeEach
     void setUp() {
         jobPostings = Arrays.asList(
-                JobPostingDto.builder().id(1L).createdAt(Instant.now()).description("description").location("Paris").keywords("toto,yoyo").salary("1111$").build(),
-                JobPostingDto.builder().id(2L).createdAt(Instant.now()).description("description2").location("New York").keywords("toto2,yoyo2").salary("2222$").build());
+                JobPostingDto.builder().id(1L).createdAt(Instant.now()).description("description").location("Paris").keywords("toto,yoyo").contractType(CDD).salary("1111$").build(),
+                JobPostingDto.builder().id(2L).createdAt(Instant.now()).description("description2").location("New York").keywords("toto2,yoyo2").contractType(CDD).salary("2222$").build());
     }
 
-    @WithMockUser
     @Test
+    @WithMockUser
     void getJobPostingsListShouldListAllJobs() throws Exception {
         // given
-        String search = "";
-        String contractType = "";
         Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
 
-        given(jobPostingService.findAllWithCriteria(DEFAULT_PAGEABLE, search, contractType)).willReturn(jobPostingPageMockResponse);
+        given(jobPostingService.getAllWithCriteria(any(), anyString(), anyString(), anyBoolean())).willReturn(jobPostingPageMockResponse);
 
-        ResultActions actions = mvc.perform(get(JOBS_BASE_URI).contentType(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
+        // when
+        ResultActions resultActions = mvc.perform(
+                get(JOBS_BASE_URI).param("contractType", CDD.name())
+
+        ).andDo(print());
+
+        // then
+        resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(jobPostingPageMockResponse.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(jobPostings.size()));
 
         for (int i = 0; i < jobPostings.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            actions.andExpect(jsonPath(contentPath + ".id", is(jobPostings.get(i).getId().intValue())))
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(jobPostings.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + ".createdAt", is(jobPostings.get(i).getCreatedAt().toString())))
                     .andExpect(jsonPath(contentPath + ".description", is(jobPostings.get(i).getDescription())))
                     .andExpect(jsonPath(contentPath + ".location", is(jobPostings.get(i).getLocation())))
@@ -70,7 +74,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".salary", is(jobPostings.get(i).getSalary())));
         }
 
-        verify(jobPostingService, times(1)).findAllWithCriteria(any(), anyString(), anyString());
+        verify(jobPostingService, times(1)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean());
     }
 
     @Test
@@ -78,7 +82,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         mvc.perform(get(JOBS_BASE_URI)).andDo(print())
                 .andExpect(status().isForbidden());
 
-        verify(jobPostingService, times(0)).findAllWithCriteria(any(), anyString(), anyString());
+        verify(jobPostingService, times(0)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean());
     }
 
     @Test

@@ -12,4 +12,5 @@ export interface JobPosting {
   createdAt?: Date;
   contractType?: ContractEnumCode;
   company?: Company;
+  apply?: boolean;
 }
