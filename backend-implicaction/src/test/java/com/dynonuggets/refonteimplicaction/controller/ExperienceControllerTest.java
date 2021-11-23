@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -88,7 +89,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
                 .andExpect(jsonPath("$.description", is(expectedDto.getDescription())))
                 .andExpect(jsonPath("$.companyName", is(expectedDto.getCompanyName())))
@@ -159,7 +160,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
+                .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
                 .andExpect(jsonPath("$.description", is(expectedDto.getDescription())))
                 .andExpect(jsonPath("$.companyName", is(expectedDto.getCompanyName())))
