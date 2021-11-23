@@ -5,6 +5,14 @@ public class ApiUrls {
     // COMPANIES
     public static final String COMPANIES_BASE_URI = "/api/companies";
 
+    //Experience
+    public static final String EXPERIENCES_BASE_URI = "/api/experiences";
+    public static final String DELETE_EXPERIENCES_URI = "/{experienceId}";
+
+    //Training
+    public static final String TRAINING_BASE_URI = "/api/trainings";
+    public static final String DELETE_TRAINING_URI = "/{trainingId}";
+
     // JOB-POSTINGS
     public static final String JOBS_BASE_URI = "/api/job-postings";
     public static final String GET_JOB_URI = "/{jobId}";
