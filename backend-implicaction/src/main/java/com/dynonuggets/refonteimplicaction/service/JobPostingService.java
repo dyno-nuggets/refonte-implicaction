@@ -37,9 +37,15 @@ public class JobPostingService {
     }
 
     public JobPostingDto getJobById(Long jobId) {
-        JobPosting jobPosting = jobPostingRepository.findById(jobId)
+        JobPosting job = jobPostingRepository.findById(jobId)
                 .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobId)));
-        return jobPostingAdapter.toDto(jobPosting);
+
+        final Long currentUserId = authService.getCurrentUser().getId();
+        final JobPostingDto jobDto = jobPostingAdapter.toDto(job);
+
+        jobDto.setApply(jobApplicationRepository.findByJobAndUser_id(job, currentUserId).isPresent());
+
+        return jobDto;
     }
 
     public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, boolean applyCheck) {

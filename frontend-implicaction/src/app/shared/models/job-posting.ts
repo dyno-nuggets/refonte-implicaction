@@ -13,4 +13,5 @@ export interface JobPosting {
   contractType?: ContractEnumCode;
   company?: Company;
   apply?: boolean;
+  archive?: boolean;
 }
