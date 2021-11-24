@@ -22,9 +22,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum.*;
+import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDI;
-import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
-import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -36,7 +36,7 @@ import static org.mockito.BDDMockito.given;
 class JobApplicationServiceTest extends ControllerIntegrationTestBase {
 
     @Mock
-    JobApplicationRepository applyRepostitory;
+    JobApplicationRepository applyRepository;
 
     @Mock
     JobPostingRepository jobRepository;
@@ -57,10 +57,10 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         final User currentUser = User.builder().id(45L).build();
         JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
-        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), CDI);
+        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), "Paris (75)", CDI);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
-        given(applyRepostitory.save(any())).willReturn(jobApplication);
+        given(applyRepository.save(any())).willReturn(jobApplication);
         given(applyAdapter.toDto(any())).willReturn(expectedDto);
 
         // when
@@ -98,12 +98,12 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         long jobId = 123L;
         JobApplicationRequest request = new JobApplicationRequest(jobId, PENDING);
         IllegalArgumentException expectedException = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, jobId));
-        final JobApplication apply = JobApplication.builder().build();
+        final JobApplication apply = JobApplication.builder().id(123L).build();
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         User currentUser = User.builder().id(123L).build();
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
-        given(applyRepostitory.findByJobAndUser_id(any(), anyLong())).willReturn(Optional.of(apply));
         given(authService.getCurrentUser()).willReturn(currentUser);
+        given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.of(apply));
 
         // when
         final IllegalArgumentException actualException = assertThrows(IllegalArgumentException.class, () -> jobApplicationService.createApplyIfNotExists(request));
@@ -122,12 +122,48 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
                 new JobApplication(3L, JobPosting.builder().id(14L).build(), currentUser, INTERVIEW, Instant.now(), false)
         );
         given(authService.getCurrentUser()).willReturn(currentUser);
-        given(applyRepostitory.findAllByUserAndArchiveIsFalse(any())).willReturn(expecteds);
+        given(applyRepository.findAllByUserAndArchiveIsFalse(any())).willReturn(expecteds);
 
         // when
         final List<JobApplicationDto> allAppliesForCurrentUser = jobApplicationService.getAllAppliesForCurrentUser();
 
         // then
         assertThat(allAppliesForCurrentUser.size()).isEqualTo(expecteds.size());
+    }
+
+    @Test
+    void should_update_given_apply_for_current_user_if_apply_exists() {
+        // given
+        JobApplicationRequest request = new JobApplicationRequest(123L, INTERVIEW);
+        User currentUser = User.builder().id(123L).build();
+        final JobApplication jobApplication = new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
+        final JobApplication jobApplicationUpdate = new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
+        final JobApplicationDto expectedDto = new JobApplicationDto(1L, 12L, "JobTitle", "companyName", "http://image.url", INTERVIEW.name(), "Paris", CDD);
+        given(authService.getCurrentUser()).willReturn(currentUser);
+        given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.of(jobApplication));
+        given(applyRepository.save(any())).willReturn(jobApplicationUpdate);
+        given(applyAdapter.toDto(any())).willReturn(expectedDto);
+
+        // when
+        final JobApplicationDto actualDto = jobApplicationService.updateApplyForCurrentUser(request);
+
+        // then
+        assertThat(actualDto).usingRecursiveComparison().isEqualTo(expectedDto);
+    }
+
+    @Test
+    void should_throw_exception_when_update_and_job_not_exists() {
+        JobApplicationRequest request = new JobApplicationRequest(123L, INTERVIEW);
+        User currentUser = User.builder().id(123L).build();
+        given(authService.getCurrentUser()).willReturn(currentUser);
+        final NotFoundException expectedException = new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, request
+                .getJobId(), currentUser.getId()));
+        given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willThrow(expectedException);
+
+        // when
+        final NotFoundException actualException = assertThrows(NotFoundException.class, () -> jobApplicationService.updateApplyForCurrentUser(request));
+
+        // then
+        assertThat(actualException.getMessage()).isEqualTo(expectedException.getMessage());
     }
 }

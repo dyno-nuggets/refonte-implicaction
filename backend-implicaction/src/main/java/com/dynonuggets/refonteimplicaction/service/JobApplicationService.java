@@ -16,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
-import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -29,6 +28,9 @@ public class JobApplicationService {
     private final JobApplicationAdapter applyAdapter;
     private final AuthService authService;
 
+    /**
+     * @return crée une candidature s'il l'utilisateur courant n'a pas déjà candidaté pour l'offre
+     */
     @Transactional
     public JobApplicationDto createApplyIfNotExists(JobApplicationRequest applyRequest) {
         final JobPosting job = jobRepository.findById(applyRequest.getJobId())
@@ -36,7 +38,7 @@ public class JobApplicationService {
 
         final User currentUser = authService.getCurrentUser();
 
-        if (applyRepository.findByJobAndUser_id(job, currentUser.getId()).isPresent()) {
+        if (applyRepository.findByJob_IdAndUser_id(job.getId(), currentUser.getId()).isPresent()) {
             throw new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, job.getId()));
         }
 
@@ -53,6 +55,9 @@ public class JobApplicationService {
         return applyAdapter.toDto(applySave);
     }
 
+    /**
+     * @return les candidatures non archivées de l'utilisateur courant
+     */
     @Transactional(readOnly = true)
     public List<JobApplicationDto> getAllAppliesForCurrentUser() {
         final User currentUser = authService.getCurrentUser();
@@ -61,5 +66,20 @@ public class JobApplicationService {
                 .stream()
                 .map(applyAdapter::toDto)
                 .collect(toList());
+    }
+
+    @Transactional
+    public JobApplicationDto updateApplyForCurrentUser(JobApplicationRequest requestDto) {
+        final User currentUser = authService.getCurrentUser();
+        final Long jobId = requestDto.getJobId();
+        final Long currentUserId = currentUser.getId();
+
+        final JobApplication jobApplication = applyRepository.findByJob_IdAndUser_id(jobId, currentUserId)
+                .orElseThrow(() -> new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
+
+        jobApplication.setStatus(requestDto.getStatus());
+        final JobApplication applySave = applyRepository.save(jobApplication);
+
+        return applyAdapter.toDto(applySave);
     }
 }

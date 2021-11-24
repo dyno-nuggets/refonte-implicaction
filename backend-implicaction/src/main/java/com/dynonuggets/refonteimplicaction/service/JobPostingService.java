@@ -43,7 +43,7 @@ public class JobPostingService {
         final Long currentUserId = authService.getCurrentUser().getId();
         final JobPostingDto jobDto = jobPostingAdapter.toDto(job);
 
-        jobDto.setApply(jobApplicationRepository.findByJobAndUser_id(job, currentUserId).isPresent());
+        jobDto.setApply(jobApplicationRepository.findByJob_IdAndUser_id(job.getId(), currentUserId).isPresent());
 
         return jobDto;
     }

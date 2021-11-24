@@ -58,7 +58,9 @@ export class BoardComponent implements OnInit {
         event.currentIndex
       );
       const jobApply = event.container.data[event.currentIndex];
-      jobApply.statusCode = statusCode;
+      this.jobBoardService
+        .updateApply({jobId: jobApply.jobId, status: statusCode})
+        .subscribe(jobApplyUpdate => jobApply.statusCode = jobApplyUpdate.statusCode);
     }
   }
 }

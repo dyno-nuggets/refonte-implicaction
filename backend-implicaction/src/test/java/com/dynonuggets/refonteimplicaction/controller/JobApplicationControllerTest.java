@@ -24,8 +24,8 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = JobApplicationController.class)
@@ -39,7 +39,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     void should_create_apply() throws Exception {
         // given
         JobApplicationRequest request = new JobApplicationRequest(123L, PENDING);
-        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), CDI);
+        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), "Paris (75)", CDI);
         given(applicationService.createApplyIfNotExists(any())).willReturn(response);
         String json = gson.toJson(request);
 
@@ -128,9 +128,9 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     void should_list_all_users_application() throws Exception {
         // given
         List<JobApplicationDto> expecteds = asList(
-                new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING.name(), CDD),
-                new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED.name(), CDD),
-                new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW.name(), INTERIM)
+                new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING.name(), "Paris (75)", CDD),
+                new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED.name(), "Paris (75)", CDD),
+                new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW.name(), "Paris (75)", INTERIM)
         );
         int expectedSize = expecteds.size();
         given(applicationService.getAllAppliesForCurrentUser()).willReturn(expecteds);
@@ -163,5 +163,26 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
         // then
         resultActions.andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    void should_update_status() throws Exception {
+        // given
+        JobApplicationDto applyExpected = new JobApplicationDto(12L, 123L, "title", "company", "http://image.url", CHASED.name(), "Paris (75)", CDD);
+        JobApplicationRequest request = new JobApplicationRequest(123L, CHASED);
+        String json = gson.toJson(request);
+        given(applicationService.updateApplyForCurrentUser(any())).willReturn(applyExpected);
+
+        // when
+        final ResultActions resultActions = mvc.perform(patch(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)).andDo(print());
+
+        // then
+        resultActions
+                .andExpect(jsonPath("$.id", is(applyExpected.getId().intValue())))
+                .andExpect(jsonPath("$.jobId", is(applyExpected.getJobId().intValue())))
+                .andExpect(jsonPath("$.statusCode", is(applyExpected.getStatusCode())));
+
+        verify(applicationService, times(1)).updateApplyForCurrentUser(any());
     }
 }

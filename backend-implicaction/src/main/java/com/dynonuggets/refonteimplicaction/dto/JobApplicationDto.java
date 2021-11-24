@@ -22,6 +22,8 @@ public class JobApplicationDto {
 
     private String statusCode;
 
+    private String location;
+
     private ContractTypeEnum contractType;
 
 }

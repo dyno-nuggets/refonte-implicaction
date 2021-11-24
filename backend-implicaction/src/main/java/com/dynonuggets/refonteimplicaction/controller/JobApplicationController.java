@@ -37,4 +37,10 @@ public class JobApplicationController {
         List<JobApplicationDto> applies = applyService.getAllAppliesForCurrentUser();
         return ResponseEntity.ok(applies);
     }
+
+    @PatchMapping
+    public ResponseEntity<JobApplicationDto> updateApply(@RequestBody JobApplicationRequest requestDto) {
+        final JobApplicationDto updateDto = applyService.updateApplyForCurrentUser(requestDto);
+        return ResponseEntity.ok(updateDto);
+    }
 }

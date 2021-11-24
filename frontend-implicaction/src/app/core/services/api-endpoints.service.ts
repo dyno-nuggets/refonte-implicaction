@@ -315,16 +315,6 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
   }
 
-  private concatCriterias(criteria: Criteria, pageable: Pageable<any>): any {
-    return {
-      ...criteria,
-      rows: pageable.rows,
-      page: pageable.page,
-      sortBy: pageable.sortBy,
-      sortOrder: pageable.sortOrder
-    };
-  }
-
   /**
    * JOB APPLICATION
    */
@@ -335,6 +325,20 @@ export class ApiEndpointsService {
 
   getAllApplicationForCurrentUser(): string {
     return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
+  }
+
+  updateApplicationStatus(): string {
+    return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
+  }
+
+  private concatCriterias(criteria: Criteria, pageable: Pageable<any>): any {
+    return {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder
+    };
   }
 
   /**

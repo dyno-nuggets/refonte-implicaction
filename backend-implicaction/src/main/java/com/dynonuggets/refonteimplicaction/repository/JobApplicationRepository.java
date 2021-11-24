@@ -1,7 +1,6 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
 import com.dynonuggets.refonteimplicaction.model.JobApplication;
-import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,7 +10,7 @@ import java.util.Optional;
 // supprime les warnings sur les noms des méthodes ne respectant pas la convention de nommage (cf named queries)
 @SuppressWarnings("squid:S00100")
 public interface JobApplicationRepository extends JpaRepository<JobApplication, Long> {
-    Optional<JobApplication> findByJobAndUser_id(JobPosting job, long userId);
+    Optional<JobApplication> findByJob_IdAndUser_id(long jobId, long userId);
 
     List<JobApplication> findAllByUserAndArchiveIsFalse(User user);
 
