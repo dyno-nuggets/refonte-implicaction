@@ -1,0 +1,35 @@
+<div class="dropdown">
+  <button
+    aria-expanded="false"
+    class="btn"
+    data-bs-toggle="dropdown"
+    id="dropdownMenuButton"
+    type="button"
+  >
+    <i class="fas fa-ellipsis-h"></i>
+  </button>
+  <ul
+    aria-labelledby="dropdownMenuButton"
+    class="dropdown-menu"
+  >
+    <li *ngFor="let action of actions">
+      <ul class="list-unstyled">
+        <li class="p-2 fw-bold">{{action.label}}
+          <ul class="list-unstyled actions pt-1">
+            <li
+              *ngFor="let item of action.items"
+              class="cursor-pointer"
+            >
+              <a
+                (click)="item.command()"
+                class="dropdown-item"
+              >
+                <i [ngClass]="item.icon"></i> {{item.label}}
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>
