@@ -35,11 +35,20 @@
     <div class="job-options align-self-end mb-4 col-12 col-lg-5 col-xl-4 col-xxl-auto">
       <button
         (click)="addToJobBoard()"
+        *ngIf="!job.apply; else jobIsApply"
+        [disabled]="job.apply"
         class="btn btn-primary fw-bold w-100 px-xxl-5"
       >
-        <i-feather class="icon me-2" name="plus"></i-feather>
+        <i
+          [ngClass]="{'fa-plus': !isLoading, 'fa-circle-notch fa-spin': isLoading}"
+          class="fas me-2"
+        >
+        </i>
         Ajouter au jobBoard
       </button>
+      <ng-template #jobIsApply>
+        <p>L'offre est ajouté au jobBoard</p>
+      </ng-template>
     </div>
   </div>
 </div>

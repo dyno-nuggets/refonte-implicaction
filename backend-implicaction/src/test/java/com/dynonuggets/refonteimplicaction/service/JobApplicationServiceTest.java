@@ -57,7 +57,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         final User currentUser = User.builder().id(45L).build();
         JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
-        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus(), CDI);
+        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), CDI);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepostitory.save(any())).willReturn(jobApplication);
@@ -69,7 +69,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         //then
         assertThat(actual.getId()).isNotNull();
         assertThat(actual.getId()).isEqualTo(jobApplication.getId());
-        assertThat(actual.getStatus()).isEqualTo(jobApplication.getStatus());
+        assertThat(actual.getStatusCode()).isEqualTo(jobApplication.getStatus().name());
         assertThat(actual.getJobId()).isEqualTo(jobApplication.getJob().getId());
         assertThat(actual.getJobTitle()).isEqualTo(jobApplication.getJob().getTitle());
         assertThat(actual.getContractType()).isEqualTo(jobApplication.getJob().getContractType());
@@ -100,8 +100,10 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         IllegalArgumentException expectedException = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, jobId));
         final JobApplication apply = JobApplication.builder().build();
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
+        User currentUser = User.builder().id(123L).build();
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
-        given(applyRepostitory.findByJob(any())).willReturn(Optional.of(apply));
+        given(applyRepostitory.findByJobAndUser_id(any(), anyLong())).willReturn(Optional.of(apply));
+        given(authService.getCurrentUser()).willReturn(currentUser);
 
         // when
         final IllegalArgumentException actualException = assertThrows(IllegalArgumentException.class, () -> jobApplicationService.createApplyIfNotExists(request));

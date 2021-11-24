@@ -17,8 +17,8 @@ export class JobService {
   ) {
   }
 
-  getAllByCriteria(pageable: Pageable, criteria: JobCriteriaFilter): Observable<any> {
-    return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable, criteria));
+  getAllByCriteria(pageable: Pageable, criteria: JobCriteriaFilter, applyCheck = false): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable, criteria, applyCheck));
   }
 
   getById(jobId: string): Observable<JobPosting> {

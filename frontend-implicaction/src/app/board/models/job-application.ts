@@ -6,7 +6,7 @@ export interface JobApplication {
   jobTitle: string;
   location: string;
   companyName: string;
-  companyImageUrl: string;
+  companyImageUri: string;
   statusCode: ApplyStatusCode;
   contractType: string;
 }

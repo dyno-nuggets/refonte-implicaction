@@ -196,14 +196,15 @@ export class ApiEndpointsService {
    * Jobs
    */
 
-  getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter): string {
+  getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, checkApply: boolean): string {
     // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
       page: pageable.page,
       sortBy: pageable.sortBy,
-      sortOrder: pageable.sortOrder
+      sortOrder: pageable.sortOrder,
+      checkApply
     };
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,
@@ -329,6 +330,10 @@ export class ApiEndpointsService {
    */
 
   createJobApplicationEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
+  }
+
+  getAllApplicationForCurrentUser(): string {
     return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
   }
 

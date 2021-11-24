@@ -39,7 +39,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     void should_create_apply() throws Exception {
         // given
         JobApplicationRequest request = new JobApplicationRequest(123L, PENDING);
-        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING, CDI);
+        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), CDI);
         given(applicationService.createApplyIfNotExists(any())).willReturn(response);
         String json = gson.toJson(request);
 
@@ -57,7 +57,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.jobTitle", is(response.getJobTitle())))
                 .andExpect(jsonPath("$.companyName", is(response.getCompanyName())))
                 .andExpect(jsonPath("$.companyImageUri", is(response.getCompanyImageUri())))
-                .andExpect(jsonPath("$.status", is(response.getStatus().name())));
+                .andExpect(jsonPath("$.statusCode", is(response.getStatusCode())));
 
         verify(applicationService, times(1)).createApplyIfNotExists(any());
     }
@@ -128,9 +128,9 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     void should_list_all_users_application() throws Exception {
         // given
         List<JobApplicationDto> expecteds = asList(
-                new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING, CDD),
-                new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED, CDD),
-                new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW, INTERIM)
+                new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING.name(), CDD),
+                new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED.name(), CDD),
+                new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW.name(), INTERIM)
         );
         int expectedSize = expecteds.size();
         given(applicationService.getAllAppliesForCurrentUser()).willReturn(expecteds);
@@ -149,7 +149,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + "jobId", is(expecteds.get(i).getJobId().intValue())))
                     .andExpect(jsonPath(contentPath + "companyName", is(expecteds.get(i).getCompanyName())))
                     .andExpect(jsonPath(contentPath + "companyImageUri", is(expecteds.get(i).getCompanyImageUri())))
-                    .andExpect(jsonPath(contentPath + "status", is(expecteds.get(i).getStatus().name())))
+                    .andExpect(jsonPath(contentPath + "statusCode", is(expecteds.get(i).getStatusCode())))
                     .andExpect(jsonPath(contentPath + "contractType", is(expecteds.get(i).getContractType().name())));
         }
 

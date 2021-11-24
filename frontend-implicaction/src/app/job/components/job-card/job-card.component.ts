@@ -4,7 +4,7 @@ import {Univers} from '../../../shared/enums/univers';
 import {ApplyStatusCode} from '../../../board/enums/apply-status-enum';
 import {JobBoardService} from '../../../board/services/job-board.service';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {Router} from '@angular/router';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-job-card',
@@ -17,24 +17,25 @@ export class JobCardComponent {
   job: JobPosting;
 
   univers = Univers;
+  isLoading = false;
 
   constructor(
     private jobBoardService: JobBoardService,
     private toasterService: ToasterService,
-    private router: Router
   ) {
   }
 
   addToJobBoard(): void {
+    this.isLoading = true;
     this.jobBoardService
       .createApplication({jobId: this.job.id, status: ApplyStatusCode.PENDING})
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(
+        () => this.job.apply = true,
         () => {
-          this.router
-            .navigate([Univers.BOARD.url])
-            .then(() => this.toasterService.success('Succès', `L'offre a bien été ajoutée à votre board`));
-        },
-        () => this.toasterService.error('Oops', `Une erreur est survenue lors de l'ajout de l'offre à votre board`)
+          this.job.apply = false;
+          this.toasterService.error('Oops', `Une erreur est survenue lors de l'ajout de l'offre à votre board`);
+        }
       );
   }
 }

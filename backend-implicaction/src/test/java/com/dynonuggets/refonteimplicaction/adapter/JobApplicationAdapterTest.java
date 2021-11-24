@@ -35,7 +35,7 @@ class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
         assertThat(actual.getCompanyName()).isEqualTo(model.getJob().getCompany().getName());
         assertThat(actual.getJobId()).isEqualTo(model.getJob().getId());
         assertThat(actual.getJobTitle()).isEqualTo(model.getJob().getTitle());
-        assertThat(actual.getStatus()).isEqualTo(model.getStatus());
+        assertThat(actual.getStatusCode()).isEqualTo(model.getStatus().name());
         assertThat(actual.getContractType()).isEqualTo(model.getJob().getContractType());
     }
 
@@ -56,7 +56,7 @@ class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
         assertThat(actual.getCompanyName()).isNull();
         assertThat(actual.getJobId()).isEqualTo(model.getJob().getId());
         assertThat(actual.getJobTitle()).isEqualTo(model.getJob().getTitle());
-        assertThat(actual.getStatus()).isEqualTo(model.getStatus());
+        assertThat(actual.getStatusCode()).isEqualTo(model.getStatus().name());
         assertThat(actual.getContractType()).isEqualTo(model.getJob().getContractType());
     }
 }

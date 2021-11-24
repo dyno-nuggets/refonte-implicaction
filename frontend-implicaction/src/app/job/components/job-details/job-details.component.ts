@@ -4,6 +4,8 @@ import {JobService} from '../../services/job.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
 import {Constants} from '../../../config/constants';
+import {ApplyStatusCode} from '../../../board/enums/apply-status-enum';
+import {JobBoardService} from '../../../board/services/job-board.service';
 
 @Component({
   selector: 'app-job-details',
@@ -18,7 +20,9 @@ export class JobDetailsComponent implements OnInit {
   constructor(
     private jobService: JobService,
     private toasterService: ToasterService,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private jobBoardService: JobBoardService
+  ) {
   }
 
   ngOnInit(): void {
@@ -34,4 +38,16 @@ export class JobDetailsComponent implements OnInit {
     );
   }
 
+  addToJobBoard(): void {
+    this.jobBoardService
+      .createApplication({jobId: this.job.id, status: ApplyStatusCode.PENDING})
+      .subscribe(
+        () => this.job.apply = true,
+        () => {
+          this.job.apply = false;
+          this.toasterService.error('Oops', `Une erreur est survenue lors de l'ajout de l'offre à votre board`);
+        },
+        () => this.toasterService.success('Succès', `L'offre a bien été ajoutée au job board.`)
+      );
+  }
 }
