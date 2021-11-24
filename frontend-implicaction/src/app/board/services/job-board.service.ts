@@ -23,4 +23,8 @@ export class JobBoardService {
   getAllForCurrentUser(): Observable<JobApplication[]> {
     return this.http.get<JobApplication[]>(this.apiEndpointService.getAllApplicationForCurrentUser());
   }
+
+  updateApply(jobApplicationRequest: JobApplicationRequest): Observable<JobApplication> {
+    return this.http.patch<JobApplication>(this.apiEndpointService.updateApplicationStatus(), jobApplicationRequest);
+  }
 }

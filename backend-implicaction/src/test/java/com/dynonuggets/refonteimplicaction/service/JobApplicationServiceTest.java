@@ -57,7 +57,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         final User currentUser = User.builder().id(45L).build();
         JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
-        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), CDI);
+        JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), "Paris (75)", CDI);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepostitory.save(any())).willReturn(jobApplication);
@@ -102,7 +102,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         User currentUser = User.builder().id(123L).build();
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
-        given(applyRepostitory.findByJobAndUser_id(any(), anyLong())).willReturn(Optional.of(apply));
+        given(applyRepostitory.findByJob_IdAndUser_id(any(), anyLong())).willReturn(Optional.of(apply));
         given(authService.getCurrentUser()).willReturn(currentUser);
 
         // when

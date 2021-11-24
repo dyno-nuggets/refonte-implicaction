@@ -20,6 +20,7 @@ public class JobApplicationAdapter {
                 .jobTitle(job.getTitle())
                 .companyName(companyName)
                 .companyImageUri(companyImageUrl)
+                .location(job.getLocation())
                 .statusCode(model.getStatus().name())
                 .contractType(job.getContractType())
                 .build();
