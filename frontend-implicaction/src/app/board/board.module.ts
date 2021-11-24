@@ -7,12 +7,16 @@ import {ApplyCardComponent} from './components/apply-card/apply-card.component';
 import {SharedModule} from '../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
+import {MenuModule} from 'primeng/menu';
+import {ButtonModule} from 'primeng/button';
+import {CardMenuComponent} from './components/card-menu/card-menu.component';
 
 
 @NgModule({
   declarations: [
     BoardComponent,
-    ApplyCardComponent
+    ApplyCardComponent,
+    CardMenuComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +24,9 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     TagModule,
     SharedModule,
     RouterModule,
-    DragDropModule
+    DragDropModule,
+    MenuModule,
+    ButtonModule
   ]
 })
 export class BoardModule {

@@ -155,9 +155,10 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     void should_throw_exception_when_update_and_job_not_exists() {
         JobApplicationRequest request = new JobApplicationRequest(123L, INTERVIEW);
         User currentUser = User.builder().id(123L).build();
+        final NotFoundException expectedException = new NotFoundException(
+                String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, request.getJobId(), currentUser.getId())
+        );
         given(authService.getCurrentUser()).willReturn(currentUser);
-        final NotFoundException expectedException = new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, request
-                .getJobId(), currentUser.getId()));
         given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willThrow(expectedException);
 
         // when
