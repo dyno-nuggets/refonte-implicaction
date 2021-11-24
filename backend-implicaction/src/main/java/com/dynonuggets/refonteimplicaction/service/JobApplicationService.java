@@ -9,7 +9,6 @@ import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
-import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -58,7 +56,7 @@ public class JobApplicationService {
     }
 
     /**
-     * @return les candidatures non archivées de l'utilisateur courrant
+     * @return les candidatures non archivées de l'utilisateur courant
      */
     @Transactional(readOnly = true)
     public List<JobApplicationDto> getAllAppliesForCurrentUser() {
@@ -77,7 +75,7 @@ public class JobApplicationService {
         final Long currentUserId = currentUser.getId();
 
         final JobApplication jobApplication = applyRepository.findByJob_IdAndUser_id(jobId, currentUserId)
-                .orElseThrow(() -> new NotFoundException(String.format(Message.APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
+                .orElseThrow(() -> new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
 
         jobApplication.setStatus(requestDto.getStatus());
         final JobApplication applySave = applyRepository.save(jobApplication);
