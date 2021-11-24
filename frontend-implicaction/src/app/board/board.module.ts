@@ -8,7 +8,6 @@ import {SharedModule} from '../shared/shared.module';
 import {RouterModule} from '@angular/router';
 import {DragDropModule} from '@angular/cdk/drag-drop';
 import {MenuModule} from 'primeng/menu';
-import {ButtonModule} from 'primeng/button';
 import {CardMenuComponent} from './components/card-menu/card-menu.component';
 
 
@@ -25,8 +24,7 @@ import {CardMenuComponent} from './components/card-menu/card-menu.component';
     SharedModule,
     RouterModule,
     DragDropModule,
-    MenuModule,
-    ButtonModule
+    MenuModule
   ]
 })
 export class BoardModule {
