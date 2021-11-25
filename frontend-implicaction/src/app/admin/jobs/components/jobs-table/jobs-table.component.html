@@ -1,5 +1,6 @@
 <p-table
   (onLazyLoad)="loadJobs($event)"
+  [(selection)]="selectedJobs"
   [lazy]="true"
   [loading]="loading"
   [paginator]="true"
