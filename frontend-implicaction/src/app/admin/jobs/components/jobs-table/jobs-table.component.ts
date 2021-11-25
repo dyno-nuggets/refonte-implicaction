@@ -24,7 +24,7 @@ export class JobsTableComponent implements OnInit {
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   loading = true; // indique si les données sont en chargement
 
-  selectedJobs: JobPosting[];
+  selectedJobs: JobPosting[] = [];
 
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
