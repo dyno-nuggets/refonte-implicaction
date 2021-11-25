@@ -78,6 +78,11 @@ public class JobApplicationService {
                 .orElseThrow(() -> new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
 
         jobApplication.setStatus(requestDto.getStatus());
+
+        if (requestDto.getArchive() != null) {
+            jobApplication.setArchive(requestDto.getArchive());
+        }
+
         jobApplication.setLastUpdate(Instant.now());
         final JobApplication applySave = applyRepository.save(jobApplication);
 

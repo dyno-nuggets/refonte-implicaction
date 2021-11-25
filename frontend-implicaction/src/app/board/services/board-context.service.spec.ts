@@ -1,13 +1,13 @@
 import {TestBed} from '@angular/core/testing';
 
-import {JobBoardService} from './job-board.service';
+import {BoardContextService} from './board-context.service';
 
-describe('JobBoardService', () => {
-  let service: JobBoardService;
+describe('BoardContextServiceService', () => {
+  let service: BoardContextService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(JobBoardService);
+    service = TestBed.inject(BoardContextService);
   });
 
   it('should be created', () => {

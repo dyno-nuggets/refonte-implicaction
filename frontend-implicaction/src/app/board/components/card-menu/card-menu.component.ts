@@ -1,6 +1,10 @@
 import {Component, Input} from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import {JobApplication} from '../../models/job-application';
+import {JobApplicationService} from '../../services/job-application.service';
+import {ApplyStatusCode} from '../../enums/apply-status-enum';
+import {ToasterService} from '../../../core/services/toaster.service';
+import {BoardContextService} from '../../services/board-context.service';
 
 @Component({
   selector: 'app-card-menu',
@@ -37,19 +41,42 @@ export class CardMenuComponent {
       }]
   }];
 
+  constructor(
+    private applicationService: JobApplicationService,
+    private toasterService: ToasterService,
+    private boardContextService: BoardContextService
+  ) {
+  }
+
   acceptApply(): void {
-    console.log('accept');
+    this.updateApply(ApplyStatusCode.HIRED, true, 'Votre candidature est désormais acceptée.');
   }
 
   declineApply(): void {
-    console.log('decline');
+    this.updateApply(ApplyStatusCode.REJECTED, true, 'Votre candidature est désormais refusée.');
   }
 
   archiveApply(): void {
-    console.log('archive');
+    this.updateApply(this.apply.statusCode, true, 'Votre candidature est désormais archivée.');
   }
 
   cancelApply(): void {
     console.log('cancel');
+  }
+
+  private updateApply(statusCode: ApplyStatusCode, archive: boolean, successMessage: string): void {
+    this.applicationService
+      .updateApply({jobId: this.apply.jobId, status: statusCode, archive})
+      .subscribe(
+        (applyUpdate) => {
+          this.apply.statusCode = applyUpdate.statusCode;
+          this.apply.archive = applyUpdate.archive;
+        },
+        () => this.toasterService.error('Oops', `Une erreur est survenue lors de la mise à jour d'une candidature.`),
+        () => {
+          this.toasterService.success('Succès', successMessage);
+          this.boardContextService.apply = this.apply;
+        }
+      );
   }
 }

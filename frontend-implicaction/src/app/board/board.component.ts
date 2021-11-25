@@ -2,8 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {ApplyStatusCode, ApplyStatusEnum} from './enums/apply-status-enum';
 import {JobApplication} from './models/job-application';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
-import {JobBoardService} from './services/job-board.service';
+import {JobApplicationService} from './services/job-application.service';
 import {ToasterService} from '../core/services/toaster.service';
+import {BoardContextService} from './services/board-context.service';
 
 export class BoardColumn {
   status: ApplyStatusEnum;
@@ -25,8 +26,9 @@ export class BoardComponent implements OnInit {
     });
 
   constructor(
-    private jobBoardService: JobBoardService,
-    private toasterService: ToasterService
+    private jobBoardService: JobApplicationService,
+    private toasterService: ToasterService,
+    private boardContextService: BoardContextService
   ) {
   }
 
@@ -40,6 +42,29 @@ export class BoardComponent implements OnInit {
             .applies
             .push(apply)),
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la récupération des données.')
+      );
+    this.boardContextService
+      .observe()
+      .subscribe(
+        applyUpdate => {
+          if (!applyUpdate) {
+            return;
+          }
+
+          const applies = this.columns.find(column => column.applies.find(apply => apply.id === applyUpdate.id))?.applies;
+          const applyIndex = applies.findIndex(apply => apply.id === applyUpdate.id);
+          if (applyIndex >= 0) {
+            // il faut supprimer du board les candidatures acceptées, refusées ou archivées
+            if ([ApplyStatusCode.HIRED, ApplyStatusCode.REJECTED].includes(applyUpdate.statusCode) || applyUpdate.archive) {
+              applies.splice(applyIndex, 1);
+              // sinon, dans le cas d'un changement de statut, on les supprime de l'ancienne colonne pour l'ajouter dans la nouvelle
+            } else if (applies[applyIndex].statusCode !== applyUpdate.statusCode) {
+              applies.splice(applyIndex, 1);
+              const boardColumn = this.columns.find(column => column.status.code === applyUpdate.statusCode);
+              boardColumn.applies.push(applyUpdate);
+            }
+          }
+        }
       );
   }
 

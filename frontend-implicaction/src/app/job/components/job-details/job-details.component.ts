@@ -5,7 +5,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
 import {Constants} from '../../../config/constants';
 import {ApplyStatusCode} from '../../../board/enums/apply-status-enum';
-import {JobBoardService} from '../../../board/services/job-board.service';
+import {JobApplicationService} from '../../../board/services/job-application.service';
 
 @Component({
   selector: 'app-job-details',
@@ -21,7 +21,7 @@ export class JobDetailsComponent implements OnInit {
     private jobService: JobService,
     private toasterService: ToasterService,
     private route: ActivatedRoute,
-    private jobBoardService: JobBoardService
+    private jobBoardService: JobApplicationService
   ) {
   }
 

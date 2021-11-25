@@ -19,6 +19,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   currentUser: User;
   allowedUnivers: Univers[] = [];
   isAdmin = false;
+  displayProfile = false;
   univers = Univers;
   constant = Constants;
 
@@ -48,6 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.currentUser = this.authService.getCurrentUser();
     this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
     this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
+    this.displayProfile = this.currentUser?.roles.includes(RoleEnumCode.USER);
   }
 
   logout(): void {

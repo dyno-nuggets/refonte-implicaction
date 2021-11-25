@@ -38,8 +38,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_apply() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING);
-        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), "Paris (75)", CDI);
+        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), "Paris (75)", CDI, false);
         given(applicationService.createApplyIfNotExists(any())).willReturn(response);
         String json = gson.toJson(request);
 
@@ -66,7 +66,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_notfound_when_creating_apply_and_job_notfound() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING);
+        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         String json = gson.toJson(request);
         final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, request.getJobId()));
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
@@ -88,7 +88,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_bad_request_when_creating_apply_with_already_applied_job() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING);
+        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         String json = gson.toJson(request);
         final IllegalArgumentException exception = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, request.getJobId()));
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
@@ -109,7 +109,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_return_forbidden_when_creating_apply_and_no_auth() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING);
+        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         String json = gson.toJson(request);
 
         // when
@@ -128,9 +128,9 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     void should_list_all_users_application() throws Exception {
         // given
         List<JobApplicationDto> expecteds = asList(
-                new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING.name(), "Paris (75)", CDD),
-                new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED.name(), "Paris (75)", CDD),
-                new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW.name(), "Paris (75)", INTERIM)
+                new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING.name(), "Paris (75)", CDD, false),
+                new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED.name(), "Paris (75)", CDD, false),
+                new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW.name(), "Paris (75)", INTERIM, false)
         );
         int expectedSize = expecteds.size();
         given(applicationService.getAllAppliesForCurrentUser()).willReturn(expecteds);
@@ -169,8 +169,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_update_status() throws Exception {
         // given
-        JobApplicationDto applyExpected = new JobApplicationDto(12L, 123L, "title", "company", "http://image.url", CHASED.name(), "Paris (75)", CDD);
-        JobApplicationRequest request = new JobApplicationRequest(123L, CHASED);
+        JobApplicationDto applyExpected = new JobApplicationDto(12L, 123L, "title", "company", "http://image.url", CHASED.name(), "Paris (75)", CDD, false);
+        JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
         String json = gson.toJson(request);
         given(applicationService.updateApplyForCurrentUser(any())).willReturn(applyExpected);
 
