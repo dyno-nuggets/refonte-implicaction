@@ -23,6 +23,7 @@ public class JobApplicationAdapter {
                 .location(job.getLocation())
                 .statusCode(model.getStatus().name())
                 .contractType(job.getContractType())
+                .archive(model.isArchive())
                 .build();
     }
 }

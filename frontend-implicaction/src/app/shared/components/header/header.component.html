@@ -58,7 +58,7 @@
               <li>
                 <hr class="dropdown-divider">
               </li>
-              <li *ngIf="currentUser && !isAdmin">
+              <li *ngIf="currentUser && displayProfile">
                 <a
                   class="dropdown-item cursor-pointer"
                   routerLink="/{{univers.USERS.url}}/{{currentUser.id}}/profile"

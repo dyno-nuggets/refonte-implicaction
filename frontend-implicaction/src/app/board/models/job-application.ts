@@ -9,4 +9,5 @@ export interface JobApplication {
   companyImageUri: string;
   statusCode: ApplyStatusCode;
   contractType: string;
+  archive?: boolean;
 }

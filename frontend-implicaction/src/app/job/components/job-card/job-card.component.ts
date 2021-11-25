@@ -2,7 +2,7 @@ import {Component, Input} from '@angular/core';
 import {JobPosting} from '../../../shared/models/job-posting';
 import {Univers} from '../../../shared/enums/univers';
 import {ApplyStatusCode} from '../../../board/enums/apply-status-enum';
-import {JobBoardService} from '../../../board/services/job-board.service';
+import {JobApplicationService} from '../../../board/services/job-application.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
 
@@ -20,7 +20,7 @@ export class JobCardComponent {
   isLoading = false;
 
   constructor(
-    private jobBoardService: JobBoardService,
+    private jobBoardService: JobApplicationService,
     private toasterService: ToasterService,
   ) {
   }

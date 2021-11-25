@@ -9,4 +9,5 @@ import lombok.Getter;
 public class JobApplicationRequest {
     private Long jobId;
     private ApplyStatusEnum status;
+    private Boolean archive;
 }

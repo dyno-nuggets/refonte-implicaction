@@ -4,7 +4,9 @@ export enum ApplyStatusCode {
   PENDING = 'PENDING',
   SENT = 'SENT',
   CHASED = 'CHASED',
-  INTERVIEW = 'INTERVIEW'
+  INTERVIEW = 'INTERVIEW',
+  HIRED = 'HIRED',
+  REJECTED = 'REJECTED'
 }
 
 export class ApplyStatusEnum extends EnumCodeLabelAbstract<ApplyStatusCode> {

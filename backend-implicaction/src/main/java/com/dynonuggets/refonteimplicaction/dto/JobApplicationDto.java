@@ -26,4 +26,6 @@ public class JobApplicationDto {
 
     private ContractTypeEnum contractType;
 
+    private boolean archive;
+
 }

@@ -8,7 +8,7 @@ import {JobApplicationRequest} from '../models/job-application-request';
 @Injectable({
   providedIn: 'root'
 })
-export class JobBoardService {
+export class JobApplicationService {
 
   constructor(
     private http: HttpClient,
