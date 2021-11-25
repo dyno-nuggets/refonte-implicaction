@@ -15,7 +15,7 @@ export class TableUsersComponent {
 
   loading = true; // indique si les données sont en chargement
 
-  selectedUsers: User[];
+  selectedUsers: User[] = [];
 
   // Pagination
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
