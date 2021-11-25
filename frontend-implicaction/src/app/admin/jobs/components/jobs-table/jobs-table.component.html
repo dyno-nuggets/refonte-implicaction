@@ -1,5 +1,6 @@
 <p-table
   (onLazyLoad)="loadJobs($event)"
+  [(selection)]="selectedJobs"
   [lazy]="true"
   [loading]="loading"
   [paginator]="true"
@@ -12,6 +13,9 @@
 >
   <ng-template pTemplate="header">
     <tr>
+      <th class="text-center col-1">
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+      </th>
       <th class="text-wrap text-uppercase col-3 col-sm-2 col-lg-3" scope="col">Nom</th>
       <th class="text-wrap text-uppercase col-1 col-sm-1 col-lg-1 px-2" scope="col">Type</th>
       <th class="text-wrap text-uppercase col-3 col-sm-2 col-lg-3 px-2" scope="col">Localisation</th>
@@ -21,6 +25,9 @@
   </ng-template>
   <ng-template let-job pTemplate="body">
     <tr>
+      <td class="text-center col-1">
+        <p-tableCheckbox [value]="job"></p-tableCheckbox>
+      </td>
       <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{job.title}}</td>
       <td class="text-wrap col-1 col-sm-1 col-lg-1 px-2">{{job.contractType?.label}}</td>
       <td class="overflow-ellipsis text-lg-wrap col-4 col-sm-3 col-lg-2 px-2">{{job.location}}</td>
@@ -29,10 +36,10 @@
         <ul class="fa-ul d-flex flex-column flex-lg-row justify-content-center list-unstyled list-inline mb-0">
           <li class="fa-li list-inline-item m-0 me-lg-2">
             <button
+              (click)="editJob(job)"
               class="btn"
               data-bs-placement="top"
               data-bs-toggle="tooltip"
-              (click)="editJob(job)"
               title="Editer"
               type="button"
             >
