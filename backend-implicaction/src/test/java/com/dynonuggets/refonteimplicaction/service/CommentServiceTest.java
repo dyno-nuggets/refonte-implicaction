@@ -4,8 +4,8 @@ import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Comment;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
@@ -144,8 +144,8 @@ class CommentServiceTest {
     void should_get_comments_for_post_when_exists() {
         // given
         User currentUser = User.builder().id(123L).username("Sankukai").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
-        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null, emptyList());
+        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
         List<Comment> comments = asList(
                 new Comment(3L, "comment1", post, Instant.now(), currentUser),
                 new Comment(2L, "comment2", post, Instant.now(), currentUser),

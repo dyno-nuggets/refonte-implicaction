@@ -199,19 +199,19 @@ CREATE TABLE `notification`
 DROP TABLE IF EXISTS `post`;
 CREATE TABLE `post`
 (
-    `id`           bigint NOT NULL AUTO_INCREMENT,
-    `created_at`   datetime     DEFAULT NULL,
-    `description`  longtext,
-    `url`          varchar(255) DEFAULT NULL,
-    `vote_count`   int          DEFAULT NULL,
-    `subreddit_id` bigint       DEFAULT NULL,
-    `user_id`      bigint       DEFAULT NULL,
-    `name`         varchar(255) DEFAULT NULL,
+    `id`          bigint NOT NULL AUTO_INCREMENT,
+    `created_at`  datetime     DEFAULT NULL,
+    `description` longtext,
+    `url`         varchar(255) DEFAULT NULL,
+    `vote_count`  int          DEFAULT NULL,
+    `group_id`    bigint       DEFAULT NULL,
+    `user_id`     bigint       DEFAULT NULL,
+    `name`        varchar(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `FK72mt33dhhs48hf9gcqrq4fxte` (`user_id`),
-    KEY `FKmlnoks6ujgl9ynt53af0bx4pj` (`subreddit_id`),
+    KEY `FKmlnoks6ujgl9ynt53af0bx4pj` (`group_id`),
     CONSTRAINT `FK72mt33dhhs48hf9gcqrq4fxte` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    CONSTRAINT `FKmlnoks6ujgl9ynt53af0bx4pj` FOREIGN KEY (`subreddit_id`) REFERENCES `subreddit` (`id`)
+    CONSTRAINT `FKmlnoks6ujgl9ynt53af0bx4pj` FOREIGN KEY (`group_id`) REFERENCES `ia_group` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
@@ -456,8 +456,8 @@ VALUES (1, 'ROLE_USER'),
        (4, 'ROLE_RECRUITER'),
        (5, 'ROLE_PREMIUM');
 
-DROP TABLE IF EXISTS `subreddit`;
-CREATE TABLE `subreddit`
+DROP TABLE IF EXISTS `ia_group`;
+CREATE TABLE `ia_group`
 (
     `id`          bigint NOT NULL AUTO_INCREMENT,
     `description` varchar(255) DEFAULT NULL,
@@ -474,7 +474,7 @@ CREATE TABLE `subreddit`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO `subreddit` (`id`, `description`, `name`, `user_id`, `created_at`, `image_id`)
+INSERT INTO `ia_group` (`id`, `description`, `name`, `user_id`, `created_at`, `image_id`)
 VALUES (33, 'Region Ile de France desc', 'Region Ile de France', 6, '2021-11-12 22:34:32', NULL),
        (34, '', 'test sans image', 6, '2021-11-12 23:38:39', NULL),
        (35, '', 'test', 6, '2021-11-13 01:02:10', NULL),

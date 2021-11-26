@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
-import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.Subreddit;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
@@ -29,7 +29,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class SubredditServiceTest {
+class GroupServiceTest {
 
     @Mock
     SubredditRepository subredditRepository;
@@ -47,31 +47,31 @@ class SubredditServiceTest {
     FileRepository fileRepository;
 
     @InjectMocks
-    SubredditService subredditService;
+    GroupService groupService;
 
     @Captor
-    private ArgumentCaptor<Subreddit> argumentCaptor;
+    private ArgumentCaptor<Group> argumentCaptor;
 
     @Test
     void should_save_subreddit_with_image() {
         // given
-        final SubredditDto sentDto = SubredditDto.builder()
+        final GroupDto sentDto = GroupDto.builder()
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
 
-        final Subreddit sentModel = Subreddit.builder()
+        final Group sentModel = Group.builder()
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
 
-        final Subreddit saveModel = Subreddit.builder()
+        final Group saveModel = Group.builder()
                 .id(123L)
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
 
-        final SubredditDto expectedDto = SubredditDto.builder()
+        final GroupDto expectedDto = GroupDto.builder()
                 .id(123L)
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
@@ -101,12 +101,12 @@ class SubredditServiceTest {
         when(subredditAdapter.toDto(any())).thenReturn(expectedDto);
 
         // when
-        subredditService.save(mockMultipartFile, sentDto);
+        groupService.save(mockMultipartFile, sentDto);
 
         // then
         verify(subredditRepository, times(1)).save(argumentCaptor.capture());
 
-        final Subreddit value = argumentCaptor.getValue();
+        final Group value = argumentCaptor.getValue();
 
         assertThat(value.getId()).isNull();
         assertThat(value.getName()).isEqualTo("coucou subreddit");
@@ -118,19 +118,19 @@ class SubredditServiceTest {
     @Test
     void should_save_when_no_image() {
         // given
-        final SubredditDto sentDto = SubredditDto.builder()
+        final GroupDto sentDto = GroupDto.builder()
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
 
-        final Subreddit sentModel = Subreddit.builder()
+        final Group sentModel = Group.builder()
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
 
         final User currentUser = User.builder().id(123L).build();
 
-        final Subreddit saveModel = Subreddit.builder()
+        final Group saveModel = Group.builder()
                 .id(123L)
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
@@ -141,7 +141,7 @@ class SubredditServiceTest {
         given(subredditRepository.save(any())).willReturn(saveModel);
 
         // when
-        subredditService.save(sentDto);
+        groupService.save(sentDto);
 
         verify(subredditRepository, times(1)).save(argumentCaptor.capture());
 
@@ -156,27 +156,27 @@ class SubredditServiceTest {
         // given
         int first = 1;
         int size = 10;
-        final List<Subreddit> subreddits = Arrays.asList(
-                Subreddit.builder().id(1L).build(),
-                Subreddit.builder().id(2L).build(),
-                Subreddit.builder().id(3L).build(),
-                Subreddit.builder().id(4L).build(),
-                Subreddit.builder().id(5L).build(),
-                Subreddit.builder().id(10L).build(),
-                Subreddit.builder().id(12L).build(),
-                Subreddit.builder().id(13L).build(),
-                Subreddit.builder().id(14L).build(),
-                Subreddit.builder().id(15L).build(),
-                Subreddit.builder().id(16L).build(),
-                Subreddit.builder().id(17L).build()
+        final List<Group> groups = Arrays.asList(
+                Group.builder().id(1L).build(),
+                Group.builder().id(2L).build(),
+                Group.builder().id(3L).build(),
+                Group.builder().id(4L).build(),
+                Group.builder().id(5L).build(),
+                Group.builder().id(10L).build(),
+                Group.builder().id(12L).build(),
+                Group.builder().id(13L).build(),
+                Group.builder().id(14L).build(),
+                Group.builder().id(15L).build(),
+                Group.builder().id(16L).build(),
+                Group.builder().id(17L).build()
         );
         Pageable pageable = PageRequest.of(first, first * size);
-        Page<Subreddit> subredditsPage = new PageImpl<>(subreddits.subList(0, size - 1));
+        Page<Group> subredditsPage = new PageImpl<>(groups.subList(0, size - 1));
 
         given(subredditRepository.findAll(any(Pageable.class))).willReturn(subredditsPage);
 
         // when
-        Page<SubredditDto> actuals = subredditService.getAll(pageable);
+        Page<GroupDto> actuals = groupService.getAll(pageable);
 
         // then
         assertThat(actuals.getTotalElements()).isEqualTo(subredditsPage.getTotalElements());

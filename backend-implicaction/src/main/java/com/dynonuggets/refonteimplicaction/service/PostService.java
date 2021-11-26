@@ -4,8 +4,8 @@ import com.dynonuggets.refonteimplicaction.adapter.PostAdapter;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
 import lombok.AllArgsConstructor;
@@ -38,10 +38,10 @@ public class PostService {
             throw new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME);
         }
 
-        Subreddit subreddit = subredditRepository.findById(postRequest.getSubredditId())
-                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditId())));
+        Group group = subredditRepository.findById(postRequest.getGroupId())
+                .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId())));
 
-        Post post = postAdapter.toPost(postRequest, subreddit, authService.getCurrentUser());
+        Post post = postAdapter.toPost(postRequest, group, authService.getCurrentUser());
         Post save = postRepository.save(post);
 
         return getPostResponse(save);

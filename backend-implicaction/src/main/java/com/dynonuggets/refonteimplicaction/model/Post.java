@@ -42,5 +42,5 @@ public class Post {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "subreddit_id", referencedColumnName = "id")
-    private Subreddit subreddit;
+    private Group group;
 }

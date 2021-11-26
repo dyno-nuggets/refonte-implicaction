@@ -2,16 +2,19 @@ package com.dynonuggets.refonteimplicaction.dto;
 
 import lombok.*;
 
+import java.time.Instant;
+
 @Data
 @Builder
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubredditDto {
+public class GroupDto {
     private Long id;
     private String name;
     private String description;
     private Integer numberOfPosts;
     private String imageUrl;
+    private Instant createdAt;
 }

@@ -86,8 +86,8 @@ export class Uris {
    * GROUPS
    */
   static GROUP = class {
-    static readonly BASE_URI = 'sub-reddits';
-    static readonly TOP_POSTING = 'sub-reddits/top-posting';
+    static readonly BASE_URI = 'groups';
+    static readonly TOP_POSTING = 'groups/top-posting';
   };
 
   /**

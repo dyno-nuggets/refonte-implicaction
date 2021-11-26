@@ -25,8 +25,8 @@ public class ApiUrls {
     public static final String GET_POST_URI = "/{postId}";
     public static final String GET_POST_COMMENTS_URI = "/{postId}/comments";
 
-    // SUBREDDITS
-    public static final String SUBREDDITS_BASE_URI = "/api/sub-reddits";
+    // GROUPS
+    public static final String GROUPS_BASE_URI = "/api/groups";
     public static final String GET_ALL_BY_TOP_POSTING_URI = "/top-posting";
 
     // COMMENTS
