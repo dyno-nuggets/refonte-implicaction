@@ -1,10 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ApplyStatusCode, ApplyStatusEnum} from './enums/apply-status-enum';
 import {JobApplication} from './models/job-application';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import {JobApplicationService} from './services/job-application.service';
 import {ToasterService} from '../core/services/toaster.service';
 import {BoardContextService} from './services/board-context.service';
+import {Subscription} from 'rxjs';
 
 export class BoardColumn {
   status: ApplyStatusEnum;
@@ -17,9 +18,9 @@ export class BoardColumn {
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.scss']
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
 
-
+  subscription: Subscription;
   columns: BoardColumn[] = ApplyStatusEnum.all()
     .map(status => {
       return {status, applies: []};
@@ -43,7 +44,7 @@ export class BoardComponent implements OnInit {
             .push(apply)),
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la récupération des données.')
       );
-    this.boardContextService
+    this.subscription = this.boardContextService
       .observe()
       .subscribe(
         applyUpdate => {
@@ -52,7 +53,7 @@ export class BoardComponent implements OnInit {
           }
 
           const applies = this.columns.find(column => column.applies.find(apply => apply.id === applyUpdate.id))?.applies;
-          const applyIndex = applies.findIndex(apply => apply.id === applyUpdate.id);
+          const applyIndex = applies?.findIndex(apply => apply.id === applyUpdate.id);
           if (applyIndex >= 0) {
             // il faut supprimer du board les candidatures acceptées, refusées ou archivées
             if ([ApplyStatusCode.HIRED, ApplyStatusCode.REJECTED].includes(applyUpdate.statusCode) || applyUpdate.archive) {
@@ -87,5 +88,9 @@ export class BoardComponent implements OnInit {
         .updateApply({jobId: jobApply.jobId, status: statusCode})
         .subscribe(jobApplyUpdate => jobApply.statusCode = jobApplyUpdate.statusCode);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }
