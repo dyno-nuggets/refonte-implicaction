@@ -65,7 +65,7 @@ export class AuthService {
   logout(): Observable<boolean> {
     const refreshTokenPayload = {
       refreshToken: this.getRefreshToken(),
-      username: this.getCurrentUser()
+      username: this.getCurrentUser().username
     };
 
     this.http
