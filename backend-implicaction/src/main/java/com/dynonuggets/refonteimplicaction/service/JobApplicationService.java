@@ -74,8 +74,7 @@ public class JobApplicationService {
         final Long jobId = requestDto.getJobId();
         final Long currentUserId = currentUser.getId();
 
-        final JobApplication jobApplication = applyRepository.findByJob_IdAndUser_id(jobId, currentUserId)
-                .orElseThrow(() -> new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
+        final JobApplication jobApplication = getJobApplication(jobId, currentUserId);
 
         jobApplication.setStatus(requestDto.getStatus());
 
@@ -87,5 +86,16 @@ public class JobApplicationService {
         final JobApplication applySave = applyRepository.save(jobApplication);
 
         return applyAdapter.toDto(applySave);
+    }
+
+    public void deleteApplyByJobId(long jobId) {
+        final long currentUserId = authService.getCurrentUser().getId();
+        final JobApplication jobApplication = getJobApplication(jobId, currentUserId);
+        applyRepository.delete(jobApplication);
+    }
+
+    private JobApplication getJobApplication(long jobId, long currentUserId) {
+        return applyRepository.findByJob_IdAndUser_id(jobId, currentUserId)
+                .orElseThrow(() -> new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
     }
 }

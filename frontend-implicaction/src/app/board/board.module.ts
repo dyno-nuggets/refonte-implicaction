@@ -24,7 +24,7 @@ import {CardMenuComponent} from './components/card-menu/card-menu.component';
     SharedModule,
     RouterModule,
     DragDropModule,
-    MenuModule
+    MenuModule,
   ]
 })
 export class BoardModule {

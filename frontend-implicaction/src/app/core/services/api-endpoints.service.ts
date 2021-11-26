@@ -71,6 +71,16 @@ export class ApiEndpointsService {
       });
   }
 
+  private static concatCriterias(criteria: Criteria, pageable: Pageable<any>): any {
+    return {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder
+    };
+  }
+
   /**
    * Auth
    */
@@ -235,7 +245,7 @@ export class ApiEndpointsService {
 
   getAllCompanyByCriteriaEndpoint(pageable: Pageable, criteria: Criteria): string {
     // on merge les filtres et les attributs de pagination
-    const objectParam = this.concatCriterias(criteria, pageable);
+    const objectParam = ApiEndpointsService.concatCriterias(criteria, pageable);
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.COMPANIES.BASE_URI,
       (qs: QueryStringParameters) =>
@@ -323,22 +333,19 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
   }
 
-  getAllApplicationForCurrentUser(): string {
+  getAllApplicationForCurrentUserEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
   }
 
-  updateApplicationStatus(): string {
+  updateApplicationStatusEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.JOB_APPLICATION.BASE_URI);
   }
 
-  private concatCriterias(criteria: Criteria, pageable: Pageable<any>): any {
-    return {
-      ...criteria,
-      rows: pageable.rows,
-      page: pageable.page,
-      sortBy: pageable.sortBy,
-      sortOrder: pageable.sortOrder
-    };
+  deleteApplicationEndpoint(jobId: string): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.JOB_APPLICATION.BASE_URI,
+      (qs: QueryStringParameters) => qs.push('jobId', jobId)
+    );
   }
 
   /**

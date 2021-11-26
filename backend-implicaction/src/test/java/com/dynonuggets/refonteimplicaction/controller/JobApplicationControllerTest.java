@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -145,7 +146,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
         for (int i = 0; i < expectedSize; i++) {
             String contentPath = String.format("$[%d].", i);
-            resultActions.andExpect(jsonPath(contentPath + "id", is(expecteds.get(i).getId().intValue())))
+            resultActions
+                    .andExpect(jsonPath(contentPath + "id", is(expecteds.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + "jobId", is(expecteds.get(i).getJobId().intValue())))
                     .andExpect(jsonPath(contentPath + "companyName", is(expecteds.get(i).getCompanyName())))
                     .andExpect(jsonPath(contentPath + "companyImageUri", is(expecteds.get(i).getCompanyImageUri())))
@@ -179,10 +181,54 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
         // then
         resultActions
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(applyExpected.getId().intValue())))
                 .andExpect(jsonPath("$.jobId", is(applyExpected.getJobId().intValue())))
                 .andExpect(jsonPath("$.statusCode", is(applyExpected.getStatusCode())));
 
         verify(applicationService, times(1)).updateApplyForCurrentUser(any());
+    }
+
+    @Test
+    @WithMockUser
+    void should_delete_apply_when_apply_exists() throws Exception {
+        // given
+        long jobId = 123L;
+
+        // when
+        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+
+        // then
+        resultActions.andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockUser
+    void should_response_notfound_when_deleting_and_apply_not_exists() throws Exception {
+        // given
+        long jobId = 123L;
+        long currentUserId = 234L;
+        final NotFoundException exception = new NotFoundException(String.format(Message.APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId));
+        doThrow(exception).when(applicationService).deleteApplyByJobId(anyLong());
+
+        // when
+        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+
+        // then
+        resultActions
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorMessage", is(exception.getMessage())));
+    }
+
+    @Test
+    void should_response_forbidden_when_deleting_and_no_auth() throws Exception {
+        // given
+        long jobId = 123L;
+
+        // when
+        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+
+        // then
+        resultActions.andExpect(status().isForbidden());
     }
 }

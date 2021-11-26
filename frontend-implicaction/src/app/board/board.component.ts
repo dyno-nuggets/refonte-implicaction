@@ -54,9 +54,13 @@ export class BoardComponent implements OnInit, OnDestroy {
 
           const applies = this.columns.find(column => column.applies.find(apply => apply.id === applyUpdate.id))?.applies;
           const applyIndex = applies?.findIndex(apply => apply.id === applyUpdate.id);
-          if (applyIndex >= 0) {
-            // il faut supprimer du board les candidatures acceptées, refusées ou archivées
-            if ([ApplyStatusCode.HIRED, ApplyStatusCode.REJECTED].includes(applyUpdate.statusCode) || applyUpdate.archive) {
+          const applyExists = applyIndex >= 0;
+          if (applyExists) {
+            if (
+              // il faut supprimer du board les candidatures acceptées, refusées ou annulées
+              [ApplyStatusCode.HIRED, ApplyStatusCode.REJECTED, ApplyStatusCode.CANCELED].includes(applyUpdate.statusCode)
+              || applyUpdate.archive // ...et celles archivées
+            ) {
               applies.splice(applyIndex, 1);
               // sinon, dans le cas d'un changement de statut, on les supprime de l'ancienne colonne pour l'ajouter dans la nouvelle
             } else if (applies[applyIndex].statusCode !== applyUpdate.statusCode) {
