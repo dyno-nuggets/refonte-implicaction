@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +18,7 @@ import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_ALL_BY_TOP_P
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GROUPS_BASE_URI;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequestMapping(GROUPS_BASE_URI)
@@ -29,7 +29,7 @@ public class GroupController {
     private final GroupService groupService;
 
     @ResponseBody
-    @PostMapping(consumes = {APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PostMapping(consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<GroupDto> createSubreddit(@RequestPart("group") GroupDto group, @RequestParam("file") MultipartFile image) {
         final GroupDto saveDto = groupService.save(image, group);
         return ResponseEntity.status(CREATED).body(saveDto);
