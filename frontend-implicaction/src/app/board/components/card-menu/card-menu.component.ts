@@ -68,7 +68,7 @@ export class CardMenuComponent {
         () => this.toasterService.error('Oops', `Une erreur est survenue lors de l'annulation de la candidature.`),
         () => {
           this.boardContextService.apply = this.apply;
-          this.toasterService.success('Succè', 'Votre candidature a bien été annulée.');
+          this.toasterService.success('Succès', 'Votre candidature a bien été annulée.');
         }
       );
   }
