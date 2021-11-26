@@ -21,7 +21,7 @@ import {SidebarService} from '../../../shared/services/sidebar.service';
 export class CreatePostFormComponent extends SidebarContentComponent implements OnInit {
 
   createPostForm: FormGroup;
-  postPayload: PostPayload = {name: '', subredditId: ''};
+  postPayload: PostPayload = {name: '', groupId: ''};
   groups: Group[];
   currentUser: User = {};
   selectedGroup: Group;
@@ -61,7 +61,7 @@ export class CreatePostFormComponent extends SidebarContentComponent implements 
     }
 
     this.postPayload.name = this.createPostForm.get('name').value;
-    this.postPayload.subredditId = this.selectedGroup?.id ?? null;
+    this.postPayload.groupId = this.selectedGroup?.id ?? null;
     this.postPayload.description = this.createPostForm.get('description').value;
 
     this.postService

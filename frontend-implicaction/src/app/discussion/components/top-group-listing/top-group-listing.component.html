@@ -7,12 +7,13 @@
       <app-top-group-skeleton *ngIf="isLoading"></app-top-group-skeleton>
       <ng-container *ngIf="groups?.length; else noGroup">
         <div *ngFor="let group of groups" class="d-flex align-items-center">
-          <p-avatar
-            [image]="group.imageUrl || GROUP_IMG_DEFAULT_URI"
-            shape="circle"
-            styleClass="me-2"
+          <img
+            #img
+            (error)="img.src = GROUP_IMG_DEFAULT_URI"
+            [src]="group.imageUrl || GROUP_IMG_DEFAULT_URI"
+            alt=""
+            class="me-2 image-mini"
           >
-          </p-avatar>
           <span class="ps-2">{{group.name}}</span>
         </div>
 
