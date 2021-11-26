@@ -61,7 +61,16 @@ export class CardMenuComponent {
   }
 
   cancelApply(): void {
-    console.log('cancel');
+    this.applicationService
+      .deleteApply(this.apply.jobId)
+      .subscribe(
+        () => this.apply.statusCode = ApplyStatusCode.CANCELED,
+        () => this.toasterService.error('Oops', `Une erreur est survenue lors de l'annulation de la candidature.`),
+        () => {
+          this.boardContextService.apply = this.apply;
+          this.toasterService.success('Succès', 'Votre candidature a bien été annulée.');
+        }
+      );
   }
 
   private updateApply(statusCode: ApplyStatusCode, archive: boolean, successMessage: string): void {

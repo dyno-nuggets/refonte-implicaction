@@ -4,3 +4,11 @@
   color: $secondary;
   background-color: transparent;
 }
+
+.dropdown-menu {
+  position: absolute;
+
+  .show {
+    z-index: 99 !important;
+  }
+}

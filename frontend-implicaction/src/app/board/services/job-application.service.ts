@@ -21,10 +21,14 @@ export class JobApplicationService {
   }
 
   getAllForCurrentUser(): Observable<JobApplication[]> {
-    return this.http.get<JobApplication[]>(this.apiEndpointService.getAllApplicationForCurrentUser());
+    return this.http.get<JobApplication[]>(this.apiEndpointService.getAllApplicationForCurrentUserEndpoint());
   }
 
   updateApply(jobApplicationRequest: JobApplicationRequest): Observable<JobApplication> {
-    return this.http.patch<JobApplication>(this.apiEndpointService.updateApplicationStatus(), jobApplicationRequest);
+    return this.http.patch<JobApplication>(this.apiEndpointService.updateApplicationStatusEndpoint(), jobApplicationRequest);
+  }
+
+  deleteApply(jobId: string): Observable<any> {
+    return this.http.delete(this.apiEndpointService.deleteApplicationEndpoint(jobId));
   }
 }

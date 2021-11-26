@@ -43,4 +43,10 @@ public class JobApplicationController {
         final JobApplicationDto updateDto = applyService.updateApplyForCurrentUser(requestDto);
         return ResponseEntity.ok(updateDto);
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteApplyByJobId(@RequestParam("jobId") long jobId) {
+        applyService.deleteApplyByJobId(jobId);
+        return ResponseEntity.noContent().build();
+    }
 }

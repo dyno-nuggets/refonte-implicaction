@@ -13,6 +13,8 @@ import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,6 +33,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class JobApplicationServiceTest extends ControllerIntegrationTestBase {
@@ -50,6 +54,9 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     @InjectMocks
     JobApplicationService jobApplicationService;
 
+    @Captor
+    ArgumentCaptor<JobApplication> argumentCaptor;
+
     @Test
     void should_create_apply() {
         // given
@@ -67,7 +74,6 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         JobApplicationDto actual = jobApplicationService.createApplyIfNotExists(request);
 
         // then
-        assertThat(actual.getId()).isNotNull();
         assertThat(actual.getId()).isEqualTo(jobApplication.getId());
         assertThat(actual.getStatusCode()).isEqualTo(jobApplication.getStatus().name());
         assertThat(actual.getJobId()).isEqualTo(jobApplication.getJob().getId());
@@ -75,6 +81,7 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         assertThat(actual.getContractType()).isEqualTo(jobApplication.getJob().getContractType());
         assertThat(actual.getCompanyName()).isEqualTo(jobApplication.getJob().getCompany().getName());
         assertThat(actual.getCompanyImageUri()).isEqualTo(jobApplication.getJob().getCompany().getLogo());
+
     }
 
     @Test
@@ -183,6 +190,38 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
 
         // when
         final NotFoundException actualException = assertThrows(NotFoundException.class, () -> jobApplicationService.updateApplyForCurrentUser(request));
+
+        // then
+        assertThat(actualException.getMessage()).isEqualTo(expectedException.getMessage());
+    }
+
+    @Test
+    void should_delete_apply_when_exists() {
+        // given
+        long jobId = 123L;
+        final User currentUser = User.builder().id(123L).build();
+        final JobApplication jobApplication = JobApplication.builder().build();
+        given(authService.getCurrentUser()).willReturn(currentUser);
+        given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.ofNullable(jobApplication));
+
+        // when
+        jobApplicationService.deleteApplyByJobId(jobId);
+
+        // then
+        verify(applyRepository, times(1)).delete(argumentCaptor.capture());
+    }
+
+    @Test
+    void should_throw_exception_when_deleting_if_apply_not_exists() {
+        // given
+        long jobId = 123L;
+        long currentUserId = 321L;
+        final User currentUser = User.builder().id(currentUserId).build();
+        final NotFoundException expectedException = new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId));
+        given(authService.getCurrentUser()).willReturn(currentUser);
+
+        // when
+        final NotFoundException actualException = assertThrows(NotFoundException.class, () -> jobApplicationService.deleteApplyByJobId(jobId));
 
         // then
         assertThat(actualException.getMessage()).isEqualTo(expectedException.getMessage());

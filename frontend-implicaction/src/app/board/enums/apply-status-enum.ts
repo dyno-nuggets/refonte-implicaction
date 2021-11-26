@@ -6,7 +6,8 @@ export enum ApplyStatusCode {
   CHASED = 'CHASED',
   INTERVIEW = 'INTERVIEW',
   HIRED = 'HIRED',
-  REJECTED = 'REJECTED'
+  REJECTED = 'REJECTED',
+  CANCELED = 'CANCELED',
 }
 
 export class ApplyStatusEnum extends EnumCodeLabelAbstract<ApplyStatusCode> {
