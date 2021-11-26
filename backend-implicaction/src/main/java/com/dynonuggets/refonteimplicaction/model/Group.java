@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
@@ -16,7 +17,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @Builder
-public class Subreddit {
+@Table(name = "ia_group")
+public class Group {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -27,8 +29,9 @@ public class Subreddit {
     @NotBlank(message = "Description is required")
     private String description;
 
-    @OneToMany(mappedBy = "subreddit")
+    @OneToMany(mappedBy = "group")
     private List<Post> posts;
+
     private Instant createdAt;
 
     @ManyToOne(fetch = LAZY)
@@ -36,4 +39,7 @@ public class Subreddit {
 
     @ManyToOne(fetch = LAZY)
     private FileModel image;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "groups")
+    private List<User> users;
 }

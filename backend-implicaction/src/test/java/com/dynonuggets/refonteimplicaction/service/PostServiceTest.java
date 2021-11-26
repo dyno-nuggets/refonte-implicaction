@@ -4,8 +4,8 @@ import com.dynonuggets.refonteimplicaction.adapter.PostAdapter;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
@@ -63,13 +63,13 @@ class PostServiceTest {
     void should_save_post_if_subreddit_exists() {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null, emptyList());
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, null, Instant.now(), null);
         PostRequest postRequest = new PostRequest(123L, 123L, "First Subreddit", "http://url.site", "Test");
 
-        given(subredditRepository.findById(anyLong())).willReturn(Optional.of(subreddit));
+        given(subredditRepository.findById(anyLong())).willReturn(Optional.of(group));
         given(authService.getCurrentUser()).willReturn(currentUser);
-        given(postAdapter.toPost(postRequest, subreddit, currentUser)).willReturn(expected);
+        given(postAdapter.toPost(postRequest, group, currentUser)).willReturn(expected);
 
         // when
         postService.saveOrUpdate(postRequest);
@@ -87,7 +87,7 @@ class PostServiceTest {
         long subredditId = 1234L;
         NotFoundException expectedException = new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, subredditId));
         given(subredditRepository.findById(anyLong())).willThrow(expectedException);
-        PostRequest postRequest = PostRequest.builder().name("test").subredditId(subredditId).build();
+        PostRequest postRequest = PostRequest.builder().name("test").groupId(subredditId).build();
 
         // when
         final NotFoundException actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
@@ -118,7 +118,7 @@ class PostServiceTest {
         // when
         Exception actualException = assertThrows(NotFoundException.class, () -> postService.saveOrUpdate(postRequest));
 
-        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getSubredditId());
+        String expectedMessage = String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId());
 
         // then
         assertThat(actualException.getMessage()).isEqualTo(expectedMessage);
@@ -128,8 +128,8 @@ class PostServiceTest {
     void should_get_post_when_exists() {
         // given
         User currentUser = User.builder().id(123L).username("Sankukai").build();
-        Subreddit subreddit = new Subreddit(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null);
-        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), subreddit);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null, emptyList());
+        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
         PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), null, "Super Subreddit", 88000, 12, null, true, false, null);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(postAdapter.toPostResponse(any(Post.class), anyInt(), anyBoolean(), anyBoolean())).willReturn(expectedResponse);
@@ -158,12 +158,12 @@ class PostServiceTest {
     void should_list_all_posts() {
         // given
         User currentUser = User.builder().id(1345L).username("gustave").build();
-        Subreddit subreddit = new Subreddit(123L, "Sub 1", "Description Sub 1", null, Instant.now(), currentUser, null);
+        Group group = new Group(123L, "Sub 1", "Description Sub 1", null, Instant.now(), currentUser, null, emptyList());
         Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         Page<Post> expectedPages = new PageImpl<>(asList(
-                new Post(1L, "Post 1", null, "Description 1", 0, currentUser, Instant.now(), subreddit),
-                new Post(2L, "Post 2", null, "Description 2", 0, currentUser, Instant.now(), subreddit),
-                new Post(3L, "Post 3", null, "Description 3", 0, currentUser, Instant.now(), subreddit)
+                new Post(1L, "Post 1", null, "Description 1", 0, currentUser, Instant.now(), group),
+                new Post(2L, "Post 2", null, "Description 2", 0, currentUser, Instant.now(), group),
+                new Post(3L, "Post 3", null, "Description 3", 0, currentUser, Instant.now(), group)
         ));
 
         given(postRepository.findAll(any(Pageable.class))).willReturn(expectedPages);

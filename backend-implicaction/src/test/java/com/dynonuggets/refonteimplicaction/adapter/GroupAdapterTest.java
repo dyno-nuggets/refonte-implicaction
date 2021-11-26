@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.Subreddit;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class SubredditAdapterTest {
+class GroupAdapterTest {
 
     @Mock
     FileService fileService;
@@ -30,25 +30,26 @@ class SubredditAdapterTest {
     @Test
     void should_map_to_model() {
         // given
-        SubredditDto expected = SubredditDto.builder()
+        GroupDto expected = GroupDto.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
                 .build();
 
         // when
-        final Subreddit actual = subredditAdapter.toModel(expected);
+        final Group actual = subredditAdapter.toModel(expected);
 
         // then
-        assertThat(actual).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "createdAt", "image")
-                .isEqualTo(expected);
+        assertThat(actual.getId()).isEqualTo(expected.getId());
+        assertThat(actual.getDescription()).isEqualTo(expected.getDescription());
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getImage()).isNull();
     }
 
     @Test
     void should_map_to_dto_with_count_when_model_has_posts() {
         // given
-        Subreddit expectedModel = Subreddit.builder()
+        Group expectedModel = Group.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
@@ -57,7 +58,7 @@ class SubredditAdapterTest {
                 .build();
 
         // when
-        final SubredditDto actualDto = subredditAdapter.toDto(expectedModel);
+        final GroupDto actualDto = subredditAdapter.toDto(expectedModel);
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
@@ -71,7 +72,7 @@ class SubredditAdapterTest {
     @Test
     void should_map_to_dto_with_image_url_when_model_has_image() {
         // given
-        Subreddit expectedModel = Subreddit.builder()
+        Group expectedModel = Group.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
@@ -84,7 +85,7 @@ class SubredditAdapterTest {
         given(fileService.buildFileUri(anyString())).willReturn(expectedUrl);
 
         // when
-        final SubredditDto actualDto = subredditAdapter.toDto(expectedModel);
+        final GroupDto actualDto = subredditAdapter.toDto(expectedModel);
 
         // then
         assertThat(actualDto).usingRecursiveComparison()

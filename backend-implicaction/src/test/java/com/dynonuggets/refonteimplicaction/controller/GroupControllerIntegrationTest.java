@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
-import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
-import com.dynonuggets.refonteimplicaction.service.SubredditService;
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
@@ -27,16 +27,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers = SubredditController.class)
-class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
+@WebMvcTest(controllers = GroupController.class)
+class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @MockBean
-    SubredditService subredditService;
+    GroupService groupService;
 
     @Test
     void should_response_forbidden_when_create_subreddit_with_no_authentication() throws Exception {
         // given
-        final SubredditDto sentDto = SubredditDto.builder()
+        final GroupDto sentDto = GroupDto.builder()
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
@@ -50,7 +50,7 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(subredditService, never()).save(any());
+        verify(groupService, never()).save(any());
     }
 
     @Test
@@ -58,22 +58,22 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_list_all_subreddit_whith_no_authentication() throws Exception {
         // given
         final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
-        final Page<SubredditDto> subreddits = new PageImpl<>(asList(
-                SubredditDto.builder().id(1L).build(),
-                SubredditDto.builder().id(2L).build(),
-                SubredditDto.builder().id(3L).build(),
-                SubredditDto.builder().id(4L).build(),
-                SubredditDto.builder().id(5L).build(),
-                SubredditDto.builder().id(10L).build(),
-                SubredditDto.builder().id(12L).build(),
-                SubredditDto.builder().id(13L).build(),
-                SubredditDto.builder().id(14L).build(),
-                SubredditDto.builder().id(15L).build()
+        final Page<GroupDto> subreddits = new PageImpl<>(asList(
+                GroupDto.builder().id(1L).build(),
+                GroupDto.builder().id(2L).build(),
+                GroupDto.builder().id(3L).build(),
+                GroupDto.builder().id(4L).build(),
+                GroupDto.builder().id(5L).build(),
+                GroupDto.builder().id(10L).build(),
+                GroupDto.builder().id(12L).build(),
+                GroupDto.builder().id(13L).build(),
+                GroupDto.builder().id(14L).build(),
+                GroupDto.builder().id(15L).build()
         ));
-        given(subredditService.getAll(DEFAULT_PAGEABLE)).willReturn(subreddits);
+        given(groupService.getAll(DEFAULT_PAGEABLE)).willReturn(subreddits);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(SUBREDDITS_BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print())
@@ -82,16 +82,16 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.totalPages").value(subreddits.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(subreddits.getTotalElements()));
 
-        final List<SubredditDto> subredditDtos = subreddits.get().collect(toList());
-        final int size = subredditDtos.size();
+        final List<GroupDto> groupDtos = subreddits.get().collect(toList());
+        final int size = groupDtos.size();
 
         for (int i = 0; i < size; i++) {
             final String contentPath = String.format("$.content[%d]", i);
-            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(subredditDtos.get(i).getId()))));
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(groupDtos.get(i).getId()))));
         }
         resultActions.andReturn();
 
-        verify(subredditService, times(1)).getAll(any());
+        verify(groupService, times(1)).getAll(any());
     }
 
     @Test
@@ -102,7 +102,7 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(subredditService, never()).getAll(any());
+        verify(groupService, never()).getAll(any());
     }
 
     @Test
@@ -110,19 +110,19 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_get_all_by_top_posting_when_authenticated() throws Exception {
         // given
         int limit = 5;
-        List<SubredditDto> expectedDtos = asList(
-                SubredditDto.builder().id(1L).numberOfPosts(5).build(),
-                SubredditDto.builder().id(1L).numberOfPosts(4).build(),
-                SubredditDto.builder().id(1L).numberOfPosts(3).build(),
-                SubredditDto.builder().id(1L).numberOfPosts(2).build(),
-                SubredditDto.builder().id(1L).numberOfPosts(1).build()
+        List<GroupDto> expectedDtos = asList(
+                GroupDto.builder().id(1L).numberOfPosts(5).build(),
+                GroupDto.builder().id(1L).numberOfPosts(4).build(),
+                GroupDto.builder().id(1L).numberOfPosts(3).build(),
+                GroupDto.builder().id(1L).numberOfPosts(2).build(),
+                GroupDto.builder().id(1L).numberOfPosts(1).build()
         );
 
-        given(subredditService.getAllByTopPosting(anyInt())).willReturn(expectedDtos);
+        given(groupService.getAllByTopPosting(anyInt())).willReturn(expectedDtos);
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(SUBREDDITS_BASE_URI + GET_ALL_BY_TOP_POSTING_URI).param("limit", String.valueOf(limit))
+                get(GROUPS_BASE_URI + GET_ALL_BY_TOP_POSTING_URI).param("limit", String.valueOf(limit))
         );
 
         // then
@@ -132,13 +132,13 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.size()").value(limit));
 
         final String contentAsString = resultActions.andReturn().getResponse().getContentAsString();
-        final List<SubredditDto> actualDtos = gson.fromJson(contentAsString, new TypeToken<List<SubredditDto>>() {
+        final List<GroupDto> actualDtos = gson.fromJson(contentAsString, new TypeToken<List<GroupDto>>() {
         }.getType());
 
-        final List<Integer> collect = actualDtos.stream().map(SubredditDto::getNumberOfPosts).collect(toList());
+        final List<Integer> collect = actualDtos.stream().map(GroupDto::getNumberOfPosts).collect(toList());
         assertTrue(Ordering.natural().reverse().isOrdered(collect));
 
-        verify(subredditService, times(1)).getAllByTopPosting(anyInt());
+        verify(groupService, times(1)).getAllByTopPosting(anyInt());
     }
 
 
@@ -149,12 +149,12 @@ class SubredditControllerIntegrationTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                get(SUBREDDITS_BASE_URI + GET_ALL_BY_TOP_POSTING_URI).param("limit", String.valueOf(limit))
+                get(GROUPS_BASE_URI + GET_ALL_BY_TOP_POSTING_URI).param("limit", String.valueOf(limit))
         );
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(subredditService, never()).getAllByTopPosting(anyInt());
+        verify(groupService, never()).getAllByTopPosting(anyInt());
     }
 }

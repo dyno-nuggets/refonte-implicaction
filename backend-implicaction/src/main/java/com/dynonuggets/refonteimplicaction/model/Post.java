@@ -41,6 +41,6 @@ public class Post {
     private Instant createdAt;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "subreddit_id", referencedColumnName = "id")
-    private Subreddit subreddit;
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    private Group group;
 }

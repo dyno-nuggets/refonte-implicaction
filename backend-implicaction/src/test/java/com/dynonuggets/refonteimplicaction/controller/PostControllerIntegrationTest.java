@@ -45,7 +45,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_create_post_when_authenticated() throws Exception {
         // given
         PostRequest postRequest = PostRequest.builder()
-                .subredditId(125L)
+                .groupId(125L)
                 .name("coucou post")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
@@ -59,7 +59,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .url("http://url.com")
                 .description("Il est super cool ce post")
                 .username("Matthieu")
-                .subredditName("divers")
+                .groupName("divers")
                 .voteCount(0)
                 .commentCount(0)
                 .duration("à l'instant")
@@ -84,7 +84,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.url", is(expectedResponse.getUrl())))
                 .andExpect(jsonPath("$.description", is(expectedResponse.getDescription())))
                 .andExpect(jsonPath("$.username", is(expectedResponse.getUsername())))
-                .andExpect(jsonPath("$.subredditName", is(expectedResponse.getSubredditName())))
+                .andExpect(jsonPath("$.groupName", is(expectedResponse.getGroupName())))
                 .andExpect(jsonPath("$.voteCount", is(expectedResponse.getVoteCount())))
                 .andExpect(jsonPath("$.commentCount", is(expectedResponse.getCommentCount())))
                 .andExpect(jsonPath("$.duration", is(expectedResponse.getDuration())))
@@ -99,7 +99,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_response_bad_request_when_postname_is_null() throws Exception {
         // given
         PostRequest postRequest = PostRequest.builder()
-                .subredditId(125L)
+                .groupId(125L)
                 .name("")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
@@ -125,7 +125,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_response_forbidden_when_not_authenticated() throws Exception {
         // given
         PostRequest postRequest = PostRequest.builder()
-                .subredditId(125L)
+                .groupId(125L)
                 .name("coucou post")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
@@ -171,7 +171,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.url", is(expectedResponse.getUrl())))
                 .andExpect(jsonPath("$.description", is(expectedResponse.getDescription())))
                 .andExpect(jsonPath("$.username", is(expectedResponse.getUsername())))
-                .andExpect(jsonPath("$.subredditName", is(expectedResponse.getSubredditName())))
+                .andExpect(jsonPath("$.groupName", is(expectedResponse.getGroupName())))
                 .andExpect(jsonPath("$.voteCount", is(expectedResponse.getVoteCount())))
                 .andExpect(jsonPath("$.commentCount", is(expectedResponse.getCommentCount())))
                 .andExpect(jsonPath("$.duration", is(expectedResponse.getDuration())))

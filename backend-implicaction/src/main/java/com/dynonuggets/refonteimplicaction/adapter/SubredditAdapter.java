@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.dto.SubredditDto;
-import com.dynonuggets.refonteimplicaction.model.Subreddit;
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,21 +16,23 @@ public class SubredditAdapter {
 
     private FileService fileService;
 
-    public Subreddit toModel(final SubredditDto dto) {
-        return Subreddit.builder()
+    public Group toModel(final GroupDto dto) {
+        return Group.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
+                .createdAt(dto.getCreatedAt())
                 .build();
     }
 
-    public SubredditDto toDto(Subreddit model) {
+    public GroupDto toDto(Group model) {
         final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : DEFAULT_GROUP_IMAGE_URI;
-        return SubredditDto.builder()
+        return GroupDto.builder()
                 .id(model.getId())
                 .name(model.getName())
                 .numberOfPosts(isNotEmpty(model.getPosts()) ? model.getPosts().size() : 0)
                 .description(model.getDescription())
+                .createdAt(model.getCreatedAt())
                 .imageUrl(imageUrl)
                 .build();
     }

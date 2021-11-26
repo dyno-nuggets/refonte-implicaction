@@ -7,7 +7,7 @@ export interface Post {
   username?: string;
   userId?: string;
   userImageUrl?: string;
-  subredditName?: string;
+  groupName?: string;
   commentCount?: number;
   duration?: string;
   upVote?: boolean;
