@@ -105,4 +105,49 @@ export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, 
         () => this.toastService.success('Succès', job.archive ? 'Offre désarchivée' : `Offre archivée`)
       );
   }
+
+  protected async getFilterFromQueryParams(): Promise<void> {
+    // TODO: voir si y'a un moyen plus élégant avec typeof
+    const filterKeys = ['search', 'contractType'];
+    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
+    return new Promise(resolve => {
+      this.route
+        .queryParams
+        .subscribe(params => {
+          Object.entries(params)
+            .forEach(([key, value]) => {
+              if (filterKeys.includes(key)) {
+                this.criteria[key] = value;
+              } else if (pageableKeys.includes(key)) {
+                this.pageable[key] = value;
+              }
+            });
+          return resolve();
+        });
+    });
+  }
+
+  archiveJobList(): void {
+    let jobsId = this.selectedJobs.map(job => job.id);
+    this.jobService
+      .archiveJobList(jobsId)
+      .subscribe(
+        () => this.paginate(),
+        () => this.toastService.error('Oops', 'Une erreur est survenue'),
+        () => this.toastService.success('Succès', ''),
+      );
+  }
+
+  /**
+   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
+   */
+  private buildQueryParams(): any {
+    return {
+      ...this.criteria,
+      size: this.pageable.rows,
+      page: this.pageable.page,
+      sortBy: this.pageable.sortBy,
+      sortOrder: this.pageable.sortOrder
+    };
+  }
 }

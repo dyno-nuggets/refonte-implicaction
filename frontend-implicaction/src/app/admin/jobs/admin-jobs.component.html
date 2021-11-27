@@ -11,6 +11,20 @@
         title="Ajouter une offre"
       >
       </i-feather>
+      <button
+        (click)="archive()"
+        class="btn"
+        data-bs-placement="top"
+        data-bs-toggle="tooltip"
+        title="Archiver"
+        type="button"
+      >
+        <i
+          [ngClass]="'fa-box border-info text-info'"
+          class="fas border rounded-3 px-2 py-1"
+        >
+        </i>
+      </button>
     </div>
   </div>
   <app-jobs-table></app-jobs-table>
