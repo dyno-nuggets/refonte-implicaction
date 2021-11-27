@@ -25,7 +25,7 @@ export class AdminJobsComponent {
       });
   }
 
-  archive() {
+  archive(): void {
     this.jobsTableComponent.archiveJobList();
   }
 
