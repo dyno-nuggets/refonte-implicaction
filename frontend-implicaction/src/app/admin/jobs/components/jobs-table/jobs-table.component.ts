@@ -128,7 +128,7 @@ export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, 
   }
 
   archiveJobList(): void {
-    let jobsId = this.selectedJobs.map(job => job.id);
+    const jobsId = this.selectedJobs.map(job => job.id);
     this.jobService
       .archiveJobList(jobsId)
       .subscribe(
