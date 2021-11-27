@@ -11,7 +11,7 @@ export class BaseWithPaginationComponent<T, C extends Criteria> {
 
   isLoading = true;
   criteria: C;
-  filterKeys: String[];
+  filterKeys: string[];
 
   // Pagination
   pageable: Pageable<T> = Constants.PAGEABLE_DEFAULT;
@@ -50,7 +50,7 @@ export class BaseWithPaginationComponent<T, C extends Criteria> {
    * Méthode qui ajoute les paramètres de l'url dans la variable correspondante
    * la variable correspond à un critère de recherche ou à la pagination
    */
-  protected async getFilterFromQueryParams(filterKeys: String[]): Promise<void> {
+  protected async getFilterFromQueryParams(filterKeys: string[]): Promise<void> {
     // TODO: voir si y'a un moyen plus élégant avec typeof
     const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
     return new Promise(resolve => {
