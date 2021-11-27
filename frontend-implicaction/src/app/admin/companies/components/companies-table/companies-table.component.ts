@@ -23,6 +23,7 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
   selectedOrder = CompanySortEnum.NAME_ASC;
   selectedOrderCode: string;
   subscription: Subscription;
+  selectedCompanies: Company[] = [];
 
   constructor(
     private companyService: CompanyService,
