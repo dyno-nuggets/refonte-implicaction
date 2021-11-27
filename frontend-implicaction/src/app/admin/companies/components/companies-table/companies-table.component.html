@@ -12,6 +12,7 @@
 </div>
 <p-table
   (onLazyLoad)="paginate($event)"
+  [(selection)]="selectedCompanies"
   [lazy]="true"
   [loading]="isLoading"
   [paginator]="true"
