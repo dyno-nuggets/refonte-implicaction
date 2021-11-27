@@ -46,6 +46,7 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
     this.pageable.sortOrder = CompanySortEnum.NAME_ASC.sortDirection;
     this.pageable.sortBy = CompanySortEnum.NAME_ASC.sortBy;
     this.selectedOrderCode = CompanySortEnum.NAME_ASC.code;
+    this.filterKeys = ['keyword'];
 
     // on s'abonne à l'ajout d'une nouvelle entreprise
     this.subscription = this.companyContextService
@@ -67,7 +68,7 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
           })
       );
 
-    this.getFilterFromQueryParams().then(() => this.filterService.criteria = this.criteria);
+    this.getFilterFromQueryParams(this.filterKeys).then(() => this.filterService.criteria = this.criteria);
   }
 
   onEditCompany(company: Company): void {

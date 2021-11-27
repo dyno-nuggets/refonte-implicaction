@@ -40,6 +40,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
     this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortDirection;
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
     this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
+    this.filterKeys = ['keyword'];
 
     // réinitialisation systématique du filtre au chargement du composant
     this.filterService.criteria = {};
@@ -53,7 +54,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
         this.paginate();
       });
 
-    this.getFilterFromQueryParams()
+    this.getFilterFromQueryParams(this.filterKeys)
       .then(() => this.filterService.criteria = this.criteria);
   }
 
