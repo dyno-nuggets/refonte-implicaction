@@ -36,4 +36,8 @@ export class JobService {
   deleteJobPosting(jobPostingId: string): Observable<any> {
     return this.http.delete(this.apiEndpointsService.deleteJobPostingEndpoint(jobPostingId));
   }
+
+  archiveJob(jobPostingId: string): Observable<JobPosting> {
+    return this.http.patch(this.apiEndpointsService.archiveJobPostingEndpoint(jobPostingId), null);
+  }
 }

@@ -3,7 +3,6 @@ import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {JobService} from '../../../../job/services/job.service';
-import {LazyLoadEvent} from 'primeng/api';
 import {finalize, take} from 'rxjs/operators';
 import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
 import {JobCriteriaFilter} from '../../../../job/models/job-criteria-filter';
@@ -13,13 +12,14 @@ import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {SortDirectionEnum} from '../../../../shared/enums/sort-direction.enum';
 import {JobFilterContextService} from '../../../../job/services/job-filter-context.service';
 import {ActivatedRoute} from '@angular/router';
+import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 
 @Component({
   selector: 'app-jobs-table',
   templateUrl: './jobs-table.component.html',
   styleUrls: ['./jobs-table.component.scss']
 })
-export class JobsTableComponent implements OnInit {
+export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, JobCriteriaFilter> implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   loading = true; // indique si les données sont en chargement
@@ -39,11 +39,16 @@ export class JobsTableComponent implements OnInit {
     private toastService: ToasterService,
     private sidebarService: SidebarService,
     private filterService: JobFilterContextService,
-    private route: ActivatedRoute
+    protected route: ActivatedRoute
   ) {
+    super(route);
   }
 
   ngOnInit(): void {
+    this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortDirection;
+    this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
+    this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
+
     this.filterService
       .observe()
       .subscribe(criteria => {
@@ -53,26 +58,7 @@ export class JobsTableComponent implements OnInit {
         this.paginate();
       });
 
-    this.getFilterFromQueryParams()
-      .then(() => this.filterService.criteria = this.criteria);
-  }
-
-  paginate({page, first, rows} = this.pageable): void {
-    this.loading = true;
-    this.pageable.page = page;
-    this.pageable.first = first;
-    this.pageable.rows = rows;
-    this.jobService
-      .getAllByCriteria(this.pageable, this.criteria)
-      .pipe(finalize(() => this.loading = false))
-      .subscribe(
-        data => {
-          this.pageable.totalPages = data.totalPages;
-          this.pageable.totalElements = data.totalElements;
-          this.pageable.content = data.content;
-        },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
-      );
+    this.getFilterFromQueryParams().then(() => this.filterService.criteria = this.criteria);
   }
 
   onSortChange({value}): void {
@@ -86,12 +72,9 @@ export class JobsTableComponent implements OnInit {
     this.filterService.criteria = this.criteria;
   }
 
-  loadJobs(event: LazyLoadEvent): void {
-    this.loading = true;
-    const page = event.first / event.rows;
-
+  protected innerPaginate(): void {
     this.jobService
-      .getAllByCriteria({page, rows: event.rows}, this.criteria)
+      .getAllByCriteria(this.pageable, this.criteria)
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -117,7 +100,17 @@ export class JobsTableComponent implements OnInit {
       });
   }
 
-  private async getFilterFromQueryParams(): Promise<void> {
+  archiveJob(job: JobPosting): void {
+    this.jobService
+      .archiveJob(job.id)
+      .subscribe(
+        () => this.paginate(),
+        () => this.toastService.error('Oops', 'Une erreur est survenue'),
+        () => this.toastService.success('Succès', job.archive ? 'Offre désarchivée' : `Offre archivée`)
+      );
+  }
+
+  protected async getFilterFromQueryParams(): Promise<void> {
     // TODO: voir si y'a un moyen plus élégant avec typeof
     const filterKeys = ['search', 'contractType'];
     const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
@@ -136,18 +129,5 @@ export class JobsTableComponent implements OnInit {
           return resolve();
         });
     });
-  }
-
-  /**
-   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
-   */
-  private buildQueryParams(): any {
-    return {
-      ...this.criteria,
-      size: this.pageable.rows,
-      page: this.pageable.page,
-      sortBy: this.pageable.sortBy,
-      sortOrder: this.pageable.sortOrder
-    };
   }
 }

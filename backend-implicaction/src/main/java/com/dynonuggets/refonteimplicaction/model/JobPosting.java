@@ -49,6 +49,6 @@ public class JobPosting {
     @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(name = "archive")
+    @Column(columnDefinition = "boolean default false")
     private boolean archive;
 }
