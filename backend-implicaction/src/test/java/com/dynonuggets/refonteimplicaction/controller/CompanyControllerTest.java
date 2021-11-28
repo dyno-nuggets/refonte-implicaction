@@ -14,16 +14,18 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.COMPANIES_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = CompanyController.class)
 class CompanyControllerTest extends ControllerIntegrationTestBase {
@@ -105,5 +107,66 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(status().isForbidden());
 
         verify(companyService, never()).getAll(any());
+    }
+
+    @Test
+    @WithMockUser
+    void should_create_company_when_authenticated() throws Exception {
+        // given
+        CompanyDto companyDto = CompanyDto.builder()
+                .id(123L)
+                .description("Description")
+                .name("Implicaction")
+                .url("url")
+                .build();
+
+        String json = gson.toJson(companyDto);
+
+        CompanyDto expectedDto = CompanyDto.builder()
+                .id(123L)
+                .description("Description")
+                .name("Implicaction")
+                .url("url")
+                .build();
+
+
+        given(companyService.saveOrUpdateCompany(any())).willReturn(expectedDto);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                post(COMPANIES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(APPLICATION_JSON_VALUE))
+                .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
+                .andExpect(jsonPath("$.description", is(expectedDto.getDescription())))
+                .andExpect(jsonPath("$.name", is(expectedDto.getName())))
+                .andExpect(jsonPath("$.url", is(expectedDto.getUrl())));
+
+        verify(companyService, times(1)).saveOrUpdateCompany(any());
+    }
+
+    @Test
+    void should_not_create_company_and_response_forbidden_when_not_authenticated() throws Exception {
+        // given
+        CompanyDto companyDto = CompanyDto.builder()
+                .description("Description")
+                .name("Implicaction")
+                .url("url")
+                .build();
+
+        String json = gson.toJson(companyDto);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                post(COMPANIES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+        verify(companyService, never()).saveOrUpdateCompany(any());
     }
 }
