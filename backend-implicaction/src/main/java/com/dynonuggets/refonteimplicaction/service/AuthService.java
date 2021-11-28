@@ -7,11 +7,9 @@ import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
-import com.dynonuggets.refonteimplicaction.model.JobSeeker;
-import com.dynonuggets.refonteimplicaction.model.Role;
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
+import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
@@ -28,9 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -48,8 +48,10 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
-    private RoleRepository roleRepository;
-    private JobSeekerRepository jobSeekerRepository;
+    private final RoleRepository roleRepository;
+    private final JobSeekerRepository jobSeekerRepository;
+    private final NotificationRepository notificationRepository;
+
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -62,7 +64,18 @@ public class AuthService {
     public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
         validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
+        final List<User> admins = userRepository.findAllByRoles_NameIn(Collections.singletonList(RoleEnum.ADMIN.getLongName()));
         registerUser(reqisterRequest, activationKey);
+        final Notification notification = Notification.builder()
+                .message(String.format("L'utilisateur %s vient de s'inscrire et est en attente de validation", reqisterRequest.getUsername()))
+                .sent(false)
+                .read(false)
+                .date(Instant.now())
+                .type(USER_REGISTRATION)
+                .build();
+        final Notification save = notificationRepository.save(notification);
+        admins.forEach(admin -> admin.getNotifications().add(save));
+        userRepository.saveAll(admins);
     }
 
     /**
