@@ -11,7 +11,6 @@ export class BaseWithPaginationComponent<T, C extends Criteria> {
 
   isLoading = true;
   criteria: C;
-  filterKeys: string[];
 
   // Pagination
   pageable: Pageable<T> = Constants.PAGEABLE_DEFAULT;

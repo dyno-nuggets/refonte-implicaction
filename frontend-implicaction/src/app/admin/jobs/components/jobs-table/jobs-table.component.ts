@@ -44,7 +44,6 @@ export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, 
     this.pageable.sortOrder = JobSortEnum.DATE_DESC.sortDirection;
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
     this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
-    this.filterKeys = ['search', 'contractType'];
 
     this.filterService.criteria = {};
 
@@ -57,7 +56,7 @@ export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, 
         this.paginate();
       });
 
-    this.getFilterFromQueryParams(this.filterKeys)
+    this.getFilterFromQueryParams(['search', 'contractType'])
       .then(() => this.filterService.criteria = this.criteria);
   }
 
