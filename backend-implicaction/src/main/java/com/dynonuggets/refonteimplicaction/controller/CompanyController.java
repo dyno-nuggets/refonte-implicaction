@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,7 +38,7 @@ public class CompanyController {
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
     public ResponseEntity<CompanyDto> createOrUpdate(@RequestBody CompanyDto companyDto) throws ImplicactionException {
         CompanyDto companyCreated = companyService.saveOrUpdateCompany(companyDto);
-        return ResponseEntity.ok(companyCreated);
+        return ResponseEntity.status(HttpStatus.CREATED).body(companyCreated);
     }
 }
 
