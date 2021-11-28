@@ -9,7 +9,8 @@ import {JobsTableComponent} from './components/jobs-table/jobs-table.component';
   styleUrls: ['./admin-jobs.component.scss']
 })
 export class AdminJobsComponent {
-  @ViewChild(JobsTableComponent) jobsTableComponent: JobsTableComponent;
+  @ViewChild(JobsTableComponent)
+  jobsTableComponent: JobsTableComponent;
 
   constructor(
     private sidebarService: SidebarService,

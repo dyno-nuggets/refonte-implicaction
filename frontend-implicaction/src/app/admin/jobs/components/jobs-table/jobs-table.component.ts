@@ -130,24 +130,11 @@ export class JobsTableComponent extends BaseWithPaginationComponent<JobPosting, 
   archiveJobList(): void {
     const jobsId = this.selectedJobs.map(job => job.id);
     this.jobService
-      .archiveJobList(jobsId)
+      .toggleArchiveJobs(jobsId)
       .subscribe(
         () => this.paginate(),
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
-        () => this.toastService.success('Succès', ''),
+        () => this.toastService.success('Succès', 'Opération effectuée'),
       );
-  }
-
-  /**
-   * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
-   */
-  private buildQueryParams(): any {
-    return {
-      ...this.criteria,
-      size: this.pageable.rows,
-      page: this.pageable.page,
-      sortBy: this.pageable.sortBy,
-      sortOrder: this.pageable.sortOrder
-    };
   }
 }

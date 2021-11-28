@@ -240,6 +240,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId]);
   }
 
+  toggleArchiveJobsEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOBS.TOGGLE_ARCHIVE);
+  }
+
   archiveJobPostingEndpoint(JobId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId, 'archive']);
   }

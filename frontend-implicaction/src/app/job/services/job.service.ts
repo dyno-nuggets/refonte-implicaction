@@ -41,7 +41,7 @@ export class JobService {
     return this.http.patch(this.apiEndpointsService.archiveJobPostingEndpoint(jobPostingId), null);
   }
 
-  archiveJobList(jobPostingIds: string[]): Observable<JobPosting> {
-    return this.http.patch(this.apiEndpointsService.archiveJobPostingListEndpoint(), jobPostingIds);
+  toggleArchiveJobs(jobIds: string[]): Observable<JobPosting> {
+    return this.http.patch(this.apiEndpointsService.toggleArchiveJobsEndpoint(), jobIds);
   }
 }
