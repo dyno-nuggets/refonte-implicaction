@@ -139,7 +139,7 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
 
         // then
         resultActions.andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
                 .andExpect(jsonPath("$.description", is(expectedDto.getDescription())))
