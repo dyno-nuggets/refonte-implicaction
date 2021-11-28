@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -87,8 +88,6 @@ public class JobPostingService {
     @Transactional
     public JobPostingDto toggleArchiveJobPosting(Long jobPostingId) {
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobPostingId)));
-        jobPosting.setArchive(!jobPosting.isArchive());
                 .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobPostingId)));
         jobPosting.setArchive(!jobPosting.isArchive());
         final JobPosting save = jobPostingRepository.save(jobPosting);
