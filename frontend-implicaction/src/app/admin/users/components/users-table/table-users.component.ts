@@ -16,7 +16,6 @@ export class TableUsersComponent {
   loading = true; // indique si les données sont en chargement
   // Ne pas oublier de retirer du tableau la valeur 'all' utilisée
   // afin de pouvoir cocher/décocher toutes les cases d'un coup
-  selectedUserIds = [];
 
   selectedUsers: User[] = [];
 
@@ -49,15 +48,5 @@ export class TableUsersComponent {
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
       );
-  }
-
-  onChangeCheckboxes(value): void {
-    if (value[value.length - 1] === 'all') {
-      const users = this.pageable.content;
-      this.selectedUserIds = users.map((user) => user.id.toString());
-      this.selectedUserIds.push(value[value.length - 1]);
-    } else {
-      this.selectedUserIds = [];
-    }
   }
 }

@@ -8,6 +8,7 @@ import {TableUsersComponent} from './components/users-table/table-users.componen
 import {PendingUserTableComponent} from './components/pending-user-table/pending-user-table.component';
 import {CheckboxModule} from 'primeng/checkbox';
 import {FormsModule} from '@angular/forms';
+import {FeatherModule} from 'angular-feather';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import {FormsModule} from '@angular/forms';
     InputTextModule,
     CheckboxModule,
     FormsModule,
+    FeatherModule,
   ]
 })
 export class UsersModule {

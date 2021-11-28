@@ -16,7 +16,7 @@
   [loading]="loading"
   [paginator]="true"
   [rowsPerPageOptions]="[10, 25, 50]"
-  [rows]="rowsPerPage"
+  [rows]="pageable.rows"
   [showCurrentPageReport]="true"
   [totalRecords]="pageable.totalElements"
   [value]="pageable.content"
@@ -24,23 +24,8 @@
 >
   <ng-template class="bg-primary" pTemplate="header">
     <tr>
-      <th class="text-center col-1">
-        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-      </th>
-      <th scope="col">Username</th>
-      <th scope="col">Email</th>
-      <th scope="col">Registered</th>
-      <th scope="col"></th>
-      <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>
-      <!--      <th class="overflow-ellipsis text-uppercase col-0 col-sm-0 col-md-0 col-lg-1" scope="col"></th>-->
       <th class="col-1 col-sm-1 col-lg-1 px-4" scope="col">
-        <p-checkbox
-          (ngModelChange)="onChangeCheckboxes($event)"
-          [ngModel]="selectedUserIds"
-          name="users"
-          value="all"
-        >
-        </p-checkbox>
+        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
       <th class="overflow-ellipsis text-uppercase col-4 col-sm-4 col-lg-2 px-2" scope="col">Username</th>
       <th class="overflow-ellipsis text-uppercase col-2 col-sm-2 col-lg-5 px-2" scope="col">Email</th>
@@ -51,63 +36,19 @@
   <ng-template let-user pTemplate="body">
     <tr>
       <td class="col-1 col-sm-1 col-lg-1 px-4">
-        <p-checkbox
-          [(ngModel)]="selectedUserIds"
-          name="users"
-          value="{{user.id}}"
-        >
-        </p-checkbox>
+        <p-tableCheckbox [value]="user"></p-tableCheckbox>
       </td>
       <td class="overflow-ellipsis text-wrap col-4 col-sm-4 col-lg-2">{{user.username}}</td>
       <td class="overflow-ellipsis text-wrap col-2 col-sm-2 col-lg-5 px-2">{{user.email}}</td>
       <td class="overflow-ellipsis col-1 col-sm-2 col-lg-2 px-2">{{user.registeredAt | date: 'shortDate'}}</td>
-      <td class="text-center col-1">
-        <p-tableCheckbox [value]="user"></p-tableCheckbox>
-      </td>
-      <td class="overflow-ellipsis">{{user.username}}</td>
-      <td class="overflow-ellipsis">{{user.email}}</td>
-      <td class="overflow-ellipsis">{{user.registered | date: 'shortDate'}}</td>
-      <td class="d-flex justify-content-end">
-        <ul class="list-unstyled list-inline">
-          <li class="list-inline-item">
-            <span class="badge badge-pill badge-primary">New</span>
-      <!--      <td class="col-0 col-lg-1">-->
-      <!--        <img-->
-      <!--          #companyLogo-->
-      <!--          (error)="companyLogo.src = 'assets/img/job-posting-img.png'"-->
-      <!--          [src]="user?.logo || 'assets/img/job-posting-img.png'"-->
-      <!--          alt="job-logo"-->
-      <!--          class="card-img-top rounded-circle img-fluid shadow-sm user-avatar"-->
-      <!--        />-->
-      <!--      </td>-->
-      <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{user.name}}</td>
-      <td class="overflow-ellipsis text-wrap col-1 col-sm-2 col-lg-2 px-2">{{user.url}}</td>
-      <td class="overflow-ellipsis col-3 col-sm-4 col-lg-5 px-2">{{user.registered | date: 'shortDate'}}</td>
-      <td class="col-4 col-sm-3 col-lg-2 px-2 text-center">
-        <ul class="fa-ul d-flex flex-column flex-lg-row justify-content-center list-unstyled list-inline mb-0">
-          <li class="fa-li list-inline-item m-0 me-lg-2">
-            <button
-              class="btn"
-              data-bs-placement="top"
-              data-bs-toggle="tooltip"
-              title="Editer"
-              type="button"
-            >
-              <i class="fas fa-pen border border-primary text-primary rounded-3 px-2 py-1"></i>
-            </button>
-          </li>
-          <li class="fa-li list-inline-item m-0 me-lg-2">
-            <button
-              class="btn"
-              data-bs-placement="top"
-              data-bs-toggle="tooltip"
-              title="Supprimer"
-              type="button"
-            >
-              <i class="fas fa-trash border border-danger text-danger rounded-3 px-2 py-1"></i>
-            </button>
-          </li>
-        </ul>
+      <td class="col-4 col-sm-3 col-lg-2">
+        <div class="d-flex justify-content-center">
+          <button
+            class="btn btn-outline-primary btn-sm"
+          >
+            Valider
+          </button>
+        </div>
       </td>
     </tr>
   </ng-template>
