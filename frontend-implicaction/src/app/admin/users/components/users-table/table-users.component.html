@@ -1,3 +1,14 @@
+<div class="d-flex justify-content-start mb-4">
+  <h2 class="panel-title">Tous les utilisateurs</h2>
+  <div class="ms-auto">
+    <button
+      class="btn btn-success fw-bold"
+    >
+      <i class="fas fa-plus px-1 text-white"></i>
+      Ajouter
+    </button>
+  </div>
+</div>
 <p-table
   (onLazyLoad)="loadUsers($event)"
   [(selection)]="selectedUsers"
@@ -5,43 +16,39 @@
   [loading]="loading"
   [paginator]="true"
   [rowsPerPageOptions]="[10, 25, 50]"
-  [rows]="rowsPerPage"
+  [rows]="pageable.rows"
   [showCurrentPageReport]="true"
   [totalRecords]="pageable.totalElements"
   [value]="pageable.content"
   currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
 >
-  <ng-template pTemplate="header">
+  <ng-template class="bg-primary" pTemplate="header">
     <tr>
-      <th class="text-center col-1">
+      <th class="col-1 col-sm-1 col-lg-1 px-4" scope="col">
         <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
       </th>
-      <th scope="col">Username</th>
-      <th scope="col">Email</th>
-      <th scope="col">Registered</th>
-      <th scope="col"></th>
+      <th class="overflow-ellipsis text-uppercase col-4 col-sm-4 col-lg-2 px-2" scope="col">Username</th>
+      <th class="overflow-ellipsis text-uppercase col-2 col-sm-2 col-lg-5 px-2" scope="col">Email</th>
+      <th class="overflow-ellipsis text-uppercase col-1 col-sm-2 col-lg-2 px-2" scope="col">Registered</th>
+      <th class="overflow-ellipsis text-uppercase text-center col-4 col-sm-3 col-lg-2 px-2" scope="col">Actions</th>
     </tr>
   </ng-template>
   <ng-template let-user pTemplate="body">
     <tr>
-      <td class="text-center col-1">
+      <td class="col-1 col-sm-1 col-lg-1 px-4">
         <p-tableCheckbox [value]="user"></p-tableCheckbox>
       </td>
-      <td class="overflow-ellipsis">{{user.username}}</td>
-      <td class="overflow-ellipsis">{{user.email}}</td>
-      <td class="overflow-ellipsis">{{user.registered | date: 'shortDate'}}</td>
-      <td class="d-flex justify-content-end">
-        <ul class="list-unstyled list-inline">
-          <li class="list-inline-item">
-            <span class="badge badge-pill badge-primary">New</span>
-          </li>
-          <li class="list-inline-item">
-            <em class="pi pi-pencil"></em>
-          </li>
-          <li class="list-inline-item">
-            <em class="pi pi-trash"></em>
-          </li>
-        </ul>
+      <td class="overflow-ellipsis text-wrap col-4 col-sm-4 col-lg-2">{{user.username}}</td>
+      <td class="overflow-ellipsis text-wrap col-2 col-sm-2 col-lg-5 px-2">{{user.email}}</td>
+      <td class="overflow-ellipsis col-1 col-sm-2 col-lg-2 px-2">{{user.registeredAt | date: 'shortDate'}}</td>
+      <td class="col-4 col-sm-3 col-lg-2">
+        <div class="d-flex justify-content-center">
+          <button
+            class="btn btn-outline-primary btn-sm"
+          >
+            Valider
+          </button>
+        </div>
       </td>
     </tr>
   </ng-template>

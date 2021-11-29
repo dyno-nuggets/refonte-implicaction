@@ -6,6 +6,9 @@ import {TableModule} from 'primeng/table';
 import {InputTextModule} from 'primeng/inputtext';
 import {TableUsersComponent} from './components/users-table/table-users.component';
 import {PendingUserTableComponent} from './components/pending-user-table/pending-user-table.component';
+import {CheckboxModule} from 'primeng/checkbox';
+import {FormsModule} from '@angular/forms';
+import {FeatherModule} from 'angular-feather';
 
 
 @NgModule({
@@ -22,6 +25,9 @@ import {PendingUserTableComponent} from './components/pending-user-table/pending
     UsersRoutingModule,
     TableModule,
     InputTextModule,
+    CheckboxModule,
+    FormsModule,
+    FeatherModule,
   ]
 })
 export class UsersModule {

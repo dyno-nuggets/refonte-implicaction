@@ -14,6 +14,8 @@ import {User} from '../../../../shared/models/user';
 export class TableUsersComponent {
 
   loading = true; // indique si les données sont en chargement
+  // Ne pas oublier de retirer du tableau la valeur 'all' utilisée
+  // afin de pouvoir cocher/décocher toutes les cases d'un coup
 
   selectedUsers: User[] = [];
 
