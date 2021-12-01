@@ -36,11 +36,13 @@ public class JobPostingController {
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
             @RequestParam(value = "search", defaultValue = "") String search,
             @RequestParam(value = "contractType", required = false) String contractType,
-            @RequestParam(value = "checkApply", required = false) String applyCheckAsString
+            @RequestParam(value = "checkApply", required = false) String checkApplyAsString,
+            @RequestParam(value = "archive", required = false) String archive
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        final boolean applyCheck = Boolean.parseBoolean(applyCheckAsString);
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, applyCheck);
+        final boolean applyCheck = Boolean.parseBoolean(checkApplyAsString);
+        final boolean isArchive = Boolean.parseBoolean(archive);
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, applyCheck, isArchive);
         return ResponseEntity.ok(jobPostingDtos);
     }
 

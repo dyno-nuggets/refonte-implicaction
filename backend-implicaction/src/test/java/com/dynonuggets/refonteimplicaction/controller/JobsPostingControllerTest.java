@@ -51,7 +51,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         // given
         Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
 
-        given(jobPostingService.getAllWithCriteria(any(), anyString(), anyString(), anyBoolean())).willReturn(jobPostingPageMockResponse);
+        given(jobPostingService.getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean())).willReturn(jobPostingPageMockResponse);
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -74,7 +74,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".salary", is(jobPostings.get(i).getSalary())));
         }
 
-        verify(jobPostingService, times(1)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean());
+        verify(jobPostingService, times(1)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean());
     }
 
     @Test
@@ -82,7 +82,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         mvc.perform(get(JOBS_BASE_URI)).andDo(print())
                 .andExpect(status().isForbidden());
 
-        verify(jobPostingService, times(0)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean());
+        verify(jobPostingService, times(0)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean());
     }
 
     @Test
