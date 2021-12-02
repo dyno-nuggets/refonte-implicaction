@@ -22,11 +22,9 @@ public class Notification {
 
     private String message;
 
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User user;
-
     private Instant date;
+
+    private String title;
 
     @Column(name = "is_read")
     private boolean read;
@@ -36,6 +34,7 @@ public class Notification {
 
     @Enumerated(EnumType.STRING)
     private NotificationTypeEnum type;
+
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "notifications")
     private List<User> users;
