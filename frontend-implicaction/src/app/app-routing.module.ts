@@ -58,6 +58,14 @@ const routes: Routes = [
     data: {
       allowedRoles: Univers.BOARD.roles
     }
+  },
+  {
+    path: Univers.BUSINESS_AREA.url,
+    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule),
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: Univers.BUSINESS_AREA.roles
+    }
   }
 ];
 
