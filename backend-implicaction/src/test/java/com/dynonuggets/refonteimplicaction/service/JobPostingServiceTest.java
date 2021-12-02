@@ -49,13 +49,13 @@ class JobPostingServiceTest {
         Page<JobPosting> jobPage = new PageImpl<>(jobs);
         Pageable pageable = PageRequest.of(0, 10);
         User currentUser = User.builder().id(123L).build();
-        given(jobPostingRepository.findAllWithCriteria(any(), anyString(), anyString())).willReturn(jobPage);
+        given(jobPostingRepository.findAllWithCriteria(any(), anyString(), anyString(), anyBoolean())).willReturn(jobPage);
         given(jobApplicationRepository.findAllByJob_IdInAndUser_Id(anyList(), anyLong())).willReturn(Collections.emptyList());
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(jobPostingAdapter.toDto(any())).willReturn(JobPostingDto.builder().build());
 
         // when
-        final Page<JobPostingDto> actual = JobPostingService.getAllWithCriteria(pageable, "", CDD.name(), true);
+        final Page<JobPostingDto> actual = JobPostingService.getAllWithCriteria(pageable, "", CDD.name(), false, true);
 
         // then
         assertThat(actual.getTotalElements()).isEqualTo(jobPage.getTotalElements());
@@ -67,10 +67,10 @@ class JobPostingServiceTest {
         List<JobPosting> jobs = Collections.singletonList(JobPosting.builder().id(123L).contractType(CDD).build());
         Page<JobPosting> jobPage = new PageImpl<>(jobs);
         Pageable pageable = PageRequest.of(0, 10);
-        given(jobPostingRepository.findAllWithCriteria(any(), anyString(), anyString())).willReturn(jobPage);
+        given(jobPostingRepository.findAllWithCriteria(any(), anyString(), anyString(), anyBoolean())).willReturn(jobPage);
 
         // when
-        final Page<JobPostingDto> actual = JobPostingService.getAllWithCriteria(pageable, "", CDD.name(), false);
+        final Page<JobPostingDto> actual = JobPostingService.getAllWithCriteria(pageable, "", CDD.name(), false, false);
 
         // then
         assertThat(actual.getTotalElements()).isEqualTo(jobPage.getTotalElements());

@@ -12,6 +12,6 @@ public interface JobPostingRepositoryCustom {
      * @param contractType le type de contrat à rechercher (CDD, CDI)
      * @return la liste de résultats paginée des JobPostings correspondant aux critères
      */
-    Page<JobPosting> findAllWithCriteria(final Pageable pageable, final String search, final String contractType);
+    Page<JobPosting> findAllWithCriteria(final Pageable pageable, final String search, final String contractType, final Boolean archive);
 
 }
