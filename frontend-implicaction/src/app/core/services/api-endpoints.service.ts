@@ -214,7 +214,7 @@ export class ApiEndpointsService {
       page: pageable.page,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder,
-      checkApply: checkApply,
+      checkApply,
       archive: archive !== null ? `${archive}` : null
     };
     return ApiEndpointsService.createUrlWithQueryParameters(
