@@ -53,7 +53,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
         this.paginate();
       });
 
-    this.getFilterFromQueryParams()
+    this.getFilterFromQueryParams(['keyword'])
       .then(() => this.filterService.criteria = this.criteria);
   }
 

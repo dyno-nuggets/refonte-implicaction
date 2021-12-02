@@ -67,7 +67,7 @@ export class CompaniesTableComponent extends BaseWithPaginationComponent<Company
           })
       );
 
-    this.getFilterFromQueryParams().then(() => this.filterService.criteria = this.criteria);
+    this.getFilterFromQueryParams(['keyword']).then(() => this.filterService.criteria = this.criteria);
   }
 
   onEditCompany(company: Company): void {
