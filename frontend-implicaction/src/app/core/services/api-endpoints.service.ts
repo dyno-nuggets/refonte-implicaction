@@ -206,7 +206,7 @@ export class ApiEndpointsService {
    * Jobs
    */
 
-  getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: Boolean, checkApply: boolean): string {
+  getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: boolean, checkApply: boolean): string {
     // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
@@ -215,7 +215,7 @@ export class ApiEndpointsService {
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder,
       checkApply: checkApply,
-      archive: archive
+      archive: archive !== null ? `${archive}` : null
     };
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.JOBS.BASE_URI,

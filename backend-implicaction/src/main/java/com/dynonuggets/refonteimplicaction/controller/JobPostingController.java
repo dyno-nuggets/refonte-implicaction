@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,12 +38,12 @@ public class JobPostingController {
             @RequestParam(value = "search", defaultValue = "") String search,
             @RequestParam(value = "contractType", required = false) String contractType,
             @RequestParam(value = "checkApply", required = false) String checkApplyAsString,
-            @RequestParam(value = "archive", required = false) String archive
+            @RequestParam(value = "archiveAsString", required = false) String archiveAsString
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         final boolean applyCheck = Boolean.parseBoolean(checkApplyAsString);
-        final boolean isArchive = Boolean.parseBoolean(archive);
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, applyCheck, isArchive);
+        final Boolean isArchive = StringUtils.isNotBlank(archiveAsString) ? Boolean.parseBoolean(archiveAsString) : null;
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, isArchive, applyCheck);
         return ResponseEntity.ok(jobPostingDtos);
     }
 
