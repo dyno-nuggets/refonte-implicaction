@@ -38,7 +38,7 @@ public class JobPostingController {
             @RequestParam(value = "search", defaultValue = "") String search,
             @RequestParam(value = "contractType", required = false) String contractType,
             @RequestParam(value = "checkApply", required = false) String checkApplyAsString,
-            @RequestParam(value = "archiveAsString", required = false) String archiveAsString
+            @RequestParam(value = "archive", required = false) String archiveAsString
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         final boolean applyCheck = Boolean.parseBoolean(checkApplyAsString);

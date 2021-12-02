@@ -55,7 +55,7 @@ class JobPostingServiceTest {
         given(jobPostingAdapter.toDto(any())).willReturn(JobPostingDto.builder().build());
 
         // when
-        final Page<JobPostingDto> actual = JobPostingService.getAllWithCriteria(pageable, "", CDD.name(), null, true);
+        final Page<JobPostingDto> actual = JobPostingService.getAllWithCriteria(pageable, "", CDD.name(), false, true);
 
         // then
         assertThat(actual.getTotalElements()).isEqualTo(jobPage.getTotalElements());

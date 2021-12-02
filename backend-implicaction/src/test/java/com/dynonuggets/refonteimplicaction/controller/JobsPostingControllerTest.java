@@ -55,7 +55,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
         // when
         ResultActions resultActions = mvc.perform(
-                get(JOBS_BASE_URI).param("contractType", CDD.name())
+                get(JOBS_BASE_URI).param("contractType", CDD.name()).param("archive", "true")
 
         ).andDo(print());
 
