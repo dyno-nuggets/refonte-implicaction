@@ -3,12 +3,12 @@ import {RoleEnumCode} from './role.enum';
 export class Univers {
   // l'ordre de déclaration de ces variables correspond à l'ordre d'affichage dans le menu
   static readonly HOME = new Univers('Accueil', '');
+  static readonly BUSINESS_AREA = new Univers('Espace Entrepise', 'entreprise');
   static readonly USERS = new Univers('Communauté', 'users', [RoleEnumCode.USER]);
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', [RoleEnumCode.USER]);
   static readonly BOARD = new Univers('Job Board', 'board', [RoleEnumCode.PREMIUM]);
   static readonly DISCUSSIONS = new Univers('Discussion', 'discussions', [RoleEnumCode.USER]);
   static readonly ADMIN = new Univers('Admin', 'admin', [RoleEnumCode.ADMIN]);
-  static readonly BUSINESS_AREA = new Univers('Espace Entrepise', 'business_area', [RoleEnumCode.USER]);
 
   constructor(
     readonly title: string,
