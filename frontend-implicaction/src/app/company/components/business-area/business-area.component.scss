@@ -1,12 +1,28 @@
+.marquee {
+  width: calc(100vw - 96px);
+  height: auto;
+}
+
 .txt-superposition {
-  position: absolute;
-  z-index: -2;
-  left: 560px;
-  top: 480px;
   background-color: #406bbc;
 }
 
-.img-superposition {
-  margin-top: 1.5rem;
-  top: 50%;
+@media screen and (min-width: 992px) {
+  .wrapper {
+    max-width: 1200px;
+
+    .img-superposition {
+      margin-top: 2.5rem;
+      top: 50%;
+    }
+
+    .txt-superposition {
+      position: relative;
+      z-index: -2;
+      float: right;
+      right: 60px;
+      max-width: 590px;
+    }
+  }
 }
+
