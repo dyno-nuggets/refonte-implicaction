@@ -85,4 +85,10 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")})
     private List<Group> groups;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_notification",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "notification_id")})
+    private List<Notification> notifications;
 }

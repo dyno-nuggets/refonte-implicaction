@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
@@ -17,20 +20,22 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private User sender;
-
-    @ManyToOne
-    @JoinColumn(name = "receiver_id")
-    private User receiver;
-
     private String message;
 
     private Instant date;
 
-    private String type;
+    private String title;
 
     @Column(name = "is_read")
     private boolean read;
+
+    @Column(name = "is_sent")
+    private boolean sent;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationTypeEnum type;
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "notifications")
+    private List<User> users;
 }

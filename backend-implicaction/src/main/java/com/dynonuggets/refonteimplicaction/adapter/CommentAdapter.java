@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.model.Comment;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.utils.DateUtils;
@@ -20,6 +21,8 @@ public class CommentAdapter {
     }
 
     public CommentDto toDto(Comment model) {
+        final FileModel userImage = model.getUser().getImage();
+        final String userImageUrl = userImage != null ? userImage.getUrl() : null;
         return CommentDto.builder()
                 .id(model.getId())
                 .postId(model.getPost().getId())
@@ -27,6 +30,7 @@ public class CommentAdapter {
                 .text(model.getText())
                 .username(model.getUser().getUsername())
                 .userId(model.getUser().getId())
+                .userImageUrl(userImageUrl)
                 .build();
     }
 }

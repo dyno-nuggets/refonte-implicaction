@@ -7,16 +7,15 @@ import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
-import com.dynonuggets.refonteimplicaction.model.JobSeeker;
-import com.dynonuggets.refonteimplicaction.model.Role;
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
+import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.security.JwtProvider;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,28 +27,34 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
+import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
+import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthService {
-
-    private static final String USERNAME_ALREADY_EXISTS_MSG = "Un compte utilisateur existe déjà avec ce nom d'utilisateur.";
-    private static final String EMAIL_ALREADY_EXISTS_MSG = "Un compte utilisateur existe déjà avec cette adresse email.";
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final MailService mailService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
-    private RoleRepository roleRepository;
-    private JobSeekerRepository jobSeekerRepository;
+    private final RoleRepository roleRepository;
+    private final JobSeekerRepository jobSeekerRepository;
+    private final NotificationRepository notificationRepository;
+
+
+    @Value("${app.url}")
+    private String contactUrl;
+
 
     /**
      * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
@@ -62,7 +67,20 @@ public class AuthService {
     public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
         validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
+        final List<User> admins = userRepository.findAllByRoles_NameIn(Collections.singletonList(RoleEnum.ADMIN.getLongName()));
         registerUser(reqisterRequest, activationKey);
+        final Notification notification = Notification.builder()
+                .message(String.format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
+                .sent(false)
+                .read(false)
+                .date(Instant.now())
+                .title(USER_REGISTER_MAIL_TITLE)
+                .type(USER_REGISTRATION)
+                .build();
+
+        final Notification save = notificationRepository.save(notification);
+        admins.forEach(admin -> admin.getNotifications().add(save));
+        userRepository.saveAll(admins);
     }
 
     /**
@@ -72,7 +90,7 @@ public class AuthService {
         userRepository.findAllByUsernameOrEmail(reqisterRequest.getUsername(), reqisterRequest.getEmail())
                 .forEach(user -> {
                     String message = user.getUsername().equals(reqisterRequest.getUsername()) ?
-                            USERNAME_ALREADY_EXISTS_MSG : EMAIL_ALREADY_EXISTS_MSG;
+                            USERNAME_ALREADY_EXISTS_MESSAGE : EMAIL_ALREADY_EXISTS_MESSAGE;
                     throw new UnauthorizedException(message);
                 });
     }
@@ -85,13 +103,27 @@ public class AuthService {
     @Transactional
     public void verifyAccount(String activationKey) throws ImplicactionException {
         User user = userRepository.findByActivationKey(activationKey)
-                .orElseThrow(() -> new ImplicactionException("Activation Key Not Found: " + activationKey));
+                .orElseThrow(() -> new ImplicactionException(String.format(ACTIVATION_KEY_NOT_FOUND_MESSAGE, activationKey)));
+
         if (user.getActivatedAt() != null) {
             throw new ImplicactionException("Account With Associated Activation Key Already Activated - " + activationKey);
         }
 
         user.setActivatedAt(Instant.now());
         user.setActive(true);
+
+        Notification notification = Notification.builder()
+                .type(USER_ACTIVATION)
+                .users(Collections.singletonList(user))
+                .date(Instant.now())
+                .sent(false)
+                .read(false)
+                .message(String.format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", contactUrl))
+                .title("[Implicaction] Activation de votre compte")
+                .build();
+        final Notification notificationSave = notificationRepository.save(notification);
+        user.getNotifications().add(notificationSave);
+
         user = userRepository.save(user);
 
         final List<String> userRoles = user.getRoles()
@@ -106,8 +138,6 @@ public class AuthService {
                     .build();
             jobSeekerRepository.save(jobSeeker);
         }
-
-        mailService.sendUserActivationMail(user);
     }
 
     @Transactional
@@ -144,7 +174,7 @@ public class AuthService {
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
         final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found."));
+                .orElseThrow(() -> new UsernameNotFoundException(String.format(USERNAME_NOT_FOUND_MESSAGE, username)));
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
         String token = jwtProvider.generateTokenWithUsername(username);
