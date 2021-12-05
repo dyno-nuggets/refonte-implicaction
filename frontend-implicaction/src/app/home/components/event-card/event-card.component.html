@@ -1,0 +1,13 @@
+<div class="card d-flex flex-row py-4 px-1 event-card align-items-center">
+  <div class="text-center px-4 col-3 border-end">
+    <p class="text-danger fs-3 mb-2">{{eventDate | date: 'dd'}}</p>
+    <p class="text-danger m-0">{{eventDate | date: 'LLLL'}}</p>
+    <p class="text-danger m-0">{{eventDate | date: 'yyyy'}}</p>
+  </div>
+  <div class="col-8 text-primary fw-bold ps-5">{{description}}</div>
+  <button
+    class="btn fw-bold col-1"
+  >
+    <i class="fas fa-chevron-right px-1 text-primary"></i>
+  </button>
+</div>

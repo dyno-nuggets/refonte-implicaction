@@ -10,6 +10,7 @@ import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -118,5 +119,18 @@ public class JobPostingService {
 
     public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, String contractType, Boolean isArchive) {
         return this.getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
+    }
+
+    public List<JobPostingDto> getLastJobs(int jobsCount) {
+        List<JobPosting> lastJobs = jobPostingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        if (lastJobs.size() < jobsCount) {
+            jobsCount = lastJobs.size();
+        }
+        lastJobs = lastJobs.subList(0, jobsCount);
+
+        return lastJobs
+                .stream()
+                .map(jobPostingAdapter::toDto)
+                .collect(Collectors.toList());
     }
 }

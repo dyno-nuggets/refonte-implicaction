@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
@@ -39,6 +40,12 @@ public class PostController {
     @GetMapping(GET_POST_URI)
     public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
         PostResponse response = postService.getPost(postId);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping(GET_LAST_POSTS_URI)
+    public ResponseEntity<List<PostResponse>> getLastPosts(@PathVariable int postCount) {
+        List<PostResponse> response = postService.getLastPosts(postCount);
         return ResponseEntity.ok(response);
     }
 

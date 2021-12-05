@@ -316,6 +316,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId]);
   }
 
+  getLastPostsEndpoint(postCount: int): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.LAST_POSTS, [postCount]);
+  }
+
   getPostCommentsEndpoint(pageable: any, postId: string): string {
     const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId, 'comments'])
       // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée

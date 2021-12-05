@@ -78,6 +78,7 @@ export class Uris {
    */
   static readonly POSTS = class {
     static readonly BASE_URI = 'posts';
+    static readonly LAST_POSTS = 'posts/last';
   };
 
   /**

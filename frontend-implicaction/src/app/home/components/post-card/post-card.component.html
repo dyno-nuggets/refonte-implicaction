@@ -1,0 +1,20 @@
+<div class="card">
+  <div class="card-body">
+    <div class="card-title d-flex align-items-center justify-content-start mb-3">
+      <p-avatar
+        [image]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
+        shape="circle"
+        size="large"
+        styleClass="me-2 shadow-sm"
+      >
+      </p-avatar>
+      <div class="head-line ps-2">
+        <a routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a> • {{post.duration}}
+        <span class="d-none d-sm-inline ps-2"> </span>
+        <h3 class="theme-primary m-0">
+          <a routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">{{post.name}}</a>
+        </h3>
+      </div>
+    </div>
+  </div>
+</div>
