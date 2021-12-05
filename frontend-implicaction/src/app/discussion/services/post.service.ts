@@ -25,13 +25,13 @@ export class PostService {
     return this.http.get(this.endpointsService.getPostEndpoint(postId));
   }
 
-  getLastPosts(postCount: int): Observable<Post[]> {
-    return this.http.get<Group[]>(this.apiEndpointService.getLastPostsEndpoint(postCount));
+  getLastPosts(postCount: number): Observable<Post[]> {
+    return this.http.get<Post[]>(this.endpointsService.getLastPostsEndpoint(postCount));
   }
 
-  findByTopPosting(limit: number): Observable<Group[]> {
-      return this.http.get<Group[]>(this.apiEndpointService.findByTopPostingEndpoint(limit));
-  }
+  // findByTopPosting(limit: number): Observable<Group[]> {
+  //     return this.http.get<Group[]>(this.endpointsService.findByTopPostingEndpoint(limit));
+  // }
 
   getCommentsByPostId(pageable: Pageable, postId: string): Observable<any> {
     return this.http.get(this.endpointsService.getPostCommentsEndpoint(pageable, postId));
