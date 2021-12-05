@@ -1,8 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Post} from '../../../discussion/model/post';
-import {Univers} from '../../../shared/enums/univers';
-import {Constants} from '../../../config/constants';
-
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-post-card',
@@ -11,13 +7,7 @@ import {Constants} from '../../../config/constants';
 })
 export class PostCardComponent implements OnInit {
 
-  @Input()
-  post: Post = {};
-  univers = Univers;
-  constant = Constants;
-
-  constructor() {
-  }
+  constructor() { }
 
   ngOnInit(): void {
   }

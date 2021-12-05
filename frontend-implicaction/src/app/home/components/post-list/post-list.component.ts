@@ -10,22 +10,20 @@ import {ToasterService} from '../../../core/services/toaster.service';
 })
 export class PostListComponent implements OnInit {
 
-  lastPosts: Post[];
-
+  lastPosts : Post[]
   constructor(
-    private postService: PostService,
-    private toasterService: ToasterService
-  ) {
-  }
+   private postService : PostService,
+   private toasterService: ToasterService
+  ) { }
 
   ngOnInit(): void {
     this.postService
-      .getLastPosts(5)
-      .subscribe(
-        posts => this.lastPosts = posts,
-        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
-        // () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
-      );
+    .getLastPosts(5)
+    .subscribe(
+       posts => this.lastPosts = posts,
+       () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
+       () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
+     );
   }
 
 }
