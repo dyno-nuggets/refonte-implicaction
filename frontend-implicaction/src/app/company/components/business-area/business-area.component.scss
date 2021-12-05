@@ -1,10 +1,12 @@
+@import "src/assets/variables";
+
 .marquee {
   width: calc(100vw - 96px);
   height: auto;
 }
 
 .txt-superposition {
-  background-color: #406bbc;
+  background-color: $blue;
 }
 
 @media screen and (min-width: 992px) {
