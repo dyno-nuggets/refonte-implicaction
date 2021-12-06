@@ -39,8 +39,8 @@
     [showCurrentPageReport]="true"
     [totalRecords]="pageable.totalElements"
     [value]="pageable.content"
-    (onRowSelect)="onRowSelect()"
-    (onRowUnselect)="onRowSelect()"
+    (onRowSelect)="onRowSelected()"
+    (onRowUnselect)="onRowSelected()"
     currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
   >
     <ng-template pTemplate="header">
@@ -95,7 +95,7 @@
             <li class="fa-li list-inline-item m-0 me-lg-2">
               <button
                 class="btn"
-                (click)="archiveJob(job)"
+                (click)="toggleArchiveJob(job)"
                 data-bs-placement="top"
                 data-bs-toggle="tooltip"
                 title="Archiver"

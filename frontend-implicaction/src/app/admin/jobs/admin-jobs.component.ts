@@ -58,7 +58,7 @@ export class AdminJobsComponent extends BaseWithPaginationComponent<JobPosting, 
         this.paginate();
       });
 
-    this.getFilterFromQueryParams().then(() => this.filterService.criteria = this.criteria);
+    this.getFilterFromQueryParams(['search', 'contractType']).then(() => this.filterService.criteria = this.criteria);
   }
 
   onSortChange({value}): void {
@@ -100,7 +100,7 @@ export class AdminJobsComponent extends BaseWithPaginationComponent<JobPosting, 
       });
   }
 
-  archiveJob(job: JobPosting): void {
+  toggleArchiveJob(job: JobPosting): void {
     this.jobService
       .archiveJob(job.id)
       .subscribe(
@@ -108,27 +108,6 @@ export class AdminJobsComponent extends BaseWithPaginationComponent<JobPosting, 
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
         () => this.toastService.success('Succès', job.archive ? 'Offre désarchivée' : `Offre archivée`)
       );
-  }
-
-  protected async getFilterFromQueryParams(): Promise<void> {
-    // TODO: voir si y'a un moyen plus élégant avec typeof
-    const filterKeys = ['search', 'contractType'];
-    const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
-    return new Promise(resolve => {
-      this.route
-        .queryParams
-        .subscribe(params => {
-          Object.entries(params)
-            .forEach(([key, value]) => {
-              if (filterKeys.includes(key)) {
-                this.criteria[key] = value;
-              } else if (pageableKeys.includes(key)) {
-                this.pageable[key] = value;
-              }
-            });
-          return resolve();
-        });
-    });
   }
 
   archiveJobList(): void {
@@ -153,7 +132,7 @@ export class AdminJobsComponent extends BaseWithPaginationComponent<JobPosting, 
       });
   }
 
-  onRowSelect(): void {
+  onRowSelected(): void {
     // on vérifie que tous les éléments sélectionné sont tous archivés ou désarchivés
     this.isArchiveEnabled = this.selectedJobs.every(job => job.archive === this.selectedJobs[0].archive);
     // on recherche si le bouton toggleArchive doit archiver ou désarchiver
