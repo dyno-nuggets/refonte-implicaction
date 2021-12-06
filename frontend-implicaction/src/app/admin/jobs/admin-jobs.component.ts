@@ -110,7 +110,7 @@ export class AdminJobsComponent extends BaseWithPaginationComponent<JobPosting, 
       );
   }
 
-  archiveJobList(): void {
+  toggleArchiveSelectedJobs(): void {
     const jobsId = this.selectedJobs.map(job => job.id);
     this.jobService
       .toggleArchiveJobs(jobsId)
