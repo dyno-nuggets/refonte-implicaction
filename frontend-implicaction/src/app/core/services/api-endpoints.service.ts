@@ -347,7 +347,7 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
   }
 
-  createGroupSubscription() {
+  createGroupSubscription(): string {
     return ApiEndpointsService.createUrl(Uris.USERS.GROUP_SUBSCRIBE);
   }
 
