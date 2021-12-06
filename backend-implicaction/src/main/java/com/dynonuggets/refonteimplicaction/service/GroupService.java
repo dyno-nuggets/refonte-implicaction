@@ -9,7 +9,6 @@ import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ import static java.util.stream.Collectors.toList;
 
 @Service
 @AllArgsConstructor
-@Slf4j
 public class GroupService {
 
     private final SubredditAdapter subredditAdapter;
@@ -32,7 +30,6 @@ public class GroupService {
     private final CloudService cloudService;
     private final FileRepository fileRepository;
     private final UserRepository userRepository;
-    private final SubredditRepository groupRepository;
 
     @Transactional
     public GroupDto save(MultipartFile image, GroupDto groupDto) {
