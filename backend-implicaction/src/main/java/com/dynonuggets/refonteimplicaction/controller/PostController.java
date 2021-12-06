@@ -44,8 +44,8 @@ public class PostController {
     }
 
     @GetMapping(GET_LAST_POSTS_URI)
-    public ResponseEntity<List<PostResponse>> getLastPosts(@PathVariable int postCount) {
-        List<PostResponse> response = postService.getLastPosts(postCount);
+    public ResponseEntity<List<PostResponse>> getLastPosts(@PathVariable int postsCount) {
+        List<PostResponse> response = postService.getLastPosts(postsCount);
         return ResponseEntity.ok(response);
     }
 

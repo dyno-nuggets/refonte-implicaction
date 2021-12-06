@@ -320,8 +320,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId]);
   }
 
-  getLastPostsEndpoint(postCount: number): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.LAST_POSTS, [postCount]);
+  getLastPostsEndpoint(postsCount: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.LAST_POSTS, [postsCount]);
   }
 
   getPostCommentsEndpoint(pageable: any, postId: string): string {
