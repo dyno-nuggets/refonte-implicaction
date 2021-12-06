@@ -4,8 +4,10 @@ import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,8 @@ public class GroupService {
     private final AuthService authService;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
+    private final UserRepository userRepository;
+    private final SubredditRepository groupRepository;
 
     @Transactional
     public GroupDto save(MultipartFile image, GroupDto groupDto) {
@@ -64,6 +68,15 @@ public class GroupService {
     public List<GroupDto> getAllByTopPosting(int limit) {
         final List<Group> topPostings = subredditRepository.findAllByTopPosting(Pageable.ofSize(limit));
         return topPostings.stream()
+                .map(subredditAdapter::toDto)
+                .collect(toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<GroupDto> getAllGroupsByUserId(Long userId) {
+        User user = userRepository.getById(userId);
+        final List<Group> groups = user.getGroups();
+        return groups.stream()
                 .map(subredditAdapter::toDto)
                 .collect(toList());
     }

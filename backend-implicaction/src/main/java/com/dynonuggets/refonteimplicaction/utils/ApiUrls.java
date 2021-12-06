@@ -46,6 +46,8 @@ public class ApiUrls {
     public static final String GET_PENDING_USER_URI = "/pending";
     public static final String GET_COMMUNITY_URI = "/community";
     public static final String SET_USER_IMAGE = "/image";
+    public static final String GET_GROUP_URI = "/{userId}/groups";
+    public static final String SUBSCRIBE_GROUP = "/group-subscribe";
 
     // FILES
     public static final String FILE_BASE_URI = "/api/files";

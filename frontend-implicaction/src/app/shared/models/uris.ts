@@ -22,6 +22,9 @@ export class Uris {
     static readonly GET_FRIEND_REQUEST_RECEIVED = 'users/friends/received';
     static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';
     static readonly GET_ALL_PENDING_USERS = 'users/pending';
+    static readonly SUBSCRIBE_GROUP = 'subscribe';
+    static readonly GROUP_LIST = 'users';
+    static readonly GROUP_SUBSCRIBE = 'users/group-subscribe';
   };
 
   /**

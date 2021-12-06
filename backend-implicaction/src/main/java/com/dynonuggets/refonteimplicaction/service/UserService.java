@@ -1,17 +1,14 @@
 package com.dynonuggets.refonteimplicaction.service;
 
+import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.JobSeeker;
-import com.dynonuggets.refonteimplicaction.model.Relation;
-import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
-import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -34,6 +32,8 @@ public class UserService {
     private final JobSeekerRepository jobSeekerRepository;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
+    private final SubredditRepository subredditRepository;
+    private SubredditAdapter subredditAdapter;
 
     /**
      * @return la liste paginée de tous les utilisateurs
@@ -122,5 +122,15 @@ public class UserService {
         currentUser.setImage(fileSave);
         final User save = userRepository.save(currentUser);
         return userAdapter.toDto(save);
+    }
+
+    @Transactional
+    public GroupDto setOrUpdateGroup(Long groupId) {
+        User user = authService.getCurrentUser();
+        Group group = subredditRepository.findById(groupId)
+                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, groupId)));
+        user.getGroups().add(group);
+        final User save = userRepository.save(user);
+        return subredditAdapter.toDto(group);
     }
 }

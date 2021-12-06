@@ -150,6 +150,15 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
   }
 
+  getAllGroups(userId: string): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GROUP_LIST, [userId, 'groups'])
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
+      // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
+      .replace(`${Constants.API_ENDPOINT}/`, '');
+
+    return ApiEndpointsService.createUrl(uri);
+  }
+
   /**
    * Experiences
    */
@@ -336,6 +345,10 @@ export class ApiEndpointsService {
 
   findAllGroupsEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
+  }
+
+  createGroupSubscription() {
+    return ApiEndpointsService.createUrl(Uris.USERS.GROUP_SUBSCRIBE);
   }
 
   /**

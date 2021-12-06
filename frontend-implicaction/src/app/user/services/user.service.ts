@@ -63,4 +63,13 @@ export class UserService {
   updateUserImage(formData: FormData): Observable<User> {
     return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(), formData);
   }
+
+  getAllGroups(userId: string): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllGroups(userId));
+  }
+
+  subscribeGroup(groupId: string): Observable<any> {
+    return this.http.post(this.apiEndpointsService.createGroupSubscription(), groupId);
+  }
+
 }
