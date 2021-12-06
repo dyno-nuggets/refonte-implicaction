@@ -1,5 +1,7 @@
 <p *ngIf="!lastPosts?.length">Il n'y a aucun message dans cette discussion</p>
 
 <div *ngFor="let post of lastPosts" class="p-0">
-  <app-post-card></app-post-card>
+  <div class="mb-3">
+    <app-post-card [post]="post"></app-post-card>
+  </div>
 </div>

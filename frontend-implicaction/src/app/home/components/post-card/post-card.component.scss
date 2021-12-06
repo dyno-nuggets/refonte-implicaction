@@ -1,0 +1,15 @@
+.duration {
+  font-size: 10px;
+}
+
+.post-card {
+  border-radius: 11px;
+}
+
+.post-card-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

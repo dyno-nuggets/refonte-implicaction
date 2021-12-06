@@ -1,0 +1,7 @@
+<p *ngIf="!lastJobs?.length">Il n'y a aucun message dans cette discussion</p>
+
+<div *ngFor="let job of lastJobs" class="p-0">
+  <div class="mb-3">
+    <app-job-card [job]="job"></app-job-card>
+  </div>
+</div>

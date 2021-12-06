@@ -1,18 +1,17 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Post} from '../../../discussion/model/post';
+import {JobPosting} from '../../../shared/models/job-posting';
 import {Univers} from '../../../shared/enums/univers';
 import {Constants} from '../../../config/constants';
 
-
 @Component({
-  selector: 'app-post-card',
-  templateUrl: './post-card.component.html',
-  styleUrls: ['./post-card.component.scss']
+  selector: 'app-job-card',
+  templateUrl: './job-card.component.html',
+  styleUrls: ['./job-card.component.scss']
 })
-export class PostCardComponent implements OnInit {
+export class JobCardComponent implements OnInit {
 
   @Input()
-  post: Post = {};
+  job: JobPosting = {};
   univers = Univers;
   constant = Constants;
 

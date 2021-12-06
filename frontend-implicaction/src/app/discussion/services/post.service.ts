@@ -25,8 +25,8 @@ export class PostService {
     return this.http.get(this.endpointsService.getPostEndpoint(postId));
   }
 
-  getLastPosts(postCount: number): Observable<Post[]> {
-    return this.http.get<Post[]>(this.endpointsService.getLastPostsEndpoint(postCount));
+  getLastPosts(postsCount: number): Observable<Post[]> {
+    return this.http.get<Post[]>(this.endpointsService.getLastPostsEndpoint(postsCount));
   }
 
   // findByTopPosting(limit: number): Observable<Group[]> {
