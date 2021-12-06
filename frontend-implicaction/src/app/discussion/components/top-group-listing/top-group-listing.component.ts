@@ -26,7 +26,7 @@ export class TopGroupListingComponent implements OnInit {
   isLoading = true;
   currentUser: User;
   canSubscribe: boolean;
-  subscribedGroups: String[] = [];
+  subscribedGroups: string[] = [];
 
   constructor(
     private groupService: GroupService,
@@ -51,7 +51,7 @@ export class TopGroupListingComponent implements OnInit {
       });
   }
 
-  joinGroup(groupId: string) {
+  joinGroup(groupId: string): void {
     this.userService.subscribeGroup(groupId)
       .subscribe(
         (group) => {
@@ -62,13 +62,15 @@ export class TopGroupListingComponent implements OnInit {
       );
   }
 
-  loadData() {
+  loadData(): void {
     this.userService
       .getAllGroups(this.currentUser.id)
       .subscribe(
-        subscribed_groups => {
-          for (let key in subscribed_groups) {
-            this.subscribedGroups.push(subscribed_groups[key].id);
+        subscribedGroups => {
+          for (const key in subscribedGroups) {
+            if (subscribedGroups.hasOwnProperty(key)) {
+              this.subscribedGroups.push(subscribedGroups[key].id);
+            }
           }
         }
       );
