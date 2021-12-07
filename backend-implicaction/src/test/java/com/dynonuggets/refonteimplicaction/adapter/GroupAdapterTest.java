@@ -25,7 +25,7 @@ class GroupAdapterTest {
     FileService fileService;
 
     @InjectMocks
-    SubredditAdapter subredditAdapter;
+    GroupAdapter groupAdapter;
 
     @Test
     void should_map_to_model() {
@@ -37,7 +37,7 @@ class GroupAdapterTest {
                 .build();
 
         // when
-        final Group actual = subredditAdapter.toModel(expected);
+        final Group actual = groupAdapter.toModel(expected);
 
         // then
         assertThat(actual.getId()).isEqualTo(expected.getId());
@@ -58,7 +58,7 @@ class GroupAdapterTest {
                 .build();
 
         // when
-        final GroupDto actualDto = subredditAdapter.toDto(expectedModel);
+        final GroupDto actualDto = groupAdapter.toDto(expectedModel);
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
@@ -66,7 +66,7 @@ class GroupAdapterTest {
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
-        assertThat(actualDto.getImageUrl()).isEqualTo(SubredditAdapter.DEFAULT_GROUP_IMAGE_URI);
+        assertThat(actualDto.getImageUrl()).isEqualTo(GroupAdapter.DEFAULT_GROUP_IMAGE_URI);
     }
 
     @Test
@@ -85,7 +85,7 @@ class GroupAdapterTest {
         given(fileService.buildFileUri(anyString())).willReturn(expectedUrl);
 
         // when
-        final GroupDto actualDto = subredditAdapter.toDto(expectedModel);
+        final GroupDto actualDto = groupAdapter.toDto(expectedModel);
 
         // then
         assertThat(actualDto).usingRecursiveComparison()

@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.service;
 
-import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
+import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
@@ -32,8 +32,8 @@ public class UserService {
     private final JobSeekerRepository jobSeekerRepository;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
-    private final SubredditRepository subredditRepository;
-    private SubredditAdapter subredditAdapter;
+    private final GroupRepository groupRepository;
+    private GroupAdapter groupAdapter;
 
     /**
      * @return la liste paginée de tous les utilisateurs
@@ -125,12 +125,12 @@ public class UserService {
     }
 
     @Transactional
-    public GroupDto setOrUpdateGroup(Long groupId) {
+    public GroupDto addGroup(String groupName) {
         User user = authService.getCurrentUser();
-        Group group = subredditRepository.findById(groupId)
-                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, groupId)));
+        Group group = groupRepository.findByName(groupName)
+                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, groupName)));
         user.getGroups().add(group);
         final User save = userRepository.save(user);
-        return subredditAdapter.toDto(group);
+        return groupAdapter.toDto(group);
     }
 }

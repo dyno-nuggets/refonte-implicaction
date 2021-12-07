@@ -51,8 +51,8 @@ export class TopGroupListingComponent implements OnInit {
       });
   }
 
-  joinGroup(groupId: string): void {
-    this.userService.subscribeGroup(groupId)
+  joinGroup(groupName: string): void {
+    this.userService.subscribeGroup(groupName)
       .subscribe(
         (group) => {
           this.toasterService.success('Succès', `Vous avez adhéré au groupe ${group.name}`);
@@ -69,7 +69,7 @@ export class TopGroupListingComponent implements OnInit {
         subscribedGroups => {
           for (const key in subscribedGroups) {
             if (subscribedGroups.hasOwnProperty(key)) {
-              this.subscribedGroups.push(subscribedGroups[key].id);
+              this.subscribedGroups.push(subscribedGroups[key].name);
             }
           }
         }

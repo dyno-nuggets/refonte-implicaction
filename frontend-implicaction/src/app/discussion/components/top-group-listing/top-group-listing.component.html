@@ -15,9 +15,9 @@
             class="me-2 image-mini"
           >
           <span class="ps-2">{{group.name}}</span>
-          <ng-container *ngIf="subscribedGroups && !subscribedGroups.includes(group.id)">
+          <ng-container *ngIf="subscribedGroups && !subscribedGroups.includes(group.name)">
             <i-feather
-              (click)="joinGroup(group.id)"
+              (click)="joinGroup(group.name)"
               class="cursor-pointer secondary-on-hover"
               color="primary"
               data-placement="bottom"

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface SubredditRepository extends JpaRepository<Group, Long> {
+public interface GroupRepository extends JpaRepository<Group, Long> {
     @Query("select s from Group s order by s.posts.size desc")
     List<Group> findAllByTopPosting(Pageable pageable);
 

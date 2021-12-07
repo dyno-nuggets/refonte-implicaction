@@ -116,8 +116,8 @@ public class UserController {
     }
 
     @PostMapping(SUBSCRIBE_GROUP)
-    public ResponseEntity<GroupDto> subscribeGroup(@RequestBody final Long groupId) {
-        final GroupDto groupDto = userService.setOrUpdateGroup(groupId);
+    public ResponseEntity<GroupDto> subscribeGroup(@RequestBody final String groupName) {
+        final GroupDto groupDto = userService.addGroup(groupName);
         return ResponseEntity.ok(groupDto);
     }
 }

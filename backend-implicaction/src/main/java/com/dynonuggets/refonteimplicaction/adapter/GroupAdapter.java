@@ -10,7 +10,7 @@ import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 @Component
 @AllArgsConstructor
-public class SubredditAdapter {
+public class GroupAdapter {
 
     protected static final String DEFAULT_GROUP_IMAGE_URI = "assets/img/avatar-ia-group.png";
 

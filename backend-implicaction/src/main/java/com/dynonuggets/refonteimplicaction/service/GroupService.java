@@ -1,12 +1,12 @@
 package com.dynonuggets.refonteimplicaction.service;
 
-import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
+import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
+import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,8 +24,8 @@ import static java.util.stream.Collectors.toList;
 @AllArgsConstructor
 public class GroupService {
 
-    private final SubredditAdapter subredditAdapter;
-    private final SubredditRepository subredditRepository;
+    private final GroupAdapter groupAdapter;
+    private final GroupRepository groupRepository;
     private final AuthService authService;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
@@ -36,36 +36,36 @@ public class GroupService {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
 
-        Group group = subredditAdapter.toModel(groupDto);
+        Group group = groupAdapter.toModel(groupDto);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
 
-        final Group save = subredditRepository.save(group);
+        final Group save = groupRepository.save(group);
 
-        return subredditAdapter.toDto(save);
+        return groupAdapter.toDto(save);
     }
 
     @Transactional
     public GroupDto save(GroupDto groupDto) {
-        Group group = subredditAdapter.toModel(groupDto);
+        Group group = groupAdapter.toModel(groupDto);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
-        final Group save = subredditRepository.save(group);
-        return subredditAdapter.toDto(save);
+        final Group save = groupRepository.save(group);
+        return groupAdapter.toDto(save);
     }
 
     @Transactional(readOnly = true)
     public Page<GroupDto> getAll(Pageable pageable) {
-        final Page<Group> subreddits = subredditRepository.findAll(pageable);
-        return subreddits.map(subredditAdapter::toDto);
+        final Page<Group> subreddits = groupRepository.findAll(pageable);
+        return subreddits.map(groupAdapter::toDto);
     }
 
     @Transactional(readOnly = true)
     public List<GroupDto> getAllByTopPosting(int limit) {
-        final List<Group> topPostings = subredditRepository.findAllByTopPosting(Pageable.ofSize(limit));
+        final List<Group> topPostings = groupRepository.findAllByTopPosting(Pageable.ofSize(limit));
         return topPostings.stream()
-                .map(subredditAdapter::toDto)
+                .map(groupAdapter::toDto)
                 .collect(toList());
     }
 
@@ -74,7 +74,7 @@ public class GroupService {
         User user = userRepository.getById(userId);
         final List<Group> groups = user.getGroups();
         return groups.stream()
-                .map(subredditAdapter::toDto)
+                .map(groupAdapter::toDto)
                 .collect(toList());
     }
 }

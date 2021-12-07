@@ -625,35 +625,30 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void getAllGroupsByUser() throws Exception {
-        userDtos = asList(
-                UserDto.builder().id(1L).username("mathusha-sdv").firstname("Mathusha").lastname("Thiru").email("mathu@implicaction.fr").url("www.google.fr").hobbies("surf,gaming,judo").purpose("").registeredAt(Instant.now()).activatedAt(Instant.now()).relationTypeOfCurrentUser(RelationTypeEnum.NONE).roles(roles).active(true).build(),
-                UserDto.builder().id(2L).username("paul-sdv").firstname("Paul").lastname("Flu").email("paul@implicaction.fr").url("www.google.fr").hobbies("surf,gaming,judo").purpose("").registeredAt(Instant.now()).activatedAt(Instant.now()).relationTypeOfCurrentUser(RelationTypeEnum.NONE).roles(roles).active(true).build(),
-                UserDto.builder().id(3L).username("paul-sdv").firstname("Paul").lastname("Flu").email("paul@implicaction.fr").url("www.google.fr").hobbies("surf,gaming,judo").purpose("").registeredAt(Instant.now()).relationTypeOfCurrentUser(RelationTypeEnum.NONE).roles(roles).active(false).build()
-        );
+        UserDto user = UserDto.builder().id(1L).build();
+        ArrayList<UserDto> userList = new ArrayList<>();
+        userList.add(user);
 
-        groupDtos = asList(
-                GroupDto.builder().id(1L).name("ile-de-france").description("communauté ile de france").numberOfPosts(0).imageUrl("").createdAt(Instant.now()).users(userDtos).build()
-        );
+        GroupDto group = GroupDto.builder().id(1L).name("ile-de-france").description("communauté ile de france").numberOfPosts(0).imageUrl("").users(userList).build();
 
-        given(groupService.getAllGroupsByUserId(userDtos.get(0).getId())).willReturn(groupDtos);
+        ArrayList<GroupDto> groupList = new ArrayList<>();
+        groupList.add(group);
+        given(groupService.getAllGroupsByUserId(anyLong())).willReturn(groupList);
 
-        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_GROUP_URI, userDtos.get(0).getId()).contentType(APPLICATION_JSON))
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_GROUP_URI, user.getId()).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
+        for (int i = 0; i < groupList.size(); i++) {
+            final String contentPath = String.format("$[%d]", i);
 
-        for (int i = 0; i < groupDtos.size(); i++) {
-            final String contentPath = String.format("$.content[%d]", i);
-
-            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(groupDtos.get(i).getId().intValue()))))
-                    .andExpect(jsonPath(contentPath + ".description", is(groupDtos.get(i).getDescription())))
-                    .andExpect(jsonPath(contentPath + ".numberOfPosts", is(groupDtos.get(i).getNumberOfPosts())))
-                    .andExpect(jsonPath(contentPath + ".imageUrl", is(groupDtos.get(i).getImageUrl())))
-                    .andExpect(jsonPath(contentPath + ".createdAt", is(groupDtos.get(i).getCreatedAt())))
-                    .andExpect(jsonPath(contentPath + ".name", is(groupDtos.get(i).getName())));
+            resultActions
+                    .andExpect(jsonPath(contentPath + ".id", is(groupList.get(i).getId().intValue())))
+                    .andExpect(jsonPath(contentPath + ".description", is(groupList.get(i).getDescription())))
+                    .andExpect(jsonPath(contentPath + ".numberOfPosts", is(groupList.get(i).getNumberOfPosts())))
+                    .andExpect(jsonPath(contentPath + ".imageUrl", is(groupList.get(i).getImageUrl())))
+                    .andExpect(jsonPath(contentPath + ".name", is(groupList.get(i).getName())));
         }
-
         verify(groupService, times(1)).getAllGroupsByUserId(anyLong());
-
     }
 }

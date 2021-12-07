@@ -68,8 +68,8 @@ export class UserService {
     return this.http.get(this.apiEndpointsService.getAllGroups(userId));
   }
 
-  subscribeGroup(groupId: string): Observable<any> {
-    return this.http.post(this.apiEndpointsService.createGroupSubscription(), groupId);
+  subscribeGroup(groupName: string): Observable<any> {
+    return this.http.post(this.apiEndpointsService.createGroupSubscription(), groupName);
   }
 
 }
