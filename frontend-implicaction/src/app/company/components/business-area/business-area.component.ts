@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-business-area',
@@ -6,11 +6,5 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./business-area.component.scss']
 })
 export class BusinessAreaComponent {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
 }
