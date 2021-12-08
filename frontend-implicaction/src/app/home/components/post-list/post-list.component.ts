@@ -24,7 +24,7 @@ export class PostListComponent implements OnInit {
       .subscribe(
         posts => this.lastPosts = posts,
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
-        () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
+        // () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
       );
   }
 
