@@ -20,7 +20,7 @@ export class JobListComponent implements OnInit {
 
   ngOnInit(): void {
     this.jobService
-      .getLastJobs(5)
+      .getLastJobs(3)
       .subscribe(
         jobs => this.lastJobs = jobs,
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),

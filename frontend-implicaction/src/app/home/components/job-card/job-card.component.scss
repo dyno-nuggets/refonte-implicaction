@@ -6,3 +6,15 @@
   width: 48px;
   height: auto;
 }
+
+.title-link {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.job-card {
+  border-radius: 11px;
+}
