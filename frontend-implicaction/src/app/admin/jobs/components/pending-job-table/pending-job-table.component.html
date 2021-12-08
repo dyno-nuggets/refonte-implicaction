@@ -1,0 +1,39 @@
+<p-table
+  (onLazyLoad)="paginate($event)"
+  [lazy]="true"
+  [loading]="isLoading"
+  [paginator]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="true"
+  [totalRecords]="pageable.totalElements"
+  [value]="pageable.content"
+  currentPageReportTemplate="{first} à {last} sur {totalRecords}"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-uppercase" scope="col">Title</th>
+      <th class="text-uppercase" scope="col">Description</th>
+      <th class="text-uppercase" scope="col">Localisation</th>
+    </tr>
+  </ng-template>
+  <ng-template let-job pTemplate="body">
+    <tr>
+      <td class="overflow-ellipsis">{{job.title}}</td>
+      <td class="overflow-ellipsis">{{job.description}}</td>
+      <td class="overflow-ellipsis">{{job.location}}</td>
+      <td>
+        <button
+          (click)="activateJob(job)"
+          class="btn btn-outline-primary"
+          type="button"
+        >
+          Valider
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <td class="ps-4" colspan="5">Aucune offre est en attente de validation.</td>
+  </ng-template>
+</p-table>
