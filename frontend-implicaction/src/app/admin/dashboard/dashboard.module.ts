@@ -4,6 +4,7 @@ import {DashboardComponent} from './dashboard.component';
 import {AdminOverviewComponent} from './components/admin-overview/admin-overview.component';
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {UsersModule} from '../users/users.module';
+import {AdminJobsModule} from '../jobs/admin-jobs.module';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {UsersModule} from '../users/users.module';
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    UsersModule
+    UsersModule,
+    AdminJobsModule,
   ]
 })
 export class DashboardModule {

@@ -103,4 +103,17 @@ public class JobPostingService {
                 .map(jobPostingAdapter::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Transactional
+    public Page<JobPostingDto> getAllPendingActivationJobs(Pageable pageable) {
+        return jobPostingRepository.findAllByActiveIsFalse(pageable)
+                .map(jobPostingAdapter::toDto);
+    }
+
+    @Transactional
+    public void activateJob(JobPosting job) {
+        job.setActive(true);
+        jobPostingRepository.save(job);
+    }
+
 }

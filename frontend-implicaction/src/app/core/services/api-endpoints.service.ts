@@ -252,6 +252,14 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId, 'archive']);
   }
 
+  getAllPendingActivationJobsEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.GET_ALL_PENDING_JOBS, pageable);
+  }
+
+  getActivateJobEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOBS.ACTIVATE_JOB);
+  }
+
   /**
    * Companies
    */

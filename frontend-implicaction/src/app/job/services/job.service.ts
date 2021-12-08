@@ -44,4 +44,12 @@ export class JobService {
   toggleArchiveJobs(jobIds: string[]): Observable<JobPosting> {
     return this.http.patch(this.apiEndpointsService.toggleArchiveJobsEndpoint(), jobIds);
   }
+
+  getAllPendingActivationJobs(pageable: Pageable): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllPendingActivationJobsEndpoint(pageable));
+  }
+
+  activateJob(job: JobPosting): Observable<JobPosting> {
+    return this.http.patch(this.apiEndpointsService.getActivateJobEndpoint(), job);
+  }
 }

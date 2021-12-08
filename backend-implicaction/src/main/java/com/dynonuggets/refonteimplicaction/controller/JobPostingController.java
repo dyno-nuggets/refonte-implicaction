@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -75,5 +76,21 @@ public class JobPostingController {
     public ResponseEntity<List<JobPostingDto>> toggleArchiveJobs(@RequestBody final List<Long> jobsId) {
         List<JobPostingDto> updated = jobPostingService.toggleArchiveAll(jobsId);
         return ResponseEntity.ok(updated);
+    }
+
+    @GetMapping(GET_PENDING_JOB_URI)
+    public ResponseEntity<Page<JobPostingDto>> getAllPendingJobs(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows
+    ) {
+        Pageable pageable = PageRequest.of(page, rows);
+        Page<JobPostingDto> pendingJobs = jobPostingService.getAllPendingActivationJobs(pageable);
+        return ResponseEntity.ok(pendingJobs);
+    }
+
+    @PatchMapping(ACTIVATE_JOB_URI)
+    public ResponseEntity<Void> activateJob(@RequestBody final JobPosting job) {
+        jobPostingService.activateJob(job);
+        return ResponseEntity.ok().build();
     }
 }

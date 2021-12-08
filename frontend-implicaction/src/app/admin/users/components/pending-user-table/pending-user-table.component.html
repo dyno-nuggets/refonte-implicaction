@@ -1,5 +1,5 @@
 <p-table
-  (onLazyLoad)="loadUsers($event)"
+  (onLazyLoad)="paginate($event)"
   [lazy]="true"
   [loading]="loading"
   [paginator]="true"
@@ -27,7 +27,7 @@
       <td class="overflow-ellipsis">{{roleCodesToString(user.roles)}}</td>
       <td>
         <button
-          (click)="activateUser(user, $event)"
+          (click)="activateUser(user)"
           class="btn btn-outline-primary"
           type="button"
         >

@@ -19,6 +19,8 @@ public class ApiUrls {
     public static final String DELETE_JOB_URI = "/{jobId}";
     public static final String ARCHIVE_JOB_URI = "/{jobId}/archive";
     public static final String ARCHIVE_JOBS_URI = "/archive";
+    public static final String GET_PENDING_JOB_URI = "/pending";
+    public static final String ACTIVATE_JOB_URI = "/activate";
 
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";
