@@ -17,7 +17,7 @@ import {BoardModule} from './board/board.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
