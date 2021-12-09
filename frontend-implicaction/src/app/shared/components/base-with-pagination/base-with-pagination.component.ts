@@ -13,7 +13,7 @@ export class BaseWithPaginationComponent<T, C extends Criteria> {
   criteria: C;
 
   // Pagination
-  pageable: Pageable<T> = Constants.PAGEABLE_DEFAULT;
+  pageable: Pageable<T> = {...Constants.PAGEABLE_DEFAULT};
 
   constructor(protected route: ActivatedRoute) {
   }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {JobPosting} from '../../../../shared/models/job-posting';
 import {Constants} from '../../../../config/constants';
@@ -8,13 +8,14 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {JobService} from '../../../../job/services/job.service';
 import {ActivatedRoute} from '@angular/router';
 import {finalize, take} from 'rxjs/operators';
+import {Criteria} from '../../../../shared/models/Criteria';
 
 @Component({
   selector: 'app-pending-job-table',
   templateUrl: './pending-job-table.component.html',
   styleUrls: ['./pending-job-table.component.scss']
 })
-export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPosting, any> implements OnInit {
+export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPosting, Criteria> {
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
   isLoading = true;
@@ -30,10 +31,6 @@ export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPos
     protected route: ActivatedRoute
   ) {
     super(route);
-  }
-
-  ngOnInit(): void {
-    this.paginate();
   }
 
   activateJob(job: JobPosting): void {

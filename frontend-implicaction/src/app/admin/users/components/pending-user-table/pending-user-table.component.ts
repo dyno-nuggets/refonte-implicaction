@@ -8,13 +8,14 @@ import {AuthService} from '../../../../shared/services/auth.service';
 import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {JobPosting} from '../../../../shared/models/job-posting';
 import {ActivatedRoute} from '@angular/router';
+import {Criteria} from '../../../../shared/models/Criteria';
 
 @Component({
   selector: 'app-pending-user-table',
   templateUrl: './pending-user-table.component.html',
   styleUrls: ['./pending-user-table.component.scss']
 })
-export class PendingUserTableComponent extends BaseWithPaginationComponent<JobPosting, any> {
+export class PendingUserTableComponent extends BaseWithPaginationComponent<JobPosting, Criteria> {
 
   loading = true;
   rowsPerPage = this.pageable.rowsPerPages[0];
@@ -26,10 +27,6 @@ export class PendingUserTableComponent extends BaseWithPaginationComponent<JobPo
     protected route: ActivatedRoute
   ) {
     super(route);
-  }
-
-  ngOnInit(): void {
-    this.paginate();
   }
 
   protected innerPaginate(): void {
