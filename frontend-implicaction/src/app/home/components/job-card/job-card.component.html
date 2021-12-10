@@ -1,5 +1,5 @@
-<div class="d-flex align-items-center flex-column px-2 py-3 col">
-  <div class="d-flex justify-content-between align-items-center w-75 pb-2">
+<div class="d-flex align-items-center flex-column px-2 py-3">
+  <div class="d-flex justify-content-between align-items-center w-75">
     <img
       #companyLogo
       (error)="companyLogo.src = 'assets/img/job-posting-img.png'"
@@ -13,7 +13,7 @@
       <app-contract-type [type]="job.contractType"></app-contract-type>
     </div>
   </div>
-  <h4 class="d-flex text-center pb-2">
+  <h4 class="d-flex text-center">
     <a class="title-link" routerLink="/{{univers.JOBS.url}}/{{job.id}}">{{job.title}}</a>
   </h4>
   <div class="d-flex">
