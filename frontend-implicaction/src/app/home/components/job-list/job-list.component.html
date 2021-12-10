@@ -1,8 +1,5 @@
 <p *ngIf="!lastJobs?.length">Il n'y a aucun message dans cette discussion</p>
-<div class="d-flex align-items-center">
-  <div *ngFor="let job of lastJobs" class="p-0 mx-2 flex-grow-1">
-    <div class="mb-3">
-      <app-job-card [job]="job"></app-job-card>
-    </div>
-  </div>
+<div class="row">
+  <app-job-card *ngFor="let job of lastJobs" [job]="job"
+                class="card job-card justify-content-center col-4"></app-job-card>
 </div>
