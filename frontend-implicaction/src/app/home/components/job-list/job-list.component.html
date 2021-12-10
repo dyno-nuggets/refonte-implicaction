@@ -1,5 +1,5 @@
 <p *ngIf="!lastJobs?.length">Il n'y a aucun message dans cette discussion</p>
 <div class="row">
   <app-job-card *ngFor="let job of lastJobs" [job]="job"
-                class="card job-card justify-content-center col-4"></app-job-card>
+                class="card job-card justify-content-center col mx-2"></app-job-card>
 </div>
