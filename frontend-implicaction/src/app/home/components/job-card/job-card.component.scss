@@ -3,12 +3,13 @@
 }
 
 .company-logo {
-  width: 48px;
+  width: 58px;
   height: auto;
 }
 
 .title-link {
   text-decoration: none;
+  font-size: 25px;
 
   &:hover {
     text-decoration: underline;
@@ -17,6 +18,6 @@
 
 .job-card {
   border-radius: 11px;
-  width: 18rem;
-  height: 11rem;
+  width: 28rem;
+  height: 21rem;
 }
