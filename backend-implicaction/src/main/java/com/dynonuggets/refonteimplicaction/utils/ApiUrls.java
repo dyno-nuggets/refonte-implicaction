@@ -31,6 +31,8 @@ public class ApiUrls {
     public static final String GROUPS_BASE_URI = "/api/groups";
     public static final String GET_ALL_BY_TOP_POSTING_URI = "/top-posting";
     public static final String CREATE_NO_IMAGE = "/no-image";
+    public static final String GET_PENDING_GROUP_URI = "/pending";
+    public static final String ACTIVATE_GROUP_URI = "/activate";
     public static final String SUBSCRIBE_GROUP = "/{groupName}/subscribe";
 
     // COMMENTS

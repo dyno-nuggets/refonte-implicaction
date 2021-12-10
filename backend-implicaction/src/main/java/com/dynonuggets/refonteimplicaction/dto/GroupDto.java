@@ -18,5 +18,6 @@ public class GroupDto {
     private Integer numberOfPosts;
     private String imageUrl;
     private Instant createdAt;
+    private boolean active;
     private List<UserDto> users;
 }

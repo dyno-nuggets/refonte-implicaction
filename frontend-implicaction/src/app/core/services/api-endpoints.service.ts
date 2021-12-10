@@ -350,6 +350,14 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
   }
 
+  getActivateGroupEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.GROUP.ACTIVATE_GROUP);
+  }
+
+  getAllPendingActivationGroupEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.GET_ALL_PENDING_GROUPS, pageable);
+  }
+
   createGroupSubscription(groupName: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.GROUP.BASE_URI, [groupName, 'subscribe']);
   }

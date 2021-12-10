@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {JobPosting} from '../../../../shared/models/job-posting';
-import {Constants} from '../../../../config/constants';
 import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
 import {SortDirectionEnum} from '../../../../shared/enums/sort-direction.enum';
 import {ToasterService} from '../../../../core/services/toaster.service';
@@ -16,7 +15,6 @@ import {Criteria} from '../../../../shared/models/Criteria';
   styleUrls: ['./pending-job-table.component.scss']
 })
 export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPosting, Criteria> {
-  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
   isLoading = true;
   // Pagination et filtres

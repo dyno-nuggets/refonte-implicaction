@@ -4,4 +4,6 @@ export interface Group {
   description?: string;
   numberOfPosts?: number;
   imageUrl?: string;
+  createdAt?: Date;
+  active?: boolean;
 }

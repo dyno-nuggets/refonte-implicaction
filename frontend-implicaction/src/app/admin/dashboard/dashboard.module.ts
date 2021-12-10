@@ -5,6 +5,7 @@ import {AdminOverviewComponent} from './components/admin-overview/admin-overview
 import {DashboardRoutingModule} from './dashboard-routing.module';
 import {UsersModule} from '../users/users.module';
 import {AdminJobsModule} from '../jobs/admin-jobs.module';
+import {AdminModule} from '../admin.module';
 
 
 @NgModule({
@@ -17,6 +18,7 @@ import {AdminJobsModule} from '../jobs/admin-jobs.module';
     DashboardRoutingModule,
     UsersModule,
     AdminJobsModule,
+    AdminModule,
   ]
 })
 export class DashboardModule {

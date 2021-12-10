@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.Group;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,13 +16,15 @@ public class GroupAdapter {
     protected static final String DEFAULT_GROUP_IMAGE_URI = "assets/img/avatar-ia-group.png";
 
     private FileService fileService;
+    private final UserAdapter userAdapter;
 
-    public Group toModel(final GroupDto dto) {
+    public Group toModel(GroupDto dto) {
         return Group.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .createdAt(dto.getCreatedAt())
+                .active(dto.isActive())
                 .build();
     }
 
@@ -34,6 +37,7 @@ public class GroupAdapter {
                 .description(model.getDescription())
                 .createdAt(model.getCreatedAt())
                 .imageUrl(imageUrl)
+                .active(model.isActive())
                 .build();
     }
 }

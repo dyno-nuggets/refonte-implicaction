@@ -1,0 +1,39 @@
+<p-table
+  (onLazyLoad)="paginate($event)"
+  [lazy]="true"
+  [loading]="isLoading"
+  [paginator]="true"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [rows]="rowsPerPage"
+  [showCurrentPageReport]="true"
+  [totalRecords]="pageable.totalElements"
+  [value]="pageable.content"
+  currentPageReportTemplate="{first} à {last} sur {totalRecords}"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th class="text-uppercase" scope="col">Nom</th>
+      <th class="text-uppercase" scope="col">Description</th>
+      <th class="text-uppercase" scope="col">Crée le</th>
+    </tr>
+  </ng-template>
+  <ng-template let-group pTemplate="body">
+    <tr>
+      <td class="overflow-ellipsis">{{group.name}}</td>
+      <td class="overflow-ellipsis">{{group.description}}</td>
+      <td class="overflow-ellipsis">{{group.createdAt}}</td>
+      <td>
+        <button
+          (click)="activateGroup(group)"
+          class="btn btn-outline-primary"
+          type="button"
+        >
+          Valider
+        </button>
+      </td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <td class="ps-4" colspan="5">Aucun groupe est en attente de validation.</td>
+  </ng-template>
+</p-table>

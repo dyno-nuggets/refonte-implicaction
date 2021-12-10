@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.service.GroupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,5 +63,21 @@ public class GroupController {
     public ResponseEntity<List<GroupDto>> subscribeGroup(@PathVariable final String groupName) {
         final List<GroupDto> groupDtos = groupService.addGroup(groupName);
         return ResponseEntity.ok(groupDtos);
+    }
+
+    @GetMapping(GET_PENDING_GROUP_URI)
+    public ResponseEntity<Page<GroupDto>> getAllPendingGroups(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows
+    ) {
+        Pageable pageable = PageRequest.of(page, rows);
+        Page<GroupDto> pendingGroups = groupService.getAllPendingActivationGroups(pageable);
+        return ResponseEntity.ok(pendingGroups);
+    }
+
+    @PatchMapping(ACTIVATE_GROUP_URI)
+    public ResponseEntity<Void> activateJob(@RequestBody final Group group) {
+        groupService.activateGroup(group);
+        return ResponseEntity.ok().build();
     }
 }

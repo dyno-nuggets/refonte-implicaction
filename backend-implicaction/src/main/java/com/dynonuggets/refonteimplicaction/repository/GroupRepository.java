@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
 import com.dynonuggets.refonteimplicaction.model.Group;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,8 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
     List<Group> findAllByTopPosting(Pageable pageable);
 
     Optional<Group> findByName(String name);
+
+    Page<Group> findAllByActiveIsFalse(Pageable pageable);
+
+    Page<Group> findAllByActiveIsTrue(Pageable pageable);
 }

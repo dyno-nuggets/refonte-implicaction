@@ -35,6 +35,7 @@ public class Group {
     private Instant createdAt;
 
     @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne(fetch = LAZY)
@@ -42,4 +43,7 @@ public class Group {
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "groups")
     private List<User> users;
+
+    @Column(name = "active")
+    private boolean active;
 }
