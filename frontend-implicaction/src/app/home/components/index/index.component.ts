@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {Univers} from '../../../shared/enums/univers';
 
 
 @Component({
@@ -7,6 +8,8 @@ import {Component, OnInit} from '@angular/core';
   styleUrls: ['./index.component.scss']
 })
 export class IndexComponent implements OnInit {
+
+  univers = Univers;
 
   constructor() {
   }

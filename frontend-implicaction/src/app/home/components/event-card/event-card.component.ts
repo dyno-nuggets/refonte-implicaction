@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-event-card',
@@ -6,11 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-card.component.scss']
 })
 export class EventCardComponent implements OnInit {
+  @Input()
+  event: { date: Date, description: string };
 
-  eventDate: Date;
-  description: string;
+  // Should take a real Event object when ready
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
