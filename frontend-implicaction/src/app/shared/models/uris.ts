@@ -52,6 +52,7 @@ export class Uris {
    */
   static readonly JOBS = class {
     static readonly BASE_URI = 'job-postings';
+    static readonly TOGGLE_ARCHIVE = 'job-postings/archive';
   };
 
   /**
