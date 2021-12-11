@@ -60,7 +60,7 @@ public class GroupController {
 
     @PostMapping(SUBSCRIBE_GROUP)
     public ResponseEntity<List<GroupDto>> subscribeGroup(@PathVariable final String groupName) {
-        final List<GroupDto> groupNames = groupService.addGroup(groupName);
-        return ResponseEntity.ok(groupNames);
+        final List<GroupDto> groupDtos = groupService.addGroup(groupName);
+        return ResponseEntity.ok(groupDtos);
     }
 }

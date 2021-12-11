@@ -8,6 +8,7 @@ import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.*;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -125,7 +126,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<GroupDto> getUserGroups(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
+                .orElseThrow(() -> new UserNotFoundException(Message.USER_NOT_FOUND_MESSAGE));
         ;
         final List<Group> groups = user.getGroups();
         return groups.stream()
