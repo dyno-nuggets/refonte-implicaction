@@ -33,6 +33,7 @@ public class ApiUrls {
     public static final String CREATE_NO_IMAGE = "/no-image";
     public static final String GET_PENDING_GROUP_URI = "/pending";
     public static final String ACTIVATE_GROUP_URI = "/activate";
+    public static final String ACTIVE_GROUPS = "/active";
     public static final String SUBSCRIBE_GROUP = "/{groupName}/subscribe";
 
     // COMMENTS

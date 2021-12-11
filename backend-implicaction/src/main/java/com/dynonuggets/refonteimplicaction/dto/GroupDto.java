@@ -20,4 +20,6 @@ public class GroupDto {
     private Instant createdAt;
     private boolean active;
     private List<UserDto> users;
+    private String username;
+    private Long userId;
 }

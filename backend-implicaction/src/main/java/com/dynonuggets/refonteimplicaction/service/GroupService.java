@@ -3,12 +3,16 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,8 +41,9 @@ public class GroupService {
     public GroupDto save(MultipartFile image, GroupDto groupDto) {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
-
-        Group group = groupAdapter.toModel(groupDto);
+        User user = userRepository.findById(groupDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(String.format(Message.USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+        Group group = groupAdapter.toModel(groupDto, user);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
@@ -50,7 +55,9 @@ public class GroupService {
 
     @Transactional
     public GroupDto save(GroupDto groupDto) {
-        Group group = groupAdapter.toModel(groupDto);
+        User user = userRepository.findById(groupDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(String.format(Message.USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+        Group group = groupAdapter.toModel(groupDto, user);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
         final Group save = groupRepository.save(group);
@@ -58,7 +65,7 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public Page<GroupDto> getAll(Pageable pageable) {
+    public Page<GroupDto> getAllActiveGroups(Pageable pageable) {
         final Page<Group> subreddits = groupRepository.findAllByActiveIsTrue(pageable);
         return subreddits.map(groupAdapter::toDto);
     }

@@ -346,8 +346,8 @@ export class ApiEndpointsService {
     );
   }
 
-  findAllGroupsEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
+  findAllActiveGroupsEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.ACTIVE_GROUPS, pageable);
   }
 
   getActivateGroupEndpoint(): string {

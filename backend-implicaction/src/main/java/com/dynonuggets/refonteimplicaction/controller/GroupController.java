@@ -41,15 +41,15 @@ public class GroupController {
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<GroupDto>> getAll(
+    @GetMapping(ACTIVE_GROUPS)
+    public ResponseEntity<Page<GroupDto>> getAllActiveGroups(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<GroupDto> subredditDtos = groupService.getAll(pageable);
+        Page<GroupDto> subredditDtos = groupService.getAllActiveGroups(pageable);
         return ResponseEntity.ok(subredditDtos);
     }
 
@@ -68,9 +68,11 @@ public class GroupController {
     @GetMapping(GET_PENDING_GROUP_URI)
     public ResponseEntity<Page<GroupDto>> getAllPendingGroups(
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "rows", defaultValue = "10") int rows
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
     ) {
-        Pageable pageable = PageRequest.of(page, rows);
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         Page<GroupDto> pendingGroups = groupService.getAllPendingActivationGroups(pageable);
         return ResponseEntity.ok(pendingGroups);
     }

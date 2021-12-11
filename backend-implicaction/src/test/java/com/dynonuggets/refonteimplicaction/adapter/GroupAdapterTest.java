@@ -4,6 +4,8 @@ import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
+import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +29,9 @@ class GroupAdapterTest {
     @InjectMocks
     GroupAdapter groupAdapter;
 
+    @Mock
+    UserRepository userRepository;
+
     @Test
     void should_map_to_model() {
         // given
@@ -34,10 +39,17 @@ class GroupAdapterTest {
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
+                .userId(1L)
+                .username("test")
+                .build();
+
+        User user = User.builder()
+                .id(1L)
+                .username("test")
                 .build();
 
         // when
-        final Group actual = groupAdapter.toModel(expected);
+        final Group actual = groupAdapter.toModel(expected, user);
 
         // then
         assertThat(actual.getId()).isEqualTo(expected.getId());
@@ -62,7 +74,7 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
@@ -89,7 +101,7 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isZero();

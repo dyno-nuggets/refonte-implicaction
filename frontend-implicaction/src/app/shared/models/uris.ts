@@ -95,6 +95,7 @@ export class Uris {
     static readonly CREATE_NO_IMAGE = 'groups/no-image';
     static readonly ACTIVATE_GROUP = 'groups/activate';
     static readonly GET_ALL_PENDING_GROUPS = 'groups/pending';
+    static readonly ACTIVE_GROUPS = 'groups/active';
   };
 
   /**

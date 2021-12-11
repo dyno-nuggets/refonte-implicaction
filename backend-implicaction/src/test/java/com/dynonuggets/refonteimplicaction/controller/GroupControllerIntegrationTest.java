@@ -1,10 +1,13 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
@@ -13,6 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static java.util.Arrays.asList;
@@ -33,6 +37,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @MockBean
     GroupService groupService;
+
+    @Mock
+    UserRepository userRepository;
 
     @Test
     void should_response_forbidden_when_create_subreddit_with_no_authentication() throws Exception {
@@ -56,7 +63,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @Test
     @WithMockUser
-    void should_list_all_subreddit_whith_no_authentication() throws Exception {
+    void should_list_all_subreddit_with_no_authentication() throws Exception {
         // given
         final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         final Page<GroupDto> subreddits = new PageImpl<>(asList(
@@ -71,10 +78,16 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
                 GroupDto.builder().id(14L).build(),
                 GroupDto.builder().id(15L).build()
         ));
-        given(groupService.getAll(DEFAULT_PAGEABLE)).willReturn(subreddits);
+        final User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
+        given(groupService.getAllActiveGroups(DEFAULT_PAGEABLE)).willReturn(subreddits);
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         // when
-        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + ACTIVE_GROUPS).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print())
@@ -92,7 +105,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         }
         resultActions.andReturn();
 
-        verify(groupService, times(1)).getAll(any());
+        verify(groupService, times(1)).getAllActiveGroups(any());
     }
 
     @Test
@@ -103,7 +116,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(groupService, never()).getAll(any());
+        verify(groupService, never()).getAllActiveGroups(any());
     }
 
     @Test

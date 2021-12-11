@@ -6,4 +6,6 @@ export interface Group {
   imageUrl?: string;
   createdAt?: Date;
   active?: boolean;
+  username?: string;
+  userId?: string;
 }

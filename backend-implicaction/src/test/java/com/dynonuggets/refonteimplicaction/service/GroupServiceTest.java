@@ -1,12 +1,14 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
+import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +25,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -45,6 +48,12 @@ class GroupServiceTest {
 
     @Mock
     FileRepository fileRepository;
+
+    @Mock
+    UserRepository userRepository;
+
+    @Mock
+    UserAdapter userAdapter;
 
     @InjectMocks
     GroupService groupService;
@@ -93,9 +102,15 @@ class GroupServiceTest {
                 "test data".getBytes()
         );
 
+        final User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
+
         when(cloudService.uploadImage(any())).thenReturn(fileModel);
         when(fileRepository.save(fileModel)).thenReturn(fileModel);
-        when(groupAdapter.toModel(any())).thenReturn(sentModel);
+        when(groupAdapter.toModel(any(), any())).thenReturn(sentModel);
         when(authService.getCurrentUser()).thenReturn(currentUser);
         when(groupRepository.save(any())).thenReturn(saveModel);
         when(groupAdapter.toDto(any())).thenReturn(expectedDto);
@@ -136,9 +151,15 @@ class GroupServiceTest {
                 .description("Elle est super bien ma description")
                 .build();
 
-        given(groupAdapter.toModel(any())).willReturn(sentModel);
+        final User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
+        given(groupAdapter.toModel(any(), any())).willReturn(sentModel);
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(groupRepository.save(any())).willReturn(saveModel);
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         // when
         groupService.save(sentDto);
@@ -173,10 +194,9 @@ class GroupServiceTest {
         Pageable pageable = PageRequest.of(first, first * size);
         Page<Group> subredditsPage = new PageImpl<>(groups.subList(0, size - 1));
 
-        given(groupRepository.findAll(any(Pageable.class))).willReturn(subredditsPage);
-
+        given(groupRepository.findAllByActiveIsTrue(any(Pageable.class))).willReturn(subredditsPage);
         // when
-        Page<GroupDto> actuals = groupService.getAll(pageable);
+        Page<GroupDto> actuals = groupService.getAllActiveGroups(pageable);
 
         // then
         assertThat(actuals.getTotalElements()).isEqualTo(subredditsPage.getTotalElements());
