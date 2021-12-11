@@ -14,8 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_ALL_BY_TOP_POSTING_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GROUPS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -35,7 +34,7 @@ public class GroupController {
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
-    @PostMapping
+    @PostMapping(CREATE_NO_IMAGE)
     public ResponseEntity<GroupDto> createSubreddit(@RequestBody GroupDto group) {
         final GroupDto saveDto = groupService.save(group);
         return ResponseEntity.status(CREATED).body(saveDto);

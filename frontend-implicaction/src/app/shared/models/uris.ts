@@ -89,6 +89,7 @@ export class Uris {
   static GROUP = class {
     static readonly BASE_URI = 'groups';
     static readonly TOP_POSTING = 'groups/top-posting';
+    static readonly CREATE_NO_IMAGE = 'groups/no-image';
   };
 
   /**

@@ -324,6 +324,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.GROUP.BASE_URI);
   }
 
+  createGroupWithoutImageEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.GROUP.CREATE_NO_IMAGE);
+  }
+
   findByTopPostingEndpoint(limit: number): string {
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.GROUP.TOP_POSTING, (qs: QueryStringParameters) => qs.push('limit', limit)

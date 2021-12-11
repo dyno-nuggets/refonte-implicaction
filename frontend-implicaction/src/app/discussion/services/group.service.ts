@@ -21,7 +21,7 @@ export class GroupService {
   }
 
   createGroupWithoutPicture(group: any): Observable<Group> {
-    return this.http.post<Group>(this.apiEndpointService.createGroupEndpoint(), group);
+    return this.http.post<Group>(this.apiEndpointService.createGroupWithoutImageEndpoint(), group);
   }
 
   findByTopPosting(limit: number): Observable<Group[]> {

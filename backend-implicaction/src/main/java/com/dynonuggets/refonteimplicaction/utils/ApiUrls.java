@@ -28,6 +28,7 @@ public class ApiUrls {
     // GROUPS
     public static final String GROUPS_BASE_URI = "/api/groups";
     public static final String GET_ALL_BY_TOP_POSTING_URI = "/top-posting";
+    public static final String CREATE_NO_IMAGE = "/no-image";
 
     // COMMENTS
     public static final String COMMENTS_BASE_URI = "/api/comments";
