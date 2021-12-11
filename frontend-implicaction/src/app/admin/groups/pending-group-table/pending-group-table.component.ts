@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {Group} from '../../../discussion/model/group';
-import {SortDirectionEnum} from '../../../shared/enums/sort-direction.enum';
 import {ActivatedRoute} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {GroupService} from '../../../discussion/services/group.service';
@@ -31,9 +30,7 @@ export class PendingGroupTableComponent extends BaseWithPaginationComponent<Grou
     this.groupService
       .validateGroup(group)
       .subscribe(
-        (data) => {
-          this.paginate({first: this.pageable.first, rows: this.pageable.rows});
-        },
+        () => this.paginate(this.pageable),
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation du groupe.`),
         () => this.toastService.success('Succès', `Le groupe  ${group.name} est désormais validé.`),
       );
