@@ -3,7 +3,7 @@
 }
 
 .company-logo {
-  width: 58px;
+  width: 38px;
   height: auto;
 }
 
@@ -14,4 +14,11 @@
   &:hover {
     text-decoration: underline;
   }
+}
+
+.job-card {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-rows: 1fr 1fr 0.3fr;
 }
