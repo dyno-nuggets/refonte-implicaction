@@ -11,6 +11,7 @@ import org.springframework.data.domain.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
@@ -156,5 +157,46 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
         verify(groupService, never()).getAllByTopPosting(anyInt());
+    }
+
+    @Test
+    @WithMockUser
+    void should_get_all_pending_groups_when_authenticated() throws Exception {
+        //given
+        List<GroupDto> groupDtos = Arrays.asList(
+                GroupDto.builder().id(1L).active(false).build(),
+                GroupDto.builder().id(2L).active(false).build(),
+                GroupDto.builder().id(3L).active(false).build()
+        );
+        Page<GroupDto> groupPageMockResponse = new PageImpl<>(groupDtos);
+        given(groupService.getAllPendingActivationGroups(any())).willReturn(groupPageMockResponse);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+
+        for (int i = 0; i < groupDtos.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(groupDtos.get(i).getId()))));
+            resultActions.andExpect(jsonPath(contentPath + ".active", is(groupDtos.get(i).isActive())));
+        }
+
+        verify(groupService, times(1)).getAllPendingActivationGroups(any());
+    }
+
+    @Test
+    void should_response_forbidden_when_pending_groups_and_not_authenticated() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
+        verify(groupService, never()).getAllPendingActivationGroups(any());
     }
 }

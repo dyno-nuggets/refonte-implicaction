@@ -1,7 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,6 +37,9 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
     @MockBean
     JobPostingService jobPostingService;
+
+    @MockBean
+    JobPostingAdapter jobPostingAdapter;
 
     List<JobPostingDto> jobPostings;
 
@@ -246,4 +251,46 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveAll(Collections.singletonList(anyLong()));
     }
+
+    @Test
+    @WithMockUser
+    void should_get_all_pending_jobs_when_authenticated() throws Exception {
+        //given
+        List<JobPostingDto> jobPostingDtos = Arrays.asList(
+                JobPostingDto.builder().id(1L).active(false).build(),
+                JobPostingDto.builder().id(2L).active(false).build(),
+                JobPostingDto.builder().id(3L).active(false).build()
+        );
+        Page<JobPostingDto> jobPageMockResponse = new PageImpl<>(jobPostingDtos);
+        given(jobPostingService.getAllPendingActivationJobs(any())).willReturn(jobPageMockResponse);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+
+        for (int i = 0; i < jobPostingDtos.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(jobPostingDtos.get(i).getId()))));
+            resultActions.andExpect(jsonPath(contentPath + ".active", is(jobPostingDtos.get(i).isActive())));
+        }
+
+        verify(jobPostingService, times(1)).getAllPendingActivationJobs(any());
+    }
+
+    @Test
+    void should_response_forbidden_when_pending_jobs_and_not_authenticated() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
+        verify(jobPostingService, never()).getAllPendingActivationJobs(any());
+    }
+
 }
