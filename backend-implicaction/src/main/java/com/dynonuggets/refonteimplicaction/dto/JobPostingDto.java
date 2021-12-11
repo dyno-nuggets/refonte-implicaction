@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
-import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +28,6 @@ public class JobPostingDto {
     private boolean archive;
     private boolean apply;
     private boolean valid;
-
+    private Long posterId;
+    private String posterName;
 }
