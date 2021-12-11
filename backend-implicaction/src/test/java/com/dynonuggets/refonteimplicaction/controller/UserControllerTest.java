@@ -633,9 +633,9 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         ArrayList<GroupDto> groupList = new ArrayList<>();
         groupList.add(group);
-        given(groupService.getAllGroupsByUserId(anyLong())).willReturn(groupList);
+        given(userService.getUserGroups(anyLong())).willReturn(groupList);
 
-        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_GROUP_URI, user.getId()).contentType(APPLICATION_JSON))
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_USER_GROUPS_URI, user.getId()).contentType(APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
@@ -649,6 +649,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".imageUrl", is(groupList.get(i).getImageUrl())))
                     .andExpect(jsonPath(contentPath + ".name", is(groupList.get(i).getName())));
         }
-        verify(groupService, times(1)).getAllGroupsByUserId(anyLong());
+        verify(userService, times(1)).getUserGroups(anyLong());
     }
 }

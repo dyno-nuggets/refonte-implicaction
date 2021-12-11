@@ -5,7 +5,6 @@ import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.*;
@@ -18,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -124,13 +122,14 @@ public class UserService {
         return userAdapter.toDto(save);
     }
 
-    @Transactional
-    public GroupDto addGroup(String groupName) {
-        User user = authService.getCurrentUser();
-        Group group = groupRepository.findByName(groupName)
-                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, groupName)));
-        user.getGroups().add(group);
-        final User save = userRepository.save(user);
-        return groupAdapter.toDto(group);
+    @Transactional(readOnly = true)
+    public List<GroupDto> getUserGroups(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
+        ;
+        final List<Group> groups = user.getGroups();
+        return groups.stream()
+                .map(groupAdapter::toDto)
+                .collect(toList());
     }
 }

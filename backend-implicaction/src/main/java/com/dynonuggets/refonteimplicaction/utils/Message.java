@@ -9,6 +9,9 @@ public class Message {
     // Jobs messages
     public static final String JOB_NOT_FOUND_MESSAGE = "No job found with id [%d]";
 
+    // Groups messages
+    public static final String GROUP_NOT_FOUND_MESSAGE = "No group found with id [%d]";
+
     // Subreddit messages
     public static final String SUBREDDIT_NOT_FOUND_MESSAGE = "No subreddit found with id [%s]";
 

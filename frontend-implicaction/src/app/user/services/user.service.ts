@@ -6,6 +6,7 @@ import {User} from '../../shared/models/user';
 import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
 import {Relation} from '../models/relation';
+import {Group} from '../../discussion/model/group';
 
 @Injectable({
   providedIn: 'root'
@@ -64,12 +65,8 @@ export class UserService {
     return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(), formData);
   }
 
-  getAllGroups(userId: string): Observable<any> {
-    return this.http.get(this.apiEndpointsService.getAllGroups(userId));
-  }
-
-  subscribeGroup(groupName: string): Observable<any> {
-    return this.http.post(this.apiEndpointsService.createGroupSubscription(), groupName);
+  getUserGroups(userId: string): Observable<Group[]> {
+    return this.http.get<Group[]>(this.apiEndpointsService.getAllGroups(userId));
   }
 
 }

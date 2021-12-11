@@ -7,8 +7,8 @@ import {CreateGroupFormComponent} from '../create-group-form/create-group-form.c
 import {finalize} from 'rxjs/operators';
 import {Constants} from '../../../config/constants';
 import {AuthService} from '../../../shared/services/auth.service';
-import {User} from '../../../shared/models/user';
 import {UserService} from '../../../user/services/user.service';
+import {User} from '../../../shared/models/user';
 
 @Component({
   selector: 'app-top-group-listing',
@@ -24,9 +24,9 @@ export class TopGroupListingComponent implements OnInit {
 
   groups: Group[] = [];
   isLoading = true;
+  userGroupNames: string[] = [];
   currentUser: User;
   canSubscribe: boolean;
-  subscribedGroups: string[] = [];
 
   constructor(
     private groupService: GroupService,
@@ -39,7 +39,18 @@ export class TopGroupListingComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
-    this.loadData();
+    this.userService
+      .getUserGroups(this.currentUser.id)
+      .subscribe(groups => this.userGroupNames = groups.map(group => group.name));
+
+    this.groupService
+      .findByTopPosting(this.limit)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe(
+        groups => this.groups = groups,
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors du chargement de la liste de groupes')
+      )
+    ;
   }
 
   openSidebarCreationGroup(): void {
@@ -52,35 +63,14 @@ export class TopGroupListingComponent implements OnInit {
   }
 
   joinGroup(groupName: string): void {
-    this.userService.subscribeGroup(groupName)
+    this.groupService.subscribeGroup(groupName)
       .subscribe(
-        (group) => {
-          this.toasterService.success('Succès', `Vous avez adhéré au groupe ${group.name}`);
-          this.loadData();
+        (groups) => {
+          this.toasterService.success('Succès', `Vous avez adhéré au groupe !`);
+          this.userGroupNames = groups.map(group => group.name);
         },
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la souscription au groupe')
       );
   }
 
-  loadData(): void {
-    this.userService
-      .getAllGroups(this.currentUser.id)
-      .subscribe(
-        subscribedGroups => {
-          for (const key in subscribedGroups) {
-            if (subscribedGroups.hasOwnProperty(key)) {
-              this.subscribedGroups.push(subscribedGroups[key].name);
-            }
-          }
-        }
-      );
-    this.groupService
-      .findByTopPosting(this.limit)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(
-        groups => this.groups = groups,
-        () => this.toasterService.error('Oops', 'Une erreur est survenue lors du chargement de la liste de groupes')
-      )
-    ;
-  }
 }

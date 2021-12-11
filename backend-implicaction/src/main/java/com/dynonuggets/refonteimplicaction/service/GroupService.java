@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Instant;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.utils.Message.GROUP_NOT_FOUND_MESSAGE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -69,11 +71,14 @@ public class GroupService {
                 .collect(toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<GroupDto> getAllGroupsByUserId(Long userId) {
-        User user = userRepository.getById(userId);
-        final List<Group> groups = user.getGroups();
-        return groups.stream()
+    @Transactional
+    public List<GroupDto> addGroup(String groupName) {
+        User user = authService.getCurrentUser();
+        Group group = groupRepository.findByName(groupName)
+                .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
+        user.getGroups().add(group);
+        final User save = userRepository.save(user);
+        return user.getGroups().stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());
     }

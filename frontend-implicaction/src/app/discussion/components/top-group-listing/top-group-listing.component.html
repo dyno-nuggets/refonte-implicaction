@@ -14,20 +14,19 @@
             alt=""
             class="me-2 image-mini"
           >
-          <span class="ps-2">{{group.name}}</span>
-          <ng-container *ngIf="subscribedGroups && !subscribedGroups.includes(group.name)">
-            <i-feather
+          <span class="ps-2 overflow-ellipsis w-50">{{group.name}}</span>
+          <div class="d-flex justify-content-end w-100">
+            <a
+              *ngIf="userGroupNames?.length && !userGroupNames.includes(group.name)"
               (click)="joinGroup(group.name)"
               class="cursor-pointer secondary-on-hover"
-              color="primary"
               data-placement="bottom"
               data-toggle="tooltip"
-              name="plus"
               title="Rejoindre le groupe"
             >
-            </i-feather>
-          </ng-container>
-
+              Rejoindre
+            </a>
+          </div>
         </div>
 
         <div class="d-grid gap-2 mt-2">

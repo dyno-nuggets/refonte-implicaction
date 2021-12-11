@@ -109,15 +109,10 @@ public class UserController {
         return ResponseEntity.ok(userDto);
     }
 
-    @GetMapping(GET_GROUP_URI)
-    public ResponseEntity<List<GroupDto>> getAllGroupsByUser(@PathVariable("userId") Long userId) {
-        final List<GroupDto> groupsDto = groupService.getAllGroupsByUserId(userId);
+    @GetMapping(GET_USER_GROUPS_URI)
+    public ResponseEntity<List<GroupDto>> getUserGroups(@PathVariable("userId") Long userId) {
+        final List<GroupDto> groupsDto = userService.getUserGroups(userId);
         return ResponseEntity.ok(groupsDto);
     }
 
-    @PostMapping(SUBSCRIBE_GROUP)
-    public ResponseEntity<GroupDto> subscribeGroup(@RequestBody final String groupName) {
-        final GroupDto groupDto = userService.addGroup(groupName);
-        return ResponseEntity.ok(groupDto);
-    }
 }

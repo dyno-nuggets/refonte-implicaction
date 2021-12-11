@@ -31,4 +31,8 @@ export class GroupService {
   getAllGroups(pageable: Pageable): Observable<any> {
     return this.http.get<Group[]>(this.apiEndpointService.findAllGroupsEndpoint(pageable));
   }
+
+  subscribeGroup(groupName: string): Observable<Group[]> {
+    return this.http.post<Group[]>(this.apiEndpointService.createGroupSubscription(groupName), null);
+  }
 }
