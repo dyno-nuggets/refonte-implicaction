@@ -29,6 +29,7 @@ public class JobPostingAdapter {
                 .contractType(model.getContractType())
                 .createdAt(model.getCreatedAt())
                 .archive(model.isArchive())
+                .sector(model.getSector())
                 .build();
     }
 
@@ -46,6 +47,7 @@ public class JobPostingAdapter {
                 .salary(dto.getSalary())
                 .keywords(dto.getKeywords())
                 .contractType(dto.getContractType())
+                .sector(dto.getSector())
                 .createdAt(dto.getCreatedAt())
                 .archive(dto.isArchive())
                 .build();

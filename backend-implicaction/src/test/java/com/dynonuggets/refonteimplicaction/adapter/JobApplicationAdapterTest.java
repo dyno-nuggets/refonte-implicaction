@@ -2,10 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
-import com.dynonuggets.refonteimplicaction.model.Company;
-import com.dynonuggets.refonteimplicaction.model.JobApplication;
-import com.dynonuggets.refonteimplicaction.model.JobPosting;
-import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -22,7 +19,7 @@ class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
     void given_company_should_return_dto() {
         // given
         Company company = new Company(1234L, "World Company", "http://logo.com", "La World Company est une multinationale imaginaire basée aux États-Unis", "http://word-company.com");
-        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, Instant.now(), false);
+        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, ActivitySectorEnum.ASSURANCE, Instant.now(), false);
         User user = User.builder().id(87L).build();
         JobApplication model = new JobApplication(123L, job, user, PENDING, Instant.now(), false);
 
@@ -43,7 +40,7 @@ class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
     void given_no_company_should_return_dto() {
         // given
         Company company = null;
-        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, Instant.now(), false);
+        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, ActivitySectorEnum.ASSURANCE, Instant.now(), false);
         User user = User.builder().id(87L).build();
         JobApplication model = new JobApplication(123L, job, user, PENDING, Instant.now(), false);
 
