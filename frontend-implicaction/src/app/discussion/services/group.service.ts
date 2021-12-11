@@ -36,11 +36,11 @@ export class GroupService {
     return this.http.post<Group[]>(this.apiEndpointService.createGroupSubscription(groupName), null);
   }
 
-  getAllPendingActivationGroup(pageable: Pageable): Observable<any> {
-    return this.http.get(this.apiEndpointService.getAllPendingActivationGroupEndpoint(pageable));
+  getAllPendingGroup(pageable: Pageable): Observable<any> {
+    return this.http.get(this.apiEndpointService.getAllPendingGroupEndpoint(pageable));
   }
 
-  activateGroup(group: Group): Observable<any> {
-    return this.http.patch(this.apiEndpointService.getActivateGroupEndpoint(), group);
+  validateGroup(group: Group): Observable<any> {
+    return this.http.patch(this.apiEndpointService.getValidateGroupEndpoint(), group);
   }
 }

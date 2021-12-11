@@ -44,7 +44,23 @@ public class JobPostingController {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         final boolean applyCheck = Boolean.parseBoolean(checkApplyAsString);
         final Boolean isArchive = StringUtils.isNotBlank(archiveAsString) ? Boolean.parseBoolean(archiveAsString) : null;
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, isArchive, applyCheck);
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, isArchive, applyCheck, null);
+        return ResponseEntity.ok(jobPostingDtos);
+    }
+
+    @GetMapping(ACTIVE_JOBS)
+    public ResponseEntity<Page<JobPostingDto>> getAllActiveByCriteria(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
+            @RequestParam(value = "search", defaultValue = "") String search,
+            @RequestParam(value = "contractType", required = false) String contractType,
+            @RequestParam(value = "archive", required = false) String archiveAsString
+    ) {
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        final Boolean isArchive = StringUtils.isNotBlank(archiveAsString) ? Boolean.parseBoolean(archiveAsString) : null;
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllActiveWithCriteria(pageable, search, contractType, isArchive);
         return ResponseEntity.ok(jobPostingDtos);
     }
 
@@ -84,13 +100,13 @@ public class JobPostingController {
             @RequestParam(value = "rows", defaultValue = "10") int rows
     ) {
         Pageable pageable = PageRequest.of(page, rows);
-        Page<JobPostingDto> pendingJobs = jobPostingService.getAllPendingActivationJobs(pageable);
+        Page<JobPostingDto> pendingJobs = jobPostingService.getAllPendingJobs(pageable);
         return ResponseEntity.ok(pendingJobs);
     }
 
-    @PatchMapping(ACTIVATE_JOB_URI)
-    public ResponseEntity<Void> activateJob(@RequestBody final JobPosting job) {
-        jobPostingService.activateJob(job);
+    @PatchMapping(VALIDATE_JOB_URI)
+    public ResponseEntity<Void> validateJob(@RequestBody final JobPosting job) {
+        jobPostingService.validateJob(job);
         return ResponseEntity.ok().build();
     }
 }

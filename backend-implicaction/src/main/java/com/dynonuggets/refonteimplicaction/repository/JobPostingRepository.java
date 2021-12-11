@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, Long>, JobPostingRepositoryCustom {
-    Page<JobPosting> findAllByActiveIsFalse(Pageable pageable);
+    Page<JobPosting> findAllByValidIsFalse(Pageable pageable);
 }

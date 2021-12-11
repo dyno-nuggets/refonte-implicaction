@@ -28,21 +28,21 @@ export class PendingGroupTableComponent extends BaseWithPaginationComponent<Grou
     super(route);
   }
 
-  activateGroup(group: Group): void {
+  validateGroup(group: Group): void {
     this.groupService
-      .activateGroup(group)
+      .validateGroup(group)
       .subscribe(
         (data) => {
           this.paginate({first: this.pageable.first, rows: this.pageable.rows});
         },
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation du groupe.`),
-        () => this.toastService.success('Succès', `Le groupe  ${group.name} est désormais actif.`),
+        () => this.toastService.success('Succès', `Le groupe  ${group.name} est désormais validé.`),
       );
   }
 
   protected innerPaginate(): void {
     this.groupService
-      .getAllPendingActivationGroup(this.pageable)
+      .getAllPendingGroup(this.pageable)
       .pipe(
         take(1),
         finalize(() => this.isLoading = false)

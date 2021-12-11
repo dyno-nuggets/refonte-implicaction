@@ -65,8 +65,8 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public Page<GroupDto> getAllActiveGroups(Pageable pageable) {
-        final Page<Group> subreddits = groupRepository.findAllByActiveIsTrue(pageable);
+    public Page<GroupDto> getAllValidGroups(Pageable pageable) {
+        final Page<Group> subreddits = groupRepository.findAllByValidIsTrue(pageable);
         return subreddits.map(groupAdapter::toDto);
     }
 
@@ -91,14 +91,14 @@ public class GroupService {
     }
 
     @Transactional
-    public Page<GroupDto> getAllPendingActivationGroups(Pageable pageable) {
-        return subredditRepository.findAllByActiveIsFalse(pageable)
+    public Page<GroupDto> getAllPendingGroups(Pageable pageable) {
+        return subredditRepository.findAllByValidIsFalse(pageable)
                 .map(subredditAdapter::toDto);
     }
 
     @Transactional
-    public void activateGroup(Group group) {
-        group.setActive(true);
+    public void validateGroup(Group group) {
+        group.setValid(true);
         subredditRepository.save(group);
     }
 }

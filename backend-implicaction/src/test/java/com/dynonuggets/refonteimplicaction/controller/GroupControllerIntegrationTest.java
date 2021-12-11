@@ -83,7 +83,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .username("test")
                 .build();
 
-        given(groupService.getAllActiveGroups(DEFAULT_PAGEABLE)).willReturn(subreddits);
+        given(groupService.getAllValidGroups(DEFAULT_PAGEABLE)).willReturn(subreddits);
         given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         // when
@@ -105,7 +105,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         }
         resultActions.andReturn();
 
-        verify(groupService, times(1)).getAllActiveGroups(any());
+        verify(groupService, times(1)).getAllValidGroups(any());
     }
 
     @Test
@@ -116,7 +116,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(groupService, never()).getAllActiveGroups(any());
+        verify(groupService, never()).getAllValidGroups(any());
     }
 
     @Test
@@ -177,12 +177,12 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_get_all_pending_groups_when_authenticated() throws Exception {
         //given
         List<GroupDto> groupDtos = Arrays.asList(
-                GroupDto.builder().id(1L).active(false).build(),
-                GroupDto.builder().id(2L).active(false).build(),
-                GroupDto.builder().id(3L).active(false).build()
+                GroupDto.builder().id(1L).valid(false).build(),
+                GroupDto.builder().id(2L).valid(false).build(),
+                GroupDto.builder().id(3L).valid(false).build()
         );
         Page<GroupDto> groupPageMockResponse = new PageImpl<>(groupDtos);
-        given(groupService.getAllPendingActivationGroups(any())).willReturn(groupPageMockResponse);
+        given(groupService.getAllPendingGroups(any())).willReturn(groupPageMockResponse);
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -195,10 +195,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         for (int i = 0; i < groupDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
             resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(groupDtos.get(i).getId()))));
-            resultActions.andExpect(jsonPath(contentPath + ".active", is(groupDtos.get(i).isActive())));
+            resultActions.andExpect(jsonPath(contentPath + ".valid", is(groupDtos.get(i).isValid())));
         }
 
-        verify(groupService, times(1)).getAllPendingActivationGroups(any());
+        verify(groupService, times(1)).getAllPendingGroups(any());
     }
 
     @Test
@@ -210,6 +210,6 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(groupService, never()).getAllPendingActivationGroups(any());
+        verify(groupService, never()).getAllPendingGroups(any());
     }
 }

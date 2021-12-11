@@ -61,12 +61,18 @@ class GroupAdapterTest {
     @Test
     void should_map_to_dto_with_count_when_model_has_posts() {
         // given
+        User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
         Group expectedModel = Group.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
                 .posts(Arrays.asList(new Post(), new Post(), new Post(), new Post()))
                 .createdAt(Instant.now())
+                .user(user)
                 .build();
 
         // when
@@ -84,12 +90,18 @@ class GroupAdapterTest {
     @Test
     void should_map_to_dto_with_image_url_when_model_has_image() {
         // given
+        User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
         Group expectedModel = Group.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
                 .image(FileModel.builder().url("http://url.com").objectKey("blablabla").build())
                 .createdAt(Instant.now())
+                .user(user)
                 .build();
 
         String expectedUrl = "http://url/objectKey";

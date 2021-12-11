@@ -15,7 +15,7 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     Optional<Group> findByName(String name);
 
-    Page<Group> findAllByActiveIsFalse(Pageable pageable);
+    Page<Group> findAllByValidIsFalse(Pageable pageable);
 
-    Page<Group> findAllByActiveIsTrue(Pageable pageable);
+    Page<Group> findAllByValidIsTrue(Pageable pageable);
 }

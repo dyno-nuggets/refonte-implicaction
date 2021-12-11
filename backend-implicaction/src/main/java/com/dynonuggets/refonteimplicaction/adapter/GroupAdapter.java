@@ -24,7 +24,7 @@ public class GroupAdapter {
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .createdAt(dto.getCreatedAt())
-                .active(dto.isActive())
+                .valid(dto.isValid())
                 .user(user)
                 .build();
     }
@@ -38,7 +38,7 @@ public class GroupAdapter {
                 .description(model.getDescription())
                 .createdAt(model.getCreatedAt())
                 .imageUrl(imageUrl)
-                .active(model.isActive())
+                .valid(model.isValid())
                 .username(model.getUser().getUsername())
                 .userId(model.getUser().getId())
                 .build();

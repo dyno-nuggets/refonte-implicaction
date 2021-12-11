@@ -28,6 +28,6 @@ public class JobPostingDto {
     private Instant createdAt;
     private boolean archive;
     private boolean apply;
-    private boolean active;
+    private boolean valid;
 
 }

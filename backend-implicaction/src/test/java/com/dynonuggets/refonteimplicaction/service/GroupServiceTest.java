@@ -194,9 +194,9 @@ class GroupServiceTest {
         Pageable pageable = PageRequest.of(first, first * size);
         Page<Group> subredditsPage = new PageImpl<>(groups.subList(0, size - 1));
 
-        given(groupRepository.findAllByActiveIsTrue(any(Pageable.class))).willReturn(subredditsPage);
+        given(groupRepository.findAllByValidIsTrue(any(Pageable.class))).willReturn(subredditsPage);
         // when
-        Page<GroupDto> actuals = groupService.getAllActiveGroups(pageable);
+        Page<GroupDto> actuals = groupService.getAllValidGroups(pageable);
 
         // then
         assertThat(actuals.getTotalElements()).isEqualTo(subredditsPage.getTotalElements());

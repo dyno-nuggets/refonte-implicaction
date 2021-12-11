@@ -30,7 +30,7 @@ public class JobPostingAdapter {
                 .createdAt(model.getCreatedAt())
                 .archive(model.isArchive())
                 .businessSector(model.getBusinessSector())
-                .active(model.isActive())
+                .valid(model.isValid())
                 .build();
     }
 
@@ -51,7 +51,7 @@ public class JobPostingAdapter {
                 .businessSector(dto.getBusinessSector())
                 .createdAt(dto.getCreatedAt())
                 .archive(dto.isArchive())
-                .active(dto.isActive())
+                .valid(dto.isValid())
                 .build();
     }
 }

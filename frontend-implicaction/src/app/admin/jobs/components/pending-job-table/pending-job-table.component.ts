@@ -31,15 +31,15 @@ export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPos
     super(route);
   }
 
-  activateJob(job: JobPosting): void {
+  validateJob(job: JobPosting): void {
     this.jobsService
-      .activateJob(job)
+      .validateJob(job)
       .subscribe(
         () => {
           this.paginate({first: this.pageable.first, rows: this.pageable.rows});
         },
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'offre.`),
-        () => this.toastService.success('Succès', `L'offre  ${job.title} est désormais active.`),
+        () => this.toastService.success('Succès', `L'offre  ${job.title} est désormais validée.`),
       );
   }
 

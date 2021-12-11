@@ -49,7 +49,7 @@ public class GroupController {
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<GroupDto> subredditDtos = groupService.getAllActiveGroups(pageable);
+        Page<GroupDto> subredditDtos = groupService.getAllValidGroups(pageable);
         return ResponseEntity.ok(subredditDtos);
     }
 
@@ -73,13 +73,13 @@ public class GroupController {
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<GroupDto> pendingGroups = groupService.getAllPendingActivationGroups(pageable);
+        Page<GroupDto> pendingGroups = groupService.getAllPendingGroups(pageable);
         return ResponseEntity.ok(pendingGroups);
     }
 
-    @PatchMapping(ACTIVATE_GROUP_URI)
-    public ResponseEntity<Void> activateJob(@RequestBody final Group group) {
-        groupService.activateGroup(group);
+    @PatchMapping(VALIDATE_GROUP_URI)
+    public ResponseEntity<Void> validateGroup(@RequestBody final Group group) {
+        groupService.validateGroup(group);
         return ResponseEntity.ok().build();
     }
 }

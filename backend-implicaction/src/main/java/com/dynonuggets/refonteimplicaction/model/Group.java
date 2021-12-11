@@ -44,6 +44,6 @@ public class Group {
     @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "groups")
     private List<User> users;
 
-    @Column(name = "active")
-    private boolean active;
+    @Column(name = "valid")
+    private boolean valid;
 }
