@@ -51,4 +51,8 @@ public class JobPosting {
 
     @Column(columnDefinition = "boolean default false")
     private boolean archive;
+
+    @Column(name = "posted_by")
+    private User poster;
+
 }

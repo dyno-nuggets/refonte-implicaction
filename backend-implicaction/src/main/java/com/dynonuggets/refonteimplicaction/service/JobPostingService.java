@@ -33,6 +33,7 @@ public class JobPostingService {
 
         JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto);
         jobPosting.setCreatedAt(Instant.now());
+        jobPosting.setPoster(authService.getCurrentUser());
         JobPosting jobSaved = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(jobSaved);
     }

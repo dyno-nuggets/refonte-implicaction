@@ -29,6 +29,8 @@ public class JobPostingAdapter {
                 .contractType(model.getContractType())
                 .createdAt(model.getCreatedAt())
                 .archive(model.isArchive())
+                .posterName(model.getPoster().getUsername())
+                .posterId(model.getPoster().getId())
                 .build();
     }
 

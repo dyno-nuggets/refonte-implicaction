@@ -26,5 +26,6 @@ public class JobPostingDto {
     private Instant createdAt;
     private boolean archive;
     private boolean apply;
-
+    private Long posterId;
+    private String posterName;
 }
