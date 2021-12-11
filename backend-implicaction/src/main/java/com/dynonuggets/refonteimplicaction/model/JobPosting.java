@@ -47,7 +47,7 @@ public class JobPosting {
     private ContractTypeEnum contractType;
 
     @Enumerated(EnumType.STRING)
-    private ActivitySectorEnum businessSector;
+    private BusinessSectorEnum businessSector;
 
     @Column(name = "created_at")
     private Instant createdAt;

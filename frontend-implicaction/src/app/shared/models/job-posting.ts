@@ -1,6 +1,6 @@
 import {Company} from './company';
 import {ContractEnumCode} from '../enums/contract.enum';
-import {SectorEnumCode} from '../enums/sector.enum';
+import {BusinessSectorEnumCode} from '../enums/sector.enum';
 
 export interface JobPosting {
   id?: string;
@@ -12,7 +12,7 @@ export interface JobPosting {
   description?: string;
   createdAt?: Date;
   contractType?: ContractEnumCode;
-  businessSector?: SectorEnumCode;
+  businessSector?: BusinessSectorEnumCode;
   company?: Company;
   apply?: boolean;
   archive?: boolean;
