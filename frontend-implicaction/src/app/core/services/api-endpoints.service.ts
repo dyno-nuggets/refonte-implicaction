@@ -150,6 +150,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
   }
 
+  getAllGroups(userId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GROUP_LIST, [userId, 'groups']);
+  }
+
   /**
    * Experiences
    */
@@ -336,6 +340,10 @@ export class ApiEndpointsService {
 
   findAllGroupsEndpoint(pageable: Pageable): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
+  }
+
+  createGroupSubscription(groupName: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.GROUP.BASE_URI, [groupName, 'subscribe']);
   }
 
   /**

@@ -1,17 +1,14 @@
 package com.dynonuggets.refonteimplicaction.service;
 
+import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.JobSeeker;
-import com.dynonuggets.refonteimplicaction.model.Relation;
-import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
-import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.repository.*;
+import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,6 +31,8 @@ public class UserService {
     private final JobSeekerRepository jobSeekerRepository;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
+    private final GroupRepository groupRepository;
+    private GroupAdapter groupAdapter;
 
     /**
      * @return la liste paginée de tous les utilisateurs
@@ -122,5 +121,16 @@ public class UserService {
         currentUser.setImage(fileSave);
         final User save = userRepository.save(currentUser);
         return userAdapter.toDto(save);
+    }
+
+    @Transactional(readOnly = true)
+    public List<GroupDto> getUserGroups(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(Message.USER_NOT_FOUND_MESSAGE));
+        ;
+        final List<Group> groups = user.getGroups();
+        return groups.stream()
+                .map(groupAdapter::toDto)
+                .collect(toList());
     }
 }

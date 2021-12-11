@@ -1,12 +1,12 @@
 package com.dynonuggets.refonteimplicaction.service;
 
-import com.dynonuggets.refonteimplicaction.adapter.SubredditAdapter;
+import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
+import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,10 +32,10 @@ import static org.mockito.Mockito.*;
 class GroupServiceTest {
 
     @Mock
-    SubredditRepository subredditRepository;
+    GroupRepository groupRepository;
 
     @Mock
-    SubredditAdapter subredditAdapter;
+    GroupAdapter groupAdapter;
 
     @Mock
     AuthService authService;
@@ -95,16 +95,16 @@ class GroupServiceTest {
 
         when(cloudService.uploadImage(any())).thenReturn(fileModel);
         when(fileRepository.save(fileModel)).thenReturn(fileModel);
-        when(subredditAdapter.toModel(any())).thenReturn(sentModel);
+        when(groupAdapter.toModel(any())).thenReturn(sentModel);
         when(authService.getCurrentUser()).thenReturn(currentUser);
-        when(subredditRepository.save(any())).thenReturn(saveModel);
-        when(subredditAdapter.toDto(any())).thenReturn(expectedDto);
+        when(groupRepository.save(any())).thenReturn(saveModel);
+        when(groupAdapter.toDto(any())).thenReturn(expectedDto);
 
         // when
         groupService.save(mockMultipartFile, sentDto);
 
         // then
-        verify(subredditRepository, times(1)).save(argumentCaptor.capture());
+        verify(groupRepository, times(1)).save(argumentCaptor.capture());
 
         final Group value = argumentCaptor.getValue();
 
@@ -136,14 +136,14 @@ class GroupServiceTest {
                 .description("Elle est super bien ma description")
                 .build();
 
-        given(subredditAdapter.toModel(any())).willReturn(sentModel);
+        given(groupAdapter.toModel(any())).willReturn(sentModel);
         given(authService.getCurrentUser()).willReturn(currentUser);
-        given(subredditRepository.save(any())).willReturn(saveModel);
+        given(groupRepository.save(any())).willReturn(saveModel);
 
         // when
         groupService.save(sentDto);
 
-        verify(subredditRepository, times(1)).save(argumentCaptor.capture());
+        verify(groupRepository, times(1)).save(argumentCaptor.capture());
 
         assertThat(argumentCaptor.getValue().getId()).isNull();
         assertThat(argumentCaptor.getValue().getName()).isEqualTo("coucou subreddit");
@@ -173,7 +173,7 @@ class GroupServiceTest {
         Pageable pageable = PageRequest.of(first, first * size);
         Page<Group> subredditsPage = new PageImpl<>(groups.subList(0, size - 1));
 
-        given(subredditRepository.findAll(any(Pageable.class))).willReturn(subredditsPage);
+        given(groupRepository.findAll(any(Pageable.class))).willReturn(subredditsPage);
 
         // when
         Page<GroupDto> actuals = groupService.getAll(pageable);

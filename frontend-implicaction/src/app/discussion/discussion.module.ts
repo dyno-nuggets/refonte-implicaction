@@ -21,6 +21,7 @@ import {EditorModule} from 'primeng/editor';
 import {CommentTileComponent} from './components/comment-tile/comment-tile.component';
 import {CommentSkeletonComponent} from './components/comment-skeleton/comment-skeleton.component';
 import {CreatePostFormComponent} from './components/create-post-form/create-post-form.component';
+import {IconsModule} from '../icons/icons.module';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import {CreatePostFormComponent} from './components/create-post-form/create-post
     AvatarModule,
     SkeletonModule,
     ReactiveFormsModule,
-    EditorModule
+    EditorModule,
+    IconsModule
   ]
 })
 export class DiscussionModule {

@@ -1,11 +1,13 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
+import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import com.dynonuggets.refonteimplicaction.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends ControllerIntegrationTestBase {
 
     List<UserDto> userDtos;
+    List<GroupDto> groupDtos;
     ArrayList<String> roles = new ArrayList<>();
 
     @MockBean
@@ -50,6 +53,9 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
     @MockBean
     AuthService authService;
+
+    @MockBean
+    GroupService groupService;
 
     @MockBean
     RelationRepository relationRepository;
@@ -614,5 +620,35 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         resultActions.andExpect(status().isForbidden());
 
         verify(userService, never()).updateImageProfile(any());
+    }
+
+    @Test
+    @WithMockUser
+    void getAllGroupsByUser() throws Exception {
+        UserDto user = UserDto.builder().id(1L).build();
+        ArrayList<UserDto> userList = new ArrayList<>();
+        userList.add(user);
+
+        GroupDto group = GroupDto.builder().id(1L).name("ile-de-france").description("communauté ile de france").numberOfPosts(0).imageUrl("").users(userList).build();
+
+        ArrayList<GroupDto> groupList = new ArrayList<>();
+        groupList.add(group);
+        given(userService.getUserGroups(anyLong())).willReturn(groupList);
+
+        final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_USER_GROUPS_URI, user.getId()).contentType(APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        for (int i = 0; i < groupList.size(); i++) {
+            final String contentPath = String.format("$[%d]", i);
+
+            resultActions
+                    .andExpect(jsonPath(contentPath + ".id", is(groupList.get(i).getId().intValue())))
+                    .andExpect(jsonPath(contentPath + ".description", is(groupList.get(i).getDescription())))
+                    .andExpect(jsonPath(contentPath + ".numberOfPosts", is(groupList.get(i).getNumberOfPosts())))
+                    .andExpect(jsonPath(contentPath + ".imageUrl", is(groupList.get(i).getImageUrl())))
+                    .andExpect(jsonPath(contentPath + ".name", is(groupList.get(i).getName())));
+        }
+        verify(userService, times(1)).getUserGroups(anyLong());
     }
 }

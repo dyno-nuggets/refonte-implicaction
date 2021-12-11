@@ -1,7 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
+import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import com.dynonuggets.refonteimplicaction.service.UserService;
 import lombok.AllArgsConstructor;
@@ -11,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 
@@ -22,6 +26,7 @@ public class UserController {
     private final UserService userService;
     private final RelationService relationService;
     private final AuthService authService;
+    private final GroupService groupService;
 
     @GetMapping
     public ResponseEntity<Page<UserDto>> getAll(
@@ -103,4 +108,11 @@ public class UserController {
         final UserDto userDto = userService.updateImageProfile(file);
         return ResponseEntity.ok(userDto);
     }
+
+    @GetMapping(GET_USER_GROUPS_URI)
+    public ResponseEntity<List<GroupDto>> getUserGroups(@PathVariable("userId") Long userId) {
+        final List<GroupDto> groupsDto = userService.getUserGroups(userId);
+        return ResponseEntity.ok(groupsDto);
+    }
+
 }

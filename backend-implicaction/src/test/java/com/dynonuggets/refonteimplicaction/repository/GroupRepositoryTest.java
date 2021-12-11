@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GroupRepositoryTest extends AbstractContainerBaseTest {
 
     @Autowired
-    SubredditRepository subredditRepository;
+    GroupRepository groupRepository;
 
     @Autowired
     PostRepository postRepository;
@@ -45,7 +45,7 @@ class GroupRepositoryTest extends AbstractContainerBaseTest {
         final Group s9 = Group.builder().id(9L).name("sub9").description("sub9").createdAt(Instant.now()).build();
         List<Group> groups = asList(s1, s2, s3, s4, s5, s6, s7, s8, s9);
 
-        subredditRepository.saveAll(groups);
+        groupRepository.saveAll(groups);
 
         List<Post> s1Posts = Stream.of(1, 2, 3, 4, 5)
                 .map(id -> Post.builder().name("bla").group(s1).build())
@@ -88,7 +88,7 @@ class GroupRepositoryTest extends AbstractContainerBaseTest {
                 .collect(toList());
 
         // when
-        final List<Group> actual = subredditRepository.findAllByTopPosting(Pageable.ofSize(limit));
+        final List<Group> actual = groupRepository.findAllByTopPosting(Pageable.ofSize(limit));
 
         // then
         assertThat(actual.size()).isEqualTo(limit);

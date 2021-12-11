@@ -57,4 +57,10 @@ public class GroupController {
         List<GroupDto> groupDtos = groupService.getAllByTopPosting(limit);
         return ResponseEntity.ok(groupDtos);
     }
+
+    @PostMapping(SUBSCRIBE_GROUP)
+    public ResponseEntity<List<GroupDto>> subscribeGroup(@PathVariable final String groupName) {
+        final List<GroupDto> groupDtos = groupService.addGroup(groupName);
+        return ResponseEntity.ok(groupDtos);
+    }
 }
