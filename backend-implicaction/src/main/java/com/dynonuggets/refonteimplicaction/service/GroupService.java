@@ -10,8 +10,6 @@ import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -92,13 +90,13 @@ public class GroupService {
 
     @Transactional
     public Page<GroupDto> getAllPendingGroups(Pageable pageable) {
-        return subredditRepository.findAllByValidIsFalse(pageable)
-                .map(subredditAdapter::toDto);
+        return groupRepository.findAllByValidIsFalse(pageable)
+                .map(groupAdapter::toDto);
     }
 
     @Transactional
     public void validateGroup(Group group) {
         group.setValid(true);
-        subredditRepository.save(group);
+        groupRepository.save(group);
     }
 }
