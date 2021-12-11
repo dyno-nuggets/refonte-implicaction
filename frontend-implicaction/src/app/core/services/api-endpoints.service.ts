@@ -239,7 +239,7 @@ export class ApiEndpointsService {
       archive: archive !== null ? `${archive}` : null
     };
     return ApiEndpointsService.createUrlWithQueryParameters(
-      Uris.JOBS.ACTIVE_JOBS,
+      Uris.JOBS.VALIDATED_JOBS,
       (qs: QueryStringParameters) => {
         this.buildQueryStringFromFilters(objectParam, qs);
       });
@@ -364,7 +364,7 @@ export class ApiEndpointsService {
   }
 
   findAllActiveGroupsEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.ACTIVE_GROUPS, pageable);
+    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.VALIDATED_GROUPS, pageable);
   }
 
   getValidateGroupEndpoint(): string {

@@ -85,6 +85,8 @@ class GroupAdapterTest {
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
         assertThat(actualDto.getImageUrl()).isEqualTo(GroupAdapter.DEFAULT_GROUP_IMAGE_URI);
+        assertThat(actualDto.getUsername()).isEqualTo(expectedModel.getUser().getUsername());
+        assertThat(actualDto.getUserId()).isEqualTo(expectedModel.getUser().getId());
     }
 
     @Test
@@ -118,5 +120,7 @@ class GroupAdapterTest {
 
         assertThat(actualDto.getNumberOfPosts()).isZero();
         assertThat(actualDto.getImageUrl()).contains(expectedUrl);
+        assertThat(actualDto.getUsername()).isEqualTo(expectedModel.getUser().getUsername());
+        assertThat(actualDto.getUserId()).isEqualTo(expectedModel.getUser().getId());
     }
 }

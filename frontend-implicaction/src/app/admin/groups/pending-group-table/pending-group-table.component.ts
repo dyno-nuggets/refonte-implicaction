@@ -17,7 +17,6 @@ export class PendingGroupTableComponent extends BaseWithPaginationComponent<Grou
 
   isLoading = true;
   selectedOrderCode: string;
-  sortDirection = SortDirectionEnum;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(

@@ -1,8 +1,6 @@
 import {Component} from '@angular/core';
 import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {JobPosting} from '../../../../shared/models/job-posting';
-import {JobSortEnum} from '../../../../job/enums/job-sort.enum';
-import {SortDirectionEnum} from '../../../../shared/enums/sort-direction.enum';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {JobService} from '../../../../job/services/job.service';
 import {ActivatedRoute} from '@angular/router';
@@ -18,9 +16,6 @@ export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPos
 
   isLoading = true;
   // Pagination et filtres
-  orderByEnums = JobSortEnum.all();
-  selectedOrderCode: string;
-  sortDirection = SortDirectionEnum;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(
@@ -35,9 +30,7 @@ export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPos
     this.jobsService
       .validateJob(job)
       .subscribe(
-        () => {
-          this.paginate({first: this.pageable.first, rows: this.pageable.rows});
-        },
+        () => this.paginate({first: this.pageable.first, rows: this.pageable.rows}),
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'offre.`),
         () => this.toastService.success('Succès', `L'offre  ${job.title} est désormais validée.`),
       );

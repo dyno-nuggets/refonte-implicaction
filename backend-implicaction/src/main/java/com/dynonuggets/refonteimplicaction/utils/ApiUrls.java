@@ -21,7 +21,7 @@ public class ApiUrls {
     public static final String ARCHIVE_JOBS_URI = "/archive";
     public static final String GET_PENDING_JOB_URI = "/pending";
     public static final String VALIDATE_JOB_URI = "/validate";
-    public static final String ACTIVE_JOBS = "/active";
+    public static final String VALIDATED_JOBS = "/validated";
 
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";
@@ -34,7 +34,7 @@ public class ApiUrls {
     public static final String CREATE_NO_IMAGE = "/no-image";
     public static final String GET_PENDING_GROUP_URI = "/pending";
     public static final String VALIDATE_GROUP_URI = "/validate";
-    public static final String ACTIVE_GROUPS = "/active";
+    public static final String VALIDATED_GROUPS_URI = "/validated";
     public static final String SUBSCRIBE_GROUP = "/{groupName}/subscribe";
 
     // COMMENTS

@@ -12,7 +12,6 @@ import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.repository.SubredditRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.Message.GROUP_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.USER_NOT_FOUND_MESSAGE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -42,7 +42,7 @@ public class GroupService {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
         User user = userRepository.findById(groupDto.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(String.format(Message.USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
         Group group = groupAdapter.toModel(groupDto, user);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
@@ -56,7 +56,7 @@ public class GroupService {
     @Transactional
     public GroupDto save(GroupDto groupDto) {
         User user = userRepository.findById(groupDto.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(String.format(Message.USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
         Group group = groupAdapter.toModel(groupDto, user);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());

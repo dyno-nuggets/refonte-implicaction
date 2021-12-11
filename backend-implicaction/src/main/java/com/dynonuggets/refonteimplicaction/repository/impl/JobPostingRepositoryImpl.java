@@ -24,7 +24,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
     private final EntityManager entityManager;
 
     @Override
-    public Page<JobPosting> findAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, Boolean active) {
+    public Page<JobPosting> findAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, Boolean valid) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<JobPosting> query = criteriaBuilder.createQuery(JobPosting.class);
         Root<JobPosting> queryRoot = query.from(JobPosting.class);
@@ -53,8 +53,8 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
             predicates.add(criteriaBuilder.equal(queryRoot.get("archive"), archive));
         }
 
-        if (active != null) {
-            predicates.add(criteriaBuilder.equal(queryRoot.get("active"), active));
+        if (valid != null) {
+            predicates.add(criteriaBuilder.equal(queryRoot.get("valid"), valid));
         }
         
         // combinaison des différents prédicats

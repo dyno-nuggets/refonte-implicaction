@@ -48,7 +48,7 @@ public class JobPostingController {
         return ResponseEntity.ok(jobPostingDtos);
     }
 
-    @GetMapping(ACTIVE_JOBS)
+    @GetMapping(VALIDATED_JOBS)
     public ResponseEntity<Page<JobPostingDto>> getAllActiveByCriteria(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows,

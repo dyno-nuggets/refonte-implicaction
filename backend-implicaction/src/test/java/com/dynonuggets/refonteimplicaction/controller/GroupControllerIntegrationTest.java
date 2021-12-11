@@ -87,7 +87,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         // when
-        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + ACTIVE_GROUPS).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + VALIDATED_GROUPS_URI).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print())

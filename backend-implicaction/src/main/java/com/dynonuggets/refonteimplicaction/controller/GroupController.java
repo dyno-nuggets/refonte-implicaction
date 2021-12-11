@@ -41,8 +41,8 @@ public class GroupController {
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
-    @GetMapping(ACTIVE_GROUPS)
-    public ResponseEntity<Page<GroupDto>> getAllActiveGroups(
+    @GetMapping(VALIDATED_GROUPS_URI)
+    public ResponseEntity<Page<GroupDto>> getAllValidGroups(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,

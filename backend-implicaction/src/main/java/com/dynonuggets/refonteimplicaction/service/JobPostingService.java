@@ -49,9 +49,9 @@ public class JobPostingService {
         return jobDto;
     }
 
-    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, boolean applyCheck, Boolean active) {
+    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, boolean applyCheck, Boolean valid) {
         // récupération des jobs
-        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, archive, active);
+        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, archive, valid);
         if (applyCheck) {
             final List<Long> jobIds = jobs.stream().map(JobPosting::getId).collect(toList());
             final List<Long> jobAppliesIds = getAllAppliesWithJobIdsIn(jobIds, authService.getCurrentUser().getId());
