@@ -44,7 +44,6 @@
       Vous devez fournir une localisation pour cette offre.
     </div>
   </div>
-
   <div class="row">
     <div class="form-floating mb-4 col-6">
       <input
@@ -69,7 +68,6 @@
         Vous devez fournir le salaire de cette offre
       </div>
     </div>
-
     <div class="form-floating col-6">
       <div class="row">
         <div class="col-12">
@@ -93,6 +91,30 @@
       >
         Vous devez fournir un type de contrat pour cette offre
       </div>
+    </div>
+  </div>
+  <div class="form-floating col-12 mb-4">
+    <div class="row">
+      <div class="col-12">
+        <p-dropdown
+          [options]="businessSectors"
+          emptyMessage="Aucun secteur d'activité"
+          formControlName="businessSector"
+          optionLabel="label"
+          optionValue="code"
+          placeholder="Sélectionnez le secteur d'activité"
+          required="true"
+          styleClass="w-100 custom-select form-select-lg"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+
+    <div
+      *ngIf="(isSubmitted || formJob.controls['businessSector'].touched) && formJob.controls['businessSector'].errors"
+      class="text-danger"
+    >
+      Vous devez fournir un secteur d'activités pour cette offre
     </div>
   </div>
   <div class="form-floating">

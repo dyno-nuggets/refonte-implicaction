@@ -11,6 +11,7 @@ import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
 import {ContractEnum} from '../../../../shared/enums/contract.enum';
+import {BusinessSectorEnum} from '../../../../shared/enums/sector.enum';
 
 @Component({
   selector: 'app-job-posting-form',
@@ -27,6 +28,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   isUpdate: boolean;
   isSubmitted = false;
   contracts = ContractEnum.all();
+  businessSectors = BusinessSectorEnum.all();
   companies: Company[] = [];
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
 
@@ -94,6 +96,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
         shortDescription: [jobPosting?.shortDescription ?? '', Validators.required],
         description: [jobPosting?.description ?? '', Validators.required],
         contractType: [jobPosting?.contractType ?? ''],
+        businessSector: [jobPosting?.businessSector ?? ''],
         company: [jobPosting?.company ?? '']
       });
 
@@ -101,6 +104,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
   private updateFields(jobUpdate: JobPosting): void {
     this.sidebarInput.job.contractType = jobUpdate.contractType;
+    this.sidebarInput.job.businessSector = jobUpdate.businessSector;
     this.sidebarInput.job.company = jobUpdate.company;
     this.sidebarInput.job.description = jobUpdate.description;
     this.sidebarInput.job.shortDescription = jobUpdate.shortDescription;
