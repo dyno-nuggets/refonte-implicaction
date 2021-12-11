@@ -12,7 +12,7 @@ export interface JobPosting {
   description?: string;
   createdAt?: Date;
   contractType?: ContractEnumCode;
-  sector?: SectorEnumCode;
+  businessSector?: SectorEnumCode;
   company?: Company;
   apply?: boolean;
   archive?: boolean;

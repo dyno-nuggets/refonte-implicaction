@@ -24,7 +24,7 @@ public class JobPostingDto {
     private String salary;
     private String keywords;
     private ContractTypeEnum contractType;
-    private ActivitySectorEnum sector;
+    private ActivitySectorEnum businessSector;
     private Instant createdAt;
     private boolean archive;
     private boolean apply;

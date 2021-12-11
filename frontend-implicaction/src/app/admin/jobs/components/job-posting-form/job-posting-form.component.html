@@ -97,9 +97,9 @@
     <div class="row">
       <div class="col-12">
         <p-dropdown
-          [options]="sectors"
+          [options]="businessSectors"
           emptyMessage="Aucun secteur d'activité"
-          formControlName="sector"
+          formControlName="businessSector"
           optionLabel="label"
           optionValue="code"
           placeholder="Sélectionnez le secteur d'activité"
@@ -111,7 +111,7 @@
     </div>
 
     <div
-      *ngIf="(isSubmitted || formJob.controls['sector'].touched) && formJob.controls['sector'].errors"
+      *ngIf="(isSubmitted || formJob.controls['businessSector'].touched) && formJob.controls['businessSector'].errors"
       class="text-danger"
     >
       Vous devez fournir un secteur d'activités pour cette offre

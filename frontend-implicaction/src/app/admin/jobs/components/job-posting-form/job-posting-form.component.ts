@@ -28,7 +28,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   isUpdate: boolean;
   isSubmitted = false;
   contracts = ContractEnum.all();
-  sectors = SectorEnum.all();
+  businessSectors = SectorEnum.all();
   companies: Company[] = [];
   pageable: Pageable = Constants.PAGEABLE_DEFAULT;
 
@@ -96,7 +96,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
         shortDescription: [jobPosting?.shortDescription ?? '', Validators.required],
         description: [jobPosting?.description ?? '', Validators.required],
         contractType: [jobPosting?.contractType ?? ''],
-        sector: [jobPosting?.sector ?? ''],
+        businessSector: [jobPosting?.sector ?? ''],
         company: [jobPosting?.company ?? '']
       });
 
