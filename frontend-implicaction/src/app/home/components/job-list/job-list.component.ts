@@ -11,6 +11,7 @@ import {JobPosting} from '../../../shared/models/job-posting';
 export class JobListComponent implements OnInit {
 
   lastJobs: JobPosting[];
+  lastJobsCount = 3;
 
   constructor(
     private jobService: JobService,
@@ -20,7 +21,7 @@ export class JobListComponent implements OnInit {
 
   ngOnInit(): void {
     this.jobService
-      .getLastJobs(3)
+      .getLastJobs(this.lastJobsCount)
       .subscribe(
         jobs => this.lastJobs = jobs,
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),

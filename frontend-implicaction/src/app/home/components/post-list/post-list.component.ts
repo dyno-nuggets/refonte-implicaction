@@ -11,6 +11,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 export class PostListComponent implements OnInit {
 
   lastPosts: Post[];
+  lastPostCount = 3;
 
   constructor(
     private postService: PostService,
@@ -20,7 +21,7 @@ export class PostListComponent implements OnInit {
 
   ngOnInit(): void {
     this.postService
-      .getLastPosts(5)
+      .getLastPosts(this.lastPostCount)
       .subscribe(
         posts => this.lastPosts = posts,
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
