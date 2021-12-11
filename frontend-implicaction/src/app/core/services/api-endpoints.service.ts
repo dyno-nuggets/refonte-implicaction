@@ -228,7 +228,7 @@ export class ApiEndpointsService {
       });
   }
 
-  getAllActiveJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: any) {
+  getAllValidatedJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: any): string {
     // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
@@ -239,7 +239,7 @@ export class ApiEndpointsService {
       archive: archive !== null ? `${archive}` : null
     };
     return ApiEndpointsService.createUrlWithQueryParameters(
-      Uris.JOBS.VALIDATED_JOBS,
+      Uris.JOBS.GET_VALIDATED_JOBS,
       (qs: QueryStringParameters) => {
         this.buildQueryStringFromFilters(objectParam, qs);
       });
