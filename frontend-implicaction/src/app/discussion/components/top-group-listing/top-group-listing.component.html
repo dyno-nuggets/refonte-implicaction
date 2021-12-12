@@ -30,11 +30,16 @@
         </div>
 
         <div class="d-grid gap-2 mt-2">
-          <button class="btn btn-primary">Voir tout</button>
+          <a
+            class="btn btn-primary"
+            routerLink="/{{univers.DISCUSSIONS.url}}/groups"
+          >
+            Voir tout
+          </a>
         </div>
       </ng-container>
       <ng-template #noGroup>
-        <p *ngIf="!isLoading">
+        <p *ngIf=" !isLoading">
           Aucun groupe n'a encore été créé. <a (click)="openSidebarCreationGroup()" class="btn-link cursor-pointer">Créer
           un groupe ?</a>
         </p>

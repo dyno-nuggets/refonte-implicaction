@@ -42,6 +42,7 @@ public class GroupAdapter {
                 .valid(model.isValid())
                 .username(username)
                 .userId(userId)
+                .numberOfUsers(isNotEmpty(model.getUsers()) ? model.getUsers().size() : 0)
                 .build();
     }
 }

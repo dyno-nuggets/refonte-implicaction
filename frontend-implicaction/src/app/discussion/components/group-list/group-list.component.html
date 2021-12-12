@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col-12 col-lg-3 p-0">
+  </div>
+  <div class="col-12 col-lg-9 p-0 row">
+    <ng-container *ngIf="!isLoading; else loadingTemplate">
+      <div class="card p-0 bg-white mb-4">
+        <div class="bg-white">
+          <p class="grey title mt-5 ms-4">
+            Tous les groupes
+          </p>
+        </div>
+        <div class="card-body p-4">
+          <p
+            *ngIf="!pageable.content?.length"
+            class="fst-italic mt-3"
+          >
+            Il n'y a aucun groupe pour le moment
+          </p>
+          <div *ngFor="let group of pageable.content; last as isLast;" [ngClass]="{'last-element': isLast}">
+            <app-group-card [group]="group"></app-group-card>
+          </div>
+        </div>
+        <p-paginator
+          (onPageChange)="paginate($event)"
+          *ngIf="pageable.totalPages > 0"
+          [alwaysShow]="true"
+          [first]="pageable.first"
+          [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
+          [rows]="pageable.rows"
+          [totalRecords]="pageable.totalElements"
+        >
+        </p-paginator>
+      </div>
+    </ng-container>
+    <ng-template #loadingTemplate>
+      <div class="d-flex justify-content-center spinner">
+        <div class="align-self-center">
+          <app-loading></app-loading>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

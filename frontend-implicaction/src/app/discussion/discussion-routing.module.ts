@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {DiscussionComponent} from './discussion.component';
 import {PostListComponent} from './components/post-list/post-list.component';
 import {PostDetailComponent} from './components/post-detail/post-detail.component';
+import {GroupListComponent} from './components/group-list/group-list.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,17 @@ const routes: Routes = [
       {
         path: '',
         component: PostListComponent,
+        outlet: 'discussion-content'
+      }
+    ]
+  },
+  {
+    path: 'groups',
+    component: DiscussionComponent,
+    children: [
+      {
+        path: '',
+        component: GroupListComponent,
         outlet: 'discussion-content'
       }
     ]

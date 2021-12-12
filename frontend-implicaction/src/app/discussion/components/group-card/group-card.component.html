@@ -1,0 +1,34 @@
+<div class="border-bottom p-2">
+
+  <div class="group-body row col justify-content-between mt-3">
+    <div class="group-info d-flex flex-row align-items-center col-12 col-lg-7 col-xl-8">
+      <img
+        [src]="group?.imageUrl || 'assets/img/job-posting-img.png'"
+        alt="group-logo"
+        class="d-none d-sm-inline-block me-1 logo"
+      >
+      <h3 class="text-wrap text-dark fw-bold me-2">{{group.name}}</h3>
+      <span class="mx-2">
+        <i class="fas fa-users group-details"></i>
+        {{group.numberOfUsers}}
+      </span>
+      <span class="mx-2">
+        <i class="fas fa-comments group-details"></i>
+        {{group.numberOfPosts}}
+      </span>
+    </div>
+
+    <div class="group-options mb-4 col-12 col-lg-4 col-xl-3 col-xxl-auto">
+      <button
+        *ngIf="userGroupNames?.length && !userGroupNames.includes(group.name)"
+        (click)="joinGroup(group.name)"
+        class="cursor-pointer btn btn-primary fw-bold  w-100 px-xxl-3"
+        data-placement="bottom"
+        data-toggle="tooltip"
+        title="Rejoindre le groupe"
+      >
+        Rejoindre
+      </button>
+    </div>
+  </div>
+</div>

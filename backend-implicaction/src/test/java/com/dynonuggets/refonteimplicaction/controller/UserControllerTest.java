@@ -629,7 +629,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         ArrayList<UserDto> userList = new ArrayList<>();
         userList.add(user);
 
-        GroupDto group = GroupDto.builder().id(1L).name("ile-de-france").description("communauté ile de france").numberOfPosts(0).imageUrl("").users(userList).build();
+        GroupDto group = GroupDto.builder().id(1L).name("ile-de-france").description("communauté ile de france").numberOfPosts(0).imageUrl("").numberOfUsers(userList.size()).build();
 
         ArrayList<GroupDto> groupList = new ArrayList<>();
         groupList.add(group);
@@ -647,7 +647,8 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".description", is(groupList.get(i).getDescription())))
                     .andExpect(jsonPath(contentPath + ".numberOfPosts", is(groupList.get(i).getNumberOfPosts())))
                     .andExpect(jsonPath(contentPath + ".imageUrl", is(groupList.get(i).getImageUrl())))
-                    .andExpect(jsonPath(contentPath + ".name", is(groupList.get(i).getName())));
+                    .andExpect(jsonPath(contentPath + ".name", is(groupList.get(i).getName())))
+                    .andExpect(jsonPath(contentPath + ".numberOfUsers", is(groupList.get(i).getNumberOfUsers())));
         }
         verify(userService, times(1)).getUserGroups(anyLong());
     }
