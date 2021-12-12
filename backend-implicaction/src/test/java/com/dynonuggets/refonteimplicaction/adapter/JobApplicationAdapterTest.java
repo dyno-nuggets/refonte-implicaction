@@ -21,9 +21,9 @@ class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
     @Test
     void given_company_should_return_dto() {
         // given
-        Company company = new Company(1234L, "World Company", "http://logo.com", "La World Company est une multinationale imaginaire basée aux États-Unis", "http://word-company.com");
-        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, Instant.now(), false);
         User user = User.builder().id(87L).build();
+        Company company = new Company(1234L, "World Company", "http://logo.com", "La World Company est une multinationale imaginaire basée aux États-Unis", "http://word-company.com");
+        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, Instant.now(), false, user);
         JobApplication model = new JobApplication(123L, job, user, PENDING, Instant.now(), false);
 
         // when
@@ -43,8 +43,8 @@ class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
     void given_no_company_should_return_dto() {
         // given
         Company company = null;
-        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, Instant.now(), false);
         User user = User.builder().id(87L).build();
+        JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, Instant.now(), false, user);
         JobApplication model = new JobApplication(123L, job, user, PENDING, Instant.now(), false);
 
         // when

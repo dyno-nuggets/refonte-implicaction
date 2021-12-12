@@ -61,8 +61,8 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
     void should_create_apply() {
         // given
         JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
-        JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         final User currentUser = User.builder().id(45L).build();
+        JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false, currentUser);
         JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
         JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), "Paris (75)", CDI, false);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
@@ -106,8 +106,8 @@ class JobApplicationServiceTest extends ControllerIntegrationTestBase {
         JobApplicationRequest request = new JobApplicationRequest(jobId, PENDING, null);
         IllegalArgumentException expectedException = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, jobId));
         final JobApplication apply = JobApplication.builder().id(123L).build();
-        JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false);
         User currentUser = User.builder().id(123L).build();
+        JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, Instant.now(), false, currentUser);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.of(apply));
