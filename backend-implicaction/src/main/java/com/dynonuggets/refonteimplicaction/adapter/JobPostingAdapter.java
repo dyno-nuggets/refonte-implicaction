@@ -34,8 +34,8 @@ public class JobPostingAdapter {
                 .archive(model.isArchive())
                 .businessSector(model.getBusinessSector())
                 .valid(model.isValid())
-                .posterName(model.getPoster().getUsername())
-                .posterId(model.getPoster().getId())
+                .posterName(username)
+                .posterId(userId)
                 .build();
     }
 
