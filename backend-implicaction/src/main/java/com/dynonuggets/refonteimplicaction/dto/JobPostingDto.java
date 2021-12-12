@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.dto;
 
+import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

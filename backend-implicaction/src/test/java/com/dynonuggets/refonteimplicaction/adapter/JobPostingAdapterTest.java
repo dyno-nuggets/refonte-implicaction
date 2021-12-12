@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.Company;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +61,11 @@ class JobPostingAdapterTest {
     void toModelTest() {
         final JobPostingDto dto = jobPostingAdapter.toDto(jobPosting);
 
-        final JobPosting expectedJobPosting = jobPostingAdapter.toModel(dto);
+        User user = User.builder()
+                .id(1L)
+                .username("User")
+                .build();
+        final JobPosting expectedJobPosting = jobPostingAdapter.toModel(dto, user);
 
         assertThat(jobPosting).usingRecursiveComparison()
                 .isEqualTo(expectedJobPosting);
