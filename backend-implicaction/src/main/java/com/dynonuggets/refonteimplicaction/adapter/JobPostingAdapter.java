@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.Company;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,8 @@ public class JobPostingAdapter {
 
     public JobPostingDto toDto(JobPosting model) {
 
+        final String username = model.getPoster() != null ? model.getPoster().getUsername() : "";
+        final Long userId = model.getPoster() != null ? model.getPoster().getId() : null;
         CompanyDto companyDto = companyAdapter.toDto(model.getCompany());
 
         return JobPostingDto.builder()
@@ -31,10 +34,12 @@ public class JobPostingAdapter {
                 .archive(model.isArchive())
                 .businessSector(model.getBusinessSector())
                 .valid(model.isValid())
+                .posterName(username)
+                .posterId(userId)
                 .build();
     }
 
-    public JobPosting toModel(JobPostingDto dto) {
+    public JobPosting toModel(JobPostingDto dto, User user) {
 
         Company company = companyAdapter.toModel(dto.getCompany());
 
@@ -52,6 +57,7 @@ public class JobPostingAdapter {
                 .createdAt(dto.getCreatedAt())
                 .archive(dto.isArchive())
                 .valid(dto.isValid())
+                .poster(user)
                 .build();
     }
 }

@@ -31,7 +31,7 @@ public class JobPostingService {
 
     public JobPostingDto createJob(JobPostingDto jobPostingDto) {
 
-        JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto);
+        JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
         jobPosting.setCreatedAt(Instant.now());
         JobPosting jobSaved = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(jobSaved);
@@ -73,7 +73,7 @@ public class JobPostingService {
 
     @Transactional
     public JobPostingDto saveOrUpdateJobPosting(final JobPostingDto jobPostingDto) {
-        JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto);
+        JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
         final JobPosting save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
     }

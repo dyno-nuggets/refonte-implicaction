@@ -59,7 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.router
           .navigateByUrl('/')
           .then(() => {
-            this.toaster.success('Félicitations', 'Vous êtes deconnecté!');
+            this.toaster.success('Success', 'You are now logged out!');
           });
       });
   }

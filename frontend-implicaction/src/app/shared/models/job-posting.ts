@@ -17,4 +17,6 @@ export interface JobPosting {
   apply?: boolean;
   archive?: boolean;
   active?: boolean;
+  posterId?: string;
+  posterName?: string;
 }

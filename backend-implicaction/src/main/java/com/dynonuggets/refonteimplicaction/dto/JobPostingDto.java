@@ -29,5 +29,6 @@ public class JobPostingDto {
     private boolean archive;
     private boolean apply;
     private boolean valid;
-
+    private Long posterId;
+    private String posterName;
 }
