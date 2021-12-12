@@ -24,8 +24,7 @@ export class JobListComponent implements OnInit {
       .getLatestJobs(Constants.LATEST_JOBS_COUNT)
       .subscribe(
         jobs => this.latestJobs = jobs,
-        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
-        () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données')
       );
   }
 
