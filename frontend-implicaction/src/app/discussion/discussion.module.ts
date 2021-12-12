@@ -22,6 +22,9 @@ import {CommentTileComponent} from './components/comment-tile/comment-tile.compo
 import {CommentSkeletonComponent} from './components/comment-skeleton/comment-skeleton.component';
 import {CreatePostFormComponent} from './components/create-post-form/create-post-form.component';
 import {IconsModule} from '../icons/icons.module';
+import {GroupListComponent} from './components/group-list/group-list.component';
+import {TableModule} from 'primeng/table';
+import { GroupCardComponent } from './components/group-card/group-card.component';
 
 
 @NgModule({
@@ -40,6 +43,8 @@ import {IconsModule} from '../icons/icons.module';
     CommentListComponent,
     CommentTileComponent,
     CommentSkeletonComponent,
+    GroupListComponent,
+    GroupCardComponent,
   ],
   imports: [
     CommonModule,
@@ -50,7 +55,8 @@ import {IconsModule} from '../icons/icons.module';
     SkeletonModule,
     ReactiveFormsModule,
     EditorModule,
-    IconsModule
+    IconsModule,
+    TableModule
   ]
 })
 export class DiscussionModule {

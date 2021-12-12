@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.dto;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.List;
 
 @Data
 @Builder
@@ -19,7 +18,7 @@ public class GroupDto {
     private String imageUrl;
     private Instant createdAt;
     private boolean valid;
-    private List<UserDto> users;
+    private Integer numberOfUsers;
     private String username;
     private Long userId;
 }

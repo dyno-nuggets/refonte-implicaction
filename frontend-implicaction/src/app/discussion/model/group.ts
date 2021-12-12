@@ -3,6 +3,7 @@ export interface Group {
   name: string;
   description?: string;
   numberOfPosts?: number;
+  numberOfUsers?: number;
   imageUrl?: string;
   createdAt?: Date;
   active?: boolean;

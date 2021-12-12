@@ -80,7 +80,7 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId", "numberOfUsers")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
@@ -115,7 +115,7 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId", "numberOfUsers")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isZero();

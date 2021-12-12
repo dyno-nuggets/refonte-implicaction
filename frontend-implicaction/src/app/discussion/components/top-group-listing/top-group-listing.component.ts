@@ -9,6 +9,7 @@ import {Constants} from '../../../config/constants';
 import {AuthService} from '../../../shared/services/auth.service';
 import {UserService} from '../../../user/services/user.service';
 import {User} from '../../../shared/models/user';
+import {Univers} from '../../../shared/enums/univers';
 
 @Component({
   selector: 'app-top-group-listing',
@@ -22,6 +23,7 @@ export class TopGroupListingComponent implements OnInit {
   @Input()
   limit = 5;
 
+  univers = Univers;
   groups: Group[] = [];
   isLoading = true;
   userGroupNames: string[] = [];
