@@ -4,17 +4,22 @@ import {AdminJobsComponent} from './admin-jobs.component';
 import {AdminJobsRoutingModule} from './admin-jobs-routing.module';
 import {TableModule} from 'primeng/table';
 import {EditorModule} from 'primeng/editor';
-import {JobPostingFormComponent} from './components/job-posting-form/job-posting-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FeatherModule} from 'angular-feather';
 import {DropdownModule} from 'primeng/dropdown';
 import {CheckboxModule} from 'primeng/checkbox';
+import {PendingJobTableComponent} from './components/pending-job-table/pending-job-table.component';
+import {JobPostingFormComponent} from './components/job-posting-form/job-posting-form.component';
 
 
 @NgModule({
   declarations: [
     AdminJobsComponent,
-    JobPostingFormComponent
+    JobPostingFormComponent,
+    PendingJobTableComponent
+  ],
+  exports: [
+    PendingJobTableComponent
   ],
   imports: [
     CommonModule,

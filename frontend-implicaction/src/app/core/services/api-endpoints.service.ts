@@ -228,6 +228,23 @@ export class ApiEndpointsService {
       });
   }
 
+  getAllValidatedJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: any): string {
+    // on merge les filtres et les attributs de pagination
+    const objectParam = {
+      ...criteria,
+      rows: pageable.rows,
+      page: pageable.page,
+      sortBy: pageable.sortBy,
+      sortOrder: pageable.sortOrder,
+      archive: archive !== null ? `${archive}` : null
+    };
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.JOBS.GET_VALIDATED_JOBS,
+      (qs: QueryStringParameters) => {
+        this.buildQueryStringFromFilters(objectParam, qs);
+      });
+  }
+
   getJobByIdEndpoint(jobId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId]);
   }
@@ -250,6 +267,14 @@ export class ApiEndpointsService {
 
   archiveJobPostingEndpoint(JobId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId, 'archive']);
+  }
+
+  getAllPendingActivationJobsEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.GET_ALL_PENDING_JOBS, pageable);
+  }
+
+  getValidateJobEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOBS.VALIDATE_JOB);
   }
 
   /**
@@ -338,8 +363,16 @@ export class ApiEndpointsService {
     );
   }
 
-  findAllGroupsEndpoint(pageable: Pageable): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.BASE_URI, pageable);
+  findAllActiveGroupsEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.VALIDATED_GROUPS, pageable);
+  }
+
+  getValidateGroupEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.GROUP.VALIDATE_GROUP);
+  }
+
+  getAllPendingGroupEndpoint(pageable: Pageable): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.GET_ALL_PENDING_GROUPS, pageable);
   }
 
   createGroupSubscription(groupName: string): string {

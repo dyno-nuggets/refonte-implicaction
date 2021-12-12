@@ -49,9 +49,9 @@ public class JobPostingService {
         return jobDto;
     }
 
-    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, boolean applyCheck) {
+    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, boolean applyCheck, Boolean valid) {
         // récupération des jobs
-        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, archive);
+        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, archive, valid);
         if (applyCheck) {
             final List<Long> jobIds = jobs.stream().map(JobPosting::getId).collect(toList());
             final List<Long> jobAppliesIds = getAllAppliesWithJobIdsIn(jobIds, authService.getCurrentUser().getId());
@@ -102,5 +102,21 @@ public class JobPostingService {
                 .stream()
                 .map(jobPostingAdapter::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Page<JobPostingDto> getAllPendingJobs(Pageable pageable) {
+        return jobPostingRepository.findAllByValidIsFalse(pageable)
+                .map(jobPostingAdapter::toDto);
+    }
+
+    @Transactional
+    public void validateJob(JobPosting job) {
+        job.setValid(true);
+        jobPostingRepository.save(job);
+    }
+
+    public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, String contractType, Boolean isArchive) {
+        return this.getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
     }
 }

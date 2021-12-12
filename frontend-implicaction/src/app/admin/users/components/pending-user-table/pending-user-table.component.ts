@@ -1,36 +1,36 @@
 import {Component} from '@angular/core';
 import {UserService} from '../../../../user/services/user.service';
-import {Constants} from '../../../../config/constants';
 import {finalize, take} from 'rxjs/operators';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {RoleEnum, RoleEnumCode} from '../../../../shared/enums/role.enum';
 import {User} from '../../../../shared/models/user';
 import {AuthService} from '../../../../shared/services/auth.service';
+import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {ActivatedRoute} from '@angular/router';
+import {Criteria} from '../../../../shared/models/Criteria';
 
 @Component({
   selector: 'app-pending-user-table',
   templateUrl: './pending-user-table.component.html',
   styleUrls: ['./pending-user-table.component.scss']
 })
-export class PendingUserTableComponent {
+export class PendingUserTableComponent extends BaseWithPaginationComponent<User, Criteria> {
 
   loading = true;
-  pageable = Constants.PAGEABLE_DEFAULT;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(
     private userService: UserService,
     private toastService: ToasterService,
-    private authService: AuthService
+    private authService: AuthService,
+    protected route: ActivatedRoute
   ) {
+    super(route);
   }
 
-  loadUsers({first, rows}): void {
-    this.loading = true;
-    const page = first / rows;
-
+  protected innerPaginate(): void {
     this.userService
-      .getAllPendingActivationUsers({page, rows})
+      .getAllPendingActivationUsers(this.pageable)
       .pipe(
         take(1),
         finalize(() => this.loading = false)
@@ -55,7 +55,7 @@ export class PendingUserTableComponent {
       .activateUser(user.activationKey)
       .subscribe(
         () => {
-          this.loadUsers({first: this.pageable.first, rows: this.pageable.rows});
+          this.paginate({first: this.pageable.first, rows: this.pageable.rows});
         },
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'utilisateur.`),
         () => this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais actif.`),

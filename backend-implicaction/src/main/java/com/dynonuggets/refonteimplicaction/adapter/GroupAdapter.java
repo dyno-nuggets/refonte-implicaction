@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.Group;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,17 +17,21 @@ public class GroupAdapter {
 
     private FileService fileService;
 
-    public Group toModel(final GroupDto dto) {
+    public Group toModel(GroupDto dto, User user) {
         return Group.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .createdAt(dto.getCreatedAt())
+                .valid(dto.isValid())
+                .user(user)
                 .build();
     }
 
     public GroupDto toDto(Group model) {
         final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : DEFAULT_GROUP_IMAGE_URI;
+        final String username = model.getUser() != null ? model.getUser().getUsername() : "";
+        final Long userId = model.getUser() != null ? model.getUser().getId() : null;
         return GroupDto.builder()
                 .id(model.getId())
                 .name(model.getName())
@@ -34,6 +39,9 @@ public class GroupAdapter {
                 .description(model.getDescription())
                 .createdAt(model.getCreatedAt())
                 .imageUrl(imageUrl)
+                .valid(model.isValid())
+                .username(username)
+                .userId(userId)
                 .build();
     }
 }

@@ -10,8 +10,9 @@ public interface JobPostingRepositoryCustom {
      * @param pageable     l'objet de pagination
      * @param search       la chaîne de caratères à rechercher dans les champs title, description, keywords
      * @param contractType le type de contrat à rechercher (CDD, CDI)
+     * @param valid        la validation de l'offre par l'administrateur
      * @return la liste de résultats paginée des JobPostings correspondant aux critères
      */
-    Page<JobPosting> findAllWithCriteria(final Pageable pageable, final String search, final String contractType, final Boolean archive);
+    Page<JobPosting> findAllWithCriteria(final Pageable pageable, final String search, final String contractType, final Boolean archive, Boolean valid);
 
 }

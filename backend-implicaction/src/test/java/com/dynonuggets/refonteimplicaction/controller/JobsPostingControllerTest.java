@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
@@ -36,6 +37,9 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @MockBean
     JobPostingService jobPostingService;
 
+    @MockBean
+    JobPostingAdapter jobPostingAdapter;
+
     List<JobPostingDto> jobPostings;
 
     @BeforeEach
@@ -51,7 +55,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         // given
         Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
 
-        given(jobPostingService.getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean())).willReturn(jobPostingPageMockResponse);
+        given(jobPostingService.getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean(), any())).willReturn(jobPostingPageMockResponse);
 
         // when
         ResultActions resultActions = mvc.perform(
@@ -74,7 +78,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".salary", is(jobPostings.get(i).getSalary())));
         }
 
-        verify(jobPostingService, times(1)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean());
+        verify(jobPostingService, times(1)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean(), any());
     }
 
     @Test
@@ -82,7 +86,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         mvc.perform(get(JOBS_BASE_URI)).andDo(print())
                 .andExpect(status().isForbidden());
 
-        verify(jobPostingService, times(0)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean());
+        verify(jobPostingService, times(0)).getAllWithCriteria(any(), anyString(), anyString(), anyBoolean(), anyBoolean(), anyBoolean());
     }
 
     @Test
@@ -246,4 +250,46 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveAll(Collections.singletonList(anyLong()));
     }
+
+    @Test
+    @WithMockUser
+    void should_get_all_pending_jobs_when_authenticated() throws Exception {
+        //given
+        List<JobPostingDto> jobPostingDtos = Arrays.asList(
+                JobPostingDto.builder().id(1L).valid(false).build(),
+                JobPostingDto.builder().id(2L).valid(false).build(),
+                JobPostingDto.builder().id(3L).valid(false).build()
+        );
+        Page<JobPostingDto> jobPageMockResponse = new PageImpl<>(jobPostingDtos);
+        given(jobPostingService.getAllPendingJobs(any())).willReturn(jobPageMockResponse);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+
+        for (int i = 0; i < jobPostingDtos.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(jobPostingDtos.get(i).getId()))));
+            resultActions.andExpect(jsonPath(contentPath + ".valid", is(jobPostingDtos.get(i).isValid())));
+        }
+
+        verify(jobPostingService, times(1)).getAllPendingJobs(any());
+    }
+
+    @Test
+    void should_response_forbidden_when_pending_jobs_and_not_authenticated() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
+        verify(jobPostingService, never()).getAllPendingJobs(any());
+    }
+
 }

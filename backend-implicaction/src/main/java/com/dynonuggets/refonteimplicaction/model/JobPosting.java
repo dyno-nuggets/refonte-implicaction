@@ -54,4 +54,7 @@ public class JobPosting {
 
     @Column(columnDefinition = "boolean default false")
     private boolean archive;
+
+    @Column(name = "valid")
+    private boolean valid;
 }

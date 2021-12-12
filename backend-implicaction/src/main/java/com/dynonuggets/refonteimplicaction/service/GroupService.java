@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
@@ -20,6 +21,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.Message.GROUP_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.utils.Message.USER_NOT_FOUND_MESSAGE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -37,8 +39,9 @@ public class GroupService {
     public GroupDto save(MultipartFile image, GroupDto groupDto) {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
-
-        Group group = groupAdapter.toModel(groupDto);
+        User user = userRepository.findById(groupDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+        Group group = groupAdapter.toModel(groupDto, user);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
@@ -50,7 +53,9 @@ public class GroupService {
 
     @Transactional
     public GroupDto save(GroupDto groupDto) {
-        Group group = groupAdapter.toModel(groupDto);
+        User user = userRepository.findById(groupDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+        Group group = groupAdapter.toModel(groupDto, user);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
         final Group save = groupRepository.save(group);
@@ -58,8 +63,8 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
-    public Page<GroupDto> getAll(Pageable pageable) {
-        final Page<Group> subreddits = groupRepository.findAll(pageable);
+    public Page<GroupDto> getAllValidGroups(Pageable pageable) {
+        final Page<Group> subreddits = groupRepository.findAllByValidIsTrue(pageable);
         return subreddits.map(groupAdapter::toDto);
     }
 
@@ -81,5 +86,17 @@ public class GroupService {
         return user.getGroups().stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());
+    }
+
+    @Transactional
+    public Page<GroupDto> getAllPendingGroups(Pageable pageable) {
+        return groupRepository.findAllByValidIsFalse(pageable)
+                .map(groupAdapter::toDto);
+    }
+
+    @Transactional
+    public void validateGroup(Group group) {
+        group.setValid(true);
+        groupRepository.save(group);
     }
 }

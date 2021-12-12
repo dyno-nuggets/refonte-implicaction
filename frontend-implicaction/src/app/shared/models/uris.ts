@@ -53,6 +53,9 @@ export class Uris {
    */
   static readonly JOBS = class {
     static readonly BASE_URI = 'job-postings';
+    static readonly GET_ALL_PENDING_JOBS = 'job-postings/pending';
+    static readonly VALIDATE_JOB = 'job-postings/validate';
+    static readonly GET_VALIDATED_JOBS = 'job-postings/validated';
     static readonly TOGGLE_ARCHIVE = 'job-postings/archive';
   };
 
@@ -91,6 +94,9 @@ export class Uris {
     static readonly BASE_URI = 'groups';
     static readonly TOP_POSTING = 'groups/top-posting';
     static readonly CREATE_NO_IMAGE = 'groups/no-image';
+    static readonly VALIDATE_GROUP = 'groups/validate';
+    static readonly GET_ALL_PENDING_GROUPS = 'groups/pending';
+    static readonly VALIDATED_GROUPS = 'groups/validated';
   };
 
   /**

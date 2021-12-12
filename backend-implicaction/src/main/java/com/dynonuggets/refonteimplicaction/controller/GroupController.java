@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.service.GroupService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,15 +41,15 @@ public class GroupController {
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
-    @GetMapping
-    public ResponseEntity<Page<GroupDto>> getAll(
+    @GetMapping(GET_VALIDATED_GROUPS_URI)
+    public ResponseEntity<Page<GroupDto>> getAllValidGroups(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "rows", defaultValue = "10") int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<GroupDto> subredditDtos = groupService.getAll(pageable);
+        Page<GroupDto> subredditDtos = groupService.getAllValidGroups(pageable);
         return ResponseEntity.ok(subredditDtos);
     }
 
@@ -62,5 +63,23 @@ public class GroupController {
     public ResponseEntity<List<GroupDto>> subscribeGroup(@PathVariable final String groupName) {
         final List<GroupDto> groupDtos = groupService.addGroup(groupName);
         return ResponseEntity.ok(groupDtos);
+    }
+
+    @GetMapping(GET_PENDING_GROUP_URI)
+    public ResponseEntity<Page<GroupDto>> getAllPendingGroups(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+    ) {
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        Page<GroupDto> pendingGroups = groupService.getAllPendingGroups(pageable);
+        return ResponseEntity.ok(pendingGroups);
+    }
+
+    @PatchMapping(VALIDATE_GROUP_URI)
+    public ResponseEntity<Void> validateGroup(@RequestBody final Group group) {
+        groupService.validateGroup(group);
+        return ResponseEntity.ok().build();
     }
 }

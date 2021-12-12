@@ -8,12 +8,14 @@ import {CompaniesComponent} from './companies/companies.component';
 import {TableModule} from 'primeng/table';
 import {CompaniesModule} from './companies/companies.module';
 import {FeatherModule} from 'angular-feather';
+import {PendingGroupTableComponent} from './groups/pending-group-table/pending-group-table.component';
 
 
 @NgModule({
   declarations: [
     AdminComponent,
     CompaniesComponent,
+    PendingGroupTableComponent,
   ],
   imports: [
     CommonModule,
@@ -24,6 +26,9 @@ import {FeatherModule} from 'angular-feather';
     FeatherModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'fr'}],
+  exports: [
+    PendingGroupTableComponent
+  ]
 })
 export class AdminModule {
   constructor() {

@@ -1,17 +1,22 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static java.util.Arrays.asList;
@@ -32,6 +37,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @MockBean
     GroupService groupService;
+
+    @Mock
+    UserRepository userRepository;
 
     @Test
     void should_response_forbidden_when_create_subreddit_with_no_authentication() throws Exception {
@@ -55,7 +63,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @Test
     @WithMockUser
-    void should_list_all_subreddit_whith_no_authentication() throws Exception {
+    void should_list_all_subreddit_with_no_authentication() throws Exception {
         // given
         final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         final Page<GroupDto> subreddits = new PageImpl<>(asList(
@@ -70,10 +78,16 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
                 GroupDto.builder().id(14L).build(),
                 GroupDto.builder().id(15L).build()
         ));
-        given(groupService.getAll(DEFAULT_PAGEABLE)).willReturn(subreddits);
+        final User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
+        given(groupService.getAllValidGroups(DEFAULT_PAGEABLE)).willReturn(subreddits);
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         // when
-        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_VALIDATED_GROUPS_URI).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print())
@@ -91,7 +105,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         }
         resultActions.andReturn();
 
-        verify(groupService, times(1)).getAll(any());
+        verify(groupService, times(1)).getAllValidGroups(any());
     }
 
     @Test
@@ -102,7 +116,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
-        verify(groupService, never()).getAll(any());
+        verify(groupService, never()).getAllValidGroups(any());
     }
 
     @Test
@@ -156,5 +170,46 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         resultActions.andDo(print()).andExpect(status().isForbidden());
 
         verify(groupService, never()).getAllByTopPosting(anyInt());
+    }
+
+    @Test
+    @WithMockUser
+    void should_get_all_pending_groups_when_authenticated() throws Exception {
+        //given
+        List<GroupDto> groupDtos = Arrays.asList(
+                GroupDto.builder().id(1L).valid(false).build(),
+                GroupDto.builder().id(2L).valid(false).build(),
+                GroupDto.builder().id(3L).valid(false).build()
+        );
+        Page<GroupDto> groupPageMockResponse = new PageImpl<>(groupDtos);
+        given(groupService.getAllPendingGroups(any())).willReturn(groupPageMockResponse);
+
+        // when
+        ResultActions resultActions = mvc.perform(
+                get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print())
+                .andExpect(status().isOk());
+
+        for (int i = 0; i < groupDtos.size(); i++) {
+            final String contentPath = String.format("$.content[%d]", i);
+            resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(groupDtos.get(i).getId()))));
+            resultActions.andExpect(jsonPath(contentPath + ".valid", is(groupDtos.get(i).isValid())));
+        }
+
+        verify(groupService, times(1)).getAllPendingGroups(any());
+    }
+
+    @Test
+    void should_response_forbidden_when_pending_groups_and_not_authenticated() throws Exception {
+
+        // when
+        final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andDo(print()).andExpect(status().isForbidden());
+
+        verify(groupService, never()).getAllPendingGroups(any());
     }
 }

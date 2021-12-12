@@ -16,4 +16,5 @@ export interface JobPosting {
   company?: Company;
   apply?: boolean;
   archive?: boolean;
+  active?: boolean;
 }

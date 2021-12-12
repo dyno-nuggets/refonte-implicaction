@@ -21,6 +21,10 @@ export class JobService {
     return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable, criteria, archive, applyCheck));
   }
 
+  getAllValidatedByCriteria(pageable: Pageable, criteria: JobCriteriaFilter, archive = null): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllValidatedJobEndpoint(pageable, criteria, archive));
+  }
+
   getById(jobId: string): Observable<JobPosting> {
     return this.http.get<JobPosting>(this.apiEndpointsService.getJobByIdEndpoint(jobId));
   }
@@ -43,5 +47,13 @@ export class JobService {
 
   toggleArchiveJobs(jobIds: string[]): Observable<JobPosting> {
     return this.http.patch(this.apiEndpointsService.toggleArchiveJobsEndpoint(), jobIds);
+  }
+
+  getAllPendingActivationJobs(pageable: Pageable): Observable<any> {
+    return this.http.get(this.apiEndpointsService.getAllPendingActivationJobsEndpoint(pageable));
+  }
+
+  validateJob(job: JobPosting): Observable<JobPosting> {
+    return this.http.patch(this.apiEndpointsService.getValidateJobEndpoint(), job);
   }
 }

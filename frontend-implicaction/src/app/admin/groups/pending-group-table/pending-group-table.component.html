@@ -1,7 +1,7 @@
 <p-table
   (onLazyLoad)="paginate($event)"
   [lazy]="true"
-  [loading]="loading"
+  [loading]="isLoading"
   [paginator]="true"
   [rowsPerPageOptions]="[10, 25, 50]"
   [rows]="rowsPerPage"
@@ -12,22 +12,21 @@
 >
   <ng-template pTemplate="header">
     <tr>
-      <th class="text-uppercase" scope="col">Username</th>
-      <th class="text-uppercase" scope="col">Prénom</th>
       <th class="text-uppercase" scope="col">Nom</th>
-      <th class="text-uppercase" scope="col">Type</th>
-      <th class="text-uppercase" scope="col">Opérations</th>
+      <th class="text-uppercase" scope="col">Description</th>
+      <th class="text-uppercase" scope="col">Administrateur</th>
+      <th class="text-uppercase" scope="col">Crée le</th>
     </tr>
   </ng-template>
-  <ng-template let-user pTemplate="body">
+  <ng-template let-group pTemplate="body">
     <tr>
-      <td class="overflow-ellipsis">{{user.username}}</td>
-      <td class="overflow-ellipsis">{{user.firstname}}</td>
-      <td class="overflow-ellipsis">{{user.lastname}}</td>
-      <td class="overflow-ellipsis">{{roleCodesToString(user.roles)}}</td>
+      <td class="overflow-ellipsis">{{group.name}}</td>
+      <td class="overflow-ellipsis">{{group.description}}</td>
+      <td class="overflow-ellipsis">{{group.username}}</td>
+      <td class="overflow-ellipsis">{{group.createdAt}}</td>
       <td>
         <button
-          (click)="activateUser(user)"
+          (click)="validateGroup(group)"
           class="btn btn-outline-primary"
           type="button"
         >
@@ -37,6 +36,6 @@
     </tr>
   </ng-template>
   <ng-template pTemplate="emptymessage">
-    <td class="ps-4" colspan="5">Aucun utilisateur en attente de validation.</td>
+    <td class="ps-4" colspan="5">Aucun groupe est en attente de validation.</td>
   </ng-template>
 </p-table>

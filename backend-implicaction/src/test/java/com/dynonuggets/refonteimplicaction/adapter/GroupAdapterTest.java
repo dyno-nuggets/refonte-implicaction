@@ -4,6 +4,8 @@ import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
+import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,6 +29,9 @@ class GroupAdapterTest {
     @InjectMocks
     GroupAdapter groupAdapter;
 
+    @Mock
+    UserRepository userRepository;
+
     @Test
     void should_map_to_model() {
         // given
@@ -34,10 +39,17 @@ class GroupAdapterTest {
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
+                .userId(1L)
+                .username("test")
+                .build();
+
+        User user = User.builder()
+                .id(1L)
+                .username("test")
                 .build();
 
         // when
-        final Group actual = groupAdapter.toModel(expected);
+        final Group actual = groupAdapter.toModel(expected, user);
 
         // then
         assertThat(actual.getId()).isEqualTo(expected.getId());
@@ -49,12 +61,18 @@ class GroupAdapterTest {
     @Test
     void should_map_to_dto_with_count_when_model_has_posts() {
         // given
+        User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
         Group expectedModel = Group.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
                 .posts(Arrays.asList(new Post(), new Post(), new Post(), new Post()))
                 .createdAt(Instant.now())
+                .user(user)
                 .build();
 
         // when
@@ -62,22 +80,30 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
         assertThat(actualDto.getImageUrl()).isEqualTo(GroupAdapter.DEFAULT_GROUP_IMAGE_URI);
+        assertThat(actualDto.getUsername()).isEqualTo(expectedModel.getUser().getUsername());
+        assertThat(actualDto.getUserId()).isEqualTo(expectedModel.getUser().getId());
     }
 
     @Test
     void should_map_to_dto_with_image_url_when_model_has_image() {
         // given
+        User user = User.builder()
+                .id(1L)
+                .username("test")
+                .build();
+
         Group expectedModel = Group.builder()
                 .id(123L)
                 .description("blablabla")
                 .name("blabla")
                 .image(FileModel.builder().url("http://url.com").objectKey("blablabla").build())
                 .createdAt(Instant.now())
+                .user(user)
                 .build();
 
         String expectedUrl = "http://url/objectKey";
@@ -89,10 +115,12 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isZero();
         assertThat(actualDto.getImageUrl()).contains(expectedUrl);
+        assertThat(actualDto.getUsername()).isEqualTo(expectedModel.getUser().getUsername());
+        assertThat(actualDto.getUserId()).isEqualTo(expectedModel.getUser().getId());
     }
 }
