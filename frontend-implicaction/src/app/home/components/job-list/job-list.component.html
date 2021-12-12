@@ -1,15 +1,8 @@
-<p *ngIf="!lastJobs?.length">Il n'y a aucun message dans cette discussion</p>
+<p *ngIf="!latestJobs?.length">Il n'y a aucun message dans cette discussion</p>
 <div class="d-flex flex-column flex-xl-row gap-xl-5 gap-3">
-  <app-job-card *ngFor="let job of lastJobs; let isFirst = first; let isLast= last"
+  <app-job-card *ngFor="let job of latestJobs"
                 [job]="job"
                 class="card job-card-container justify-content-center col-xl"
   >
   </app-job-card>
 </div>
-<!--                [className]="isFirst ? 'me-5' : isLast ? 'ms-5' : 'mx-5'"-->
-<!--                [ngClass]="-->
-<!--                {-->
-<!--                'me-5': isFirst === true,-->
-<!--                'ms-5': isLast === true,-->
-<!--                'mx-5': !isFirst && !isLast,-->
-<!--                 }"-->

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Post} from '../../../discussion/model/post';
 import {Univers} from '../../../shared/enums/univers';
 import {Constants} from '../../../config/constants';
@@ -9,17 +9,10 @@ import {Constants} from '../../../config/constants';
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.scss']
 })
-export class PostCardComponent implements OnInit {
+export class PostCardComponent {
 
   @Input()
   post: Post = {};
   univers = Univers;
   constant = Constants;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
 }

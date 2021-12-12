@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Univers} from '../../../shared/enums/univers';
 
 
@@ -7,14 +7,7 @@ import {Univers} from '../../../shared/enums/univers';
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.scss']
 })
-export class IndexComponent implements OnInit {
+export class IndexComponent {
 
   univers = Univers;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
 }

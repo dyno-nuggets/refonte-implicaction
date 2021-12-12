@@ -110,9 +110,9 @@ public class JobPostingController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(GET_LAST_JOBS_URI)
-    public ResponseEntity<List<JobPostingDto>> getLastJobs(@PathVariable int jobsCount) {
-        List<JobPostingDto> response = jobPostingService.getLastJobs(jobsCount);
+    @GetMapping(GET_LATEST_JOBS_URI)
+    public ResponseEntity<List<JobPostingDto>> getLatestJobs(@PathVariable int jobsCount) {
+        List<JobPostingDto> response = jobPostingService.getLatestJobs(jobsCount);
         return ResponseEntity.ok(response);
     }
 }

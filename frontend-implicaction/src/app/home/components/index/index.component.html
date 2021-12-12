@@ -1,5 +1,4 @@
 <div>
-
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-xl-5 text-center">
       <img
@@ -30,7 +29,11 @@
         class="fst-italic">action</span>, c'est...</span></h2>
       <div class="row justify-content-evenly align-self-center mt-5 px-5">
         <div class="col-lg-3 col-md-6 mb-2 justify-content-center">
-          <img alt="reseau" class="img-fluid img-intro" src="assets/img/reseau.png">
+          <img
+            alt="reseau"
+            class="img-fluid img-intro"
+            src="assets/img/reseau.png"
+          />
           <p class="ahead network">Un réseau</p>
           <p class="a-subhead mt-4">Un réseau d’anciens militaires et civils reconvertis ou en phase de reconversion
             partageant leur expérience et leurs connaissances</p>
@@ -63,7 +66,7 @@
           <h2 class="text-start align-self-center sub-heading">Prochains <span
             class="text-danger">événements</span></h2>
         </div>
-        <div class="">
+        <div>
           <app-event-card></app-event-card>
           <app-event-card></app-event-card>
           <app-event-card></app-event-card>
@@ -74,8 +77,8 @@
         <div class="d-flex align-items-start justify-content-between mb-3">
           <h2 class="text-start align-self-center sub-heading">Les dernières <span
             class="text-danger">publications</span></h2>
-          <a class="post-card-link" routerLink="/{{univers.DISCUSSIONS.url}}">
-            <button class="btn btn-primary">Tout voir</button>
+          <a class="btn btn-primary" routerLink="/{{univers.DISCUSSIONS.url}}">
+            Tout voir
           </a>
         </div>
         <app-post-list></app-post-list>
@@ -84,8 +87,8 @@
         <div class="d-flex align-items-start justify-content-between mb-3">
           <h2 class="text-start align-self-center sub-heading">Les nouvelles <span
             class="text-danger">offres</span></h2>
-          <a class="post-card-link" routerLink="/{{univers.JOBS.url}}">
-            <button class="btn btn-primary">Tout voir</button>
+          <a class="btn btn-primary" routerLink="/{{univers.JOBS.url}}">
+            Tout voir
           </a>
         </div>
         <app-job-list></app-job-list>

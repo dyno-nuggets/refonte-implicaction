@@ -19,13 +19,13 @@ public class ApiUrls {
     public static final String DELETE_JOB_URI = "/{jobId}";
     public static final String ARCHIVE_JOB_URI = "/{jobId}/archive";
     public static final String ARCHIVE_JOBS_URI = "/archive";
-    public static final String GET_LAST_JOBS_URI = "/last/{jobsCount}";
+    public static final String GET_LATEST_JOBS_URI = "/latest/{jobsCount}";
 
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";
     public static final String GET_POST_URI = "/{postId}";
     public static final String GET_POST_COMMENTS_URI = "/{postId}/comments";
-    public static final String GET_LAST_POSTS_URI = "/last/{postsCount}";
+    public static final String GET_LATEST_POSTS_URI = "/latest/{postsCount}";
 
     // GROUPS
     public static final String GROUPS_BASE_URI = "/api/groups";

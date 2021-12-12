@@ -121,7 +121,7 @@ public class JobPostingService {
         return this.getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
     }
 
-    public List<JobPostingDto> getLastJobs(int jobsCount) {
+    public List<JobPostingDto> getLatestJobs(int jobsCount) {
         List<JobPosting> lastJobs = jobPostingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         if (lastJobs.size() < jobsCount) {
             jobsCount = lastJobs.size();

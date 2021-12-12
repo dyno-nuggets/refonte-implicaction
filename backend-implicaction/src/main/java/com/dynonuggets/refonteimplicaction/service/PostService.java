@@ -69,7 +69,7 @@ public class PostService {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
     }
 
-    public List<PostResponse> getLastPosts(int postCount) {
+    public List<PostResponse> getLatestPosts(int postCount) {
         List<Post> lastPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
         if (lastPosts.size() < postCount) {
             postCount = lastPosts.size();

@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Post} from 'src/app/discussion/model/post';
 import {PostService} from 'src/app/discussion/services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-post-list',
@@ -10,8 +11,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 })
 export class PostListComponent implements OnInit {
 
-  lastPosts: Post[];
-  lastPostCount = 3;
+  latestPosts: Post[];
 
   constructor(
     private postService: PostService,
@@ -21,11 +21,10 @@ export class PostListComponent implements OnInit {
 
   ngOnInit(): void {
     this.postService
-      .getLastPosts(this.lastPostCount)
+      .getLatestPosts(Constants.LATEST_POSTS_COUNT)
       .subscribe(
-        posts => this.lastPosts = posts,
-        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données'),
-        // () => this.toasterService.success('Ok', 'Le changement des données a bien été effectué')
+        posts => this.latestPosts = posts,
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données')
       );
   }
 

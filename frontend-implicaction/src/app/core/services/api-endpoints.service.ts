@@ -249,8 +249,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId]);
   }
 
-  getLastJobsEndpoint(jobsCount: number): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.LAST_JOBS, [jobsCount]);
+  getLatestJobsEndpoint(jobsCount: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.LATEST_JOBS, [jobsCount]);
   }
 
   createJobPostingEndpoint(): string {
@@ -320,8 +320,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId]);
   }
 
-  getLastPostsEndpoint(postsCount: number): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.LAST_POSTS, [postsCount]);
+  getLatestPostsEndpoint(postsCount: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.LATEST_POSTS, [postsCount]);
   }
 
   getPostCommentsEndpoint(pageable: any, postId: string): string {

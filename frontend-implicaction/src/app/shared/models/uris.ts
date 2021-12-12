@@ -53,7 +53,7 @@ export class Uris {
    */
   static readonly JOBS = class {
     static readonly BASE_URI = 'job-postings';
-    static readonly LAST_JOBS = 'job-postings/last';
+    static readonly LATEST_JOBS = 'job-postings/last';
     static readonly GET_ALL_PENDING_JOBS = 'job-postings/pending';
     static readonly VALIDATE_JOB = 'job-postings/validate';
     static readonly GET_VALIDATED_JOBS = 'job-postings/validated';
@@ -74,13 +74,13 @@ export class Uris {
     static readonly BASE_URI = 'contracts';
   };
 
-  /**
-   * POSTS
-   */
-  static readonly POSTS = class {
-    static readonly BASE_URI = 'posts';
-    static readonly LAST_POSTS = 'posts/last';
-  };
+    /**
+     * POSTS
+     */
+    static readonly POSTS = class {
+        static readonly BASE_URI = 'posts';
+        static readonly LATEST_POSTS = 'posts/latest';
+    };
 
   /**
    * VOTES
