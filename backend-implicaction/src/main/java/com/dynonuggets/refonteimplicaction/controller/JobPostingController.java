@@ -109,4 +109,10 @@ public class JobPostingController {
         jobPostingService.validateJob(job);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping(GET_LATEST_JOBS_URI)
+    public ResponseEntity<List<JobPostingDto>> getLatestJobs(@PathVariable int jobsCount) {
+        List<JobPostingDto> response = jobPostingService.getLatestJobs(jobsCount);
+        return ResponseEntity.ok(response);
+    }
 }

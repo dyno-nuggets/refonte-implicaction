@@ -25,6 +25,10 @@ export class PostService {
     return this.http.get(this.endpointsService.getPostEndpoint(postId));
   }
 
+  getLatestPosts(postsCount: number): Observable<Post[]> {
+    return this.http.get<Post[]>(this.endpointsService.getLatestPostsEndpoint(postsCount));
+  }
+
   getCommentsByPostId(pageable: Pageable, postId: string): Observable<any> {
     return this.http.get(this.endpointsService.getPostCommentsEndpoint(pageable, postId));
   }

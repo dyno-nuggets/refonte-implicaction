@@ -29,6 +29,10 @@ export class JobService {
     return this.http.get<JobPosting>(this.apiEndpointsService.getJobByIdEndpoint(jobId));
   }
 
+  getLatestJobs(jobsCount: number): Observable<JobPosting[]> {
+    return this.http.get<JobPosting[]>(this.apiEndpointsService.getLatestJobsEndpoint(jobsCount));
+  }
+
   createJob(job: JobPosting): Observable<JobPosting> {
     return this.http.post<JobPosting>(this.apiEndpointsService.createJobPostingEndpoint(), job);
   }

@@ -9,6 +9,7 @@ import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,6 +118,12 @@ public class JobPostingService {
     }
 
     public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, String contractType, Boolean isArchive) {
-        return this.getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
+        return getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
+    }
+
+    public List<JobPostingDto> getLatestJobs(int jobsCount) {
+        return jobPostingRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, jobsCount))
+                .map(jobPostingAdapter::toDto)
+                .getContent();
     }
 }

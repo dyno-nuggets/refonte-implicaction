@@ -2,7 +2,6 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './core/guards/auth.guard.service';
 import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
-import {IndexComponent} from './home/components/index/index.component';
 import {Univers} from './shared/enums/univers';
 import {BoardComponent} from './board/board.component';
 
@@ -12,8 +11,8 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {
-    path: '',
-    component: IndexComponent
+    path: Univers.HOME.url,
+    loadChildren: () => import('./home/home.module').then(m => m.HomeModule)
   },
   {
     path: Univers.ADMIN.url,

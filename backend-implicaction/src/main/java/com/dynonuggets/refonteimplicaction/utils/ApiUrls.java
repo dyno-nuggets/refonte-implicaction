@@ -22,11 +22,13 @@ public class ApiUrls {
     public static final String GET_PENDING_JOB_URI = "/pending";
     public static final String VALIDATE_JOB_URI = "/validate";
     public static final String VALIDATED_JOBS = "/validated";
+    public static final String GET_LATEST_JOBS_URI = "/latest/{jobsCount}";
 
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";
     public static final String GET_POST_URI = "/{postId}";
     public static final String GET_POST_COMMENTS_URI = "/{postId}/comments";
+    public static final String GET_LATEST_POSTS_URI = "/latest/{postsCount}";
 
     // GROUPS
     public static final String GROUPS_BASE_URI = "/api/groups";

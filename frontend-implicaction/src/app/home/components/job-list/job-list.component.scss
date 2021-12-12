@@ -1,0 +1,9 @@
+.job-card-container {
+  border-radius: 11px;
+  border: none;
+  box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
+
+  &:hover {
+    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
+  }
+}

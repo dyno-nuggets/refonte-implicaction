@@ -1,5 +1,4 @@
 <div>
-
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-xl-5 text-center">
       <img
@@ -9,7 +8,7 @@
       />
     </div>
 
-    <div class="col-9 col-xl-5 text-center align-self-center">
+    <div class="col-12 col-md-4 text-center align-self-center">
       <h2 class="text-center mt-5 heading">Implic’<span class="text-danger fst-italic">action</span></h2>
       <p class="subheading text-uppercase mb-4">Une association qui vous accompagne grâce à sa dynamique réseau !</p>
       <p>Pour partager, échanger, préparer dans un seul but commun : réussir votre reconversion !</p>
@@ -40,6 +39,7 @@
             partageant leur expérience et leurs connaissances</p>
         </div>
         <div class="col-lg-3 col-md-6 mb-2">
+          <img alt="dynamique" class="img-fluid img-intro" src="assets/img/dynamique.png">
           <img
             alt="dynamique"
             class="img-fluid img-intro"
@@ -50,17 +50,51 @@
             des zones de Défense et des bassins d’emploi</p>
         </div>
         <div class="col-lg-3 col-md-6 mb-2">
-          <img
-            alt="forum"
-            class="img-fluid img-intro"
-            src="assets/img/forum.png"
-          />
+          <img alt="forum" class="img-fluid img-intro" src="assets/img/forum.png">
           <p class="ahead forum">Un forum</p>
           <p class="a-subhead mt-4">Un espace d’échanges, des réponses à vos questions sur différents sujets
             liés aux métiers, aux dispositifs de reconversion …</p>
         </div>
       </div>
+    </div>
+  </div>
 
+  <div class="row custom-mt">
+    <div class="row align-items-start">
+      <div class="col-xl-6 p-5">
+        <div class="d-flex align-items-start justify-content-between mb-3">
+          <h2 class="text-start align-self-center sub-heading">Prochains <span
+            class="text-danger">événements</span></h2>
+        </div>
+        <div>
+          <app-event-card></app-event-card>
+          <app-event-card></app-event-card>
+          <app-event-card></app-event-card>
+        </div>
+
+      </div>
+      <div class="col-xl-6 p-5">
+        <div class="d-flex align-items-start justify-content-between mb-3">
+          <h2 class="text-start align-self-center sub-heading">Les dernières <span
+            class="text-danger">publications</span></h2>
+          <a class="btn btn-primary" routerLink="/{{univers.DISCUSSIONS.url}}">
+            Tout voir
+          </a>
+        </div>
+        <app-post-list></app-post-list>
+      </div>
+      <div class="col-md-12 p-5">
+        <div class="d-flex align-items-start justify-content-between mb-3">
+          <h2 class="text-start align-self-center sub-heading">Les nouvelles <span
+            class="text-danger">offres</span></h2>
+          <a class="btn btn-primary" routerLink="/{{univers.JOBS.url}}">
+            Tout voir
+          </a>
+        </div>
+        <app-job-list></app-job-list>
+      </div>
+    </div>
+    <div>
     </div>
   </div>
 </div>

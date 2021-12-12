@@ -1,0 +1,28 @@
+<div class="ps-2 py-1 post-card d-flex flex-row align-items-center">
+  <div class="card-body col-md-10 col-11">
+    <div class="card-title d-flex align-items-center justify-content-start">
+      <p-avatar
+        [image]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
+        shape="circle"
+        size="medium"
+        styleClass="me-2 shadow-sm"
+      >
+      </p-avatar>
+      <div class="d-flex flex-column head-line ps-2">
+        <a class="post-card-link" routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a>
+        <span class="d-none d-sm-inline ps-2"> </span>
+        <span class="duration mt-1">{{post.duration}}</span>
+      </div>
+    </div>
+    <div>
+      <h3 class="theme-primary m-0">
+        <a class="post-card-link" routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">{{post.name}}</a>
+      </h3>
+    </div>
+  </div>
+  <div class="col-2 col-md-1">
+    <a class="btn fw-bold card-body post-card-link" routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">
+      <i class="fas fa-chevron-right px-1 text-primary"></i>
+    </a>
+  </div>
+</div>

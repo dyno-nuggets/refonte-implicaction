@@ -12,9 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 
@@ -63,5 +66,11 @@ public class PostService {
 
     private PostResponse getPostResponse(Post post) {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
+    }
+
+    public List<PostResponse> getLatestPosts(int postsCount) {
+        return postRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, postsCount))
+                .map(post -> postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post)))
+                .getContent();
     }
 }
