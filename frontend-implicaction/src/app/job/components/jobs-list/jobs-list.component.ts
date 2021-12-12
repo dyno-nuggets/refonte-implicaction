@@ -10,6 +10,8 @@ import {ActivatedRoute} from '@angular/router';
 import {SortDirectionEnum} from '../../../shared/enums/sort-direction.enum';
 import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
 import {JobPosting} from '../../../shared/models/job-posting';
+import {JobPostingFormComponent} from '../../../admin/jobs/components/job-posting-form/job-posting-form.component';
+import {SidebarService} from '../../../shared/services/sidebar.service';
 
 @Component({
   selector: 'app-jobs-list',
@@ -31,6 +33,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
     private toastService: ToasterService,
     private jobsService: JobService,
     private filterService: JobFilterContextService,
+    private sidebarService: SidebarService,
     protected route: ActivatedRoute
   ) {
     super(route);
@@ -66,6 +69,15 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
 
   onSearchChange(): void {
     this.filterService.criteria = this.criteria;
+  }
+
+  onAddJob(): void {
+    this.sidebarService
+      .open({
+        title: 'Ajouter une offre',
+        component: JobPostingFormComponent,
+        width: 650
+      });
   }
 
   protected innerPaginate(): void {

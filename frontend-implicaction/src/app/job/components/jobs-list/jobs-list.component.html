@@ -2,9 +2,20 @@
   <div class="col-12 col-lg-3 p-0">
     <app-job-filter></app-job-filter>
   </div>
-  <div class="col-12 col-lg-9 p-0 row bg-white">
+  <div class="col-12 col-lg-9 p-0 row">
+    <div class="d-flex justify-content-end mb-3 p-0">
+      <div class="align-self-end col-12 col-sm-4 col-lg-3 col-xl-3 col-xxl-auto">
+        <button
+          (click)="onAddJob()"
+          class="btn btn-primary fw-bold w-100 px-xxl-4"
+        >
+          <i class="fa-plus fas"></i>
+          Ajouter une offre
+        </button>
+      </div>
+    </div>
     <ng-container *ngIf="!isLoading; else loadingTemplate">
-      <div class="card p-0">
+      <div class="card p-0 bg-white">
         <div class="card-header bg-white clo-9 d-flex flex-column flex-sm-row ps-0 py-2 m-0">
           <div class="input-group p-1">
             <span class="d-none d-sm-inline input-group-text border-0 bg-white">
