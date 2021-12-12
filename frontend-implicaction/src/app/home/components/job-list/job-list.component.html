@@ -1,4 +1,4 @@
-<p *ngIf="!latestJobs?.length">Il n'y a aucun message dans cette discussion</p>
+<p *ngIf="!latestJobs?.length">Il n'y a aucune offre pour le moment.</p>
 <div class="d-flex flex-column flex-xl-row gap-xl-5 gap-3">
   <app-job-card *ngFor="let job of latestJobs"
                 [job]="job"

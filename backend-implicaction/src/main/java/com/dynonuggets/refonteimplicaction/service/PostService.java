@@ -69,16 +69,16 @@ public class PostService {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
     }
 
-    public List<PostResponse> getLatestPosts(int postCount) {
-        List<Post> lastPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        if (lastPosts.size() < postCount) {
-            postCount = lastPosts.size();
+    public List<PostResponse> getLatestPosts(int postsCount) {
+        List<Post> latestPosts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        if (latestPosts.size() < postsCount) {
+            postsCount = latestPosts.size();
         }
-        lastPosts = lastPosts.subList(0, postCount);
+        latestPosts = latestPosts.subList(0, postsCount);
 
         final List<PostResponse> returnList = new ArrayList<>();
 
-        for (Post post : lastPosts) {
+        for (Post post : latestPosts) {
             returnList.add(postAdapter.toPostResponse(post, 0, false, false));
         }
         return returnList;

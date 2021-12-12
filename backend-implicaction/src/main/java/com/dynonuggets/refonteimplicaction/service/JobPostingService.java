@@ -118,17 +118,17 @@ public class JobPostingService {
     }
 
     public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, String contractType, Boolean isArchive) {
-        return this.getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
+        return getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
     }
 
     public List<JobPostingDto> getLatestJobs(int jobsCount) {
-        List<JobPosting> lastJobs = jobPostingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        if (lastJobs.size() < jobsCount) {
-            jobsCount = lastJobs.size();
+        List<JobPosting> latestJobs = jobPostingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+        if (latestJobs.size() < jobsCount) {
+            jobsCount = latestJobs.size();
         }
-        lastJobs = lastJobs.subList(0, jobsCount);
+        latestJobs = latestJobs.subList(0, jobsCount);
 
-        return lastJobs
+        return latestJobs
                 .stream()
                 .map(jobPostingAdapter::toDto)
                 .collect(Collectors.toList());
