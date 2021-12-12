@@ -58,7 +58,8 @@ public class JobPosting {
     @Column(name = "valid")
     private boolean valid;
 
-    @Column(name = "posted_by")
+    @ManyToOne
+    @JoinColumn(name = "posted_by")
     private User poster;
 
 }
