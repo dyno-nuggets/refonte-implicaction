@@ -9,8 +9,8 @@ import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,15 +122,8 @@ public class JobPostingService {
     }
 
     public List<JobPostingDto> getLatestJobs(int jobsCount) {
-        List<JobPosting> latestJobs = jobPostingRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
-        if (latestJobs.size() < jobsCount) {
-            jobsCount = latestJobs.size();
-        }
-        latestJobs = latestJobs.subList(0, jobsCount);
-
-        return latestJobs
-                .stream()
+        return jobPostingRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, jobsCount))
                 .map(jobPostingAdapter::toDto)
-                .collect(Collectors.toList());
+                .getContent();
     }
 }
