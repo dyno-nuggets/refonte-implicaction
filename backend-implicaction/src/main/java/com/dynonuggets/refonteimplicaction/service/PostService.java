@@ -8,7 +8,7 @@ import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 @Transactional
 public class PostService {
@@ -34,6 +34,7 @@ public class PostService {
     private final PostAdapter postAdapter;
     private final CommentService commentService;
     private final VoteService voteService;
+    private final NotificationService notificationService;
 
     @Transactional
     public PostResponse saveOrUpdate(PostRequest postRequest) {
@@ -46,6 +47,11 @@ public class PostService {
 
         Post post = postAdapter.toPost(postRequest, group, authService.getCurrentUser());
         Post save = postRepository.save(post);
+
+        // création de la notification
+        if (post.getGroup() != null) {
+            notificationService.createPostNotification(post);
+        }
 
         return getPostResponse(save);
     }

@@ -2,7 +2,6 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -105,9 +104,9 @@ public class JobPostingController {
     }
 
     @PatchMapping(VALIDATE_JOB_URI)
-    public ResponseEntity<Void> validateJob(@RequestBody final JobPosting job) {
-        jobPostingService.validateJob(job);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<JobPostingDto> validateJob(@PathVariable final Long jobId) {
+        final JobPostingDto jobUpdate = jobPostingService.validateJob(jobId);
+        return ResponseEntity.ok(jobUpdate);
     }
 
     @GetMapping(GET_LATEST_JOBS_URI)

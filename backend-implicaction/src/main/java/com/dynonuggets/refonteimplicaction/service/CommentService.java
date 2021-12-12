@@ -44,7 +44,6 @@ public class CommentService {
         comment.setCreatedAt(Instant.now());
 
         final Comment save = commentRepository.save(comment);
-
         return commentAdapter.toDto(save);
     }
 

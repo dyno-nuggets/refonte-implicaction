@@ -25,7 +25,6 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -106,7 +105,6 @@ class GroupServiceTest {
                 .id(1L)
                 .username("test")
                 .build();
-        given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         when(cloudService.uploadImage(any())).thenReturn(fileModel);
         when(fileRepository.save(fileModel)).thenReturn(fileModel);
@@ -159,7 +157,6 @@ class GroupServiceTest {
         given(groupAdapter.toModel(any(), any())).willReturn(sentModel);
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(groupRepository.save(any())).willReturn(saveModel);
-        given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         // when
         groupService.save(sentDto);

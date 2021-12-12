@@ -64,6 +64,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
     if (this.isUpdate) {
       job.id = this.sidebarInput.job.id;
+      job.valid = this.sidebarInput.job.valid;
       job$ = this.jobService.updateJob(job);
     } else {
       job$ = this.jobService.createJob(job);
@@ -80,7 +81,8 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
         this.toasterService.error('Oops', `Une erreur est survenue lors de ${action} de votre expérience.`);
       },
       () => {
-        this.toasterService.success('Succès', `L'offre a été mise à jour avec succès.`);
+        const action = this.isUpdate ? 'mise à jour' : 'créée';
+        this.toasterService.success('Succès', `L'offre a été ${action} avec succès.`);
         this.sidebarService.close();
       }
     );

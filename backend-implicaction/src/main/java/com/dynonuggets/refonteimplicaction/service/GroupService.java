@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.User;
@@ -21,7 +20,6 @@ import java.time.Instant;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.utils.Message.GROUP_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.utils.Message.USER_NOT_FOUND_MESSAGE;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -39,8 +37,7 @@ public class GroupService {
     public GroupDto save(MultipartFile image, GroupDto groupDto) {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
-        User user = userRepository.findById(groupDto.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+        User user = authService.getCurrentUser();
         Group group = groupAdapter.toModel(groupDto, user);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
@@ -53,8 +50,7 @@ public class GroupService {
 
     @Transactional
     public GroupDto save(GroupDto groupDto) {
-        User user = userRepository.findById(groupDto.getUserId())
-                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_MESSAGE, groupDto.getUserId())));
+        User user = authService.getCurrentUser();
         Group group = groupAdapter.toModel(groupDto, user);
         group.setCreatedAt(Instant.now());
         group.setUser(authService.getCurrentUser());
@@ -81,8 +77,9 @@ public class GroupService {
         User user = authService.getCurrentUser();
         Group group = groupRepository.findByName(groupName)
                 .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
+
         user.getGroups().add(group);
-        final User save = userRepository.save(user);
+        userRepository.save(user);
         return user.getGroups().stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());
@@ -95,8 +92,12 @@ public class GroupService {
     }
 
     @Transactional
-    public void validateGroup(Group group) {
+    public GroupDto validateGroup(String groupName) {
+        Group group = groupRepository.findByName(groupName)
+                .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
+
         group.setValid(true);
-        groupRepository.save(group);
+        final Group groupUpdate = groupRepository.save(group);
+        return groupAdapter.toDto(groupUpdate);
     }
 }

@@ -42,10 +42,14 @@ class FileControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(cloudService.getFileAsBytes(anyString())).willReturn(expectedBytes);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(FILE_BASE_URI + GET_FILE_BY_KEY, objectKey)).andDo(print());
+        final ResultActions resultActions = mvc.perform(
+                get(FILE_BASE_URI + GET_FILE_BY_KEY, objectKey)
+        );
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_OCTET_STREAM))
                 .andExpect(content().bytes(expectedBytes));
 

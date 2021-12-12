@@ -20,7 +20,7 @@ public class ApiUrls {
     public static final String ARCHIVE_JOB_URI = "/{jobId}/archive";
     public static final String ARCHIVE_JOBS_URI = "/archive";
     public static final String GET_PENDING_JOB_URI = "/pending";
-    public static final String VALIDATE_JOB_URI = "/validate";
+    public static final String VALIDATE_JOB_URI = "{jobId}/validate";
     public static final String VALIDATED_JOBS = "/validated";
     public static final String GET_LATEST_JOBS_URI = "/latest/{jobsCount}";
 
@@ -35,7 +35,7 @@ public class ApiUrls {
     public static final String GET_ALL_BY_TOP_POSTING_URI = "/top-posting";
     public static final String CREATE_NO_IMAGE = "/no-image";
     public static final String GET_PENDING_GROUP_URI = "/pending";
-    public static final String VALIDATE_GROUP_URI = "/validate";
+    public static final String VALIDATE_GROUP_URI = "{groupName}/validate";
     public static final String GET_VALIDATED_GROUPS_URI = "/validated";
     public static final String SUBSCRIBE_GROUP = "/{groupName}/subscribe";
 

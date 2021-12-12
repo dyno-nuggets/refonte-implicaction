@@ -23,6 +23,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -83,7 +84,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
@@ -154,7 +155,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                put(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                put(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
@@ -204,7 +205,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                delete(EXPERIENCES_BASE_URI + DELETE_EXPERIENCES_URI, 123L)
+                delete(EXPERIENCES_BASE_URI + DELETE_EXPERIENCES_URI, 123L).with(csrf())
         );
 
         // then

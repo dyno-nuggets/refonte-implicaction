@@ -13,6 +13,7 @@ import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.VOTE_BASE_URI;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,10 +32,14 @@ class VoteControllerTest extends ControllerIntegrationTestBase {
         String json = gson.toJson(voteDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(post(VOTE_BASE_URI).content(json).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(
+                post(VOTE_BASE_URI).content(json).contentType(APPLICATION_JSON).with(csrf())
+        );
 
         // then
-        resultActions.andDo(print()).andExpect(status().isOk());
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk());
 
         verify(voteService, times(1)).vote(any());
     }

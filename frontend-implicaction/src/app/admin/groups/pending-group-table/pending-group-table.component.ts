@@ -28,7 +28,7 @@ export class PendingGroupTableComponent extends BaseWithPaginationComponent<Grou
 
   validateGroup(group: Group): void {
     this.groupService
-      .validateGroup(group)
+      .validateGroup(group.name)
       .subscribe(
         () => this.paginate(this.pageable),
         () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation du groupe.`),

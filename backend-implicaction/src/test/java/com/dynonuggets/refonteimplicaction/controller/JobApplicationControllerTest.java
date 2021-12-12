@@ -25,6 +25,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -46,7 +47,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
@@ -74,7 +75,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
@@ -96,7 +97,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
@@ -177,10 +178,13 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         given(applicationService.updateApplyForCurrentUser(any())).willReturn(applyExpected);
 
         // when
-        final ResultActions resultActions = mvc.perform(patch(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)).andDo(print());
+        final ResultActions resultActions = mvc.perform(
+                patch(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
+        );
 
         // then
         resultActions
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(applyExpected.getId().intValue())))
                 .andExpect(jsonPath("$.jobId", is(applyExpected.getJobId().intValue())))
@@ -196,10 +200,14 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         long jobId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+        final ResultActions resultActions = mvc.perform(
+                delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId)).with(csrf())
+        );
 
         // then
-        resultActions.andExpect(status().isNoContent());
+        resultActions
+                .andDo(print())
+                .andExpect(status().isNoContent());
     }
 
     @Test
@@ -212,10 +220,13 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         doThrow(exception).when(applicationService).deleteApplyByJobId(anyLong());
 
         // when
-        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+        final ResultActions resultActions = mvc.perform(
+                delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId)).with(csrf())
+        );
 
         // then
         resultActions
+                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage", is(exception.getMessage())));
     }

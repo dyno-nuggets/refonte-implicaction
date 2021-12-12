@@ -66,7 +66,7 @@ export class TopGroupListingComponent implements OnInit {
     this.groupService.subscribeGroup(groupName)
       .subscribe(
         (groups) => {
-          this.toasterService.success('Succès', `Vous avez adhéré au groupe !`);
+          this.toasterService.success('Félicitation', `Vous avez rejoint le groupe ${groupName} !`);
           this.userGroupNames = groups.map(group => group.name);
         },
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la souscription au groupe')
