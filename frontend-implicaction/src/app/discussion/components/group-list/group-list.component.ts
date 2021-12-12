@@ -26,7 +26,7 @@ export class GroupListComponent extends BaseWithPaginationComponent<Group, Crite
     super(route);
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.paginate();
   }
 
