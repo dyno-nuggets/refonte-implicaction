@@ -1,13 +1,13 @@
 <div class="ps-2 py-1 post-card home-card-border d-flex flex-row align-items-center">
   <div class="card-body col-md-10 col-11">
     <div class="card-title d-flex align-items-center justify-content-start">
-      <p-avatar
-        [image]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
-        shape="circle"
-        size="medium"
-        styleClass="me-2 shadow-sm"
+      <img
+        #userImg
+        (error)="userImg.src = constant.USER_IMAGE_DEFAULT_URI"
+        [src]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
+        class="rounded-circle me-2 shadow-sm avatar"
+        alt=""
       >
-      </p-avatar>
       <div class="d-flex flex-column head-line ps-2">
         <a class="post-card-link" routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a>
         <span class="d-none d-sm-inline ps-2"> </span>
