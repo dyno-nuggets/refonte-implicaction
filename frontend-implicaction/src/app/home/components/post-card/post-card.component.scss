@@ -4,15 +4,10 @@
 
 .post-card {
   border-radius: 11px;
-  box-shadow: rgba(99, 99, 99, 0.2) 0 2px 8px 0;
   position: relative;
   min-width: 0;
   word-wrap: break-word;
   background-clip: border-box;
-
-  &:hover {
-    box-shadow: rgba(100, 100, 111, 0.2) 0 7px 29px 0;
-  }
 }
 
 
