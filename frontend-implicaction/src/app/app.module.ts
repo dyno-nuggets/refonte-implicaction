@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AuthModule} from './auth/auth.module';
 import {ReactiveFormsModule} from '@angular/forms';
-import {HttpClientModule} from '@angular/common/http';
+import {HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 import {NgxWebstorageModule} from 'ngx-webstorage';
 import {SharedModule} from './shared/shared.module';
 import {CoreModule} from './core/core.module';
@@ -31,7 +31,8 @@ import {BoardModule} from './board/board.module';
     BrowserAnimationsModule,
     ToastModule,
     SidebarModule,
-    BoardModule
+    BoardModule,
+    HttpClientXsrfModule
   ],
   providers: [MessageService],
   bootstrap: [AppComponent]

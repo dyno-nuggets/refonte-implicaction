@@ -4,10 +4,11 @@ import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,19 +22,28 @@ import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_ME
 import static java.util.stream.Collectors.toList;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class JobPostingService {
 
     private final JobPostingRepository jobPostingRepository;
     private final JobPostingAdapter jobPostingAdapter;
     private final JobApplicationRepository jobApplicationRepository;
     private final AuthService authService;
+    private final NotificationService notificationService;
 
     public JobPostingDto createJob(JobPostingDto jobPostingDto) {
-
         JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
         jobPosting.setCreatedAt(Instant.now());
+        // si l'utilisateur qui crée une offre est admin, alors elle est validée par défaut
+        final User currentUser = authService.getCurrentUser();
+        boolean isAdmin = currentUser.getRoles()
+                .stream()
+                .anyMatch(role -> role.getName().equals(RoleEnum.ADMIN.getLongName()));
+        jobPosting.setValid(isAdmin);
         JobPosting jobSaved = jobPostingRepository.save(jobPosting);
+        if (jobSaved.isValid()) {
+            notificationService.createJobNotification(jobSaved);
+        }
         return jobPostingAdapter.toDto(jobSaved);
     }
 
@@ -80,15 +90,13 @@ public class JobPostingService {
 
     @Transactional
     public void deleteJobPosting(Long jobPostingId) {
-        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobPostingId)));
+        JobPosting jobPosting = findById(jobPostingId);
         jobPostingRepository.delete(jobPosting);
     }
 
     @Transactional
     public JobPostingDto toggleArchiveJobPosting(Long jobPostingId) {
-        JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
-                .orElseThrow(() -> new NotFoundException(String.format(Message.JOB_NOT_FOUND_MESSAGE, jobPostingId)));
+        JobPosting jobPosting = findById(jobPostingId);
         jobPosting.setArchive(!jobPosting.isArchive());
         final JobPosting save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
@@ -111,12 +119,23 @@ public class JobPostingService {
     }
 
     @Transactional
-    public void validateJob(JobPosting job) {
+    public JobPostingDto validateJob(Long jobId) {
+        final JobPosting job = findById(jobId);
         job.setValid(true);
-        jobPostingRepository.save(job);
+        final JobPosting jobValidate = jobPostingRepository.save(job);
+
+        // creation de la notification
+        notificationService.createJobNotification(jobValidate);
+
+        return jobPostingAdapter.toDto(jobValidate);
     }
 
     public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, String contractType, Boolean isArchive) {
         return this.getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
+    }
+
+    private JobPosting findById(Long jobId) {
+        return jobPostingRepository.findById(jobId)
+                .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId)));
     }
 }

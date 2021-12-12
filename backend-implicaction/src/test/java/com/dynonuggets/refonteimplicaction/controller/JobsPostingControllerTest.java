@@ -25,6 +25,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -153,10 +154,13 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, givenDto.getId()).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(
+                patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, givenDto.getId()).contentType(APPLICATION_JSON).with(csrf())
+        );
 
         // then
-        resultActions.andDo(print())
+        resultActions
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((givenDto.getId().intValue()))))
                 .andExpect(jsonPath("$.archive", is(!givenDto.isArchive())));
@@ -186,7 +190,9 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.toggleArchiveAll(anyList())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+        final ResultActions resultActions = mvc.perform(
+                patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json).with(csrf())
+        );
 
         // then
         resultActions.andDo(print())
@@ -210,7 +216,9 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willThrow(exception);
 
         // when
-        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId));
+        ResultActions resultActions = mvc.perform(
+                patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).with(csrf())
+        );
 
         // then
         resultActions.andExpect(status().isNotFound());

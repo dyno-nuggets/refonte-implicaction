@@ -273,8 +273,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.GET_ALL_PENDING_JOBS, pageable);
   }
 
-  getValidateJobEndpoint(): string {
-    return ApiEndpointsService.createUrl(Uris.JOBS.VALIDATE_JOB);
+  getValidateJobEndpoint(jobId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId, 'validate']);
   }
 
   /**
@@ -367,8 +367,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.VALIDATED_GROUPS, pageable);
   }
 
-  getValidateGroupEndpoint(): string {
-    return ApiEndpointsService.createUrl(Uris.GROUP.VALIDATE_GROUP);
+  getValidateGroupEndpoint(groupName: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.GROUP.BASE_URI, [groupName, 'validate']);
   }
 
   getAllPendingGroupEndpoint(pageable: Pageable): string {

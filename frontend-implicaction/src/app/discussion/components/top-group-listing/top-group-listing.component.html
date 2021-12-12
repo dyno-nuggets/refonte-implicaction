@@ -17,9 +17,9 @@
           <span class="ps-2 overflow-ellipsis w-50">{{group.name}}</span>
           <div class="d-flex justify-content-end w-100">
             <a
-              *ngIf="userGroupNames?.length && !userGroupNames.includes(group.name)"
+              *ngIf="userGroupNames?.length >= 0 && !userGroupNames.includes(group.name)"
               (click)="joinGroup(group.name)"
-              class="cursor-pointer secondary-on-hover"
+              class="cursor-pointer secondary-on-hover cursor-pointer"
               data-placement="bottom"
               data-toggle="tooltip"
               title="Rejoindre le groupe"

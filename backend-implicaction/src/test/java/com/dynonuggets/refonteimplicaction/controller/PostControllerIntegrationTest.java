@@ -26,6 +26,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -72,11 +73,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
-        resultActions.andDo(print())
+        resultActions
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedResponse.getId().intValue())))
@@ -111,11 +113,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
-        resultActions.andDo(print())
+        resultActions
+                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is(POST_SHOULD_HAVE_A_NAME)))
                 .andExpect(jsonPath("$.errorCode", is(BAD_REQUEST.value())));

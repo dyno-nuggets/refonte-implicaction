@@ -53,7 +53,7 @@ public class AuthService {
 
 
     @Value("${app.url}")
-    private String contactUrl;
+    private String appUrl;
 
 
     /**
@@ -118,7 +118,7 @@ public class AuthService {
                 .date(Instant.now())
                 .sent(false)
                 .read(false)
-                .message(String.format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", contactUrl))
+                .message(String.format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", appUrl))
                 .title("[Implicaction] Activation de votre compte")
                 .build();
         final Notification notificationSave = notificationRepository.save(notification);

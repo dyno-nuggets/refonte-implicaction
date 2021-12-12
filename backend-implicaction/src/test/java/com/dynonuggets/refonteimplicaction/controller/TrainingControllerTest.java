@@ -22,6 +22,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -77,11 +78,12 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                post(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                post(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
-        resultActions.andDo(print())
+        resultActions
+                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
@@ -137,11 +139,12 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                put(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                put(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
         );
 
         // then
-        resultActions.andDo(print())
+        resultActions
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
@@ -179,7 +182,7 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                delete(TRAINING_BASE_URI + DELETE_TRAINING_URI, 123L)
+                delete(TRAINING_BASE_URI + DELETE_TRAINING_URI, 123L).with(csrf())
         );
 
         // then

@@ -53,7 +53,7 @@ export class JobService {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationJobsEndpoint(pageable));
   }
 
-  validateJob(job: JobPosting): Observable<JobPosting> {
-    return this.http.patch(this.apiEndpointsService.getValidateJobEndpoint(), job);
+  validateJob(jobId: string): Observable<JobPosting> {
+    return this.http.patch(this.apiEndpointsService.getValidateJobEndpoint(jobId), null);
   }
 }

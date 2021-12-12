@@ -127,7 +127,7 @@ public class UserService {
     public List<GroupDto> getUserGroups(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(Message.USER_NOT_FOUND_MESSAGE));
-        ;
+
         final List<Group> groups = user.getGroups();
         return groups.stream()
                 .map(groupAdapter::toDto)

@@ -33,6 +33,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -42,7 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest extends ControllerIntegrationTestBase {
 
     List<UserDto> userDtos;
-    List<GroupDto> groupDtos;
     ArrayList<String> roles = new ArrayList<>();
 
     @MockBean
@@ -553,11 +553,14 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         given(userService.updateUser(userDto)).willReturn(userDto);
 
         // when
-        ResultActions resultActions = mvc.perform(put(USER_BASE_URI).content(json).contentType(APPLICATION_JSON))
-                .andDo(print());
+        ResultActions resultActions = mvc.perform(
+                put(USER_BASE_URI).content(json).contentType(APPLICATION_JSON).with(csrf())
+        );
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(userDto.getId().intValue())))
                 .andExpect(jsonPath("$.username", is(userDto.getUsername())))
                 .andExpect(jsonPath("$.email", is(userDto.getEmail())))
@@ -589,12 +592,13 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         given(userService.updateImageProfile(any())).willReturn(userDto);
 
         // when
-        final ResultActions resultActions = mvc
-                .perform(multipart(USER_BASE_URI + SET_USER_IMAGE).file("file", mockMultipartFile.getBytes()))
-                .andDo(print());
+        final ResultActions resultActions = mvc.perform(
+                multipart(USER_BASE_URI + SET_USER_IMAGE).file("file", mockMultipartFile.getBytes()).with(csrf())
+        );
 
         // then
         resultActions
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.imageUrl").isNotEmpty());
 

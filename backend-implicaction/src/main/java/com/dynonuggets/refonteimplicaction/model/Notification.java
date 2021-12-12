@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -37,5 +38,5 @@ public class Notification {
 
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "notifications")
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 }

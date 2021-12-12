@@ -4,6 +4,7 @@ import {Group} from '../model/group';
 import {HttpClient} from '@angular/common/http';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Pageable} from '../../shared/models/pageable';
+import {JobPosting} from '../../shared/models/job-posting';
 
 @Injectable({
   providedIn: 'root'
@@ -40,7 +41,7 @@ export class GroupService {
     return this.http.get(this.apiEndpointService.getAllPendingGroupEndpoint(pageable));
   }
 
-  validateGroup(group: Group): Observable<any> {
-    return this.http.patch(this.apiEndpointService.getValidateGroupEndpoint(), group);
+  validateGroup(groupName: string): Observable<JobPosting> {
+    return this.http.patch(this.apiEndpointService.getValidateGroupEndpoint(groupName), null);
   }
 }
