@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/login",
             "/api/auth/refresh/token",
             "/api/posts/latest/**",
-            "/api/jobs/latest/**",
+            "/api/jobs-postings/latest/**",
             // swagger
             "/v2/api-docs",
             // -- swagger ui
@@ -46,10 +46,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/*.css",
             "/*.css.map",
             "/assets/img/*.png",
+            "/assets/img/*.jpg",
             "/favicon.ico",
             "/**.ttf",
-            "/**.woff",
-            "/*.jpg"
+            "/**.woff"
     };
     private static final String[] ADMIN_PROTECTED = {
             "/api/auth/accountVerification/**"
