@@ -43,6 +43,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
             this.currentUser = currentUser;
             this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
             this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
+            this.displayProfile = this.currentUser?.roles.includes(RoleEnumCode.USER);
           })
       );
     this.isLoggedIn = this.authService.isLoggedIn();
@@ -55,13 +56,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   logout(): void {
     this.authService
       .logout()
-      .subscribe(() => {
-        this.router
-          .navigateByUrl('/')
-          .then(() => {
-            this.toaster.success('Success', 'You are now logged out!');
-          });
-      });
+      .subscribe(() => this.router
+        .navigateByUrl('/')
+        .then(() => this.toaster.success('Success', 'You are now logged out!'))
+      );
   }
 
   ngOnDestroy(): void {

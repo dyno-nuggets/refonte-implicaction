@@ -8,7 +8,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JobPostingRepository extends JpaRepository<JobPosting, Long>, JobPostingRepositoryCustom {
+
     Page<JobPosting> findAllByValidIsFalse(Pageable pageable);
 
-    Page<JobPosting> findAllByOrderByCreatedAtDesc(Pageable pageable);
+    Page<JobPosting> findAllByArchiveFalseAndValidTrueOrderByCreatedAtDesc(Pageable pageable);
 }

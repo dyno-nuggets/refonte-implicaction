@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/login",
             "/api/auth/refresh/token",
             "/api/posts/latest/**",
-            "/api/jobs-postings/latest/**",
+            "/api/job-postings/latest/**",
             // swagger
             "/v2/api-docs",
             // -- swagger ui

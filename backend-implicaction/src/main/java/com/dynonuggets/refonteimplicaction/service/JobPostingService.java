@@ -136,7 +136,7 @@ public class JobPostingService {
     }
 
     public List<JobPostingDto> getLatestJobs(int jobsCount) {
-        return jobPostingRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, jobsCount))
+        return jobPostingRepository.findAllByArchiveFalseAndValidTrueOrderByCreatedAtDesc(PageRequest.of(0, jobsCount))
                 .map(jobPostingAdapter::toDto)
                 .getContent();
     }
