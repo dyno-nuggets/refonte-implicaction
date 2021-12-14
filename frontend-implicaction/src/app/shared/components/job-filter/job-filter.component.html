@@ -38,9 +38,18 @@
       <input class="form-control" id="localisationInput" placeholder="Localisation...">
     </div>
     <div class="mb-3">
-      <label class="form-label text-dark fw-bold" for="exampleFormControlInput1">Secteur d'activité</label>
-      <input class="form-control" id="exampleFormControlInput1" placeholder="Informatique, Banque, Assurance ..."
-             type="email">
+      <p-dropdown
+        [options]="businessSectors"
+        (onChange)="onBusinessSectorChange($event)"
+        [(ngModel)]="criteria.businessSector"
+        emptyMessage="Aucun secteur d'activité"
+        optionLabel="label"
+        optionValue="code"
+        placeholder="Sélectionnez un secteur d'activité"
+        required="true"
+        styleClass="w-100"
+      >
+      </p-dropdown>
     </div>
   </div>
 </div>

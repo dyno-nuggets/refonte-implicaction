@@ -3,9 +3,7 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.model.JobPosting;
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import lombok.RequiredArgsConstructor;
@@ -60,9 +58,9 @@ public class JobPostingService {
         return jobDto;
     }
 
-    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, boolean applyCheck, Boolean valid) {
+    public Page<JobPostingDto> getAllWithCriteria(Pageable pageable, String search, ContractTypeEnum contractType, BusinessSectorEnum businessSectorEnum, Boolean archive, boolean applyCheck, Boolean valid) {
         // récupération des jobs
-        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, archive, valid);
+        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, businessSectorEnum, archive, valid);
         if (applyCheck) {
             final List<Long> jobIds = jobs.stream().map(JobPosting::getId).collect(toList());
             final List<Long> jobAppliesIds = getAllAppliesWithJobIdsIn(jobIds, authService.getCurrentUser().getId());
@@ -131,8 +129,8 @@ public class JobPostingService {
         return jobPostingAdapter.toDto(jobValidate);
     }
 
-    public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, String contractType, Boolean isArchive) {
-        return getAllWithCriteria(pageable, search, contractType, isArchive, true, true);
+    public Page<JobPostingDto> getAllActiveWithCriteria(Pageable pageable, String search, ContractTypeEnum contractType, BusinessSectorEnum businessSectorEnum, Boolean isArchive) {
+        return getAllWithCriteria(pageable, search, contractType, businessSectorEnum, isArchive, true, true);
     }
 
     public List<JobPostingDto> getLatestJobs(int jobsCount) {

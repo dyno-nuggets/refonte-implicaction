@@ -18,15 +18,6 @@
   box-shadow: none;
 }
 
-::ng-deep {
-  .p-dropdown, p-dropdown:focus {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-  }
-}
-
-
 .spinner {
   height: 50vh;
 }

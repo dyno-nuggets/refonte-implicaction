@@ -67,7 +67,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         params => this.router
           .navigateByUrl(params.returnUrl || Univers.HOME.url)
-          .then(() => this.toaster.success('Success', 'Login Successful')),
+          .then(() => this.toaster.success('Bienvenue', 'vous êtes maintenant connecté')),
         error => console.log(error)
       );
   }

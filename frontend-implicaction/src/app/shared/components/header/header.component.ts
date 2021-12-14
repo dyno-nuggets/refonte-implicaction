@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .logout()
       .subscribe(() => this.router
         .navigateByUrl('/')
-        .then(() => this.toaster.success('Success', 'You are now logged out!'))
+        .then(() => this.toaster.success('Succès', 'Vous êtes maintenant déconnecté'))
       );
   }
 
