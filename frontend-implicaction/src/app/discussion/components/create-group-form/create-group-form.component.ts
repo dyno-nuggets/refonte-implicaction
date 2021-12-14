@@ -57,7 +57,7 @@ export class CreateGroupFormComponent extends SidebarContentComponent implements
     group$.subscribe(
       () => this.sidebarService.close(),
       () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la création du groupe'),
-      () => this.toasterService.success('Succès', 'Le groupe a été créé avec succès')
+      () => this.toasterService.success('Succès', 'Le groupe a été créé avec succès, mais doit encore être validé !')
     );
   }
 
