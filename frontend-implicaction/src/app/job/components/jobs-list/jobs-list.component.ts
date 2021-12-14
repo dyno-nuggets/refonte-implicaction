@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Constants} from '../../../config/constants';
 import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
@@ -12,13 +12,14 @@ import {BaseWithPaginationComponent} from '../../../shared/components/base-with-
 import {JobPosting} from '../../../shared/models/job-posting';
 import {JobPostingFormComponent} from '../../../admin/jobs/components/job-posting-form/job-posting-form.component';
 import {SidebarService} from '../../../shared/services/sidebar.service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-jobs-list',
   templateUrl: './jobs-list.component.html',
   styleUrls: ['./jobs-list.component.scss']
 })
-export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, JobCriteriaFilter> implements OnInit {
+export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, JobCriteriaFilter> implements OnInit, OnDestroy {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
@@ -28,12 +29,13 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
   orderByEnums = JobSortEnum.all();
   selectedOrderCode: string;
   sortDirection = SortDirectionEnum;
+  subscription: Subscription;
 
   constructor(
-    private toastService: ToasterService,
-    private jobsService: JobService,
-    private filterService: JobFilterContextService,
-    private sidebarService: SidebarService,
+    protected toastService: ToasterService,
+    protected jobsService: JobService,
+    protected filterService: JobFilterContextService,
+    protected sidebarService: SidebarService,
     protected route: ActivatedRoute
   ) {
     super(route);
@@ -44,10 +46,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
     this.pageable.sortBy = JobSortEnum.DATE_DESC.sortBy;
     this.selectedOrderCode = JobSortEnum.DATE_DESC.code;
 
-    // réinitialisation systématique du filtre au chargement du composant
-    this.filterService.criteria = {};
-
-    this.filterService
+    this.subscription = this.filterService
       .observe()
       .subscribe(criteria => {
         this.criteria = criteria;
@@ -56,7 +55,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
         this.paginate();
       });
 
-    this.getFilterFromQueryParams(['keyword'])
+    this.getFilterFromQueryParams(['keyword', 'createdAt', 'contractType', 'businessSector'])
       .then(() => this.filterService.criteria = this.criteria);
   }
 
@@ -92,5 +91,10 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des offres')
       );
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
+    this.filterService.criteria = {};
   }
 }

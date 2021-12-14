@@ -97,6 +97,20 @@ textarea, input {
   }
 }
 
+.p-dropdown.p-component {
+  border: 1px solid #ced4da !important;
+
+  &.no-outline {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
+
+  &:hover {
+    border-color: $info !important;
+  }
+}
+
 .theme-primary {
   color: $primary !important;
 }

@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.repository.impl;
 
+import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepositoryCustom;
@@ -24,7 +25,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
     private final EntityManager entityManager;
 
     @Override
-    public Page<JobPosting> findAllWithCriteria(Pageable pageable, String search, String contractType, Boolean archive, Boolean valid) {
+    public Page<JobPosting> findAllWithCriteria(Pageable pageable, String search, ContractTypeEnum contractType, BusinessSectorEnum businessSector, Boolean archive, Boolean valid) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<JobPosting> query = criteriaBuilder.createQuery(JobPosting.class);
         Root<JobPosting> queryRoot = query.from(JobPosting.class);
@@ -45,8 +46,13 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         }
 
         // recherche par type de contrat
-        if (StringUtils.isNotEmpty(contractType)) {
-            predicates.add(criteriaBuilder.equal(queryRoot.get("contractType"), ContractTypeEnum.valueOf(contractType)));
+        if (contractType != null) {
+            predicates.add(criteriaBuilder.equal(queryRoot.get("contractType"), contractType));
+        }
+
+        // recherche par secteur d'activité
+        if (businessSector != null) {
+            predicates.add(criteriaBuilder.equal(queryRoot.get("businessSector"), businessSector));
         }
 
         if (archive != null) {
@@ -56,7 +62,7 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         if (valid != null) {
             predicates.add(criteriaBuilder.equal(queryRoot.get("valid"), valid));
         }
-        
+
         // combinaison des différents prédicats
         Predicate finalPredicate = criteriaBuilder.and(predicates.toArray(new Predicate[0]));
 

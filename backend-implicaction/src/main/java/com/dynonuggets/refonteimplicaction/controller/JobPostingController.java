@@ -2,6 +2,8 @@ package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
+import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -36,14 +38,16 @@ public class JobPostingController {
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
             @RequestParam(value = "search", defaultValue = "") String search,
-            @RequestParam(value = "contractType", required = false) String contractType,
+            @RequestParam(value = "contractType", required = false) ContractTypeEnum contractType,
+            @RequestParam(value = "businessSector", required = false) BusinessSectorEnum businessSector,
             @RequestParam(value = "checkApply", required = false) String checkApplyAsString,
             @RequestParam(value = "archive", required = false) String archiveAsString
+
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         final boolean applyCheck = Boolean.parseBoolean(checkApplyAsString);
         final Boolean isArchive = StringUtils.isNotBlank(archiveAsString) ? Boolean.parseBoolean(archiveAsString) : null;
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, isArchive, applyCheck, null);
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllWithCriteria(pageable, search, contractType, businessSector, isArchive, applyCheck, null);
         return ResponseEntity.ok(jobPostingDtos);
     }
 
@@ -54,12 +58,13 @@ public class JobPostingController {
             @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder,
             @RequestParam(value = "search", defaultValue = "") String search,
-            @RequestParam(value = "contractType", required = false) String contractType,
+            @RequestParam(value = "contractType", required = false) ContractTypeEnum contractType,
+            @RequestParam(value = "businessSector", required = false) BusinessSectorEnum businessSector,
             @RequestParam(value = "archive", required = false) String archiveAsString
     ) {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         final Boolean isArchive = StringUtils.isNotBlank(archiveAsString) ? Boolean.parseBoolean(archiveAsString) : null;
-        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllActiveWithCriteria(pageable, search, contractType, isArchive);
+        Page<JobPostingDto> jobPostingDtos = jobPostingService.getAllActiveWithCriteria(pageable, search, contractType, businessSector, isArchive);
         return ResponseEntity.ok(jobPostingDtos);
     }
 

@@ -15,6 +15,7 @@ import {CompanyFilterComponent} from './components/company-filter/company-filter
 import {BaseWithPaginationComponent} from './components/base-with-pagination/base-with-pagination.component';
 import {AvatarModule} from 'primeng/avatar';
 import {FormsModule} from '@angular/forms';
+import {DropdownModule} from 'primeng/dropdown';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import {FormsModule} from '@angular/forms';
     BadgeModule,
     IconsModule,
     AvatarModule,
-    FormsModule
+    FormsModule,
+    DropdownModule
   ]
 })
 export class SharedModule {
