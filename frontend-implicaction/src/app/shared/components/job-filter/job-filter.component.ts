@@ -12,10 +12,12 @@ import {BusinessSectorEnum} from '../../enums/sector.enum';
 })
 export class JobFilterComponent implements OnInit, OnDestroy {
 
+  readonly defaultSector = {label: `Tous les secteurs d'activités`, code: null};
+
   contractTypes = ContractEnum.all();
   criteria: JobCriteriaFilter = {};
   subscription: Subscription;
-  businessSectors = BusinessSectorEnum.all();
+  businessSectors = [this.defaultSector, ...BusinessSectorEnum.all()];
 
   constructor(private filterContextService: JobFilterContextService) {
   }

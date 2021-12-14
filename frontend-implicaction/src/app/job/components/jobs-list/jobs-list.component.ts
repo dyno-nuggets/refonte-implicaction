@@ -94,7 +94,7 @@ export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, J
   }
 
   ngOnDestroy(): void {
-    this.filterService.criteria = {};
     this.subscription?.unsubscribe();
+    this.filterService.criteria = {};
   }
 }
