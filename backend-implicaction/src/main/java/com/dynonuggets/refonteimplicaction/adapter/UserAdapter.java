@@ -98,7 +98,7 @@ public class UserAdapter {
                 .stream()
                 .map(roleLabel -> {
                     final RoleEnum role = RoleEnum.valueOf(roleLabel);
-                    return new Role(role.getId(), role.getName(), emptySet());
+                    return new Role(role.getId(), role.name(), emptySet());
                 })
                 .collect(toList());
 

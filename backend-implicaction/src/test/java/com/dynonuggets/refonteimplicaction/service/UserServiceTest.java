@@ -78,7 +78,7 @@ class UserServiceTest {
     void setMockOutput() {
 
         List<Role> seekerRoles = Stream.of(RoleEnum.USER, RoleEnum.JOB_SEEKER)
-                .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.getName(), Collections.emptySet()))
+                .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.name(), Collections.emptySet()))
                 .collect(toList());
 
         userSeeker = User.builder()

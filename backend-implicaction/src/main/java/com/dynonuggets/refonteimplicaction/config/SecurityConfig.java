@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+
 @EnableWebSecurity
 @AllArgsConstructor
 @EnableScheduling
@@ -29,8 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/signup",
             "/api/auth/login",
             "/api/auth/refresh/token",
-            "/api/posts/latest/**",
-            "/api/job-postings/latest/**",
+            POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
+            JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
+            JOBS_BASE_URI + VALIDATED_JOBS + "?**",
             // swagger
             "/v2/api-docs",
             // -- swagger ui
@@ -51,8 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/**.ttf",
             "/**.woff"
     };
+
     private static final String[] ADMIN_PROTECTED = {
             "/api/auth/accountVerification/**"
+    };
+
+    private static final String[] PREMIUM_PROTECTED = {
+            APPLY_BASE_URI + "/**",
     };
 
     private final UserDetailsService userDetailsService;
@@ -65,7 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(ADMIN_PROTECTED).hasRole(RoleEnum.ADMIN.getName())
+                .antMatchers(ADMIN_PROTECTED).hasRole(RoleEnum.ADMIN.name())
+                .antMatchers(PREMIUM_PROTECTED).hasRole(RoleEnum.PREMIUM.name())
                 .anyRequest()
                 .authenticated();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
