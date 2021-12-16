@@ -1,6 +1,6 @@
 {
   "name": "frontend-implicaction",
-  "version": "0.2.1",
+  "version": "0.2.2-SNAPSHOT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
