@@ -37,8 +37,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     JobApplicationService applicationService;
 
     @Test
-    @WithMockUser
-    void should_create_apply() throws Exception {
+    @WithMockUser(roles = "PREMIUM")
+    void should_create_apply_when_premium() throws Exception {
         // given
         JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), "Paris (75)", CDI, false);
@@ -65,8 +65,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     }
 
     @Test
-    @WithMockUser
-    void should_return_notfound_when_creating_apply_and_job_notfound() throws Exception {
+    @WithMockUser(roles = "PREMIUM")
+    void should_return_notfound_when_creating_apply_and_job_notfound_and_premium() throws Exception {
         // given
         JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         String json = gson.toJson(request);
@@ -87,8 +87,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     }
 
     @Test
-    @WithMockUser
-    void should_return_bad_request_when_creating_apply_with_already_applied_job() throws Exception {
+    @WithMockUser(roles = "PREMIUM")
+    void should_return_bad_request_when_creating_apply_with_already_applied_job_and_premium() throws Exception {
         // given
         JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         String json = gson.toJson(request);
@@ -127,6 +127,24 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     @WithMockUser
+    void should_return_forbidden_when_creating_apply_and_not_premium() throws Exception {
+        // given
+        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        String json = gson.toJson(request);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+        );
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+
+        verify(applicationService, never()).createApplyIfNotExists(any());
+    }
+
+    @Test
+    @WithMockUser(roles = "PREMIUM")
     void should_list_all_users_application() throws Exception {
         // given
         List<JobApplicationDto> expecteds = asList(
@@ -169,8 +187,17 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     }
 
     @Test
-    @WithMockUser
-    void should_update_status() throws Exception {
+    void should_response_forbidden_when_listing_and_no_premium() throws Exception {
+        // when
+        final ResultActions resultActions = mvc.perform(get(APPLY_BASE_URI));
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser(roles = "PREMIUM")
+    void should_update_status_when_premium() throws Exception {
         // given
         JobApplicationDto applyExpected = new JobApplicationDto(12L, 123L, "title", "company", "http://image.url", CHASED.name(), "Paris (75)", CDD, false);
         JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
@@ -195,7 +222,27 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     @WithMockUser
-    void should_delete_apply_when_apply_exists() throws Exception {
+    void when_not_premium_then_update_should_response_forbidden() throws Exception {
+        // given
+        JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
+        String json = gson.toJson(request);
+
+        // when
+        final ResultActions resultActions = mvc.perform(
+                patch(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
+        );
+
+        // then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isForbidden());
+
+        verify(applicationService, times(0)).updateApplyForCurrentUser(any());
+    }
+
+    @Test
+    @WithMockUser(roles = "PREMIUM")
+    void when_premium_then_delete_existing_apply_should_delete_apply() throws Exception {
         // given
         long jobId = 123L;
 
@@ -211,8 +258,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     }
 
     @Test
-    @WithMockUser
-    void should_response_notfound_when_deleting_and_apply_not_exists() throws Exception {
+    @WithMockUser(roles = "PREMIUM")
+    void when_premium_then_deleting_not_existing_apply_should_response_notfound() throws Exception {
         // given
         long jobId = 123L;
         long currentUserId = 234L;
@@ -232,7 +279,20 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     }
 
     @Test
-    void should_response_forbidden_when_deleting_and_no_auth() throws Exception {
+    void when_no_auth_then_delete_should_response_forbidden() throws Exception {
+        // given
+        long jobId = 123L;
+
+        // when
+        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+
+        // then
+        resultActions.andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockUser
+    void when_not_premium_then_delete_should_response_forbidden() throws Exception {
         // given
         long jobId = 123L;
 
