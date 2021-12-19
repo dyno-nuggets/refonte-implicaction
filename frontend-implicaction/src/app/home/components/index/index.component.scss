@@ -4,6 +4,19 @@
   font-size: 48px;
 }
 
+.latest-events {
+  .heading {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 575px) {
+  .heading {
+    font-size: 28px;
+    word-wrap: break-word;
+  }
+}
+
 .subheading {
   font-size: 10px;
 }
@@ -39,5 +52,11 @@ p {
 }
 
 .custom-mt {
-  margin-top: 5rem;
+  margin-top: 3rem;
+}
+
+@media screen and (min-width: 576px) {
+  .custom-mt {
+    margin-top: 5rem;
+  }
 }

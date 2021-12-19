@@ -10,4 +10,5 @@ import {Univers} from '../../../shared/enums/univers';
 export class IndexComponent {
 
   univers = Univers;
+
 }
