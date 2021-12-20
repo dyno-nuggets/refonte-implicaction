@@ -64,20 +64,24 @@
 
   <div class="row custom-mt latest-section">
     <div class="row m-0 p-1">
-      <div class="col-xl-6 px-2 px-sm-5">
+      <div class="col-md-6 px-2 px-sm-5 px-md-2 px-lg-5">
         <div class="d-flex align-items-start justify-content-between mb-3">
           <h2 class="text-start align-self-center sub-heading">Prochains <span class="text-danger">événements</span></h2>
+          <a class="btn btn-primary">
+            Tout voir
+          </a>
         </div>
-        <div class="latest-events-list">
-          <app-event-card></app-event-card>
-          <app-event-card></app-event-card>
-          <app-event-card></app-event-card>
+        <div
+          *ngFor="let event of events"
+          class="latest-events-list"
+        >
+          <app-event-card [event]="event"></app-event-card>
         </div>
       </div>
 
-      <div class="col-xl-6 px-2 px-sm-5">
+      <div class="col-md-6 px-2 px-sm-5 px-md-2 px-lg-5">
         <div class="d-flex align-items-start justify-content-between mb-3">
-          <h2 class="text-start align-self-center sub-heading">Les dernières <span class="text-danger">publications</span></h2>
+          <h2 class="text-start align-self-center sub-heading">Dernières <span class="text-danger">publications</span></h2>
           <a class="btn btn-primary" routerLink="/{{univers.DISCUSSIONS.url}}">
             Tout voir
           </a>
@@ -88,9 +92,9 @@
       </div>
     </div>
 
-    <div class="col-md-12 p-sm-5">
+    <div class="col-md-12 px-sm-5 px-md-2 px-lg-5 mt-3">
       <div class="d-flex align-items-start justify-content-between mb-3">
-        <h2 class="text-start align-self-center sub-heading">Les nouvelles <span
+        <h2 class="text-start align-self-center sub-heading">Nouvelles <span
           class="text-danger">offres</span></h2>
         <a class="btn btn-primary" routerLink="/{{univers.JOBS.url}}">
           Tout voir
