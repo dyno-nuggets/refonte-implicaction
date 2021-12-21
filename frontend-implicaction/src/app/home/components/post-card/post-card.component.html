@@ -1,28 +1,41 @@
-<div class="ps-2 py-1 post-card home-card-border d-flex flex-row align-items-center">
-  <div class="card-body col-md-10 col-11">
-    <div class="card-title d-flex align-items-center justify-content-start">
-      <img
-        #userImg
-        (error)="userImg.src = constant.USER_IMAGE_DEFAULT_URI"
-        [src]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
-        class="rounded-circle me-2 shadow-sm avatar"
-        alt=""
-      >
-      <div class="d-flex flex-column head-line ps-2">
-        <a class="post-card-link" routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a>
-        <span class="d-none d-sm-inline ps-2"> </span>
-        <span class="duration mt-1">{{post.duration}}</span>
+<div class="card card-post card-event py-0 px-2 mb-3">
+  <div class="card-body d-flex justify-content-between align-items-center pe-1">
+    <div class="post-data col-11">
+      <div class="card-title d-flex">
+        <div class="user-img">
+          <img
+            #userImg
+            (error)="userImg.src = constant.USER_IMAGE_DEFAULT_URI"
+            [src]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
+            class="rounded-circle me-2 shadow-sm avatar"
+            alt=""
+          >
+        </div>
+        <div class="flex flex-column">
+          <div class="username">
+            <a
+              class="post-card-link"
+              routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile"
+            >
+              {{post.username}}
+            </a>
+          </div>
+          <div class="duration mt-1">{{post.duration}}</div>
+        </div>
+      </div>
+      <div>
+        <h3 class="theme-primary m-0 overflow-ellipsis">
+          <a
+            class="post-card-link"
+            routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}"
+          >
+            {{post.name}}
+          </a>
+        </h3>
       </div>
     </div>
-    <div>
-      <h3 class="theme-primary m-0 overflow-ellipsis">
-        <a class="post-card-link" routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">{{post.name}}</a>
-      </h3>
+    <div class="col-1 d-flex justify-content-center">
+      <i class="fas fa-chevron-right"></i>
     </div>
-  </div>
-  <div class="col-2 col-md-1">
-    <a class="btn fw-bold card-body post-card-link" routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">
-      <i class="fas fa-chevron-right px-1 text-primary"></i>
-    </a>
   </div>
 </div>

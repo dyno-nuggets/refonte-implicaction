@@ -1,13 +1,20 @@
-<div class="d-flex flex-row py-4 px-1 event-card home-card-border align-items-center mb-3">
-  <div class="text-center col-5 col-md-3 border-end">
-    <p class="text-danger fs-3 fw-light mb-2">01</p>
-    <p class="text-danger fw-bold m-0">décembre</p>
-    <p class="text-danger fw-bold m-0">2021</p>
+<div class="card card-event py-4 px-2 mb-3">
+  <div class="row align-items-center">
+    <div class="col-12 flex-column col-sm-3 px-0 px-md-2 text-center mb-2 m-md-0 text-danger date-section">
+      <span class="fw-light event-day">{{event.date | date: 'dd'}}</span>
+      <span class="fw-bold m-0 px-1 px-sm-0 event-month px-1 px-sm-0 d-none d-sm-inline-block d-md-inline d-lg-inline d-xl-none">{{event.date | date: 'MMM'}}</span>
+      <span class="fw-bold m-0 px-1 px-sm-0 event-month px-1 px-sm-0 d-sm-none d-md-none d-lg-none d-xl-inline">{{event.date | date: 'MMMM'}}</span>
+      <span class="fw-bold m-0 event-year">2021</span>
+    </div>
+    <div class="col-sm-9 px-0 ps-sm-3 ps-md-1">
+      <div class="card-body m-0 p-0">
+        <h5 class="card-title text-primary fw-bold text-center d-flex justify-content-between align-items-baseline align-items-sm-center">
+          <span class="d-block col-10 ps-3">{{event.title}}</span>
+          <span class="d-block col py-0 px-1 pe-sm-3">
+            <i class="fas fa-chevron-right"></i>
+          </span>
+        </h5>
+      </div>
+    </div>
   </div>
-  <div class=" col-5 col-md-8 text-primary fw-bold ps-5">Conférence Général de Villiers à l'UCO d'Angers</div>
-  <button
-    class="btn fw-bold col-2 col-md-1"
-  >
-    <i class="fas fa-chevron-right px-1 text-primary"></i>
-  </button>
 </div>

@@ -8,7 +8,7 @@
       >
     </div>
 
-    <div class="col-12 col-md-4 text-center align-self-center">
+    <div class="col-12 col-md-4 text-center align-self-center summary">
       <h2 class="text-center mt-5 heading">Implic’<span class="text-danger fst-italic">action</span></h2>
       <p class="subheading text-uppercase mb-4">Une association qui vous accompagne grâce à sa dynamique réseau !</p>
       <p>Pour partager, échanger, préparer dans un seul but commun : réussir votre reconversion !</p>
@@ -23,11 +23,15 @@
       <button class="btn btn-primary mt-2">Adhérer à l'association</button>
     </div>
   </div>
-  <div class="row custom-mt">
+
+  <div class="row custom-mt key-points">
     <div class="col-12 text-center">
-      <h2 class="text-center heading">Implic’<span class="text-danger"><span
-        class="fst-italic">action</span>, c'est...</span></h2>
-      <div class="row justify-content-evenly align-self-center mt-5 px-5">
+      <h2 class="heading">
+        <span class="heading-part">Implic’</span>
+        <span class="heading-part text-danger fst-italic">action, </span>
+        <span class="heading-part text-danger">c'est...</span>
+      </h2>
+      <div class="row justify-content-evenly align-self-center mt-3 mt-sm-5 px-2 px-sm-5">
         <div class="col-lg-3 col-md-6 mb-2 justify-content-center">
           <img
             alt="reseau"
@@ -58,42 +62,47 @@
     </div>
   </div>
 
-  <div class="row custom-mt">
-    <div class="row align-items-start">
-      <div class="col-xl-6 p-5">
+  <div class="row custom-mt latest-section">
+    <div class="row m-0 p-1">
+      <div class="col-md-6 px-2 px-sm-5 px-md-2 px-lg-5">
         <div class="d-flex align-items-start justify-content-between mb-3">
-          <h2 class="text-start align-self-center sub-heading">Prochains <span
-            class="text-danger">événements</span></h2>
+          <h2 class="text-start align-self-center sub-heading">Prochains <span class="text-danger">événements</span></h2>
+          <a class="btn btn-primary">
+            Tout voir
+          </a>
         </div>
-        <div>
-          <app-event-card></app-event-card>
-          <app-event-card></app-event-card>
-          <app-event-card></app-event-card>
+        <div
+          *ngFor="let event of events"
+          class="latest-events-list"
+        >
+          <app-event-card [event]="event"></app-event-card>
         </div>
-
       </div>
-      <div class="col-xl-6 p-5">
+
+      <div class="col-md-6 px-2 px-sm-5 px-md-2 px-lg-5">
         <div class="d-flex align-items-start justify-content-between mb-3">
-          <h2 class="text-start align-self-center sub-heading">Les dernières <span
-            class="text-danger">publications</span></h2>
+          <h2 class="text-start align-self-center sub-heading">Dernières <span class="text-danger">publications</span></h2>
           <a class="btn btn-primary" routerLink="/{{univers.DISCUSSIONS.url}}">
             Tout voir
           </a>
         </div>
-        <app-post-list></app-post-list>
-      </div>
-      <div class="col-md-12 p-5">
-        <div class="d-flex align-items-start justify-content-between mb-3">
-          <h2 class="text-start align-self-center sub-heading">Les nouvelles <span
-            class="text-danger">offres</span></h2>
-          <a class="btn btn-primary" routerLink="/{{univers.JOBS.url}}">
-            Tout voir
-          </a>
+        <div class="latest-posts-list">
+          <app-post-list></app-post-list>
         </div>
-        <app-job-list></app-job-list>
       </div>
     </div>
-    <div>
+
+    <div class="col-md-12 px-sm-5 px-md-2 px-lg-5 mt-3">
+      <div class="d-flex align-items-start justify-content-between mb-3">
+        <h2 class="text-start align-self-center sub-heading">Nouvelles <span
+          class="text-danger">offres</span></h2>
+        <a class="btn btn-primary" routerLink="/{{univers.JOBS.url}}">
+          Tout voir
+        </a>
+      </div>
+      <app-job-list></app-job-list>
     </div>
+  </div>
+  <div>
   </div>
 </div>
