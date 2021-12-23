@@ -1,28 +1,43 @@
-<div class="px-2 py-3 py-xxl-4 col job-card">
-  <div class="d-flex justify-content-between align-items-center w-75 pb-2">
-    <img
-      #companyLogo
-      (error)="companyLogo.src = constant.COMPANY_IMAGE_DEFAULT_URI"
-      [src]="job.company?.logo || constant.COMPANY_IMAGE_DEFAULT_URI"
-      alt="company-logo"
-      class="d-flex d-sm-inline-block me-1 company-logo col-3"
-    >
-    <span
-      class="d-flex fw-bold grey overflow-ellipsis text-uppercase text-center justify-content-center col-7">{{job.company?.name}}</span>
-    <div class="d-flex align-items-end col-2">
+<div class="card card-job col row flex-column m-0 p-0 py-2">
+  <div class="card-header w-100 bg-transparent border-0 row align-items-center justify-content-between">
+    <div class="company-logo col-2 p-0">
+      <img
+        #companyLogo
+        (error)="companyLogo.src = constant.COMPANY_IMAGE_DEFAULT_URI"
+        [src]="job.company?.logo || constant.COMPANY_IMAGE_DEFAULT_URI"
+        alt="company-logo"
+        class="icon"
+      >
+    </div>
+    <div class="col-6 text-center p-0 overflow-ellipsis">{{job.company?.name}}</div>
+    <div class="col-3 p-0 d-flex justify-content-end">
       <app-contract-type [type]="job.contractType"></app-contract-type>
     </div>
   </div>
-  <h4 class="d-flex text-center pb-2">
-    <a class="title-link" routerLink="/{{univers.JOBS.url}}/{{job.id}}">{{job.title}}</a>
-  </h4>
-  <div class="d-flex">
-    <span class="pe-2">{{job.location}}</span>
-    <ng-container *ngIf="job.createdAt">
-      <span class="d-none d-sm-inline ps-2">•</span>
-      <span class="ps-2">
+  <div class="card-body row align-items-center">
+    <h4 class="text-center m-0 p-0 text-uppercase">
+      <a
+        class="job-title"
+        [title]="job.title"
+        routerLink="/{{univers.JOBS.url}}/{{job.id}}"
+      >
+        {{job.title | textEllipsis: 30}}
+      </a>
+    </h4>
+  </div>
+  <div class="card-footer bg-transparent border-0">
+    <div class="d-flex justify-content-center">
+      <div class="col-auto d-xl-none d-xxl-block">{{job.location | textEllipsis: 20}}</div>
+      <div class="col-auto d-none d-xl-block d-xxl-none">{{job.location | textEllipsis: 10}}</div>
+      <div
+        *ngIf="job.createdAt"
+        class="col-auto"
+      >
+        <span class="ps-2">•</span>
+        <span class="ps-2">
         <app-date-timelapse [date]="job.createdAt"></app-date-timelapse>
       </span>
-    </ng-container>
+      </div>
+    </div>
   </div>
 </div>

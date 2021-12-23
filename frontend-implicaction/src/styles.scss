@@ -123,6 +123,11 @@ input:focus::placeholder {
   box-shadow: none;
 }
 
+.icon {
+  width: 50px;
+  height: auto;
+}
+
 @media screen and (max-width: 768px) {
   .p-sidebar-right {
     width: 100vw !important;
