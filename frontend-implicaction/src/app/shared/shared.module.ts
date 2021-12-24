@@ -16,6 +16,7 @@ import {BaseWithPaginationComponent} from './components/base-with-pagination/bas
 import {AvatarModule} from 'primeng/avatar';
 import {FormsModule} from '@angular/forms';
 import {DropdownModule} from 'primeng/dropdown';
+import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import {DropdownModule} from 'primeng/dropdown';
     DateTimelapseComponent,
     JobFilterComponent,
     BaseWithPaginationComponent,
-    CompanyFilterComponent
+    CompanyFilterComponent,
+    TextEllipsisPipe
   ],
   exports: [
     HeaderComponent,
@@ -42,6 +44,7 @@ import {DropdownModule} from 'primeng/dropdown';
     ContractTypeComponent,
     DateTimelapseComponent,
     JobFilterComponent,
+    TextEllipsisPipe,
   ],
   imports: [
     CommonModule,

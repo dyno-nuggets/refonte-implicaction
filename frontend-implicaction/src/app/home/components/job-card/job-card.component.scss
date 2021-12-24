@@ -1,24 +1,26 @@
+.card-job {
+  border-radius: 11px;
+}
+
 .grey {
   color: #3F3F46;
 }
 
-.company-logo {
-  width: 38px;
-  height: auto;
-}
-
-.title-link {
+.job-title {
   text-decoration: none;
-  font-size: 25px;
+  font-size: 20px;
 
   &:hover {
     text-decoration: underline;
   }
 }
 
-.job-card {
-  display: grid;
+.card-job {
   justify-items: center;
   align-items: center;
-  grid-template-rows: 1fr 1fr 0.3fr;
+  height: 200px;
+
+  .card-body {
+    max-height: 92px;
+  }
 }
