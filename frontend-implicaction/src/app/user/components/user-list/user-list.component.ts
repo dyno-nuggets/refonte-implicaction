@@ -158,4 +158,7 @@ export class UserListComponent implements OnInit {
         () => this.toastService.success('Succès', message)
       );
   }
+
+  trackByUserId = (index: number, user: User) => user.id;
+
 }

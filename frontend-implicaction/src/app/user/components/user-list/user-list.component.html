@@ -37,7 +37,7 @@
     <ng-container *ngIf="!isLoading; else loadingTemplate">
       <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2">
         <app-user-card
-          *ngFor="let user of pageable.content"
+          *ngFor="let user of pageable.content; trackBy: trackByUserId"
           [user]="user"
         >
           <div class="mt-4 mb-2">

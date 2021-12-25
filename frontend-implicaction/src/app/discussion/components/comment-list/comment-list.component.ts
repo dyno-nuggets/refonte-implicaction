@@ -66,8 +66,6 @@ export class CommentListComponent extends BaseWithPaginationComponent<Comment, C
     });
   }
 
-  trackCommentById = (index: number, comment: Comment) => comment.id;
-
   postComment(): void {
     if (this.createCommentForm.invalid || this.createCommentForm.get('text').value.length === 0) {
       return;

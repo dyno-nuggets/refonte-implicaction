@@ -28,4 +28,6 @@ export class PostListComponent implements OnInit {
       );
   }
 
+  trackByPostId = (index: number, post: Post) => post.id;
+
 }

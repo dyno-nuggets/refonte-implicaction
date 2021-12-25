@@ -1,7 +1,10 @@
 <ng-container *ngIf="!isLoading; else loadingTemplate">
   <p *ngIf="!pageable.content?.length">Il n'y a aucun message dans cette discussion</p>
 
-  <div *ngFor="let post of pageable.content" class="row p-0 post">
+  <div
+    *ngFor="let post of pageable.content; trackBy: trackByItemId"
+    class="row p-0 post"
+  >
     <app-post-tile [post]="post"></app-post-tile>
   </div>
   <p-paginator

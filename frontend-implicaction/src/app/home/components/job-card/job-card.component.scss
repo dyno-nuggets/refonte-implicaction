@@ -8,7 +8,8 @@
 
 .job-title {
   text-decoration: none;
-  font-size: 20px;
+  font-size: 16px;
+  font-weight: 600;
 
   &:hover {
     text-decoration: underline;
@@ -19,6 +20,10 @@
   justify-items: center;
   align-items: center;
   height: 200px;
+
+  .card-header {
+    height: 66px;
+  }
 
   .card-body {
     max-height: 92px;

@@ -31,7 +31,7 @@
         <ng-container *ngIf="!isLoading; else loadingTemplate">
 
           <div
-            *ngFor="let comment of pageable.content; trackBy: trackCommentById"
+            *ngFor="let comment of pageable.content; trackBy: trackByItemId"
             class="mt-2"
           >
             <app-comment-tile [comment]="comment"></app-comment-tile>

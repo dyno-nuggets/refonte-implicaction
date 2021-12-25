@@ -28,4 +28,6 @@ export class JobListComponent implements OnInit {
       );
   }
 
+  trackByJobId = (index: number, job: JobPosting) => job.id;
+
 }

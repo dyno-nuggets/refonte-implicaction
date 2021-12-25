@@ -56,7 +56,10 @@
           >
             Il n'y a aucune offre d'emploi pour le moment.
           </p>
-          <div *ngFor="let job of pageable.content; last as isLast;" [ngClass]="{'last-element': isLast}">
+          <div
+            *ngFor="let job of pageable.content; last as isLast; trackBy: trackByItemId"
+            [ngClass]="{'last-element': isLast}"
+          >
             <app-job-card [job]="job"></app-job-card>
           </div>
         </div>
