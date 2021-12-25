@@ -10,6 +10,7 @@ import {Observable} from 'rxjs';
 import {RelationType} from '../../models/relation-type.enum';
 import {finalize} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
+import {MenuItem} from 'primeng/api';
 
 enum UserListType {
   ALL_USERS = '/users/list',
@@ -33,6 +34,24 @@ export class UserListComponent implements OnInit {
   relationType = RelationType;
   isLoading = true;
   univers = Univers;
+  menuItems: MenuItem[] = [
+    {
+      label: 'Tous les utilisateurs',
+      routerLink: `/${Univers.USERS.url}`
+    },
+    {
+      label: 'Mes amis',
+      routerLink: `/${Univers.USERS.url}/friends`
+    },
+    {
+      label: 'Demandes reçues',
+      routerLink: `/${Univers.USERS.url}/friends/received`
+    },
+    {
+      label: 'Demandes envoyées',
+      routerLink: `/${Univers.USERS.url}/friends/sent`
+    }
+  ];
 
   // Pagination
   pageable = Constants.PAGEABLE_DEFAULT;

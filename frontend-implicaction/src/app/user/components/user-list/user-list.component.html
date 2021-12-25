@@ -1,43 +1,25 @@
 <div class="row">
-  <div class="col-12 col-md-3 col-sm-12 mb-2">
+  <div class="col-12 col-md-4 col-lg-3 col-xxl-2 mb-3 p-0 pe-md-3">
     <a
+      *ngFor="let menuItem of menuItems"
       [routerLinkActiveOptions]="{exact: true}"
       class="list-group-item list-group-item-action"
-      routerLink="/{{univers.USERS.url}}"
+      [routerLink]=menuItem.routerLink
       routerLinkActive="active"
     >
-      Tous les utilisateurs
-    </a>
-    <a
-      [routerLinkActiveOptions]="{exact: true}"
-      class="list-group-item list-group-item-action"
-      routerLink="/{{univers.USERS.url}}/friends"
-      routerLinkActive="active"
-    >
-      Mes amis
-    </a>
-    <a
-      [routerLinkActiveOptions]="{exact: true}"
-      class="list-group-item list-group-item-action"
-      routerLink="/{{univers.USERS.url}}/friends/received"
-      routerLinkActive="active"
-    >
-      Demandes reçues
-    </a>
-    <a
-      [routerLinkActiveOptions]="{exact: true}"
-      class="list-group-item list-group-item-action"
-      routerLink="/{{univers.USERS.url}}/friends/sent"
-      routerLinkActive="active"
-    >
-      Demandes envoyées
+      {{menuItem.label}}
     </a>
   </div>
-  <div class="col-lg-9 col-md-9 col-sm-12">
+  <div
+    class="col-12 col-md-8 col-lg-9 col-xxl-10 d-flex"
+    [ngClass]="{'justify-content-center': isLoading, 'justify-content-between': !isLoading}"
+  >
     <ng-container *ngIf="!isLoading; else loadingTemplate">
-      <div class="row row-cols-xxl-5 row-cols-xl-4 row-cols-lg-3 row-cols-md-2 row-cols-sm-2">
+      <div class="row p-0">
         <app-user-card
-          *ngFor="let user of pageable.content; trackBy: trackByUserId"
+          *ngFor="let user of pageable.content; trackBy: trackByUserId; let isOdd = odd; let isEven = even"
+          class="col-12 col-sm-6 col-lg-4 col-xl-3 d-flex p-0 justify-content-center mb-3 mb-xxl-5"
+          [ngClass]="{'pe-sm-2 pe-lg-0 pe-xl-2': isEven, 'ps-sm-2 px-lg-2 ps-xl-0': isOdd}"
           [user]="user"
         >
           <div class="mt-4 mb-2">
