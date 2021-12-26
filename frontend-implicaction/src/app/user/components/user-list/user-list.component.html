@@ -29,8 +29,8 @@
 
     <ng-template #userList>
       <app-user-card
-        *ngFor="let user of pageable.content; trackBy: trackByUserId; let isOdd = odd; let isEven = even"
-        class="col-12 col-sm-6 col-xl-4 col-xxl-3 d-flex justify-content-center justify-content-md-center mb-3"
+        *ngFor="let user of pageable.content; trackBy: trackByItemId; let isOdd = odd; let isEven = even"
+        class="col-12 col-sm-6 col-xl-4 col-xxl-3 d-flex justify-content-center justify-content-md-center mb-4"
         [user]="user"
         [ngClass]="{'pe-sm-3 pe-lg-0 pe-xl-3 justify-content-sm-start': isEven, 'ps-sm-3 px-lg-3 ps-xl-0 justify-content-sm-end': isOdd}"
         [innerTemplate]="innerControls"
@@ -98,7 +98,7 @@
                     class="text-decoration-none text-light-gray"
                     routerLink="/{{univer.USERS.url}}/{{user.id}}/profile"
                   >
-                    En savoir plus ...
+                    En savoir plus
                   </a>
                 </p>
                 <button
@@ -118,15 +118,17 @@
       </app-user-card>
     </ng-template>
 
-    <p-paginator
-      (onPageChange)="paginate($event)"
-      *ngIf="pageable.totalPages > 0"
-      [alwaysShow]="false"
-      [first]="pageable.first"
-      [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
-      [rows]="pageable.rows"
-      [totalRecords]="pageable.totalElements"
-    >
-    </p-paginator>
+    <div class="col-12">
+      <p-paginator
+        (onPageChange)="paginate($event)"
+        *ngIf="pageable.totalPages > 0"
+        [alwaysShow]="false"
+        [first]="pageable.first"
+        [rowsPerPageOptions]="DEFAULT_ROWS_PER_PAGE_OPTIONS"
+        [rows]="pageable.rows"
+        [totalRecords]="pageable.totalElements"
+      >
+      </p-paginator>
+    </div>
   </div>
 </div>

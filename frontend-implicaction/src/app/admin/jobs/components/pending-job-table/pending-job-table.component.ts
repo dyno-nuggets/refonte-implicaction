@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {JobPosting} from '../../../../shared/models/job-posting';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {JobService} from '../../../../job/services/job.service';
@@ -12,7 +12,7 @@ import {Criteria} from '../../../../shared/models/Criteria';
   templateUrl: './pending-job-table.component.html',
   styleUrls: ['./pending-job-table.component.scss']
 })
-export class PendingJobTableComponent extends BaseWithPaginationComponent<JobPosting, Criteria> {
+export class PendingJobTableComponent extends BaseWithPaginationAndFilterComponent<JobPosting, Criteria> {
 
   isLoading = true;
   // Pagination et filtres

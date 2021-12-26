@@ -9,7 +9,7 @@ import {CompanyFilterContextService} from '../../../../company/services/company-
 import {ActivatedRoute} from '@angular/router';
 import {CompanySortEnum} from '../../../../company/enums/company-sort.enum';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
-import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Subscription} from 'rxjs';
 import {Criteria} from '../../../../shared/models/Criteria';
 
@@ -18,7 +18,7 @@ import {Criteria} from '../../../../shared/models/Criteria';
   templateUrl: './companies-table.component.html',
   styleUrls: ['./companies-table.component.scss']
 })
-export class CompaniesTableComponent extends BaseWithPaginationComponent<Company, Criteria> implements OnInit, OnDestroy {
+export class CompaniesTableComponent extends BaseWithPaginationAndFilterComponent<Company, Criteria> implements OnInit, OnDestroy {
 
   selectedOrder = CompanySortEnum.NAME_ASC;
   selectedOrderCode: string;

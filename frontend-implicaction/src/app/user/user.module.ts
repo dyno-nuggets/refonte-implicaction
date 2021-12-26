@@ -17,6 +17,7 @@ import {SharedModule} from '../shared/shared.module';
 import {ExperienceFormComponent} from './components/experience-form/experience-form.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {TrainingFormComponent} from './components/training-form/training-form.component';
+import {SkeletonModule} from 'primeng/skeleton';
 
 
 @NgModule({
@@ -41,6 +42,7 @@ import {TrainingFormComponent} from './components/training-form/training-form.co
     CalendarModule,
     SharedModule,
     ReactiveFormsModule,
+    SkeletonModule,
   ]
 })
 export class UserModule {

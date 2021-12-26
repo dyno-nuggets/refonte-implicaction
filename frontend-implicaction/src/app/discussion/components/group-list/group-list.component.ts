@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Group} from '../../model/group';
 import {Criteria} from '../../../shared/models/Criteria';
 import {ActivatedRoute} from '@angular/router';
@@ -13,7 +13,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
   templateUrl: './group-list.component.html',
   styleUrls: ['./group-list.component.scss']
 })
-export class GroupListComponent extends BaseWithPaginationComponent<Group, Criteria> implements OnInit {
+export class GroupListComponent extends BaseWithPaginationAndFilterComponent<Group, Criteria> implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
   isLoading = true;

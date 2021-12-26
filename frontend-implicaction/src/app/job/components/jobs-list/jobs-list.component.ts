@@ -8,7 +8,7 @@ import {JobCriteriaFilter} from '../../models/job-criteria-filter';
 import {JobFilterContextService} from '../../services/job-filter-context.service';
 import {ActivatedRoute} from '@angular/router';
 import {SortDirectionEnum} from '../../../shared/enums/sort-direction.enum';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {JobPosting} from '../../../shared/models/job-posting';
 import {JobPostingFormComponent} from '../../../admin/jobs/components/job-posting-form/job-posting-form.component';
 import {SidebarService} from '../../../shared/services/sidebar.service';
@@ -19,7 +19,7 @@ import {Subscription} from 'rxjs';
   templateUrl: './jobs-list.component.html',
   styleUrls: ['./jobs-list.component.scss']
 })
-export class JobsListComponent extends BaseWithPaginationComponent<JobPosting, JobCriteriaFilter> implements OnInit, OnDestroy {
+export class JobsListComponent extends BaseWithPaginationAndFilterComponent<JobPosting, JobCriteriaFilter> implements OnInit, OnDestroy {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 

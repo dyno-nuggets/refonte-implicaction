@@ -1,16 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {UserService} from '../../services/user.service';
 import {User} from '../../../shared/models/user';
-import {Constants} from '../../../config/constants';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RelationService} from '../../services/relation.service';
 import {AuthService} from '../../../shared/services/auth.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {RelationType} from '../../models/relation-type.enum';
 import {finalize} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
 import {MenuItem} from 'primeng/api';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {Criteria} from '../../../shared/models/Criteria';
 
 enum UserListType {
   ALL_USERS = '/users/list',
@@ -24,9 +25,7 @@ enum UserListType {
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss']
 })
-export class UserListComponent implements OnInit {
-
-  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
+export class UserListComponent extends BaseWithPaginationAndFilterComponent<User, Criteria> implements OnInit {
 
   readonly univer = Univers;
 
@@ -55,16 +54,15 @@ export class UserListComponent implements OnInit {
     }
   ];
 
-  // Pagination
-  pageable = Constants.PAGEABLE_DEFAULT;
-
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private toastService: ToasterService,
     private relationService: RelationService,
     private router: Router,
+    protected route: ActivatedRoute
   ) {
+    super(route);
     // on détermine le type de données à afficher en fonction de l'url
     switch (router.url) {
       case UserListType.FRIENDS:
@@ -90,18 +88,10 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
     // chargement des données
-    this.paginate({
-      first: 0,
-      rows: this.ROWS_PER_PAGE_OPTIONS[0],
-      page: this.pageable.page
-    });
+    this.paginate();
   }
 
-  paginate({first, rows, page} = this.pageable): void {
-    this.isLoading = true;
-    this.pageable.page = page;
-    this.pageable.first = first;
-    this.pageable.rows = rows;
+  protected innerPaginate(): void {
     let user$: Observable<any>;
 
     // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
@@ -179,7 +169,4 @@ export class UserListComponent implements OnInit {
         () => this.toastService.success('Succès', message)
       );
   }
-
-  trackByUserId = (index: number, user: User) => user.id;
-
 }

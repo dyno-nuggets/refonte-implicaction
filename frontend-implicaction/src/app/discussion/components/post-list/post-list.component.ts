@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Post} from '../../model/post';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {PostService} from '../../services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
@@ -12,7 +12,7 @@ import {Criteria} from '../../../shared/models/Criteria';
   templateUrl: './post-list.component.html',
   styleUrls: ['./post-list.component.scss']
 })
-export class PostListComponent extends BaseWithPaginationComponent<Post, Criteria> implements OnInit {
+export class PostListComponent extends BaseWithPaginationAndFilterComponent<Post, Criteria> implements OnInit {
 
   constructor(
     private postService: PostService,

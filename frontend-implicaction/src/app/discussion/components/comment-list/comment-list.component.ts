@@ -7,7 +7,7 @@ import {Subscription} from 'rxjs';
 import {ActivatedRoute} from '@angular/router';
 import {finalize} from 'rxjs/operators';
 import {Comment} from '../../model/comment';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {CommentPayload} from '../../model/comment-payload';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {CommentService} from '../../services/comment.service';
@@ -19,7 +19,7 @@ import {Criteria} from '../../../shared/models/Criteria';
   templateUrl: './comment-list.component.html',
   styleUrls: ['./comment-list.component.scss']
 })
-export class CommentListComponent extends BaseWithPaginationComponent<Comment, Criteria> implements OnInit, OnDestroy {
+export class CommentListComponent extends BaseWithPaginationAndFilterComponent<Comment, Criteria> implements OnInit, OnDestroy {
 
   readonly ROWS_PER_PAGE_OPTIONS = [25, 50, 100];
 
