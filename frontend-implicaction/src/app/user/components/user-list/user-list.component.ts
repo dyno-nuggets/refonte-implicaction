@@ -28,6 +28,8 @@ export class UserListComponent implements OnInit {
 
   readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
+  readonly univer = Univers;
+
   currentUser: User;
   action: string;
   listType: UserListType;

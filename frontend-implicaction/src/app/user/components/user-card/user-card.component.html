@@ -9,10 +9,16 @@
     >
   </div>
   <div class="card-body pt-5">
-    <div class="h5 text-center m-0 overflow-ellipsis">
-      <a routerLink="/users/{{user.id}}/profile">
-        {{user.firstname}} {{user.lastname}}
-      </a>
+    <div class="h5 text-center m-0">
+      <span class="link-profile overflow-ellipsis">
+        <a
+          class="text-decoration-none"
+          title="{{user.firstname}} {{user.lastname}}"
+          routerLink="/{{univer.USERS.url}}/{{user.id}}/profile"
+        >
+          {{user.firstname}} {{user.lastname}}
+        </a>
+      </span>
     </div>
     <ng-container *ngTemplateOutlet="innerTemplate"></ng-container>
   </div>

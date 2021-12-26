@@ -1,14 +1,13 @@
 @import "src/assets/variables";
 
-.card-user {
-  background-color: $secondary-bg-color;
-  border-radius: 10px;
-  max-width: 250px;
-}
-
 .card {
   width: 300px;
   overflow: hidden;
+
+  &.card-user {
+    border-radius: 11px;
+    max-width: 250px;
+  }
 
   .card-header {
     width: 100%;
@@ -29,6 +28,16 @@
       margin-top: calc((-50px / 2) * -1);
       border-radius: 50%;
     }
+  }
+
+  .link-profile {
+    text-decoration: none;
+    border-bottom: 3px solid $danger;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 200px;
+    display: inline-block;
   }
 }
 

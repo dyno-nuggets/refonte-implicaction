@@ -1,111 +1,132 @@
 <div class="row">
-  <div class="col-12 col-md-4 col-lg-3 col-xxl-2 mb-3 p-0 pe-md-3">
-    <a
-      *ngFor="let menuItem of menuItems"
-      [routerLinkActiveOptions]="{exact: true}"
-      class="list-group-item list-group-item-action"
-      [routerLink]=menuItem.routerLink
-      routerLinkActive="active"
-    >
-      {{menuItem.label}}
-    </a>
-  </div>
-  <div
-    class="col-12 col-md-8 col-lg-9 col-xxl-10 d-flex"
-    [ngClass]="{'justify-content-center': isLoading, 'justify-content-between': !isLoading}"
-  >
-    <ng-container *ngIf="!isLoading; else loadingTemplate">
-      <div class="row p-0">
-        <app-user-card
-          *ngFor="let user of pageable.content; trackBy: trackByUserId; let isOdd = odd; let isEven = even"
-          class="col-12 col-sm-6 col-lg-4 col-xl-3 d-flex p-0 justify-content-center mb-3 mb-xxl-5"
-          [ngClass]="{'pe-sm-2 pe-lg-0 pe-xl-2': isEven, 'ps-sm-2 px-lg-2 ps-xl-0': isOdd}"
-          [user]="user"
+  <div class="card card-menu col-12 col-md-4 col-xl-3 border-0 mb-2">
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item p-0">
+        <a
+          *ngFor="let menuItem of menuItems"
+          [routerLinkActiveOptions]="{exact: true}"
+          class="list-group-item list-group-item-action"
+          [routerLink]=menuItem.routerLink
+          routerLinkActive="active"
         >
-          <div class="mt-4 mb-2">
-            <ng-container [ngSwitch]="user.relationTypeOfCurrentUser">
-              <ng-template [ngSwitchCase]="relationType.FRIEND">
-                <button
-                  (click)="removeUserRelation(user)"
-                  class="btn btn-danger text-light rounded-pill"
-                  data-bs-placement="top"
-                  data-bs-toggle="tooltip"
-                  title="Retirer des amis"
-                  type="button"
-                >
-                  <i-feather class="icon" name="user-minus"></i-feather>
-                </button>
-              </ng-template>
+          {{menuItem.label}}
+        </a>
+      </li>
+    </ul>
+  </div>
 
-              <ng-template [ngSwitchCase]="relationType.SENDER">
-                <button
-                  (click)="removeUserRelation(user)"
-                  class="btn btn-danger text-light rounded-pill"
-                  data-bs-placement="top"
-                  data-bs-toggle="tooltip"
-                  title="Annuler la demande d'ami"
-                  type="button"
-                >
-                  <i-feather class="icon" name="user-x"></i-feather>
-                </button>
-              </ng-template>
-
-              <ng-template [ngSwitchCase]="relationType.RECEIVER">
-                <button
-                  (click)="confirmUserAsFriend(user)"
-                  class="btn btn-success rounded-pill mx-2 mx-sm-1"
-                  data-bs-placement="top"
-                  data-bs-toggle="tooltip"
-                  title="Accepter la demande d'ami"
-                  type="button"
-                >
-                  <i-feather class="icon" name="user-check"></i-feather>
-                </button>
-                <button
-                  (click)="removeUserRelation(user)"
-                  class="btn btn-danger rounded-pill mx-2 mx-sm-1"
-                  data-bs-placement="top"
-                  data-bs-toggle="tooltip"
-                  title="Annuler la demande d'ami"
-                  type="button"
-                >
-                  <i-feather class="icon" name="user-x"></i-feather>
-                </button>
-              </ng-template>
-
-              <ng-template ngSwitchDefault>
-                <button
-                  (click)="requestUserAsFriend(user)"
-                  class="btn btn-primary rounded-pill"
-                  data-bs-placement="top"
-                  data-bs-toggle="tooltip"
-                  title="Demander en ami"
-                  type="button"
-                >
-                  <i-feather class="icon" name="user-plus"></i-feather>
-                </button>
-              </ng-template>
-            </ng-container>
-          </div>
-        </app-user-card>
-      </div>
-      <p-paginator
-        (onPageChange)="paginate($event)"
-        *ngIf="pageable.totalPages > 0"
-        [alwaysShow]="false"
-        [first]="pageable.first"
-        [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
-        [rows]="pageable.rows"
-        [totalRecords]="pageable.totalElements"
-      >
-      </p-paginator>
-    </ng-container>
-    <ng-template #loadingTemplate>
+  <div
+    class="d-flex col-12 col-md-8 col-xl-9 flex-wrap justify-content-center"
+    [ngClass]="{'justify-content-sm-between justify-content-md-start': !isLoading}"
+  >
+    <ng-container *ngIf="isLoading; else userList">
       <div class="d-flex justify-content-center spinner">
         <div class="align-self-center">
           <app-loading></app-loading>
         </div>
       </div>
+    </ng-container>
+
+    <ng-template #userList>
+      <app-user-card
+        *ngFor="let user of pageable.content; trackBy: trackByUserId; let isOdd = odd; let isEven = even"
+        class="col-12 col-sm-6 col-xl-4 col-xxl-3 d-flex justify-content-center justify-content-md-center mb-3"
+        [user]="user"
+        [ngClass]="{'pe-sm-3 pe-lg-0 pe-xl-3 justify-content-sm-start': isEven, 'ps-sm-3 px-lg-3 ps-xl-0 justify-content-sm-end': isOdd}"
+        [innerTemplate]="innerControls"
+      >
+        <ng-template #innerControls>
+          <div class="d-flex flex-column gap-2 mt-5 inner-controls">
+            <ng-container [ngSwitch]="user.relationTypeOfCurrentUser">
+              <ng-template [ngSwitchCase]="relationType.FRIEND">
+                <p class="text-center">Vous êtes amis</p>
+                <button
+                  (click)="removeUserRelation(user)"
+                  class="btn btn-primary"
+                  data-bs-placement="top"
+                  data-bs-toggle="tooltip"
+                  title="Supprimer des amis"
+                  type="button"
+                >
+                  Supprimer
+                </button>
+              </ng-template>
+
+              <ng-template [ngSwitchCase]="relationType.SENDER">
+                <p class="text-center">Demande éffectuée</p>
+                <button
+                  (click)="removeUserRelation(user)"
+                  class="btn btn-primary"
+                  data-bs-placement="top"
+                  data-bs-toggle="tooltip"
+                  title="Annuler la demande d'ami"
+                  type="button"
+                >
+                  Supprimer
+                </button>
+              </ng-template>
+
+              <ng-template [ngSwitchCase]="relationType.RECEIVER">
+                <p class="text-center">Demande reçue</p>
+                <div class="d-flex gap-1">
+                  <button
+                    (click)="confirmUserAsFriend(user)"
+                    class="btn btn-primary col-6 px-0"
+                    data-bs-placement="top"
+                    data-bs-toggle="tooltip"
+                    title="Confirmer la demande d'ami"
+                    type="button"
+                  >
+                    Valider
+                  </button>
+                  <button
+                    (click)="removeUserRelation(user)"
+                    class="btn btn-outline-primary btn-deny col-6 p-0"
+                    data-bs-placement="top"
+                    data-bs-toggle="tooltip"
+                    title="Supprimer la demande d'ami"
+                    type="button"
+                  >
+                    Refuser
+                  </button>
+                </div>
+              </ng-template>
+
+              <ng-template ngSwitchDefault>
+                <p class="text-center">
+                  <a
+                    class="text-decoration-none text-light-gray"
+                    routerLink="/{{univer.USERS.url}}/{{user.id}}/profile"
+                  >
+                    En savoir plus ...
+                  </a>
+                </p>
+                <button
+                  (click)="requestUserAsFriend(user)"
+                  class="btn btn-primary"
+                  data-bs-placement="top"
+                  data-bs-toggle="tooltip"
+                  title="Ajouter comme ami"
+                  type="button"
+                >
+                  Ajouter
+                </button>
+              </ng-template>
+            </ng-container>
+          </div>
+        </ng-template>
+      </app-user-card>
     </ng-template>
+
+    <p-paginator
+      (onPageChange)="paginate($event)"
+      *ngIf="pageable.totalPages > 0"
+      [alwaysShow]="false"
+      [first]="pageable.first"
+      [rowsPerPageOptions]="ROWS_PER_PAGE_OPTIONS"
+      [rows]="pageable.rows"
+      [totalRecords]="pageable.totalElements"
+    >
+    </p-paginator>
   </div>
 </div>
