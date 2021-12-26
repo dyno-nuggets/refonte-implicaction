@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Constants} from '../../../config/constants';
 import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {JobService} from '../../services/job.service';
@@ -20,8 +19,6 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./jobs-list.component.scss']
 })
 export class JobsListComponent extends BaseWithPaginationAndFilterComponent<JobPosting, JobCriteriaFilter> implements OnInit, OnDestroy {
-
-  readonly ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
   isLoading = true;
 
