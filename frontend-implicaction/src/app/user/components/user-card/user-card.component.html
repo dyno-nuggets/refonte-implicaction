@@ -1,19 +1,25 @@
-<div class="col mb-3">
-  <div class="card align-items-center pt-5 shadow-sm border-0 user-card">
+<div class="card card-user shadow-sm border-0">
+  <div class="card-header"></div>
+  <div class="img-container d-flex align-items-center justify-content-center">
     <img
       #userImage
       (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
       [src]="user.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
       alt="photo de {{user.firstname}} {{user.lastname}}"
-      class="rounded-circle img-fluid shadow-sm user-avatar"
-    />
-    <div class="card-body text-center w-100">
-      <h5 class="card-title overflow-ellipsis">
-        <a routerLink="/users/{{user.id}}/profile">
+    >
+  </div>
+  <div class="card-body pt-5">
+    <div class="h5 text-center m-0">
+      <span class="link-profile overflow-ellipsis">
+        <a
+          class="text-decoration-none"
+          title="{{user.firstname}} {{user.lastname}}"
+          routerLink="/{{univer.USERS.url}}/{{user.id}}/profile"
+        >
           {{user.firstname}} {{user.lastname}}
         </a>
-      </h5>
-      <ng-content></ng-content>
+      </span>
     </div>
+    <ng-container *ngTemplateOutlet="innerTemplate"></ng-container>
   </div>
 </div>

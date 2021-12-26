@@ -42,6 +42,10 @@ input.ng-invalid.ng-touched {
   text-overflow: ellipsis;
 }
 
+.text-light-gray {
+  color: $light-gray;
+}
+
 body {
   background-color: $primary-bg-color;
   color: $light-gray;

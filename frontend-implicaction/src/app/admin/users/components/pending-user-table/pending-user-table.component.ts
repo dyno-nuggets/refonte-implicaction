@@ -5,7 +5,7 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {RoleEnum, RoleEnumCode} from '../../../../shared/enums/role.enum';
 import {User} from '../../../../shared/models/user';
 import {AuthService} from '../../../../shared/services/auth.service';
-import {BaseWithPaginationComponent} from '../../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {ActivatedRoute} from '@angular/router';
 import {Criteria} from '../../../../shared/models/Criteria';
 
@@ -14,7 +14,7 @@ import {Criteria} from '../../../../shared/models/Criteria';
   templateUrl: './pending-user-table.component.html',
   styleUrls: ['./pending-user-table.component.scss']
 })
-export class PendingUserTableComponent extends BaseWithPaginationComponent<User, Criteria> {
+export class PendingUserTableComponent extends BaseWithPaginationAndFilterComponent<User, Criteria> {
 
   loading = true;
   rowsPerPage = this.pageable.rowsPerPages[0];

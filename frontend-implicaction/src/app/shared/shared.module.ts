@@ -12,7 +12,7 @@ import {ContractTypeComponent} from './components/contract-type/contract-type.co
 import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 import {JobFilterComponent} from './components/job-filter/job-filter.component';
 import {CompanyFilterComponent} from './components/company-filter/company-filter.component';
-import {BaseWithPaginationComponent} from './components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from './components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {AvatarModule} from 'primeng/avatar';
 import {FormsModule} from '@angular/forms';
 import {DropdownModule} from 'primeng/dropdown';
@@ -30,7 +30,7 @@ import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
     ContractTypeComponent,
     DateTimelapseComponent,
     JobFilterComponent,
-    BaseWithPaginationComponent,
+    BaseWithPaginationAndFilterComponent,
     CompanyFilterComponent,
     TextEllipsisPipe
   ],

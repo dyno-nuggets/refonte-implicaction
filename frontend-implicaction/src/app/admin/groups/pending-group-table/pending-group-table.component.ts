@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {BaseWithPaginationComponent} from '../../../shared/components/base-with-pagination/base-with-pagination.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Group} from '../../../discussion/model/group';
 import {ActivatedRoute} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
@@ -12,7 +12,7 @@ import {Criteria} from '../../../shared/models/Criteria';
   templateUrl: './pending-group-table.component.html',
   styleUrls: ['./pending-group-table.component.scss']
 })
-export class PendingGroupTableComponent extends BaseWithPaginationComponent<Group, Criteria> {
+export class PendingGroupTableComponent extends BaseWithPaginationAndFilterComponent<Group, Criteria> {
 
   isLoading = true;
   selectedOrderCode: string;

@@ -1,7 +1,11 @@
-button {
-  width: 55px;
+.spinner {
+  height: 60vh;
 }
 
-.spinner {
-  height: 50vh;
+.inner-controls {
+  height: 80px;
+
+  .btn-deny {
+    padding: 0 !important;
+  }
 }

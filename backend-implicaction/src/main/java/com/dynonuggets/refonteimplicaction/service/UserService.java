@@ -51,7 +51,8 @@ public class UserService {
     public Page<UserDto> getAllCommunity(Pageable pageable) {
         final Long currentUserId = authService.getCurrentUser().getId();
 
-        final Page<UserDto> users = userRepository.findAllForCommunity(pageable).map(userAdapter::toDto);
+        final Page<UserDto> users = userRepository.findAllForCommunity(pageable, currentUserId)
+                .map(userAdapter::toDto);
 
         final List<Long> userIds = users.map(UserDto::getId)
                 .get()
