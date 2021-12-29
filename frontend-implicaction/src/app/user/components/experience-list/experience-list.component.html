@@ -1,6 +1,6 @@
-<div class="col">
+<div class="col mb-5 ps-2">
   <div class="card py-4 px-4 shadow-sm border-0">
-    <div class="d-flex flex-row justify-content-between mb-4">
+    <div class="d-flex flex-row justify-content-between mb-2">
       <h2>Experiences professionnelles</h2>
       <div *ngIf="!readOnly">
         <i-feather
@@ -14,23 +14,53 @@
         </i-feather>
       </div>
     </div>
-    <ul>
+    <section class="resume-item resume-experience">
       <ng-container *ngIf="experiences?.length else emptyInfo">
-        <li
-          *ngFor="let experience of experiences; trackBy: trackByExperienceId; last as isLast;"
-          class="list-unstyled"
-        >
-          <app-experience-detail
-            [experience]="experience"
-            [readOnly]="readOnly"
+        <div class="resume-info">
+          <div
+            *ngFor="let experience of experiences"
+            class="resume-data"
           >
-          </app-experience-detail>
-          <hr *ngIf="!isLast" class="mx-4 mb-5"/>
-        </li>
+            <div class="year">{{experience.startedAt | date: 'YYYY'}} - {{experience.finishedAt | date: 'YYYY'}}</div>
+            <div class="content pe-1">
+              <div
+                *ngIf="!readOnly"
+                class="float-end"
+              >
+                <i-feather
+                  (click)="editExperience(experience)"
+                  class="cursor-pointer me-1 secondary-on-hover"
+                  style="width: 20px; height: 20px"
+                  data-placement="bottom"
+                  data-toggle="tooltip"
+                  name="edit-2"
+                  title="Editer cette expérience"
+                >
+                </i-feather>
+                <i-feather
+                  (click)="deleteExperience(experience)"
+                  class="cursor-pointer danger-on-hover"
+                  style="width: 20px; height: 20px"
+                  data-placement="bottom"
+                  data-toggle="tooltip"
+                  name="trash-2"
+                  title="Supprimer cette expérience"
+                >
+                </i-feather>
+              </div>
+              <p class="text-primary text-uppercase fw-bold">{{experience.label}}</p>
+              <p class="text-info">{{experience.companyName}}</p>
+              <p class="experience-description"
+                 [innerHTML]="experience.description | br"
+              >
+              </p>
+            </div>
+          </div>
+        </div>
       </ng-container>
-      <ng-template #emptyInfo>
-        <span class="fst-italic">Non renseigné.</span>
-      </ng-template>
-    </ul>
+    </section>
+    <ng-template #emptyInfo>
+      <span class="fst-italic">Non renseigné.</span>
+    </ng-template>
   </div>
 </div>

@@ -1,27 +1,29 @@
 <div class="col mb-3">
   <div class="card shadow-sm border-0 user-card px-4 py-4">
-    <div *ngIf="!readOnly" class="d-flex justify-content-end">
-      <i-feather
-        (click)="toggleModeEdition()"
-        *ngIf="!isEditing; else rollbackAndSaveIcon"
-        class="cursor-pointer secondary-on-hover"
-        name="edit-2"
-      >
-      </i-feather>
-      <ng-template #rollbackAndSaveIcon>
+    <div class="d-flex justify-content-end user-options">
+      <ng-container *ngIf="!readOnly">
         <i-feather
           (click)="toggleModeEdition()"
-          class="cursor-pointer danger-on-hover me-2"
-          name="rotate-ccw"
+          *ngIf="!isEditing; else rollbackAndSaveIcon"
+          class="cursor-pointer secondary-on-hover"
+          name="edit-2"
         >
         </i-feather>
-        <i-feather
-          (click)="updatePersonalInfo()"
-          class="cursor-pointer success-on-hover"
-          name="save"
-        >
-        </i-feather>
-      </ng-template>
+        <ng-template #rollbackAndSaveIcon>
+          <i-feather
+            (click)="toggleModeEdition()"
+            class="cursor-pointer danger-on-hover me-2"
+            name="rotate-ccw"
+          >
+          </i-feather>
+          <i-feather
+            (click)="updatePersonalInfo()"
+            class="cursor-pointer success-on-hover"
+            name="save"
+          >
+          </i-feather>
+        </ng-template>
+      </ng-container>
     </div>
     <div class="d-flex flex-column justify-content-center align-items-center pt-3">
       <div>
@@ -39,7 +41,7 @@
               <div class="background"></div>
             </ng-container>
           </label>
-          <br/>
+          <br>
           <input
             (change)="onFileChange($event)"
             *ngIf="isEditing"
@@ -62,9 +64,9 @@
                 <div class="flex-fill px-3">
                   <input
                     [(ngModel)]="user.email"
-                    class="form-control form-control-lg rounded-pill px-4"
+                    class="form-control form-control-lg px-4"
                     placeholder="Email"
-                  />
+                  >
                 </div>
               </ng-template>
             </div>
@@ -79,9 +81,9 @@
                 <div class="flex-fill px-3">
                   <input
                     [(ngModel)]="user.phoneNumber"
-                    class="form-control form-control-lg rounded-pill px-4"
+                    class="form-control form-control-lg px-4"
                     placeholder="Téléphone"
-                  />
+                  >
                 </div>
               </ng-template>
             </div>
@@ -100,7 +102,7 @@
                     [yearRange]="YEAR_RANGE"
                     dateFormat="yy-mm-dd"
                     id="birthdayInput"
-                    inputStyleClass="form-control form-control-lg rounded-pill px-4 fs-5"
+                    inputStyleClass="form-control form-control-lg px-4 fs-5"
                     placeholder="Date de naissance"
                   >
                   </p-calendar>
@@ -120,7 +122,7 @@
                 <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.hobbies"
-                  class="form-control form-control-lg w-100 px-4 text-description"
+                  class="form-control form-control-lg w-100 px-4"
                   rows="4"
                 ></textarea>
                 </div>
@@ -128,7 +130,7 @@
             </div>
             <div class="row mt-3">
               <h2>Présentation</h2>
-              <div *ngIf="!isEditing; else presentationEdition" class="">
+              <div *ngIf="!isEditing; else presentationEdition">
                 <p>
                   <app-user-info [value]="user.presentation"></app-user-info>
                 </p>
@@ -137,7 +139,7 @@
                 <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.presentation"
-                  class="form-control form-control-lg w-100 px-4 text-description"
+                  class="form-control form-control-lg w-100 px-4"
                   rows="4"
                 ></textarea>
                 </div>
@@ -145,7 +147,7 @@
             </div>
             <div class="row mt-3">
               <h2>Quel est mon objectif professionnel</h2>
-              <div *ngIf="!isEditing; else purposeEdition" class="">
+              <div *ngIf="!isEditing; else purposeEdition">
                 <p>
                   <app-user-info [value]="user.purpose"></app-user-info>
                 </p>
@@ -154,14 +156,14 @@
                 <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.purpose"
-                  class="form-control form-control-lg w-100 px-4 text-description"
+                  class="form-control form-control-lg w-100 px-4"
                 ></textarea>
                 </div>
               </ng-template>
             </div>
             <div class="row mt-3">
               <h2>Ce que j'attends du réseau</h2>
-              <div *ngIf="!isEditing; else expectationEdition" class="">
+              <div *ngIf="!isEditing; else expectationEdition">
                 <p>
                   <app-user-info [value]="user.expectation"></app-user-info>
                 </p>
@@ -170,7 +172,7 @@
                 <div class="mb-4">
                 <textarea
                   [(ngModel)]="user.expectation"
-                  class="form-control form-control-lg w-100 px-4 text-description"
+                  class="form-control form-control-lg w-100 px-4"
                   rows="4"
                 ></textarea>
                 </div>
@@ -178,7 +180,7 @@
             </div>
             <div class="row mt-3">
               <h2>Ce que je peux apporter au réseau</h2>
-              <div *ngIf="!isEditing; else contributionEdition" class="">
+              <div *ngIf="!isEditing; else contributionEdition">
                 <p>
                   <app-user-info [value]="user.contribution"></app-user-info>
                 </p>

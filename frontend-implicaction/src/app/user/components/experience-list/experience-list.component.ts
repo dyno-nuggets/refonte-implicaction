@@ -7,6 +7,7 @@ import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';
 import {UserContextService} from '../../../shared/services/user-context.service';
 import {Subscription} from 'rxjs';
+import {ExperienceService} from '../../services/experience.service';
 
 @Component({
   selector: 'app-experience-list',
@@ -27,6 +28,7 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
     private userContexteService: UserContextService,
+    private experienceService: ExperienceService,
   ) {
   }
 
@@ -42,6 +44,33 @@ export class ExperienceListComponent implements OnInit, OnDestroy {
     this.sidebarService
       .open({
         title: 'Ajouter une expérience professionnelle',
+        component: ExperienceFormComponent,
+        width: 650
+      });
+  }
+
+  deleteExperience(experience: WorkExperience): void {
+    if (this.readOnly) {
+      return;
+    }
+
+    this.experienceService
+      .deleteExperience(experience.id)
+      .subscribe(
+        () => this.userContexteService.removeExperience(experience),
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la suppression de la formation')
+      );
+  }
+
+  editExperience(experience: WorkExperience): void {
+    if (this.readOnly) {
+      return;
+    }
+
+    this.sidebarService
+      .open({
+        title: 'Editer une formation',
+        input: {experience},
         component: ExperienceFormComponent,
         width: 650
       });

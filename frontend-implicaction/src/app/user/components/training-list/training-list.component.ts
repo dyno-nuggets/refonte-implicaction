@@ -7,6 +7,7 @@ import {Subscription} from 'rxjs';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {UserContextService} from '../../../shared/services/user-context.service';
 import {TrainingFormComponent} from '../training-form/training-form.component';
+import {TrainingService} from '../../services/training.service';
 
 @Component({
   selector: 'app-training-list',
@@ -27,6 +28,7 @@ export class TrainingListComponent implements OnInit {
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
     private userContextService: UserContextService,
+    private trainingService: TrainingService
   ) {
   }
 
@@ -42,6 +44,33 @@ export class TrainingListComponent implements OnInit {
     this.sidebarService
       .open({
         title: 'Ajouter une formation',
+        component: TrainingFormComponent,
+        width: 650
+      });
+  }
+
+  deleteTraining(training: Training): void {
+    if (this.readOnly) {
+      return;
+    }
+
+    this.trainingService
+      .deleteTraining(training.id)
+      .subscribe(
+        () => this.userContextService.removeTraining(training),
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la suppression de la formation'),
+      );
+  }
+
+  editTraining(training: Training): void {
+    if (this.readOnly) {
+      return;
+    }
+
+    this.sidebarService
+      .open({
+        title: 'Editer une formation',
+        input: {training},
         component: TrainingFormComponent,
         width: 650
       });

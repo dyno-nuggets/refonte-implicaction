@@ -8,6 +8,7 @@ import {SidebarService} from '../../../shared/services/sidebar.service';
 import {Observable} from 'rxjs';
 import {UserContextService} from '../../../shared/services/user-context.service';
 import {ExperienceService} from '../../services/experience.service';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-experience-form',
@@ -16,13 +17,12 @@ import {ExperienceService} from '../../services/experience.service';
 })
 export class ExperienceFormComponent extends SidebarContentComponent implements OnInit {
 
-  readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
-
   formExperience: FormGroup;
   currentUserId: string;
   experience: WorkExperience;
   isUpdate: boolean;
   isSubmitted = false;
+  constant = Constants;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,6 +50,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
 
     const experience: WorkExperience = {...this.formExperience.value};
     let experience$: Observable<WorkExperience>;
+
     if (this.isUpdate) {
       // on set manuellement l'id de l'expérience car cette information n'est pas stockée dans le formulaire
       experience.id = this.sidebarInput.experience.id;
@@ -57,6 +58,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     } else {
       experience$ = this.experienceService.createExperience(this.currentUserId, experience);
     }
+
     experience$.subscribe(
       experienceFromDb => {
         if (this.isUpdate) {
@@ -65,7 +67,10 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
           this.userContextService.addExperience(experienceFromDb);
         }
       },
-      () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
+      () => {
+        const action = this.isUpdate ? 'la mise à jour' : `l'ajout`;
+        this.toasterService.error('Oops', `Une erreur est survenue lors de ${action} de votre expérience`);
+      },
       () => this.sidebarService.close()
     );
   }

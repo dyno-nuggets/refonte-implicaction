@@ -8,6 +8,7 @@ import {UserContextService} from '../../../shared/services/user-context.service'
 import {Training} from '../../../shared/models/training';
 import {Observable} from 'rxjs';
 import {TrainingService} from '../../services/training.service';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-training-form',
@@ -16,13 +17,12 @@ import {TrainingService} from '../../services/training.service';
 })
 export class TrainingFormComponent extends SidebarContentComponent implements OnInit {
 
-  readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
-
   formTraining: FormGroup;
   currentUserId: string;
   training: Training;
   isUpdate: boolean;
   isSubmitted = false;
+  constant = Constants;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -65,7 +65,10 @@ export class TrainingFormComponent extends SidebarContentComponent implements On
           this.userContexteService.addTraining(trainingUpdate);
         }
       },
-      () => this.toasterService.error('Oops', `Une erreur est survenue lors de ${this.isUpdate ? 'la mise à jour' : `l'ajout`} de votre expérience`),
+      () => {
+        const action = this.isUpdate ? 'la mise à jour' : `l'ajout`;
+        this.toasterService.error('Oops', `Une erreur est survenue lors de ${action} de votre expérience`);
+      },
       () => this.sidebarService.close()
     );
   }
