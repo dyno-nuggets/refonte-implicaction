@@ -2,12 +2,8 @@
   <div class="col-12 col-xxl-3 col-xl-4 col-lg-5 col-md-12 col-sm-12 mb-2">
     <app-personal-card [readOnly]="!canEdit" [user]="user"></app-personal-card>
   </div>
-  <div class="col-12 col-xxl-9 col-xl-8 col-lg-7 col-md-12 col-sm-12 ps-0 ps-lg-5">
-    <div class="mb-5">
-      <app-experience-list [readOnly]="!canEdit"></app-experience-list>
-    </div>
-    <div class="mb-5">
-      <app-training-list [readOnly]="!canEdit"></app-training-list>
-    </div>
+  <div class="col-12 col-xxl-9 col-xl-8 col-lg-7 col-md-12 col-sm-12 ps-0 ps-xl-5">
+    <app-experience-list [readOnly]="!canEdit"></app-experience-list>
+    <app-training-list [readOnly]="!canEdit"></app-training-list>
   </div>
 </div>

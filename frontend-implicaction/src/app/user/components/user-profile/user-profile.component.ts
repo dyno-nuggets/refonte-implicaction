@@ -6,6 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {UserContextService} from '../../../shared/services/user-context.service';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../../shared/services/auth.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-profile',
@@ -37,6 +38,18 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       const userId = paramMap.get('userId');
       this.userService
         .getUserById(userId)
+        .pipe(
+          map(user => {
+              console.log('coucou');
+              // tri des dates par ordre décroissant
+              user.trainings = [...user.trainings]
+                .sort((a, b) => a.date ? new Date(b.date).getFullYear() - new Date(a.date).getFullYear() : -1);
+              user.experiences = [...user.experiences]
+                .sort((a, b) => a.finishedAt ? new Date(b.finishedAt).getFullYear() - new Date(a.finishedAt).getFullYear() : -1);
+              return user;
+            }
+          )
+        )
         .subscribe(
           user => {
             this.user = user;

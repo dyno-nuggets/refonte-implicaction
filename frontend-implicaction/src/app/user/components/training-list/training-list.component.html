@@ -1,6 +1,6 @@
-<div class="col">
+<div class="col mb-5 ps-2">
   <div class="card py-4 px-4 shadow-sm border-0">
-    <div class="mb-3 d-flex justify-content-between">
+    <div class="d-flex flex-row justify-content-between mb-2">
       <h2>Formations</h2>
       <div *ngIf="!readOnly">
         <i-feather
@@ -9,28 +9,54 @@
           data-placement="bottom"
           data-toggle="tooltip"
           name="plus"
-          title="Ajouter une formation"
+          title="Ajouter une expérience"
         >
         </i-feather>
       </div>
     </div>
-    <ul>
+    <section class="resume-item resume-training">
       <ng-container *ngIf="trainings?.length else emptyInfo">
-        <li
-          *ngFor="let training of trainings; trackBy: trackByTrainingId; last as isLast;"
-          class="list-unstyled"
-        >
-          <app-training-detail
-            [readOnly]="readOnly"
-            [training]="training"
+        <div class="resume-info">
+          <div
+            *ngFor="let training of trainings"
+            class="resume-data"
           >
-          </app-training-detail>
-          <hr *ngIf="!isLast" class="mx-4 mb-5"/>
-        </li>
+            <div class="year">{{training.date | date: 'YYYY'}}</div>
+            <div class="content pe-1">
+              <div
+                *ngIf="!readOnly"
+                class="float-end"
+              >
+                <i-feather
+                  (click)="editTraining(training)"
+                  class="cursor-pointer me-xl-2 secondary-on-hover"
+                  data-placement="bottom"
+                  style="width: 20px; height: 20px"
+                  data-toggle="tooltip"
+                  name="edit-2"
+                  title="Editer cette formation"
+                >
+                </i-feather>
+                <i-feather
+                  (click)="deleteTraining(training)"
+                  class="cursor-pointer danger-on-hover"
+                  data-placement="bottom"
+                  style="width: 20px; height: 20px"
+                  data-toggle="tooltip"
+                  name="trash-2"
+                  title="Supprimer cette formation"
+                >
+                </i-feather>
+              </div>
+              <p class="text-primary text-uppercase fw-bold">{{training.label}}</p>
+              <p class="text-info">{{training.school}}</p>
+            </div>
+          </div>
+        </div>
       </ng-container>
-      <ng-template #emptyInfo>
-        <span class="fst-italic">Non renseigné.</span>
-      </ng-template>
-    </ul>
+    </section>
+    <ng-template #emptyInfo>
+      <span class="fst-italic">Non renseigné.</span>
+    </ng-template>
   </div>
 </div>

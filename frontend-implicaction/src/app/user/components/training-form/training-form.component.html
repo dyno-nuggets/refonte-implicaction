@@ -5,11 +5,11 @@
   <div class="form-floating mb-4">
     <input
       [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formTraining.controls['label'].touched) && formTraining.controls['label'].errors}"
-      class="form-control form-control-lg rounded-pill px-4"
+      class="form-control form-control-lg px-4"
       formControlName="label"
       id="labelInput"
       placeholder="Nom de la compagnie"
-    />
+    >
     <label
       class="form-label px-4"
       for="labelInput"
@@ -26,11 +26,11 @@
   <div class="form-floating mb-4">
     <input
       [ngClass]="{'ng-invalid ng-touched': (isSubmitted || formTraining.controls['school'].touched) && formTraining.controls['school'].errors}"
-      class="form-control form-control-lg rounded-pill px-4"
+      class="form-control form-control-lg px-4"
       formControlName="school"
       id="schoolInput"
       placeholder="Nom de l'expérience"
-    />
+    >
     <label
       class="form-label px-4"
       for="schoolInput"
@@ -55,12 +55,12 @@
     </div>
     <p-calendar
       [yearNavigator]="true"
-      [yearRange]="YEAR_RANGE"
+      [yearRange]="constant.DEFAULT_YEAR_RANGE"
       appendTo="body"
       dateFormat="yy-mm-dd"
       formControlName="date"
       id="dateInput"
-      inputStyleClass="form-control rounded-pill"
+      inputStyleClass="form-control"
     >
     </p-calendar>
     <div
@@ -70,7 +70,7 @@
       Vous devez fournir une date d'obtention pour cette formation.
     </div>
   </div>
-  <div class="d-flex justify-content-center rounded-pill sidebar-options">
+  <div class="d-flex justify-content-center sidebar-options">
     <button
       class="btn btn-primary w-50"
       type="submit"

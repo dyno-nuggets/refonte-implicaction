@@ -39,5 +39,5 @@ export class Constants {
 
   public static readonly LATEST_POSTS_COUNT = 3;
 
-  readonly DEFAULT_YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
+  public static readonly DEFAULT_YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
 }
