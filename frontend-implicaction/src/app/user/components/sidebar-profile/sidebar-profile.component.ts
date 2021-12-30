@@ -13,7 +13,6 @@ import {Constants} from '../../../config/constants';
 })
 export class SidebarProfileComponent {
 
-  readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
   readonly constant = Constants;
 
   @Input()

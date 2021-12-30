@@ -9,12 +9,10 @@ h2 {
 }
 
 .card {
-  //width: 300px;
   overflow: hidden;
 
   &.card-user {
     border-radius: 11px;
-    //max-width: 450px;
   }
 
   .card-header {
