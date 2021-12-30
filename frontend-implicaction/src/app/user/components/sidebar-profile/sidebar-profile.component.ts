@@ -7,13 +7,12 @@ import {finalize} from 'rxjs/operators';
 import {Constants} from '../../../config/constants';
 
 @Component({
-  selector: 'app-personal-card',
-  templateUrl: './personal-card.component.html',
-  styleUrls: ['./personal-card.component.scss']
+  selector: 'app-sidebar-profile',
+  templateUrl: './sidebar-profile.component.html',
+  styleUrls: ['./sidebar-profile.component.scss']
 })
-export class PersonalCardComponent {
+export class SidebarProfileComponent {
 
-  readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
   readonly constant = Constants;
 
   @Input()

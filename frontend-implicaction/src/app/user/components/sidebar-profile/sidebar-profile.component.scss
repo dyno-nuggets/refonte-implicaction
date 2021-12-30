@@ -1,0 +1,133 @@
+@import "src/assets/variables";
+
+$img-width: 120px;
+
+h2 {
+  text-transform: uppercase;
+  line-height: 25px;
+  font-size: 18px;
+}
+
+.card {
+  overflow: hidden;
+
+  &.card-user {
+    border-radius: 11px;
+  }
+
+  .card-header {
+    width: 100%;
+    height: 80px;
+    background-color: $primary;
+    color: white;
+    text-align: right;
+  }
+
+  .card-options {
+    color: white;
+    float: right;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+
+  .img-container {
+    width: 100%;
+    position: absolute;
+
+    img,
+    .hoverable {
+      width: $img-width;
+      height: $img-width;
+    }
+
+    img {
+      width: $img-width;
+      height: $img-width;
+      object-fit: cover;
+      z-index: 5;
+      border: 8px solid $primary-bg-color;
+      margin-top: 25px;
+      border-radius: 50%;
+    }
+
+    .hoverable {
+      img {
+        // lorsque le profil devient éditable, le label de l'input de l'image passe en display block.
+        // Pour qu'il ne descende pas, on supprime le margin de l'image
+        margin: 0;
+      }
+
+      position: absolute;
+      display: block;
+      cursor: pointer;
+      height: $img-width;
+      width: $img-width;
+      top: 25px;
+    }
+
+    .hoverable .hover-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 100%);
+      z-index: 2;
+      color: white;
+    }
+
+    .hoverable .background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background-color: rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    #fileInput {
+      display: none;
+    }
+  }
+
+  .card-body {
+    margin-top: 30px;
+
+    h1 {
+      text-align: center;
+      font-size: 22px;
+      color: $primary;
+    }
+
+    .user-contacts {
+      li {
+        display: flex;
+        align-items: center;
+        margin-bottom: 6px;
+
+        &.item-mail:before {
+          content: '\f003';
+        }
+
+        &.item-phone:before {
+          content: '\f879';
+        }
+
+        &.item-birthday:before {
+          content: '\f133';
+        }
+
+        &:before {
+          display: block;
+          font-family: 'FontAwesome';
+          font-size: 22px;
+          margin-right: 15px;
+          margin-bottom: -4px; // pour centrer l'image avec le texte
+          color: $primary;
+        }
+      }
+    }
+  }
+}

@@ -1,20 +1,20 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {PersonalCardComponent} from './personal-card.component';
+import {SidebarProfileComponent} from './sidebar-profile.component';
 
 describe('PersonalCardComponent', () => {
-  let component: PersonalCardComponent;
-  let fixture: ComponentFixture<PersonalCardComponent>;
+  let component: SidebarProfileComponent;
+  let fixture: ComponentFixture<SidebarProfileComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [PersonalCardComponent]
+      declarations: [SidebarProfileComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PersonalCardComponent);
+    fixture = TestBed.createComponent(SidebarProfileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

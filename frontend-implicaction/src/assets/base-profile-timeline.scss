@@ -1,0 +1,100 @@
+@import "src/assets/variables";
+
+
+h2 {
+  text-transform: uppercase;
+  line-height: 25px;
+  font-size: 18px;
+}
+
+.resume-item {
+  margin-top: 10px;
+  padding: 20px 0;
+  border-bottom: 1px solid $light-gray;
+
+  .resume-title {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 50px;
+    letter-spacing: 4px;
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  .resume-data {
+    display: flex;
+
+    &:last-child .year:after {
+      display: none;
+    }
+
+    .year {
+      padding-right: 35px;
+      width: 150px;
+      position: relative;
+      color: $info;
+
+      &:before {
+        font-family: FontAwesome;
+        /* content doit être surchargé dans le composant cible pour afficher l'icone font
+           awesome désiré */
+        display: inline-block;
+        font-size: 1.5rem;
+        position: absolute;
+        top: -10px;
+        right: -15px;
+        z-index: 5;
+        padding: 5px;
+        width: 45px;
+        text-align: center;
+        background-color: $light-gray;
+        color: white;
+        border: 1px solid $light-gray;
+        border-radius: 50%;
+      }
+
+      &:after {
+        content: "";
+        position: absolute;
+        top: 17px;
+        right: 6px;
+        width: 3px;
+        /* height peut être surchargé pour correspondre au besoin */
+        height: 90%;
+        background: $danger;
+      }
+    }
+
+    .content {
+      padding-left: 35px;
+      margin-bottom: 20px;
+      width: calc(100% - 115px);
+    }
+  }
+}
+
+@media screen and (max-width: 424px),
+screen and (min-width: 768px) and (max-width: 991px) {
+
+  .resume-item .resume-data {
+    flex-direction: column;
+  }
+
+  .resume-item .resume-data .year {
+    padding: 0;
+    margin-bottom: 5px;
+    width: 100%;
+    color: $info;
+  }
+  .resume-item .resume-data .year:before,
+  .resume-item .resume-data .year:after {
+    display: none;
+  }
+  .resume-item .resume-data .content {
+    width: 100%;
+    padding: 0;
+  }
+}

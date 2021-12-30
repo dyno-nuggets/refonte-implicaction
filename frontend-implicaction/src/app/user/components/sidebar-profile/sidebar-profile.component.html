@@ -1,0 +1,194 @@
+<div class="card shadow-sm border-0 card-user">
+  <div class="card-header"></div>
+  <div class="d-flex align-items-center justify-content-center mb-4 img-container">
+    <div class="card-options">
+      <ng-container *ngIf="!readOnly">
+        <i-feather
+          (click)="toggleModeEdition()"
+          *ngIf="!isEditing; else rollbackAndSaveIcon"
+          class="cursor-pointer"
+          name="edit-2"
+        >
+        </i-feather>
+        <ng-template #rollbackAndSaveIcon>
+          <i-feather
+            (click)="toggleModeEdition()"
+            class="cursor-pointer danger-on-hover me-2"
+            name="rotate-ccw"
+          >
+          </i-feather>
+          <i-feather
+            (click)="updatePersonalInfo()"
+            class="cursor-pointer success-on-hover"
+            name="save"
+          >
+          </i-feather>
+        </ng-template>
+      </ng-container>
+    </div>
+    <label [ngClass]="{'hoverable': isEditing}" for="fileInput">
+      <img
+        #userImage
+        (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
+        [src]="user.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
+        alt="photo de {{user.firstname}}"
+        class="rounded-circle shadow-sm"
+      >
+      <ng-container *ngIf="isEditing">
+        <div class="hover-text">Modifier</div>
+        <div class="background"></div>
+      </ng-container>
+    </label>
+    <br>
+    <input
+      (change)="onFileChange($event)"
+      *ngIf="isEditing"
+      accept=".jpg, .png, .jpeg"
+      id="fileInput"
+      type="file"
+    >
+  </div>
+
+  <div class="card-body mt-5 px-5">
+    <h1 class="mt-4">{{user.firstname}} {{user.lastname}}</h1>
+
+    <section class="user-contacts mt-5">
+      <ul class="list-unstyled">
+        <li class="list-item item-mail">
+          <ng-container *ngIf="!isEditing; else mailEditionTemplate">
+            <app-user-info [value]="user.email"></app-user-info>
+          </ng-container>
+          <ng-template #mailEditionTemplate>
+            <input
+              [(ngModel)]="user.email"
+              class="form-control px-4"
+              placeholder="Email"
+            >
+          </ng-template>
+        </li>
+        <li class="list-item item-phone">
+          <ng-container *ngIf="!isEditing; else phoneEditionTemplate">
+            <app-user-info [value]="user.phoneNumber"></app-user-info>
+          </ng-container>
+          <ng-template #phoneEditionTemplate>
+            <input
+              [(ngModel)]="user.phoneNumber"
+              class="form-control px-4"
+              placeholder="Email"
+            >
+          </ng-template>
+        </li>
+        <li class="list-item item-birthday">
+          <ng-container *ngIf="!isEditing; else birthdayEditionTemplate">
+            <app-user-info [value]="user.birthday"></app-user-info>
+          </ng-container>
+          <ng-template #birthdayEditionTemplate>
+            <p-calendar
+              [(ngModel)]="user.birthday"
+              [yearNavigator]="true"
+              [yearRange]="constant.DEFAULT_YEAR_RANGE"
+              dateFormat="yy-mm-dd"
+              id="birthdayInput"
+              inputStyleClass="form-control px-4 fs-5"
+              placeholder="Date de naissance"
+            >
+            </p-calendar>
+          </ng-template>
+        </li>
+      </ul>
+    </section>
+
+    <section class="profile-highlights my-5">
+      <div class="highlight-item user-hobbies">
+        <h2>Loisirs / Hobbies</h2>
+        <div *ngIf="!isEditing; else hobbiesEditionTemplate" class="">
+          <p>
+            <app-user-info [value]="user.hobbies"></app-user-info>
+          </p>
+        </div>
+        <ng-template #hobbiesEditionTemplate>
+          <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.hobbies"
+                  class="form-control px-4"
+                  rows="4"
+                ></textarea>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="highlight-item user-presentation">
+        <h2>Présentation</h2>
+        <div *ngIf="!isEditing; else presentationEditionTemplate">
+          <p>
+            <app-user-info [value]="user.presentation"></app-user-info>
+          </p>
+        </div>
+        <ng-template #presentationEditionTemplate>
+          <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.presentation"
+                  class="form-control px-4"
+                  rows="4"
+                ></textarea>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="highlight-item user-purpose">
+        <h2>Quel est mon objectif professionnel</h2>
+        <div *ngIf="!isEditing; else purposeEditionTemplate">
+          <p>
+            <app-user-info [value]="user.purpose"></app-user-info>
+          </p>
+        </div>
+        <ng-template #purposeEditionTemplate>
+          <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.purpose"
+                  class="form-control px-4"
+                ></textarea>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="highlight-item user-expectation">
+        <h2>Ce que j'attends du réseau</h2>
+        <div *ngIf="!isEditing; else expectationEditionTemplate">
+          <p>
+            <app-user-info [value]="user.expectation"></app-user-info>
+          </p>
+        </div>
+        <ng-template #expectationEditionTemplate>
+          <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.expectation"
+                  class="form-control px-4"
+                  rows="4"
+                ></textarea>
+          </div>
+        </ng-template>
+      </div>
+
+      <div class="highlight-item user-contribution">
+        <h2>Ce que je peux apporter au réseau</h2>
+        <div *ngIf="!isEditing; else contributionEditionTemplate">
+          <p>
+            <app-user-info [value]="user.contribution"></app-user-info>
+          </p>
+        </div>
+        <ng-template #contributionEditionTemplate>
+          <div class="mb-4">
+                <textarea
+                  [(ngModel)]="user.contribution"
+                  class="form-control px-4"
+                  rows="4"
+                ></textarea>
+          </div>
+        </ng-template>
+      </div>
+    </section>
+
+  </div>
+</div>
+
