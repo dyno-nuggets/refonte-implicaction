@@ -1,1 +1,11 @@
+.spinner {
+  position: absolute;
+  top: 50%;
+  width: 100%;
+}
 
+@media screen and (min-width: 992px) {
+  .sidebar-profile {
+    max-width: 400px;
+  }
+}

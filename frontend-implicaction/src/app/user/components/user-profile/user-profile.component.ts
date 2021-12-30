@@ -6,7 +6,7 @@ import {ActivatedRoute} from '@angular/router';
 import {UserContextService} from '../../../shared/services/user-context.service';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../../shared/services/auth.service';
-import {map} from 'rxjs/operators';
+import {finalize, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-profile',
@@ -19,6 +19,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   canEdit = false;
 
   private subscription: Subscription;
+  isLoading = true;
 
   constructor(
     private authService: AuthService,
@@ -29,23 +30,19 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
-
   ngOnInit(): void {
     this.route.paramMap.subscribe(paramMap => {
       const userId = paramMap.get('userId');
       this.userService
         .getUserById(userId)
         .pipe(
+          finalize(() => this.isLoading = false),
           map(user => {
-              console.log('coucou');
               // tri des dates par ordre décroissant
               user.trainings = [...user.trainings]
                 .sort((a, b) => a.date ? new Date(b.date).getFullYear() - new Date(a.date).getFullYear() : -1);
               user.experiences = [...user.experiences]
-                .sort((a, b) => a.finishedAt ? new Date(b.finishedAt).getFullYear() - new Date(a.finishedAt).getFullYear() : -1);
+                .sort((a, b) => a.finishedAt ? new Date(b.startedAt).getFullYear() - new Date(a.finishedAt).getFullYear() : -1);
               return user;
             }
           )
@@ -56,12 +53,16 @@ export class UserProfileComponent implements OnInit, OnDestroy {
             this.canEdit = user.id === this.authService.getCurrentUser()?.id;
             this.userContexteService.setUser(user);
           },
-          () => this.toasterService.error('oops', 'Une erreur est survenue !')
+          () => this.toasterService.error('Oops', 'Une erreur est survenue !')
         );
     });
     this.subscription = this.userContexteService
       .observeUser()
       .subscribe(user => this.user = user);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 
 }
