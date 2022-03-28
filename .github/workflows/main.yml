@@ -3,7 +3,7 @@ name: Workflow Maven
 on:
   push:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [ opened, synchronize, reopened, closed ]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -27,7 +27,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0 
+          fetch-depth: 0
       - name: Get last tag
         id: previoustag
         uses: "WyriHaximus/github-action-get-previous-tag@v1"
@@ -52,3 +52,20 @@ jobs:
           docker image tag ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:latest \
           ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
           docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=dyno-nuggets_refonte-implicaction
