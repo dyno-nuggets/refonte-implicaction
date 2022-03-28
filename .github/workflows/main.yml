@@ -20,12 +20,18 @@ jobs:
           distribution: 'adopt'
       - name: Test with Maven
         run: mvn test -Dspring.profiles.active=test
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
+
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
         with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
       - name: Cache Maven packages
         uses: actions/cache@v1
         with:
@@ -36,7 +42,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=dyno-nuggets_refonte-implicaction
+          run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=dyno-nuggets_refonte-implicaction
 
   build-and-deploy:
     if: github.event.pull_request.merged == true
