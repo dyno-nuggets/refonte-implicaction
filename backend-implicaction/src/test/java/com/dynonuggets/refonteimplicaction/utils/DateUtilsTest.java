@@ -26,7 +26,7 @@ class DateUtilsTest {
         expectedMaps.put(now().minusMillis(3_540_000L), "il y a 59 minutes");
         expectedMaps.put(now().minusMillis(3_600_000L), "il y a 1 heure");
         expectedMaps.put(ZonedDateTime.ofInstant(now(), zoneId).minusDays(1).toInstant(), "il y a 1 jour");
-        expectedMaps.put(ZonedDateTime.ofInstant(now(), zoneId).minusMonths(1).toInstant(), "il y a 1 mois");
+        expectedMaps.put(ZonedDateTime.ofInstant(now(), zoneId).minusMonths(1).toInstant(), "il y a 4 semaines");
         expectedMaps.put(ZonedDateTime.ofInstant(now(), zoneId).minusYears(2).toInstant(), "il y a 2 ans");
     }
 
