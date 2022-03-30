@@ -28,11 +28,13 @@ jobs:
         with:
           node-version: '14'
       - run: docker-compose up -d
-      - run: mvn spring-boot:run -Dspring-boot.run.profiles=local
+      - run: mvn spring-boot:run -Dspring-boot.run.profiles=local &
       - name: Cypress install and test
         uses: cypress-io/github-action@v2
         with:
           record: true
+          wait-on: 'http://localhost:8080'
+          wait-on-timeout: 120
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
