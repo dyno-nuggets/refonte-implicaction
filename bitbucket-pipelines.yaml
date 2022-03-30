@@ -1,0 +1,56 @@
+#  Template maven-build
+
+#  This template allows you to test and build your Java project with Maven.
+#  The workflow allows running tests, code checkstyle and security scans on the default branch.
+
+# Prerequisites: pom.xml and appropriate project structure should exist in the repository.
+
+image: maven:3.8.4-jdk-11
+
+clone:
+  depth: full              # SonarCloud scanner needs the full history to assign issues properly
+
+definitions:
+  services:
+    docker:
+      memory: 2048
+  caches:
+    sonar: ~/.sonar/cache  # Caching SonarCloud artifacts will speed up your build
+  steps:
+    - step: &build-test-sonarcloud
+        name: Build, test and analyze on SonarCloud
+        caches:
+          - maven
+          - sonar
+        script:
+          - mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
+        artifacts:
+          - target/**
+    - step: &build-test
+        name: Build and test
+        caches:
+          - maven
+        script:
+          - export TESTCONTAINERS_RYUK_DISABLED=true
+          - mvn test -Dspring.profiles.active=test -Dtest=WorkExperienceAdapterTest -DfailIfNoTests=false
+        after-script:
+          - pipe: atlassian/checkstyle-report:0.3.0
+        services:
+          - docker
+        artifacts:
+          - target/**
+    - step: &k6-test
+        image: loadimpact/k6:latest
+        name: Run performance tests
+        script:
+          - k6 run -e HOST=test ./single-request.js
+
+pipelines:
+  default:
+    - step: *k6-test
+  branches:
+    master:
+      - step: *build-test-sonarcloud
+  pull-requests:
+    '**':
+      - step: *build-test-sonarcloud
