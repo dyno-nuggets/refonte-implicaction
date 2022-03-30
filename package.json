@@ -1,0 +1,23 @@
+{
+  "name": "refonte-implicaction",
+  "version": "1.0.0",
+  "description": "* [java](https://java.com/fr/download/help/download_options.html) (v11)\r * [node](https://nodejs.org/en/) (14 ou supérieure)\r * [docker](https://docs.docker.com/engine/install/) (v17.09 min) pour les tests",
+  "main": "index.js",
+  "dependencies": {
+    "cypress": "^9.5.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Julien1498/refonte-implicaction.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Julien1498/refonte-implicaction/issues"
+  },
+  "homepage": "https://github.com/Julien1498/refonte-implicaction#readme"
+}
