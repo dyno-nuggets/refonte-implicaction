@@ -663,6 +663,4 @@ VALUES (15, 'Ivalua', 'Alternance', '2022-09-30', 'Ingénieur informaticien c#',
         '2021-09-10', 'Chef d\'étage à moustaches', '2021-02-28', 15);
 
 
-ALTER TABLE `job_posting`
-    ADD `short_description` longtext NULL AFTER `description`;
 
