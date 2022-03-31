@@ -39,6 +39,17 @@ jobs:
         env:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  k6:
+    name: k6 load test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - run: docker run --rm -i grafana/k6 run - < ./k6/test_jobs_api.js
+      - run: docker run --rm -i grafana/k6 --vus 10 --duration 30s run - < ./k6/test_jobs_api.js
+      - run: docker run --rm -i grafana/k6 run - < ./k6/test_user_api.js
+      - run: docker run --rm -i grafana/k6 --vus 10 --duration 30s run - < ./k6/test_user_api.js
   build:
     name: Unit test and Sonar
     runs-on: ubuntu-latest
@@ -70,7 +81,7 @@ jobs:
 
   build-and-push:
     name: Building and push docker image on Github container
-    needs: Build
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
