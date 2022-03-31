@@ -25,14 +25,17 @@ import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 @EnableScheduling
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] CSRF_WHITELIST = {
+            "/api/auth/logout",
+            "/api/users",
+            "/api/job-postings"
+    };
+
     private static final String[] AUTH_WHITELIST = {
             "/",
             "/error",
             "/api/auth/signup",
             "/api/auth/login",
-            "/api/auth/logout",
-            "/api/users",
-            "/api/job-postings",
             "/api/auth/refresh/token",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
@@ -75,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().disable()
                 .csrf().ignoringAntMatchers(AUTH_WHITELIST)
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                .csrf().ignoringAntMatchers(CSRF_WHITELIST).and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
