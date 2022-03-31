@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/error",
             "/api/auth/signup",
             "/api/auth/login",
+            "/api/auth/logout",
             "/api/auth/refresh/token",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
@@ -70,6 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().disable()
+                .csrf().ignoringAntMatchers(AUTH_WHITELIST)
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
