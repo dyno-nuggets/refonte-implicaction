@@ -2,7 +2,7 @@
 
 context('Connection', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4200')
+    cy.visit('http://localhost:8080')
   })
   it('cy.go() - Testing navbar', () => {
     cy.get('.navbar-expand-lg').contains('Se connecter').click()
@@ -41,7 +41,7 @@ context('Connection', () => {
 
 context('Navigation', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:4200')
+    cy.visit('http://localhost:8080')
     cy.get('.navbar-expand-lg').contains('Se connecter').click()
     cy.get('#floatingUsername').type('admin')
     cy.get('#floatingPassword').type('password')
