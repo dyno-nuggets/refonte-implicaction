@@ -1,6 +1,9 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 
+//Local: host.docker.internal
+const baseUrl = "localhost";
+
 function getToken() {
     const payload = JSON.stringify({
         username: 'admin',
@@ -12,7 +15,7 @@ function getToken() {
         },
     };
 
-    const loginRes = http.post("http://host.docker.internal:8080/api/auth/login", payload, params);
+    const loginRes = http.post("http://"+baseUrl+":8080/api/auth/login", payload, params);
 
     check(loginRes, {
         'Login status is 200': (r) => r.status === 200,
@@ -35,9 +38,9 @@ export default function () {
         },
     };
 
-    should_return_200('http://host.docker.internal:8080/api/users');
+    should_return_200("http://"+baseUrl+":8080/api/users");
 
-    const res = http.get("http://host.docker.internal:8080/api/users/1");
+    const res = http.get("http://"+baseUrl+":8080/api/users/1");
 
     check(res, {
         'Status user is 200': (r) => r.status === 200,
@@ -54,11 +57,11 @@ export default function () {
         },
     };
 
-    const resUpdateUser = http.put("http://host.docker.internal:8080/api/users", payload, params)
+    const resUpdateUser = http.put("http://"+baseUrl+":8080/api/users", payload, params)
 
     check(resUpdateUser, {'Status update user is 200': (r) => r.status === 200})
 
-    const resdUserUpdated = http.get("http://host.docker.internal:8080/api/users/1");
+    const resdUserUpdated = http.get("http://"+baseUrl+":8080/api/users/1");
 
     check(resdUserUpdated, {
         'Status updated user is 200': (r) => r.status === 200,

@@ -1,6 +1,9 @@
 import http from 'k6/http';
 import { sleep, check } from 'k6';
 
+//Local: host.docker.internal
+const baseUrl = "localhost";
+
 function getToken() {
     const payload = JSON.stringify({
         username: 'admin',
@@ -12,7 +15,7 @@ function getToken() {
         },
     };
 
-    const loginRes = http.post("http://host.docker.internal:8080/api/auth/login", payload, params);
+    const loginRes = http.post("http://"+baseUrl+":8080/api/auth/login", payload, params);
 
     check(loginRes, {
         'Login status is 200': (r) => r.status === 200,
@@ -30,7 +33,7 @@ export default function () {
         },
     };
 
-    const res = http.get("http://host.docker.internal:8080/api/companies");
+    const res = http.get("http://"+baseUrl+":8080/api/companies");
 
     check(res, {
         'Status companies is 200': (r) => r.status === 200,
@@ -66,13 +69,13 @@ export default function () {
         },
     };
 
-    const resCreateJob = http.post("http://host.docker.internal:8080/api/job-postings", payload, params)
+    const resCreateJob = http.post("http://"+baseUrl+":8080/api/job-postings", payload, params)
 
     check(resCreateJob, {'Status create job is 200': (r) => r.status === 200})
 
     const jobId = resCreateJob.json().id;
 
-    const resGetJobCreated = http.get("http://host.docker.internal:8080/api/job-postings/" + jobId);
+    const resGetJobCreated = http.get("http://"+baseUrl+":8080/api/job-postings/" + jobId);
 
     check(resGetJobCreated, {'Status get created job is 200': (r) => r.status === 200})
 
