@@ -31,6 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/signup",
             "/api/auth/login",
             "/api/auth/logout",
+            "/api/users",
+            "/api/job-postings",
             "/api/auth/refresh/token",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
