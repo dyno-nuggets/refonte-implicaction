@@ -7,6 +7,7 @@ on:
     types: [opened, synchronize, reopened]
 jobs:
   cypress:
+    name: Cypress
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +40,7 @@ jobs:
           CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_TOKEN}}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   build:
-    name: Build
+    name: Unit test and Sonar
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
