@@ -24,11 +24,11 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add('login', (username, password) => {
+Cypress.Commands.add('login', (username, password, expected = 'exist') => {
   cy.visit('')
   cy.get('#headerLoginBtn').click()
   cy.get('#floatingUsername').type(username)
   cy.get('#floatingPassword').type(password)
   cy.get('#floatingConnection').click()
-  cy.get('#dropdownUser2').should('exist')
+  cy.get('#dropdownUser2').should(expected)
 })
