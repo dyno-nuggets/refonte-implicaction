@@ -37,6 +37,7 @@
         (click)="addToJobBoard()"
         *ngIf="!job.apply; else jobIsApply"
         class="btn btn-primary fw-bold w-100 px-xxl-5"
+        id="jobCardToBoardButton-{{job.id}}"
       >
         <i
           [ngClass]="{'fa-plus': !isLoading, 'fa-circle-notch fa-spin': isLoading}"
