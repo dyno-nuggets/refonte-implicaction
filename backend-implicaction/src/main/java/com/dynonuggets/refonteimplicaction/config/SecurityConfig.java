@@ -26,23 +26,34 @@ import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] AUTH_WHITELIST = {
-            "/",
-            "/error",
+            // api
             "/api/auth/signup",
             "/api/auth/login",
             "/api/auth/refresh/token",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
             JOBS_BASE_URI + VALIDATED_JOBS + "?**",
+
             // swagger
             "/v2/api-docs",
-            // -- swagger ui
+
+            // swagger ui
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/swagger-ui/**",
-            "/v2/api-docs",
             "/webjars/**",
-            // -- angular
+    };
+
+    // Toutes les routes front doivent être autorisées en back car c'est angular qui en gère l'accès
+    private static final String[] ANGULAR_WHITELIST = {
+            "/",
+            "/entreprise/**",
+            "/users/**",
+            "/jobs/**",
+            "/board/**",
+            "/admin/**",
+            "/auth/**",
+            "/error",
             "/index.html",
             "/*.js",
             "/*.js.map",
@@ -55,11 +66,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/**.woff"
     };
 
-    private static final String[] ADMIN_PROTECTED = {
+    private static final String[] ADMIN_PROTECTEDS = {
             "/api/auth/accountVerification/**"
     };
 
-    private static final String[] PREMIUM_PROTECTED = {
+    private static final String[] PREMIUM_PROTECTEDS = {
             APPLY_BASE_URI + "/**",
     };
 
@@ -74,8 +85,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
                 .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(ADMIN_PROTECTED).hasRole(RoleEnum.ADMIN.name())
-                .antMatchers(PREMIUM_PROTECTED).hasRole(RoleEnum.PREMIUM.name())
+                .antMatchers(ANGULAR_WHITELIST).permitAll()
+                .antMatchers(ADMIN_PROTECTEDS).hasRole(RoleEnum.ADMIN.name())
+                .antMatchers(PREMIUM_PROTECTEDS).hasRole(RoleEnum.PREMIUM.name())
                 .anyRequest()
                 .authenticated();
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
