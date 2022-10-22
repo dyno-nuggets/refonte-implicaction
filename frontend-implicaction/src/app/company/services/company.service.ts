@@ -17,11 +17,11 @@ export class CompanyService {
   ) {
   }
 
-  getAllByCriteria(pageable: Pageable, criteria: Criteria): Observable<any> {
+  getAllByCriteria(pageable: Pageable<Company>, criteria: Criteria): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllCompanyByCriteriaEndpoint(pageable, criteria));
   }
 
-  getAll(pageable: Pageable): Observable<any> {
+  getAll(pageable: Pageable<Company>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllCompanyEndpoint(pageable));
   }
 

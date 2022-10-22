@@ -30,7 +30,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   contracts = ContractEnum.all();
   businessSectors = BusinessSectorEnum.all();
   companies: Company[] = [];
-  pageable: Pageable = Constants.PAGEABLE_DEFAULT;
+  pageable: Pageable<JobPosting> = Constants.PAGEABLE_DEFAULT;
 
   constructor(
     private formBuilder: FormBuilder,

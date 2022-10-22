@@ -22,7 +22,7 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
   company: Company;
   isUpdate: boolean;
   isSubmitted = false;
-  pageable: Pageable = Constants.PAGEABLE_DEFAULT;
+  pageable: Pageable<any> = Constants.PAGEABLE_DEFAULT;
 
   constructor(
     private formBuilder: FormBuilder,

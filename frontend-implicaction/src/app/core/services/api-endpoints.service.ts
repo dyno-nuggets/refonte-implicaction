@@ -52,7 +52,7 @@ export class ApiEndpointsService {
     return urlBuilder.toString();
   }
 
-  private static createUrlWithPageable(uri: string, pageable: Pageable): string {
+  private static createUrlWithPageable(uri: string, pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithQueryParameters(
       uri,
       (qs: QueryStringParameters) => {
@@ -113,7 +113,7 @@ export class ApiEndpointsService {
    * Users
    */
 
-  getAllUserEndpoint(pageable: Pageable): string {
+  getAllUserEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
@@ -121,15 +121,15 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.USERS.UPDATE_IMAGE);
   }
 
-  getAllUserCommunityEndpoint(pageable: Pageable): string {
+  getAllUserCommunityEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.COMMUNITY_LIST, pageable);
   }
 
-  getAllPendingActivationUsersEndpoint(pageable: Pageable): string {
+  getAllPendingActivationUsersEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_ALL_PENDING_USERS, pageable);
   }
 
-  getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable): string {
+  getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable<any>): string {
     const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GET_FRIENDS, [userId, 'friends'])
       // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
@@ -138,11 +138,11 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
-  getFriendRequestReceivedEndpoint(pageable: Pageable): string {
+  getFriendRequestReceivedEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_RECEIVED, pageable);
   }
 
-  getFriendRequestSentEndPoint(pageable: Pageable): string {
+  getFriendRequestSentEndPoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_SENT, pageable);
   }
 
@@ -210,7 +210,7 @@ export class ApiEndpointsService {
    * Jobs
    */
 
-  getAllJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: boolean, checkApply: boolean): string {
+  getAllJobEndpoint(pageable: Pageable<any>, criteria: JobCriteriaFilter, archive: boolean, checkApply: boolean): string {
     // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
@@ -228,7 +228,7 @@ export class ApiEndpointsService {
       });
   }
 
-  getAllValidatedJobEndpoint(pageable: Pageable, criteria: JobCriteriaFilter, archive: any): string {
+  getAllValidatedJobEndpoint(pageable: Pageable<any>, criteria: JobCriteriaFilter, archive: any): string {
     // on merge les filtres et les attributs de pagination
     const objectParam = {
       ...criteria,
@@ -273,7 +273,7 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [JobId, 'archive']);
   }
 
-  getAllPendingActivationJobsEndpoint(pageable: Pageable): string {
+  getAllPendingActivationJobsEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.JOBS.GET_ALL_PENDING_JOBS, pageable);
   }
 
@@ -285,7 +285,7 @@ export class ApiEndpointsService {
    * Companies
    */
 
-  getAllCompanyByCriteriaEndpoint(pageable: Pageable, criteria: Criteria): string {
+  getAllCompanyByCriteriaEndpoint(pageable: Pageable<any>, criteria: Criteria): string {
     // on merge les filtres et les attributs de pagination
     const objectParam = ApiEndpointsService.concatCriterias(criteria, pageable);
     return ApiEndpointsService.createUrlWithQueryParameters(
@@ -295,7 +295,7 @@ export class ApiEndpointsService {
     );
   }
 
-  getAllCompanyEndpoint(pageable: Pageable): string {
+  getAllCompanyEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.COMPANIES.BASE_URI, pageable);
   }
 
@@ -311,7 +311,7 @@ export class ApiEndpointsService {
    * Posts
    */
 
-  getAllPostsEndpoint(pageable: Pageable): string {
+  getAllPostsEndpoint(pageable: Pageable<any>): string {
 
     return ApiEndpointsService.createUrlWithPageable(Uris.POSTS.BASE_URI, pageable);
   }
@@ -371,7 +371,7 @@ export class ApiEndpointsService {
     );
   }
 
-  findAllActiveGroupsEndpoint(pageable: Pageable): string {
+  findAllActiveGroupsEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.VALIDATED_GROUPS, pageable);
   }
 
@@ -379,7 +379,7 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.GROUP.BASE_URI, [groupName, 'validate']);
   }
 
-  getAllPendingGroupEndpoint(pageable: Pageable): string {
+  getAllPendingGroupEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.GET_ALL_PENDING_GROUPS, pageable);
   }
 

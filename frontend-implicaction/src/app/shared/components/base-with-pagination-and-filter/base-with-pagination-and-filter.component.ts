@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {Constants} from '../../../config/constants';
-import {Pageable} from '../../models/pageable';
+import {Pageable, PageableType} from '../../models/pageable';
 import {ActivatedRoute} from '@angular/router';
 import {Criteria} from '../../models/Criteria';
 
 @Component({template: ''})
-export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
+export class BaseWithPaginationAndFilterComponent<T extends PageableType, C extends Criteria> {
 
   readonly DEFAULT_ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
@@ -13,7 +13,7 @@ export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
   criteria: C;
 
   // Pagination
-  pageable: Pageable<T> = {...Constants.PAGEABLE_DEFAULT};
+  pageable: Pageable<PageableType> = {...Constants.PAGEABLE_DEFAULT};
 
   constructor(protected route: ActivatedRoute) {
   }
