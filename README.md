@@ -41,6 +41,16 @@ ng serve
 
 #### depuis IntelliJ-IDEA
 
+* backend
+![Capture d’écran 2022-10-24 à 01 10 31](https://user-images.githubusercontent.com/4210719/197422713-4974e17d-fecb-4a36-b2b7-a620ed7d4403.png)
+
+* frontend
+![image](https://user-images.githubusercontent.com/4210719/197422825-8d56268f-d9f7-4900-8b60-529889dd2be9.png)
+
+## configuration IntelliJ-IDEA
+
+
+
 ## Détail du projet
 
 Refonte-Implicaction est un projet qui s'appuie sur les technologies spring et angular. Tout son processus de build est
