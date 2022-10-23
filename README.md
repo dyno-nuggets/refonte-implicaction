@@ -5,7 +5,8 @@
 ### dépendances
 
 * [java](https://java.com/fr/download/help/download_options.html) (v11)
-* [node](https://nodejs.org/en/) (14 ou supérieure)
+* [node](https://nodejs.org/en/) (v16)
+* [Angular](https://angular.io/guide/setup-local) : `npm install -g @angular/cli`
 * [docker](https://docs.docker.com/engine/install/) (v17.09 min) pour les tests
 
 ### lancement de la bd
@@ -14,31 +15,33 @@
 docker-compose up
 ```
 
-la commande va créer 2 containers : une base de données MySQL sur le port 3307 et une instance d'adminer accessible à
-l'adresse http://localhost:9000. Utiliser les identifiants suivants :
+### environnement local
 
-* utilisateur : root
-* mot de passe : password
-* base de données : implicaction
+* BD : mysql://root:password@localhost:3306/implicaction
+* Adminer : http://localhost:9030
+* Backend : http://localhost:8080
+* Frontend : http://localhost:4200
+* swagger : http://localhost:8080/swagger-ui.html
 
 ### lancement de l'application
+
+#### en ligne de commande
+
+* backend
 
 ```shell
 mvn spring-boot:run -Dspring-boot.run.profiles=local
 ```
 
-* l'application est accessbible à l'adresse http://localhost:8080.
-* documentation de l'api : http://localhost:8080/swagger-ui.html
-
-### lancement du front (pour le développement)
+* frontend
 
 ```shell
 ng serve
 ```
 
-l'application est accessible à l'adresse http://localhost:4200/
+#### depuis IntelliJ-IDEA
 
-## Quickless Start
+## Détail du projet
 
 Refonte-Implicaction est un projet qui s'appuie sur les technologies spring et angular. Tout son processus de build est
 géré par maven.
@@ -57,9 +60,9 @@ Il se découpe en 3 projets maven :
     |   +-- src/test/resources
     |   |   +-- application-test.properties
     |   |       •••
-    |   +-- pom.xml 
+    |   +-- pom.xml (backend)
     +-- frontend-implicaction/
-    |   +-- pom.xml
+    |   +-- pom.xml (frontend)
     |       •••
     +-- pom.xml  (root)
 ```
@@ -67,15 +70,6 @@ Il se découpe en 3 projets maven :
 * le projet backend-implicaction
 * le projet frontend-implicaction
 * le projet root, qui pilote le build des 2 projets
-
-la commande `mvn clean install` depuis le répertoire racine va donc lancer le build des 2 projets
-(ng build --prod pour le front et mvn clean install sur le back) et packager le tout au sein d'un même
-jar `backend-implicaction/target/backend-implicaction-[version].jar`. il suffira d'executer la
-commande `mvn spring-boot:run [-Dspring-boot.run.profiles=nom_profil]` (pour un build en prod, pas besoin de fournir un
-profil, c'est celui par défaut qui est défini). Il est également possible de lancer le jar 'à la main' à l'aide de la
-commande `java -jar backend-implicaction/target/backend-implicaction-num_version.jar [-Dspring-boot.run.profiles=nom_profil]`
-. Il est également possible de définir la variable d'environnement `spring-boot.run.profiles` pour définir un profil par
-défaut.
 
 ### les profils
 
@@ -87,17 +81,17 @@ défaut.
 * le profil 'test' à utiliser pour lancer les tests (
   cf `backend-implicaction/src/test/resources/applicaction-test.properties`)
 
-### les variables d'environnement à définir*
+### les variables d'environnement à définir
 
 * PORT : port du serveur
 * DB_URI : adresse de la base de données (ex: mysql://domain:port/db_name)
-* DB_USER : utilisateur de la base de données
+* DB_USER : nom d'utilisateur de la base de données
 * DB_PASS : mot de passe de la base de données
 * SMTP_HOST : adresse du serveur smtp
 * SMTP_PORT : port du serveur smtp
-* SMTP_USER : user du serveur smtp
-* SMTP_PASS : password du serveur smtp
-* KS_PATH : chemin vers le fichier JKS
+* SMTP_USER : nom d'utilisateur du serveur smtp
+* SMTP_PASS : mot de passe du serveur smtp
+* KS_PATH : chemin du fichier KeyStore
 * KS_NAME : nom du certificat de sécurité (par défaut mettre implicaction)
 * KS_PASSWORD : mot de passe du certificat
 * APP_URL : url de l'applicaction
@@ -105,6 +99,8 @@ défaut.
 * AWS_ACCESS_KEY(*): access key du compte aws
 * AWS_SECRET_KEY(*): client secret du compte aws
 * AWS_REGION(*): region du compte aws
+
+(*) mandatory
 
 ### lancement des tests
 

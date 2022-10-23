@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
 import {PostPayload} from '../../model/post-payload';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {Group} from '../../model/group';
 import {Router} from '@angular/router';
 import {PostService} from '../../services/post.service';
@@ -20,7 +20,7 @@ import {SidebarService} from '../../../shared/services/sidebar.service';
 })
 export class CreatePostFormComponent extends SidebarContentComponent implements OnInit {
 
-  createPostForm: FormGroup;
+  createPostForm: UntypedFormGroup;
   postPayload: PostPayload = {name: '', groupId: ''};
   groups: Group[];
   currentUser: User = {};
@@ -39,10 +39,10 @@ export class CreatePostFormComponent extends SidebarContentComponent implements 
   }
 
   ngOnInit(): void {
-    this.createPostForm = new FormGroup({
-      name: new FormControl('', Validators.required),
-      url: new FormControl(''),
-      description: new FormControl(''),
+    this.createPostForm = new UntypedFormGroup({
+      name: new UntypedFormControl('', Validators.required),
+      url: new UntypedFormControl(''),
+      description: new UntypedFormControl(''),
     });
 
     this.currentUser = this.authService.getCurrentUser();

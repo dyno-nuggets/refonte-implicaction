@@ -9,7 +9,7 @@ import {finalize} from 'rxjs/operators';
 import {Comment} from '../../model/comment';
 import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {CommentPayload} from '../../model/comment-payload';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {CommentService} from '../../services/comment.service';
 import {Paginator} from 'primeng/paginator';
 import {Criteria} from '../../../shared/models/Criteria';
@@ -32,7 +32,7 @@ export class CommentListComponent extends BaseWithPaginationAndFilterComponent<C
   currentUserImageUrl = Constants.USER_IMAGE_DEFAULT_URI;
   subscription: Subscription;
   postId: string;
-  createCommentForm: FormGroup;
+  createCommentForm: UntypedFormGroup;
   commentPayload: CommentPayload;
 
   constructor(
@@ -61,8 +61,8 @@ export class CommentListComponent extends BaseWithPaginationAndFilterComponent<C
       this.paginate();
     });
 
-    this.createCommentForm = new FormGroup({
-      text: new FormControl('', Validators.minLength(1))
+    this.createCommentForm = new UntypedFormGroup({
+      text: new UntypedFormControl('', Validators.minLength(1))
     });
   }
 

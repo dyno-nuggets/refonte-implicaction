@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../shared/services/auth.service';
 import {LoginRequestPayload} from '../../../shared/models/login-request-payload';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -14,7 +14,7 @@ import {Univers} from '../../../shared/enums/univers';
 })
 export class LoginComponent implements OnInit {
 
-  loginForm: FormGroup;
+  loginForm: UntypedFormGroup;
   loginRequestPayload: LoginRequestPayload;
   isLoading = false;
 
@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loginForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      password: new FormControl('', Validators.required)
+    this.loginForm = new UntypedFormGroup({
+      username: new UntypedFormControl('', Validators.required),
+      password: new UntypedFormControl('', Validators.required)
     });
   }
 

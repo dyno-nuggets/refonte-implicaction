@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {SidebarContentComponent} from '../../../../shared/models/sidebar-props';
@@ -17,7 +17,7 @@ import {CompanyContextServiceService} from '../../../../shared/services/company-
 })
 export class CompaniesFormComponent extends SidebarContentComponent implements OnInit {
 
-  formCompany: FormGroup;
+  formCompany: UntypedFormGroup;
   currentUserId: string;
   company: Company;
   isUpdate: boolean;
@@ -25,7 +25,7 @@ export class CompaniesFormComponent extends SidebarContentComponent implements O
   pageable: Pageable<any> = Constants.PAGEABLE_DEFAULT;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private companyService: CompanyService,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,

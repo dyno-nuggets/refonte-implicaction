@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {WorkExperience} from '../../../shared/models/work-experience';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
@@ -17,7 +17,7 @@ import {Constants} from '../../../config/constants';
 })
 export class ExperienceFormComponent extends SidebarContentComponent implements OnInit {
 
-  formExperience: FormGroup;
+  formExperience: UntypedFormGroup;
   currentUserId: string;
   experience: WorkExperience;
   isUpdate: boolean;
@@ -25,7 +25,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
   constant = Constants;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private experienceService: ExperienceService,
     private authService: AuthService,
     private toasterService: ToasterService,

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {JobPosting} from '../../../../shared/models/job-posting';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {JobService} from '../../../../job/services/job.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
@@ -22,7 +22,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
 
   readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
 
-  formJob: FormGroup;
+  formJob: UntypedFormGroup;
   currentUserId: string;
   job: JobPosting;
   isUpdate: boolean;
@@ -33,7 +33,7 @@ export class JobPostingFormComponent extends SidebarContentComponent implements 
   pageable: Pageable<JobPosting> = Constants.PAGEABLE_DEFAULT;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private jobService: JobService,
     private companyService: CompanyService,
     private toasterService: ToasterService,
