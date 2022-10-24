@@ -6,16 +6,30 @@
 
 * [java](https://java.com/fr/download/help/download_options.html) (v11)
 * [node](https://nodejs.org/en/) (v16)
-* [Angular](https://angular.io/guide/setup-local) : `npm install -g @angular/cli`
 * [docker](https://docs.docker.com/engine/install/) (v17.09 min) pour les tests
 
-### lancement de la bd
+### environnement local
 
+* pour lancer les conteneurs (bdd, adminer, aws)
 ```shell
 docker-compose up
 ```
 
-### environnement local
+* Pour lancer le back 
+
+```shell
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+```
+
+* pour avoir accès aux commandes `ng`
+```shell
+npm install -g @angular/cli
+```
+
+* pour lancer le front
+```shell
+ng serve
+```
 
 * BD : mysql://root:password@localhost:3306/implicaction
 * Adminer : http://localhost:9030
@@ -23,33 +37,55 @@ docker-compose up
 * Frontend : http://localhost:4200
 * swagger : http://localhost:8080/swagger-ui.html
 
-### lancement de l'application
-
-#### en ligne de commande
-
-* backend
-
-```shell
-mvn spring-boot:run -Dspring-boot.run.profiles=local
-```
-
-* frontend
-
-```shell
-ng serve
-```
-
-#### depuis IntelliJ-IDEA
-
+## config IntelliJ-IDEA
+### launchers
 * backend
 ![Capture d’écran 2022-10-24 à 01 10 31](https://user-images.githubusercontent.com/4210719/197422713-4974e17d-fecb-4a36-b2b7-a620ed7d4403.png)
 
 * frontend
 ![image](https://user-images.githubusercontent.com/4210719/197422825-8d56268f-d9f7-4900-8b60-529889dd2be9.png)
 
-## configuration IntelliJ-IDEA
+### codestyle et formatage
+
+* dezipper et installer le fichier [implicaction-cs.xml.zip](https://github.com/dyno-nuggets/refonte-implicaction/files/9847801/implicaction-cs.xml.zip) comme suit : 
+![image](https://user-images.githubusercontent.com/4210719/197423670-27a3ba53-81ad-469c-92b2-afdbd88d1a3a.png)
+
+* installer le plugin Save Actions et le configurer comme illustré :
+![image](https://user-images.githubusercontent.com/4210719/197423803-7d6bad6e-9fc0-4e44-864c-9c2b3395bc67.png)
+
+* configurer l'outil Actions on save
+![image](https://user-images.githubusercontent.com/4210719/197423865-11cf1517-5ab2-4227-a335-60ca9f0e06f2.png)
+
+## gestion d'un développement
+### création de la branche
+* mise à jour de son dépôt local : `git fetch origin`
+* création de la branche de développement :
+`git checkout -b features/RI-XXXX origin/RELEASE-2023` (où XXX est le numéro de la JIRA associée)
+
+### commit sur la branche
+Il est important de créer des commits avec le moins de changements possibles afin de faciliter la compréhension pour le reviewer
+
+* sélection des changements à commit
+* ecriture du message de commit :
+```
+RI-XXX : titre du commit explicite
+
+* liste de détails éventuels
+```
+
+Il est important d'envoyer ses commits sur le dépôt régulièrement
+* `git push origin features/RI-XXX`
+  * si on a modifié un commi précédemment envoyé, il faut forcer le push : `git push -f origin features/RI-XXXX`
 
 
+### création de la pull request
+
+Une fois que le branche est prête à être revue on créée la PR sur github.
+
+* envoyer les commits sur le distant : `git push origin features/RI-XXX`
+* choisir **RELEASE-2023** comme **base**
+* choisir **features/RI-XXX** comme **compare**
+* cliquer sur le bouton **create pull request**
 
 ## Détail du projet
 
