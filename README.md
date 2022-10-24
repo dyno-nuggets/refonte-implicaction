@@ -101,10 +101,13 @@ Une fois que le branche est prête à être revue on créée la PR sur github.
 * choisir **features/RI-XXX** comme **compare**
 * cliquer sur le bouton **create pull request**
 
+see
+also : [documentation github](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
+
 ### Merge de la branche
 
 Il est important de squash les différents commits de la branche afin de conserver un historique git cohérent et
-intelligible. Veillez à sélectionner l'option Squash and merge avan de merger votre branche
+intelligible. Veillez à sélectionner l'option Squash and merge avan de merger votre branche.
 
 ![image](https://user-images.githubusercontent.com/4210719/197425462-13607e85-f747-47dc-8253-9bd5dd3b61fb.png)
 
