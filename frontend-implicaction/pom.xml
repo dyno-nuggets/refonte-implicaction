@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.dyno-nuggets</groupId>
     <artifactId>refonte-implicaction</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>RELEASE-2023-SNAPSHOT</version>
   </parent>
 
   <artifactId>frontend-implicaction</artifactId>
@@ -40,8 +40,8 @@
               <goal>install-node-and-npm</goal>
             </goals>
             <configuration>
-              <nodeVersion>v14.17.0</nodeVersion>
-              <npmVersion>7.19.1</npmVersion>
+              <nodeVersion>v16.17.1</nodeVersion>
+              <npmVersion>8.15.0</npmVersion>
             </configuration>
           </execution>
 

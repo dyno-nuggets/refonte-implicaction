@@ -15,7 +15,6 @@ import {Criteria} from '../../../shared/models/Criteria';
 export class PendingGroupTableComponent extends BaseWithPaginationAndFilterComponent<Group, Criteria> {
 
   isLoading = true;
-  selectedOrderCode: string;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(

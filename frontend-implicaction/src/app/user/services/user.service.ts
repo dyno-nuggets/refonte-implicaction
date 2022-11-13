@@ -21,11 +21,11 @@ export class UserService {
 
   }
 
-  getAll(pageable: Pageable): Observable<any> {
+  getAll(pageable: Pageable<any>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllUserEndpoint(pageable));
   }
 
-  getAllCommunity(pageable: Pageable): Observable<any> {
+  getAllCommunity(pageable: Pageable<User>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllUserCommunityEndpoint(pageable));
   }
 
@@ -33,15 +33,15 @@ export class UserService {
     return this.http.get(this.apiEndpointsService.getUserByIdEndpoint(userId));
   }
 
-  getUserFriends(userId: string, pageable: Pageable): Observable<any> {
+  getUserFriends(userId: string, pageable: Pageable<any>): Observable<any> {
     return this.http.get<Pageable<User>>(this.apiEndpointsService.getAllFriendsByUserIdEndPoint(userId, pageable));
   }
 
-  getUserFriendRequestReceived(pageable: Pageable): Observable<any> {
+  getUserFriendRequestReceived(pageable: Pageable<any>): Observable<any> {
     return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestReceivedEndpoint(pageable));
   }
 
-  getUserFriendRequestSent(pageable: Pageable): Observable<any> {
+  getUserFriendRequestSent(pageable: Pageable<any>): Observable<any> {
     return this.http.get<Pageable<User>>(this.apiEndpointsService.getFriendRequestSentEndPoint(pageable));
   }
 
@@ -53,11 +53,11 @@ export class UserService {
     return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(userId));
   }
 
-  updateUser(user: User): Observable<User> {
+  updateUser(user: User): Observable<any> {
     return this.http.put<User>(this.apiEndpointsService.updateUserEndpoint(), user);
   }
 
-  getAllPendingActivationUsers(pageable: Pageable): Observable<any> {
+  getAllPendingActivationUsers(pageable: Pageable<User>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
 

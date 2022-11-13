@@ -29,7 +29,7 @@ export class GroupService {
     return this.http.get<Group[]>(this.apiEndpointService.findByTopPostingEndpoint(limit));
   }
 
-  getAllGroups(pageable: Pageable): Observable<any> {
+  getAllGroups(pageable: Pageable<any>): Observable<any> {
     return this.http.get<Group[]>(this.apiEndpointService.findAllActiveGroupsEndpoint(pageable));
   }
 
@@ -37,7 +37,7 @@ export class GroupService {
     return this.http.post<Group[]>(this.apiEndpointService.createGroupSubscription(groupName), null);
   }
 
-  getAllPendingGroup(pageable: Pageable): Observable<any> {
+  getAllPendingGroup(pageable: Pageable<any>): Observable<any> {
     return this.http.get(this.apiEndpointService.getAllPendingGroupEndpoint(pageable));
   }
 

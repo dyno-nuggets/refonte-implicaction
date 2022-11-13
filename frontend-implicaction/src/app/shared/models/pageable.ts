@@ -1,4 +1,7 @@
-export interface Pageable<T = any> {
+export interface PageableType {
+}
+
+export interface Pageable<T extends PageableType> {
   rows: number;
   page?: number;
   sortBy?: string;

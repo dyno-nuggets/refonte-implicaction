@@ -17,11 +17,11 @@ export class JobService {
   ) {
   }
 
-  getAllByCriteria(pageable: Pageable, criteria: JobCriteriaFilter, archive = null, applyCheck = false): Observable<any> {
+  getAllByCriteria(pageable: Pageable<any>, criteria: JobCriteriaFilter, archive = null, applyCheck = false): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllJobEndpoint(pageable, criteria, archive, applyCheck));
   }
 
-  getAllValidatedByCriteria(pageable: Pageable, criteria: JobCriteriaFilter, archive = null): Observable<any> {
+  getAllValidatedByCriteria(pageable: Pageable<any>, criteria: JobCriteriaFilter, archive = null): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllValidatedJobEndpoint(pageable, criteria, archive));
   }
 
@@ -53,7 +53,7 @@ export class JobService {
     return this.http.patch(this.apiEndpointsService.toggleArchiveJobsEndpoint(), jobIds);
   }
 
-  getAllPendingActivationJobs(pageable: Pageable): Observable<any> {
+  getAllPendingActivationJobs(pageable: Pageable<any>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationJobsEndpoint(pageable));
   }
 

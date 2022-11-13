@@ -6,7 +6,7 @@
 
     <groupId>com.dyno-nuggets</groupId>
     <artifactId>refonte-implicaction</artifactId>
-    <version>0.2.2-SNAPSHOT</version>
+    <version>RELEASE-2023-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>

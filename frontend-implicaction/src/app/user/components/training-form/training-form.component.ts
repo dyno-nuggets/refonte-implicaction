@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../shared/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
@@ -17,7 +17,7 @@ import {Constants} from '../../../config/constants';
 })
 export class TrainingFormComponent extends SidebarContentComponent implements OnInit {
 
-  formTraining: FormGroup;
+  formTraining: UntypedFormGroup;
   currentUserId: string;
   training: Training;
   isUpdate: boolean;
@@ -25,7 +25,7 @@ export class TrainingFormComponent extends SidebarContentComponent implements On
   constant = Constants;
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private trainingService: TrainingService,
     private authService: AuthService,
     private toasterService: ToasterService,

@@ -17,7 +17,7 @@ export class PostService {
   ) {
   }
 
-  getAllPosts(pageable: Pageable): Observable<any> {
+  getAllPosts(pageable: Pageable<any>): Observable<any> {
     return this.http.get(this.endpointsService.getAllPostsEndpoint(pageable));
   }
 
@@ -29,7 +29,7 @@ export class PostService {
     return this.http.get<Post[]>(this.endpointsService.getLatestPostsEndpoint(postsCount));
   }
 
-  getCommentsByPostId(pageable: Pageable, postId: string): Observable<any> {
+  getCommentsByPostId(pageable: Pageable<any>, postId: string): Observable<any> {
     return this.http.get(this.endpointsService.getPostCommentsEndpoint(pageable, postId));
   }
 

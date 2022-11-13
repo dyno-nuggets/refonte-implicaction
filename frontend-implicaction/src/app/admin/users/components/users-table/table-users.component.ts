@@ -20,7 +20,7 @@ export class TableUsersComponent {
   selectedUsers: User[] = [];
 
   // Pagination
-  pageable: Pageable = Constants.PAGEABLE_DEFAULT;
+  pageable: Pageable<User> = Constants.PAGEABLE_DEFAULT;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(

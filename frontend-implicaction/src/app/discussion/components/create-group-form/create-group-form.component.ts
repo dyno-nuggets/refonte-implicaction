@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
-import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {GroupService} from '../../services/group.service';
@@ -17,13 +17,13 @@ export class CreateGroupFormComponent extends SidebarContentComponent implements
 
   readonly GROUP_IMAGE_DEFAULT_URI = Constants.GROUP_IMAGE_DEFAULT_URI;
 
-  createGroupForm: FormGroup;
+  createGroupForm: UntypedFormGroup;
   isSubmitted = false;
   imageSrc: string;
   formData = new FormData();
 
   constructor(
-    private formBuilder: FormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private toasterService: ToasterService,
     private sidebarService: SidebarService,
     private groupService: GroupService

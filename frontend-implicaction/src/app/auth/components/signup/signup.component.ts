@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {SignupRequestPayload} from '../../../shared/models/signup-request-payload';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
@@ -16,7 +16,7 @@ import {Univers} from '../../../shared/enums/univers';
 })
 export class SignupComponent implements OnInit {
 
-  signupForm: FormGroup;
+  signupForm: UntypedFormGroup;
   signupRequestPayload: SignupRequestPayload;
   isError: boolean;
   isLoading = false;
@@ -42,13 +42,13 @@ export class SignupComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.signupForm = new FormGroup({
-      username: new FormControl('', Validators.required),
-      email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', Validators.required),
-      repeatPassword: new FormControl('', Validators.required),
-      firstname: new FormControl('', Validators.required),
-      lastname: new FormControl('', Validators.required),
+    this.signupForm = new UntypedFormGroup({
+      username: new UntypedFormControl('', Validators.required),
+      email: new UntypedFormControl('', [Validators.required, Validators.email]),
+      password: new UntypedFormControl('', Validators.required),
+      repeatPassword: new UntypedFormControl('', Validators.required),
+      firstname: new UntypedFormControl('', Validators.required),
+      lastname: new UntypedFormControl('', Validators.required),
     });
   }
 
