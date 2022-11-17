@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <sonar.organization>{env.GITHUB_ORGANIZATION}</sonar.organization>
+        <sonar.organization>${env.GITHUB_ORGANIZATION}</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
