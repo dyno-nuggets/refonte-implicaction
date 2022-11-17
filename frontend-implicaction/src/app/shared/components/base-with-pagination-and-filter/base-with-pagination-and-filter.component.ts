@@ -39,6 +39,11 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
     this.innerPaginate();
   }
 
+  /**
+   * default trackBy function
+   */
+  trackByItemId = (index: number, item: T) => (item as any).id;
+
   protected innerPaginate(): void {
     // Méthode à implémenter qui s'occupe de charger les données. Elle est appelée par la méthode paginate
   }
@@ -50,7 +55,7 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
    */
   protected async getFilterFromQueryParams(filterKeys: string[]): Promise<void> {
     const pageableKeys = ['rows', 'page', 'sortOrder', 'sortBy'];
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       this.route
         .queryParams
         .subscribe(params => {
@@ -66,11 +71,6 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
         });
     });
   }
-
-  /**
-   * default trackBy function
-   */
-  trackByItemId = (index: number, item: T) => (item as any).id;
 
   /**
    * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
