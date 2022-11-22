@@ -44,7 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_ORGANIZATION: ${{ github.GITHUB_REPOSITORY_OWNER }}
+          SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
           REPOSITORY: ${{ github.repository }}
         run: echo $REPOSITORY
 #          PROJECT_KEY="${REPOSITORY//\//_}"
