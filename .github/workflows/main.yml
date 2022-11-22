@@ -44,5 +44,5 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_ORGANIZATION: ${{ secrets.SONAR_ORGANIZATION }}
           PROJECT_KEY: ${{ env.SONAR_PROJECT_KEY }}
-        #        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=$env.SONAR_PROJECT_KEY
-        run: echo "{env.PROJECT_KEY}"
+        #        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey="$env.SONAR_PROJECT_KEY"
+        run: echo "$env.PROJECT_KEY"
