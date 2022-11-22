@@ -46,6 +46,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_ORGANIZATION: ${{ github.GITHUB_REPOSITORY_OWNER }}
           REPOSITORY: ${{ github.repository }}
-        run: echo $SONAR_ORGANIZATION
+        run: echo $REPOSITORY
 #          PROJECT_KEY="${REPOSITORY//\//_}"
 #          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true -Dsonar.projectKey=$PROJECT_KEY
