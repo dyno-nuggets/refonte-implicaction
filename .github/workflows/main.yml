@@ -2,6 +2,9 @@ name: Workflow Maven
 
 on:
   push:
+    paths-ignore:
+      - 'README.md'
+
   pull_request:
     types: [ opened, reopened ]
 
@@ -20,8 +23,6 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Test with Maven
-        env:
-          SONAR_ORGANIZATION: ${{ github.GITHUB_REPOSITORY_OWNER }}
         run: mvn test -Dspring.profiles.active=test
 
   sonar:
