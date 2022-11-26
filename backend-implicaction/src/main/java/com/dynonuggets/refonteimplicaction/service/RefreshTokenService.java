@@ -27,8 +27,9 @@ public class RefreshTokenService {
     }
 
     public void validateRefreshToken(String token) throws UnauthorizedException {
-        refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new UnauthorizedException("Votre session a expirée, vous devez vous identifier."));
+        if (!refreshTokenRepository.findByToken(token).isPresent()) {
+            throw new UnauthorizedException("Votre session a expiré, veuillez vous devez vous identifier.");
+        }
     }
 
     public void deleteRefreshToken(String token) {
