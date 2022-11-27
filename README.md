@@ -1,5 +1,9 @@
 # refonte-implicaction
 
+| :exclamation:  IMPORTANT                                                                                                                                                               |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Pour que la CI fonctionne correctement vous devez désactiver l'analyse automatique (https://sonarcloud.io/project/analysis_method?id={nom_de_votre_organisation}_refonte-implicaction) |
+
 ## Quick Start
 
 ### Dépendances
