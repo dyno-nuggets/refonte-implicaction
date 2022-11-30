@@ -17,6 +17,8 @@ app:
   url: http://localhost:8080
   contact:
     mail: contact@implicaction.eu
+  s3:
+    bucket-name: refonte-implicaction
 
 cloud:
   aws:

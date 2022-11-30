@@ -2,19 +2,23 @@ name: Workflow Maven
 
 on:
   push:
+    paths-ignore:
+      - 'README.md'
+
   pull_request:
-    types: [ opened, synchronize, reopened, closed ]
+    types: [ opened, reopened ]
+
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
       file: docker-compose.build-test.yml
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
@@ -24,16 +28,16 @@ jobs:
   sonar:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'adopt'
       - name: Cache Maven packages
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
@@ -42,40 +46,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=dyno-nuggets_refonte-implicaction
-
-  build-and-deploy:
-    if: github.event.pull_request.merged == true
-    name: Building and deploying on Docker Hub
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Get last tag
-        id: previoustag
-        uses: "WyriHaximus/github-action-get-previous-tag@v1"
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to Dockerhub
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME}}
-          password: ${{secrets.DOCKER_TOKEN}}
-      - name: Build images
-        run: docker-compose -f docker-compose.build-prod.yml build
-      - name: Push db
+          SONAR_ORGANIZATION: ${{ github.repository_owner }}
+          REPOSITORY: ${{ github.repository }}
         run: |
-          docker image tag ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:latest \
-          ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:${{ steps.previoustag.outputs.tag }}
-          docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-db:${{ steps.previoustag.outputs.tag }}
-      - name: Push app
-        run: |
-          docker image tag ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:latest \
-          ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
-          docker push ${{ secrets.DOCKER_USERNAME}}/dyno-nuggets-app:${{ steps.previoustag.outputs.tag }}
-      
+          PROJECT_KEY="${REPOSITORY//\//_}"
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true -Dsonar.projectKey=$PROJECT_KEY

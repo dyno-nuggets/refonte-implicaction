@@ -41,6 +41,8 @@ app:
   url: ${APP_URL}
   contact:
     mail: ${CONTACT_EMAIL}
+  s3:
+    bucket-name: ${S3_BUCKET_NAME}
 
 cloud:
   aws:
@@ -51,4 +53,5 @@ cloud:
       auto: false
     s3:
       region: ${AWS_REGION}
+
 

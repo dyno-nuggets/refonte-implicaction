@@ -29,6 +29,11 @@
       "name": "app.contact.mail",
       "type": "java.lang.String",
       "description": "Description for app.contact.mail."
+    },
+    {
+      "name": "app.s3.bucket-name",
+      "type": "java.lang.String",
+      "description": "Description for app.s3.bucket-name."
     }
   ]
 }

@@ -1,5 +1,9 @@
 # refonte-implicaction
 
+| :warning:  IMPORTANT                                                                                                                                                               |
+|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Pour que la CI fonctionne correctement vous devez désactiver l'analyse automatique. Pour cela rendez vous sur la page [sonarcloud](https://sonarcloud.io/) de votre **projet** > Administration > Analysis Method > ![image](https://user-images.githubusercontent.com/4210719/204150398-7893dc5c-a72b-4dd0-9ac5-711248239347.png)|
+
 ## Quick Start
 
 ### Dépendances
@@ -71,7 +75,7 @@ ng serve
 
 * mise à jour de son dépôt local : `git fetch origin`
 * création de la branche de développement :
-  `git checkout -b features/RI-XXXX origin/RELEASE-2023` (où XXX est le numéro de la JIRA associée)
+  `git checkout -b features/RI-XXXX origin/develop` (où RI-XXX est la référence à la JIRA associée)
 
 ### Commit sur la branche
 
@@ -97,12 +101,12 @@ Il est important d'envoyer ses commits sur le dépôt régulièrement
 Une fois que le branche est prête à être revue on créée la PR sur github.
 
 * envoyer les commits sur le distant : `git push origin features/RI-XXX`
-* choisir **RELEASE-2023** comme **base**
+* choisir **develop** comme **base**
 * choisir **features/RI-XXX** comme **compare**
 * cliquer sur le bouton **create pull request**
 
 see
-also : [documentation github](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
+also : [documentation GitHub](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request)
 
 ### Merge de la branche
 
