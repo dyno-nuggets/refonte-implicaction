@@ -15,6 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 @Entity
+@Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -33,4 +34,8 @@ public class Comment {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "group_id", referencedColumnName = "id")
+    private Group group;
 }

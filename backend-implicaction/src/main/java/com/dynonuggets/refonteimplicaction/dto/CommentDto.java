@@ -4,6 +4,7 @@ import lombok.*;
 
 @Data
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +16,6 @@ public class CommentDto {
     private String username;
     private Long userId;
     private String userImageUrl;
+    private Long groupId;
+
 }

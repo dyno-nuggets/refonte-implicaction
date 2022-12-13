@@ -76,13 +76,14 @@ class CommentServiceTest {
         // given
         Post post = Post.builder().id(789L).build();
         User user = User.builder().id(666L).username("lucifer").build();
-        CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null);
-        Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user);
+        Group group = Group.builder().id(78L).build();
+        CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null, group.getId());
+        Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user, null);
         CommentDto expectedDto = commentAdapter.toDto(commentTosave);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(authService.getCurrentUser()).willReturn(user);
-        given(commentAdapter.toModel(any(), any(), any())).willReturn(commentTosave);
+        given(commentAdapter.toModel(any(), any(), any(), any())).willReturn(commentTosave);
         given(commentRepository.save(any())).willReturn(commentTosave);
         given(commentAdapter.toDto(any())).willReturn(expectedDto);
 
@@ -116,7 +117,7 @@ class CommentServiceTest {
         // given
         User user = User.builder().id(666L).username("lucifer").build();
         Post post = Post.builder().id(789L).build();
-        Comment comment = new Comment(123L, "coucou", post, Instant.now(), user);
+        Comment comment = new Comment(123L, "coucou", post, Instant.now(), user, null);
         CommentDto expectedDto = commentAdapter.toDto(comment);
         given(commentRepository.findById(anyLong())).willReturn(java.util.Optional.of(comment));
         given(commentAdapter.toDto(any())).willReturn(expectedDto);
@@ -144,12 +145,12 @@ class CommentServiceTest {
     void should_get_comments_for_post_when_exists() {
         // given
         User currentUser = User.builder().id(123L).username("Sankukai").build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null, emptyList(), true);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), Instant.now(), currentUser, null, emptyList(), true);
         Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
         List<Comment> comments = asList(
-                new Comment(3L, "comment1", post, Instant.now(), currentUser),
-                new Comment(2L, "comment2", post, Instant.now(), currentUser),
-                new Comment(1L, "comment3", post, Instant.now(), currentUser)
+                new Comment(3L, "comment1", post, Instant.now(), currentUser, null),
+                new Comment(2L, "comment2", post, Instant.now(), currentUser, null),
+                new Comment(1L, "comment3", post, Instant.now(), currentUser, null)
         );
         Page<Comment> commentPage = new PageImpl<>(comments);
         final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");

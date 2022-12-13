@@ -32,7 +32,7 @@ class PostAdapterTest {
     void toPost() {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), now(), currentUser, null, emptyList(), true);
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), group);
         PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
 
@@ -62,7 +62,7 @@ class PostAdapterTest {
     @Test
     void should_return_post_with_subreddit_image_null() {
         User currentUser = User.builder().id(123L).username("test user").build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), now(), currentUser, null, emptyList(), true);
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
 
@@ -77,7 +77,7 @@ class PostAdapterTest {
     void toPostResponse() {
         // given
         User currentUser = User.builder().id(123L).username("test user").image(FileModel.builder().url("http://url.com").build()).build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build(), emptyList(), true);
+        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build(), emptyList(), true);
         Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
 

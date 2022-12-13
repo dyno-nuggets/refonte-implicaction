@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.model.Comment;
+import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.utils.DateUtils;
@@ -20,6 +21,8 @@ class CommentAdapterTest {
         // given
         User user = User.builder().id(123L).username("Marc Elbichon").build();
         Post post = Post.builder().id(243L).build();
+        Group group = Group.builder().id(23L).build();
+
         CommentDto dto = CommentDto.builder()
                 .id(123L)
                 .postId(243L)
@@ -35,7 +38,7 @@ class CommentAdapterTest {
                 .build();
 
         // when
-        Comment actualComment = commentAdapter.toModel(dto, post, user);
+        Comment actualComment = commentAdapter.toModel(dto, post, user, group);
 
         // then
         assertThat(actualComment.getId()).isEqualTo(expectedComment.getId());

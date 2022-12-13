@@ -32,6 +32,9 @@ public class Group {
     @OneToMany(mappedBy = "group")
     private List<Post> posts;
 
+    @OneToMany(mappedBy = "group")
+    private List<Comment> comments;
+
     private Instant createdAt;
 
     @ManyToOne(fetch = LAZY)
