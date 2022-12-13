@@ -36,6 +36,7 @@ public class GroupAdapter {
                 .id(model.getId())
                 .name(model.getName())
                 .numberOfPosts(isNotEmpty(model.getPosts()) ? model.getPosts().size() : 0)
+                .numberOfComments(isNotEmpty(model.getComments()) ? model.getComments().size() : 0)
                 .description(model.getDescription())
                 .createdAt(model.getCreatedAt())
                 .imageUrl(imageUrl)

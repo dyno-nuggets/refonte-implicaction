@@ -15,6 +15,7 @@ public class GroupDto {
     private String name;
     private String description;
     private Integer numberOfPosts;
+    private Integer numberOfComments;
     private String imageUrl;
     private Instant createdAt;
     private boolean valid;
