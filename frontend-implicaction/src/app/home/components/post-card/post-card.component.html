@@ -3,20 +3,13 @@
     <div class="post-data col-11">
       <div class="card-title d-flex">
         <div class="user-img">
-          <img
-            #userImg
-            (error)="userImg.src = constant.USER_IMAGE_DEFAULT_URI"
-            [src]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
-            class="rounded-circle me-2 shadow-sm avatar"
-            alt=""
-          >
+          <img #userImg (error)="userImg.src = constant.USER_IMAGE_DEFAULT_URI"
+            [src]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI" class="rounded-circle me-2 shadow-sm avatar"
+            alt="">
         </div>
         <div class="flex flex-column">
           <div class="username">
-            <a
-              class="post-card-link"
-              routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile"
-            >
+            <a class="post-card-link" routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">
               {{post.username}}
             </a>
           </div>
@@ -25,17 +18,14 @@
       </div>
       <div>
         <h3 class="theme-primary m-0 overflow-ellipsis">
-          <a
-            class="post-card-link"
-            routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}"
-          >
+          <a class="post-card-link" routerLink="/{{univers.FORUMS.url}}/{{post.id}}">
             {{post.name}}
           </a>
         </h3>
       </div>
     </div>
     <div class="col-1 d-flex justify-content-center">
-      <a routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">
+      <a routerLink="/{{univers.FORUMS.url}}/{{post.id}}">
         <i class="fas fa-chevron-right"></i>
       </a>
     </div>

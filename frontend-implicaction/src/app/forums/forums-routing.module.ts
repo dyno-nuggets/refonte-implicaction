@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {DiscussionComponent} from './discussion.component';
+import {ForumsComponent} from './forums.component';
 import {PostListComponent} from './components/post-list/post-list.component';
 import {PostDetailComponent} from './components/post-detail/post-detail.component';
 import {GroupListComponent} from './components/group-list/group-list.component';
@@ -8,34 +8,34 @@ import {GroupListComponent} from './components/group-list/group-list.component';
 const routes: Routes = [
   {
     path: '',
-    component: DiscussionComponent,
+    component: ForumsComponent,
     children: [
       {
         path: '',
         component: PostListComponent,
-        outlet: 'discussion-content'
+        outlet: 'forums-content'
       }
     ]
   },
   {
     path: 'groups',
-    component: DiscussionComponent,
+    component: ForumsComponent,
     children: [
       {
         path: '',
         component: GroupListComponent,
-        outlet: 'discussion-content'
+        outlet: 'forums-content'
       }
     ]
   },
   {
     path: ':postId',
-    component: DiscussionComponent,
+    component: ForumsComponent,
     children: [
       {
         path: '',
         component: PostDetailComponent,
-        outlet: 'discussion-content'
+        outlet: 'forums-content'
       }
     ]
   }
@@ -46,5 +46,5 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 
-export class DiscussionRoutingModule {
+export class ForumsRoutingModule {
 }

@@ -68,9 +68,9 @@ export class CreatePostFormComponent extends SidebarContentComponent implements 
       .createPost(this.postPayload)
       .subscribe(
         post => this.router
-          .navigateByUrl(`${Univers.DISCUSSIONS.url}/${post.id}`)
-          .then(() => this.toasterService.success('Succès', 'Votre discussion a été créée avec succès')),
-        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la création de votre discussion'),
+          .navigateByUrl(`${Univers.FORUMS.url}/${post.id}`)
+          .then(() => this.toasterService.success('Succès', 'Votre forum a été créée avec succès')),
+        () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la création de votre forum'),
         () => this.sidebarService.close()
       );
   }

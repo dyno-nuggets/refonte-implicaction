@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Post} from 'src/app/discussion/model/post';
-import {PostService} from 'src/app/discussion/services/post.service';
+import {Post} from 'src/app/forums/model/post';
+import {PostService} from 'src/app/forums/services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {Constants} from '../../../config/constants';
 

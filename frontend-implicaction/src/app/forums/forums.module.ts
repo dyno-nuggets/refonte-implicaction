@@ -1,8 +1,8 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PostListComponent} from './components/post-list/post-list.component';
-import {DiscussionComponent} from './discussion.component';
-import {DiscussionRoutingModule} from './discussion-routing.module';
+import {ForumsComponent} from './forums.component';
+import {ForumsRoutingModule} from './forums-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {PaginatorModule} from 'primeng/paginator';
 import {VoteboxComponent} from './components/votebox/votebox.component';
@@ -31,7 +31,7 @@ import { GroupCardComponent } from './components/group-card/group-card.component
   declarations: [
     PostListComponent,
     PostTileComponent,
-    DiscussionComponent,
+    ForumsComponent,
     VoteboxComponent,
     PostDetailComponent,
     PostSkeletonComponent,
@@ -48,7 +48,7 @@ import { GroupCardComponent } from './components/group-card/group-card.component
   ],
   imports: [
     CommonModule,
-    DiscussionRoutingModule,
+    ForumsRoutingModule,
     SharedModule,
     PaginatorModule,
     AvatarModule,
@@ -59,5 +59,5 @@ import { GroupCardComponent } from './components/group-card/group-card.component
     TableModule
   ]
 })
-export class DiscussionModule {
+export class ForumsModule {
 }

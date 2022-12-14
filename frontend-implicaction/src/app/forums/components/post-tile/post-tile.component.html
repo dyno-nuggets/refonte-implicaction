@@ -7,35 +7,28 @@
     <div class="col-11 p-0">
       <div class="card-body ps-5 pt-4">
         <div class="card-title d-flex align-items-center justify-content-start mb-3">
-          <p-avatar
-            [image]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
-            shape="circle"
-            size="large"
-            styleClass="me-2 shadow-sm"
-          >
+          <p-avatar [image]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI" shape="circle" size="large"
+            styleClass="me-2 shadow-sm">
           </p-avatar>
           <div class="head-line ps-2">
             <h3 class="theme-primary m-0">
-              <a routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">{{post.name}}</a>
+              <a routerLink="/{{univers.FORUMS.url}}/{{post.id}}">{{post.name}}</a>
             </h3>
-            <a routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a> •  {{post.duration}}
+            <a routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile">{{post.username}}</a> • {{post.duration}}
             <span class="d-none d-sm-inline ps-2"> </span>
           </div>
         </div>
-        <p
-          [innerHTML]="post.description"
-          class="card-text"
-        >
+        <p [innerHTML]="post.description" class="card-text">
         </p>
       </div>
 
       <div class="card-footer border-0 pb-5 bg-white d-flex justify-content-end">
-        <a class="text-decoration-none" fragment="comments" routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">
-        <span class="post-comment d-flex align-items-center">
+        <a class="text-decoration-none" fragment="comments" routerLink="/{{univers.FORUMS.url}}/{{post.id}}">
+          <span class="post-comment d-flex align-items-center">
             <i class="far fa-comment-alt d-block px-2"></i>
             <span class="comment-count pe-1">{{post.commentCount}}</span>
             <span class="comment-word">{{(post.commentCount > 1 ? ' commentaires' : ' commentaire')}}</span>
-        </span>
+          </span>
         </a>
       </div>
 

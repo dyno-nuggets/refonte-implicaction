@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Post} from '../../../discussion/model/post';
+import {Post} from '../../../forums/model/post';
 import {Univers} from '../../../shared/enums/univers';
 import {Constants} from '../../../config/constants';
 
