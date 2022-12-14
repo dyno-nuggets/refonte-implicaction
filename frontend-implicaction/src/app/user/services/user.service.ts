@@ -6,7 +6,7 @@ import {User} from '../../shared/models/user';
 import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
 import {Relation} from '../models/relation';
-import {Group} from '../../discussion/model/group';
+import {Group} from '../../forums/model/group';
 
 @Injectable({
   providedIn: 'root'

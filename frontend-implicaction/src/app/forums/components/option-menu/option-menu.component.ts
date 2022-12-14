@@ -26,7 +26,7 @@ export class OptionMenuComponent {
     this.sidebarService
       .open({
         component: CreatePostFormComponent,
-        title: 'Créer une discussion',
+        title: 'Créer un forum',
         width: 735
       });
   }

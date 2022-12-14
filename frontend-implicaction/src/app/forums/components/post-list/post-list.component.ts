@@ -36,7 +36,7 @@ export class PostListComponent extends BaseWithPaginationAndFilterComponent<Post
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
         },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des discussions')
+        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des forums')
       );
   }
 

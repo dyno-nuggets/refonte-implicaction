@@ -1,11 +1,7 @@
 <div>
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-xl-5 text-center">
-      <img
-        alt="banner"
-        class="img-fluid"
-        src="assets/img/banner.jpg"
-      >
+      <img alt="banner" class="img-fluid" src="assets/img/banner.jpg">
     </div>
 
     <div class="col-12 col-md-4 text-center align-self-center summary">
@@ -33,21 +29,14 @@
       </h2>
       <div class="row justify-content-evenly align-self-center mt-3 mt-sm-5 px-2 px-sm-5">
         <div class="col-lg-3 col-md-6 mb-2 justify-content-center">
-          <img
-            alt="reseau"
-            class="img-fluid img-intro"
-            src="assets/img/reseau.png"
-          >
+          <img alt="reseau" class="img-fluid img-intro" src="assets/img/reseau.png">
           <p class="ahead network">Un réseau</p>
-          <p class="a-subhead mt-4">Un réseau d’anciens militaires et civils des armés reconvertis ou en phase de reconversion
+          <p class="a-subhead mt-4">Un réseau d’anciens militaires et civils des armés reconvertis ou en phase de
+            reconversion
             partageant leur expérience et leurs connaissances</p>
         </div>
         <div class="col-lg-3 col-md-6 mb-2">
-          <img
-            alt="dynamique"
-            class="img-fluid img-intro"
-            src="assets/img/dynamique.png"
-          >
+          <img alt="dynamique" class="img-fluid img-intro" src="assets/img/dynamique.png">
           <p class="ahead dynamic">Une dynamique</p>
           <p class="a-subhead mt-4">Une dynamique simple mais efficace répartie sur l’ensemble du territoire, au coeur
             des zones de Défense et des bassins d’emploi</p>
@@ -66,23 +55,22 @@
     <div class="row m-0 p-1">
       <div class="col-md-6 px-2 px-sm-5 px-md-2 ps-lg-5 p-xl-5">
         <div class="d-flex align-items-start justify-content-between mb-3">
-          <h2 class="text-start align-self-center sub-heading">Prochains <span class="text-danger">événements</span></h2>
+          <h2 class="text-start align-self-center sub-heading">Prochains <span class="text-danger">événements</span>
+          </h2>
           <a class="btn btn-primary">
             Tout voir
           </a>
         </div>
-        <div
-          *ngFor="let event of events"
-          class="latest-events-list"
-        >
+        <div *ngFor="let event of events" class="latest-events-list">
           <app-event-card [event]="event"></app-event-card>
         </div>
       </div>
 
       <div class="col-md-6 px-2 px-sm-5 px-md-2 pe-lg-5 p-xl-5">
         <div class="d-flex align-items-start justify-content-between mb-3">
-          <h2 class="text-start align-self-center sub-heading">Dernières <span class="text-danger">publications</span></h2>
-          <a class="btn btn-primary" routerLink="/{{univers.DISCUSSIONS.url}}">
+          <h2 class="text-start align-self-center sub-heading">Dernières <span class="text-danger">publications</span>
+          </h2>
+          <a class="btn btn-primary" routerLink="/{{univers.FORUMS.url}}">
             Tout voir
           </a>
         </div>
@@ -94,8 +82,7 @@
 
     <div class="col-md-12 px-sm-5 px-md-2 px-lg-5 mt-3">
       <div class="d-flex align-items-start justify-content-between mb-3">
-        <h2 class="text-start align-self-center sub-heading">Nouvelles <span
-          class="text-danger">offres</span></h2>
+        <h2 class="text-start align-self-center sub-heading">Nouvelles <span class="text-danger">offres</span></h2>
         <a class="btn btn-primary" routerLink="/{{univers.JOBS.url}}">
           Tout voir
         </a>

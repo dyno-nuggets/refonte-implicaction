@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
 import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
-import {Group} from '../../../discussion/model/group';
+import {Group} from '../../../forums/model/group';
 import {ActivatedRoute} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {GroupService} from '../../../discussion/services/group.service';
+import {GroupService} from '../../../forums/services/group.service';
 import {finalize, take} from 'rxjs/operators';
 import {Criteria} from '../../../shared/models/Criteria';
 
