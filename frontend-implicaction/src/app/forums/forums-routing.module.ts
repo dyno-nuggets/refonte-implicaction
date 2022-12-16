@@ -4,6 +4,8 @@ import {ForumsComponent} from './forums.component';
 import {PostListComponent} from './components/post-list/post-list.component';
 import {PostDetailComponent} from './components/post-detail/post-detail.component';
 import {GroupListComponent} from './components/group-list/group-list.component';
+import {CustomTableWithSearchBarComponent} from './components/custom-table-with-search-bar/custom-table-with-search-bar.component';
+
 
 const routes: Routes = [
   {
@@ -12,8 +14,21 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: PostListComponent,
+        component: CustomTableWithSearchBarComponent,
+        data: {
+          labels: ['Posts', 'Commentaires','Membres'],
+          title: "Forums"
+        },
         outlet: 'forums-content'
+      },
+      {
+        path: '',
+        component: CustomTableWithSearchBarComponent,
+        data: {
+          labels: ['Likes', 'Commentaires','Vues'],
+          title: "Posts"
+        },
+        outlet: 'posts-content'
       }
     ]
   },

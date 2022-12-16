@@ -25,6 +25,9 @@ import {IconsModule} from '../icons/icons.module';
 import {GroupListComponent} from './components/group-list/group-list.component';
 import {TableModule} from 'primeng/table';
 import { GroupCardComponent } from './components/group-card/group-card.component';
+import { CustomTableWithSearchBarComponent } from './components/custom-table-with-search-bar/custom-table-with-search-bar.component';
+import { ForumCardComponent } from './components/forum-card/forum-card.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
 
 
 @NgModule({
@@ -45,6 +48,9 @@ import { GroupCardComponent } from './components/group-card/group-card.component
     CommentSkeletonComponent,
     GroupListComponent,
     GroupCardComponent,
+    CustomTableWithSearchBarComponent,
+    ForumCardComponent,
+    PostCardComponent,
   ],
   imports: [
     CommonModule,

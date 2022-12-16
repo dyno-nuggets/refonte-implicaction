@@ -8,6 +8,7 @@ import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
+import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,9 @@ class CommentServiceTest {
     PostRepository postRepository;
 
     @Mock
+    GroupRepository groupRepository;
+
+    @Mock
     AuthService authService;
 
     @InjectMocks
@@ -78,10 +82,11 @@ class CommentServiceTest {
         User user = User.builder().id(666L).username("lucifer").build();
         Group group = Group.builder().id(78L).build();
         CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null, group.getId());
-        Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user, null);
+        Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user, group);
         CommentDto expectedDto = commentAdapter.toDto(commentTosave);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
+        given(groupRepository.findById(anyLong())).willReturn(Optional.of(group));
         given(authService.getCurrentUser()).willReturn(user);
         given(commentAdapter.toModel(any(), any(), any(), any())).willReturn(commentTosave);
         given(commentRepository.save(any())).willReturn(commentTosave);

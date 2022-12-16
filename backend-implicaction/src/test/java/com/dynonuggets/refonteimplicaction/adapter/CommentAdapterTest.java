@@ -50,11 +50,13 @@ class CommentAdapterTest {
     @Test
     void toDto() {
         // given
+        Group group = Group.builder().id(23L).build();
         User user = User.builder().id(123L).username("Marc Elbichon").build();
         Post post = Post.builder().id(243L).build();
         Comment comment = Comment.builder()
                 .id(123L)
                 .post(post)
+                .group(group)
                 .createdAt(Instant.now())
                 .text("voici mon commentaire sur ce point !")
                 .user(user)

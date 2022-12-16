@@ -1,0 +1,36 @@
+<div class="container row">
+    <div class="table card">
+        <div class="header">
+            <h6 class="title">{{title}}</h6>
+            <div class="flex">
+                <div class="search-bar form-outline">
+                    <input type="search" id="form1" placeholder="Search..." class="form-control" />
+                    <span class="search-bar__icon border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+            <ul class="infos">
+                <li *ngFor="let label of labels;">
+                    {{label}}
+                </li>
+            </ul>
+        </div>
+        <div class="content">
+            <div *ngIf="title && title==='Forums'">
+                <app-forum-card *ngFor=" let group of pageable.content; last as isLast;"
+                    [ngClass]="{'last-element': isLast}" [group]="group"></app-forum-card>
+            </div>
+            <div *ngIf="title && title==='Posts' && posts?.length > 0">
+                <app-post-card *ngFor="let post of posts;" [post]="post"></app-post-card>
+            </div>
+
+        </div>
+    </div>
+    <div class="pagination row">
+        <p-paginator (onPageChange)="paginate($event)" *ngIf="pageable.totalPages > 0" [alwaysShow]="true"
+            [first]="pageable.first" [rows]="pageable.rows" [totalRecords]="pageable.totalElements"
+            ngClass="no-bg-color" [ngStyle]="backgron">
+        </p-paginator>
+    </div>
+</div>

@@ -1,10 +1,7 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.Group;
-import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
@@ -71,6 +68,7 @@ class GroupAdapterTest {
                 .description("blablabla")
                 .name("blabla")
                 .posts(Arrays.asList(new Post(), new Post(), new Post(), new Post()))
+                .comments(Arrays.asList(new Comment(), new Comment(), new Comment(), new Comment()))
                 .createdAt(Instant.now())
                 .user(user)
                 .build();
@@ -80,10 +78,11 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId", "numberOfUsers")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId", "numberOfUsers", "numberOfComments")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isEqualTo(expectedModel.getPosts().size());
+        assertThat(actualDto.getNumberOfComments()).isEqualTo(expectedModel.getComments().size());
         assertThat(actualDto.getImageUrl()).isEqualTo(GroupAdapter.DEFAULT_GROUP_IMAGE_URI);
         assertThat(actualDto.getUsername()).isEqualTo(expectedModel.getUser().getUsername());
         assertThat(actualDto.getUserId()).isEqualTo(expectedModel.getUser().getId());
@@ -115,10 +114,11 @@ class GroupAdapterTest {
 
         // then
         assertThat(actualDto).usingRecursiveComparison()
-                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId", "numberOfUsers")
+                .ignoringFields("user", "posts", "numberOfPosts", "imageUrl", "username", "userId", "numberOfUsers", "numberOfComments")
                 .isEqualTo(expectedModel);
 
         assertThat(actualDto.getNumberOfPosts()).isZero();
+        assertThat(actualDto.getNumberOfComments()).isZero();
         assertThat(actualDto.getImageUrl()).contains(expectedUrl);
         assertThat(actualDto.getUsername()).isEqualTo(expectedModel.getUser().getUsername());
         assertThat(actualDto.getUserId()).isEqualTo(expectedModel.getUser().getId());

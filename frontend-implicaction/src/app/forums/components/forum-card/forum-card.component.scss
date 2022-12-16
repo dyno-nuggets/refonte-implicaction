@@ -1,0 +1,24 @@
+.element{
+    width: 100%;
+    height: 100px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr 1fr 1fr;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+}
+
+.element-img-box {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.element-img {
+    margin: 0px;
+    max-height: 90px;
+    max-width: 90px;
+}
