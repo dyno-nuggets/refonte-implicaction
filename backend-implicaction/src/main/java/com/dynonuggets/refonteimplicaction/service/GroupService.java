@@ -92,6 +92,12 @@ public class GroupService {
     }
 
     @Transactional
+    public Page<GroupDto> searchGroup(Pageable pageable, String param) {
+        final Page<Group> groups = groupRepository.searchGroup(pageable, param);
+        return groups.map(groupAdapter::toDto);
+    }
+
+    @Transactional
     public GroupDto validateGroup(String groupName) {
         Group group = groupRepository.findByName(groupName)
                 .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));

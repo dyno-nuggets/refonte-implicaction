@@ -82,4 +82,17 @@ public class GroupController {
         final GroupDto groupDto = groupService.validateGroup(groupName);
         return ResponseEntity.ok(groupDto);
     }
+
+    @GetMapping(GET_SEARCH_GROUP_URI)
+    public ResponseEntity<Page<GroupDto>> searchGroupByName(
+            @PathVariable final String groupName,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+    ) {
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
+        Page<GroupDto> groupsMatchingSearchParam = groupService.searchGroup(pageable, groupName);
+        return ResponseEntity.ok(groupsMatchingSearchParam);
+    }
 }
