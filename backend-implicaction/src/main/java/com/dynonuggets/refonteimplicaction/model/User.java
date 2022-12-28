@@ -1,5 +1,7 @@
 package com.dynonuggets.refonteimplicaction.model;
 
+import com.dynonuggets.refonteimplicaction.model.forum.Response;
+import com.dynonuggets.refonteimplicaction.model.forum.Topic;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -72,6 +74,12 @@ public class User {
 
     @ManyToOne
     private FileModel image;
+
+    @OneToMany(mappedBy = "author")
+    private List<Topic> topics;
+
+    @OneToMany(mappedBy = "author")
+    private List<Response> responses;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
