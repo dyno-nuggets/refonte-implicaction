@@ -9,13 +9,13 @@ import {Category} from "../../model/category";
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  test: Observable<Category[]>;
+  $categories: Observable<Category[]>;
 
   constructor(private categoryService: CategoryService) {
   }
 
   ngOnInit(): void {
-    this.test = this.categoryService.getCategories()
+    this.$categories = this.categoryService.getCategories()
   }
 
 }

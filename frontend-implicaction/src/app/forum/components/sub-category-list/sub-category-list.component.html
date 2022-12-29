@@ -1,0 +1,5 @@
+<ul>
+  <li *ngFor="let subCategory of categories">
+    <a routerLink="/{{ univers.FORUM.url }}/category/{{ subCategory.id }}">{{ subCategory.title }}</a>
+  </li>
+</ul>

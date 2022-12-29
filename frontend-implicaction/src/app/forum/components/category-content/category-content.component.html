@@ -1,0 +1,24 @@
+<div *ngIf="$category | async as category">
+  <h2>{{ category.title }}</h2>
+
+  <div *ngIf="category.children.length > 0">
+    <h3>Sous-catégories</h3>
+    <app-sub-category-list
+      [categories]="category.children"></app-sub-category-list>
+  </div>
+
+  <div *ngIf="$paginatedTopics | async as paginatedTopics">
+    <h3>Sujets</h3>
+    <app-topic-list [topics]="paginatedTopics.content"></app-topic-list>
+  </div>
+
+  <p-paginator
+    (onPageChange)="paginate($event)"
+    *ngIf="pageable.totalPages > 0"
+    [alwaysShow]="false"
+    [first]="pageable.first"
+    [rowsPerPageOptions]="DEFAULT_ROWS_PER_PAGE_OPTIONS"
+    [rows]="pageable.rows"
+    [totalRecords]="pageable.totalElements"
+  ></p-paginator>
+</div>

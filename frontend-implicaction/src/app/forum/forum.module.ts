@@ -12,12 +12,18 @@ import {ForumRoutingModule} from './forum-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {IconsModule} from '../icons/icons.module';
 import {HomeComponent} from './components/home/home.component';
+import { CategoryContentComponent } from './components/category-content/category-content.component';
+import { SubCategoryListComponent } from './components/sub-category-list/sub-category-list.component';
+import { TopicListComponent } from './components/topic-list/topic-list.component';
 
 
 @NgModule({
   declarations: [
     ForumComponent,
     HomeComponent,
+    CategoryContentComponent,
+    SubCategoryListComponent,
+    TopicListComponent,
   ],
   imports: [
     CommonModule,

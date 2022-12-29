@@ -392,7 +392,15 @@ export class ApiEndpointsService {
    */
 
   getAllCategories() {
-    return ApiEndpointsService.createUrl(Uris.FORUM.ALL_CATEGORIES);
+    return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
+  }
+
+  getCategory(id: number) {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.CATEGORIES, [id]);
+  }
+
+  getCategoryTopics(id: number, pageable: Pageable<any>) {
+    return ApiEndpointsService.createUrlWithPageable(`${Uris.FORUM.CATEGORIES}/${id}/topics`, pageable);
   }
 
   /**
