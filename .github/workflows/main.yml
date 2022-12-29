@@ -50,5 +50,4 @@ jobs:
           REPOSITORY: ${{ github.repository }}
         run: |
           PROJECT_KEY=$(echo "${REPOSITORY//\//_}" | tr '[:upper:]' '[:lower:]') # mise en minuscule de la project key pour matcher avec les pré-requis de noms de sonarcloud
-          echo $PROJECT_KEY
-#          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true -Dsonar.projectKey=$PROJECT_KEY
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dmaven.test.skip=true -Dsonar.projectKey=$PROJECT_KEY
