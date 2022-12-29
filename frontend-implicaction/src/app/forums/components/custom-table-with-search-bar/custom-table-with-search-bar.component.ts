@@ -1,13 +1,15 @@
-import { Component,Input, OnInit } from '@angular/core';
-import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {Component, OnInit} from '@angular/core';
+import {
+  BaseWithPaginationAndFilterComponent
+} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Group} from '../../model/group';
 import {Criteria} from '../../../shared/models/Criteria';
 import {ActivatedRoute} from '@angular/router';
 import {GroupService} from '../../services/group.service';
 import {finalize} from 'rxjs/operators';
 import {ToasterService} from '../../../core/services/toaster.service';
-import { PostService } from '../../services/post.service';
-import { Post } from '../../model/post';
+import {PostService} from '../../services/post.service';
+import {Post} from '../../model/post';
 
 @Component({
   selector: 'app-custom-table-with-search-bar',
@@ -21,6 +23,8 @@ export class CustomTableWithSearchBarComponent extends BaseWithPaginationAndFilt
   title: string;
   labels: string[];
   posts: Post[];
+  searchValue: string = '';
+  searchOn: boolean = false;
 
   constructor(
     private toastService: ToasterService,
@@ -33,29 +37,71 @@ export class CustomTableWithSearchBarComponent extends BaseWithPaginationAndFilt
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
-          this.title=data.title;
-          this.labels=data.labels;
-      })
+      this.title = data.title;
+      this.labels = data.labels;
+    })
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
     this.paginate();
   }
 
-  protected innerPaginate(): void {
-    if(this.title === "Forums"){
-    this.groupService
-      .getAllGroups(this.pageable)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(
-        data => {
-          this.pageable.totalPages = data.totalPages;
-          this.pageable.totalElements = data.totalElements;
-          this.pageable.content = data.content;
-        },
-        () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des groupes')
-      );
+  clearSearch() {
+    this.searchValue = '';
+    if (this.searchOn) {
+      this.search();
     }
-    if(this.title === "Posts"){
+  }
+
+  async search() {
+    if (this.title === "Forums") {
+      if (this.searchValue) {
+        this.groupService
+          .findGroupByName(this.pageable, this.searchValue)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe(
+            data => {
+              this.pageable.totalPages = data.totalPages;
+              this.pageable.totalElements = data.totalElements;
+              this.pageable.content = data.content;
+            },
+            () => this.toastService.error('Oops', 'Une erreur est survenue lors de la recherche du groupe: ' + this.searchValue)
+          );
+        this.searchOn = true;
+      } else {
+        this.groupService
+          .getAllGroups(this.pageable)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe(
+            data => {
+              this.pageable.totalPages = data.totalPages;
+              this.pageable.totalElements = data.totalElements;
+              this.pageable.content = data.content;
+            },
+            () => this.toastService.error('Oops', 'Une erreur est survenue lors de la recherche du groupe: ' + this.searchValue)
+          );
+        this.searchOn = false;
+      }
+    }
+    if (this.title === "Posts") {
+    }
+  }
+
+  protected innerPaginate(): void {
+    if (this.title === "Forums") {
+      this.groupService
+        .getAllGroups(this.pageable)
+        .pipe(finalize(() => this.isLoading = false))
+        .subscribe(
+          data => {
+            this.pageable.totalPages = data.totalPages;
+            this.pageable.totalElements = data.totalElements;
+            this.pageable.content = data.content;
+
+          },
+          () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des groupes')
+        );
+    }
+    if (this.title === "Posts") {
       this.postService
         .getLatestPosts(10)
         .pipe(finalize(() => this.isLoading = false))

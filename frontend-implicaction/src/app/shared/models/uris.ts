@@ -98,6 +98,8 @@ export class Uris {
     static readonly CREATE_NO_IMAGE = 'groups/no-image';
     static readonly GET_ALL_PENDING_GROUPS = 'groups/pending';
     static readonly VALIDATED_GROUPS = 'groups/validated';
+    static readonly FIND_BY_NAME = 'groups/search';
+
   };
 
   /**

@@ -24,10 +24,13 @@ import {CreatePostFormComponent} from './components/create-post-form/create-post
 import {IconsModule} from '../icons/icons.module';
 import {GroupListComponent} from './components/group-list/group-list.component';
 import {TableModule} from 'primeng/table';
-import { GroupCardComponent } from './components/group-card/group-card.component';
-import { CustomTableWithSearchBarComponent } from './components/custom-table-with-search-bar/custom-table-with-search-bar.component';
-import { ForumCardComponent } from './components/forum-card/forum-card.component';
-import { PostCardComponent } from './components/post-card/post-card.component';
+import {GroupCardComponent} from './components/group-card/group-card.component';
+import {
+  CustomTableWithSearchBarComponent
+} from './components/custom-table-with-search-bar/custom-table-with-search-bar.component';
+import {ForumCardComponent} from './components/forum-card/forum-card.component';
+import {PostCardComponent} from './components/post-card/post-card.component';
+import {ButtonModule} from "primeng/button";
 
 
 @NgModule({
@@ -62,7 +65,8 @@ import { PostCardComponent } from './components/post-card/post-card.component';
     ReactiveFormsModule,
     EditorModule,
     IconsModule,
-    TableModule
+    TableModule,
+    ButtonModule
   ]
 })
 export class ForumsModule {

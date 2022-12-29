@@ -44,4 +44,8 @@ export class GroupService {
   validateGroup(groupName: string): Observable<JobPosting> {
     return this.http.patch(this.apiEndpointService.getValidateGroupEndpoint(groupName), null);
   }
+
+  findGroupByName(pageable: Pageable<any>, groupName: string): Observable<any> {
+    return this.http.get<Group[]>(this.apiEndpointService.findGroupByName(pageable, groupName));
+  }
 }

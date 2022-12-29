@@ -371,6 +371,10 @@ export class ApiEndpointsService {
     );
   }
 
+  findGroupByName(pageable: Pageable<any>, groupName: string): string {
+    return ApiEndpointsService.createUrlWithPageable(`${Uris.GROUP.FIND_BY_NAME}/${groupName}`, pageable);
+  }
+
   findAllActiveGroupsEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.GROUP.VALIDATED_GROUPS, pageable);
   }
