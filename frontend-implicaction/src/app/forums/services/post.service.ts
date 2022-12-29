@@ -25,6 +25,11 @@ export class PostService {
     return this.http.get(this.endpointsService.getPostEndpoint(postId));
   }
 
+
+  findPostByName(pageable: Pageable<any>, postName: string): Observable<any> {
+    return this.http.get<Post[]>(this.endpointsService.findPostByName(pageable, postName));
+  }
+
   getLatestPosts(postsCount: number): Observable<Post[]> {
     return this.http.get<Post[]>(this.endpointsService.getLatestPostsEndpoint(postsCount));
   }

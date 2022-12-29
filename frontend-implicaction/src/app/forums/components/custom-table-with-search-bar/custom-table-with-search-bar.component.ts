@@ -83,6 +83,31 @@ export class CustomTableWithSearchBarComponent extends BaseWithPaginationAndFilt
       }
     }
     if (this.title === "Posts") {
+      if (this.searchValue) {
+        this.postService
+          .findPostByName(this.pageable, this.searchValue)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe(
+            data => {
+              this.pageable.totalPages = data.totalPages;
+              this.pageable.totalElements = data.totalElements;
+              this.posts = data.content;
+            },
+            () => this.toastService.error('Oops', 'Une erreur est survenue lors de la recherche de post: ' + this.searchValue)
+          );
+        this.searchOn = true;
+      } else {
+        this.postService
+          .getLatestPosts(10)
+          .pipe(finalize(() => this.isLoading = false))
+          .subscribe(
+            data => {
+              this.posts = data;
+            },
+            () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des posts les plus récent')
+          );
+        this.searchOn = false;
+      }
     }
   }
 
