@@ -1,9 +1,9 @@
-import {Pageable, PageableType} from '../shared/models/pageable';
+import {Pageable} from '../shared/models/pageable';
 
 export class Constants {
   public static readonly API_ENDPOINT: string = '/api';
   public static readonly API_MOCK_ENDPOINT: string = 'mock-domain/api';
-  public static readonly PAGEABLE_DEFAULT: Pageable<PageableType> = {
+  public static readonly PAGEABLE_DEFAULT: Pageable<any> = {
     page: 0,
     rows: 10,
     totalElements: 0,
@@ -20,7 +20,7 @@ export class Constants {
    * Cette constante est utilisée pour outrepasser la pagination d'une réponse : la page contiendra tous les résultats entre 0 et la
    * valeur maximale d'un entier en java
    */
-  public static readonly ALL_VALUE_PAGEABLE: Pageable<PageableType> = {
+  public static readonly ALL_VALUE_PAGEABLE: Pageable<any> = {
     page: 0,
     rows: 2147483647, // correspond à Integer.MAX_VALUE
   };
