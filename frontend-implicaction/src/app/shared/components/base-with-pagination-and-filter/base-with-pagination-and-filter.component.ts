@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {Constants} from '../../../config/constants';
-import {Pageable, PageableType} from '../../models/pageable';
+import {Pageable} from '../../models/pageable';
 import {ActivatedRoute} from '@angular/router';
 import {Criteria} from '../../models/Criteria';
 
 @Component({template: ''})
-export class BaseWithPaginationAndFilterComponent<T extends PageableType, C extends Criteria> {
+export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
 
   readonly DEFAULT_ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
@@ -13,7 +13,7 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
   criteria: C;
 
   // Pagination
-  pageable: Pageable<PageableType> = {...Constants.PAGEABLE_DEFAULT};
+  pageable: Pageable<T> = {...Constants.PAGEABLE_DEFAULT};
 
   constructor(protected route: ActivatedRoute) {
   }
@@ -24,7 +24,7 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
    * @param first indice du 1er élément à récupérer
    * @param rows nombre d'éléments par page
    */
-  paginate({page, first, rows} = this.pageable): void {
+  paginate({page, first, rows} = this.pageable as Pageable<T>): void {
     this.isLoading = true;
     if (page) {
       this.pageable.page = page;
@@ -38,6 +38,11 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
 
     this.innerPaginate();
   }
+
+  /**
+   * default trackBy function
+   */
+  trackByItemId = (index: number, item: T) => (item as any).id;
 
   protected innerPaginate(): void {
     // Méthode à implémenter qui s'occupe de charger les données. Elle est appelée par la méthode paginate
@@ -66,11 +71,6 @@ export class BaseWithPaginationAndFilterComponent<T extends PageableType, C exte
         });
     });
   }
-
-  /**
-   * default trackBy function
-   */
-  trackByItemId = (index: number, item: T) => (item as any).id;
 
   /**
    * @return any les filtres de recherche auxquels sont ajoutés les filtres de pagination
