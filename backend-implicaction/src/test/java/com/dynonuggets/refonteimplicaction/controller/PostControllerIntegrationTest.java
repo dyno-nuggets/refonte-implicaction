@@ -62,11 +62,13 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .username("Matthieu")
                 .groupName("divers")
                 .voteCount(0)
+                .views(0)
                 .commentCount(0)
                 .duration("à l'instant")
                 .upVote(false)
                 .downVote(false)
                 .voteCount(0)
+                .views(0)
                 .commentCount(0)
                 .build();
         given(postService.saveOrUpdate(any(PostRequest.class))).willReturn(expectedResponse);
@@ -88,6 +90,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.username", is(expectedResponse.getUsername())))
                 .andExpect(jsonPath("$.groupName", is(expectedResponse.getGroupName())))
                 .andExpect(jsonPath("$.voteCount", is(expectedResponse.getVoteCount())))
+                .andExpect(jsonPath("$.views", is(expectedResponse.getViews())))
                 .andExpect(jsonPath("$.commentCount", is(expectedResponse.getCommentCount())))
                 .andExpect(jsonPath("$.duration", is(expectedResponse.getDuration())))
                 .andExpect(jsonPath("$.upVote", is(expectedResponse.isUpVote())))
@@ -176,6 +179,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.username", is(expectedResponse.getUsername())))
                 .andExpect(jsonPath("$.groupName", is(expectedResponse.getGroupName())))
                 .andExpect(jsonPath("$.voteCount", is(expectedResponse.getVoteCount())))
+                .andExpect(jsonPath("$.views", is(expectedResponse.getViews())))
                 .andExpect(jsonPath("$.commentCount", is(expectedResponse.getCommentCount())))
                 .andExpect(jsonPath("$.duration", is(expectedResponse.getDuration())))
                 .andExpect(jsonPath("$.upVote", is(expectedResponse.isUpVote())))
@@ -223,9 +227,9 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_list_all_post_when_authenticated() throws Exception {
         // given
         PostResponse postRequest1 = new PostResponse(1L, "Post Name", "http://url.site", "Description", "User 1", 12L, null,
-                "Subreddit Name", 0, 0, "il y a 2 jours", false, false, null);
+                "Subreddit Name", 0, 0, 0, "il y a 2 jours", false, false, null);
         PostResponse postRequest2 = new PostResponse(2L, "Post Name 2", "http://url2.site2", "Description2", "User 2", 13L, null,
-                "Subreddit Name 2", 0, 0, "il y a 2 jours", false, false, null);
+                "Subreddit Name 2", 0, 0, 0, "il y a 2 jours", false, false, null);
 
         final List<PostResponse> postResponses = asList(postRequest1, postRequest2);
         final Page<PostResponse> expectedPages = new PageImpl<>(postResponses);

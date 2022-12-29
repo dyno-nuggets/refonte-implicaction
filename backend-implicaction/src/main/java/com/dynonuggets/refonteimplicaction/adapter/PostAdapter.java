@@ -25,6 +25,7 @@ public class PostAdapter {
                 .url(postRequest.getUrl())
                 .description(postRequest.getDescription())
                 .voteCount(0) // 0 car cette méthode n'est utilisée que lors de la création d'un post
+                .views(0) // 0 car cette méthode n'est utilisée que lors de la création d'un post
                 .user(currentUser)
                 .createdAt(Instant.now())
                 .group(group)
@@ -50,6 +51,7 @@ public class PostAdapter {
                 .upVote(isPostUpVoted)
                 .downVote(isPostDownVoted)
                 .voteCount(post.getVoteCount())
+                .views(post.getViews())
                 .subredditImageUrl(subredditImageUrl)
                 .userImageUrl(userImageKey)
                 .build();

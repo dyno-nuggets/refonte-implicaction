@@ -151,7 +151,7 @@ class CommentServiceTest {
         // given
         User currentUser = User.builder().id(123L).username("Sankukai").build();
         Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), Instant.now(), currentUser, null, emptyList(), true);
-        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
+        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, 0, currentUser, Instant.now(), group);
         List<Comment> comments = asList(
                 new Comment(3L, "comment1", post, Instant.now(), currentUser, null),
                 new Comment(2L, "comment2", post, Instant.now(), currentUser, null),

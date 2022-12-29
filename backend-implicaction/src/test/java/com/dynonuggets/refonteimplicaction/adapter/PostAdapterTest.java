@@ -33,7 +33,7 @@ class PostAdapterTest {
         // given
         User currentUser = User.builder().id(123L).username("test user").build();
         Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), now(), currentUser, null, emptyList(), true);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), group);
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, 0, currentUser, now(), group);
         PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
 
         // when
@@ -49,7 +49,7 @@ class PostAdapterTest {
     @Test
     void should_return_post_with_no_subreddit_and_poster_has_no_image() {
         User currentUser = User.builder().id(123L).username("test user").build();
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), null);
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, 0, currentUser, now(), null);
         final int expectedCommentCount = 10;
 
         // when
@@ -63,7 +63,7 @@ class PostAdapterTest {
     void should_return_post_with_subreddit_image_null() {
         User currentUser = User.builder().id(123L).username("test user").build();
         Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), now(), currentUser, null, emptyList(), true);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, 0, currentUser, now(), group);
         final int expectedCommentCount = 10;
 
         // when
@@ -78,7 +78,7 @@ class PostAdapterTest {
         // given
         User currentUser = User.builder().id(123L).username("test user").image(FileModel.builder().url("http://url.com").build()).build();
         Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build(), emptyList(), true);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
+        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, 0, currentUser, now(), group);
         final int expectedCommentCount = 10;
 
         // when
@@ -93,6 +93,7 @@ class PostAdapterTest {
         assertThat(postResponse.getGroupName()).isEqualTo(expected.getGroup().getName());
         assertThat(postResponse.getCommentCount()).isEqualTo(expectedCommentCount);
         assertThat(postResponse.getVoteCount()).isEqualTo(expected.getVoteCount());
+        assertThat(postResponse.getViews()).isEqualTo(expected.getViews());
         assertThat(postResponse.getSubredditImageUrl()).isEqualTo(expected.getGroup().getImage().getUrl());
         assertThat(postResponse.isDownVote()).isFalse();
         assertThat(postResponse.isUpVote()).isTrue();

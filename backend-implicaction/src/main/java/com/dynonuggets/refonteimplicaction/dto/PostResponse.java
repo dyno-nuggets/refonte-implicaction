@@ -17,6 +17,8 @@ public class PostResponse {
     private String userImageUrl;
     private String groupName;
     private Integer voteCount;
+
+    private Integer views;
     private Integer commentCount;
     private String duration;
     private boolean upVote;
