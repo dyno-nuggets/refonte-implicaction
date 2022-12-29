@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -74,5 +75,18 @@ public class PostController {
         Page<CommentDto> comments = commentService.getAllCommentsForPost(pageable, postId);
 
         return ResponseEntity.ok(comments);
+    }
+
+    @GetMapping(GET_SEARCH_POST_URI)
+    public ResponseEntity<Page<PostResponse>> searchPostByName(
+            @PathVariable final String postName,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+    ) {
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
+        Page<PostResponse> groupsMatchingSearchParam = postService.searchGroup(pageable, postName);
+        return ResponseEntity.ok(groupsMatchingSearchParam);
     }
 }

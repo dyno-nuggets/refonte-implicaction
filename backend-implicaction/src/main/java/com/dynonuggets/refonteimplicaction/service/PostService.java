@@ -70,6 +70,12 @@ public class PostService {
         return allPosts.map(this::getPostResponse);
     }
 
+    @Transactional
+    public Page<PostResponse> searchGroup(Pageable pageable, String param) {
+        final Page<Post> posts = postRepository.findPostByName(pageable, param);
+        return posts.map(this::getPostResponse);
+    }
+
     private PostResponse getPostResponse(Post post) {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
     }

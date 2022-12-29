@@ -30,6 +30,9 @@ public class ApiUrls {
     public static final String GET_POST_COMMENTS_URI = "/{postId}/comments";
     public static final String GET_LATEST_POSTS_URI = "/latest/{postsCount}";
 
+    public static final String GET_SEARCH_POST_URI = "/search/{postName}";
+
+
     // GROUPS
     public static final String GROUPS_BASE_URI = "/api/groups";
     public static final String GET_ALL_BY_TOP_POSTING_URI = "/top-posting";
