@@ -113,4 +113,9 @@ export class Uris {
   static JOB_APPLICATION = class {
     static readonly BASE_URI = 'applies';
   };
+
+  static FORUM = class {
+    static readonly BASE_URI = 'forum';
+    static readonly ALL_CATEGORIES = 'forum/categories'
+  };
 }

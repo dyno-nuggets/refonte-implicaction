@@ -388,6 +388,14 @@ export class ApiEndpointsService {
   }
 
   /**
+   * FORUM
+   */
+
+  getAllCategories() {
+    return ApiEndpointsService.createUrl(Uris.FORUM.ALL_CATEGORIES);
+  }
+
+  /**
    * JOB APPLICATION
    */
 

@@ -61,6 +61,10 @@ const routes: Routes = [
   {
     path: Univers.BUSINESS_AREA.url,
     loadChildren: () => import('./company/company.module').then(m => m.CompanyModule),
+  },
+  {
+    path: Univers.FORUM.url,
+    loadChildren: () => import('./forum/forum.module').then(m => m.ForumModule),
   }
 ];
 

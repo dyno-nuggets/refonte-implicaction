@@ -1,0 +1,8 @@
+<ul>
+  <li *ngFor="let category of test | async">
+    {{ category.title }}
+    <ul>
+      <li *ngFor="let subCategory of category.children">{{ subCategory.title }}</li>
+    </ul>
+  </li>
+</ul>
