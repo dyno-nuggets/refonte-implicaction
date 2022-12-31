@@ -12,5 +12,5 @@ export interface Topic {
   isPinned: boolean;
   author: User;
   response: Response[];
-  category: Category
+  category: Category;
 }

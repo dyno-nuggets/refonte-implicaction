@@ -12,9 +12,18 @@ import {ForumRoutingModule} from './forum-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {IconsModule} from '../icons/icons.module';
 import {HomeComponent} from './components/home/home.component';
-import { CategoryContentComponent } from './components/category-content/category-content.component';
-import { SubCategoryListComponent } from './components/sub-category-list/sub-category-list.component';
-import { TopicListComponent } from './components/topic-list/topic-list.component';
+import {CategoryContentComponent} from './components/category-content/category-content.component';
+import {SubCategoryListComponent} from './components/sub-category-list/sub-category-list.component';
+import {TopicListComponent} from './components/topic-list/topic-list.component';
+import {ButtonModule} from "primeng/button";
+import {DialogModule} from "primeng/dialog";
+import {RippleModule} from "primeng/ripple";
+import {InputTextareaModule} from "primeng/inputtextarea";
+import {CheckboxModule} from "primeng/checkbox";
+import {InputTextModule} from "primeng/inputtext";
+import {TreeSelectModule} from "primeng/treeselect";
+import {CreateTopicFormComponent} from './components/create-topic-form/create-topic-form.component';
+import {CreateTopicButtonComponent} from './components/create-topic-button/create-topic-button.component';
 
 
 @NgModule({
@@ -24,6 +33,8 @@ import { TopicListComponent } from './components/topic-list/topic-list.component
     CategoryContentComponent,
     SubCategoryListComponent,
     TopicListComponent,
+    CreateTopicFormComponent,
+    CreateTopicButtonComponent,
   ],
   imports: [
     CommonModule,
@@ -35,8 +46,16 @@ import { TopicListComponent } from './components/topic-list/topic-list.component
     ReactiveFormsModule,
     EditorModule,
     IconsModule,
-    TableModule
+    TableModule,
+    ButtonModule,
+    DialogModule,
+    RippleModule,
+    InputTextareaModule,
+    CheckboxModule,
+    InputTextModule,
+    TreeSelectModule,
   ]
+
 })
 export class ForumModule {
 }

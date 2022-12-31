@@ -403,6 +403,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(`${Uris.FORUM.CATEGORIES}/${id}/topics`, pageable);
   }
 
+  createTopic(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.TOPIC);
+  }
+
   /**
    * JOB APPLICATION
    */

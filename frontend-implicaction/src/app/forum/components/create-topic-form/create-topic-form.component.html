@@ -1,0 +1,63 @@
+<form
+  (ngSubmit)="onSubmit()"
+  [formGroup]="topicForm">
+
+  <div class="form-floating mb-4">
+    <p-treeSelect [options]="categoriesNodes"
+                  appendTo="body"
+                  formControlName="category"
+                  placeholder="Sélectionner une catégorie">
+    </p-treeSelect>
+  </div>
+
+  <div class="form-floating mb-4">
+    <input
+      class="form-control form-control-lg"
+      formControlName="title"
+      id="titleInput"
+      placeholder="Titre"
+    />
+    <label
+      class="form-label px-4"
+      for="titleInput"
+    >
+      Titre du topic
+    </label>
+  </div>
+
+  <div class="form-floating mb-4">
+    <textarea [autoResize]="true"
+              [cols]="30"
+              [rows]="5"
+              class="form-control form-control-lg px-4"
+              formControlName="message"
+              pInputTextarea
+              placeholder="Message"
+              style="min-height: 70px;"></textarea>
+    <label
+      class="form-label px-4" for="titleInput">
+      Message du topic
+    </label>
+  </div>
+
+  <div class="form-floating mb-4">
+    <div class="mt-1">
+      <p-checkbox [binary]="true" formControlName="isPinned" label="Epingler" name="groupname"></p-checkbox>
+    </div>
+    <div class="mt-1">
+      <p-checkbox [binary]="true" formControlName="isLocked" label="Verrouiller" name="groupname"></p-checkbox>
+    </div>
+
+  </div>
+
+  <div class="d-flex justify-content-center rounded-pill sidebar-options mt-5">
+    <button
+      [disabled]="!topicForm.valid"
+      class="btn btn-primary w-50"
+      type="submit"
+    >
+      Enregistrer
+    </button>
+  </div>
+
+</form>
