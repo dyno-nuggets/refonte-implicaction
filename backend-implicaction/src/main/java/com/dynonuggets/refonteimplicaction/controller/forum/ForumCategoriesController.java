@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -27,7 +28,10 @@ public class ForumCategoriesController {
     private final TopicService topicService;
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> getAllCategories() throws ImplicactionException {
+    public ResponseEntity<List<CategoryDto>> getAllCategories(@RequestParam(defaultValue = "false") boolean onlyRoot) throws ImplicactionException {
+        if (onlyRoot) {
+            return ResponseEntity.ok(categoryService.getRootCategories());
+        }
         return ResponseEntity.ok(categoryService.getCategories());
     }
 
@@ -38,9 +42,11 @@ public class ForumCategoriesController {
     }
 
     @GetMapping(GET_CATEGORY_URI)
-    public ResponseEntity<CategoryDto> getCategory(@PathVariable long categoryId) {
-        CategoryDto foundDto = categoryService.getCategory(categoryId);
-        return ResponseEntity.ok(foundDto);
+    public ResponseEntity<List<CategoryDto>> getCategory(@PathVariable List<Long> categoryIds) {
+        List<CategoryDto> categories = categoryIds.stream()
+                .map(categoryService::getCategory)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(categories);
     }
 
     @GetMapping(GET_TOPIC_FROM_CATEGORY_URI)

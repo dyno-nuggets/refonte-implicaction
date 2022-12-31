@@ -2,7 +2,6 @@ package com.dynonuggets.refonteimplicaction.dto.forum;
 
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -15,5 +14,5 @@ public class CategoryDto {
     private String title;
     private String description;
     private Long parentId;
-    private List<CategoryDto> children = new ArrayList<>();
+    private List<Long> children;
 }

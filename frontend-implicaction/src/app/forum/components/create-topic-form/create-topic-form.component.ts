@@ -1,20 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Category} from "../../model/category";
-import {CategoryService} from "../../services/category.service";
+import {CategoryNode, CategoryService} from "../../services/category.service";
 import {TopicService} from "../../services/topic.service";
 import {ToasterService} from "../../../core/services/toaster.service";
-import {Observable} from "rxjs";
 import {CreateTopicPayload} from "../../model/createTopicPayload";
 import {SidebarContentComponent} from "../../../shared/models/sidebar-props";
 import {SidebarService} from "../../../shared/services/sidebar.service";
 
-interface CategoryNode {
+interface CategoryTreeSelectNode {
   id: number;
   label: string;
   data: string;
   selectable: boolean;
-  children?: CategoryNode[];
+  children?: CategoryTreeSelectNode[];
 }
 
 @Component({
@@ -32,18 +31,19 @@ export class CreateTopicFormComponent extends SidebarContentComponent implements
     category: new FormControl<Category>(null, Validators.required)
   });
 
-  categoriesNodes: CategoryNode[];
+  categoriesNodes: CategoryTreeSelectNode[];
 
-  constructor(private categoryService: CategoryService,
-              private topicService: TopicService,
-              private toastService: ToasterService,
-              private sidebarService: SidebarService,
+  constructor(
+    private categoryService: CategoryService,
+    private topicService: TopicService,
+    private toastService: ToasterService,
+    private sidebarService: SidebarService,
   ) {
     super();
   }
 
   ngOnInit(): void {
-    const categories: Observable<Category[]> = this.categoryService.getCategories();
+    const categories = this.categoryService.getCategoryTree();
     categories.subscribe((val) => {
       this.categoriesNodes = this.categoriesToCategoriesNode(val);
     });
@@ -56,14 +56,14 @@ export class CreateTopicFormComponent extends SidebarContentComponent implements
       isPinned: this.topicForm.value.isPinned,
       isLocked: this.topicForm.value.isLocked,
       categoryId: this.topicForm.value.category.id
-    }
+    };
     this.topicService.createTopic(createTopic).subscribe(res => {
       this.toastService.success('Topic créé!', 'Le topic a bien été créé');
       this.sidebarService.close();
-    })
+    });
   }
 
-  private categoriesToCategoriesNode(categories: Category[]): CategoryNode[] {
+  private categoriesToCategoriesNode(categories: CategoryNode[]): CategoryTreeSelectNode[] {
     return categories.map(({id, title, parentId, children}) => ({
       id: id,
       label: title,

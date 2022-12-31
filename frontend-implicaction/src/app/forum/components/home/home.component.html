@@ -1,5 +1,5 @@
 <ul>
-  <li *ngFor="let category of $categories | async">
+  <li *ngFor="let category of categories$ | async">
     {{ category.title }}
     <app-sub-category-list [categories]="category.children"></app-sub-category-list>
   </li>

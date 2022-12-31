@@ -71,7 +71,7 @@ public class ApiUrls {
 
     // FORUM CATEGORIES
     public static final String CATEGORY_BASE_URI = "/api/forum/categories";
-    public static final String GET_CATEGORY_URI = "/{categoryId}";
+    public static final String GET_CATEGORY_URI = "/{categoryIds}";
 
     public static final String GET_TOPIC_FROM_CATEGORY_URI = "/{categoryId}/topics";
 

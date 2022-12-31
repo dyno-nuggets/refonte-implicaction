@@ -44,8 +44,10 @@ export class ApiEndpointsService {
     let encodedPathVariablesUrl = '';
     // Push extra path variables
     for (const pathVariable of pathVariables) {
+      let pathVariableStr = pathVariable instanceof Array ? pathVariable.join(',') : pathVariable;
+
       if (pathVariable !== null) {
-        encodedPathVariablesUrl += `/${encodeURIComponent(pathVariable.toString())}`;
+        encodedPathVariablesUrl += `/${encodeURIComponent(pathVariableStr.toString())}`;
       }
     }
     const urlBuilder: UrlBuilder = new UrlBuilder(Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
@@ -391,12 +393,24 @@ export class ApiEndpointsService {
    * FORUM
    */
 
-  getAllCategories() {
+  getCategories(): string;
+  getCategories(ids: number[]): string;
+  getCategories(ids?: number[]) {
+    if (ids) {
+      return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.CATEGORIES, [ids]);
+    }
     return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
   }
 
+  getRootCategories() {
+    return ApiEndpointsService.createUrlWithQueryParameters(Uris.FORUM.CATEGORIES, (queryParams) => {
+      queryParams.push("onlyRoot", true);
+      return queryParams;
+    });
+  }
+
   getCategory(id: number) {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.CATEGORIES, [id]);
+    return this.getCategories([id]);
   }
 
   getCategoryTopics(id: number, pageable: Pageable<any>) {

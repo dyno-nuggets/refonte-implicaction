@@ -3,5 +3,5 @@ export interface Category {
   title: string;
   description?: string;
   parentId?: number;
-  children: Category[];
+  children: number[];
 }

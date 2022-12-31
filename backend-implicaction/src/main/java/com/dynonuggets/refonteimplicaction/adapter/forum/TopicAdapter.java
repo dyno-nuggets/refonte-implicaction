@@ -72,7 +72,7 @@ public class TopicAdapter {
                 .isPinned(model.isPinned())
                 .isLocked(model.isLocked())
                 .author(userAdapter.toDto(model.getAuthor()))
-                .category(categoryAdapter.toDto(model.getCategory()))
+                .category(categoryAdapter.toDtoWithoutChildren(model.getCategory()))
                 .responses(new ArrayList<>())
                 .build();
     }
