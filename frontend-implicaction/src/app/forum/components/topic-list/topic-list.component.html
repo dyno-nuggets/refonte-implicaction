@@ -1,7 +1,8 @@
 <div *ngIf="topics.length > 0; else elseBlock">
   <ul>
     <li *ngFor="let topic of topics">
-      <a href="#">{{ topic.title }}</a> by <a href="#">{{ topic.author.username }}</a> à {{ topic.createdAt }}
+      <a routerLink="/{{ univers.FORUM.url }}/topic/{{ topic.id }}">{{ topic.title }}</a>
+      by <a href="#">{{ topic.author.username }}</a> à {{ topic.createdAt }}
     </li>
   </ul>
 </div>

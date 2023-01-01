@@ -15,6 +15,7 @@ import {HomeComponent} from './components/home/home.component';
 import {CategoryContentComponent} from './components/category-content/category-content.component';
 import {SubCategoryListComponent} from './components/sub-category-list/sub-category-list.component';
 import {TopicListComponent} from './components/topic-list/topic-list.component';
+import {TopicContentComponent} from './components/topic-content/topic-content.component';
 import {ButtonModule} from "primeng/button";
 import {DialogModule} from "primeng/dialog";
 import {RippleModule} from "primeng/ripple";
@@ -33,6 +34,7 @@ import {CreateTopicButtonComponent} from './components/create-topic-button/creat
     CategoryContentComponent,
     SubCategoryListComponent,
     TopicListComponent,
+    TopicContentComponent,
     CreateTopicFormComponent,
     CreateTopicButtonComponent,
   ],

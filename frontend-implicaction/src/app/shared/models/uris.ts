@@ -116,7 +116,10 @@ export class Uris {
 
   static FORUM = class {
     static readonly BASE_URI = 'forum';
-    static readonly CATEGORIES = 'forum/categories';
-    static readonly TOPIC = 'forum/topics';
+    static readonly CATEGORIES = 'forum/categories'
+    static readonly TOPICS = 'forum/topics'
+
+    static readonly CATEGORIES_TOPICS = (id: number) => `${Uris.FORUM.CATEGORIES}/${id}/topics`
+    static readonly TOPICS_RESPONSES = (id: number) => `${Uris.FORUM.TOPICS}/${id}/responses`
   };
 }

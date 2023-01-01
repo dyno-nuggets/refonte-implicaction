@@ -6,6 +6,6 @@ export interface Response {
   message: string;
   createdAt: number;
   editedAt: number;
-  user: User;
+  author: User;
   topic: Topic;
 }

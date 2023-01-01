@@ -1,19 +1,29 @@
 import {Injectable} from '@angular/core';
-import {Topic} from "../model/topic";
 import {HttpClient} from "@angular/common/http";
-import {ApiHttpService} from "../../core/services/api-http.service";
-import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
-import {CreateTopicPayload} from "../model/createTopicPayload";
 import {Observable} from "rxjs";
+import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
+import {Pageable} from "../../shared/models/pageable";
+import {Topic} from "../model/topic";
+import {Response} from "../model/response";
+import {CreateTopicPayload} from '../model/createTopicPayload';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TopicService {
 
-  constructor(private http: HttpClient,
-              private apiHttpService: ApiHttpService,
-              private apiEndpointsService: ApiEndpointsService) {
+  constructor(
+    private http: HttpClient,
+    private apiEndpointsService: ApiEndpointsService
+  ) {
+  }
+
+  getTopic(id: number): Observable<Topic> {
+    return this.http.get<Topic>(this.apiEndpointsService.getTopic(id));
+  }
+
+  getTopicResponses(id: number, pageable: Pageable<Response>): Observable<Pageable<Response>> {
+    return this.http.get<Pageable<Response>>(this.apiEndpointsService.getTopicResponses(id, pageable));
   }
 
   createTopic(topic: CreateTopicPayload): Observable<Topic> {

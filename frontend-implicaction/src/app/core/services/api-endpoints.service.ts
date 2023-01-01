@@ -6,6 +6,7 @@ import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/Criteria';
+import {Response} from "../../forum/model/response";
 
 @Injectable({
   providedIn: 'root'
@@ -390,7 +391,7 @@ export class ApiEndpointsService {
   }
 
   /**
-   * FORUM
+   * FORUM CATEGORIES
    */
 
   getCategories(): string;
@@ -414,11 +415,23 @@ export class ApiEndpointsService {
   }
 
   getCategoryTopics(id: number, pageable: Pageable<any>) {
-    return ApiEndpointsService.createUrlWithPageable(`${Uris.FORUM.CATEGORIES}/${id}/topics`, pageable);
+    return ApiEndpointsService.createUrlWithPageable(Uris.FORUM.CATEGORIES_TOPICS(id), pageable);
+  }
+
+  /**
+   * FORUM TOPICS
+   */
+
+  getTopic(id: number) {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.TOPICS, [id]);
+  }
+
+  getTopicResponses(id: number, pageable: Pageable<Response>) {
+    return ApiEndpointsService.createUrlWithPageable(Uris.FORUM.TOPICS_RESPONSES(id), pageable);
   }
 
   createTopic(): string {
-    return ApiEndpointsService.createUrl(Uris.FORUM.TOPIC);
+    return ApiEndpointsService.createUrl(Uris.FORUM.TOPICS);
   }
 
   /**

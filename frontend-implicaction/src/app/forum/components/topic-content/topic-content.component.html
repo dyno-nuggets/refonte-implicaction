@@ -1,0 +1,12 @@
+<div *ngIf="topic$ | async as topic">
+  <div *ngIf="pageable.page === 0">
+    <div class="title">{{ topic.title }} by {{ topic.author.username }}</div>
+    <p>{{ topic.message }}</p>
+  </div>
+  <ul *ngIf="paginatedResponses$ | async as paginatedResponses">
+    <li *ngFor="let response of paginatedResponses.content">
+      {{ response.author.username }}
+      <p>{{ response.message }}</p>
+    </li>
+  </ul>
+</div>

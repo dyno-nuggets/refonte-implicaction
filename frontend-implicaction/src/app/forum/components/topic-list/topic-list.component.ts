@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Topic} from "../../model/topic";
+import {Univers} from "../../../shared/enums/univers";
 
 @Component({
   selector: 'app-topic-list',
@@ -7,6 +8,8 @@ import {Topic} from "../../model/topic";
   styleUrls: ['./topic-list.component.scss']
 })
 export class TopicListComponent {
+
+  univers = Univers;
 
   @Input()
   topics: Topic[];
