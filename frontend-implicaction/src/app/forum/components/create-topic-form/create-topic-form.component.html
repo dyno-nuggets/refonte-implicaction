@@ -26,18 +26,13 @@
   </div>
 
   <div class="form-floating mb-4">
-    <textarea [autoResize]="true"
-              [cols]="30"
-              [rows]="5"
-              class="form-control form-control-lg px-4"
-              formControlName="message"
-              pInputTextarea
-              placeholder="Message"
-              style="min-height: 70px;"></textarea>
-    <label
-      class="form-label px-4" for="titleInput">
-      Message du topic
-    </label>
+
+    <p-editor
+      [style]="{'height':'200px'}"
+      formControlName="message"
+      placeholder="Message"
+    >
+    </p-editor>
   </div>
 
   <div class="form-floating mb-4">
