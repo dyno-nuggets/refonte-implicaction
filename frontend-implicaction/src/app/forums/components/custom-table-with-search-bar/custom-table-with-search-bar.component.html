@@ -1,42 +1,52 @@
 <div class="container row">
   <div class="table card">
     <div class="header">
-      <h6 class="title">{{title}}</h6>
+      <h6 class="title">{{ title }}</h6>
       <div class="flex">
         <div class="search-bar form-outline">
-          <span class="p-input-icon-right search-bar__box">
-            <input (keydown.enter)="search()" [(ngModel)]="searchValue" class="p-input text-lg search-bar__input"
-                   pInputText placeholder="Search..."
-                   type="text">
-            <i (click)="clearSearch()"
-               [ngClass]="{'search-bar__clear-icon-on': searchValue, 'search-bar__clear-icon-off': !searchValue}"
-               class="pi pi-times"></i>
+          <span class="p-input-icon-right">
+            <i (click)="search()" class="pi pi-search cursor-pointer"></i>
+            <input
+              (keydown.enter)="search()"
+              [(ngModel)]="searchValue"
+              class=""
+              pInputText
+              placeholder="Recherche..."
+              type="text"
+            />
           </span>
-          <p-button (click)="search()" icon="pi pi-search"></p-button>
+          <!-- <p-button (click)="search()" icon="pi pi-search"></p-button> -->
         </div>
       </div>
       <ul class="infos">
-        <li *ngFor="let label of labels;">
-          {{label}}
+        <li *ngFor="let label of labels">
+          {{ label }}
         </li>
       </ul>
     </div>
     <div class="content">
-      <div *ngIf="title && title==='Forums'">
+      <div *ngIf="title && title === 'Forums'">
         <!--Fix the group Type Issue ! -->
-        <app-forum-card *ngFor=" let group of pageable.content; last as isLast;"
-                        [group]="group" [ngClass]="{'last-element': isLast}"></app-forum-card>
+        <app-forum-card
+          *ngFor="let group of pageable.content; last as isLast"
+          [group]="group"
+          [ngClass]="{ 'last-element': isLast }"
+        ></app-forum-card>
       </div>
-      <div *ngIf="title && title==='Posts' && posts?.length > 0">
-        <app-post-card *ngFor="let post of posts;" [post]="post"></app-post-card>
+      <div *ngIf="title && title === 'Posts' && posts?.length > 0">
+        <app-post-card *ngFor="let post of posts" [post]="post"></app-post-card>
       </div>
-
     </div>
   </div>
   <div class="pagination row">
-    <p-paginator (onPageChange)="paginate($event)" *ngIf="pageable.totalPages > 0" [alwaysShow]="true"
-                 [first]="pageable.first" [rows]="pageable.rows"
-                 [totalRecords]="pageable.totalElements" ngClass="no-bg-color">
+    <p-paginator
+      (onPageChange)="paginate($event)"
+      *ngIf="pageable.totalPages > 0"
+      [alwaysShow]="true"
+      [first]="pageable.first"
+      [rows]="pageable.rows"
+      [totalRecords]="pageable.totalElements"
+    >
     </p-paginator>
   </div>
 </div>
