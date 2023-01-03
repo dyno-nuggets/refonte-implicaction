@@ -19,7 +19,7 @@ export class GroupCardComponent implements OnInit {
 
   userGroupNames: string[] = [];
   currentUser: User;
-  univers = Univers;
+
 
   constructor(
     private groupService: GroupService,

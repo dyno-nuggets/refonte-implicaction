@@ -30,6 +30,9 @@ import {
 } from './components/custom-table-with-search-bar/custom-table-with-search-bar.component';
 import {ForumCardComponent} from './components/forum-card/forum-card.component';
 import {PostCardComponent} from './components/post-card/post-card.component';
+import {TagsComponent} from './components/tags/tags.component';
+import {SelectButtonModule} from "primeng/selectbutton";
+import {ToggleButtonModule} from "primeng/togglebutton";
 import {ButtonModule} from "primeng/button";
 
 
@@ -54,6 +57,7 @@ import {ButtonModule} from "primeng/button";
     CustomTableWithSearchBarComponent,
     ForumCardComponent,
     PostCardComponent,
+    TagsComponent,
   ],
   imports: [
     CommonModule,
@@ -66,6 +70,10 @@ import {ButtonModule} from "primeng/button";
     EditorModule,
     IconsModule,
     TableModule,
+    ButtonModule,
+    TableModule,
+    SelectButtonModule,
+    ToggleButtonModule,
     ButtonModule
   ]
 })

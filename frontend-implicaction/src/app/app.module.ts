@@ -15,6 +15,7 @@ import {SidebarModule} from 'primeng/sidebar';
 import {BoardModule} from './board/board.module';
 import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import {ButtonModule} from 'primeng/button';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import localeFr from '@angular/common/locales/fr';
     ToastModule,
     SidebarModule,
     BoardModule,
-    HttpClientXsrfModule
+    HttpClientXsrfModule,
+    ButtonModule
   ],
   providers: [MessageService, {provide: LOCALE_ID, useValue: 'fr'}],
   bootstrap: [AppComponent]
