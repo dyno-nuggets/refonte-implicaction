@@ -1,3 +1,4 @@
+
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {PostListComponent} from './components/post-list/post-list.component';
@@ -34,6 +35,7 @@ import {TagsComponent} from './components/tags/tags.component';
 import {SelectButtonModule} from "primeng/selectbutton";
 import {ToggleButtonModule} from "primeng/togglebutton";
 import {ButtonModule} from "primeng/button";
+import { InputTextModule } from 'primeng/inputtext';
 
 
 @NgModule({
@@ -74,8 +76,9 @@ import {ButtonModule} from "primeng/button";
     TableModule,
     SelectButtonModule,
     ToggleButtonModule,
-    ButtonModule
+    ButtonModule,
+    InputTextModule
   ]
+
 })
-export class ForumsModule {
-}
+export class ForumsModule {}

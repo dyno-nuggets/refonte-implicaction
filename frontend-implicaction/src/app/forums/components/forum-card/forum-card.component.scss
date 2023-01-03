@@ -1,6 +1,6 @@
 .element{
     width: 100%;
-    height: 100px;
+    height: 90px;
     display: grid;
     grid-template-columns: 1fr 3fr 1fr 1fr 1fr;
     justify-content: center;
@@ -14,7 +14,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    
+
 }
 
 .element-img {
