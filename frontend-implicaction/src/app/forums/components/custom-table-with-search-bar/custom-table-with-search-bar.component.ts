@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BaseWithPaginationAndFilterComponent } from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import { Group } from '../../model/group';
 import { Criteria } from '../../../shared/models/Criteria';
@@ -18,10 +18,12 @@ export class CustomTableWithSearchBarComponent
   extends BaseWithPaginationAndFilterComponent<Group, Criteria>
   implements OnInit
 {
+  @Input() tableType: 'Posts' | 'Forums' = 'Posts';
+  @Input() labels: string[] = ['Likes', 'Commentaires', 'Vues'];
+
   readonly ROWS_PER_PAGE_OPTIONS = [5];
   isLoading = true;
   title: string;
-  labels: string[];
   posts: Post[];
   searchValue: string = '';
   searchOn: boolean = false;
@@ -36,10 +38,8 @@ export class CustomTableWithSearchBarComponent
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.title = data.title;
-      this.labels = data.labels;
-    });
+    console.log(this.tableType, this.labels);
+
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
     this.paginate();
@@ -53,7 +53,7 @@ export class CustomTableWithSearchBarComponent
   }
 
   async search() {
-    if (this.title === 'Forums') {
+    if (this.tableType === 'Forums') {
       if (this.searchValue) {
         this.groupService
           .findGroupByName(this.pageable, this.searchValue)
@@ -92,7 +92,7 @@ export class CustomTableWithSearchBarComponent
         this.searchOn = false;
       }
     }
-    if (this.title === 'Posts') {
+    if (this.tableType === 'Posts') {
       if (this.searchValue) {
         this.postService
           .findPostByName(this.pageable, this.searchValue)
@@ -131,7 +131,7 @@ export class CustomTableWithSearchBarComponent
   }
 
   protected innerPaginate(): void {
-    if (this.title === 'Forums') {
+    if (this.tableType === 'Forums') {
       this.groupService
         .getAllGroups(this.pageable)
         .pipe(finalize(() => (this.isLoading = false)))
@@ -148,7 +148,7 @@ export class CustomTableWithSearchBarComponent
             )
         );
     }
-    if (this.title === 'Posts') {
+    if (this.tableType === 'Posts') {
       this.postService
         .getLatestPosts(10)
         .pipe(finalize(() => (this.isLoading = false)))
