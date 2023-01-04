@@ -30,6 +30,8 @@ export class CustomTableWithSearchBarComponent
   posts: Post[];
   searchValue: string = '';
   searchOn: boolean = false;
+  forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
+  postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
 
   constructor(
     private toastService: ToasterService,
