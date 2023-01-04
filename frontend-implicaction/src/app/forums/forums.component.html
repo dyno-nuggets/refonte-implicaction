@@ -2,11 +2,11 @@
   <div class="col-md-9 row m-0 p-0 forums-content">
     <app-custom-table-with-search-bar
       [labels]="['Posts', 'Commentaires', 'Membres']"
-      tableType="Forums"
+      [tableType]="forumType"
     ></app-custom-table-with-search-bar>
     <app-custom-table-with-search-bar
       [labels]="['Likes', 'Commentaires', 'Vues']"
-      tableType="Posts"
+      [tableType]="postType"
     ></app-custom-table-with-search-bar>
   </div>
   <div class="col-md-3 flex-column flex-start row m-0 p-0">
