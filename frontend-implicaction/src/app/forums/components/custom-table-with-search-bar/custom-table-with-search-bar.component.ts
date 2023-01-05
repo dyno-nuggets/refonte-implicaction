@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { BaseWithPaginationAndFilterComponent } from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import { Group } from '../../model/group';
 import { Criteria } from '../../../shared/models/Criteria';
@@ -8,6 +8,10 @@ import { finalize } from 'rxjs/operators';
 import { ToasterService } from '../../../core/services/toaster.service';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../model/post';
+import {
+  ForumTableTypeCode,
+  ForumTableTypesEnum,
+} from '../../enums/table-type-enum';
 
 @Component({
   selector: 'app-custom-table-with-search-bar',
@@ -18,13 +22,16 @@ export class CustomTableWithSearchBarComponent
   extends BaseWithPaginationAndFilterComponent<Group, Criteria>
   implements OnInit
 {
+  @Input() tableType: ForumTableTypesEnum;
+  @Input() labels: string[];
+
   readonly ROWS_PER_PAGE_OPTIONS = [5];
   isLoading = true;
-  title: string;
-  labels: string[];
   posts: Post[];
   searchValue: string = '';
   searchOn: boolean = false;
+  forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
+  postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
 
   constructor(
     private toastService: ToasterService,
@@ -36,10 +43,6 @@ export class CustomTableWithSearchBarComponent
   }
 
   ngOnInit(): void {
-    this.route.data.subscribe((data) => {
-      this.title = data.title;
-      this.labels = data.labels;
-    });
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
     this.paginate();
@@ -53,7 +56,7 @@ export class CustomTableWithSearchBarComponent
   }
 
   async search() {
-    if (this.title === 'Forums') {
+    if (this.tableType.code === ForumTableTypeCode.FORUM) {
       if (this.searchValue) {
         this.groupService
           .findGroupByName(this.pageable, this.searchValue)
@@ -92,7 +95,7 @@ export class CustomTableWithSearchBarComponent
         this.searchOn = false;
       }
     }
-    if (this.title === 'Posts') {
+    if (this.tableType.code === ForumTableTypeCode.POST) {
       if (this.searchValue) {
         this.postService
           .findPostByName(this.pageable, this.searchValue)
@@ -131,7 +134,7 @@ export class CustomTableWithSearchBarComponent
   }
 
   protected innerPaginate(): void {
-    if (this.title === 'Forums') {
+    if (this.tableType.code === ForumTableTypeCode.FORUM) {
       this.groupService
         .getAllGroups(this.pageable)
         .pipe(finalize(() => (this.isLoading = false)))
@@ -148,7 +151,7 @@ export class CustomTableWithSearchBarComponent
             )
         );
     }
-    if (this.title === 'Posts') {
+    if (this.tableType.code === ForumTableTypeCode.POST) {
       this.postService
         .getLatestPosts(10)
         .pipe(finalize(() => (this.isLoading = false)))
