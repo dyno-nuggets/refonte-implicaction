@@ -5,7 +5,7 @@
         <form
           (ngSubmit)="postComment()"
           [formGroup]="createCommentForm"
-          class="form-color p-3"
+          class="p-3"
         >
           <div class="my-2 d-flex align-items-center">
             <p-avatar
@@ -17,7 +17,7 @@
             >
             </p-avatar>
             <p-editor
-              [style]="{'height':'200px'}"
+              [style]="{ height: '200px' }"
               class="col-12 col-md-11"
               formControlName="text"
             >
@@ -29,7 +29,6 @@
         </form>
 
         <ng-container *ngIf="!isLoading; else loadingTemplate">
-
           <div
             *ngFor="let comment of pageable.content; trackBy: trackByItemId"
             class="mt-2"
@@ -38,9 +37,10 @@
           </div>
         </ng-container>
         <ng-template #loadingTemplate>
-          <app-comment-skeleton *ngFor="let i of [1,2,3,4,5]"></app-comment-skeleton>
+          <app-comment-skeleton
+            *ngFor="let i of [1, 2, 3, 4, 5]"
+          ></app-comment-skeleton>
         </ng-template>
-
       </div>
     </div>
   </div>
