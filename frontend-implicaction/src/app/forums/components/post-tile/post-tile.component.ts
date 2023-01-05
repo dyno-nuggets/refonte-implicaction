@@ -8,7 +8,7 @@ import { Constants } from '../../../config/constants';
   templateUrl: './post-tile.component.html',
   styleUrls: ['./post-tile.component.scss'],
 })
-export class PostTileComponent implements OnInit {
+export class PostTileComponent {
   @Input()
   post: Post = {};
   univers = Univers;
@@ -16,8 +16,5 @@ export class PostTileComponent implements OnInit {
 
   updateCommentCount(count: number): void {
     this.post.commentCount = count;
-  }
-  ngOnInit(): void {
-    console.log(this.post);
   }
 }

@@ -1,25 +1,27 @@
 <div class="d-flex flex-row p-3">
-  <p-avatar
-    [image]="comment.userImageUrl || constants.USER_IMAGE_DEFAULT_URI"
-    class="col-md-1 d-none d-md-block align-self-start"
-    shape="circle"
-    size="large"
-    styleClass="shadow-sm"
-  >
-  </p-avatar>
-  <div class="w-100">
-    <div class="d-flex justify-content-between align-items-center">
-      <div class="d-flex flex-row align-items-center mb-2">
-        <a routerLink="/{{univers.USERS.url}}/{{comment.userId}}/profile">
-          <span class="me-2">{{comment.username}}</span>
-        </a>
-      </div>
-      <small>{{comment.duration}}</small>
-    </div>
-    <p
-      [innerHTML]="comment.text"
-      class="text-justify mb-0"
+  <a routerLink="/{{ univers.USERS.url }}/{{ comment.userId }}/profile">
+    <p-avatar
+      [image]="comment.userImageUrl || constants.USER_IMAGE_DEFAULT_URI"
+      class="me-3 d-none d-md-block align-self-start m"
+      shape="circle"
+      size="large"
+      styleClass="shadow-sm"
     >
-    </p>
+    </p-avatar>
+  </a>
+
+  <div class="w-100">
+    <div
+      class="d-flex w-25 flex-column justify-content-between align-items-start"
+    >
+      <span class="me-3 fw-bold" style="color: black">{{
+        comment.username
+      }}</span>
+      <div class="5 d-flex flex-row align-items-center mb-2">
+        <small>{{ comment.duration }}</small>
+      </div>
+    </div>
+    <p [innerHTML]="comment.text" class="text-justify mb-0 mt-2"></p>
   </div>
+  <button class="btn btn-primary h-100 align-self-end">Répondre</button>
 </div>

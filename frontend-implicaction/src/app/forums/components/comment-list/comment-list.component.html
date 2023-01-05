@@ -1,41 +1,41 @@
 <div class="container mb-5" id="comments">
   <div class="row height d-flex justify-content-center align-items-center">
-    <div class="col-md-12 p-0 ps-3">
+    <div class="col-md-12 p-0">
       <div class="card border-0">
-        <form
-          (ngSubmit)="postComment()"
-          [formGroup]="createCommentForm"
-          class="p-3"
-        >
-          <div class="my-2 d-flex align-items-center">
-            <p-avatar
+        <form (ngSubmit)="postComment()" [formGroup]="createCommentForm">
+          <div class="my-2 d-flex flex-column align-items-end gap-2">
+            <!-- <p-avatar
               [image]="currentUserImageUrl"
               class="col-md-1 d-none d-md-block align-self-start"
               shape="circle"
               size="large"
               styleClass="shadow-sm"
             >
-            </p-avatar>
+            </p-avatar> -->
+            <ng-container *ngIf="!isLoading; else loadingTemplate">
+              <!-- <div
+                *ngFor="let comment of pageable.content; trackBy: trackByItemId"
+                class="mt-2"
+              > -->
+              <div
+                *ngFor="let comment of commentTest; trackBy: trackByItemId"
+                class="mt-2 w-100"
+              >
+                <app-comment-tile [comment]="comment"></app-comment-tile>
+                <hr />
+              </div>
+            </ng-container>
             <p-editor
               [style]="{ height: '200px' }"
-              class="col-12 col-md-11"
+              class="col-12 col-md-11 w-100"
               formControlName="text"
             >
             </p-editor>
-          </div>
-          <div class="d-flex justify-content-end">
             <button class="btn btn-primary" type="submit">Commenter</button>
           </div>
+          <div class="d-flex justify-content-end"></div>
         </form>
 
-        <ng-container *ngIf="!isLoading; else loadingTemplate">
-          <div
-            *ngFor="let comment of pageable.content; trackBy: trackByItemId"
-            class="mt-2"
-          >
-            <app-comment-tile [comment]="comment"></app-comment-tile>
-          </div>
-        </ng-container>
         <ng-template #loadingTemplate>
           <app-comment-skeleton
             *ngFor="let i of [1, 2, 3, 4, 5]"
