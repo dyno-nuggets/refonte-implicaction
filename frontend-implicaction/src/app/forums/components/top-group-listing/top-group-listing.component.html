@@ -1,12 +1,18 @@
 <div class="card">
   <div class="card-body">
-    <div class="card-header bg-white text-center">
-      Filtrer par tags
+    <div class="card-header mb-4 bg-white text-dark text-left">
+      <h2>Tags</h2>
     </div>
     <ng-container>
-      <app-tags></app-tags>
+      <div>
+        <button
+          (click)="applyTag(button)"
+          *ngFor="let button of tags"
+          class="tag btn btn-primary"
+        >
+          {{ button.name }}
+        </button>
+      </div>
     </ng-container>
   </div>
 </div>
-
-

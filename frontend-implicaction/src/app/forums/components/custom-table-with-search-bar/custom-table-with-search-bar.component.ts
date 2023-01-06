@@ -36,6 +36,7 @@ export class CustomTableWithSearchBarComponent
   posts: Post[];
   searchValue: string = '';
   searchOn: boolean = false;
+  tagFilteredData: Group[];
   forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
   postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
 
@@ -51,7 +52,14 @@ export class CustomTableWithSearchBarComponent
   ngOnInit(): void {
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
-    this.paginate();
+    this.groupService.filterTag.subscribe((tag) => {
+      if (tag) {
+        this.pageable.content = tag.callBack(this.pageable.content as Group[]);
+        //this.innerPaginate();
+        console.log(this.pageable.content);
+      }
+    });
+    this.innerPaginate();
   }
 
   clearSearch() {
@@ -170,6 +178,17 @@ export class CustomTableWithSearchBarComponent
         this.searchOn = false;
       }
     }
+  }
+
+  sortBy(property: keyof Group, sortOrder: number) {
+    return function (a: Group, b: Group) {
+      if (typeof a[property] !== 'number') {
+        return 0;
+      }
+      const result =
+        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      return result * sortOrder;
+    };
   }
 
   protected innerPaginate(): void {
