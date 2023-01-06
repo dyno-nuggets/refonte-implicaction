@@ -20,13 +20,16 @@
       </div>
       <ul class="infos">
         <li *ngFor="let label of labels">
+          <i
+            (click)="sortForumData(label)"
+            class="pi pi-sort cursor-pointer"
+          ></i>
           {{ label }}
         </li>
       </ul>
     </div>
     <div class="content">
       <div *ngIf="tableType.code === forumTableType">
-        <!--Fix the group Type Issue ! -->
         <app-forum-card
           *ngFor="let group of pageable.content; last as isLast"
           [group]="group"
