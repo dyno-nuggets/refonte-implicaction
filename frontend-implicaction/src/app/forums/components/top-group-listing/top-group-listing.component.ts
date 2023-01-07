@@ -11,6 +11,7 @@ import { UserService } from '../../../user/services/user.service';
 import { User } from '../../../shared/models/user';
 import { Univers } from '../../../shared/enums/univers';
 import { Subject } from 'rxjs';
+import { Post } from '../../model/post';
 
 @Component({
   selector: 'app-top-group-listing',
@@ -38,47 +39,24 @@ export class TopGroupListingComponent implements OnInit {
     private userService: UserService
   ) {
     // TODO: idée de filtre par rapport aux tags a trouvé => démonstration de filtre
-    this.tags = [
-      {
-        name: 'Les plus vus',
-        value: 1,
+    this.tags = Constants.TAG_LIST_DEMO.map((tag, index) => {
+      return {
+        active: false,
+        name: tag,
+        value: index,
         callBack(content) {
-          return content
-            .map((group) => {
-              return Object.assign(group, {
-                views: Math.floor(Math.random() * 1000),
-              });
-            })
-            .filter((group) => {
-              return group.views > 600;
-            });
-        },
-      },
+          if (this.tags && this.tags[index].active) {
+            this.tags[index].active = false;
+            console.log(content, 'test');
 
-      {
-        name: 'Les plus de posts',
-        value: 3,
-        callBack(content) {
-          return content;
-        },
-      },
-      {
-        name: "'test' dans le nom",
-        value: 4,
-        callBack: (content) => {
-          return content.sort(this.sortBy('numberOfPosts', -1));
-        },
-      },
-      {
-        name: 'Ont un ou plusieurs post',
-        value: 5,
-        callBack: (content) => {
-          return content.filter((content: Group) => {
-            return content.numberOfPosts > 0;
+            return content;
+          }
+          return content.filter((group) => {
+            return group.tagList.includes(tag);
           });
         },
-      },
-    ];
+      };
+    });
   }
 
   sortBy(property: keyof Group, sortOrder: number) {
@@ -112,7 +90,8 @@ export class TopGroupListingComponent implements OnInit {
           )
       );
   }
-  applyTag(c: any) {
+  applyTag(c: Tag) {
+    c.active = true;
     this.groupService.filterTag.next(c);
   }
 
@@ -145,5 +124,6 @@ export class TopGroupListingComponent implements OnInit {
 export interface Tag {
   name: string;
   value: number;
-  callBack?(content: Group[]): any | Group[];
+  active: boolean;
+  callBack?(content: Group[]): Group[] | Post[];
 }

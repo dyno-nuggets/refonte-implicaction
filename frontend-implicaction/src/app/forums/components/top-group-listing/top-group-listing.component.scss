@@ -1,6 +1,11 @@
+@import "../../../../assets/variables.scss";
+
 .image-mini {
   width: 48px;
 }
 .tag {
   margin: 4px;
+}
+.active {
+  outline: 3px solid $light-gray!important;
 }

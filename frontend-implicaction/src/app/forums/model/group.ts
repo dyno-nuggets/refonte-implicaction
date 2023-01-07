@@ -10,4 +10,5 @@ export interface Group {
   active?: boolean;
   username?: string;
   userId?: string;
+  tagList?: string[];
 }

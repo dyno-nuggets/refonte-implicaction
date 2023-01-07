@@ -12,6 +12,7 @@ import {
   ForumTableTypeCode,
   ForumTableTypesEnum,
 } from '../../enums/table-type-enum';
+import { Constants } from 'src/app/config/constants';
 
 @Component({
   selector: 'app-custom-table-with-search-bar',
@@ -31,6 +32,7 @@ export class CustomTableWithSearchBarComponent
   searchValue: string = '';
   searchOn: boolean = false;
   tagFilteredData: Group[];
+  currentTag: number;
   forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
   postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
 
@@ -48,9 +50,14 @@ export class CustomTableWithSearchBarComponent
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
     this.groupService.filterTag.subscribe((tag) => {
       if (tag) {
+        console.log(tag);
+
+        if (tag.value === this.currentTag && tag.active) {
+          tag.active = false;
+          this.innerPaginate();
+        }
+        this.currentTag = tag.value;
         this.pageable.content = tag.callBack(this.pageable.content as Group[]);
-        //this.innerPaginate();
-        console.log(this.pageable.content);
       }
     });
     this.innerPaginate();
@@ -92,6 +99,7 @@ export class CustomTableWithSearchBarComponent
               this.pageable.totalPages = data.totalPages;
               this.pageable.totalElements = data.totalElements;
               this.pageable.content = data.content;
+              this.setRandomTag();
             },
             () =>
               this.toastService.error(
@@ -152,6 +160,18 @@ export class CustomTableWithSearchBarComponent
     };
   }
 
+  setRandomTag() {
+    this.pageable.content.map((content) => {
+      Object.assign(content, {
+        tagList: [
+          Constants.TAG_LIST_DEMO[
+            Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
+          ],
+        ],
+      });
+    });
+  }
+
   protected innerPaginate(): void {
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       this.groupService
@@ -162,6 +182,7 @@ export class CustomTableWithSearchBarComponent
             this.pageable.totalPages = data.totalPages;
             this.pageable.totalElements = data.totalElements;
             this.pageable.content = data.content;
+            this.setRandomTag();
           },
           () =>
             this.toastService.error(

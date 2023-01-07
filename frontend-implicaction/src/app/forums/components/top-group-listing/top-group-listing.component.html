@@ -9,6 +9,7 @@
           (click)="applyTag(button)"
           *ngFor="let button of tags"
           class="tag btn btn-primary"
+          [ngClass]="{ active: button.active }"
         >
           {{ button.name }}
         </button>
