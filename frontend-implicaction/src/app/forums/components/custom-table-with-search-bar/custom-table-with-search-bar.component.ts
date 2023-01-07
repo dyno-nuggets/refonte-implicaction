@@ -63,37 +63,35 @@ export class CustomTableWithSearchBarComponent
 
   sortForumData(column: SortParameterCode) {
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
-      this.pageable.content.sort(this.sortGroupByColumn(column));
+      this.pageable.content.sort(this.sortByColumn<Group>(column));
     } else if (this.tableType.code === ForumTableTypeCode.POST) {
-      this.posts.sort(this.sortGroupByColumn(column));
+      this.posts.sort(this.sortByColumn<Post>(column));
     }
   }
 
-  sortGroupByColumn(column: SortParameterCode) {
+  sortByColumn<T>(column: SortParameterCode) {
     const enumParam = SortParametersEnum.from(SortParameterCode[column]);
-    if (this.pageable.sortOrder === SortDirectionEnum.ASC) {
-      this.pageable.sortOrder = SortDirectionEnum.DESC;
-      return (a: Group | Post, b: Group | Post) => {
-        const result =
-          a[enumParam.label] < b[enumParam.label]
-            ? -1
-            : a[enumParam.label] > b[enumParam.label]
-            ? 1
-            : 0;
-        return result * SortDirectionNumberEnum.ASC;
+    const sortLogic = (sortDir: SortDirectionNumberEnum) => {
+      return (a: T, b: T) => {
+        if (a[enumParam.label] < b[enumParam.label]) {
+          return -1 * sortDir;
+        }
+        if (a[enumParam.label] > b[enumParam.label]) {
+          return 1 * sortDir;
+        }
+        return 0 * sortDir;
       };
-    }
-
-    this.pageable.sortOrder = SortDirectionEnum.ASC;
-    return (a: Group | Post, b: Group | Post) => {
-      const result =
-        a[enumParam.label] < b[enumParam.label]
-          ? -1
-          : a[enumParam.label] > b[enumParam.label]
-          ? 1
-          : 0;
-      return result * SortDirectionNumberEnum.DESC;
     };
+    let sortDir: SortDirectionNumberEnum;
+
+    if (this.pageable.sortOrder === SortDirectionEnum.ASC) {
+      sortDir = SortDirectionNumberEnum.ASC;
+      this.pageable.sortOrder = SortDirectionEnum.DESC;
+      return sortLogic(sortDir);
+    }
+    this.pageable.sortOrder = SortDirectionEnum.ASC;
+    sortDir = SortDirectionNumberEnum.DESC;
+    return sortLogic(sortDir);
   }
 
   search() {
