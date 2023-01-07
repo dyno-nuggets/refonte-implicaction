@@ -62,22 +62,15 @@ export class CustomTableWithSearchBarComponent
   }
 
   sortForumData(column: SortParameterCode) {
-    console.log(column);
-
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       this.pageable.content.sort(this.sortGroupByColumn(column));
     } else if (this.tableType.code === ForumTableTypeCode.POST) {
-      console.log(this.posts);
-
       this.posts.sort(this.sortGroupByColumn(column));
     }
   }
 
   sortGroupByColumn(column: SortParameterCode) {
     const enumParam = SortParametersEnum.from(SortParameterCode[column]);
-    console.log(enumParam);
-
-    // this.pageable.sortBy = enumParam.label;
     if (this.pageable.sortOrder === SortDirectionEnum.ASC) {
       this.pageable.sortOrder = SortDirectionEnum.DESC;
       return (a: Group | Post, b: Group | Post) => {
@@ -89,24 +82,21 @@ export class CustomTableWithSearchBarComponent
             : 0;
         return result * SortDirectionNumberEnum.ASC;
       };
-    } else {
-      this.pageable.sortOrder = SortDirectionEnum.ASC;
-      return (a: Group | Post, b: Group | Post) => {
-        const result =
-          a[enumParam.label] < b[enumParam.label]
-            ? -1
-            : a[enumParam.label] > b[enumParam.label]
-            ? 1
-            : 0;
-        return result * SortDirectionNumberEnum.DESC;
-      };
     }
 
-    // this.innerPaginate();
-    // api pas encore au point
+    this.pageable.sortOrder = SortDirectionEnum.ASC;
+    return (a: Group | Post, b: Group | Post) => {
+      const result =
+        a[enumParam.label] < b[enumParam.label]
+          ? -1
+          : a[enumParam.label] > b[enumParam.label]
+          ? 1
+          : 0;
+      return result * SortDirectionNumberEnum.DESC;
+    };
   }
 
-  async search() {
+  search() {
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       if (this.searchValue) {
         this.groupService
