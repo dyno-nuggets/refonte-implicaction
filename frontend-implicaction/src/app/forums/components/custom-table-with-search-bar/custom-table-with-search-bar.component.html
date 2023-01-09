@@ -19,11 +19,22 @@
         </div>
       </div>
       <ul class="infos">
-        <li *ngFor="let label of labels">
-          <i
+        <li *ngFor="let label of labels" class="text-nowrap">
+          <button
+            class="sort-btn"
             (click)="sortForumData(label)"
-            class="pi pi-sort cursor-pointer"
-          ></i>
+            pButton
+            [icon]="
+              currentSortColmun === label &&
+              pageable.sortOrder === SortDirEnum.ASC
+                ? 'pi pi-sort-up'
+                : currentSortColmun === label &&
+                  pageable.sortOrder === SortDirEnum.DESC
+                ? 'pi pi-sort-down'
+                : 'pi pi-sort'
+            "
+            class="p-button-rounded"
+          ></button>
           {{ label }}
         </li>
       </ul>

@@ -80,6 +80,14 @@
   background: transparent!important;
 }
 
+::ng-deep.p-element.p-button-rounded.p-button.p-component.p-button-icon-only {
+  background: none;
+  padding: 0;
+  width: 1.5em;
+  height: 100%;
+  border: none;
+}
+
 .content {
   margin: 0px;
   padding: 0px;
