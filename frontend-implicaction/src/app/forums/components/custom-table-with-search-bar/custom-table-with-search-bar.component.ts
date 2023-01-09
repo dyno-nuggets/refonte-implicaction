@@ -83,8 +83,6 @@ export class CustomTableWithSearchBarComponent
   }
 
   sortForumData(column: SortParameterCode) {
-    console.log(this.pageable.sortOrder);
-
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       this.pageable.content.sort(this.sortByColumn<Group>(column));
     } else if (this.tableType.code === ForumTableTypeCode.POST) {
@@ -93,7 +91,6 @@ export class CustomTableWithSearchBarComponent
   }
 
   sortByColumn<T>(column: SortParameterCode) {
-    console.log(column);
     this.currentSortColmun = column;
     const enumParam = SortParametersEnum.from(SortParameterCode[column]);
     const sortLogic = (sortDir: SortDirectionNumberEnum) => {
