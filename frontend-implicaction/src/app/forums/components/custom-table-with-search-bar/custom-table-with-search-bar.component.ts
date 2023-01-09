@@ -35,9 +35,11 @@ export class CustomTableWithSearchBarComponent
   readonly ROWS_PER_PAGE_OPTIONS = [5];
   isLoading = true;
   posts: Post[];
+  filtered: boolean = false;
   searchValue: string = '';
   searchOn: boolean = false;
   currentTag: number;
+  filteredTagData: Group[] = [];
   forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
   postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
 
@@ -53,14 +55,20 @@ export class CustomTableWithSearchBarComponent
   ngOnInit(): void {
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
-    this.groupService.filterTag.subscribe((tags) => {
+    this.groupService.filterTag$.subscribe((tags) => {
+      console.log(tags);
+
       if (tags.length > 0) {
-        console.log(tags);
+        this.filteredTagData = this.pageable.content as Group[];
         tags.map((tag) => {
-          return (this.pageable.content = tag.callBack(
-            this.pageable.content as Group[]
+          return (this.filteredTagData = tag.callBack(
+            this.filteredTagData as Group[]
           ));
         });
+        this.filtered = true;
+      } else {
+        this.innerPaginate();
+        this.filtered = false;
       }
     });
     this.innerPaginate();
@@ -200,13 +208,7 @@ export class CustomTableWithSearchBarComponent
     this.pageable.content.map((content, index) => {
       if (index % 2 === 0) {
         Object.assign(content, {
-          tagList: [
-            'Recherche',
-            'Offre',
-            // Constants.TAG_LIST_DEMO[
-            //   Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
-            // ],
-          ],
+          tagList: ['Recherche', 'Offre'],
         });
       } else {
         Object.assign(content, {

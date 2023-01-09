@@ -89,25 +89,22 @@ export class TopGroupListingComponent implements OnInit {
           )
       );
   }
-  applyTag(c: Tag) {
-    this.groupService.filterTag.pipe(take(1)).subscribe((val) => {
-      if (!val.includes(c)) {
-        const newArr = [...val, c];
-        c.active = true;
-        this.groupService.filterTag.next(newArr);
+  applyTag(selectedTag: Tag) {
+    this.groupService.filterTag$.pipe(take(1)).subscribe((tags) => {
+      if (!tags.includes(selectedTag)) {
+        selectedTag.active = true;
+        this.groupService.filterTag$.next([...tags, selectedTag]);
       } else {
-        this.removeElementToObservableArray(c.value);
+        this.removeTag(selectedTag.value);
       }
     });
   }
-  removeElementToObservableArray(idx: number) {
-    console.log(idx);
-
-    this.groupService.filterTag.pipe(take(1)).subscribe((val) => {
-      val[idx].active = false;
-      const arr = this.groupService.filterTag.getValue();
-      arr.splice(idx, 1);
-      this.groupService.filterTag.next(arr);
+  removeTag(idx: number) {
+    this.groupService.filterTag$.pipe(take(1)).subscribe((tags) => {
+      tags.find((v) => v.value === idx).active = false;
+      const tagValues = this.groupService.filterTag$.getValue();
+      const removedTagValues = tagValues.filter((v) => v.value !== idx);
+      this.groupService.filterTag$.next(removedTagValues);
     });
   }
 
