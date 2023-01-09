@@ -11,18 +11,18 @@ export class SidebarService {
 
   isOpen = false;
 
-  private sidebarContent = new BehaviorSubject<SidebarProps>(null);
+  private sidebarContent = new BehaviorSubject<SidebarProps<unknown>>(null);
 
-  getContent(): Observable<SidebarProps> {
+  getContent(): Observable<SidebarProps<unknown>> {
     return this.sidebarContent.asObservable();
   }
 
-  setContent(content: SidebarProps): SidebarService {
+  setContent<T>(content: SidebarProps<T>): SidebarService {
     this.sidebarContent.next(content);
     return this;
   }
 
-  open(content?: SidebarProps): void {
+  open<T>(content?: SidebarProps<T>): void {
     if (content) {
       // défini la largeur par défaut si non définie
       content.width = content.width ?? SidebarService.DEFAULT_WIDTH;

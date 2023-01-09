@@ -6,6 +6,14 @@ import {Category} from "../model/category";
 import {Pageable} from "../../shared/models/pageable";
 import {Topic} from "../model/topic";
 import {map} from "rxjs/operators";
+import {CategoryTreeSelectNode} from '../model/categoryTreeSelectNode';
+
+
+export interface ITree {
+  tree: CategoryTreeSelectNode[],
+  map: Map<number, CategoryTreeSelectNode>;
+}
+
 
 export type CategoryNode = Category & { children: CategoryNode[]; };
 
@@ -58,6 +66,29 @@ export class CategoryService {
       // only keep the root categories
       return categoryNodes.filter(categoryNode => categoryNode.parentId === null);
     }));
+  }
+
+  getCategoriesTreeSelectNode(): Observable<ITree> {
+    const node_map: Map<number, CategoryTreeSelectNode> = new Map();
+
+    const categoryToCategoryTreeSelectNode = (categories: CategoryNode[]) => {
+      return categories
+        .map(({id, title, parentId, children}) => {
+          const node: CategoryTreeSelectNode = {
+            id,
+            label: title,
+            selectable: parentId !== null,
+            data: '',
+            children: categoryToCategoryTreeSelectNode(children)
+          }
+          node_map.set(id, node);
+          return node;
+        });
+    };
+    return this.getCategoryTree().pipe(
+      map(categoryToCategoryTreeSelectNode),
+      map((tree) => ({tree, map: node_map}))
+    );
   }
 
   getCategory(id: number): Observable<Category> {

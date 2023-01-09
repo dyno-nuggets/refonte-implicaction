@@ -3,6 +3,7 @@
     <li *ngFor="let topic of topics">
       <a routerLink="/{{ univers.FORUM.url }}/topic/{{ topic.id }}">{{ topic.title }}</a>
       by <a href="#">{{ topic.author.username }}</a> à {{ topic.createdAt }}
+      <app-edit-topic-button [topic]="topic" buttonName="Edit"></app-edit-topic-button>
     </li>
   </ul>
 </div>

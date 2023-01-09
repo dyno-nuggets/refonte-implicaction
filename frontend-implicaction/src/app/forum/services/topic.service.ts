@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
 import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
+import {TopicPayload} from "../model/topicPayload";
+import {Observable} from "rxjs";
 import {Pageable} from "../../shared/models/pageable";
 import {Topic} from "../model/topic";
 import {Response} from "../model/response";
-import {CreateTopicPayload} from '../model/createTopicPayload';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +26,11 @@ export class TopicService {
     return this.http.get<Pageable<Response>>(this.apiEndpointsService.getTopicResponses(id, pageable));
   }
 
-  createTopic(topic: CreateTopicPayload): Observable<Topic> {
+  createTopic(topic: TopicPayload): Observable<Topic> {
     return this.http.post<Topic>(this.apiEndpointsService.createTopic(), topic);
+  }
+
+  editTopic(topic: TopicPayload): Observable<Topic> {
+    return this.http.patch<Topic>(this.apiEndpointsService.editTopic(), topic);
   }
 }

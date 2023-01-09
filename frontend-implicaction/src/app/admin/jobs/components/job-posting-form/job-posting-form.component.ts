@@ -13,12 +13,14 @@ import {Company} from '../../../../shared/models/company';
 import {ContractEnum} from '../../../../shared/enums/contract.enum';
 import {BusinessSectorEnum} from '../../../../shared/enums/sector.enum';
 
+export type JobsPostingFormProps = { job: JobPosting } | undefined
+
 @Component({
   selector: 'app-job-posting-form',
   templateUrl: './job-posting-form.component.html',
   styleUrls: ['./job-posting-form.component.scss']
 })
-export class JobPostingFormComponent extends SidebarContentComponent implements OnInit {
+export class JobPostingFormComponent extends SidebarContentComponent<JobsPostingFormProps> implements OnInit {
 
   readonly YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
 

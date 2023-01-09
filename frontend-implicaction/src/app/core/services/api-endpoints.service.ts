@@ -434,6 +434,11 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.FORUM.TOPICS);
   }
 
+  editTopic(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.TOPICS);
+  }
+
+
   /**
    * JOB APPLICATION
    */

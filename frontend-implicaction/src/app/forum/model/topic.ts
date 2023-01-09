@@ -8,8 +8,8 @@ export interface Topic {
   message: string;
   createdAt: number;
   editedAt: number;
-  isLocked: boolean;
-  isPinned: boolean;
+  locked: boolean;
+  pinned: boolean;
   author: User;
   response: Response[];
   category: Category;

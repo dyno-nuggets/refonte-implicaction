@@ -10,12 +10,15 @@ import {UserContextService} from '../../../shared/services/user-context.service'
 import {ExperienceService} from '../../services/experience.service';
 import {Constants} from '../../../config/constants';
 
+export type ExperienceFormProps = { experience: WorkExperience } | undefined
+
+
 @Component({
   selector: 'app-experience-form',
   templateUrl: './experience-form.component.html',
   styleUrls: ['./experience-form.component.scss']
 })
-export class ExperienceFormComponent extends SidebarContentComponent implements OnInit {
+export class ExperienceFormComponent extends SidebarContentComponent<ExperienceFormProps> implements OnInit {
 
   formExperience: UntypedFormGroup;
   currentUserId: string;
@@ -39,6 +42,7 @@ export class ExperienceFormComponent extends SidebarContentComponent implements 
     this.experience = this.sidebarInput ? {...this.sidebarInput.experience} : undefined;
     this.isUpdate = !!this.sidebarInput?.experience?.id;
     this.initForm(this.experience);
+    console.log(this.sidebarInput);
   }
 
   onSubmit(): void {

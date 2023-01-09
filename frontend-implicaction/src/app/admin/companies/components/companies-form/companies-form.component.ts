@@ -10,12 +10,14 @@ import {Company} from '../../../../shared/models/company';
 import {CompanyService} from '../../../../company/services/company.service';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 
+export type CompaniesFormProps = { company: Company } | undefined;
+
 @Component({
   selector: 'app-companies-form',
   templateUrl: './companies-form.component.html',
   styleUrls: ['./companies-form.component.scss']
 })
-export class CompaniesFormComponent extends SidebarContentComponent implements OnInit {
+export class CompaniesFormComponent extends SidebarContentComponent<CompaniesFormProps> implements OnInit {
 
   formCompany: UntypedFormGroup;
   currentUserId: string;

@@ -13,7 +13,7 @@ import {Constants} from '../../../config/constants';
   templateUrl: './create-group-form.component.html',
   styleUrls: ['./create-group-form.component.scss']
 })
-export class CreateGroupFormComponent extends SidebarContentComponent implements OnInit {
+export class CreateGroupFormComponent extends SidebarContentComponent<never> implements OnInit {
 
   readonly GROUP_IMAGE_DEFAULT_URI = Constants.GROUP_IMAGE_DEFAULT_URI;
 

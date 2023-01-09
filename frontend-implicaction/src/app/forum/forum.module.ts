@@ -25,6 +25,8 @@ import {InputTextModule} from "primeng/inputtext";
 import {TreeSelectModule} from "primeng/treeselect";
 import {CreateTopicFormComponent} from './components/create-topic-form/create-topic-form.component';
 import {CreateTopicButtonComponent} from './components/create-topic-button/create-topic-button.component';
+import {EditTopicFormComponent} from './components/edit-topic-form/edit-topic-form.component';
+import {EditTopicButtonComponent} from './components/edit-topic-button/edit-topic-button.component';
 
 
 @NgModule({
@@ -37,6 +39,8 @@ import {CreateTopicButtonComponent} from './components/create-topic-button/creat
     TopicContentComponent,
     CreateTopicFormComponent,
     CreateTopicButtonComponent,
+    EditTopicFormComponent,
+    EditTopicButtonComponent,
   ],
   imports: [
     CommonModule,
