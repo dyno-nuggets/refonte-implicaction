@@ -9,7 +9,9 @@ import {PendingUserTableComponent} from './components/pending-user-table/pending
 import {CheckboxModule} from 'primeng/checkbox';
 import {FormsModule} from '@angular/forms';
 import {FeatherModule} from 'angular-feather';
-
+import {CardModule} from 'primeng/card';
+import {ButtonModule} from 'primeng/button';
+import {UserModule} from "../../user/user.module";
 
 @NgModule({
   declarations: [
@@ -20,15 +22,18 @@ import {FeatherModule} from 'angular-feather';
   exports: [
     PendingUserTableComponent
   ],
-  imports: [
-    CommonModule,
-    UsersRoutingModule,
-    TableModule,
-    InputTextModule,
-    CheckboxModule,
-    FormsModule,
-    FeatherModule,
-  ]
+    imports: [
+        CommonModule,
+        UsersRoutingModule,
+        TableModule,
+        InputTextModule,
+        CheckboxModule,
+        FormsModule,
+        FeatherModule,
+        CardModule,
+        ButtonModule,
+        UserModule
+    ]
 })
 export class UsersModule {
 }
