@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
 import lombok.AllArgsConstructor;
+import org.apache.commons.collections4.Get;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -119,4 +120,10 @@ public class JobPostingController {
         List<JobPostingDto> response = jobPostingService.getLatestJobs(jobsCount);
         return ResponseEntity.ok(response);
     }
+    @GetMapping(GET_NB_OF_JOBS)
+     public ResponseEntity<Integer> getNbOfJobs(){
+        List<JobPostingDto> jobs = jobPostingService.getNbOfJobs();
+        return ResponseEntity.ok(jobs.size());
+    }
+
 }

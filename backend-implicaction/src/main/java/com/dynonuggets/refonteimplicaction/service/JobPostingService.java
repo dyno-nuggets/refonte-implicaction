@@ -143,4 +143,11 @@ public class JobPostingService {
         return jobPostingRepository.findById(jobId)
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId)));
     }
+
+    public List<JobPostingDto> getNbOfJobs(){
+        List<JobPosting> jobs =jobPostingRepository.findAll();
+       return jobs.stream().map(
+               jobPostingAdapter::toDto
+            ).collect(toList());
+    }
 }

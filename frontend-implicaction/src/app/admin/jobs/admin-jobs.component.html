@@ -1,3 +1,6 @@
+
+
+
 <div class="pending-table card">
   <div class="card-header pb-0 bg-primary text-light mb-3 d-flex justify-content-between">
     <h5 class="panel-title">Toutes les offres d'emplois</h5>
@@ -43,30 +46,47 @@
     (onRowUnselect)="onRowSelected()"
     currentPageReportTemplate="{first} à {last} sur {totalRecords} entrées"
   >
-    <ng-template pTemplate="header">
-      <tr>
-        <th class="text-center col-1">
-          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-        </th>
-        <th class="text-wrap text-uppercase col-3 col-sm-2 col-lg-3" scope="col">Nom</th>
-        <th class="text-wrap text-uppercase col-1 col-sm-1 col-lg-1 px-2" scope="col">Type</th>
-        <th class="text-wrap text-uppercase col-3 col-sm-2 col-lg-3 px-2" scope="col">Localisation</th>
-        <th class="text-wrap text-uppercase col-6 col-sm-4 col-lg-6 px-2" scope="col">Description</th>
-        <th class="text-wrap text-uppercase text-center col-4 col-sm-2 col-lg-4 col-xl-3 px-2" scope="col">Actions</th>
-      </tr>
-    </ng-template>
+
     <ng-template let-job pTemplate="body">
       <tr>
-        <td class="text-center col-1">
-          <p-tableCheckbox
-            [value]="job"
-          >
-          </p-tableCheckbox>
-        </td>
-        <td class="overflow-ellipsis text-wrap col-4 col-sm-3 col-lg-2">{{job.title}}</td>
-        <td class="text-wrap col-1 col-sm-1 col-lg-1 px-2">{{job.contractType?.label}}</td>
-        <td class="overflow-ellipsis text-lg-wrap col-4 col-sm-3 col-lg-2 px-2">{{job.location}}</td>
-        <td class="overflow-ellipsis col-4 col-sm-3 col-md-2 col-lg-3 px-2">{{job.description}}</td>
+
+        <div class="border-bottom job-card-container p-2">
+          <div class="job-header d-flex flex-wrap align-items-center mb-2">
+            <img
+              #companyLogo
+              (error)="companyLogo.src = 'assets/img/job-posting-img.png'"
+              [src]="job.company?.logo || 'assets/img/job-posting-img.png'"
+              alt="company-logo"
+              class="d-none d-sm-inline-block me-1 company-logo"
+            >
+            <span class="fw-bold grey overflow-ellipsis pe-2 text-uppercase">{{job.company?.name}}</span>
+            <span>
+      <span class="d-none d-sm-inline pe-2">•</span>
+      <span class="pe-2">{{job.location}}</span>
+      <span class="d-none d-sm-inline pe-2">•</span>
+    </span>
+            <app-contract-type [type]="job.contractType"></app-contract-type>
+            <ng-container *ngIf="job.createdAt">
+              <span class="d-none d-sm-inline ps-2">•</span>
+              <span class="ps-2">
+        <app-date-timelapse [date]="job.createdAt"></app-date-timelapse>
+      </span>
+            </ng-container>
+          </div>
+          <div class="job-body row col justify-content-between mt-3">
+            <div class="job-infos col-12 col-lg-7 col-xl-8">
+
+              <p
+                [innerHTML]="job.shortDescription"
+                class="text-justify"
+              >
+              </p>
+            </div>
+
+          </div>
+        </div>
+
+
         <td class="col-4 col-sm-2 col-lg-4 col-xl-3 px-2 text-center">
           <ul class="fa-ul d-flex flex-column flex-lg-row justify-content-center list-unstyled list-inline mb-0">
             <li class="fa-li list-inline-item m-0 me-lg-2">
@@ -75,7 +95,7 @@
                 class="btn"
                 data-bs-placement="top"
                 data-bs-toggle="tooltip"
-                title="Editer"
+                title="Editer et voir plus"
                 type="button"
               >
                 <i class="fas fa-pen border border-primary text-primary rounded-3 px-2 py-1"></i>
@@ -115,3 +135,4 @@
   </p-table>
 
 </div>
+

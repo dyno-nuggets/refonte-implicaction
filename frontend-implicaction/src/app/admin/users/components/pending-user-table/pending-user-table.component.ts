@@ -61,4 +61,5 @@ export class PendingUserTableComponent extends BaseWithPaginationAndFilterCompon
         () => this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais actif.`),
       );
   }
+
 }

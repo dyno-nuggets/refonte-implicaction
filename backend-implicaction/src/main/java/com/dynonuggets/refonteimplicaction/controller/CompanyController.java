@@ -11,7 +11,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.COMPANIES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_NB_OF_COMPANIES;
 
 @RestController
 @AllArgsConstructor
@@ -38,6 +41,12 @@ public class CompanyController {
     public ResponseEntity<CompanyDto> createOrUpdate(@RequestBody CompanyDto companyDto) throws ImplicactionException {
         CompanyDto companyCreated = companyService.saveOrUpdateCompany(companyDto);
         return ResponseEntity.ok(companyCreated);
+    }
+
+    @GetMapping(GET_NB_OF_COMPANIES)
+    public ResponseEntity<Integer> getNbOfComapnies(){
+        List<CompanyDto> companies = companyService.getNbOfCompanies();
+        return ResponseEntity.ok(companies.size()) ;
     }
 }
 

@@ -114,5 +114,10 @@ public class UserController {
         final List<GroupDto> groupsDto = userService.getUserGroups(userId);
         return ResponseEntity.ok(groupsDto);
     }
+    @GetMapping(GET_NB_OF_USERS)
+    public ResponseEntity<Integer> getNbOfUsers(){
+        List<UserDto> users = userService.getNbOfUsers();
+        return ResponseEntity.ok(users.size()) ;
+    }
 
 }

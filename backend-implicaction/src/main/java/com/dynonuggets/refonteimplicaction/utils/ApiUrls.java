@@ -4,6 +4,7 @@ public class ApiUrls {
 
     // COMPANIES
     public static final String COMPANIES_BASE_URI = "/api/companies";
+    public static final String GET_NB_OF_COMPANIES="/nbcompanies";
 
     //Experience
     public static final String EXPERIENCES_BASE_URI = "/api/experiences";
@@ -23,6 +24,7 @@ public class ApiUrls {
     public static final String VALIDATE_JOB_URI = "{jobId}/validate";
     public static final String VALIDATED_JOBS = "/validated";
     public static final String GET_LATEST_JOBS_URI = "/latest/{jobsCount}";
+    public static final String GET_NB_OF_JOBS="/nbjobs";
 
     // POSTS
     public static final String POSTS_BASE_URI = "/api/posts";
@@ -56,6 +58,8 @@ public class ApiUrls {
     public static final String GET_COMMUNITY_URI = "/community";
     public static final String SET_USER_IMAGE = "/image";
     public static final String GET_USER_GROUPS_URI = "/{userId}/groups";
+
+    public static final String GET_NB_OF_USERS ="/nbusers";
 
     // FILES
     public static final String FILE_BASE_URI = "/api/files";
