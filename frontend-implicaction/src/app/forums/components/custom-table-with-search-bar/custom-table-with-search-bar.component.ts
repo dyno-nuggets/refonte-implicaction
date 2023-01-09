@@ -37,7 +37,6 @@ export class CustomTableWithSearchBarComponent
   posts: Post[];
   searchValue: string = '';
   searchOn: boolean = false;
-  tagFilteredData: Group[];
   currentTag: number;
   forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
   postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
@@ -54,16 +53,14 @@ export class CustomTableWithSearchBarComponent
   ngOnInit(): void {
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
-    this.groupService.filterTag.subscribe((tag) => {
-      if (tag) {
-        console.log(tag);
-
-        if (tag.value === this.currentTag && tag.active) {
-          tag.active = false;
-          this.innerPaginate();
-        }
-        this.currentTag = tag.value;
-        this.pageable.content = tag.callBack(this.pageable.content as Group[]);
+    this.groupService.filterTag.subscribe((tags) => {
+      if (tags.length > 0) {
+        console.log(tags);
+        tags.map((tag) => {
+          return (this.pageable.content = tag.callBack(
+            this.pageable.content as Group[]
+          ));
+        });
       }
     });
     this.innerPaginate();
@@ -200,14 +197,26 @@ export class CustomTableWithSearchBarComponent
   }
 
   setRandomTag() {
-    this.pageable.content.map((content) => {
-      Object.assign(content, {
-        tagList: [
-          Constants.TAG_LIST_DEMO[
-            Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
+    this.pageable.content.map((content, index) => {
+      if (index % 2 === 0) {
+        Object.assign(content, {
+          tagList: [
+            'Recherche',
+            'Offre',
+            // Constants.TAG_LIST_DEMO[
+            //   Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
+            // ],
           ],
-        ],
-      });
+        });
+      } else {
+        Object.assign(content, {
+          tagList: [
+            Constants.TAG_LIST_DEMO[
+              Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
+            ],
+          ],
+        });
+      }
     });
   }
 
