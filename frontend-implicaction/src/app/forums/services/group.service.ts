@@ -1,5 +1,5 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { Group } from '../model/group';
 import { HttpClient } from '@angular/common/http';
 import { ApiEndpointsService } from '../../core/services/api-endpoints.service';
@@ -11,7 +11,7 @@ import { Tag } from '../components/top-group-listing/top-group-listing.component
   providedIn: 'root',
 })
 export class GroupService {
-  filterTag: Subject<Tag> = new Subject();
+  filterTag: BehaviorSubject<Tag[]> = new BehaviorSubject([]);
 
   constructor(
     private http: HttpClient,

@@ -11,6 +11,7 @@ import { UserService } from '../../../user/services/user.service';
 import { User } from '../../../shared/models/user';
 import { Univers } from '../../../shared/enums/univers';
 import { Subject } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Post } from '../../model/post';
 
 @Component({
@@ -44,11 +45,9 @@ export class TopGroupListingComponent implements OnInit {
         active: false,
         name: tag,
         value: index,
-        callBack(content) {
+        callBack<Group>(content) {
           if (this.tags && this.tags[index].active) {
             this.tags[index].active = false;
-            console.log(content, 'test');
-
             return content;
           }
           return content.filter((group) => {
@@ -91,8 +90,25 @@ export class TopGroupListingComponent implements OnInit {
       );
   }
   applyTag(c: Tag) {
-    c.active = true;
-    this.groupService.filterTag.next(c);
+    this.groupService.filterTag.pipe(take(1)).subscribe((val) => {
+      if (!val.includes(c)) {
+        const newArr = [...val, c];
+        c.active = true;
+        this.groupService.filterTag.next(newArr);
+      } else {
+        this.removeElementToObservableArray(c.value);
+      }
+    });
+  }
+  removeElementToObservableArray(idx: number) {
+    console.log(idx);
+
+    this.groupService.filterTag.pipe(take(1)).subscribe((val) => {
+      val[idx].active = false;
+      const arr = this.groupService.filterTag.getValue();
+      arr.splice(idx, 1);
+      this.groupService.filterTag.next(arr);
+    });
   }
 
   openSidebarCreationGroup(): void {
@@ -125,5 +141,5 @@ export interface Tag {
   name: string;
   value: number;
   active: boolean;
-  callBack?(content: Group[]): Group[] | Post[];
+  callBack?<T>(content: T[]): T[];
 }
