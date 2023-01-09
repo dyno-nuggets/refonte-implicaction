@@ -34,7 +34,7 @@ public class User {
     private String password;
 
     @Column(name = "email", unique = true)
-    @NotEmpty(message = "Email is required")
+    @NotEmpty(message = "e-mail is required")
     @Email
     private String email;
 
@@ -76,8 +76,7 @@ public class User {
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-    )
+            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
     private List<Role> roles;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -91,4 +90,11 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "notification_id")})
     private List<Notification> notifications;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+      @JoinTable(name = "user_chat_room",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "chat_room_id")})
+    private List<ChatRoom> chatRooms;
+
 }
