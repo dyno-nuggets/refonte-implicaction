@@ -11,7 +11,7 @@ import { Tag } from '../components/top-group-listing/top-group-listing.component
   providedIn: 'root',
 })
 export class GroupService {
-  filterTag: BehaviorSubject<Tag[]> = new BehaviorSubject([]);
+  filterTag$: BehaviorSubject<Tag[]> = new BehaviorSubject([]);
 
   constructor(
     private http: HttpClient,
