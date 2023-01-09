@@ -1,3 +1,5 @@
+@import "../../../../assets/variables.scss";
+
 .element{
     width: 100%;
     height: 90px;
@@ -21,4 +23,8 @@
     margin: 0px;
     max-height: 90px;
     max-width: 90px;
+}
+
+span {
+  color: $light-gray;
 }

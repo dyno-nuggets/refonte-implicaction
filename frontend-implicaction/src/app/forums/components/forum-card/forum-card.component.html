@@ -1,19 +1,22 @@
 <div class="element">
-    <div class="element-img-box">
-        <img [src]="group?.imageUrl || 'assets/img/job-posting-img.png'" alt="group-logo"
-            class="d-none d-sm-inline-block logo element-img">
-    </div>
-    <div class="element-info">
-        <h6>{{group.name}}</h6>
-        <span>{{group.description}}</span>
-    </div>
-    <div class="posts-number text-center">
-        {{group.numberOfPosts}}
-    </div>
-    <div class="comments-number text-center">
-        {{group.numberOfComments}}
-    </div>
-    <div class="recentMessage text-center">
-        {{group.numberOfUsers}}
-    </div>
+  <div class="element-img-box">
+    <img
+      [src]="group?.imageUrl || 'assets/img/job-posting-img.png'"
+      alt="group-logo"
+      class="d-none d-sm-inline-block logo element-img"
+    />
+  </div>
+  <div class="element-info">
+    <h4 class="fw-bold">{{ group.name }}</h4>
+    <span>{{ group.description }}</span>
+  </div>
+  <div class="posts-number text-center">
+    {{ group.numberOfPosts }}
+  </div>
+  <div class="comments-number text-center">
+    {{ group.numberOfComments }}
+  </div>
+  <div class="recentMessage text-center">
+    {{ group.numberOfUsers }}
+  </div>
 </div>
