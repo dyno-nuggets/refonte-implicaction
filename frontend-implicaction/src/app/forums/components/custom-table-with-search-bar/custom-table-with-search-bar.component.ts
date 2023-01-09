@@ -40,8 +40,7 @@ export class CustomTableWithSearchBarComponent
   searchOn: boolean = false;
   currentTag: number;
   filteredTagData: Group[] = [];
-  forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
-  postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
+  tableTypeCode = ForumTableTypeCode;
 
   constructor(
     private toastService: ToasterService,
@@ -56,8 +55,6 @@ export class CustomTableWithSearchBarComponent
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
     this.groupService.filterTag$.subscribe((tags) => {
-      console.log(tags);
-
       if (tags.length > 0) {
         this.filteredTagData = this.pageable.content as Group[];
         tags.map((tag) => {
