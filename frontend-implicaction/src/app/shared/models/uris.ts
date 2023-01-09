@@ -23,6 +23,7 @@ export class Uris {
     static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';
     static readonly GET_ALL_PENDING_USERS = 'users/pending';
     static readonly GROUP_LIST = 'users';
+    static readonly GET_NB_OF_USERS='users/nbusers'
   };
 
   /**
@@ -58,6 +59,7 @@ export class Uris {
     static readonly VALIDATE_JOB = 'job-postings/validate';
     static readonly GET_VALIDATED_JOBS = 'job-postings/validated';
     static readonly TOGGLE_ARCHIVE = 'job-postings/archive';
+    static readonly GET_NB_OF_JOBS='job-postings/nbjobs';
   };
 
   /**
@@ -65,6 +67,7 @@ export class Uris {
    */
   static readonly COMPANIES = class {
     static readonly BASE_URI = 'companies';
+    static readonly GET_NB_OF_COMPANIES='companies/nbcompanies'
   };
 
   /**

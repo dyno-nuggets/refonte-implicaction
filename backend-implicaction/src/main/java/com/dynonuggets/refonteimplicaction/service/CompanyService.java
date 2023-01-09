@@ -10,6 +10,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
+
 @Service
 @AllArgsConstructor
 public class CompanyService {
@@ -35,5 +40,11 @@ public class CompanyService {
         Company company = companyAdapter.toModel(companyDto);
         final Company saved = companyRepository.save(company);
         return companyAdapter.toDto(saved);
+    }
+   public List<CompanyDto> getNbOfCompanies(){
+        List<Company> companies = companyRepository.findAll();
+        return companies.stream().map(
+                companyAdapter::toDto
+        ).collect(toList());
     }
 }

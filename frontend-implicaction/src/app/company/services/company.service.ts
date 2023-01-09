@@ -32,4 +32,7 @@ export class CompanyService {
   updateCompany(company: Company): Observable<Company> {
     return this.http.put<Company>(this.apiEndpointsService.updateCompanyEndpoint(), company);
   }
+  getNbCompanies():Observable<any>{
+    return this.http.get<any>(this.apiEndpointsService.getNbOfCompanies())
+  }
 }

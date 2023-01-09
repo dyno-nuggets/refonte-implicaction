@@ -134,4 +134,11 @@ public class UserService {
                 .map(groupAdapter::toDto)
                 .collect(toList());
     }
+
+   public List<UserDto> getNbOfUsers(){
+        List<User> users = userRepository.findAll();
+        return users.stream()
+                .map(userAdapter::toDto)
+                .collect(toList());
+   }
 }

@@ -117,6 +117,9 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
+
+
+
   updateImageProfileEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.USERS.UPDATE_IMAGE);
   }
@@ -153,7 +156,9 @@ export class ApiEndpointsService {
   getAllGroups(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GROUP_LIST, [userId, 'groups']);
   }
-
+  getNbOfUsers():any{
+    return ApiEndpointsService.createUrl(Uris.USERS.GET_NB_OF_USERS)
+  }
   /**
    * Experiences
    */
@@ -281,6 +286,9 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId, 'validate']);
   }
 
+  getNbOfJobs():any{
+    return ApiEndpointsService.createUrl(Uris.JOBS.GET_NB_OF_JOBS);
+  }
   /**
    * Companies
    */
@@ -305,6 +313,9 @@ export class ApiEndpointsService {
 
   updateCompanyEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.COMPANIES.BASE_URI);
+  }
+  getNbOfCompanies():any{
+    return ApiEndpointsService.createUrl(Uris.COMPANIES.GET_NB_OF_COMPANIES)
   }
 
   /**

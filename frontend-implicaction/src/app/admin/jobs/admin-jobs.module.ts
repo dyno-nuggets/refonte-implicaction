@@ -10,7 +10,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {CheckboxModule} from 'primeng/checkbox';
 import {PendingJobTableComponent} from './components/pending-job-table/pending-job-table.component';
 import {JobPostingFormComponent} from './components/job-posting-form/job-posting-form.component';
-
+import { ContractTypeComponent} from "../../shared/components/contract-type/contract-type.component";
 
 @NgModule({
   declarations: [
