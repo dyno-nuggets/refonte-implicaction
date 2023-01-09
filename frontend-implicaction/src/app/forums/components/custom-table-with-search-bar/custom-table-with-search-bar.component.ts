@@ -12,6 +12,12 @@ import {
   ForumTableTypeCode,
   ForumTableTypesEnum,
 } from '../../enums/table-type-enum';
+import {
+  SortDirectionNumberEnum,
+  SortParameterCode,
+  SortParametersEnum,
+} from '../../enums/sort-parameters-enum';
+import { SortDirectionEnum } from 'src/app/shared/enums/sort-direction.enum';
 
 @Component({
   selector: 'app-custom-table-with-search-bar',
@@ -55,7 +61,40 @@ export class CustomTableWithSearchBarComponent
     }
   }
 
-  async search() {
+  sortForumData(column: SortParameterCode) {
+    if (this.tableType.code === ForumTableTypeCode.FORUM) {
+      this.pageable.content.sort(this.sortByColumn<Group>(column));
+    } else if (this.tableType.code === ForumTableTypeCode.POST) {
+      this.posts.sort(this.sortByColumn<Post>(column));
+    }
+  }
+
+  sortByColumn<T>(column: SortParameterCode) {
+    const enumParam = SortParametersEnum.from(SortParameterCode[column]);
+    const sortLogic = (sortDir: SortDirectionNumberEnum) => {
+      return (a: T, b: T) => {
+        if (a[enumParam.label] < b[enumParam.label]) {
+          return -1 * sortDir;
+        }
+        if (a[enumParam.label] > b[enumParam.label]) {
+          return 1 * sortDir;
+        }
+        return 0 * sortDir;
+      };
+    };
+    let sortDir: SortDirectionNumberEnum;
+
+    if (this.pageable.sortOrder === SortDirectionEnum.ASC) {
+      sortDir = SortDirectionNumberEnum.ASC;
+      this.pageable.sortOrder = SortDirectionEnum.DESC;
+      return sortLogic(sortDir);
+    }
+    this.pageable.sortOrder = SortDirectionEnum.ASC;
+    sortDir = SortDirectionNumberEnum.DESC;
+    return sortLogic(sortDir);
+  }
+
+  search() {
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       if (this.searchValue) {
         this.groupService
