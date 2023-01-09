@@ -30,7 +30,6 @@
     </div>
     <div class="content">
       <div *ngIf="tableType.code === tableTypeCode.FORUM && !filtered">
-        <!--Fix the group Type Issue ! -->
         <app-forum-card
           *ngFor="let group of pageable.content; last as isLast"
           [group]="group"
@@ -38,7 +37,6 @@
         ></app-forum-card>
       </div>
       <div *ngIf="tableType.code === tableTypeCode.FORUM && filtered">
-        <!--Fix the group Type Issue ! -->
         <app-forum-card
           *ngFor="let group of filteredTagData; last as isLast"
           [group]="group"
