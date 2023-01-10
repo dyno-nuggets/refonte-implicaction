@@ -103,4 +103,18 @@ public class PostController {
         Page<PostResponse> posts = postService.getPostsByGroupId(pageable, groupId);
         return ResponseEntity.ok(posts);
     }
+
+    @GetMapping(GET_POPULAR_POST_URI)
+    public ResponseEntity<Page<PostResponse>> getPopularPostByForum(
+            @PathVariable final Long groupId,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "rows", defaultValue = "10") int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+    ) {
+        Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
+        Page<PostResponse> posts = postService.getPopularPosts(pageable, groupId);
+        return ResponseEntity.ok(posts);
+    }
+
 }

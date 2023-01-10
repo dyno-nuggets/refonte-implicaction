@@ -34,6 +34,8 @@ public class ApiUrls {
 
     public static final String GET_POST_BY_GROUP_URI = "/forum/{groupId}";
 
+    public static final String GET_POPULAR_POST_URI = "/popular/{groupId}";
+
 
     // GROUPS
     public static final String GROUPS_BASE_URI = "/api/groups";

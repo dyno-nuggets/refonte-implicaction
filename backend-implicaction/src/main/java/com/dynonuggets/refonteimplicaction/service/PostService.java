@@ -95,4 +95,10 @@ public class PostService {
                 .map(post -> postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post)))
                 .getContent();
     }
+
+    @Transactional
+    public Page<PostResponse> getPopularPosts(Pageable pageable, Long groupId) {
+        final Page<Post> posts = postRepository.findByGroupIdOrderByViewsDesc(pageable, groupId);
+        return posts.map(this::getPostResponse);
+    }
 }
