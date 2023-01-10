@@ -9,6 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
 
+    Page<Post> findByGroupId(Pageable pageable, Long groupId);
+
+
     @Query("select s from Post s  where " +
             "s.name like CONCAT('%',:query, '%')" + "order by s.name desc")
     Page<Post> findPostByName(Pageable pageable, String query);
