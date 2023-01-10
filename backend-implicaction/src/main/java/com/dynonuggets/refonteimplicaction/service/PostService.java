@@ -76,6 +76,12 @@ public class PostService {
         return posts.map(this::getPostResponse);
     }
 
+    @Transactional
+    public Page<PostResponse> getPostsByGroupId(Pageable pageable, Long groupId) {
+        final Page<Post> posts = postRepository.findByGroupId(pageable, groupId);
+        return posts.map(this::getPostResponse);
+    }
+
     private PostResponse getPostResponse(Post post) {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
     }
