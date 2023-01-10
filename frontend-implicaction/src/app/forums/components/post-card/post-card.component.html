@@ -1,22 +1,35 @@
 <div class="element">
-    <div class="element-img-box">
-        <img [src]="post?.userImageUrl || 'assets/img/job-posting-img.png'" alt="group-logo"
-            class="d-none d-sm-inline-block logo element-img">
+  <div class="element-img-box">
+    <img
+      [src]="post?.userImageUrl || 'assets/img/job-posting-img.png'"
+      alt="group-logo"
+      class="d-none d-sm-inline-block logo element-img"
+    />
+  </div>
+  <div class="element-info">
+    <h4 class="fw-bold">{{ post.name }}</h4>
+    <div class="post-description">
+      <span>{{ post.username }}</span>
+      <span>{{ post.duration }}</span>
     </div>
-    <div class="element-info">
-        <h6>{{post.name}}</h6>
-        <div class="post-description">
-            <span>{{post.username}}</span>
-            <span>{{post.duration}}</span>
-        </div>
-    </div>
-    <div class="posts-number text-center">
-        {{post.voteCount}}
-    </div>
-    <div class="comments-number text-center">
-        {{post.commentCount}}
-    </div>
-    <div class="recentMessage text-center">
-        {{post.voteCount}}
-    </div>
+  </div>
+  <div
+    class="posts-number text-center d-flex justify-content-center align-items-center gap-2"
+  >
+    <i class="pi pi-heart"></i>
+
+    {{ post.voteCount }}
+  </div>
+  <div
+    class="comments-number d-flex justify-content-center align-items-center gap-2 text-center"
+  >
+    <i class="pi pi-comments"></i>
+    {{ post.commentCount }}
+  </div>
+  <div
+    class="recentMessage text-center d-flex justify-content-center align-items-center gap-2"
+  >
+    <i class="pi pi-eye"></i>
+    {{ post.voteCount }}
+  </div>
 </div>

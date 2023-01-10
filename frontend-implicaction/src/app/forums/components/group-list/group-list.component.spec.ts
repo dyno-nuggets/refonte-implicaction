@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { GroupListComponent } from './group-list.component';
+import {GroupListComponent} from './group-list.component';
 
 describe('GroupListComponent', () => {
   let component: GroupListComponent;
@@ -8,9 +8,9 @@ describe('GroupListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GroupListComponent ]
+      declarations: [GroupListComponent]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

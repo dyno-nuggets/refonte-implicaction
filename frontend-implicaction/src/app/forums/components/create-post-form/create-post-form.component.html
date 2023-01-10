@@ -2,7 +2,7 @@
   <div class="row mb-3 d-flex">
     <div class="col-md-6 d-flex align-items-center">
       <p-avatar [image]="currentUser.imageUrl || constant.USER_IMAGE_DEFAULT_URI" shape="circle" size="xlarge"
-        styleClass="me-2">
+                styleClass="me-2">
       </p-avatar>
       <div>
         {{currentUser.username}}
@@ -10,11 +10,12 @@
     </div>
     <div class="col-md-6 d-flex align-items-center justify-content-end">
       <p-dropdown [(ngModel)]="selectedGroup" [ngModelOptions]="{standalone: true}" [options]="groups"
-        [virtualScroll]="true" optionLabel="name" placeholder="sélectionner un groupe" styleClass="rounded-pill ps-3">
+                  [virtualScroll]="true" optionLabel="name" placeholder="sélectionner un groupe"
+                  styleClass="rounded-pill ps-3">
         <ng-template pTemplate="selectedItem">
           <div *ngIf="selectedGroup" class="d-flex country-item-value">
             <img *ngIf="selectedGroup.imageUrl" [src]="selectedGroup.imageUrl" alt="{{selectedGroup.name}} logo"
-              class="dropdown-image me-2">
+                 class="dropdown-image me-2">
             <div>{{selectedGroup.name}}</div>
           </div>
         </ng-template>
@@ -28,7 +29,7 @@
     </div>
   </div>
   <div class="form-floating mb-3">
-    <input class="form-control px-4" formControlName="name" id="postNameInput" placeholder="Titre du forum" />
+    <input class="form-control px-4" formControlName="name" id="postNameInput" placeholder="Titre du forum"/>
     <label class="form-label px-4" for="postNameInput">
       Titre du forum
     </label>

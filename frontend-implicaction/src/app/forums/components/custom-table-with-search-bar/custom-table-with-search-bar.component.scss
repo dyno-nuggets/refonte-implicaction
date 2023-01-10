@@ -77,7 +77,15 @@
 }
 
 ::ng-deep .p-paginator {
-  background: transparent!important;
+  background: transparent !important;
+}
+
+::ng-deep.p-element.p-button-rounded.p-button.p-component.p-button-icon-only {
+  background: none;
+  padding: 0;
+  width: 1.4em;
+  height: 100%;
+  border: none;
 }
 
 .content {

@@ -6,10 +6,9 @@ import {Constants} from '../../../config/constants';
 @Component({
   selector: 'app-post-tile',
   templateUrl: './post-tile.component.html',
-  styleUrls: ['./post-tile.component.scss']
+  styleUrls: ['./post-tile.component.scss'],
 })
 export class PostTileComponent {
-
   @Input()
   post: Post = {};
   univers = Univers;
@@ -18,5 +17,4 @@ export class PostTileComponent {
   updateCommentCount(count: number): void {
     this.post.commentCount = count;
   }
-
 }
