@@ -18,6 +18,7 @@ import {
   SortParametersEnum,
 } from '../../enums/sort-parameters-enum';
 import { SortDirectionEnum } from 'src/app/shared/enums/sort-direction.enum';
+import { Constants } from 'src/app/config/constants';
 
 @Component({
   selector: 'app-custom-table-with-search-bar',
@@ -34,10 +35,12 @@ export class CustomTableWithSearchBarComponent
   readonly ROWS_PER_PAGE_OPTIONS = [5];
   isLoading = true;
   posts: Post[];
+  filtered: boolean = false;
   searchValue: string = '';
   searchOn: boolean = false;
-  forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
-  postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
+  currentTag: number;
+  filteredTagData: Group[] = [];
+  tableTypeCode = ForumTableTypeCode;
 
   constructor(
     private toastService: ToasterService,
@@ -51,7 +54,21 @@ export class CustomTableWithSearchBarComponent
   ngOnInit(): void {
     this.pageable.rowsPerPages = this.ROWS_PER_PAGE_OPTIONS;
     this.pageable.rows = this.ROWS_PER_PAGE_OPTIONS[0];
-    this.paginate();
+    this.groupService.filterTag$.subscribe((tags) => {
+      if (tags.length > 0) {
+        this.filteredTagData = this.pageable.content as Group[];
+        tags.map((tag) => {
+          return (this.filteredTagData = tag.callBack(
+            this.filteredTagData as Group[]
+          ));
+        });
+        this.filtered = true;
+      } else {
+        this.innerPaginate();
+        this.filtered = false;
+      }
+    });
+    this.innerPaginate();
   }
 
   clearSearch() {
@@ -123,6 +140,7 @@ export class CustomTableWithSearchBarComponent
               this.pageable.totalPages = data.totalPages;
               this.pageable.totalElements = data.totalElements;
               this.pageable.content = data.content;
+              this.setRandomTag();
             },
             () =>
               this.toastService.error(
@@ -172,6 +190,35 @@ export class CustomTableWithSearchBarComponent
     }
   }
 
+  sortBy(property: keyof Group, sortOrder: number) {
+    return function (a: Group, b: Group) {
+      if (typeof a[property] !== 'number') {
+        return 0;
+      }
+      const result =
+        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
+      return result * sortOrder;
+    };
+  }
+
+  setRandomTag() {
+    this.pageable.content.map((content, index) => {
+      if (index % 2 === 0) {
+        Object.assign(content, {
+          tagList: ['Recherche', 'Offre'],
+        });
+      } else {
+        Object.assign(content, {
+          tagList: [
+            Constants.TAG_LIST_DEMO[
+              Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
+            ],
+          ],
+        });
+      }
+    });
+  }
+
   protected innerPaginate(): void {
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       this.groupService
@@ -182,6 +229,7 @@ export class CustomTableWithSearchBarComponent
             this.pageable.totalPages = data.totalPages;
             this.pageable.totalElements = data.totalElements;
             this.pageable.content = data.content;
+            this.setRandomTag();
           },
           () =>
             this.toastService.error(
