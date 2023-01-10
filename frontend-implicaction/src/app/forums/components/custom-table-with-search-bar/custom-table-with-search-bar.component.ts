@@ -77,8 +77,14 @@ export class CustomTableWithSearchBarComponent
   }
 
   sortForumData(column: SortParameterCode) {
+
+
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
-      this.pageable.content.sort(this.sortByColumn<Group>(column));
+      if (this.filtered) {
+        this.filteredTagData.sort(this.sortByColumn<Group>(column));
+      } else {
+        this.pageable.content.sort(this.sortByColumn<Group>(column));
+      }
     } else if (this.tableType.code === ForumTableTypeCode.POST) {
       this.posts.sort(this.sortByColumn<Post>(column));
     }
