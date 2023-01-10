@@ -71,8 +71,12 @@ public class PostService {
     }
 
     @Transactional
-    public Page<PostResponse> searchGroup(Pageable pageable, String param) {
-        final Page<Post> posts = postRepository.findPostByName(pageable, param);
+    public Page<PostResponse> findPostByQuery(Pageable pageable, String param, Long groupId) {
+        if (groupId > 0) {
+            final Page<Post> posts = postRepository.findByGroupIdAndNameContainingIgnoreCase(pageable, groupId, param);
+            return posts.map(this::getPostResponse);
+        }
+        final Page<Post> posts = postRepository.findByNameContainingIgnoreCase(pageable, param);
         return posts.map(this::getPostResponse);
     }
 
