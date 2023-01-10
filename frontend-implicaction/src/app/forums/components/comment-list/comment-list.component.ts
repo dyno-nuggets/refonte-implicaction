@@ -1,29 +1,20 @@
+import {Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild,} from '@angular/core';
+import {AuthService} from '../../../shared/services/auth.service';
+import {Constants} from '../../../config/constants';
+import {ToasterService} from '../../../core/services/toaster.service';
+import {PostService} from '../../services/post.service';
+import {Subscription} from 'rxjs';
+import {ActivatedRoute} from '@angular/router';
+import {finalize} from 'rxjs/operators';
+import {Comment} from '../../model/comment';
 import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { AuthService } from '../../../shared/services/auth.service';
-import { Constants } from '../../../config/constants';
-import { ToasterService } from '../../../core/services/toaster.service';
-import { PostService } from '../../services/post.service';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { finalize } from 'rxjs/operators';
-import { Comment } from '../../model/comment';
-import { BaseWithPaginationAndFilterComponent } from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
-import { CommentPayload } from '../../model/comment-payload';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { CommentService } from '../../services/comment.service';
-import { Paginator } from 'primeng/paginator';
-import { Criteria } from '../../../shared/models/Criteria';
+  BaseWithPaginationAndFilterComponent
+} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {CommentPayload} from '../../model/comment-payload';
+import {UntypedFormControl, UntypedFormGroup, Validators,} from '@angular/forms';
+import {CommentService} from '../../services/comment.service';
+import {Paginator} from 'primeng/paginator';
+import {Criteria} from '../../../shared/models/Criteria';
 
 @Component({
   selector: 'app-comment-list',
@@ -32,11 +23,10 @@ import { Criteria } from '../../../shared/models/Criteria';
 })
 export class CommentListComponent
   extends BaseWithPaginationAndFilterComponent<Comment, Criteria>
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   readonly ROWS_PER_PAGE_OPTIONS = [25, 50, 100];
 
-  @ViewChild('paginator', { static: true })
+  @ViewChild('paginator', {static: true})
   paginator: Paginator;
 
   @Output()

@@ -1,4 +1,5 @@
 @import "../../../../assets/variables.scss";
+
 @media (min-width: 768px) {
   .vote-box {
     max-width: 80px;
@@ -9,6 +10,7 @@
   color: $secondary;
   font-weight: 500;
   font-size: 1.5em;
+
   .far.fa-comment-alt {
     padding-top: 2px;
   }

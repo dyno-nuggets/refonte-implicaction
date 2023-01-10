@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { CustomTableWithSearchBarComponent } from './custom-table-with-search-bar.component';
+import {CustomTableWithSearchBarComponent} from './custom-table-with-search-bar.component';
 
 describe('CustomTableWithSearchBarComponent', () => {
   let component: CustomTableWithSearchBarComponent;
@@ -8,9 +8,9 @@ describe('CustomTableWithSearchBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CustomTableWithSearchBarComponent ]
+      declarations: [CustomTableWithSearchBarComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(CustomTableWithSearchBarComponent);
     component = fixture.componentInstance;

@@ -1,24 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BaseWithPaginationAndFilterComponent } from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
-import { Group } from '../../model/group';
-import { Criteria } from '../../../shared/models/Criteria';
-import { ActivatedRoute } from '@angular/router';
-import { GroupService } from '../../services/group.service';
-import { finalize } from 'rxjs/operators';
-import { ToasterService } from '../../../core/services/toaster.service';
-import { PostService } from '../../services/post.service';
-import { Post } from '../../model/post';
+import {Component, Input, OnInit} from '@angular/core';
 import {
-  ForumTableTypeCode,
-  ForumTableTypesEnum,
-} from '../../enums/table-type-enum';
-import {
-  SortDirectionNumberEnum,
-  SortParameterCode,
-  SortParametersEnum,
-} from '../../enums/sort-parameters-enum';
-import { SortDirectionEnum } from 'src/app/shared/enums/sort-direction.enum';
-import { Constants } from 'src/app/config/constants';
+  BaseWithPaginationAndFilterComponent
+} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {Group} from '../../model/group';
+import {Criteria} from '../../../shared/models/Criteria';
+import {ActivatedRoute} from '@angular/router';
+import {GroupService} from '../../services/group.service';
+import {finalize} from 'rxjs/operators';
+import {ToasterService} from '../../../core/services/toaster.service';
+import {PostService} from '../../services/post.service';
+import {Post} from '../../model/post';
+import {ForumTableTypeCode, ForumTableTypesEnum,} from '../../enums/table-type-enum';
+import {SortDirectionNumberEnum, SortParameterCode, SortParametersEnum,} from '../../enums/sort-parameters-enum';
+import {SortDirectionEnum} from 'src/app/shared/enums/sort-direction.enum';
+import {Constants} from 'src/app/config/constants';
 
 @Component({
   selector: 'app-custom-table-with-search-bar',
@@ -27,8 +22,7 @@ import { Constants } from 'src/app/config/constants';
 })
 export class CustomTableWithSearchBarComponent
   extends BaseWithPaginationAndFilterComponent<Group, Criteria>
-  implements OnInit
-{
+  implements OnInit {
   @Input() tableType: ForumTableTypesEnum;
   @Input() labels: string[];
 
@@ -132,7 +126,7 @@ export class CustomTableWithSearchBarComponent
               this.toastService.error(
                 'Oops',
                 'Une erreur est survenue lors de la recherche du groupe: ' +
-                  this.searchValue
+                this.searchValue
               )
           );
         this.searchOn = true;
@@ -151,7 +145,7 @@ export class CustomTableWithSearchBarComponent
               this.toastService.error(
                 'Oops',
                 'Une erreur est survenue lors de la recherche du groupe: ' +
-                  this.searchValue
+                this.searchValue
               )
           );
         this.searchOn = false;
@@ -172,7 +166,7 @@ export class CustomTableWithSearchBarComponent
               this.toastService.error(
                 'Oops',
                 'Une erreur est survenue lors de la recherche de post: ' +
-                  this.searchValue
+                this.searchValue
               )
           );
         this.searchOn = true;
@@ -217,7 +211,7 @@ export class CustomTableWithSearchBarComponent
           tagList: [
             Constants.TAG_LIST_DEMO[
               Math.floor(Math.random() * Constants.TAG_LIST_DEMO.length)
-            ],
+              ],
           ],
         });
       }

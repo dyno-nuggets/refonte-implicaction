@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {
+  BaseWithPaginationAndFilterComponent
+} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Group} from '../../model/group';
 import {Criteria} from '../../../shared/models/Criteria';
 import {ActivatedRoute} from '@angular/router';

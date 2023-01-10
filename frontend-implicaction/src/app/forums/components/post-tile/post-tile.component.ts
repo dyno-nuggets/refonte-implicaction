@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Post } from '../../model/post';
-import { Univers } from '../../../shared/enums/univers';
-import { Constants } from '../../../config/constants';
+import {Component, Input} from '@angular/core';
+import {Post} from '../../model/post';
+import {Univers} from '../../../shared/enums/univers';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-post-tile',

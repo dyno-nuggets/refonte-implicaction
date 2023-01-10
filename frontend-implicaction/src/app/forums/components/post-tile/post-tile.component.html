@@ -19,7 +19,7 @@
           <div class="head-line ps-2 d-grid gap-1">
             <a
               routerLink="/{{ univers.USERS.url }}/{{ post.userId }}/profile"
-              >{{ post.username }}</a
+            >{{ post.username }}</a
             >
             {{ post.duration }}
             <span class="d-none d-sm-inline ps-2"> </span>
@@ -27,15 +27,15 @@
         </div>
         <h2 class="theme-primary margin-left">
           <a
-            routerLink="/{{ univers.FORUMS.url }}/{{ post.id }}"
             class="text-decoration-none"
-            >{{ post.name }}</a
+            routerLink="/{{ univers.FORUMS.url }}/{{ post.id }}"
+          >{{ post.name }}</a
           >
         </h2>
 
         <p [innerHTML]="post.description" class="card-text p-5 w-75"></p>
         <div class="margin-left">
-          <hr class="my-5" />
+          <hr class="my-5"/>
           <span class="post-comment d-flex align-items-center">
             Questions / Réponses
             <!-- <i class="far fa-comment-alt d-block px-2"></i>

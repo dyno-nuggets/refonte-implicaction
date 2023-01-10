@@ -1,5 +1,5 @@
-import { Component, Input } from '@angular/core';
-import { Group } from '../../model/group';
+import {Component, Input} from '@angular/core';
+import {Group} from '../../model/group';
 
 @Component({
   selector: 'app-forum-card',
