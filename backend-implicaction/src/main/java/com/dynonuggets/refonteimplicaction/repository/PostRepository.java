@@ -14,4 +14,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findByNameContainingIgnoreCase(Pageable pageable, String query);
 
+    Page<Post> findByGroupIdOrderByViewsDesc(Pageable pageable, Long groupId);
+
 }
