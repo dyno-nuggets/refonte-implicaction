@@ -1,0 +1,23 @@
+<div>
+  <div id="forum-header-description">
+    <h2>Title du Forum</h2>
+    <h6>Descriptions...</h6>
+  </div>
+  <div id="forum-content">
+    <app-custom-table-with-search-bar
+      [labels]="['Likes', 'Commentaires', 'Vues']"
+      [tableType]="tableType.POST"
+    ></app-custom-table-with-search-bar>
+    <div id="forum-right-content">
+      <button id="create-post-btn">
+        Créer un sujet
+      </button>
+      <div>
+
+      </div>
+      <app-top-group-listing
+        class=""
+      ></app-top-group-listing>
+    </div>
+  </div>
+</div>
