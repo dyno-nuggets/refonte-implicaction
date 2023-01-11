@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ForumTableTypesEnum} from "../../enums/table-type-enum";
 
 @Component({
@@ -6,14 +6,11 @@ import {ForumTableTypesEnum} from "../../enums/table-type-enum";
   templateUrl: './forum-posts.component.html',
   styleUrls: ['./forum-posts.component.scss']
 })
-export class ForumPostsComponent implements OnInit {
+export class ForumPostsComponent {
 
   tableType = ForumTableTypesEnum;
 
   constructor() {
-  }
-
-  ngOnInit(): void {
   }
 
 }
