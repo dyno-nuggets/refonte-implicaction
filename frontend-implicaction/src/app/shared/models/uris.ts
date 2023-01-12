@@ -81,6 +81,7 @@ export class Uris {
     static readonly BASE_URI = 'posts';
     static readonly LATEST_POSTS = 'posts/latest';
     static readonly FIND_BY_NAME = 'posts/search';
+    static readonly POPULAR_POSTS = 'posts/popular'
 
   };
 

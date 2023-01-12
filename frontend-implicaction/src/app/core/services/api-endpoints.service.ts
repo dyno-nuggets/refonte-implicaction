@@ -312,7 +312,6 @@ export class ApiEndpointsService {
    */
 
   getAllPostsEndpoint(pageable: Pageable<any>): string {
-
     return ApiEndpointsService.createUrlWithPageable(Uris.POSTS.BASE_URI, pageable);
   }
 
@@ -326,6 +325,15 @@ export class ApiEndpointsService {
 
   getPostCommentsEndpoint(pageable: any, postId: string): string {
     const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId, 'comments'])
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
+      // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
+      .replace(`${Constants.API_ENDPOINT}/`, '');
+
+    return ApiEndpointsService.createUrlWithPageable(uri, pageable);
+  }
+
+  getPopularPostsByForum(pageable: any, groupId: number): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.POPULAR_POSTS, [groupId])
       // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
       .replace(`${Constants.API_ENDPOINT}/`, '');

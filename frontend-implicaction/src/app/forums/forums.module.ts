@@ -25,6 +25,8 @@ import {IconsModule} from '../icons/icons.module';
 import {GroupListComponent} from './components/group-list/group-list.component';
 import {TableModule} from 'primeng/table';
 import {GroupCardComponent} from './components/group-card/group-card.component';
+import {TabMenuModule} from 'primeng/tabmenu';
+
 import {
   CustomTableWithSearchBarComponent
 } from './components/custom-table-with-search-bar/custom-table-with-search-bar.component';
@@ -69,7 +71,7 @@ import {ForumPostsComponent} from './components/forum-posts/forum-posts.componen
     ReactiveFormsModule,
     EditorModule,
     IconsModule,
-    TableModule,
+    TabMenuModule,
     ButtonModule,
     TableModule,
     SelectButtonModule,

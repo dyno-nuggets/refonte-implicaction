@@ -37,7 +37,7 @@ export class CustomTableWithSearchBarComponent
   tableTypeCode = ForumTableTypeCode;
   forumTableType: ForumTableTypeCode = ForumTableTypeCode.FORUM;
   postTableType: ForumTableTypeCode = ForumTableTypeCode.POST;
-  currentSortColmun: string;
+  currentSortColumn: string;
   SortDirEnum = SortDirectionEnum;
 
   constructor(
@@ -77,8 +77,6 @@ export class CustomTableWithSearchBarComponent
   }
 
   sortForumData(column: SortParameterCode) {
-
-
     if (this.tableType.code === ForumTableTypeCode.FORUM) {
       if (this.filtered) {
         this.filteredTagData.sort(this.sortByColumn<Group>(column));
@@ -91,7 +89,7 @@ export class CustomTableWithSearchBarComponent
   }
 
   sortByColumn<T>(column: SortParameterCode) {
-    this.currentSortColmun = column;
+    this.currentSortColumn = column;
     const enumParam = SortParametersEnum.from(SortParameterCode[column]);
     const sortLogic = (sortDir: SortDirectionNumberEnum) => {
       return (a: T, b: T) => {
@@ -101,7 +99,7 @@ export class CustomTableWithSearchBarComponent
         if (a[enumParam.label] > b[enumParam.label]) {
           return 1 * sortDir;
         }
-        return 0 * sortDir;
+        return 0;
       };
     };
     let sortDir: SortDirectionNumberEnum;
@@ -195,17 +193,6 @@ export class CustomTableWithSearchBarComponent
     }
   }
 
-  sortBy(property: keyof Group, sortOrder: number) {
-    return function (a: Group, b: Group) {
-      if (typeof a[property] !== 'number') {
-        return 0;
-      }
-      const result =
-        a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
-      return result * sortOrder;
-    };
-  }
-
   setRandomTag() {
     this.pageable.content.map((content, index) => {
       if (index % 2 === 0) {
@@ -254,7 +241,7 @@ export class CustomTableWithSearchBarComponent
           () =>
             this.toastService.error(
               'Oops',
-              'Une erreur est survenue lors de la récupération de la liste des groupes'
+              'Une erreur est survenue lors de la récupération de la liste des postes'
             )
         );
     }

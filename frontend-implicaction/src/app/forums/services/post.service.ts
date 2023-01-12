@@ -41,4 +41,8 @@ export class PostService {
   createPost(postPayload: PostPayload): Observable<Post> {
     return this.http.post(this.endpointsService.createPostEndpoint(), postPayload);
   }
+
+  getPopularPostsByForum(pageable: Pageable<any>, groupId: number): Observable<any> {
+    return this.http.get(this.endpointsService.getPopularPostsByForum(pageable, groupId));
+  }
 }
