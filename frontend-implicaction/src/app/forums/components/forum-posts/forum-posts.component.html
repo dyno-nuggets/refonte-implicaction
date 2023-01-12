@@ -5,19 +5,49 @@
   </div>
   <div id="forum-content">
     <app-custom-table-with-search-bar
-      [labels]="['Likes', 'Commentaires', 'Vues']"
+      [labels]="['Likes', 'Messages', 'Vues']"
       [tableType]="tableType.POST"
     ></app-custom-table-with-search-bar>
     <div id="forum-right-content">
       <button id="create-post-btn">
-        Créer un sujet
+        <i class="pi pi-comment me-4" style="font-size: 1.5rem"></i>
+        <span class="me-4">Créer un sujet</span>
       </button>
-      <div>
 
+      <div class="my-5 w-100">
+        <div class="card">
+          <div class="card-header header text-left">
+            <h2 class="m-0">Top</h2>
+            <p-tabMenu [activeItem]="optionsTopMenu[0]" [model]="optionsTopMenu">
+
+            </p-tabMenu>
+          </div>
+          <div *ngIf="!isLoading; else skeletonTop" class="card-body">
+            <div *ngFor="let post of pageable.content; let index = index" class="my-4">
+              <div class="d-flex align-items-center gap-3">
+                <span class="post-num my-auto mx-0">0{{index + 1}}</span>
+                <div>
+                  <p class="post-title m-0">{{post?.name}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <app-top-group-listing
         class=""
       ></app-top-group-listing>
     </div>
+    <ng-template #skeletonTop>
+      <div *ngFor="let i of [0,1,2]" class="custom-skeleton p-4">
+        <div class="d-flex align-items-center gap-3">
+          <p-skeleton shape="circle" size="4rem" styleClass="mr-2"></p-skeleton>
+          <div style="flex: 1">
+            <p-skeleton styleClass="mb-2" width="100%"></p-skeleton>
+            <p-skeleton width="75%"></p-skeleton>
+          </div>
+        </div>
+      </div>
+    </ng-template>
   </div>
 </div>
