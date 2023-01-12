@@ -135,10 +135,7 @@ public class UserService {
                 .collect(toList());
     }
 
-   public List<UserDto> getNbOfUsers(){
-        List<User> users = userRepository.findAll();
-        return users.stream()
-                .map(userAdapter::toDto)
-                .collect(toList());
+   public long getNbOfUsers() {
+        return  userRepository.count();
    }
 }

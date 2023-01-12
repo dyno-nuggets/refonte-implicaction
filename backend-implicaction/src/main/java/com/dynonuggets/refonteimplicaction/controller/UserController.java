@@ -115,9 +115,8 @@ public class UserController {
         return ResponseEntity.ok(groupsDto);
     }
     @GetMapping(GET_NB_OF_USERS)
-    public ResponseEntity<Integer> getNbOfUsers(){
-        List<UserDto> users = userService.getNbOfUsers();
-        return ResponseEntity.ok(users.size()) ;
+    public ResponseEntity<Long> getNbOfUsers(){
+        return ResponseEntity.ok(userService.getNbOfUsers()) ;
     }
 
 }
