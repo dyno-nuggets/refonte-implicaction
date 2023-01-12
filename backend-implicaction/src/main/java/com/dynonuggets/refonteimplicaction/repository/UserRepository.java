@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "and exists (select 1 from JobSeeker s where u.id = s.user.id) " +
             "or exists (select 1 from Recruiter r where u.id = r.user.id) ")
     Page<User> findAllForCommunity(Pageable pageable, @Param("currentUserId") Long currentUserId);
+
+    List<User> findAllByUsernameContaining(String userName);
+
 }

@@ -61,6 +61,10 @@ public class ApiUrls {
 
     public static final String GET_NB_OF_USERS ="/nbusers";
 
+    public static final String GET_USER_NAMES_URI = "/usernames/{username}";
+
+    public static final String GET_USER_BY_NAME_URI = "/by-username/{username}";
+
     // FILES
     public static final String FILE_BASE_URI = "/api/files";
     public static final String GET_FILE_BY_KEY = "/{objectKey}";
@@ -68,6 +72,10 @@ public class ApiUrls {
     // APPLICATION
     public static final String APPLY_BASE_URI = "/api/applies";
     public static final String GET_APPLY_URI = "/{applyId}";
+    // ADMIN
+    public static final String ADMIN_BASE_URI = "/api/admin";
+    public static final String ADMIN_USER_ROLES_URI = "/users/roles";
+
 
     private ApiUrls() {
         // empêche la construction d'un objet ApiUrls

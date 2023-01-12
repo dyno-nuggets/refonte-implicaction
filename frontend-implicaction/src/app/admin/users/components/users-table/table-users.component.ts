@@ -45,23 +45,8 @@ export class TableUsersComponent {
           this.pageable.rows = data.size;
           this.pageable.totalElements = data.totalElements;
           this.pageable.content = data.content;
-          this.users = data.content;
         },
         () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération des données'),
       );
-    /*
-    editUser(user: User): void {
-      this.sidebarService
-        .open({
-          title: `Editer une nouvelle offre d'emploi`,
-          input: {job},
-          component: JobPostingFormComponent,
-          width: 650
-        });
-    }*/
-  }
-
-  editUser(user: User) {
-    //à implémenter dans le prochain commit
   }
 }

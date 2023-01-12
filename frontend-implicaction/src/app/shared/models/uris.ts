@@ -23,6 +23,8 @@ export class Uris {
     static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';
     static readonly GET_ALL_PENDING_USERS = 'users/pending';
     static readonly GROUP_LIST = 'users';
+    static readonly GET_USERNAMES_BY_NAME = 'users/usernames';
+    static readonly GET_USER_BY_USERNAME = 'users/by-username'
     static readonly GET_NB_OF_USERS='users/nbusers'
   };
 
@@ -115,5 +117,13 @@ export class Uris {
    */
   static JOB_APPLICATION = class {
     static readonly BASE_URI = 'applies';
+  };
+
+  /**
+   * ADMIN
+   */
+   static ADMIN = class {
+    static readonly BASE_URI = 'admin';
+    static readonly ADMIN_USER_ROLES_URI = "admin/users/roles"
   };
 }

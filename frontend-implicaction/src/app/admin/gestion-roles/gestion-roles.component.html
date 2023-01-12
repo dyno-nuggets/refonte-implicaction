@@ -1,0 +1,67 @@
+
+<h6 class="mb-3"  ><i class="fas fa-user-cog"></i> Gestion des  roles </h6>
+
+<div class="card">
+<div class="card-body">
+
+  <div class="row row-cols-lg-auto g-3 align-items-center mb-2">
+        <div [ngClass] ="{'col':userName,'col-12': !userName}" >
+          <div class="input-group">
+            <p-autoComplete (completeMethod)="usernameChange($event)" 
+                            (onSelect)="usernameSelected($event)"
+                            [(ngModel)]="keyWord"
+                            [suggestions]="usersFind"
+                            placeholder="Search user ..."
+                            size="75"
+                [style]="{
+                  display: 'inline-flex',
+                  height: '34px'
+                }"></p-autoComplete>
+          </div>
+      </div>
+
+      <div class="col"  *ngIf="userName" >
+        <label class="mr-3"> Ulitisateur :</label><b> {{ userName}}</b>
+
+      </div>
+  </div>
+<div class="row row-cols-lg-auto g-3 align-items-center mt-2">
+  <div class="col-12">
+    <p-multiSelect
+      [(ngModel)]="userSelected.roles"
+      [options]="roles"
+      optionLabel="label"
+      optionValue="code"
+      class="form-control"
+      placeholder="Select role ..."
+      >
+    </p-multiSelect>
+
+  </div>
+</div>
+
+<div class="row row-cols-lg-auto g-3 justify-content-center mt-1">
+  <div class="col-3">
+    <button class="btn btn-secondary"
+      (click)="updateUser()"
+      class="btn btn-secondary"
+    >
+      <i class="fas fa-user-cog"></i>
+             Mettre à jour 
+    </button>
+  </div>
+
+</div>
+
+</div>
+</div>
+
+<!-- <div class="row justify-content-center clearfix align-items-center">
+  <div class="col-xxl-4 col-12 text-center error-code">
+    403
+  </div>
+  <div class="col-auto text-center text-xxl-start">
+    <h1 class="col-12 error-title my-xxl-4 my-2">Accès non autorisé</h1>
+    <p class="error-message">Désolé mais votre compte n’est pas autorisé à acceder à cette page.</p>
+  </div>
+</div> -->

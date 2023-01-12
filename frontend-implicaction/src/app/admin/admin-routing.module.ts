@@ -19,6 +19,18 @@ const routes: Routes = [
     ]
   },
   {
+    path: '', redirectTo: 'gestion-roles', pathMatch: 'full'
+  },
+  {
+    path: 'gestion-roles', component: AdminComponent, children: [
+      {
+        path: '',
+        loadChildren: () => import('./gestion-roles/gestionroles.module').then(m => m.GestionrolesModule),
+        outlet: 'admin-content'
+      }
+    ]
+  },
+  {
     path: 'users', component: AdminComponent, children: [
       {
         path: '',

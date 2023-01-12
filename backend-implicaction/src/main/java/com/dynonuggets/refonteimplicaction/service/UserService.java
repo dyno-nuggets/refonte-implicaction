@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.*;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -79,16 +81,9 @@ public class UserService {
                         " les informations personelles; L'user avec l'id " + userDto.getId() + " n'existe pas."));
         // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
         // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
-        user.setEmail(userDto.getEmail());
-        user.setPhoneNumber(userDto.getPhoneNumber());
-        user.setBirthday(userDto.getBirthday());
-        user.setHobbies(userDto.getHobbies());
-        user.setPresentation(userDto.getPresentation());
-        user.setPurpose(userDto.getPurpose());
-        user.setContribution(userDto.getContribution());
-        user.setExpectation(userDto.getExpectation());
-
+        user = updateUserFromDto(userDto, user);
         User userUpdate = userRepository.save(user);
+
         return userAdapter.toDto(userUpdate);
     }
 
@@ -133,6 +128,57 @@ public class UserService {
         return groups.stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());
+    }
+
+    public List<String> getAllUsersContaining(String userName) {
+        List<User> users = userRepository.findAllByUsernameContaining(userName);
+
+        return users.stream()
+                .map(User::getUsername)
+                .collect(toList());
+    }
+
+    public UserDto getUserByUsername(String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new UserNotFoundException(Message.USER_NOT_FOUND_MESSAGE));
+
+        return userAdapter.toDto(user);
+    }
+
+    public UserDto updateRoleOfUser(UserDto userDto) {
+        boolean isAdmin = authService.isAdmin();
+        if (!isAdmin) {
+            throw new UnauthorizedException("Vous avez pas le droit de modifier");
+        }
+        User user = userRepository.findById(userDto.getId())
+                .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour" +
+                        " les informations personelles; L'user avec l'id " + userDto.getId() + " n'existe pas."));
+        // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
+        // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
+        final List<Role> roles = userDto.getRoles()
+                .stream()
+                .map(roleLabel -> {
+                    final RoleEnum role = RoleEnum.byLongName(roleLabel);
+                    return new Role(role.getId(), role.getLongName(), emptySet());
+                })
+                .collect(toList());
+        user.setRoles(roles);
+        user = updateUserFromDto(userDto, user);
+        User userUpdate = userRepository.save(user);
+        return userAdapter.toDto(userUpdate);
+    }
+
+    private User updateUserFromDto(UserDto userDto, User user) {
+        user.setEmail(userDto.getEmail());
+        user.setPhoneNumber(userDto.getPhoneNumber());
+        user.setBirthday(userDto.getBirthday());
+        user.setHobbies(userDto.getHobbies());
+        user.setPresentation(userDto.getPresentation());
+        user.setPurpose(userDto.getPurpose());
+        user.setContribution(userDto.getContribution());
+        user.setExpectation(userDto.getExpectation());
+
+        return user;
     }
 
    public List<UserDto> getNbOfUsers(){
