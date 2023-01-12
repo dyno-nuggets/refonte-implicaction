@@ -214,4 +214,8 @@ public class AuthService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
+
+    public boolean isAdmin() {
+        return getCurrentUser().getRoles().stream().filter(role -> RoleEnum.ADMIN.getLongName().equals(role.getName())).findAny().isPresent();
+    }
 }

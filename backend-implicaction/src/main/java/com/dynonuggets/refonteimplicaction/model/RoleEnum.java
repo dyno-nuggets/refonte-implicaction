@@ -1,7 +1,10 @@
 package com.dynonuggets.refonteimplicaction.model;
 
+import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
+import java.util.Arrays;
 
 @Getter
 @AllArgsConstructor
@@ -14,5 +17,12 @@ public enum RoleEnum {
 
     private final Long id;
     private final String longName;
+
+    public static RoleEnum byLongName(final String longName) {
+        return Arrays.stream(RoleEnum.values())
+                .filter(roleEnum -> roleEnum.getLongName().equals(longName))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException(String.format("role: %s not found.", longName)));
+    }
 
 }

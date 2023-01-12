@@ -120,4 +120,14 @@ public class UserController {
         return ResponseEntity.ok(users.size()) ;
     }
 
+    @GetMapping(GET_USER_NAMES_URI)
+    public ResponseEntity<List<String>> getAllUsersContaining(@PathVariable String username) {
+        return ResponseEntity.ok(userService.getAllUsersContaining(username));
+    }
+
+    @GetMapping(GET_USER_BY_NAME_URI)
+    public ResponseEntity<UserDto> getUserByname(@PathVariable String username) {
+        return ResponseEntity.ok(userService.getUserByUsername(username));
+    }
+
 }

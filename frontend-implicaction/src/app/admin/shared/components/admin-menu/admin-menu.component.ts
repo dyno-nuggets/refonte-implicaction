@@ -45,6 +45,12 @@ export class AdminMenuComponent implements OnInit {
       classIcon: 'pi pi-id-card',
       roles: [RoleEnumCode.ADMIN]
     },
+    {
+      label: 'Gestion des Roles',
+      link: `/${Univers.ADMIN.url}/gestion-roles`,
+      classIcon: 'pi pi-user-edit',
+      roles: [RoleEnumCode.ADMIN]
+    }
   ];
 
   constructor(private authService: AuthService) {

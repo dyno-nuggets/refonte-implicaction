@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static java.lang.String.format;
 
 @EnableWebSecurity
 @AllArgsConstructor
@@ -67,7 +68,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ADMIN_PROTECTEDS = {
-            "/api/auth/accountVerification/**"
+            "/api/auth/accountVerification/**",
+            format("%s/**", ADMIN_BASE_URI)
     };
 
     private static final String[] PREMIUM_PROTECTEDS = {

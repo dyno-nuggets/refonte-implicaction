@@ -11,6 +11,7 @@ import {FeatherModule} from 'angular-feather';
 import {PendingGroupTableComponent} from './groups/pending-group-table/pending-group-table.component';
 
 
+
 @NgModule({
   declarations: [
     AdminComponent,

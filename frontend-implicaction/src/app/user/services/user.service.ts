@@ -57,6 +57,10 @@ export class UserService {
     return this.http.put<User>(this.apiEndpointsService.updateUserEndpoint(), user);
   }
 
+  updateRoleOfUser(user: User): Observable<any> {
+    return this.http.put<User>(this.apiEndpointsService.updateRoleOfUserEndpoint(), user);
+  }
+
   getAllPendingActivationUsers(pageable: Pageable<User>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
@@ -73,4 +77,11 @@ export class UserService {
     return this.http.get<any>(this.apiEndpointsService.getNbOfUsers())
   }
 
+  getAllUsernameMatching(userName: string): Observable<string[]> {
+    return this.http.get<string[]>(this.apiEndpointsService.getUserName(userName))
+  }
+
+  getUserByUsername(userName: string): Observable<User> {
+    return this.http.get<User>(this.apiEndpointsService.getUserByUsername(userName))
+  }
 }

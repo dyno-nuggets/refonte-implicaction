@@ -167,6 +167,15 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.EXPERIENCE.BASE_URI, [experienceId]);
   }
 
+  getUserName(userName: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GET_USERNAMES_BY_NAME, [userName]);
+  }
+
+  getUserByUsername(userName: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GET_USER_BY_USERNAME, [userName]);
+  }
+
+
   /**
    * Trainings
    */
@@ -193,6 +202,10 @@ export class ApiEndpointsService {
 
   updateUserEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.USERS.BASE_URI);
+  }
+
+  updateRoleOfUserEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.ADMIN.ADMIN_USER_ROLES_URI);
   }
 
   /**
