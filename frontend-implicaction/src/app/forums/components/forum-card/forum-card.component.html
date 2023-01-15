@@ -7,7 +7,7 @@
     />
   </div>
   <div class="element-info">
-    <h4 class="fw-bold">{{ group.name }}</h4>
+    <h4 class="fw-bold" [routerLink]="['/forums/'+this.group.id]" >{{ group.name }}</h4>
     <span>{{ group.description }}</span>
   </div>
   <div class="posts-number text-center">

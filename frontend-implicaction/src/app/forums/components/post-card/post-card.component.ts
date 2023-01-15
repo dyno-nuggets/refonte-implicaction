@@ -1,5 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {Post} from '../../model/post';
+import {Router} from "@angular/router";
+
+
 
 @Component({
   selector: 'app-post-card',
@@ -9,4 +12,5 @@ import {Post} from '../../model/post';
 export class PostCardComponent {
   @Input()
   post: Post;
+
 }
