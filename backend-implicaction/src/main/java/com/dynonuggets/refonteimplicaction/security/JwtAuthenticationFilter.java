@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.security;
 import com.dynonuggets.refonteimplicaction.dto.ExceptionResponse;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @Component
@@ -37,7 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             String jwt = getJwtFromRequest(request);
 
-            if (StringUtils.isNotBlank(jwt) && jwtProvider.validateToken(jwt)) {
+            if (isNotBlank(jwt) && jwtProvider.validateToken(jwt)) {
                 String username = jwtProvider.getUsernameFromJwt(jwt);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getJwtFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader(HEADER_AUTH_PREFIX);
         // le header 'Authorization' est de la forme 'Bearer <token>', pour obtenir le token il suffit de supprimer 'Bearer '
-        if (StringUtils.isNotBlank(bearerToken) && bearerToken.startsWith(AUTH_TYPE_PREFIX)) {
+        if (isNotBlank(bearerToken) && bearerToken.startsWith(AUTH_TYPE_PREFIX)) {
             return bearerToken.substring(AUTH_TYPE_PREFIX.length());
         }
         return bearerToken;

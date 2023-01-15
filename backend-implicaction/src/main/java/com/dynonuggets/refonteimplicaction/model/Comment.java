@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 
 import static javax.persistence.FetchType.LAZY;

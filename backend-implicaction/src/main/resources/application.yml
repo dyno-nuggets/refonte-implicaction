@@ -2,6 +2,13 @@ server:
   port: ${PORT:8080}
 
 spring:
+  main:
+    allow-circular-references: true
+
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
   servlet:
     multipart:
       max-file-size: 5MB
