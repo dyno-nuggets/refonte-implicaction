@@ -7,8 +7,10 @@ import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
-import com.dynonuggets.refonteimplicaction.model.*;
-import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
+import com.dynonuggets.refonteimplicaction.model.Notification;
+import com.dynonuggets.refonteimplicaction.model.Role;
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
@@ -34,7 +36,6 @@ import java.util.UUID;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
 import static com.dynonuggets.refonteimplicaction.utils.Message.*;
-import static java.util.stream.Collectors.toList;
 
 @Service
 @Slf4j
@@ -48,7 +49,6 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
     private final RoleRepository roleRepository;
-    private final JobSeekerRepository jobSeekerRepository;
     private final NotificationRepository notificationRepository;
 
 
@@ -125,19 +125,6 @@ public class AuthService {
         user.getNotifications().add(notificationSave);
 
         user = userRepository.save(user);
-
-        final List<String> userRoles = user.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(toList());
-
-        // à l'activation du compte on map l'utilisateur à un job_seeker
-        if (userRoles.contains(RoleEnum.JOB_SEEKER.getLongName())) {
-            JobSeeker jobSeeker = JobSeeker.builder()
-                    .user(user)
-                    .build();
-            jobSeekerRepository.save(jobSeeker);
-        }
     }
 
     @Transactional

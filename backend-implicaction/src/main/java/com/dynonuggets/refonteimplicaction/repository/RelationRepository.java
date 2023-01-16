@@ -41,11 +41,6 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
 
     @Query("select r " +
             "from Relation r " +
-            "where r.sender.id in ?1 or r.receiver.id in ?1")
-    List<Relation> findAllByUserIdIn(List<Long> userIds);
-
-    @Query("select r " +
-            "from Relation r " +
             "where (r.sender.id in ?2 and r.receiver.id = ?1) or (r.receiver.id in ?2 and r.sender.id = ?1)")
     List<Relation> findAllRelatedToUserByUserIdIn(Long userId, List<Long> userIds);
 }

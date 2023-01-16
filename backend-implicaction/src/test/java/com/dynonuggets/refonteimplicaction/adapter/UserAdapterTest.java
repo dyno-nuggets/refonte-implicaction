@@ -1,297 +1,182 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
+import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.service.FileService;
-import com.dynonuggets.refonteimplicaction.utils.ApiUrls;
-import org.junit.jupiter.api.BeforeEach;
+import com.dynonuggets.refonteimplicaction.utils.UserUtils;
+import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Value;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Stream;
-
-import static java.util.Collections.emptyList;
+import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generateRandomExperience;
+import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generateRandomExperienceDto;
+import static com.dynonuggets.refonteimplicaction.utils.TrainingUtils.generateRandomTraining;
+import static com.dynonuggets.refonteimplicaction.utils.TrainingUtils.generateRandomTrainingDto;
+import static com.dynonuggets.refonteimplicaction.utils.UserUtils.generateRandomUser;
+import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserAdapterTest {
 
-    User userRecruiter;
-    Recruiter recruiter;
-    List<Role> recruiterRoles;
+    private static final RecursiveComparisonConfiguration TO_DTO_COMPARISON_CONFIGURATION =
+            RecursiveComparisonConfiguration.builder()
+                    .withIgnoredFields("imageUrl", "roles", "experiences", "trainings", "relationTypeOfCurrentUser")
+                    .build();
+    private static final RecursiveComparisonConfiguration TO_DTO_LIGHT_COMPARISON_CONFIGURATION =
+            RecursiveComparisonConfiguration.builder()
+                    .withComparedFields("id", "username")
+                    .withIgnoredFields("relationTypeOfCurrentUser", "imageUrl")
+                    .build();
 
-    JobSeeker jobSeeker;
-    Company company;
-
-    User userSeeker;
-    List<WorkExperience> experiences;
-    List<Training> trainings;
-    List<Role> seekerRoles;
+    private static final RecursiveComparisonConfiguration TO_MODEL_COMPARISON_CONFIGURATION =
+            RecursiveComparisonConfiguration.builder()
+                    .withIgnoredFields("password", "image", "groups", "notifications", "roles", "experiences", "trainings")
+                    .build();
+    private static final String[] NULL_FIELDS_FOR_LIGHT_DTO = {
+            "firstname",
+            "birthday",
+            "lastname",
+            "url",
+            "email",
+            "hobbies",
+            "purpose",
+            "presentation",
+            "expectation",
+            "contribution",
+            "phoneNumber",
+            "registeredAt",
+            "activatedAt",
+            "activationKey",
+            "active",
+            "relationTypeOfCurrentUser"
+    };
 
     @InjectMocks
     UserAdapter userAdapter;
-
     @Mock
-    WorkExperienceAdapter workExperienceAdapter;
-
+    WorkExperienceAdapter experienceAdapter;
     @Mock
     TrainingAdapter trainingAdapter;
-
-    @Mock
-    CompanyAdapter companyAdapter;
-
     @Mock
     FileService fileService;
 
-    @Value("${app.url}")
-    String appUrl;
-
-    private void initRecruiter() {
-        recruiterRoles = Stream.of(RoleEnum.USER, RoleEnum.RECRUITER)
-                .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.name(), Collections.emptySet()))
-                .collect(toList());
-
-        company = Company.builder()
-                .id(321L)
-                .name("compagnie")
-                .logo("logo")
-                .description("description")
-                .url("https://google.com")
-                .build();
-
-        userRecruiter = User.builder()
-                .id(123L)
-                .username("user")
-                .password("password")
-                .email("mail@mail.com")
-                .firstname("prénom")
-                .lastname("nom")
-                .birthday(LocalDate.now())
-                .url("https://google.com")
-                .hobbies("hobbies")
-                .purpose("purpose")
-                .presentation("coucou")
-                .expectation("rien")
-                .contribution("tout")
-                .phoneNumber("06666666")
-                .registeredAt(Instant.now())
-                .activatedAt(Instant.now())
-                .activationKey("key")
-                .active(true)
-                .roles(recruiterRoles)
-                .build();
-
-        recruiter = Recruiter.builder()
-                .id(userRecruiter.getId())
-                .user(userRecruiter)
-                .company(company)
-                .build();
-    }
-
-    private void initSeeker() {
-        experiences = Arrays.asList(
-                WorkExperience.builder().id(1L).startedAt(LocalDate.of(2002, 12, 10)).finishedAt(LocalDate.of(2003, 6, 12)).label("XP1").description("c'était super").companyName("compagnie 1").build(),
-                WorkExperience.builder().id(2L).startedAt(LocalDate.of(2003, 12, 24)).finishedAt(LocalDate.of(2007, 6, 14)).label("XP2").description("c'était cool").companyName("compagnie 2").build()
-        );
-
-        trainings = Arrays.asList(
-                Training.builder().id(1L).label("Formation 1").date(LocalDate.of(2001, 10, 10)).school("School1").build(),
-                Training.builder().id(2L).label("Formation 2").date(LocalDate.of(2002, 10, 10)).school("School1").build()
-        );
-
-        seekerRoles = Stream.of(RoleEnum.USER, RoleEnum.JOB_SEEKER)
-                .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.name(), Collections.emptySet()))
-                .collect(toList());
-
-        userSeeker = User.builder()
-                .id(123L)
-                .username("user")
-                .password("password")
-                .email("mail@mail.com")
-                .firstname("prénom")
-                .lastname("nom")
-                .birthday(LocalDate.now())
-                .url("http://google.com")
-                .hobbies("hobbies")
-                .purpose("purpose")
-                .presentation("coucou")
-                .expectation("rien")
-                .contribution("tout")
-                .phoneNumber("06666666")
-                .registeredAt(Instant.now())
-                .activatedAt(Instant.now())
-                .activationKey("key")
-                .active(true)
-                .roles(seekerRoles)
-                .build();
-
-        jobSeeker = JobSeeker.builder()
-                .user(userRecruiter)
-                .experiences(experiences)
-                .trainings(trainings)
-                .build();
-    }
-
-    @BeforeEach
-    public void setUp() {
-        initRecruiter();
-        initSeeker();
-    }
-
     @Test
-    void toDtoTestWillNullImage() {
-        final UserDto userDto = userAdapter.toDto(userRecruiter);
-
-        assertThat(userDto.getId()).isEqualTo(userRecruiter.getId());
-        assertThat(userDto.getUsername()).isEqualTo(userRecruiter.getUsername());
-        assertThat(userDto.getEmail()).isEqualTo(userRecruiter.getEmail());
-        assertThat(userDto.getUrl()).isEqualTo(userRecruiter.getUrl());
-        assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
-        assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
-        assertThat(userDto.getBirthday()).isEqualTo(userRecruiter.getBirthday());
-        assertThat(userDto.getImageUrl()).isEqualTo(UserAdapter.DEFAULT_USER_IMAGE_URI);
-    }
-
-    @Test
-    void toDtoTestWithImage() {
+    void should_map_fields_when_toDto() {
         // given
-        FileModel image = FileModel.builder().objectKey("azertyKey").build();
-        User user = User.builder().image(image).build();
-        final UserDto expectedDto = UserDto.builder()
-                .roles(emptyList())
-                .imageUrl(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()))
-                .build();
-        given(fileService.buildFileUri(anyString())).willReturn(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()));
+        final User user = generateRandomUser(of(RoleEnum.USER));
+        user.setTrainings(of(generateRandomTraining()));
+        user.setExperiences(of(generateRandomExperience()));
+        String imageUrl = "https://appurl/image_key";
+        int trainingSize = user.getTrainings().size();
+        int experienceSize = user.getExperiences().size();
+
+        given(fileService.buildFileUri(anyString())).willReturn(imageUrl);
+        given(experienceAdapter.toDtoWithoutUser(any())).willReturn(WorkExperienceDto.builder().build());
+        given(trainingAdapter.toDtoWithoutUser(any())).willReturn(TrainingDto.builder().build());
 
         // when
         final UserDto userDto = userAdapter.toDto(user);
 
         // then
-        assertThat(userDto).usingRecursiveComparison().isEqualTo(expectedDto);
+        assertThat(userDto)
+                .usingRecursiveComparison(TO_DTO_COMPARISON_CONFIGURATION)
+                .isEqualTo(user);
+
+        // on vérifie que les rôles sont bien mappés
+        assertThat(userDto.getRoles())
+                .isNotEmpty()
+                .containsSequence(user.getRoles().stream().map(Role::getName).collect(toList()));
+
+        // on vérifie que l'url de l'image est transmise
+        assertThat(userDto.getImageUrl())
+                .isNotNull()
+                .isEqualTo(imageUrl);
+
+        // on vérifie que les expériences ont bien été transmises
+        assertThat(userDto.getExperiences())
+                .isNotNull()
+                .hasSize(experienceSize);
+
+        // on vérifie que les formations ont bien été transmises
+        assertThat(userDto.getTrainings())
+                .isNotNull()
+                .hasSize(trainingSize);
+
+        assertThat(userDto.getRelationTypeOfCurrentUser())
+                .isNull();
+
+        verify(experienceAdapter, times(experienceSize)).toDtoWithoutUser(any());
+        verify(trainingAdapter, times(trainingSize)).toDtoWithoutUser(any());
+        verify(fileService, times(1)).buildFileUri(anyString());
     }
 
     @Test
-    void toDtoJobSeekerTest() {
-        final UserDto userDto = userAdapter.toDto(jobSeeker);
-        assertThat(userDto.getId()).isEqualTo(userRecruiter.getId());
-        assertThat(userDto.getUsername()).isEqualTo(userRecruiter.getUsername());
-        assertThat(userDto.getEmail()).isEqualTo(userRecruiter.getEmail());
-        assertThat(userDto.getUrl()).isEqualTo(userRecruiter.getUrl());
-        assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
-        assertThat(userDto.getRegisteredAt()).isEqualTo(userRecruiter.getRegisteredAt());
-        assertThat(userDto.getBirthday()).isEqualTo(userRecruiter.getBirthday());
-    }
-
-    @Test
-    void toDtoJobSeekerTestWithEmptyTrainingTest() {
-        final JobSeeker jobSeeker = JobSeeker.builder()
-                .user(userSeeker)
-                .trainings(null)
-                .build();
-
-        final UserDto actual = userAdapter.toDto(jobSeeker);
-
-        assertThat(actual.getTrainings().isEmpty()).isTrue();
-    }
-
-    @Test
-    void toDtoJobSeekerTestWithEmptyExperienceTest() {
-        final JobSeeker jobSeeker = JobSeeker.builder()
-                .user(userSeeker)
-                .experiences(null)
-                .build();
-
-        final UserDto actual = userAdapter.toDto(jobSeeker);
-
-        assertThat(actual.getExperiences().isEmpty()).isTrue();
-    }
-
-    @Test
-    void toDtoRecruiterTest() {
-        final UserDto expectedDto = UserDto.builder()
-                .id(userRecruiter.getId())
-                .username(userRecruiter.getUsername())
-                .firstname(userRecruiter.getFirstname())
-                .lastname(userRecruiter.getLastname())
-                .email(userRecruiter.getEmail())
-                .url(userRecruiter.getUrl())
-                .hobbies(userRecruiter.getHobbies())
-                .purpose(userRecruiter.getPurpose())
-                .registeredAt(userRecruiter.getRegisteredAt())
-                .presentation(userRecruiter.getPresentation())
-                .contribution(userRecruiter.getContribution())
-                .birthday(userRecruiter.getBirthday())
-                .phoneNumber(userRecruiter.getPhoneNumber())
-                .activationKey(userRecruiter.getActivationKey())
-                .activatedAt(userRecruiter.getActivatedAt())
-                .expectation(userRecruiter.getExpectation())
-                .active(userRecruiter.isActive())
-                .roles(userRecruiter.getRoles().stream().map(Role::getName).collect(toList()))
-                .company(companyAdapter.toDto(company))
-                .imageUrl(UserAdapter.DEFAULT_USER_IMAGE_URI)
-                .build();
-
-        final UserDto actualDto = userAdapter.toDto(recruiter);
-
-        assertThat(actualDto).usingRecursiveComparison()
-                .isEqualTo(expectedDto);
-    }
-
-    @Test
-    void toDtoLightWithNullImageTest() {
-        UserDto expectedDto = UserDto.builder()
-                .id(userSeeker.getId())
-                .username(userSeeker.getUsername())
-                .roles(userSeeker.getRoles().stream().map(Role::getName).collect(toList()))
-                .build();
-        UserDto actualDto = userAdapter.toDtoLight(userSeeker);
-
-        assertThat(actualDto).usingRecursiveComparison()
-                .isEqualTo(expectedDto);
-    }
-
-    @Test
-    void toDtoLightWithImageTest() {
+    void should_only_map_required_fields_when_toDtoLight() {
         // given
-        FileModel image = FileModel.builder().objectKey("azertyKey").build();
-        User user = User.builder()
-                .image(image)
-                .build();
-        UserDto expectedDto = UserDto.builder()
-                .roles(emptyList())
-                .imageUrl(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()))
-                .build();
+        final User user = generateRandomUser(of(RoleEnum.USER));
+        String imageUrl = "https://appurl/image_key";
 
-        given(fileService.buildFileUri(anyString())).willReturn(appUrl + ApiUrls.FILE_BASE_URI + ApiUrls.GET_FILE_BY_KEY.replace("{objectKey}", image.getObjectKey()));
+        given(fileService.buildFileUri(anyString())).willReturn(imageUrl);
 
         // when
-        UserDto actualDto = userAdapter.toDtoLight(user);
+        UserDto dtoLight = userAdapter.toDtoLight(user);
 
         // then
-        assertThat(actualDto).usingRecursiveComparison()
-                .isEqualTo(expectedDto);
+        assertThat(dtoLight)
+                .usingRecursiveComparison(TO_DTO_LIGHT_COMPARISON_CONFIGURATION)
+                .isEqualTo(user);
+
+        // on vérifie que tous les champs que l'on ne veut pas transmettre son bien nuls
+        assertThat(dtoLight)
+                .extracting(NULL_FIELDS_FOR_LIGHT_DTO)
+                .allSatisfy(field -> assertThat(field).isNull());
     }
 
     @Test
-    void toModelTest() {
-        final UserDto dto = userAdapter.toDto(userRecruiter);
+    void should_map_when_toModel() {
+        // given
+        final UserDto dto = UserUtils.generateRandomUserDto(of("USER"));
+        dto.setExperiences(of(generateRandomExperienceDto()));
+        dto.setTrainings(of(generateRandomTrainingDto()));
+        int experienceCount = dto.getExperiences().size();
+        int trainingCount = dto.getTrainings().size();
 
-        final User actualUser = userAdapter.toModel(dto);
+        given(experienceAdapter.toModel(any())).willReturn(WorkExperience.builder().build());
+        given(trainingAdapter.toModel(any())).willReturn(Training.builder().build());
 
-        assertThat(actualUser).usingRecursiveComparison()
-                .ignoringFields("password")
-                .isEqualTo(userRecruiter);
+        // when
+        final User model = userAdapter.toModel(dto);
+
+        assertThat(model)
+                .usingRecursiveComparison(TO_MODEL_COMPARISON_CONFIGURATION)
+                .isEqualTo(dto);
+
+        // on vérifie que les expériences ont bien été transmises
+        assertThat(model.getExperiences())
+                .isNotNull()
+                .hasSize(experienceCount);
+
+        // on vérifie que les formations ont bien été transmises
+        assertThat(model.getTrainings())
+                .isNotNull()
+                .hasSize(trainingCount);
+
+        assertThat(model.getRoles())
+                .isNotEmpty()
+                .doesNotContainNull()
+                .allMatch(role -> dto.getRoles().contains(role.getName()));
+
+        verify(experienceAdapter, times(experienceCount)).toModel(any());
+        verify(trainingAdapter, times(trainingCount)).toModel(any());
     }
 }

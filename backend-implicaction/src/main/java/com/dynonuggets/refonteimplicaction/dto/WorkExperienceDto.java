@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class WorkExperienceDto {
     private Long id;
+    @Deprecated
     private UserDto user;
     private LocalDate startedAt;
     private LocalDate finishedAt;

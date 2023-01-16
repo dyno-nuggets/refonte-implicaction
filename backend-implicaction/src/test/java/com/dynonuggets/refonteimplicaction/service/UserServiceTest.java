@@ -4,15 +4,12 @@ import com.dynonuggets.refonteimplicaction.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,22 +22,18 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.dynonuggets.refonteimplicaction.model.RoleEnum.USER;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
-
-    JobSeeker jobSeeker;
     UserDto expectedUserDto;
     User userSeeker;
 
@@ -63,9 +56,6 @@ class UserServiceTest {
     UserAdapter userAdapter;
 
     @Mock
-    JobSeekerRepository jobSeekerRepository;
-
-    @Mock
     S3CloudServiceImpl cloudService;
 
     @Mock
@@ -77,7 +67,7 @@ class UserServiceTest {
     @BeforeEach
     void setMockOutput() {
 
-        List<Role> seekerRoles = Stream.of(RoleEnum.USER, RoleEnum.JOB_SEEKER)
+        List<Role> seekerRoles = Stream.of(USER)
                 .map(roleEnum -> new Role(roleEnum.getId(), roleEnum.name(), Collections.emptySet()))
                 .collect(toList());
 
@@ -113,13 +103,6 @@ class UserServiceTest {
                 Training.builder().id(2L).label("Formation 2").date(LocalDate.of(2002, 10, 10)).school("School1").build()
         );
 
-        jobSeeker = JobSeeker.builder()
-                .id(userSeeker.getId())
-                .user(userSeeker)
-                .experiences(experiences)
-                .trainings(trainings)
-                .build();
-
         expectedUserDto = UserDto.builder()
                 .id(123L)
                 .username("user")
@@ -142,31 +125,6 @@ class UserServiceTest {
                 .trainings(trainings.stream().map(trainingAdapter::toDtoWithoutUser).collect(toList()))
                 .roles(seekerRoles.stream().map(Role::getName).collect(toList()))
                 .build();
-    }
-
-    @Test
-    @DisplayName("Should Retrieve User by Id")
-    void getUserByIdWithExistingUserId() {
-
-        when(jobSeekerRepository.findById(userSeeker.getId())).thenReturn(Optional.of(jobSeeker));
-        when(userAdapter.toDto(jobSeeker)).thenReturn(expectedUserDto);
-
-        UserDto actualUser = userService.getUserById(123L);
-
-        assertThat(actualUser.getId()).isEqualTo(expectedUserDto.getId());
-    }
-
-    @Test
-    @DisplayName("Should Throw Exception")
-    void getUserByIdWithNonExistingUserId() {
-        final long notFoundId = 10000L;
-        final String expectedMessage = "No user found with id " + notFoundId;
-
-        when(jobSeekerRepository.findById(notFoundId)).thenReturn(Optional.empty());
-
-        assertThatThrownBy(() -> userService.getUserById(notFoundId))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage(expectedMessage);
     }
 
     @Test

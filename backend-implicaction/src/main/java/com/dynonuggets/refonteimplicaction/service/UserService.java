@@ -6,8 +6,14 @@ import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
-import com.dynonuggets.refonteimplicaction.model.*;
-import com.dynonuggets.refonteimplicaction.repository.*;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.model.Group;
+import com.dynonuggets.refonteimplicaction.model.Relation;
+import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.repository.FileRepository;
+import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
+import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
+import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +34,6 @@ public class UserService {
     private final RelationRepository relationRepository;
     private final AuthService authService;
     private final UserAdapter userAdapter;
-    private final JobSeekerRepository jobSeekerRepository;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
     private final GroupRepository groupRepository;
@@ -51,7 +56,7 @@ public class UserService {
     public Page<UserDto> getAllCommunity(Pageable pageable) {
         final Long currentUserId = authService.getCurrentUser().getId();
 
-        final Page<UserDto> users = userRepository.findAllForCommunity(pageable, currentUserId)
+        final Page<UserDto> users = userRepository.findAllByIdNot(pageable, currentUserId)
                 .map(userAdapter::toDto);
 
         final List<Long> userIds = users.map(UserDto::getId)
@@ -68,9 +73,9 @@ public class UserService {
     }
 
     public UserDto getUserById(Long userId) {
-        JobSeeker jobSeeker = jobSeekerRepository.findById(userId)
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
-        return userAdapter.toDto(jobSeeker);
+        return userAdapter.toDto(user);
     }
 
     public UserDto updateUser(UserDto userDto) {

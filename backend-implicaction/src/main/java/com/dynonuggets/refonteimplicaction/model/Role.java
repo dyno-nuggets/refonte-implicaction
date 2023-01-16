@@ -1,9 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,6 +12,7 @@ import static javax.persistence.CascadeType.ALL;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "role")
 public class Role {
     @Id
