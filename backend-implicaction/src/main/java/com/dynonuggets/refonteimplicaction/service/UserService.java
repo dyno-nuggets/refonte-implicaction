@@ -11,10 +11,8 @@ import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.utils.Message.USER_NOT_FOUND_MESSAGE;
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -36,7 +36,6 @@ public class UserService {
     private final UserAdapter userAdapter;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
-    private final GroupRepository groupRepository;
     private GroupAdapter groupAdapter;
 
     /**
@@ -49,8 +48,7 @@ public class UserService {
 
 
     /**
-     * @return la liste paginée de tous les utilisateurs (recruiters et job-seekers) dont l'inscription a été
-     * validée
+     * @return la liste paginée de tous les utilisateurs dont l'inscription a été validée
      */
     @Transactional(readOnly = true)
     public Page<UserDto> getAllCommunity(Pageable pageable) {
@@ -73,15 +71,14 @@ public class UserService {
     }
 
     public UserDto getUserById(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id " + userId));
+        final User user = getUserByIdIfExists(userId);
+
         return userAdapter.toDto(user);
     }
 
     public UserDto updateUser(UserDto userDto) {
-        User user = userRepository.findById(userDto.getId())
-                .orElseThrow(() -> new UserNotFoundException("Impossible de mettre à jour" +
-                        " les informations personelles; L'user avec l'id " + userDto.getId() + " n'existe pas."));
+        final User user = getUserByIdIfExists(userDto.getId());
+
         // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
         // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
         user.setEmail(userDto.getEmail());
@@ -132,11 +129,16 @@ public class UserService {
     @Transactional(readOnly = true)
     public List<GroupDto> getUserGroups(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(Message.USER_NOT_FOUND_MESSAGE));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
 
         final List<Group> groups = user.getGroups();
         return groups.stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());
+    }
+
+    private User getUserByIdIfExists(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(format(USER_NOT_FOUND_MESSAGE, userId)));
     }
 }

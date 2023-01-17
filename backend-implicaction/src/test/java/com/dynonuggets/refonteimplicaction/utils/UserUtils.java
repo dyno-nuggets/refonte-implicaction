@@ -83,6 +83,10 @@ public class UserUtils {
                 .build();
     }
 
+    public static UserDto generateRandomUserDto() {
+        return generateRandomUserDto(null);
+    }
+
     public static UserDto generateRandomUserDto(final List<String> roles) {
         final String firstname = randomAlphabetic(generateRandomNumber());
         final String lastname = randomAlphabetic(generateRandomNumber());

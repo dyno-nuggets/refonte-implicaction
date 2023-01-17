@@ -7,6 +7,8 @@ import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import com.dynonuggets.refonteimplicaction.utils.UserUtils;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -26,6 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserAdapterTest {
 
     private static final RecursiveComparisonConfiguration TO_DTO_COMPARISON_CONFIGURATION =
@@ -145,7 +148,7 @@ class UserAdapterTest {
     @Test
     void should_map_when_toModel() {
         // given
-        final UserDto dto = UserUtils.generateRandomUserDto(of("USER"));
+        final UserDto dto = UserUtils.generateRandomUserDto();
         dto.setExperiences(of(generateRandomExperienceDto()));
         dto.setTrainings(of(generateRandomTrainingDto()));
         int experienceCount = dto.getExperiences().size();
