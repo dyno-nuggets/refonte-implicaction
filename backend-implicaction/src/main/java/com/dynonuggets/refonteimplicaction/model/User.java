@@ -10,6 +10,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
+import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -33,18 +34,18 @@ public class User {
     @NotBlank(message = "password is required")
     private String password;
 
+    private String firstname;
+
+    private String lastname;
+
     @Column(name = "email", unique = true)
     @NotEmpty(message = "Email is required")
     @Email
     private String email;
 
-    private String firstname;
-
-    private String lastname;
+    private String url;
 
     private LocalDate birthday;
-
-    private String url;
 
     private String hobbies;
 
@@ -97,4 +98,10 @@ public class User {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "notification_id")})
     private List<Notification> notifications;
+
+    @OneToMany(fetch = LAZY, mappedBy = "user")
+    private List<WorkExperience> experiences;
+
+    @OneToMany(fetch = LAZY, mappedBy = "user")
+    private List<Training> trainings;
 }

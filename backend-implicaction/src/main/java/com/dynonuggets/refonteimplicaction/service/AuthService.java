@@ -7,8 +7,10 @@ import com.dynonuggets.refonteimplicaction.dto.RefreshTokenRequestDto;
 import com.dynonuggets.refonteimplicaction.dto.ReqisterRequestDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
-import com.dynonuggets.refonteimplicaction.model.*;
-import com.dynonuggets.refonteimplicaction.repository.JobSeekerRepository;
+import com.dynonuggets.refonteimplicaction.model.Notification;
+import com.dynonuggets.refonteimplicaction.model.Role;
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.repository.UserRepository;
@@ -35,7 +37,8 @@ import java.util.UUID;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
 import static com.dynonuggets.refonteimplicaction.utils.Message.*;
-import static java.util.stream.Collectors.toList;
+import static java.lang.String.format;
+import static java.util.Collections.singletonList;
 
 @Service
 @Slf4j
@@ -49,7 +52,6 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
     private final RoleRepository roleRepository;
-    private final JobSeekerRepository jobSeekerRepository;
     private final NotificationRepository notificationRepository;
 
 
@@ -67,10 +69,10 @@ public class AuthService {
     public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
         validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
-        final List<User> admins = userRepository.findAllByRoles_NameIn(Collections.singletonList(RoleEnum.ADMIN.getLongName()));
+        final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(RoleEnum.ADMIN.getLongName()));
         registerUser(reqisterRequest, activationKey);
         final Notification notification = Notification.builder()
-                .message(String.format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
+                .message(format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
                 .sent(false)
                 .read(false)
                 .date(Instant.now())
@@ -103,7 +105,7 @@ public class AuthService {
     @Transactional
     public void verifyAccount(String activationKey) throws ImplicactionException {
         User user = userRepository.findByActivationKey(activationKey)
-                .orElseThrow(() -> new ImplicactionException(String.format(ACTIVATION_KEY_NOT_FOUND_MESSAGE, activationKey)));
+                .orElseThrow(() -> new ImplicactionException(format(ACTIVATION_KEY_NOT_FOUND_MESSAGE, activationKey)));
 
         if (user.getActivatedAt() != null) {
             throw new ImplicactionException("Account With Associated Activation Key Already Activated - " + activationKey);
@@ -114,30 +116,16 @@ public class AuthService {
 
         Notification notification = Notification.builder()
                 .type(USER_ACTIVATION)
-                .users(Collections.singletonList(user))
+                .users(singletonList(user))
                 .date(Instant.now())
                 .sent(false)
                 .read(false)
-                .message(String.format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", appUrl))
+                .message(format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", appUrl))
                 .title("[Implicaction] Activation de votre compte")
                 .build();
         final Notification notificationSave = notificationRepository.save(notification);
         user.getNotifications().add(notificationSave);
-
-        user = userRepository.save(user);
-
-        final List<String> userRoles = user.getRoles()
-                .stream()
-                .map(Role::getName)
-                .collect(toList());
-
-        // à l'activation du compte on map l'utilisateur à un job_seeker
-        if (userRoles.contains(RoleEnum.JOB_SEEKER.getLongName())) {
-            JobSeeker jobSeeker = JobSeeker.builder()
-                    .user(user)
-                    .build();
-            jobSeekerRepository.save(jobSeeker);
-        }
+        userRepository.save(user);
     }
 
     @Transactional
@@ -167,14 +155,14 @@ public class AuthService {
         org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(principal.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User name not found - " + principal.getUsername()));
+                .orElseThrow(() -> new UsernameNotFoundException(format(USERNAME_NOT_FOUND_MESSAGE, principal.getUsername())));
     }
 
     @Transactional(readOnly = true)
     public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
         final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USERNAME_NOT_FOUND_MESSAGE, username)));
+                .orElseThrow(() -> new UsernameNotFoundException(format(USERNAME_NOT_FOUND_MESSAGE, username)));
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
         String token = jwtProvider.generateTokenWithUsername(username);
