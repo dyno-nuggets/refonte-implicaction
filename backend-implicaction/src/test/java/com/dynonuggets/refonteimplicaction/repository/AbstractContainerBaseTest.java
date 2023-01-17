@@ -1,18 +1,29 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
+import org.testcontainers.containers.ContainerLaunchException;
 import org.testcontainers.containers.MySQLContainer;
 
+@DataJpaTest
+@ActiveProfiles(profiles = "test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public abstract class AbstractContainerBaseTest {
 
     @SuppressWarnings("rawtypes")
-    static final MySQLContainer MY_SQL_CONTAINER;
+    static final MySQLContainer container;
 
     static {
-        MY_SQL_CONTAINER = new MySQLContainer<>("mysql:8")
+        container = new MySQLContainer<>("mysql:8")
                 .withDatabaseName("implicaction")
-                .withUsername("test")
-                .withPassword("test")
                 .withReuse(true);
-        MY_SQL_CONTAINER.start();
+
+        try {
+            container.start();
+        } catch (ContainerLaunchException ignored) {
+        } finally {
+            container.stop();
+        }
     }
 }
