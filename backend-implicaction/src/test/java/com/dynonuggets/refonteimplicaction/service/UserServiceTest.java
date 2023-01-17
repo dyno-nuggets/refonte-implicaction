@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.model.RoleEnum.*;
+import static com.dynonuggets.refonteimplicaction.utils.Message.USERNAME_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.utils.Message.USER_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.utils.UserUtils.generateRandomUser;
 import static java.lang.String.format;
@@ -42,25 +43,20 @@ import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
     List<User> users;
+    Pageable pageable = Pageable.unpaged();
 
     @Mock
     UserRepository userRepository;
-
     @Mock
     RelationRepository relationRepository;
-
     @Mock
     AuthService authService;
-
     @Mock
     UserAdapter userAdapter;
-
     @Mock
     S3CloudServiceImpl cloudService;
-
     @Mock
     FileRepository fileRepository;
-
     @InjectMocks
     UserService userService;
 
@@ -107,7 +103,7 @@ class UserServiceTest {
         given(userRepository.findAll(any(Pageable.class))).willReturn(new PageImpl<>(users));
 
         // when
-        final Page<UserDto> result = userService.getAll(Pageable.unpaged());
+        final Page<UserDto> result = userService.getAll(pageable);
 
         // then
         assertThat(result)
@@ -218,11 +214,12 @@ class UserServiceTest {
         @DisplayName("L'accès à cette méthode doit être interdit si l'utilisateur n'est pas identifié et une exception doit-être lancée")
         void should_throw_UserNotFoundException_when_getAllCommunity_without_auth() {
             // given
-            final var message = "User name not found - ";
-            given(authService.getCurrentUser()).willThrow(new UserNotFoundException("User name not found - "));
+            String message = format(USERNAME_NOT_FOUND_MESSAGE, "");
+            given(authService.getCurrentUser())
+                    .willThrow(new UserNotFoundException(message));
 
             final var exception =
-                    assertThrows(UserNotFoundException.class, () -> userService.getAllCommunity(Pageable.unpaged()));
+                    assertThrows(UserNotFoundException.class, () -> userService.getAllCommunity(pageable));
 
             // then
             assertThat(exception.getMessage())
