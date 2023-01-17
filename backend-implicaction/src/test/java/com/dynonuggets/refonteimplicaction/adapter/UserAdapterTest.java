@@ -3,7 +3,10 @@ package com.dynonuggets.refonteimplicaction.adapter;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.model.Role;
+import com.dynonuggets.refonteimplicaction.model.Training;
+import com.dynonuggets.refonteimplicaction.model.User;
+import com.dynonuggets.refonteimplicaction.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import com.dynonuggets.refonteimplicaction.utils.UserUtils;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
@@ -15,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import static com.dynonuggets.refonteimplicaction.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generateRandomExperience;
 import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generateRandomExperienceDto;
 import static com.dynonuggets.refonteimplicaction.utils.TrainingUtils.generateRandomTraining;
@@ -76,7 +80,7 @@ class UserAdapterTest {
     @Test
     void should_map_fields_when_toDto() {
         // given
-        final User user = generateRandomUser(of(RoleEnum.USER));
+        final User user = generateRandomUser(of(USER));
         user.setTrainings(of(generateRandomTraining()));
         user.setExperiences(of(generateRandomExperience()));
         String imageUrl = "https://appurl/image_key";
@@ -126,7 +130,7 @@ class UserAdapterTest {
     @Test
     void should_only_map_required_fields_when_toDtoLight() {
         // given
-        final User user = generateRandomUser(of(RoleEnum.USER));
+        final User user = generateRandomUser(of(USER));
         String imageUrl = "https://appurl/image_key";
 
         given(fileService.buildFileUri(anyString())).willReturn(imageUrl);
@@ -148,7 +152,7 @@ class UserAdapterTest {
     @Test
     void should_map_when_toModel() {
         // given
-        final UserDto dto = UserUtils.generateRandomUserDto();
+        final UserDto dto = UserUtils.generateRandomUserDto(of(USER.name()));
         dto.setExperiences(of(generateRandomExperienceDto()));
         dto.setTrainings(of(generateRandomTrainingDto()));
         int experienceCount = dto.getExperiences().size();

@@ -84,13 +84,14 @@ public class UserAdapter {
                 .map(trainingAdapter::toModel)
                 .collect(toList()) : null;
 
-        final List<Role> roles = dto.getRoles()
+        // TODO: implémenter callIfNotNull
+        final List<Role> roles = isNotEmpty(dto.getRoles()) ? dto.getRoles()
                 .stream()
                 .map(roleLabel -> {
                     final RoleEnum role = RoleEnum.valueOf(roleLabel);
                     return new Role(role.getId(), role.name(), emptySet());
                 })
-                .collect(toList());
+                .collect(toList()) : null;
 
         return User.builder()
                 .id(dto.getId())
