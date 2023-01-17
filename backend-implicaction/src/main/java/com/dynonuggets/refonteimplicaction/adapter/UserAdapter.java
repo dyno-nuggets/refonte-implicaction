@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
@@ -15,6 +14,7 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 
 @Component
@@ -25,45 +25,21 @@ public class UserAdapter {
 
     private final WorkExperienceAdapter experienceAdapter;
     private final TrainingAdapter trainingAdapter;
-    private final CompanyAdapter companyAdapter;
     private final FileService fileService;
 
-    public UserDto toDto(JobSeeker jobSeeker) {
-        final User model = jobSeeker.getUser();
+    public UserDto toDto(final User model) {
+        final List<String> roles = rolesToDtos(model);
+        final String imageUrl = getImageUrl(model);
 
-        final List<WorkExperienceDto> experiences = isNotEmpty(jobSeeker.getExperiences()) ? jobSeeker.getExperiences()
+        final List<WorkExperienceDto> experiences = isNotEmpty(model.getExperiences()) ? model.getExperiences()
                 .stream()
                 .map(experienceAdapter::toDtoWithoutUser)
-                .collect(toList()) : emptyList();
+                .collect(toList()) : null;
 
-        final List<TrainingDto> trainings = isNotEmpty(jobSeeker.getTrainings()) ? jobSeeker.getTrainings()
+        final List<TrainingDto> trainings = isNotEmpty(model.getTrainings()) ? model.getTrainings()
                 .stream()
                 .map(trainingAdapter::toDtoWithoutUser)
-                .collect(toList()) : emptyList();
-
-        UserDto userDto = toDto(model);
-        userDto.setTrainings(trainings);
-        userDto.setExperiences(experiences);
-
-        return userDto;
-    }
-
-    public UserDto toDto(final Recruiter recruiter) {
-        final User model = recruiter.getUser();
-
-        final CompanyDto companyDto = companyAdapter.toDto(recruiter.getCompany());
-
-        UserDto userDto = toDto(model);
-        userDto.setCompany(companyDto);
-
-        return userDto;
-    }
-
-    public UserDto toDto(final User model) {
-
-        final List<String> roles = rolesToDtos(model);
-
-        final String imageUrl = getImageUrl(model);
+                .collect(toList()) : null;
 
         return UserDto.builder()
                 .id(model.getId())
@@ -85,6 +61,8 @@ public class UserAdapter {
                 .active(model.isActive())
                 .roles(roles)
                 .imageUrl(imageUrl)
+                .experiences(experiences)
+                .trainings(trainings)
                 .build();
     }
 
@@ -94,13 +72,26 @@ public class UserAdapter {
 
     public User toModel(UserDto dto) {
 
-        final List<Role> roles = dto.getRoles()
+        // TODO: implémenter callIfNotNull
+        final List<WorkExperience> experiences = isNotEmpty(dto.getExperiences()) ? dto.getExperiences()
+                .stream()
+                .map(experienceAdapter::toModel)
+                .collect(toList()) : null;
+
+        // TODO: implémenter callIfNotNull
+        final List<Training> trainings = isNotEmpty(dto.getTrainings()) ? dto.getTrainings()
+                .stream()
+                .map(trainingAdapter::toModel)
+                .collect(toList()) : null;
+
+        // TODO: implémenter callIfNotNull
+        final List<Role> roles = isNotEmpty(dto.getRoles()) ? dto.getRoles()
                 .stream()
                 .map(roleLabel -> {
                     final RoleEnum role = RoleEnum.valueOf(roleLabel);
                     return new Role(role.getId(), role.name(), emptySet());
                 })
-                .collect(toList());
+                .collect(toList()) : null;
 
         return User.builder()
                 .id(dto.getId())
@@ -109,7 +100,7 @@ public class UserAdapter {
                 .lastname(dto.getLastname())
                 .activatedAt(dto.getActivatedAt())
                 .activationKey(dto.getActivationKey())
-                .active(dto.isActive())
+                .active(isTrue(dto.getActive()))
                 .contribution(dto.getContribution())
                 .expectation(dto.getExpectation())
                 .hobbies(dto.getHobbies())
@@ -121,6 +112,8 @@ public class UserAdapter {
                 .phoneNumber(dto.getPhoneNumber())
                 .birthday(dto.getBirthday())
                 .roles(roles)
+                .experiences(experiences)
+                .trainings(trainings)
                 .build();
     }
 
