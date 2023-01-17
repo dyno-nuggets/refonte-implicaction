@@ -14,6 +14,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class WorkExperienceDto {
     private Long id;
+    /**
+     * @deprecated depuis la v.2003 cet attribut ne doit plus être utilisé
+     */
+    @Deprecated(forRemoval = true, since = "v.2003")
     private UserDto user;
     private LocalDate startedAt;
     private LocalDate finishedAt;
