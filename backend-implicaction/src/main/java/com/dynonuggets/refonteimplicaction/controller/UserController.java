@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.service.AuthService;
-import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.dynonuggets.refonteimplicaction.service.RelationService;
 import com.dynonuggets.refonteimplicaction.service.UserService;
 import lombok.AllArgsConstructor;
@@ -26,7 +25,6 @@ public class UserController {
     private final UserService userService;
     private final RelationService relationService;
     private final AuthService authService;
-    private final GroupService groupService;
 
     @GetMapping
     public ResponseEntity<Page<UserDto>> getAll(
@@ -49,7 +47,7 @@ public class UserController {
     }
 
     @GetMapping(path = GET_USER_URI)
-    public ResponseEntity<UserDto> getUserProfile(@PathVariable("userId") Long userId) {
+    public ResponseEntity<UserDto> getUserProfile(@PathVariable Long userId) {
         UserDto userdto = userService.getUserById(userId);
         return ResponseEntity.ok(userdto);
     }
@@ -110,7 +108,7 @@ public class UserController {
     }
 
     @GetMapping(GET_USER_GROUPS_URI)
-    public ResponseEntity<List<GroupDto>> getUserGroups(@PathVariable("userId") Long userId) {
+    public ResponseEntity<List<GroupDto>> getUserGroups(@PathVariable Long userId) {
         final List<GroupDto> groupsDto = userService.getUserGroups(userId);
         return ResponseEntity.ok(groupsDto);
     }

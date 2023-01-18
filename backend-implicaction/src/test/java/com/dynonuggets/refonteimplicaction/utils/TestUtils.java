@@ -18,6 +18,10 @@ public class TestUtils {
         return random.nextInt(20);
     }
 
+    public static boolean generateRandomBoolean() {
+        return random.nextBoolean();
+    }
+
     public static Instant generateRandomDate() {
         return generateRandomDate(Instant.parse("2020-12-03T10:15:30.00Z"));
     }
