@@ -12,7 +12,6 @@ import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
-
     JobApplicationAdapter adapter = new JobApplicationAdapter();
 
     @Test

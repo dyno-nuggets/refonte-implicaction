@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -220,21 +221,21 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @Test
     @WithMockUser
-    void should_list_all_post_when_authenticated() throws Exception {
+    void should_list_all_post_when_getAllPost_and_authenticated() throws Exception {
         // given
-        PostResponse postRequest1 = new PostResponse(1L, "Post Name", "http://url.site", "Description", "User 1", 12L, null,
-                "Subreddit Name", 0, 0, "il y a 2 jours", false, false, null);
-        PostResponse postRequest2 = new PostResponse(2L, "Post Name 2", "http://url2.site2", "Description2", "User 2", 13L, null,
-                "Subreddit Name 2", 0, 0, "il y a 2 jours", false, false, null);
+        PostResponse postRequest1 = PostResponse.builder().id(1L).name("Post Name").url("http://url.site").build();
+        PostResponse postRequest2 = PostResponse.builder().id(2L).name("Post Name 2").url("http://url2.site2").build();
 
         final List<PostResponse> postResponses = asList(postRequest1, postRequest2);
         final Page<PostResponse> expectedPages = new PageImpl<>(postResponses);
         final long expectedSize = expectedPages.getTotalElements();
 
-        given(postService.getAllPosts(DEFAULT_PAGEABLE)).willReturn(expectedPages);
+        given(postService.getAllPosts(any(Pageable.class))).willReturn(expectedPages);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(POSTS_BASE_URI));
+        final ResultActions resultActions = mvc.perform(
+                get(POSTS_BASE_URI).contentType(APPLICATION_JSON)
+        );
 
         // then
         resultActions.andExpect(status().isOk())
