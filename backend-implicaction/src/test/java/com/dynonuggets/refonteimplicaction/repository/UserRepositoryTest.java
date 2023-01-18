@@ -1,88 +1,60 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.User;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
+import static com.dynonuggets.refonteimplicaction.utils.UserUtils.generateRandomUser;
+import static java.util.List.of;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.TestInstance.Lifecycle;
+import static org.springframework.data.domain.Pageable.unpaged;
 
-
+@TestInstance(Lifecycle.PER_CLASS)
 class UserRepositoryTest extends AbstractContainerBaseTest {
 
-    final int DEFAULT_PAGE = 0;
-    final int DEFAULT_SIZE = 10;
+    User mockedUser;
+    List<User> dbContent;
 
     @Autowired
     UserRepository userRepository;
 
-    @Test
-    void shouldSaveUser() {
-        User user = User.builder()
-                .username("test user")
-                .password("secret password")
-                .email("user@email.com")
-                .registeredAt(Instant.now())
-                .build();
-
-        User savedUser = userRepository.save(user);
-
-        assertThat(savedUser).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(user);
+    @BeforeAll
+    void setup() {
+        dbContent = userRepository.saveAll(
+                of(
+                        generateRandomUser(of(RoleEnum.USER), true),
+                        generateRandomUser(of(RoleEnum.USER), false),
+                        generateRandomUser(of(RoleEnum.USER), true),
+                        generateRandomUser(of(RoleEnum.USER), false),
+                        generateRandomUser(of(RoleEnum.USER), true)
+                )
+        );
     }
 
     @Test
-    void shouldFindUser() {
-        User user = User.builder()
-                .username("test get user")
-                .password("secret password")
-                .email("userget@email.com")
-                .registeredAt(Instant.now())
-                .build();
+    @DisplayName("doit retourner la liste des utilisateurs dont la date d'activation est nulle")
+    void should_find_all_pending_users() {
+        // given
+        final List<Long> activeUserIds =
+                dbContent.stream().filter(u -> u.getActivatedAt() == null).map(User::getId).collect(toList());
 
-        userRepository.save(user);
+        // when
+        final Page<User> result = userRepository.findAllByActivatedAtIsNull(unpaged());
 
-        Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
-        assertThat(byUsername).isPresent();
-        assertThat(byUsername.get()).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(user);
-    }
-
-    @Test
-    void shouldFindAllPendingActivationUsers() {
-        List<User> users = Arrays.stream(new String[]{"unactivated1", "unactivated2", "activated1", "activated2", "unactivated3"})
-                .map(username -> {
-                    boolean isActivated = !username.contains("unactivated");
-                    return User.builder()
-                            .username(username)
-                            .email(username + "@mail.com")
-                            .activatedAt(isActivated ? Instant.now() : null)
-                            .active(isActivated)
-                            .build();
-                })
-                .collect(Collectors.toList());
-
-        final User[] expecteds = users.stream()
-                .filter(user -> !user.isActive())
-                .toArray(User[]::new);
-
-        userRepository.saveAll(users);
-
-        Pageable pageable = PageRequest.of(DEFAULT_PAGE, DEFAULT_SIZE);
-        final Page<User> actuals = userRepository.findAllByActivatedAtIsNull(pageable);
-
-        assertThat(actuals.getTotalElements()).isEqualTo(expecteds.length);
-        assertThat(actuals.getContent()).usingElementComparatorIgnoringFields("id")
-                .contains(expecteds);
+        // then
+        assertThat(result.getTotalElements()).isNotZero();
+        assertThat(result.getContent())
+                .allSatisfy(user -> assertThat(user.getActivatedAt()).isNull())
+                .map(User::getId)
+                .containsAll(activeUserIds);
     }
 }

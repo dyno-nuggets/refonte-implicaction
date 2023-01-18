@@ -7,7 +7,6 @@ import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
@@ -21,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 import static com.dynonuggets.refonteimplicaction.utils.Message.USER_NOT_FOUND_MESSAGE;
 import static java.lang.String.format;
@@ -36,22 +37,22 @@ public class UserService {
     private final UserAdapter userAdapter;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
-    private GroupAdapter groupAdapter;
+    private final GroupAdapter groupAdapter;
 
     /**
      * @return la liste paginée de tous les utilisateurs
      */
     @Transactional(readOnly = true)
-    public Page<UserDto> getAll(Pageable pageable) {
-        return userRepository.findAll(pageable).map(userAdapter::toDto);
+    public Page<UserDto> getAll(final Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(userAdapter::toDto);
     }
-
 
     /**
      * @return la liste paginée de tous les utilisateurs dont l'inscription a été validée
      */
     @Transactional(readOnly = true)
-    public Page<UserDto> getAllCommunity(Pageable pageable) {
+    public Page<UserDto> getAllCommunity(final Pageable pageable) {
         final Long currentUserId = authService.getCurrentUser().getId();
 
         final Page<UserDto> users = userRepository.findAllByIdNot(pageable, currentUserId)
@@ -61,7 +62,8 @@ public class UserService {
                 .get()
                 .collect(toList());
         // on recherche les relations de tous les utilisateurs remontés avec l'utilisateur courant ...
-        List<Relation> relations = relationRepository.findAllRelatedToUserByUserIdIn(currentUserId, userIds);
+        final List<Relation> relations = relationRepository.findAllRelatedToUserByUserIdIn(currentUserId, userIds);
+
         // ... et on associe chaque relation avec un statut
         relations.forEach(relation -> users.stream()
                 .filter(user -> isSenderOrReceiver(relation, user.getId()) && !currentUserId.equals(user.getId()))
@@ -70,13 +72,15 @@ public class UserService {
         return users;
     }
 
-    public UserDto getUserById(Long userId) {
-        final User user = getUserByIdIfExists(userId);
-
-        return userAdapter.toDto(user);
+    @Transactional
+    public UserDto getUserById(final Long userId) {
+        return userAdapter.toDto(
+                getUserByIdIfExists(userId)
+        );
     }
 
-    public UserDto updateUser(UserDto userDto) {
+    @Transactional
+    public UserDto updateUser(final UserDto userDto) {
         final User user = getUserByIdIfExists(userDto.getId());
 
         // on attribue les valeurs des champs manquants à notre user présent dans la BD avec la conversion
@@ -90,20 +94,25 @@ public class UserService {
         user.setContribution(userDto.getContribution());
         user.setExpectation(userDto.getExpectation());
 
-        User userUpdate = userRepository.save(user);
-        return userAdapter.toDto(userUpdate);
+        return userAdapter.toDto(
+                userRepository.save(user)
+        );
     }
 
-    private boolean isSenderOrReceiver(Relation relation, Long userId) {
-        return userId.equals(relation.getReceiver().getId()) || userId.equals(relation.getSender().getId());
+    private boolean isSenderOrReceiver(final Relation relation, final Long userId) {
+        return Stream.of(relation.getReceiver(), relation.getSender())
+                .map(User::getId)
+                .filter(Objects::nonNull)
+                .anyMatch(id -> id.equals(userId));
     }
 
-    public Page<UserDto> getAllPendingActivationUsers(Pageable pageable) {
+    @Transactional(readOnly = true)
+    public Page<UserDto> getAllPendingActivationUsers(final Pageable pageable) {
         return userRepository.findAllByActivatedAtIsNull(pageable)
                 .map(userAdapter::toDto);
     }
 
-    private RelationTypeEnum getRelationType(Relation relation, Long userId) {
+    private RelationTypeEnum getRelationType(final Relation relation, final Long userId) {
         if (relation.getConfirmedAt() != null) {
             return RelationTypeEnum.FRIEND;
         }
@@ -117,27 +126,28 @@ public class UserService {
     }
 
     @Transactional
-    public UserDto updateImageProfile(MultipartFile file) {
+    public UserDto updateImageProfile(final MultipartFile file) {
         final User currentUser = authService.getCurrentUser();
         final FileModel fileModel = cloudService.uploadImage(file);
         final FileModel fileSave = fileRepository.save(fileModel);
         currentUser.setImage(fileSave);
-        final User save = userRepository.save(currentUser);
-        return userAdapter.toDto(save);
+
+        return userAdapter.toDto(
+                userRepository.save(currentUser)
+        );
     }
 
     @Transactional(readOnly = true)
-    public List<GroupDto> getUserGroups(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE));
-
-        final List<Group> groups = user.getGroups();
-        return groups.stream()
+    public List<GroupDto> getUserGroups(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_MESSAGE))
+                .getGroups()
+                .stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());
     }
 
-    private User getUserByIdIfExists(Long userId) {
+    public User getUserByIdIfExists(final Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(format(USER_NOT_FOUND_MESSAGE, userId)));
     }
