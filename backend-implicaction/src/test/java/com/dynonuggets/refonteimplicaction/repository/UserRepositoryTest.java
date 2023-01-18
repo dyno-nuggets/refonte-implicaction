@@ -55,6 +55,7 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
         assertThat(result.getContent())
                 .allSatisfy(user -> assertThat(user.getActivatedAt()).isNull())
                 .map(User::getId)
+                .hasSameSizeAs(activeUserIds)
                 .containsAll(activeUserIds);
     }
 }
