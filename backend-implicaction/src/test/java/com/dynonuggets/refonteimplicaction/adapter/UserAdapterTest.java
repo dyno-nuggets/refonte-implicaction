@@ -3,16 +3,10 @@ package com.dynonuggets.refonteimplicaction.adapter;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.model.Role;
-import com.dynonuggets.refonteimplicaction.model.Training;
-import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.model.*;
 import com.dynonuggets.refonteimplicaction.service.FileService;
-import com.dynonuggets.refonteimplicaction.utils.UserUtils;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,6 +18,7 @@ import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generate
 import static com.dynonuggets.refonteimplicaction.utils.TrainingUtils.generateRandomTraining;
 import static com.dynonuggets.refonteimplicaction.utils.TrainingUtils.generateRandomTrainingDto;
 import static com.dynonuggets.refonteimplicaction.utils.UserUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.utils.UserUtils.generateRandomUserDto;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,21 +30,21 @@ import static org.mockito.Mockito.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserAdapterTest {
 
-    private static final RecursiveComparisonConfiguration TO_DTO_COMPARISON_CONFIGURATION =
+    static final RecursiveComparisonConfiguration TO_DTO_COMPARISON_CONFIGURATION =
             RecursiveComparisonConfiguration.builder()
                     .withIgnoredFields("imageUrl", "roles", "experiences", "trainings", "relationTypeOfCurrentUser")
                     .build();
-    private static final RecursiveComparisonConfiguration TO_DTO_LIGHT_COMPARISON_CONFIGURATION =
+    static final RecursiveComparisonConfiguration TO_DTO_LIGHT_COMPARISON_CONFIGURATION =
             RecursiveComparisonConfiguration.builder()
                     .withComparedFields("id", "username")
                     .withIgnoredFields("relationTypeOfCurrentUser", "imageUrl")
                     .build();
-
-    private static final RecursiveComparisonConfiguration TO_MODEL_COMPARISON_CONFIGURATION =
+    static final RecursiveComparisonConfiguration TO_MODEL_COMPARISON_CONFIGURATION =
             RecursiveComparisonConfiguration.builder()
                     .withIgnoredFields("password", "image", "groups", "notifications", "roles", "experiences", "trainings")
                     .build();
-    private static final String[] NULL_FIELDS_FOR_LIGHT_DTO = {
+
+    static final String[] NULL_FIELDS_FOR_LIGHT_DTO = {
             "firstname",
             "birthday",
             "lastname",
@@ -68,6 +63,9 @@ class UserAdapterTest {
             "relationTypeOfCurrentUser"
     };
 
+    User mockedUser;
+    UserDto mockedUserDto;
+
     @InjectMocks
     UserAdapter userAdapter;
     @Mock
@@ -77,49 +75,58 @@ class UserAdapterTest {
     @Mock
     FileService fileService;
 
+    @BeforeEach
+    void setUp() {
+        mockedUser = generateRandomUser(of(USER), true);
+        mockedUserDto = generateRandomUserDto(of(USER.name()));
+    }
+
     @Test
+    @DisplayName("doit retourner un dto correspondant au model fourni quand on utilise toDto")
     void should_map_fields_when_toDto() {
         // given
-        final User user = generateRandomUser(of(USER));
-        user.setTrainings(of(generateRandomTraining()));
-        user.setExperiences(of(generateRandomExperience()));
-        String imageUrl = "https://appurl/image_key";
-        int trainingSize = user.getTrainings().size();
-        int experienceSize = user.getExperiences().size();
+        mockedUser.setTrainings(of(generateRandomTraining()));
+        mockedUser.setExperiences(of(generateRandomExperience()));
+        final String imageUrl = "https://appurl/image_key";
+        mockedUser.setImage(FileModel.builder().objectKey("image_key").build());
+        final int trainingSize = mockedUser.getTrainings().size();
+        final int experienceSize = mockedUser.getExperiences().size();
 
         given(fileService.buildFileUri(anyString())).willReturn(imageUrl);
         given(experienceAdapter.toDtoWithoutUser(any())).willReturn(WorkExperienceDto.builder().build());
         given(trainingAdapter.toDtoWithoutUser(any())).willReturn(TrainingDto.builder().build());
 
         // when
-        final UserDto userDto = userAdapter.toDto(user);
+        final UserDto userDto = userAdapter.toDto(mockedUser);
 
         // then
         assertThat(userDto)
                 .usingRecursiveComparison(TO_DTO_COMPARISON_CONFIGURATION)
-                .isEqualTo(user);
+                .isEqualTo(mockedUser);
 
         // on vérifie que les rôles sont bien mappés
-        assertThat(userDto.getRoles())
+        assertThat(userDto)
+                .extracting(UserDto::getRoles).asList()
                 .isNotEmpty()
-                .containsSequence(user.getRoles().stream().map(Role::getName).collect(toList()));
+                .containsSequence(mockedUser.getRoles().stream().map(Role::getName).collect(toList()));
 
         // on vérifie que l'url de l'image est transmise
-        assertThat(userDto.getImageUrl())
-                .isNotNull()
+        assertThat(userDto)
+                .extracting(UserDto::getImageUrl)
                 .isEqualTo(imageUrl);
 
         // on vérifie que les expériences ont bien été transmises
-        assertThat(userDto.getExperiences())
-                .isNotNull()
+        assertThat(userDto)
+                .extracting(UserDto::getExperiences).asList()
                 .hasSize(experienceSize);
 
         // on vérifie que les formations ont bien été transmises
-        assertThat(userDto.getTrainings())
-                .isNotNull()
+        assertThat(userDto)
+                .extracting(UserDto::getTrainings).asList()
                 .hasSize(trainingSize);
 
-        assertThat(userDto.getRelationTypeOfCurrentUser())
+        assertThat(userDto)
+                .extracting(UserDto::getRelationTypeOfCurrentUser)
                 .isNull();
 
         verify(experienceAdapter, times(experienceSize)).toDtoWithoutUser(any());
@@ -128,60 +135,60 @@ class UserAdapterTest {
     }
 
     @Test
+    @DisplayName("doit retourner un dto avec seulement les champs requis correspondants au model fourni quand on utilise toDtoLight")
     void should_only_map_required_fields_when_toDtoLight() {
         // given
-        final User user = generateRandomUser(of(USER));
-        String imageUrl = "https://appurl/image_key";
-
-        given(fileService.buildFileUri(anyString())).willReturn(imageUrl);
+        final String imageUrl = "https://appurl/image_key";
+        mockedUser.setImage(FileModel.builder().build());
+        given(fileService.buildFileUri(any())).willReturn(imageUrl);
 
         // when
-        UserDto dtoLight = userAdapter.toDtoLight(user);
+        final UserDto dtoLight = userAdapter.toDtoLight(mockedUser);
 
         // then
         assertThat(dtoLight)
                 .usingRecursiveComparison(TO_DTO_LIGHT_COMPARISON_CONFIGURATION)
-                .isEqualTo(user);
+                .isEqualTo(mockedUser);
 
-        // on vérifie que tous les champs que l'on ne veut pas transmettre son bien nuls
+        // on vérifie que tous les champs que l'on ne veut pas transmettre son bien nuls NULL_FIELDS_FOR_LIGHT_DTO
         assertThat(dtoLight)
                 .extracting(NULL_FIELDS_FOR_LIGHT_DTO)
                 .allSatisfy(field -> assertThat(field).isNull());
     }
 
     @Test
+    @DisplayName("doit retourner un model correspondant au dto fourni quand on utilise toModel")
     void should_map_when_toModel() {
         // given
-        final UserDto dto = UserUtils.generateRandomUserDto(of(USER.name()));
-        dto.setExperiences(of(generateRandomExperienceDto()));
-        dto.setTrainings(of(generateRandomTrainingDto()));
-        int experienceCount = dto.getExperiences().size();
-        int trainingCount = dto.getTrainings().size();
-
+        mockedUserDto.setExperiences(of(generateRandomExperienceDto()));
+        mockedUserDto.setTrainings(of(generateRandomTrainingDto()));
+        final int experienceCount = mockedUserDto.getExperiences().size();
+        final int trainingCount = mockedUserDto.getTrainings().size();
         given(experienceAdapter.toModel(any())).willReturn(WorkExperience.builder().build());
         given(trainingAdapter.toModel(any())).willReturn(Training.builder().build());
 
         // when
-        final User model = userAdapter.toModel(dto);
+        final User model = userAdapter.toModel(mockedUserDto);
 
+        // vérification champ par champ
         assertThat(model)
                 .usingRecursiveComparison(TO_MODEL_COMPARISON_CONFIGURATION)
-                .isEqualTo(dto);
+                .isEqualTo(mockedUserDto);
 
         // on vérifie que les expériences ont bien été transmises
-        assertThat(model.getExperiences())
-                .isNotNull()
+        assertThat(model)
+                .extracting(User::getExperiences).asList()
                 .hasSize(experienceCount);
 
         // on vérifie que les formations ont bien été transmises
-        assertThat(model.getTrainings())
-                .isNotNull()
+        assertThat(model)
+                .extracting(User::getTrainings).asList()
                 .hasSize(trainingCount);
 
-        assertThat(model.getRoles())
-                .isNotEmpty()
-                .doesNotContainNull()
-                .allMatch(role -> dto.getRoles().contains(role.getName()));
+        // on vérifie ques les rôles correspondent
+        assertThat(model)
+                .extracting(User::getRoles).asList().map(o -> (Role) o)
+                .allMatch(role -> mockedUserDto.getRoles().contains(role.getName()));
 
         verify(experienceAdapter, times(experienceCount)).toModel(any());
         verify(trainingAdapter, times(trainingCount)).toModel(any());

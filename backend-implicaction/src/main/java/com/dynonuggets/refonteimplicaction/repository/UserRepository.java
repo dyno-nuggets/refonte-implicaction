@@ -15,7 +15,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByActivationKey(String activationKey);
 
-    List<User> findAllByUsernameOrEmail(String username, String email);
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 
     Page<User> findAllByActivatedAtIsNull(Pageable pageable);
 

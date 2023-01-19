@@ -9,7 +9,6 @@ import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.model.Notification;
 import com.dynonuggets.refonteimplicaction.model.Role;
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import com.dynonuggets.refonteimplicaction.repository.RoleRepository;
@@ -36,6 +35,7 @@ import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
+import static com.dynonuggets.refonteimplicaction.model.RoleEnum.ADMIN;
 import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.lang.String.format;
 import static java.util.Collections.singletonList;
@@ -66,10 +66,10 @@ public class AuthService {
      * @throws ImplicactionException si l'envoi du mail échoue
      */
     @Transactional
-    public void signup(ReqisterRequestDto reqisterRequest) throws ImplicactionException {
+    public void signup(final ReqisterRequestDto reqisterRequest) throws ImplicactionException {
         validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
-        final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(RoleEnum.ADMIN.getLongName()));
+        final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(ADMIN.getLongName()));
         registerUser(reqisterRequest, activationKey);
         final Notification notification = Notification.builder()
                 .message(format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
@@ -88,13 +88,14 @@ public class AuthService {
     /**
      * Vérifie la validité de la requête de sign-up
      */
-    private void validateRegisterRequest(ReqisterRequestDto reqisterRequest) {
-        userRepository.findAllByUsernameOrEmail(reqisterRequest.getUsername(), reqisterRequest.getEmail())
-                .forEach(user -> {
-                    String message = user.getUsername().equals(reqisterRequest.getUsername()) ?
-                            USERNAME_ALREADY_EXISTS_MESSAGE : EMAIL_ALREADY_EXISTS_MESSAGE;
-                    throw new UnauthorizedException(message);
-                });
+    private void validateRegisterRequest(final ReqisterRequestDto reqisterRequest) {
+        if (userRepository.existsByUsername(reqisterRequest.getUsername())) {
+            throw new UnauthorizedException(USERNAME_ALREADY_EXISTS_MESSAGE);
+        }
+
+        if (userRepository.existsByEmail(reqisterRequest.getEmail())) {
+            throw new UnauthorizedException(EMAIL_ALREADY_EXISTS_MESSAGE);
+        }
     }
 
     /**
@@ -103,8 +104,8 @@ public class AuthService {
      * @throws ImplicactionException Si la clé n'existe pas, ou si la clé est déjà activée
      */
     @Transactional
-    public void verifyAccount(String activationKey) throws ImplicactionException {
-        User user = userRepository.findByActivationKey(activationKey)
+    public void verifyAccount(final String activationKey) throws ImplicactionException {
+        final User user = userRepository.findByActivationKey(activationKey)
                 .orElseThrow(() -> new ImplicactionException(format(ACTIVATION_KEY_NOT_FOUND_MESSAGE, activationKey)));
 
         if (user.getActivatedAt() != null) {
@@ -114,7 +115,7 @@ public class AuthService {
         user.setActivatedAt(Instant.now());
         user.setActive(true);
 
-        Notification notification = Notification.builder()
+        final Notification notification = Notification.builder()
                 .type(USER_ACTIVATION)
                 .users(singletonList(user))
                 .date(Instant.now())
@@ -129,15 +130,15 @@ public class AuthService {
     }
 
     @Transactional
-    public AuthenticationResponseDto login(LoginRequestDto loginRequestDto) throws ImplicactionException {
+    public AuthenticationResponseDto login(final LoginRequestDto loginRequestDto) throws ImplicactionException {
         final String username = loginRequestDto.getUsername();
-        Authentication authenticate = authenticationManager.authenticate(
+        final Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, loginRequestDto.getPassword())
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
-        String token = jwtProvider.generateToken(authenticate);
-        Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
-        String refreshToken = refreshTokenService.generateRefreshToken().getToken();
+        final String token = jwtProvider.generateToken(authenticate);
+        final Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+        final String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username " + username + " not found."));
@@ -152,21 +153,21 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public User getCurrentUser() {
-        org.springframework.security.core.userdetails.User principal =
+        final org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userRepository.findByUsername(principal.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException(format(USERNAME_NOT_FOUND_MESSAGE, principal.getUsername())));
     }
 
     @Transactional(readOnly = true)
-    public AuthenticationResponseDto refreshToken(RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
+    public AuthenticationResponseDto refreshToken(final RefreshTokenRequestDto refreshTokenRequestDto) throws ImplicactionException {
         final String username = refreshTokenRequestDto.getUsername();
         final User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(format(USERNAME_NOT_FOUND_MESSAGE, username)));
 
         refreshTokenService.validateRefreshToken(refreshTokenRequestDto.getRefreshToken());
-        String token = jwtProvider.generateTokenWithUsername(username);
-        Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+        final String token = jwtProvider.generateTokenWithUsername(username);
+        final Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
         return AuthenticationResponseDto.builder()
                 .authenticationToken(token)
@@ -176,10 +177,10 @@ public class AuthService {
                 .build();
     }
 
-    private User registerUser(ReqisterRequestDto reqisterRequest, String activationKey) {
+    private User registerUser(final ReqisterRequestDto reqisterRequest, final String activationKey) {
         final List<Role> roles = roleRepository.findAllByNameIn(reqisterRequest.getRoles());
 
-        User user = User.builder()
+        final User user = User.builder()
                 .username(reqisterRequest.getUsername())
                 .email(reqisterRequest.getEmail())
                 .password(passwordEncoder.encode(reqisterRequest.getPassword()))
@@ -199,7 +200,7 @@ public class AuthService {
     }
 
     public boolean isLoggedIn() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
