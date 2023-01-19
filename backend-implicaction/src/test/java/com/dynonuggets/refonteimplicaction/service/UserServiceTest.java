@@ -79,7 +79,7 @@ class UserServiceTest {
     @DisplayName("doit retourner un UserDto avec le champ imageUrl mis à jour")
     void should_update_image_profile_when_updateImageProfile() {
         // given
-        final UserDto expectedUser = UserDto.builder().imageUrl("imageUrl").build();
+        final UserDto expectedUserDto = UserDto.builder().imageUrl("imageUrl").build();
         final FileModel fileModel = FileModel.builder().objectKey("objectKey").build();
         final MockMultipartFile mockedFile = new MockMultipartFile(
                 "user-file", "test.png", IMAGE_PNG_VALUE, "test data".getBytes()
@@ -89,15 +89,15 @@ class UserServiceTest {
         given(cloudService.uploadImage(mockedFile)).willReturn(fileModel);
         given(fileRepository.save(fileModel)).willReturn(fileModel);
         given(userRepository.save(mockedUser)).willReturn(mockedUser);
-        given(userAdapter.toDto(mockedUser)).willReturn(expectedUser);
+        given(userAdapter.toDto(mockedUser)).willReturn(expectedUserDto);
 
         // when
-        final UserDto resultUser = userService.updateImageProfile(mockedFile);
+        final UserDto actualUserDto = userService.updateImageProfile(mockedFile);
 
         // then
-        assertThat(resultUser)
-                .extracting(UserDto::getImageUrl)
-                .isEqualTo(expectedUser.getImageUrl());
+        assertThat(actualUserDto)
+                .hasFieldOrPropertyWithValue("id", expectedUserDto.getId())
+                .hasFieldOrPropertyWithValue("imageUrl", expectedUserDto.getImageUrl());
     }
 
     @Test
@@ -124,16 +124,15 @@ class UserServiceTest {
         @DisplayName("Doit retourner l'utilisateur correspondant à l'id en paramètres quand il existe")
         void should_get_user_when_getUserById_and_user_exists() {
             // given
-            final Long userId = mockedUser.getId();
-            final UserDto userDto = UserDto.builder().id(userId).build();
+            final Long expectedId = mockedUser.getId();
+            final UserDto userDto = UserDto.builder().id(expectedId).build();
 
-            given(userRepository.findById(userId)).willReturn(Optional.of(mockedUser));
+            given(userRepository.findById(expectedId)).willReturn(Optional.of(mockedUser));
             given(userAdapter.toDto(any())).willReturn(userDto);
 
             // then
-            assertThat(userService.getUserById(userId))
-                    .extracting(UserDto::getId)
-                    .isEqualTo(userId);
+            assertThat(userService.getUserById(expectedId))
+                    .hasFieldOrPropertyWithValue("id", expectedId);
 
             verify(userRepository, times(1)).findById(anyLong());
             verify(userAdapter, times(1)).toDto(any());
@@ -144,18 +143,17 @@ class UserServiceTest {
         void should_throw_UserNotFoundException_when_getUserById_and_user_not_exists() {
             // given
             final long userId = mockedUser.getId();
-            final String message = format(USER_NOT_FOUND_MESSAGE, userId);
+            final String expectedMessage = format(USER_NOT_FOUND_MESSAGE, userId);
 
-            given(userRepository.findById(userId)).willThrow(new UserNotFoundException(message));
+            given(userRepository.findById(userId)).willThrow(new UserNotFoundException(expectedMessage));
 
             // when
             final var exception =
                     assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
 
             // then
-            assertThat(exception)
-                    .extracting(Exception::getMessage)
-                    .isEqualTo(message);
+            assertThat(exception.getMessage())
+                    .isEqualTo(expectedMessage);
         }
     }
 
@@ -168,21 +166,21 @@ class UserServiceTest {
             // given
             mockedUser.setFirstname("Han");
             mockedUser.setLastname("Solo");
-            final UserDto dtoToUpdate = UserDto.builder().id(mockedUser.getId()).firstname(mockedUser.getFirstname()).lastname(mockedUser.getLastname()).build();
+            final UserDto expectedDto = UserDto.builder().id(mockedUser.getId()).firstname(mockedUser.getFirstname()).lastname(mockedUser.getLastname()).build();
 
             given(userRepository.findById(mockedUser.getId())).willReturn(Optional.of(mockedUser));
             given(userRepository.save(any())).willReturn(mockedUser);
-            given(userAdapter.toDto(any())).willReturn(dtoToUpdate);
+            given(userAdapter.toDto(any())).willReturn(expectedDto);
 
             // when
-            final UserDto resultDto = userService.updateUser(dtoToUpdate);
+            final UserDto actualDto = userService.updateUser(expectedDto);
 
             // then
-            assertThat(resultDto)
+            assertThat(actualDto)
                     .isNotNull()
                     .usingRecursiveComparison()
                     .comparingOnlyFields("firstname", "lastname")
-                    .isEqualTo(dtoToUpdate);
+                    .isEqualTo(expectedDto);
 
             verify(userRepository, times(1)).findById(anyLong());
             verify(userRepository, times(1)).save(any());
@@ -193,17 +191,16 @@ class UserServiceTest {
         @DisplayName("Doit lancer une exception lorsque l'on essaye de mettre à jour un utilisateur qui n'existe pas")
         void should_throw_UserNotFoundException_when_updateUser_and_user_not_exists() {
             // given
-            final String message = format(USER_NOT_FOUND_MESSAGE, mockedUserDto.getId());
+            final String expectedMessage = format(USER_NOT_FOUND_MESSAGE, mockedUserDto.getId());
 
-            given(userRepository.findById(mockedUserDto.getId())).willThrow(new UserNotFoundException(message));
+            given(userRepository.findById(mockedUserDto.getId())).willThrow(new UserNotFoundException(expectedMessage));
 
             // when
             final var exception =
                     assertThrows(UserNotFoundException.class, () -> userService.updateUser(mockedUserDto));
 
-            assertThat(exception)
-                    .extracting(Exception::getMessage)
-                    .isEqualTo(message);
+            assertThat(exception.getMessage())
+                    .isEqualTo(expectedMessage);
 
             verify(userRepository, times(1)).findById(anyLong());
             verify(userRepository, times(0)).save(any());
@@ -218,17 +215,16 @@ class UserServiceTest {
         @DisplayName("L'accès à cette méthode doit être interdit si l'utilisateur n'est pas identifié et une exception doit-être lancée")
         void should_throw_UserNotFoundException_when_getAllCommunity_without_auth() {
             // given
-            final String message = format(USERNAME_NOT_FOUND_MESSAGE, "");
+            final String expectedMessage = format(USERNAME_NOT_FOUND_MESSAGE, "");
             given(authService.getCurrentUser())
-                    .willThrow(new UserNotFoundException(message));
+                    .willThrow(new UserNotFoundException(expectedMessage));
 
-            final var exception =
+            final var actualException =
                     assertThrows(UserNotFoundException.class, () -> userService.getAllCommunity(pageable));
 
             // then
-            assertThat(exception)
-                    .extracting(Exception::getMessage)
-                    .isEqualTo(message);
+            assertThat(actualException.getMessage())
+                    .isEqualTo(expectedMessage);
 
             verifyNoInteractions(userRepository);
             verifyNoInteractions(userAdapter);
@@ -259,7 +255,7 @@ class UserServiceTest {
         void shoud_throw_exception_when_getUserByIdIfExists_and_userId_not_exists() {
             // given
             final Long userId = mockedUser.getId();
-            final String message = format(USER_NOT_FOUND_MESSAGE, userId);
+            final String expectedMessage = format(USER_NOT_FOUND_MESSAGE, userId);
             given(userRepository.findById(userId)).willReturn(Optional.empty());
 
             // when
@@ -267,9 +263,8 @@ class UserServiceTest {
                     assertThrows(UserNotFoundException.class, () -> userService.getUserById(userId));
 
             // then
-            assertThat(exception)
-                    .extracting(Exception::getMessage)
-                    .isEqualTo(message);
+            assertThat(exception.getMessage())
+                    .isEqualTo(expectedMessage);
         }
     }
 }
