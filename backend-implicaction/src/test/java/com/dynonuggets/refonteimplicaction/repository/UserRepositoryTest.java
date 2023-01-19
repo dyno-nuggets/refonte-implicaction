@@ -1,88 +1,153 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.User;
-import org.junit.jupiter.api.Test;
+import lombok.var;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.time.Instant;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import static com.dynonuggets.refonteimplicaction.utils.UserUtils.generateRandomUser;
+import static java.util.List.of;
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.TestInstance.Lifecycle;
+import static org.springframework.data.domain.Pageable.unpaged;
 
-
+@TestInstance(Lifecycle.PER_CLASS)
 class UserRepositoryTest extends AbstractContainerBaseTest {
 
-    final int DEFAULT_PAGE = 0;
-    final int DEFAULT_SIZE = 10;
+    List<User> dbContent;
 
     @Autowired
     UserRepository userRepository;
 
-    @Test
-    void shouldSaveUser() {
-        User user = User.builder()
-                .username("test user")
-                .password("secret password")
-                .email("user@email.com")
-                .registeredAt(Instant.now())
-                .build();
+    @BeforeEach
+    void setup() {
+        dbContent = userRepository.saveAll(
+                of(
+                        generateRandomUser(of(RoleEnum.USER), true),
+                        generateRandomUser(of(RoleEnum.USER), false),
+                        generateRandomUser(of(RoleEnum.USER), true),
+                        generateRandomUser(of(RoleEnum.USER), false),
+                        generateRandomUser(of(RoleEnum.USER), true)
+                )
+        );
+    }
 
-        User savedUser = userRepository.save(user);
-
-        assertThat(savedUser).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(user);
+    @AfterEach
+    void cleanUp() {
+        userRepository.deleteAll();
     }
 
     @Test
-    void shouldFindUser() {
-        User user = User.builder()
-                .username("test get user")
-                .password("secret password")
-                .email("userget@email.com")
-                .registeredAt(Instant.now())
-                .build();
+    @DisplayName("doit retourner la liste des utilisateurs dont la date d'activation est nulle")
+    void should_find_all_pending_users() {
+        // given
+        final List<Long> activeUserIds =
+                dbContent.stream().filter(u -> u.getActivatedAt() == null).map(User::getId).collect(toList());
 
-        userRepository.save(user);
+        // when
+        final Page<User> result = userRepository.findAllByActivatedAtIsNull(unpaged());
 
-        Optional<User> byUsername = userRepository.findByUsername(user.getUsername());
-        assertThat(byUsername).isPresent();
-        assertThat(byUsername.get()).usingRecursiveComparison()
-                .ignoringFields("id")
-                .isEqualTo(user);
+        // then
+        assertThat(result.getContent())
+                .allSatisfy(user -> assertThat(user.getActivatedAt()).isNull())
+                .hasSameSizeAs(activeUserIds)
+                .map(User::getId)
+                .containsAll(activeUserIds);
     }
 
-    @Test
-    void shouldFindAllPendingActivationUsers() {
-        List<User> users = Arrays.stream(new String[]{"unactivated1", "unactivated2", "activated1", "activated2", "unactivated3"})
-                .map(username -> {
-                    boolean isActivated = !username.contains("unactivated");
-                    return User.builder()
-                            .username(username)
-                            .email(username + "@mail.com")
-                            .activatedAt(isActivated ? Instant.now() : null)
-                            .active(isActivated)
-                            .build();
-                })
-                .collect(Collectors.toList());
+    @Nested
+    @DisplayName("# findByActivationKey")
+    class FindByActivationKeyTest {
+        @Test
+        @DisplayName("doit retourner l'utilisateur correspondant à la clé d'activation transmise")
+        void should_find_user_by_activation_key_when_exists() {
+            // given
+            final var expectedUser = dbContent.get(0);
 
-        final User[] expecteds = users.stream()
-                .filter(user -> !user.isActive())
-                .toArray(User[]::new);
+            // when
+            final Optional<User> actualUser = userRepository.findByActivationKey(expectedUser.getActivationKey());
 
-        userRepository.saveAll(users);
+            // when
+            assertThat(actualUser)
+                    .isPresent().get()
+                    .hasFieldOrPropertyWithValue("id", expectedUser.getId())
+                    .hasFieldOrPropertyWithValue("activationKey", expectedUser.getActivationKey());
+        }
 
-        Pageable pageable = PageRequest.of(DEFAULT_PAGE, DEFAULT_SIZE);
-        final Page<User> actuals = userRepository.findAllByActivatedAtIsNull(pageable);
+        @Test
+        @DisplayName("doit retourner Optional.EMPTY quand la clé d'activation transmise ne correspond à aucun utilisateur")
+        void should_not_find_user_by_activationKey_when_not_exists() {
+            assertThat(userRepository.findByActivationKey("qui n'existe pas !"))
+                    .isNotPresent();
+        }
+    }
 
-        assertThat(actuals.getTotalElements()).isEqualTo(expecteds.length);
-        assertThat(actuals.getContent()).usingElementComparatorIgnoringFields("id")
-                .contains(expecteds);
+    @Nested
+    @DisplayName("# findByUsername")
+    class FindByUsernameTest {
+        @Test
+        @DisplayName("doit retourner l'utilisateur correspondant au nom d'utilisateur transmis")
+        void should_find_user_by_username_when_exists() {
+            // given
+            final var expectedUser = dbContent.get(0);
+
+            // when
+            final Optional<User> actualUser = userRepository.findByUsername(expectedUser.getUsername());
+
+            // when
+            assertThat(actualUser)
+                    .isPresent().get()
+                    .hasFieldOrPropertyWithValue("id", expectedUser.getId())
+                    .hasFieldOrPropertyWithValue("username", expectedUser.getUsername());
+        }
+
+        @Test
+        @DisplayName("doit retourner Optional.EMPTY quand le nom d'utilisateur transmis ne correspond à aucun utilisateur")
+        void should_not_find_user_by_username_when_not_exists() {
+            assertThat(userRepository.findByUsername("qui n'existe pas !"))
+                    .isNotPresent();
+        }
+    }
+
+    @Nested
+    @DisplayName("# existsByUsername")
+    class ExistsByUsernameTest {
+        @Test
+        @DisplayName("doit retourner VRAI quand l'utilisateur existe")
+        void should_return_true_when_user_exists() {
+            assertThat(userRepository.existsByUsername(dbContent.get(0).getUsername()))
+                    .isTrue();
+        }
+
+        @Test
+        @DisplayName("doit retourner FAUX quand l'utilisateur n'existe pas")
+        void should_return_false_when_user_not_exists() {
+            assertThat(userRepository.existsByUsername("qui n'existe pas !"))
+                    .isFalse();
+        }
+    }
+
+    @Nested
+    @DisplayName("# existsByUsername")
+    class ExistsByEmailTest {
+        @Test
+        @DisplayName("doit retourner VRAI quand l'utilisateur existe")
+        void should_return_true_when_user_exists() {
+            assertThat(userRepository.existsByEmail(dbContent.get(0).getEmail()))
+                    .isTrue();
+        }
+
+        @Test
+        @DisplayName("doit retourner FAUX quand l'utilisateur n'existe pas")
+        void should_return_false_when_user_not_exists() {
+            assertThat(userRepository.existsByEmail("qui n'existe pas !"))
+                    .isFalse();
+        }
     }
 }

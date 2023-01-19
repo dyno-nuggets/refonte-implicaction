@@ -25,14 +25,14 @@ import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 public class UserUtils {
 
     public static User generateRandomUser() {
-        return generateRandomUser(null);
+        return generateRandomUser(null, generateRandomBoolean());
     }
 
-    public static User generateRandomUser(final List<RoleEnum> roleEnums) {
+    public static User generateRandomUser(final List<RoleEnum> roleEnums, boolean isActive) {
         final String firstname = randomAlphabetic(10);
         final String lastname = randomAlphabetic(10);
         final Instant registeredAt = generateRandomDate();
-        final Instant activatedAt = generateRandomDate(registeredAt);
+        final Instant activatedAt = isActive ? generateRandomDate(registeredAt) : null;
         String email = format("%s.%s@mail.com", firstname, lastname);
         String url = format("%s.%s.com", firstname, lastname);
 
@@ -71,8 +71,8 @@ public class UserUtils {
                 .registeredAt(registeredAt)
                 .activatedAt(activatedAt)
                 .activationKey(randomAlphabetic(25))
-                .active(true)
-                .image(image)
+                .active(isActive)
+                .image(null)
                 .roles(roles)
                 .groups(null)
                 .notifications(null)
