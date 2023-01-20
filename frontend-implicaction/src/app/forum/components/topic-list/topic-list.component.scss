@@ -1,0 +1,12 @@
+.topic .stats > * {
+  height: fit-content;
+}
+
+.topic:first-child {
+  padding-top: 0 !important;
+}
+
+.topic:last-child {
+  border: none !important;
+  padding-bottom: 0 !important;
+}

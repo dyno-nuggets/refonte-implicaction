@@ -30,7 +30,7 @@ public class TopicService {
     public Page<TopicDto> getTopicsFromCategory(long categoryId, Pageable pageable) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, categoryId)));
-        return topicRepository.findByCategoryOrderByEditedAt(category, pageable).map(topicAdapter::toDto);
+        return topicRepository.findByCategory(category, pageable).map(topicAdapter::toDtoWithLastResponse);
     }
 
     public TopicDto createTopic(CreateTopicDto topicDto) {
@@ -44,16 +44,14 @@ public class TopicService {
     public TopicDto updateTopic(UpdateTopicDto topicDto) {
         Category category = categoryRepository.findById(topicDto.getCategoryId())
                 .orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, topicDto.getCategoryId())));
-        Topic existingTopic = topicRepository.findById(topicDto.getId())
-                .orElseThrow(() -> new NotFoundException(String.format(TOPIC_NOT_FOUND_MESSAGE, topicDto.getId())));
+        Topic existingTopic = findById(topicDto.getId());
         Topic topic = topicAdapter.mergeWith(existingTopic, topicDto, category);
         Topic save = topicRepository.save(topic);
         return topicAdapter.toDto(save);
     }
 
     public TopicDto getTopic(long topicId) {
-        Topic topic = topicRepository.findById(topicId)
-                .orElseThrow(() -> new NotFoundException(String.format(TOPIC_NOT_FOUND_MESSAGE, topicId)));
+        Topic topic = findById(topicId);
         return topicAdapter.toDto(topic);
     }
 
@@ -63,8 +61,8 @@ public class TopicService {
         topicRepository.delete(topic);
     }
 
-    private Topic findById(Long responseId) {
-        return topicRepository.findById(responseId)
-                .orElseThrow(() -> new NotFoundException(String.format(TOPIC_NOT_FOUND_MESSAGE, responseId)));
+    private Topic findById(Long topicId) {
+        return topicRepository.findById(topicId)
+                .orElseThrow(() -> new NotFoundException(String.format(TOPIC_NOT_FOUND_MESSAGE, topicId)));
     }
 }

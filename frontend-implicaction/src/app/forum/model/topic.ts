@@ -13,4 +13,6 @@ export interface Topic {
   author: User;
   response: Response[];
   category: Category;
+  responsesCount: number;
+  lastResponse?: Response;
 }

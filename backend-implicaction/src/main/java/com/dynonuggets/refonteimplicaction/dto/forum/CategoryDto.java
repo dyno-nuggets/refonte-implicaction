@@ -15,4 +15,5 @@ public class CategoryDto {
     private String description;
     private Long parentId;
     private List<Long> children;
+    private LastCategoryUpdateDto lastUpdate;
 }

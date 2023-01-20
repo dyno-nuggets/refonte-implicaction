@@ -1,5 +1,35 @@
-<ul>
-  <li *ngFor="let subCategory of categories">
-    <a routerLink="/{{ univers.FORUM.url }}/category/{{ subCategory.id }}">{{ subCategory.title }}</a>
-  </li>
-</ul>
+<div class="card p-0 bg-white border-dark">
+  <div class="card-body p-4">
+    <div *ngFor="let subCategory of categories"
+         class="category border-bottom px-2 py-4 row col justify-content-between border-dark">
+      <div class="col-12 col-lg-6 col-xl-6 d-flex align-items-center">
+        <div class="category-info">
+          <div class="text-wrap pb-1 text-dark fw-bold m-0 mb-1">
+            <a routerLink="/{{ univers.FORUM.url }}/category/{{ subCategory.id }}">{{ subCategory.title }}</a>
+          </div>
+          <div class="text-justify">
+            {{ subCategory.description }}
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-lg-3 col-xl-3 col-xxl-auto d-flex align-items-center stats">
+        <!--        <div class="topics me-2">50 sujets</div>-->
+        <!--        <div class="responses">456 réponses</div>-->
+      </div>
+      <div class="col-12 col-lg-3 col-xl-3 col-xxl-auto d-flex align-items-center">
+        <div *ngIf="subCategory.lastUpdate as lastUpdate" class="last-topic w-100">
+          <div class="overflow-ellipsis">
+            <a
+              href="#/topic/{{ lastUpdate.topicId }}{{ lastUpdate.type === 'response' ? '?to_response=' + lastUpdate.responseId : '' }}"
+            >{{ lastUpdate.title }}</a>
+          </div>
+          <div class="meta">
+            <a class="time" href="#">{{ lastUpdate.createdAt }}</a>
+            -
+            <a class="author" href="#">{{ lastUpdate.author.username }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

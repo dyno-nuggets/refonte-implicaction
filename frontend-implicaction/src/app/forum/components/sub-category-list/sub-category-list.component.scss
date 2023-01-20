@@ -1,0 +1,12 @@
+.category .stats > * {
+  height: fit-content;
+}
+
+.category:first-child {
+  padding-top: 0 !important;
+}
+
+.category:last-child {
+  border: none !important;
+  padding-bottom: 0 !important;
+}

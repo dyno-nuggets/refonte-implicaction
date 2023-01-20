@@ -22,4 +22,7 @@ public class TopicDto {
     private UserDto author;
     private List<ResponseDto> responses;
     private CategoryDto category;
+    private Instant lastAction;
+    private long responsesCount;
+    private ResponseDto lastResponse;
 }

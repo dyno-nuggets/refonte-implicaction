@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.model.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -17,8 +18,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "topic")
-public class
-    Topic {
+public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -55,4 +55,7 @@ public class
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
+
+    @Formula("GREATEST(COALESCE((SELECT max(r.created_at) FROM response r WHERE r.topic_id = id), 0), created_at)")
+    private Instant lastAction;
 }

@@ -1,21 +1,20 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
 import {Observable} from "rxjs";
-import {Category} from "../model/category";
-import {Pageable} from "../../shared/models/pageable";
-import {Topic} from "../model/topic";
 import {map} from "rxjs/operators";
+import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
+import {Category} from "../model/category";
+import {Topic} from "../model/topic";
+import {Pageable} from "../../shared/models/pageable";
 import {CategoryTreeSelectNode} from '../model/categoryTreeSelectNode';
-
 
 export interface ITree {
   tree: CategoryTreeSelectNode[],
   map: Map<number, CategoryTreeSelectNode>;
 }
 
-
 export type CategoryNode = Category & { children: CategoryNode[]; };
+export type GetCategoriesOptions = { withRecentlyUpdatedTopic: boolean };
 
 @Injectable({
   providedIn: 'root'
@@ -28,13 +27,13 @@ export class CategoryService {
   ) {
   }
 
-  getCategories(): Observable<Category[]>;
-  getCategories(ids: number[]): Observable<Category[]>;
-  getCategories(ids?: number[]): Observable<Category[]> {
-    if (ids) {
-      return this.http.get<Category[]>(this.apiEndpointService.getCategories(ids));
+  getCategories(opts?: GetCategoriesOptions): Observable<Category[]>;
+  getCategories(ids: number[], opts?: GetCategoriesOptions): Observable<Category[]>;
+  getCategories(ids?: number[] | GetCategoriesOptions, opts?: GetCategoriesOptions): Observable<Category[]> {
+    if (ids instanceof Array) {
+      return this.http.get<Category[]>(this.apiEndpointService.getCategories(ids, opts));
     }
-    return this.http.get<Category[]>(this.apiEndpointService.getCategories());
+    return this.http.get<Category[]>(this.apiEndpointService.getCategories(opts));
   }
 
   getRootCategories(): Observable<Category[]> {

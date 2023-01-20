@@ -7,6 +7,10 @@ import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/Criteria';
 import {Response} from "../../forum/model/response";
+import {GetCategoriesOptions} from '../../forum/services/category.service';
+
+export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
+export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +18,40 @@ import {Response} from "../../forum/model/response";
 @Injectable()
 export class ApiEndpointsService {
 
-  // URL
-  private static createUrl(action: string, isMockAPI = false): string {
+  private static preparePathVariables(pathVariables?: CreateUrlOptions['pathVariables']) {
+    let encodedPathVariablesUrl = '';
+    if (pathVariables?.length > 0) {
+      // Push extra path variables
+      for (const pathVariable of pathVariables) {
+        let pathVariableStr = pathVariable instanceof Array ? pathVariable.join(',') : pathVariable;
+
+        if (pathVariable !== null) {
+          encodedPathVariablesUrl += `/${encodeURIComponent(pathVariableStr.toString())}`;
+        }
+      }
+    }
+    return encodedPathVariablesUrl;
+  }
+
+  private static createUrlWithOptions(action: string, opts: CreateUrlOptions) {
+    // path variables
+    const encodedPathVariablesUrl = ApiEndpointsService.preparePathVariables(opts.pathVariables);
+
     const urlBuilder: UrlBuilder = new UrlBuilder(
-      isMockAPI ? Constants.API_MOCK_ENDPOINT : Constants.API_ENDPOINT,
-      action
+      opts.isMockApi ? Constants.API_MOCK_ENDPOINT : Constants.API_ENDPOINT,
+      action + encodedPathVariablesUrl
     );
+
+    opts.queryStringHandler?.(urlBuilder.queryString);
+
     return urlBuilder.toString();
   }
+
+  // URL
+  private static createUrl(action: string, isMockApi = false): string {
+    return ApiEndpointsService.createUrlWithOptions(action, {isMockApi});
+  }
+
 
   // URL WITH QUERY PARAMETERS
   private static createUrlWithQueryParameters(
@@ -29,30 +59,12 @@ export class ApiEndpointsService {
     queryStringHandler?:
       (queryStringParameters: QueryStringParameters) => void
   ): string {
-    const urlBuilder: UrlBuilder = new UrlBuilder(
-      Constants.API_ENDPOINT,
-      action
-    );
-    // Push extra query string params
-    if (queryStringHandler) {
-      queryStringHandler(urlBuilder.queryString);
-    }
-    return urlBuilder.toString();
+    return ApiEndpointsService.createUrlWithOptions(action, {queryStringHandler});
   }
 
   // URL WITH PATH VARIABLES
   private static createUrlWithPathVariables(action: string, pathVariables: any[] = []): string {
-    let encodedPathVariablesUrl = '';
-    // Push extra path variables
-    for (const pathVariable of pathVariables) {
-      let pathVariableStr = pathVariable instanceof Array ? pathVariable.join(',') : pathVariable;
-
-      if (pathVariable !== null) {
-        encodedPathVariablesUrl += `/${encodeURIComponent(pathVariableStr.toString())}`;
-      }
-    }
-    const urlBuilder: UrlBuilder = new UrlBuilder(Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
-    return urlBuilder.toString();
+    return ApiEndpointsService.createUrlWithOptions(action, {pathVariables});
   }
 
   private static createUrlWithPageable(uri: string, pageable: Pageable<any>): string {
@@ -394,13 +406,19 @@ export class ApiEndpointsService {
    * FORUM CATEGORIES
    */
 
-  getCategories(): string;
-  getCategories(ids: number[]): string;
-  getCategories(ids?: number[]) {
-    if (ids) {
-      return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.CATEGORIES, [ids]);
-    }
-    return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
+  getCategories(opts?: GetCategoriesOptions): string;
+  getCategories(ids: number[], opts?: GetCategoriesOptions): string;
+  getCategories(ids?: number[] | GetCategoriesOptions, opts?: GetCategoriesOptions): string {
+    const options: GetCategoriesOptions | undefined = (ids instanceof Array ? opts : ids);
+    const pathVariables = ids instanceof Array ? [ids] : [];
+    return ApiEndpointsService.createUrlWithOptions(Uris.FORUM.CATEGORIES, {
+      pathVariables,
+      queryStringHandler(queryString) {
+        if (options?.withRecentlyUpdatedTopic) {
+          queryString.push("withRecentlyUpdatedTopic", options.withRecentlyUpdatedTopic);
+        }
+      }
+    });
   }
 
   getRootCategories() {

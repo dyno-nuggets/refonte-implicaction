@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -42,10 +41,10 @@ public class ForumCategoriesController {
     }
 
     @GetMapping(GET_CATEGORY_URI)
-    public ResponseEntity<List<CategoryDto>> getCategory(@PathVariable List<Long> categoryIds) {
-        List<CategoryDto> categories = categoryIds.stream()
-                .map(categoryService::getCategory)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<CategoryDto>> getCategory(@PathVariable List<Long> categoryIds, @RequestParam(defaultValue = "false") boolean withRecentlyUpdatedTopic) {
+        List<CategoryDto> categories = withRecentlyUpdatedTopic
+                ? categoryService.getCategoriesWithLastUpdate(categoryIds)
+                : categoryService.getCategories(categoryIds);
         return ResponseEntity.ok(categories);
     }
 

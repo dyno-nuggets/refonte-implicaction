@@ -1,18 +1,22 @@
 <div *ngIf="category$ | async as category">
   <h2>{{ category.title }}</h2>
+  <p>{{ category.description }}</p>
 
-  <div *ngIf="category.children.length > 0">
-    <h3>Sous-catégories</h3>
+  <app-forum-block *ngIf="subCategories$ | async as subCategories">
+    <ng-container title>Sous-catégories</ng-container>
     <app-sub-category-list
-      *ngIf="subCategories$ | async as subCategories"
       [categories]="subCategories"
+      content
     ></app-sub-category-list>
-  </div>
+  </app-forum-block>
 
-  <div *ngIf="paginatedTopics$ | async as paginatedTopics">
-    <h3>Sujets</h3>
-    <app-topic-list [topics]="paginatedTopics.content"></app-topic-list>
-  </div>
+  <app-forum-block *ngIf="paginatedTopics$ | async as paginatedTopics">
+    <ng-container title>Sujets</ng-container>
+    <ng-container actions>
+      <app-create-topic-button buttonName="Créer un topic"></app-create-topic-button>
+    </ng-container>
+    <app-topic-list [topics]="paginatedTopics.content" content></app-topic-list>
+  </app-forum-block>
 
   <p-paginator
     (onPageChange)="paginate($event)"
