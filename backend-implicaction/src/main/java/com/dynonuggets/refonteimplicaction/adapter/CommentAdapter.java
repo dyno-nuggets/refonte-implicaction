@@ -1,17 +1,17 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CommentAdapter {
 
-    public Comment toModel(CommentDto dto, Post post, User user) {
+    public Comment toModel(final CommentDto dto, final Post post, final User user) {
         return Comment.builder()
                 .id(dto.getId())
                 .text(dto.getText())
@@ -20,7 +20,7 @@ public class CommentAdapter {
                 .build();
     }
 
-    public CommentDto toDto(Comment model) {
+    public CommentDto toDto(final Comment model) {
         final FileModel userImage = model.getUser().getImage();
         final String userImageUrl = userImage != null ? userImage.getUrl() : null;
         return CommentDto.builder()

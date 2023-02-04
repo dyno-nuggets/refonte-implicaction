@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.VOTE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.VOTE_BASE_URI;
 
 @RestController
 @RequestMapping(VOTE_BASE_URI)
@@ -19,7 +19,7 @@ public class VoteController {
     private final VoteService voteService;
 
     @PostMapping
-    public ResponseEntity<Void> vote(@RequestBody VoteDto voteDto) {
+    public ResponseEntity<Void> vote(@RequestBody final VoteDto voteDto) {
         voteService.vote(voteDto);
 
         return ResponseEntity.ok().build();

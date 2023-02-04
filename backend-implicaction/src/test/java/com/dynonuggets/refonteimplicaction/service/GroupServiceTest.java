@@ -1,14 +1,15 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
-import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Group;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

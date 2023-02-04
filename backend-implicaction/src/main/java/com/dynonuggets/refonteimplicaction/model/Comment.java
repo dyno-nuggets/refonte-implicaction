@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 @Entity
+@Table(name = "comment")
 public class Comment {
     @Id
     @GeneratedValue(strategy = IDENTITY)

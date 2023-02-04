@@ -1,10 +1,11 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.core.util.Message;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
-import com.dynonuggets.refonteimplicaction.utils.Message;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -13,11 +14,11 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.APPLY_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.JOB_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum.*;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.*;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.APPLY_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.Message.APPLY_ALREADY_EXISTS_FOR_JOB;
-import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,10 +41,10 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void should_create_apply_when_premium() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
-        JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), "Paris (75)", CDI, false);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        final JobApplicationDto response = new JobApplicationDto(243L, 123L, "Mon super Job", "Google", "http://uri.com", PENDING.name(), "Paris (75)", CDI, false);
         given(applicationService.createApplyIfNotExists(any())).willReturn(response);
-        String json = gson.toJson(request);
+        final String json = gson.toJson(request);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -68,8 +69,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void should_return_notfound_when_creating_apply_and_job_notfound_and_premium() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
-        String json = gson.toJson(request);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        final String json = gson.toJson(request);
         final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, request.getJobId()));
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
 
@@ -90,8 +91,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void should_return_bad_request_when_creating_apply_with_already_applied_job_and_premium() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
-        String json = gson.toJson(request);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        final String json = gson.toJson(request);
         final IllegalArgumentException exception = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, request.getJobId()));
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
 
@@ -111,8 +112,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_return_forbidden_when_creating_apply_and_no_auth() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
-        String json = gson.toJson(request);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        final String json = gson.toJson(request);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -129,8 +130,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_forbidden_when_creating_apply_and_not_premium() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
-        String json = gson.toJson(request);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
+        final String json = gson.toJson(request);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -147,12 +148,12 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void should_list_all_users_application() throws Exception {
         // given
-        List<JobApplicationDto> expecteds = asList(
+        final List<JobApplicationDto> expecteds = asList(
                 new JobApplicationDto(1L, 12L, "super job", "google", "http://url.com", PENDING.name(), "Paris (75)", CDD, false),
                 new JobApplicationDto(2L, 13L, "super job 2", "microsof", "http://url2.com", CHASED.name(), "Paris (75)", CDD, false),
                 new JobApplicationDto(3L, 14L, "super job 3", "amazon", "http://url3.com", INTERVIEW.name(), "Paris (75)", INTERIM, false)
         );
-        int expectedSize = expecteds.size();
+        final int expectedSize = expecteds.size();
         given(applicationService.getAllAppliesForCurrentUser()).willReturn(expecteds);
 
         // when
@@ -164,7 +165,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.size()", is(expectedSize)));
 
         for (int i = 0; i < expectedSize; i++) {
-            String contentPath = String.format("$[%d].", i);
+            final String contentPath = String.format("$[%d].", i);
             resultActions
                     .andExpect(jsonPath(contentPath + "id", is(expecteds.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + "jobId", is(expecteds.get(i).getJobId().intValue())))
@@ -199,9 +200,9 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void should_update_status_when_premium() throws Exception {
         // given
-        JobApplicationDto applyExpected = new JobApplicationDto(12L, 123L, "title", "company", "http://image.url", CHASED.name(), "Paris (75)", CDD, false);
-        JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
-        String json = gson.toJson(request);
+        final JobApplicationDto applyExpected = new JobApplicationDto(12L, 123L, "title", "company", "http://image.url", CHASED.name(), "Paris (75)", CDD, false);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
+        final String json = gson.toJson(request);
         given(applicationService.updateApplyForCurrentUser(any())).willReturn(applyExpected);
 
         // when
@@ -224,8 +225,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void when_not_premium_then_update_should_response_forbidden() throws Exception {
         // given
-        JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
-        String json = gson.toJson(request);
+        final JobApplicationRequest request = new JobApplicationRequest(123L, CHASED, null);
+        final String json = gson.toJson(request);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -244,7 +245,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void when_premium_then_delete_existing_apply_should_delete_apply() throws Exception {
         // given
-        long jobId = 123L;
+        final long jobId = 123L;
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -261,8 +262,8 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser(roles = "PREMIUM")
     void when_premium_then_deleting_not_existing_apply_should_response_notfound() throws Exception {
         // given
-        long jobId = 123L;
-        long currentUserId = 234L;
+        final long jobId = 123L;
+        final long currentUserId = 234L;
         final NotFoundException exception = new NotFoundException(String.format(Message.APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId));
         doThrow(exception).when(applicationService).deleteApplyByJobId(anyLong());
 
@@ -281,7 +282,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @Test
     void when_no_auth_then_delete_should_response_forbidden() throws Exception {
         // given
-        long jobId = 123L;
+        final long jobId = 123L;
 
         // when
         final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
@@ -294,7 +295,7 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void when_not_premium_then_delete_should_response_forbidden() throws Exception {
         // given
-        long jobId = 123L;
+        final long jobId = 123L;
 
         // when
         final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());

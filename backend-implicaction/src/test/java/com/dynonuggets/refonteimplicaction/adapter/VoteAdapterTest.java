@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.model.Vote;
 import com.dynonuggets.refonteimplicaction.model.VoteType;
 import org.junit.jupiter.api.Test;

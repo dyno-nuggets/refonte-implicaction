@@ -5,8 +5,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.FILE_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_FILE_BY_KEY;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.FILE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_FILE_BY_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)

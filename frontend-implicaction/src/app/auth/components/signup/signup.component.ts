@@ -6,7 +6,6 @@ import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
 import {AlertService} from '../../../shared/services/alert.service';
-import {RoleEnumCode} from '../../../shared/enums/role.enum';
 import {Univers} from '../../../shared/enums/univers';
 
 @Component({
@@ -35,8 +34,7 @@ export class SignupComponent implements OnInit {
         email: '',
         password: '',
         firstname: '',
-        lastname: '',
-        roles: [RoleEnumCode.USER, RoleEnumCode.JOB_SEEKER]
+        lastname: ''
       };
     }
   }

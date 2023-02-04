@@ -1,14 +1,15 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.TrainingAdapter;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Training;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.TrainingRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
