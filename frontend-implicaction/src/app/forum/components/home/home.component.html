@@ -1,6 +1,7 @@
-<ul>
-  <li *ngFor="let category of categories$ | async">
-    {{ category.title }}
-    <app-sub-category-list [categories]="category.children"></app-sub-category-list>
-  </li>
-</ul>
+<app-forum-block *ngFor="let category of categories$ | async">
+  <ng-container title>{{ category.title }}</ng-container>
+  <app-sub-category-list
+    [categories]="category.children"
+    content
+  ></app-sub-category-list>
+</app-forum-block>
