@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.dto.forum.CreateTopicDto;
 import com.dynonuggets.refonteimplicaction.dto.forum.TopicDto;
 import com.dynonuggets.refonteimplicaction.dto.forum.UpdateTopicDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.forum.Category;
 import com.dynonuggets.refonteimplicaction.model.forum.Topic;
 import com.dynonuggets.refonteimplicaction.repository.forum.CategoryRepository;
@@ -51,6 +52,11 @@ public class TopicService {
         Category category = categoryRepository.findById(topicDto.getCategoryId())
                 .orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, topicDto.getCategoryId())));
         Topic existingTopic = findById(topicDto.getId());
+
+        if (authService.getCurrentUser() != existingTopic.getAuthor()) {
+            authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
+        }
+
         Topic topic = topicAdapter.mergeWith(existingTopic, topicDto, category);
         Topic save = topicRepository.save(topic);
         return topicAdapter.toDto(save);
@@ -71,6 +77,7 @@ public class TopicService {
 
     @Transactional
     public void deleteTopic(Long topicId) {
+        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
         Topic topic = findById(topicId);
         topicRepository.delete(topic);
     }

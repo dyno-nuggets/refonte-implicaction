@@ -7,10 +7,12 @@ import com.dynonuggets.refonteimplicaction.dto.forum.EditCategoryDto;
 import com.dynonuggets.refonteimplicaction.exception.ConflictException;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.model.forum.Category;
 import com.dynonuggets.refonteimplicaction.model.forum.Topic;
 import com.dynonuggets.refonteimplicaction.repository.forum.CategoryRepository;
 import com.dynonuggets.refonteimplicaction.repository.forum.TopicRepository;
+import com.dynonuggets.refonteimplicaction.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,8 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final TopicRepository topicRepository;
     private final CategoryAdapter categoryAdapter;
+
+    private final AuthService authService;
 
     @Transactional
     public List<CategoryDto> getCategories() {
@@ -81,6 +85,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryDto createCategory(CreateCategoryDto categoryDto) throws ImplicactionException {
+        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
         Category createdCategory = categoryAdapter.toModel(categoryDto);
         if (categoryDto.getParentId() != null) {
             Category parentCategory = categoryRepository.findById(categoryDto.getParentId())
@@ -93,6 +98,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(long categoryId) {
+        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
         Category category = findById(categoryId);
         boolean hasTopic = this.topicRepository.findFirstByCategoryOrderByLastActionDesc(category).isPresent();
         boolean hasChildren = category.getChildren().size() > 0;
@@ -111,7 +117,7 @@ public class CategoryService {
 
 
     public CategoryDto editCategory(EditCategoryDto editCategoryDto) {
-
+        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
         Category newParentCategory = null;
         if (editCategoryDto.getParentId() != null) {
             newParentCategory = this.findById(editCategoryDto.getParentId());
