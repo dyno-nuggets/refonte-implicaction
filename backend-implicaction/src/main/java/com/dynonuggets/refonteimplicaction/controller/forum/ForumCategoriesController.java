@@ -1,7 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller.forum;
 
+import com.dynonuggets.refonteimplicaction.dto.ExceptionResponse;
 import com.dynonuggets.refonteimplicaction.dto.forum.CategoryDto;
 import com.dynonuggets.refonteimplicaction.dto.forum.CreateCategoryDto;
+import com.dynonuggets.refonteimplicaction.dto.forum.EditCategoryDto;
 import com.dynonuggets.refonteimplicaction.dto.forum.TopicDto;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.service.forum.CategoryService;
@@ -59,5 +61,19 @@ public class ForumCategoriesController {
         Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         Page<TopicDto> topicDtos = topicService.getTopicsFromCategory(categoryId, pageable);
         return ResponseEntity.ok(topicDtos);
+    }
+
+    @DeleteMapping(value = DELETE_CATEGORY_URI)
+    public ResponseEntity<ExceptionResponse> delete(@PathVariable("categoryId") final long categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping()
+    public ResponseEntity<CategoryDto> edit(@RequestBody EditCategoryDto categoryDto) {
+
+        CategoryDto editDto = categoryService.editCategory(categoryDto);
+        return ResponseEntity.status(CREATED).body(editDto);
+
     }
 }

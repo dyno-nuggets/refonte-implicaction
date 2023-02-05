@@ -46,6 +46,10 @@ import {MessageBlockComponent} from './components/message-block/message-block.co
     EditTopicButtonComponent,
     MessageBlockComponent,
   ],
+  exports: [
+    CategoryContentComponent,
+    SubCategoryListComponent
+  ],
   imports: [
     CommonModule,
     ForumRoutingModule,

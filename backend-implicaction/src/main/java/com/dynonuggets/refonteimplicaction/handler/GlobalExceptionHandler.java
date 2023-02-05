@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.handler;
 
 import com.dynonuggets.refonteimplicaction.dto.ExceptionResponse;
+import com.dynonuggets.refonteimplicaction.exception.ConflictException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
@@ -31,6 +32,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {NotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<ExceptionResponse> userNotFoundException(Exception ex) {
         return generateResponse(ex.getMessage(), NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {ConflictException.class})
+    public ResponseEntity<ExceptionResponse> conflictException(Exception ex) {
+        return generateResponse(ex.getMessage(), CONFLICT);
     }
 
     @ExceptionHandler(value = BadCredentialsException.class)

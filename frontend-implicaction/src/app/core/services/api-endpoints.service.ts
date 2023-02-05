@@ -421,30 +421,42 @@ export class ApiEndpointsService {
     });
   }
 
-  getRootCategories() {
+  getRootCategories(): string {
     return ApiEndpointsService.createUrlWithQueryParameters(Uris.FORUM.CATEGORIES, (queryParams) => {
-      queryParams.push("onlyRoot", true);
+      queryParams.push('onlyRoot', true);
       return queryParams;
     });
   }
 
-  getCategory(id: number) {
+  getCategory(id: number): string {
     return this.getCategories([id]);
   }
 
-  getCategoryTopics(id: number, pageable: Pageable<any>) {
+  getCategoryTopics(id: number, pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.FORUM.CATEGORIES_TOPICS(id), pageable);
+  }
+
+  createCategory(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
+  }
+
+  deleteCategory(categoryId: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.CATEGORIES, [categoryId]);
+  }
+
+  editCategory(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
   }
 
   /**
    * FORUM TOPICS
    */
 
-  getTopic(id: number) {
+  getTopic(id: number): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.TOPICS, [id]);
   }
 
-  getTopicResponses(id: number, pageable: Pageable<Response>) {
+  getTopicResponses(id: number, pageable: Pageable<Response>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.FORUM.TOPICS_RESPONSES(id), pageable);
   }
 

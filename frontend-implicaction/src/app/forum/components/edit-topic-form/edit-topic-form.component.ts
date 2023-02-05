@@ -36,7 +36,9 @@ export class EditTopicFormComponent extends SidebarContentComponent<EditTopicFor
   ngOnInit(): void {
     this.topicId = typeof this.sidebarInput === "number" ? this.sidebarInput : this.sidebarInput.id;
     this.topic$ = this.getTopic(this.sidebarInput);
-    this.categoriesNodes$ = this.categoryService.getCategoriesTreeSelectNode();
+    this.categoriesNodes$ = this.categoryService.getCategoriesTreeSelectNode({
+      selectable: ({parentId}) => parentId !== null
+    });
     zip(this.topic$, this.categoriesNodes$).subscribe(([topic, {map}]) =>
       this.topicForm.next(this.createTopicForm(topic, map.get(topic.category.id)))
     );

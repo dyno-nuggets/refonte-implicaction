@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter.forum;
 
 import com.dynonuggets.refonteimplicaction.dto.forum.CategoryDto;
 import com.dynonuggets.refonteimplicaction.dto.forum.CreateCategoryDto;
+import com.dynonuggets.refonteimplicaction.dto.forum.EditCategoryDto;
 import com.dynonuggets.refonteimplicaction.model.forum.Category;
 import com.dynonuggets.refonteimplicaction.model.forum.Topic;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,14 @@ public class CategoryAdapter {
                 .build();
     }
 
+    public Category toModel(EditCategoryDto dto, Category parent) {
+        return Category.builder()
+                .title(dto.getTitle())
+                .description(dto.getDescription())
+                .parent(parent)
+                .build();
+    }
+
     public CategoryDto toDtoWithoutChildren(Category model) {
         return CategoryDto.builder()
                 .id(model.getId())
@@ -50,7 +59,7 @@ public class CategoryAdapter {
                 .title(model.getTitle())
                 .description(model.getDescription())
                 .parentId(model.getParent() != null ? model.getParent().getId() : null)
-                .children(model.getChildren().stream().map(Category::getId).collect(Collectors.toList()))
+                .children(model.getChildren() != null ? model.getChildren().stream().map(Category::getId).collect(Collectors.toList()) : null)
                 .build();
     }
 

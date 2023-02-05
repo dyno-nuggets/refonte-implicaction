@@ -3,6 +3,8 @@ package com.dynonuggets.refonteimplicaction.service.forum;
 import com.dynonuggets.refonteimplicaction.adapter.forum.CategoryAdapter;
 import com.dynonuggets.refonteimplicaction.dto.forum.CategoryDto;
 import com.dynonuggets.refonteimplicaction.dto.forum.CreateCategoryDto;
+import com.dynonuggets.refonteimplicaction.dto.forum.EditCategoryDto;
+import com.dynonuggets.refonteimplicaction.exception.ConflictException;
 import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.forum.Category;
@@ -22,8 +24,8 @@ import static com.dynonuggets.refonteimplicaction.utils.Message.CATEGORY_NOT_FOU
 @AllArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
-    private final CategoryAdapter categoryAdapter;
     private final TopicRepository topicRepository;
+    private final CategoryAdapter categoryAdapter;
 
     @Transactional
     public List<CategoryDto> getCategories() {
@@ -89,4 +91,51 @@ public class CategoryService {
         Category saved = categoryRepository.save(createdCategory);
         return categoryAdapter.toDto(saved);
     }
+
+    public void deleteCategory(long categoryId) {
+        Category category = findById(categoryId);
+        boolean hasTopic = this.topicRepository.findFirstByCategoryOrderByLastActionDesc(category).isPresent();
+        boolean hasChildren = category.getChildren().size() > 0;
+
+        if (hasChildren) {
+            throw new ConflictException("Impossible de supprimer la catégorie. Il existe encore des catégories enfants");
+        } else if (hasTopic) {
+            throw new ConflictException("Impossible de supprimer la catégorie. Il existe encore des topics");
+        }
+        categoryRepository.delete(category);
+    }
+
+    private Category findById(long categoryId) {
+        return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException(String.format(CATEGORY_NOT_FOUND_MESSAGE, categoryId)));
+    }
+
+
+    public CategoryDto editCategory(EditCategoryDto editCategoryDto) {
+
+        Category newParentCategory = null;
+        if (editCategoryDto.getParentId() != null) {
+            newParentCategory = this.findById(editCategoryDto.getParentId());
+        }
+
+        Category category = this.findById(editCategoryDto.getId());
+        if (newParentCategory != null) {
+            Category parentCategory = newParentCategory;
+
+            while (parentCategory != null && editCategoryDto.getId() != parentCategory.getId()) {
+                parentCategory = parentCategory.getParent();
+            }
+
+            if (parentCategory != null) {
+                throw new ConflictException("Le parent d'un catégorie ne peut etre lui même ou l'un de ses enfants");
+            }
+        }
+
+        category.setTitle(editCategoryDto.getTitle());
+        category.setDescription(editCategoryDto.getDescription());
+        category.setParent(newParentCategory);
+        category.setChildren(category.getChildren());
+        Category editedCategory = categoryRepository.save(category);
+        return categoryAdapter.toDto(editedCategory);
+    }
+
 }

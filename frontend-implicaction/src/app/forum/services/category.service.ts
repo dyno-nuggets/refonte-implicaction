@@ -7,10 +7,17 @@ import {Category} from "../model/category";
 import {Topic} from "../model/topic";
 import {Pageable} from "../../shared/models/pageable";
 import {CategoryTreeSelectNode} from '../model/categoryTreeSelectNode';
+import {CategoryPayload} from '../model/categoryPayload';
 
 export interface ITree {
-  tree: CategoryTreeSelectNode[],
+  tree: CategoryTreeSelectNode[];
   map: Map<number, CategoryTreeSelectNode>;
+}
+
+export interface GetCategoriesTreeSelectNodesOption {
+  selectable?: (categoryNode: CategoryNode) => boolean;
+  filter?: (categoryNode: CategoryNode) => boolean;
+  notHaveParent?: (categoryNode: CategoryNode) => boolean;
 }
 
 export type CategoryNode = Category & { children: CategoryNode[]; };
@@ -67,26 +74,28 @@ export class CategoryService {
     }));
   }
 
-  getCategoriesTreeSelectNode(): Observable<ITree> {
-    const node_map: Map<number, CategoryTreeSelectNode> = new Map();
+  getCategoriesTreeSelectNode(options?: GetCategoriesTreeSelectNodesOption): Observable<ITree> {
+    const nodeMap: Map<number, CategoryTreeSelectNode> = new Map();
 
     const categoryToCategoryTreeSelectNode = (categories: CategoryNode[]) => {
       return categories
-        .map(({id, title, parentId, children}) => {
+        .filter(options?.filter ?? (() => true))
+        .map((categoryNode) => {
+          const {id, title, children} = categoryNode;
           const node: CategoryTreeSelectNode = {
             id,
             label: title,
-            selectable: parentId !== null,
+            selectable: options?.selectable(categoryNode) ?? true,
             data: '',
             children: categoryToCategoryTreeSelectNode(children)
-          }
-          node_map.set(id, node);
+          };
+          nodeMap.set(id, node);
           return node;
         });
     };
     return this.getCategoryTree().pipe(
       map(categoryToCategoryTreeSelectNode),
-      map((tree) => ({tree, map: node_map}))
+      map((tree) => ({tree, map: nodeMap}))
     );
   }
 
@@ -99,4 +108,17 @@ export class CategoryService {
   getCategoryTopics(id: number, pageable: Pageable<any>): Observable<Pageable<Topic>> {
     return this.http.get<Pageable<Topic>>(this.apiEndpointService.getCategoryTopics(id, pageable));
   }
+
+  createCategory(category: CategoryPayload): Observable<Category> {
+    return this.http.post<Category>(this.apiEndpointService.createCategory(), category);
+  }
+
+  deleteCategory(categoryId: number) {
+    return this.http.delete(this.apiEndpointService.deleteCategory(categoryId));
+  }
+
+  editCategory(category: CategoryPayload): Observable<Category> {
+    return this.http.put<Category>(this.apiEndpointService.editCategory(), category);
+  }
+
 }
