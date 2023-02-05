@@ -28,6 +28,7 @@ import {CreateTopicButtonComponent} from './components/create-topic-button/creat
 import {ForumBlockComponent} from './components/forum-block/forum-block.component';
 import {EditTopicFormComponent} from './components/edit-topic-form/edit-topic-form.component';
 import {EditTopicButtonComponent} from './components/edit-topic-button/edit-topic-button.component';
+import {MessageBlockComponent} from './components/message-block/message-block.component';
 
 
 @NgModule({
@@ -43,6 +44,7 @@ import {EditTopicButtonComponent} from './components/edit-topic-button/edit-topi
     ForumBlockComponent,
     EditTopicFormComponent,
     EditTopicButtonComponent,
+    MessageBlockComponent,
   ],
   imports: [
     CommonModule,

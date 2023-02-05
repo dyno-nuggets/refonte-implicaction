@@ -9,6 +9,9 @@ import {Univers} from "../../../shared/enums/univers";
 })
 export class TopicListComponent {
 
+  DATE_FORMAT = 'dd MMMM yyyy';
+  DATETIME_FORMAT = this.DATE_FORMAT + ' HH:mm';
+
   univers = Univers;
 
   @Input()

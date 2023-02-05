@@ -20,15 +20,26 @@ import {Pageable} from "../../../shared/models/pageable";
 export class TopicContentComponent extends BaseWithPaginationAndFilterComponent<Response, Criteria> implements OnInit {
   topic$: Observable<Topic>;
   paginatedResponses$: Observable<Pageable<Response>>;
+  private $id: Observable<number>;
 
   constructor(private currentRoute: ActivatedRoute, private topicService: TopicService) {
     super(currentRoute);
   }
 
   ngOnInit(): void {
-    const $id = this.currentRoute.params.pipe(map(map => +map['id']))
-    this.topic$ = $id.pipe(switchMap(id => this.topicService.getTopic(id)));
-    this.paginatedResponses$ = $id.pipe(switchMap(id => this.topicService.getTopicResponses(id, this.pageable)));
+    this.pageable = {...this.pageable, sortBy: 'createdAt', sortOrder: 'ASC'};
+    this.$id = this.currentRoute.params.pipe(map(map => +map['id']));
+    this.topic$ = this.$id.pipe(switchMap(id => this.topicService.getTopic(id)));
+    this.paginate();
+  }
+
+  protected innerPaginate() {
+    this.paginatedResponses$ = this.$id.pipe(switchMap(id => this.topicService.getTopicResponses(id, this.pageable)));
+    this.paginatedResponses$.subscribe((paginatedResponses) => {
+      this.pageable.totalPages = paginatedResponses.totalPages;
+      this.pageable.totalElements = paginatedResponses.totalElements;
+      this.pageable.content = paginatedResponses.content;
+    });
   }
 
 }

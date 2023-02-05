@@ -44,5 +44,10 @@ export class CategoryContentComponent extends BaseWithPaginationAndFilterCompone
 
   protected innerPaginate() {
     this.paginatedTopics$ = this.id$.pipe(switchMap(id => this.categoryService.getCategoryTopics(id, this.pageable)));
+    this.paginatedTopics$.subscribe((paginatedTopics) => {
+      this.pageable.totalPages = paginatedTopics.totalPages;
+      this.pageable.totalElements = paginatedTopics.totalElements;
+      this.pageable.content = paginatedTopics.content;
+    });
   }
 }
