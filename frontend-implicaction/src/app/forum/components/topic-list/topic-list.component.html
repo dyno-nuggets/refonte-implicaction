@@ -9,7 +9,7 @@
               <a routerLink="/{{ univers.FORUM.url }}/topic/{{ topic.id }}">{{ topic.title }}</a>
             </div>
             <div class="text-justify">
-              <a href="#">{{ topic.author.username }}</a> - {{ topic.createdAt | date: DATETIME_FORMAT  }}
+              <a href="#">{{ topic.author.username }}</a> - {{ topic.createdAt | date: constants.DATETIME_FORMAT  }}
             </div>
           </div>
         </div>
@@ -19,7 +19,7 @@
         <div class="col-12 col-lg-3 col-xl-3 col-xxl-auto d-flex align-items-center">
           <div *ngIf="topic.lastResponse as lastResponse; else noLastResponse" class="last-response">
             <div class="time">
-              <a href="#">{{ lastResponse.createdAt | date: DATETIME_FORMAT  }}</a>
+              <a href="#">{{ lastResponse.createdAt | date: constants.DATETIME_FORMAT  }}</a>
             </div>
             <div class="author">
               <a href="#">{{ lastResponse.author.username }}</a>

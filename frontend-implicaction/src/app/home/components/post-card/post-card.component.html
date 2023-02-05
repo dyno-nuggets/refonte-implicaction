@@ -5,37 +5,42 @@
         <div class="user-img">
           <img
             #userImg
-            (error)="userImg.src = constant.USER_IMAGE_DEFAULT_URI"
-            [src]="post.userImageUrl || constant.USER_IMAGE_DEFAULT_URI"
-            class="rounded-circle me-2 shadow-sm avatar"
+            (error)="userImg.src = constants.USER_IMAGE_DEFAULT_URI"
+            [src]="topic.author.imageUrl || constants.USER_IMAGE_DEFAULT_URI"
             alt=""
+            class="rounded-circle me-2 shadow-sm avatar"
           >
         </div>
         <div class="flex flex-column">
           <div class="username">
             <a
               class="post-card-link"
-              routerLink="/{{univers.USERS.url}}/{{post.userId}}/profile"
+              routerLink="/{{univers.USERS.url}}/{{topic.lastResponse?.author.id ?? topic.author.id}}/profile"
             >
-              {{post.username}}
+              {{topic.lastResponse?.author.username ?? topic.author.username}}
             </a>
           </div>
-          <div class="duration mt-1">{{post.duration}}</div>
+          <div
+            class="duration mt-1">{{topic.lastResponse?.createdAt ?? topic.createdAt | date: constants.DATETIME_FORMAT }}</div>
         </div>
       </div>
       <div>
         <h3 class="theme-primary m-0 overflow-ellipsis">
           <a
+            [queryParams]="topic.lastResponse ? {responseId:topic.lastResponse.id} : {}"
             class="post-card-link"
-            routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}"
+            routerLink="/{{univers.FORUM.url}}/topic/{{topic.id}}"
           >
-            {{post.name}}
+            {{topic.title}}
           </a>
         </h3>
       </div>
     </div>
     <div class="col-1 d-flex justify-content-center">
-      <a routerLink="/{{univers.DISCUSSIONS.url}}/{{post.id}}">
+      <a
+        [queryParams]="topic.lastResponse ? {responseId:topic.lastResponse.id} : {}"
+        routerLink="/{{univers.FORUM.url}}/topic/{{topic.id}}"
+      >
         <i class="fas fa-chevron-right"></i>
       </a>
     </div>

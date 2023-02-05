@@ -1,6 +1,7 @@
 import {Component, Input} from '@angular/core';
 import {Topic} from "../../model/topic";
 import {Univers} from "../../../shared/enums/univers";
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-topic-list',
@@ -8,10 +9,8 @@ import {Univers} from "../../../shared/enums/univers";
   styleUrls: ['./topic-list.component.scss']
 })
 export class TopicListComponent {
-
-  DATE_FORMAT = 'dd MMMM yyyy';
-  DATETIME_FORMAT = this.DATE_FORMAT + ' HH:mm';
-
+  
+  constants = Constants;
   univers = Univers;
 
   @Input()

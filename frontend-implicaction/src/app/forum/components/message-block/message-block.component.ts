@@ -2,6 +2,7 @@ import {Component, Input} from '@angular/core';
 import {Topic} from '../../model/topic';
 import {Response} from '../../model/response';
 import {Univers} from '../../../shared/enums/univers';
+import {Constants} from '../../../config/constants';
 
 @Component({
   selector: 'app-message-block',
@@ -11,8 +12,8 @@ import {Univers} from '../../../shared/enums/univers';
 export class MessageBlockComponent {
 
   univers = Univers;
-  
-  DATETIME_FORMAT = 'dd MMMM yyyy HH:mm';
+
+  constants = Constants;
 
   @Input()
   message: Topic | Response;

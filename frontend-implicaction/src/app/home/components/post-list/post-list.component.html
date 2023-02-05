@@ -1,6 +1,6 @@
-<p *ngIf="!latestPosts?.length">Il n'y a aucune publication pour le moment</p>
-<div *ngFor="let post of latestPosts; trackBy: trackByPostId" class="p-0">
+<p *ngIf="!latestTopics?.length">Il n'y a aucune publication pour le moment</p>
+<div *ngFor="let topics of latestTopics; trackBy: trackByTopicId" class="p-0">
   <div class="mb-3">
-    <app-post-card [post]="post"></app-post-card>
+    <app-post-card [topic]="topics"></app-post-card>
   </div>
 </div>

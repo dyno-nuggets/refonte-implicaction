@@ -79,6 +79,7 @@ public class ApiUrls {
 
     // FORUM TOPICS
     public static final String TOPIC_BASE_URI = "/api/forum/topics";
+    public static final String GET_LATEST_TOPICS = "/latest/{topicCount}";
     public static final String GET_TOPIC_URI = "/{topicId}";
     public static final String GET_RESPONSE_FROM_TOPIC_URI = "/{topicId}/responses";
 

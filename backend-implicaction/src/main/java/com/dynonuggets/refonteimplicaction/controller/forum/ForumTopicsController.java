@@ -14,6 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
 import static org.springframework.http.HttpStatus.CREATED;
 
@@ -42,6 +44,12 @@ public class ForumTopicsController {
         return ResponseEntity.ok(foundDto);
     }
 
+    @GetMapping(GET_LATEST_TOPICS)
+    public ResponseEntity<List<TopicDto>> getLatest(@PathVariable int topicCount) {
+        List<TopicDto> topics = topicService.getLatest(topicCount);
+        return ResponseEntity.ok(topics);
+    }
+
     @GetMapping(GET_RESPONSE_FROM_TOPIC_URI)
     public ResponseEntity<Page<ResponseDto>> getResponsesFromTopic(
             @PathVariable long topicId,
@@ -55,7 +63,7 @@ public class ForumTopicsController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    @DeleteMapping
+    @DeleteMapping(GET_TOPIC_URI)
     public ResponseEntity<Void> delete(@PathVariable Long topicId) {
         topicService.deleteTopic(topicId);
         return ResponseEntity.noContent().build();

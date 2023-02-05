@@ -33,4 +33,8 @@ export class TopicService {
   editTopic(topic: TopicPayload): Observable<Topic> {
     return this.http.patch<Topic>(this.apiEndpointsService.editTopic(), topic);
   }
+
+  getLatest(topicCount: number) {
+    return this.http.get<Topic[]>(this.apiEndpointsService.getLatestTopics(topicCount));
+  }
 }

@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {Post} from 'src/app/discussion/model/post';
-import {PostService} from 'src/app/discussion/services/post.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {Constants} from '../../../config/constants';
+import {TopicService} from '../../../forum/services/topic.service';
+import {Topic} from '../../../forum/model/topic';
 
 @Component({
   selector: 'app-post-list',
@@ -11,23 +11,23 @@ import {Constants} from '../../../config/constants';
 })
 export class PostListComponent implements OnInit {
 
-  latestPosts: Post[];
+  latestTopics: Topic[];
 
   constructor(
-    private postService: PostService,
+    private topicService: TopicService,
     private toasterService: ToasterService
   ) {
   }
 
   ngOnInit(): void {
-    this.postService
-      .getLatestPosts(Constants.LATEST_POSTS_COUNT)
+    this.topicService
+      .getLatest(Constants.LATEST_TOPICS_COUNT)
       .subscribe(
-        posts => this.latestPosts = posts,
+        topics => this.latestTopics = topics,
         () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la mise à jour des données')
       );
   }
 
-  trackByPostId = (index: number, post: Post) => post.id;
+  trackByTopicId = (index: number, topic: Topic) => topic.id;
 
 }

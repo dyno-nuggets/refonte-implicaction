@@ -7,15 +7,15 @@
       <a routerLink="/{{ univers.USERS.url }}/{{ message.author.id }}/profile">{{ author.username }}</a>
     </div>
     <div>Inscrit depuis:</div>
-    <div>{{ author.registeredAt | date: DATE_FORMAT }}</div>
+    <div>{{ author.registeredAt | date: constants.DATE_FORMAT }}</div>
   </div>
   <div class="message__content flex-grow-1 position-relative">
     <small class="created-at m-2">
-      {{ message.createdAt | date: DATETIME_FORMAT }}
+      {{ message.createdAt | date: constants.DATETIME_FORMAT }}
     </small>
     <p [innerHTML]="message.message" class="p-2"></p>
     <small *ngIf="message.editedAt !== message.createdAt" class="modified-at position-absolute bottom-0 end-0 m-2">
-      modifié le {{ message.editedAt | date: DATETIME_FORMAT }}
+      modifié le {{ message.editedAt | date: constants.DATETIME_FORMAT }}
     </small>
   </div>
 </div>
