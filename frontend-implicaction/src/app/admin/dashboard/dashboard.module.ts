@@ -11,7 +11,7 @@ import {AdminModule} from '../admin.module';
 @NgModule({
   declarations: [
     DashboardComponent,
-    AdminOverviewComponent,
+    AdminOverviewComponent
   ],
   imports: [
     CommonModule,

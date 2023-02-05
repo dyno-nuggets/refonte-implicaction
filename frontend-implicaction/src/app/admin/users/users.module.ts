@@ -12,6 +12,7 @@ import {FeatherModule} from 'angular-feather';
 import {CardModule} from 'primeng/card';
 import {ButtonModule} from 'primeng/button';
 import {UserModule} from "../../user/user.module";
+import {ChartModule} from 'primeng/chart';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {UserModule} from "../../user/user.module";
         FeatherModule,
         CardModule,
         ButtonModule,
-        UserModule
+        UserModule,
+        ChartModule
     ]
 })
 export class UsersModule {

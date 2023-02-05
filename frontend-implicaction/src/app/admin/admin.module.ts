@@ -24,7 +24,8 @@ import {PendingGroupTableComponent} from './groups/pending-group-table/pending-g
     SharedModule,
     TableModule,
     CompaniesModule,
-    FeatherModule
+    FeatherModule,
+
   ],
   providers: [{provide: LOCALE_ID, useValue: 'fr'}],
   exports: [
