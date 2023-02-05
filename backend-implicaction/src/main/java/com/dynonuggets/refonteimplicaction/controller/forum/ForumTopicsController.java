@@ -63,7 +63,7 @@ public class ForumTopicsController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    @DeleteMapping(GET_TOPIC_URI)
+    @DeleteMapping(DELETE_TOPIC_URI)
     public ResponseEntity<Void> delete(@PathVariable Long topicId) {
         topicService.deleteTopic(topicId);
         return ResponseEntity.noContent().build();

@@ -6,7 +6,6 @@ import {AvatarModule} from 'primeng/avatar';
 import {SkeletonModule} from 'primeng/skeleton';
 import {EditorModule} from 'primeng/editor';
 import {TableModule} from 'primeng/table';
-
 import {ForumComponent} from './forum.component';
 import {ForumRoutingModule} from './forum-routing.module';
 import {SharedModule} from '../shared/shared.module';
@@ -29,6 +28,8 @@ import {ForumBlockComponent} from './components/forum-block/forum-block.componen
 import {EditTopicFormComponent} from './components/edit-topic-form/edit-topic-form.component';
 import {EditTopicButtonComponent} from './components/edit-topic-button/edit-topic-button.component';
 import {MessageBlockComponent} from './components/message-block/message-block.component';
+import {DeleteTopicValidationComponent} from './components/delete-topic-validation/delete-topic-validation.component';
+import {DeleteTopicButtonComponent} from './components/delete-topic-button/delete-topic-button.component';
 
 
 @NgModule({
@@ -45,6 +46,8 @@ import {MessageBlockComponent} from './components/message-block/message-block.co
     EditTopicFormComponent,
     EditTopicButtonComponent,
     MessageBlockComponent,
+    DeleteTopicValidationComponent,
+    DeleteTopicButtonComponent,
   ],
   exports: [
     CategoryContentComponent,

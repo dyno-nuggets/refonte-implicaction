@@ -83,6 +83,8 @@ public class ApiUrls {
     public static final String GET_TOPIC_URI = "/{topicId}";
     public static final String GET_RESPONSE_FROM_TOPIC_URI = "/{topicId}/responses";
 
+    public static final String DELETE_TOPIC_URI = "/{topicId}";
+
     private ApiUrls() {
         // empêche la construction d'un objet ApiUrls
     }

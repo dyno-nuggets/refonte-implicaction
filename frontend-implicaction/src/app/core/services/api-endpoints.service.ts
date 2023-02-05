@@ -472,6 +472,9 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.FORUM.TOPICS);
   }
 
+  deleteTopic(id: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.TOPICS, [id]);
+  }
 
   /**
    * JOB APPLICATION
