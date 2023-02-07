@@ -1,8 +1,8 @@
 # refonte-implicaction
 
-| :warning:  IMPORTANT                                                                                                                                                               |
-|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Pour que la CI fonctionne correctement vous devez désactiver l'analyse automatique. Pour cela rendez vous sur la page [sonarcloud](https://sonarcloud.io/) de votre **projet** > Administration > Analysis Method > ![image](https://user-images.githubusercontent.com/4210719/204150398-7893dc5c-a72b-4dd0-9ac5-711248239347.png)|
+| :warning:  IMPORTANT                                                                                                                                                                                                                                                                                                                                                                 |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| __En cas de fork__ (et seulement en cas de fork), pour que la CI fonctionne correctement vous devez désactiver l'analyse automatique. Pour cela rendez vous sur la page [sonarcloud](https://sonarcloud.io/) de votre **projet** > Administration > Analysis Method > ![image](https://user-images.githubusercontent.com/4210719/204150398-7893dc5c-a72b-4dd0-9ac5-711248239347.png) |
 
 ## Quick Start
 
