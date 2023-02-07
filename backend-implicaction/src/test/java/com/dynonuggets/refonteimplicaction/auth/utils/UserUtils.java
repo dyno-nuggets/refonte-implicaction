@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.utils.TestUtils.*;
+import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
 import static java.util.Optional.ofNullable;

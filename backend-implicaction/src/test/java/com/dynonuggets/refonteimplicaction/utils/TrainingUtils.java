@@ -5,7 +5,7 @@ import com.dynonuggets.refonteimplicaction.model.Training;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import static com.dynonuggets.refonteimplicaction.auth.utils.TestUtils.*;
+import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)

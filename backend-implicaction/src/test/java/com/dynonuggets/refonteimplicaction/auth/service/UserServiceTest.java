@@ -1,11 +1,9 @@
-package com.dynonuggets.refonteimplicaction.auth.services;
+package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.auth.service.UserService;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
@@ -123,7 +121,7 @@ class UserServiceTest {
     @DisplayName("# getUserById")
     class GetUserByIdTest {
         @Test
-        @DisplayName("Doit retourner l'utilisateur correspondant à l'id en paramètres quand il existe")
+        @DisplayName("doit retourner l'utilisateur correspondant à l'id en paramètres quand il existe")
         void should_get_user_when_getUserById_and_user_exists() {
             // given
             final Long expectedId = mockedUser.getId();
@@ -141,7 +139,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("Doit lancer une exception quand l'utilisateur dont l'id est fourni n'existe pas")
+        @DisplayName("doit lancer une exception quand l'utilisateur dont l'id est fourni n'existe pas")
         void should_throw_UserNotFoundException_when_getUserById_and_user_not_exists() {
             // given
             final long userId = mockedUser.getId();
@@ -163,7 +161,7 @@ class UserServiceTest {
     @DisplayName("# updateUser")
     class UpdateUserTest {
         @Test
-        @DisplayName("Doit mettre à jour les champs de l'utilisateur fourni en paramètres quand celui-ci existe")
+        @DisplayName("doit mettre à jour les champs de l'utilisateur fourni en paramètres quand celui-ci existe")
         void should_get_user_updated_when_updateUser_and_user_exists() {
             // given
             mockedUser.setFirstname("Han");
@@ -190,7 +188,7 @@ class UserServiceTest {
         }
 
         @Test
-        @DisplayName("Doit lancer une exception lorsque l'on essaye de mettre à jour un utilisateur qui n'existe pas")
+        @DisplayName("doit lancer une exception lorsque l'on essaye de mettre à jour un utilisateur qui n'existe pas")
         void should_throw_UserNotFoundException_when_updateUser_and_user_not_exists() {
             // given
             final String expectedMessage = format(USER_NOT_FOUND_MESSAGE, mockedUserDto.getId());

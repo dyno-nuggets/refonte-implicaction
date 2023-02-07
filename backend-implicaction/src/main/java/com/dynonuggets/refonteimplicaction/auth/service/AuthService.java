@@ -27,7 +27,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,11 +70,13 @@ public class AuthService {
      * @throws AuthenticationException si l'envoi du mail échoue
      */
     @Transactional
-    public void signup(final RegisterRequest reqisterRequest) throws ImplicactionException {
+    public void signup(@Valid final RegisterRequest reqisterRequest) throws ImplicactionException {
         validateRegisterRequest(reqisterRequest);
         final String activationKey = generateActivationKey();
         final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(ADMIN.getLongName()));
         registerUser(reqisterRequest, activationKey);
+
+        // TODO: MAIL-NOTIFICATION à revoir
         final Notification notification = Notification.builder()
                 .message(format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
                 .sent(false)
@@ -90,7 +94,7 @@ public class AuthService {
     /**
      * Vérifie la validité de la requête de sign-up
      */
-    private void validateRegisterRequest(final RegisterRequest registerRequest) throws ImplicactionException {
+    private void validateRegisterRequest(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
             throw new AuthenticationException(USERNAME_ALREADY_EXISTS, registerRequest.getUsername());
         }
@@ -117,6 +121,7 @@ public class AuthService {
         user.setActivatedAt(Instant.now());
         user.setActive(true);
 
+        // TODO: MAIL-NOTIFICATION à revoir
         final Notification notification = Notification.builder()
                 .type(USER_ACTIVATION)
                 .users(singletonList(user))
@@ -127,12 +132,16 @@ public class AuthService {
                 .title("[Implicaction] Activation de votre compte")
                 .build();
         final Notification notificationSave = notificationRepository.save(notification);
+        if (user.getNotifications() == null) {
+            user.setNotifications(new ArrayList<>());
+        }
         user.getNotifications().add(notificationSave);
         userRepository.save(user);
     }
 
+    // TODO: revoir potentiellement la logique des tokens (ex: suppression des refresh tokens associés précédemment)
     @Transactional
-    public LoginResponse login(final LoginRequest loginRequest) throws ImplicactionException {
+    public LoginResponse login(@Valid final LoginRequest loginRequest) throws ImplicactionException {
         final String username = loginRequest.getUsername();
         final Authentication authenticate = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(username, loginRequest.getPassword())

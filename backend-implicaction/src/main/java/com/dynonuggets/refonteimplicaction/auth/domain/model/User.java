@@ -9,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
@@ -92,7 +93,7 @@ public class User {
     @JoinTable(name = "user_notification",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "notification_id")})
-    private List<Notification> notifications;
+    private List<Notification> notifications = new ArrayList<>();
 
     @OneToMany(fetch = LAZY, mappedBy = "user")
     private List<WorkExperience> experiences;

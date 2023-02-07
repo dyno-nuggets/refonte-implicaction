@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.auth.utils;
+package com.dynonuggets.refonteimplicaction.core.util;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -26,10 +26,10 @@ public class TestUtils {
         return generateRandomDate(Instant.parse("2020-12-03T10:15:30.00Z"));
     }
 
-    public static Instant generateRandomDate(Instant minDate) {
-        long startSeconds = minDate.getEpochSecond();
-        long endSeconds = Instant.now().getEpochSecond();
-        long random = ThreadLocalRandom
+    public static Instant generateRandomDate(final Instant minDate) {
+        final long startSeconds = minDate.getEpochSecond();
+        final long endSeconds = Instant.now().getEpochSecond();
+        final long random = ThreadLocalRandom
                 .current()
                 .nextLong(startSeconds, endSeconds);
 
