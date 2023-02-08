@@ -56,10 +56,6 @@ public class Message {
     public static final String APPLY_NOT_FOUND_WITH_JOB_AND_USER = "No apply found for user [%d] and jobId [%d]";
     @Deprecated(since = "v.2023")
     public static final String APPLY_ALREADY_EXISTS_FOR_JOB = "Unable to apply, apply already exists with jobId [%d]";
-
-    // Auth messages
-    @Deprecated(since = "v.2023")
-    public static final String BAD_CREDENTIAL_MESSAGE = "Nom d'utilisateur ou mot de passe incorrect.";
     @Deprecated(since = "v.2023")
     public static final String USER_DISABLED_MESSAGE = "Votre compte n'a pas encore été activé.";
 

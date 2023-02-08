@@ -25,8 +25,9 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.dynonuggets.refonteimplicaction.core.rest.dto.ExceptionResponse.from;
+import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.BAD_CREDENTIAL_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.BAD_CREDENTIAL_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_DISABLED_MESSAGE;
 import static org.springframework.http.HttpStatus.*;
 
@@ -34,16 +35,24 @@ import static org.springframework.http.HttpStatus.*;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
+    @ExceptionHandler(value = ImplicactionException.class)
+    ResponseEntity<ExceptionResponse> implicactionException(final ImplicactionException ex) {
+        return ResponseEntity
+                .status(ex.getErrorResult().getStatus().value())
+                .body(from(ex.getErrorResult()));
+    }
+
     @ExceptionHandler(value = {UnauthorizedException.class, AuthenticationException.class})
     public ResponseEntity<ExceptionResponse> unauthorizedException(final Exception ex) {
-        return generateResponse(ex.getMessage(), UNAUTHORIZED);
+        return ResponseEntity.status(UNAUTHORIZED).body(from(ex, UNAUTHORIZED));
     }
 
     @ExceptionHandler(value = {NotFoundException.class, UserNotFoundException.class})
     public ResponseEntity<ExceptionResponse> userNotFoundException(final Exception ex) {
-        return generateResponse(ex.getMessage(), NOT_FOUND);
+        return ResponseEntity.status(NOT_FOUND).body(from(ex, NOT_FOUND));
     }
 
+    // L'exception en amont n'est pas catchable, on est obligé de récupérer les BadCredentialsException
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> badCredentialsException() {
         return generateResponse(BAD_CREDENTIAL_MESSAGE, UNAUTHORIZED);
@@ -57,11 +66,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = IllegalArgumentException.class)
     ResponseEntity<ExceptionResponse> illegalArgumentException(final Exception ex) {
         return generateResponse(ex.getMessage(), BAD_REQUEST);
-    }
-
-    @ExceptionHandler(value = ImplicactionException.class)
-    ResponseEntity<ExceptionResponse> implicactionException(final ImplicactionException ex) {
-        return generateResponse(ex.getMessage(), ex.getErrorResult().getStatus());
     }
 
     private ResponseEntity<ExceptionResponse> generateResponse(final String message, final HttpStatus httpStatus) {
@@ -80,7 +84,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @NonNull
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
-            final MethodArgumentNotValidException ex, final HttpHeaders headers, final HttpStatus status, final WebRequest request) {
+            @NonNull final MethodArgumentNotValidException ex,
+            @NonNull final HttpHeaders headers,
+            @NonNull final HttpStatus status,
+            @NonNull final WebRequest request) {
         final Map<String, String> errors = new HashMap<>();
         ex.getBindingResult()
                 .getAllErrors()

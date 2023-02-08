@@ -11,8 +11,8 @@ import static com.dynonuggets.refonteimplicaction.auth.util.AuthConstants.USERNA
 import static lombok.AccessLevel.PRIVATE;
 
 @Data
-@AllArgsConstructor(access = PRIVATE)
 @Builder
+@AllArgsConstructor(access = PRIVATE)
 public class RefreshTokenRequest {
     @NotBlank
     private String refreshToken;
