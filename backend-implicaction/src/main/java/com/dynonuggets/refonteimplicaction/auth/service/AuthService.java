@@ -41,6 +41,7 @@ import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTE
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
 import static java.lang.String.format;
+import static java.time.Instant.now;
 import static java.util.Collections.singletonList;
 
 @Service
@@ -81,7 +82,7 @@ public class AuthService {
                 .message(format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
                 .sent(false)
                 .read(false)
-                .date(Instant.now())
+                .date(now())
                 .title(USER_REGISTER_MAIL_TITLE)
                 .type(USER_REGISTRATION)
                 .build();
@@ -118,14 +119,14 @@ public class AuthService {
             throw new AuthenticationException(USER_ALREADY_ACTIVATED, activationKey);
         }
 
-        user.setActivatedAt(Instant.now());
+        user.setActivatedAt(now());
         user.setActive(true);
 
         // TODO: MAIL-NOTIFICATION à revoir
         final Notification notification = Notification.builder()
                 .type(USER_ACTIVATION)
                 .users(singletonList(user))
-                .date(Instant.now())
+                .date(now())
                 .sent(false)
                 .read(false)
                 .message(format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", appUrl))
@@ -148,7 +149,7 @@ public class AuthService {
         );
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         final String token = jwtProvider.generateToken(authenticate);
-        final Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+        final Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         final String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
         final User user = userRepository.findByUsername(username)
@@ -176,7 +177,7 @@ public class AuthService {
 
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
         final String token = jwtProvider.generateTokenWithUsername(username);
-        final Instant expiresAt = Instant.now().plusMillis(jwtProvider.getJwtExpirationInMillis());
+        final Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
         return LoginResponse.builder()
                 .authenticationToken(token)
@@ -200,10 +201,10 @@ public class AuthService {
                 .password(passwordEncoder.encode(reqisterRequest.getPassword()))
                 .firstname(reqisterRequest.getFirstname())
                 .lastname(reqisterRequest.getLastname())
-                .registeredAt(Instant.now())
+                .registeredAt(now())
                 .active(false)
                 .activationKey(activationKey)
-                .registeredAt(Instant.now())
+                .registeredAt(now())
                 .roles(roles)
                 .build();
         userRepository.save(user);
