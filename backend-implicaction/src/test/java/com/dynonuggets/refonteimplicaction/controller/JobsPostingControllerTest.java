@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
@@ -18,9 +19,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.JOB_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
-import static com.dynonuggets.refonteimplicaction.utils.Message.JOB_NOT_FOUND_MESSAGE;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -54,12 +55,12 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void getJobPostingsListShouldListAllJobs() throws Exception {
         // given
-        Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
+        final Page<JobPostingDto> jobPostingPageMockResponse = new PageImpl<>(jobPostings);
 
         given(jobPostingService.getAllWithCriteria(any(), anyString(), any(), any(), anyBoolean(), anyBoolean(), any())).willReturn(jobPostingPageMockResponse);
 
         // when
-        ResultActions resultActions = mvc.perform(
+        final ResultActions resultActions = mvc.perform(
                 get(JOBS_BASE_URI).param("contractType", CDD.name()).param("archive", "true")
 
         ).andDo(print());
@@ -93,7 +94,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void getJobByIdShouldReturnOneJob() throws Exception {
-        JobPostingDto jobPostingDto = JobPostingDto.builder()
+        final JobPostingDto jobPostingDto = JobPostingDto.builder()
                 .id(1L)
                 .createdAt(Instant.now())
                 .description("description")
@@ -141,12 +142,12 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void archiveJobShouldChangeStatus() throws Exception {
         // given
-        JobPostingDto givenDto = JobPostingDto.builder()
+        final JobPostingDto givenDto = JobPostingDto.builder()
                 .id(1L)
                 .archive(false)
                 .build();
 
-        JobPostingDto expectedDto = JobPostingDto.builder()
+        final JobPostingDto expectedDto = JobPostingDto.builder()
                 .id(1L)
                 .archive(true)
                 .build();
@@ -171,21 +172,21 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void archiveJobShouldChangeListStatus() throws Exception {
         // given
-        JobPostingDto job = JobPostingDto.builder()
+        final JobPostingDto job = JobPostingDto.builder()
                 .id(1L)
                 .archive(false)
                 .build();
 
-        List<Long> givenDto = Collections.singletonList(job.getId());
+        final List<Long> givenDto = Collections.singletonList(job.getId());
 
-        List<JobPostingDto> expectedDto = Collections.singletonList(
+        final List<JobPostingDto> expectedDto = Collections.singletonList(
                 JobPostingDto.builder()
                         .id(1L)
                         .archive(true)
                         .build()
         );
 
-        String json = gson.toJson(givenDto);
+        final String json = gson.toJson(givenDto);
 
         given(jobPostingService.toggleArchiveAll(anyList())).willReturn(expectedDto);
 
@@ -216,7 +217,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willThrow(exception);
 
         // when
-        ResultActions resultActions = mvc.perform(
+        final ResultActions resultActions = mvc.perform(
                 patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).with(csrf())
         );
 
@@ -231,7 +232,7 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         final long jobId = 123L;
 
         // when
-        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print())
@@ -242,16 +243,16 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @Test
     void archiveJobListWithoutJwtShouldBeForbidden() throws Exception {
         // given
-        JobPostingDto job = JobPostingDto.builder()
+        final JobPostingDto job = JobPostingDto.builder()
                 .id(1L)
                 .archive(false)
                 .build();
 
-        List<Long> givenDto = Collections.singletonList(job.getId());
-        String json = gson.toJson(givenDto);
+        final List<Long> givenDto = Collections.singletonList(job.getId());
+        final String json = gson.toJson(givenDto);
 
         // when
-        ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
 
         // then
         resultActions.andDo(print())
@@ -263,16 +264,16 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_get_all_pending_jobs_when_authenticated() throws Exception {
         //given
-        List<JobPostingDto> jobPostingDtos = Arrays.asList(
+        final List<JobPostingDto> jobPostingDtos = Arrays.asList(
                 JobPostingDto.builder().id(1L).valid(false).build(),
                 JobPostingDto.builder().id(2L).valid(false).build(),
                 JobPostingDto.builder().id(3L).valid(false).build()
         );
-        Page<JobPostingDto> jobPageMockResponse = new PageImpl<>(jobPostingDtos);
+        final Page<JobPostingDto> jobPageMockResponse = new PageImpl<>(jobPostingDtos);
         given(jobPostingService.getAllPendingJobs(any())).willReturn(jobPageMockResponse);
 
         // when
-        ResultActions resultActions = mvc.perform(
+        final ResultActions resultActions = mvc.perform(
                 get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
 
         // then

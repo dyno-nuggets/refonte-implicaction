@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import lombok.*;
 
 import javax.persistence.*;

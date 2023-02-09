@@ -1,9 +1,13 @@
 package com.dynonuggets.refonteimplicaction.service;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.dto.NotificationEmailDto;
-import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.model.Notification;
+import com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum;
+import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;

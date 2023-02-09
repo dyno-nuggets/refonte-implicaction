@@ -6,7 +6,6 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
-import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
@@ -22,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.*;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
 import static java.util.Arrays.asList;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
@@ -38,7 +37,7 @@ public class S3CloudServiceImpl implements CloudService {
     private String bucketName = "refonte-implicaction";
 
     @Override
-    public FileModel uploadFile(MultipartFile file) {
+    public FileModel uploadFile(final MultipartFile file) {
         final String originalFilename = file.getOriginalFilename();
         final String filenameExtension = StringUtils.getFilenameExtension(originalFilename);
         final String key = UUID.randomUUID() + filenameExtension;
@@ -62,26 +61,26 @@ public class S3CloudServiceImpl implements CloudService {
                     .url(client.getResourceUrl(bucketName, key))
                     .objectKey(key)
                     .build();
-        } catch (IOException exception) {
+        } catch (final IOException exception) {
             throw new ResponseStatusException(INTERNAL_SERVER_ERROR, String.format(UNKNOWN_FILE_UPLOAD_MESSAGE, originalFilename));
         }
     }
 
     @Override
-    public FileModel uploadImage(MultipartFile file) {
+    public FileModel uploadImage(final MultipartFile file) {
         if (file.getSize() > MAX_IMAGE_SIZE_IN_BIT) {
-            throw new ImplicactionException(String.format(FILE_SIZE_TOO_LARGE_MESSAGE, file.getOriginalFilename(), MAX_IMAGE_SIZE_IN_BIT));
+            throw new RuntimeException(String.format(FILE_SIZE_TOO_LARGE_MESSAGE, file.getOriginalFilename(), MAX_IMAGE_SIZE_IN_BIT));
         }
 
         if (!IMAGE_CONTENT_TYPES.contains(file.getContentType())) {
-            throw new ImplicactionException(String.format(UNAUTHORIZED_CONTENT_TYPE_MESSAGE, file.getOriginalFilename()));
+            throw new RuntimeException(String.format(UNAUTHORIZED_CONTENT_TYPE_MESSAGE, file.getOriginalFilename()));
         }
 
         return uploadFile(file);
     }
 
     @Override
-    public byte[] getFileAsBytes(String objectKey) throws IOException {
+    public byte[] getFileAsBytes(final String objectKey) throws IOException {
         final FileModel fileModel = fileRepository.findByObjectKey(objectKey)
                 .orElseThrow(() -> new NotFoundException(String.format(FILE_NOT_FOUND_MESSAGE, objectKey)));
 

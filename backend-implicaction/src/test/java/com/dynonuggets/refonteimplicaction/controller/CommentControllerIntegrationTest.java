@@ -1,9 +1,10 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.CommentService;
-import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -12,9 +13,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.COMMENTS_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_COMMENT_URI;
-import static com.dynonuggets.refonteimplicaction.utils.Message.COMMENT_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.COMMENTS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_COMMENT_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.COMMENT_NOT_FOUND;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -37,15 +38,15 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_comment_when_authenticated() throws Exception {
         // given
-        CommentDto sentDto = CommentDto.builder()
+        final CommentDto sentDto = CommentDto.builder()
                 .postId(243L)
                 .text("voici mon commentaire sur ce point !")
                 .username("Marc Elbichon")
                 .build();
 
-        String json = gson.toJson(sentDto);
+        final String json = gson.toJson(sentDto);
 
-        CommentDto expectedDto = CommentDto.builder()
+        final CommentDto expectedDto = CommentDto.builder()
                 .id(123L)
                 .postId(243L)
                 .duration(DateUtils.getDurationAsString(Instant.now()))
@@ -77,13 +78,13 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_create_comment_and_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        CommentDto sentDto = CommentDto.builder()
+        final CommentDto sentDto = CommentDto.builder()
                 .postId(243L)
                 .text("voici mon commentaire sur ce point !")
                 .username("Marc Elbichon")
                 .build();
 
-        String json = gson.toJson(sentDto);
+        final String json = gson.toJson(sentDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -98,7 +99,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_get_comment_when_exists_and_authenticated() throws Exception {
         // given
-        CommentDto expectedDto = CommentDto.builder()
+        final CommentDto expectedDto = CommentDto.builder()
                 .id(123L)
                 .postId(243L)
                 .duration(DateUtils.getDurationAsString(Instant.now()))
@@ -130,7 +131,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_response_not_found_when_authenticated_and_not_exists() throws Exception {
         // given
-        long commentId = 123L;
+        final long commentId = 123L;
         given(commentService.getComment(anyLong())).willThrow(new NotFoundException(String.format(COMMENT_NOT_FOUND, commentId)));
 
         // when
@@ -147,7 +148,7 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_getting_comment_and_not_authenticated() throws Exception {
         // given
-        long commentId = 123L;
+        final long commentId = 123L;
 
         // when
         final ResultActions resultActions = mvc.perform(

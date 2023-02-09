@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 @Builder
+@Table(name = "vote")
 public class Vote {
     @Id
     @GeneratedValue(strategy = IDENTITY)

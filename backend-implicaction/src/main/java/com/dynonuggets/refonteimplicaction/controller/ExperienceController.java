@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.DELETE_EXPERIENCES_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.EXPERIENCES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_EXPERIENCES_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.EXPERIENCES_BASE_URI;
 
 @RestController
 @AllArgsConstructor
@@ -20,13 +20,13 @@ public class ExperienceController {
 
     @PostMapping
     public ResponseEntity<WorkExperienceDto> createExperience(@RequestBody final WorkExperienceDto experienceDto) {
-        WorkExperienceDto created = experienceService.saveOrUpdateExperience(experienceDto);
+        final WorkExperienceDto created = experienceService.saveOrUpdateExperience(experienceDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping
     public ResponseEntity<WorkExperienceDto> updateExperience(@RequestBody final WorkExperienceDto trainingDto) {
-        WorkExperienceDto updated = experienceService.saveOrUpdateExperience(trainingDto);
+        final WorkExperienceDto updated = experienceService.saveOrUpdateExperience(trainingDto);
         return ResponseEntity.ok(updated);
     }
 

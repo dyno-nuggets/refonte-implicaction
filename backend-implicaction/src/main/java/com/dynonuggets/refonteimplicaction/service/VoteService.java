@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.VoteAdapter;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
@@ -15,10 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_ALREADY_VOTE_FOR_POST;
 import static com.dynonuggets.refonteimplicaction.model.VoteType.DOWNVOTE;
 import static com.dynonuggets.refonteimplicaction.model.VoteType.UPVOTE;
-import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.utils.Message.USER_ALREADY_VOTE_FOR_POST;
 
 @Service
 @AllArgsConstructor
@@ -29,19 +30,19 @@ public class VoteService {
     private final PostRepository postRepository;
     private final VoteAdapter voteAdapter;
 
-    public boolean isPostUpVoted(Post post) {
+    public boolean isPostUpVoted(final Post post) {
         return checkVoteType(post, UPVOTE);
     }
 
-    public boolean isPostDownVoted(Post post) {
+    public boolean isPostDownVoted(final Post post) {
         return checkVoteType(post, DOWNVOTE);
     }
 
-    private boolean checkVoteType(Post post, VoteType voteType) {
+    private boolean checkVoteType(final Post post, final VoteType voteType) {
         if (!authService.isLoggedIn()) {
             return false;
         }
-        Optional<Vote> voteForPostByUser = voteRepository.findTopByPostAndUserOrderByIdDesc(
+        final Optional<Vote> voteForPostByUser = voteRepository.findTopByPostAndUserOrderByIdDesc(
                 post,
                 authService.getCurrentUser()
         );
@@ -49,7 +50,7 @@ public class VoteService {
     }
 
     @Transactional
-    public void vote(VoteDto voteDto) {
+    public void vote(final VoteDto voteDto) {
         final Long postId = voteDto.getPostId();
         final Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));

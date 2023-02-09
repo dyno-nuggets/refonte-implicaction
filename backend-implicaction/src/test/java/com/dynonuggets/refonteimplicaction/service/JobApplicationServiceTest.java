@@ -1,11 +1,16 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.JobApplicationAdapter;
-import com.dynonuggets.refonteimplicaction.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
+import com.dynonuggets.refonteimplicaction.model.Company;
+import com.dynonuggets.refonteimplicaction.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
 import org.junit.jupiter.api.Test;
@@ -20,10 +25,10 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
 import static com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum.*;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDI;
-import static com.dynonuggets.refonteimplicaction.utils.Message.*;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

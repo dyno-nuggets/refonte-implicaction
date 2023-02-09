@@ -1,7 +1,8 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.model.Relation;
-import com.dynonuggets.refonteimplicaction.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,17 +25,20 @@ class RelationRepositoryTest extends AbstractContainerBaseTest {
     void setUp() {
         sender = User.builder()
                 .username("sender")
+                .password("password")
                 .email("sender@email.com")
                 .registeredAt(Instant.now())
                 .build();
         receiver = User.builder()
                 .username("receiver")
+                .password("password")
                 .email("receiver@email.com")
                 .registeredAt(Instant.now())
                 .build();
 
         unRelated = User.builder()
                 .username("unRelated")
+                .password("password")
                 .email("unrelated@email.com")
                 .registeredAt(Instant.now())
                 .build();
@@ -47,7 +51,7 @@ class RelationRepositoryTest extends AbstractContainerBaseTest {
     @Test
     void shouldSaveRelation() {
 
-        Relation relation = Relation.builder()
+        final Relation relation = Relation.builder()
                 .sender(sender)
                 .receiver(receiver)
                 .sentAt(Instant.now())

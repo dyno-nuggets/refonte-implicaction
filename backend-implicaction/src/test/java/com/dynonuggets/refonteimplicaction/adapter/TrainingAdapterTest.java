@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.model.Training;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.model.WorkExperience;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

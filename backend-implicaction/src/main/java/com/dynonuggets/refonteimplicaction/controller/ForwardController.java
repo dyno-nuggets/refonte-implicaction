@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorContro
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,14 +17,14 @@ import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 @Controller
 public class ForwardController extends BasicErrorController {
 
-    public ForwardController(ErrorAttributes errorAttributes) {
+    public ForwardController(final ErrorAttributes errorAttributes) {
         super(errorAttributes, new ErrorProperties());
     }
 
     @Override
-    @RequestMapping(produces = TEXT_HTML_VALUE)
-    public ModelAndView errorHtml(HttpServletRequest request, HttpServletResponse response) {
-        HttpStatus status = getStatus(request);
+    @GetMapping(produces = TEXT_HTML_VALUE)
+    public ModelAndView errorHtml(final HttpServletRequest request, final HttpServletResponse response) {
+        final HttpStatus status = getStatus(request);
         if (NOT_FOUND.equals(status)) {
             return new ModelAndView("forward:/");
         } else {

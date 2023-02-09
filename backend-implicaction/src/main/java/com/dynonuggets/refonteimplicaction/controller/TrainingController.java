@@ -7,8 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.DELETE_TRAINING_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.TRAINING_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_TRAINING_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.TRAINING_BASE_URI;
 
 @RestController
 @AllArgsConstructor
@@ -19,19 +19,19 @@ public class TrainingController {
 
     @PostMapping
     public ResponseEntity<TrainingDto> createTraining(@RequestBody final TrainingDto trainingDto) {
-        TrainingDto created = trainingService.saveOrUpdateTraining(trainingDto);
+        final TrainingDto created = trainingService.saveOrUpdateTraining(trainingDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping
     public ResponseEntity<TrainingDto> updateTraining(@RequestBody final TrainingDto trainingDto) {
-        TrainingDto updated = trainingService.saveOrUpdateTraining(trainingDto);
+        final TrainingDto updated = trainingService.saveOrUpdateTraining(trainingDto);
         return ResponseEntity.ok(updated);
     }
 
     @SuppressWarnings("rawtypes")
     @DeleteMapping(DELETE_TRAINING_URI)
-    public ResponseEntity deleteTraining(@PathVariable Long trainingId) {
+    public ResponseEntity deleteTraining(@PathVariable final Long trainingId) {
         trainingService.deleteTraining(trainingId);
         return ResponseEntity.noContent().build();
     }

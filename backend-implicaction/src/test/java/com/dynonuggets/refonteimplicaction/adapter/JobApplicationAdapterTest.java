@@ -1,8 +1,12 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
-import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
+import com.dynonuggets.refonteimplicaction.model.Company;
+import com.dynonuggets.refonteimplicaction.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

@@ -1,8 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
-import com.dynonuggets.refonteimplicaction.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.service.WorkExperienceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,8 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.DELETE_EXPERIENCES_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.EXPERIENCES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_EXPERIENCES_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.EXPERIENCES_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -49,7 +50,6 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .hobbies("surf,gaming,judo")
                 .purpose("")
                 .registeredAt(null)
-                .activatedAt(null)
                 .roles(roles)
                 .active(true)
                 .build();
@@ -59,7 +59,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_experience_when_authenticated() throws Exception {
         // given
-        WorkExperienceDto experienceDto = WorkExperienceDto.builder()
+        final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
                 .user(user)
                 .companyName("Idemia")
                 .description("Creation")
@@ -68,9 +68,9 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(experienceDto);
+        final String json = gson.toJson(experienceDto);
 
-        WorkExperienceDto expectedDto = WorkExperienceDto.builder()
+        final WorkExperienceDto expectedDto = WorkExperienceDto.builder()
                 .id(123L)
                 .companyName("Idemia")
                 .description("Creation")
@@ -104,7 +104,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_create_experience_and_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        WorkExperienceDto experienceDto = WorkExperienceDto.builder()
+        final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
                 .id(123L)
                 .user(user)
                 .companyName("Idemia")
@@ -114,7 +114,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(experienceDto);
+        final String json = gson.toJson(experienceDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -130,7 +130,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_update_experience_when_authenticated() throws Exception {
         // given
-        WorkExperienceDto experienceDto = WorkExperienceDto.builder()
+        final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
                 .user(user)
                 .companyName("Idemia")
                 .description("Creation")
@@ -139,9 +139,9 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(experienceDto);
+        final String json = gson.toJson(experienceDto);
 
-        WorkExperienceDto expectedDto = WorkExperienceDto.builder()
+        final WorkExperienceDto expectedDto = WorkExperienceDto.builder()
                 .id(123L)
                 .companyName("Idemia")
                 .description("Creation")
@@ -175,7 +175,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_update_experience_and_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        WorkExperienceDto experienceDto = WorkExperienceDto.builder()
+        final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
                 .id(123L)
                 .user(user)
                 .companyName("Idemia")
@@ -185,12 +185,11 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(experienceDto);
-
+        final String json = gson.toJson(experienceDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
-                put(EXPERIENCES_BASE_URI).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                put(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
         // then

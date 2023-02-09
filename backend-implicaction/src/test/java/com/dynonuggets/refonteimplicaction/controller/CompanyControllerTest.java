@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.service.CompanyService;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,7 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.COMPANIES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.COMPANIES_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -50,11 +51,11 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
     @Test
     void getCompanysListShouldListAllCompanies() throws Exception {
         // given
-        Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
+        final Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
         given(companyService.getAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
 
         // when
-        ResultActions resultActions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
 
         // then
         resultActions
@@ -79,12 +80,12 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
     @Test
     void getCompaniesListShouldListAllCompaniesByCriteria() throws Exception {
         // given
-        Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
+        final Page<CompanyDto> companyDtoPage = new PageImpl<>(companyDtos);
 
         // when
         // test des données de pagination
         given(companyService.getAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
-        ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
 
         // then
         actions.andDo(print())
@@ -114,16 +115,16 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_company_when_authenticated() throws Exception {
         // given
-        CompanyDto companyDto = CompanyDto.builder()
+        final CompanyDto companyDto = CompanyDto.builder()
                 .id(123L)
                 .description("Description")
                 .name("Implicaction")
                 .url("url")
                 .build();
 
-        String json = gson.toJson(companyDto);
+        final String json = gson.toJson(companyDto);
 
-        CompanyDto expectedDto = CompanyDto.builder()
+        final CompanyDto expectedDto = CompanyDto.builder()
                 .id(123L)
                 .description("Description")
                 .name("Implicaction")
@@ -153,13 +154,13 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_create_company_and_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        CompanyDto companyDto = CompanyDto.builder()
+        final CompanyDto companyDto = CompanyDto.builder()
                 .description("Description")
                 .name("Implicaction")
                 .url("url")
                 .build();
 
-        String json = gson.toJson(companyDto);
+        final String json = gson.toJson(companyDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
