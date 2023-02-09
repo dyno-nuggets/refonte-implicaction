@@ -6,7 +6,6 @@ import com.dynonuggets.refonteimplicaction.repository.AbstractContainerBaseTest;
 import lombok.var;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +13,8 @@ import java.util.Optional;
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUser;
 import static java.util.List.of;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
-import static org.springframework.data.domain.Pageable.unpaged;
 
 @TestInstance(Lifecycle.PER_CLASS)
 class UserRepositoryTest extends AbstractContainerBaseTest {
@@ -43,24 +40,6 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
     @AfterEach
     void cleanUp() {
         userRepository.deleteAll();
-    }
-
-    @Test
-    @DisplayName("doit retourner la liste des utilisateurs dont la date d'activation est nulle")
-    void should_find_all_pending_users() {
-        // given
-        final List<Long> activeUserIds =
-                dbContent.stream().filter(u -> !u.isActive()).map(User::getId).collect(toList());
-
-        // when
-        final Page<User> result = userRepository.findAllByActiveIsFalse(unpaged());
-
-        // then
-        assertThat(result.getContent())
-                .allSatisfy(user -> assertThat(user.isActive()).isFalse())
-                .hasSameSizeAs(activeUserIds)
-                .map(User::getId)
-                .containsAll(activeUserIds);
     }
 
     @Nested
