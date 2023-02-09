@@ -29,8 +29,9 @@ public class RefreshTokenService {
     }
 
     public void validateRefreshToken(final String token) throws ImplicactionException {
-        refreshTokenRepository.findByToken(token)
-                .orElseThrow(() -> new AuthenticationException(REFRESH_TOKEN_EXPIRED));
+        if (!refreshTokenRepository.findByToken(token).isPresent()) {
+            throw new AuthenticationException(REFRESH_TOKEN_EXPIRED);
+        }
     }
 
     public void deleteRefreshToken(final String token) {
