@@ -6,7 +6,7 @@ import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginResponse;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.service.RefreshTokenService;
+import com.dynonuggets.refonteimplicaction.auth.service.RefreshTokenService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -14,7 +14,6 @@ import com.dynonuggets.refonteimplicaction.auth.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.Notification;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
-import com.dynonuggets.refonteimplicaction.service.RefreshTokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

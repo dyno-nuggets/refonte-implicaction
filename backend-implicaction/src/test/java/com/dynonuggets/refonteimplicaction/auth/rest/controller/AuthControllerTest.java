@@ -2,8 +2,8 @@ package com.dynonuggets.refonteimplicaction.auth.rest.controller;
 
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.auth.service.RefreshTokenService;
 import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.service.RefreshTokenService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
