@@ -20,7 +20,6 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
-import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 
 @Component
@@ -56,7 +55,6 @@ public class UserAdapter {
                 .birthday(model.getBirthday())
                 .url(model.getUrl())
                 .registeredAt(model.getRegisteredAt())
-                .activatedAt(model.getActivatedAt())
                 .hobbies(model.getHobbies())
                 .presentation(model.getPresentation())
                 .expectation(model.getExpectation())
@@ -72,11 +70,11 @@ public class UserAdapter {
                 .build();
     }
 
-    private String getImageUrl(User model) {
+    private String getImageUrl(final User model) {
         return model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : DEFAULT_USER_IMAGE_URI;
     }
 
-    public User toModel(UserDto dto) {
+    public User toModel(final UserDto dto) {
 
         // TODO: implémenter callIfNotNull
         final List<WorkExperience> experiences = isNotEmpty(dto.getExperiences()) ? dto.getExperiences()
@@ -104,9 +102,8 @@ public class UserAdapter {
                 .username(dto.getUsername())
                 .firstname(dto.getFirstname())
                 .lastname(dto.getLastname())
-                .activatedAt(dto.getActivatedAt())
                 .activationKey(dto.getActivationKey())
-                .active(isTrue(dto.getActive()))
+                .active(dto.isActive())
                 .contribution(dto.getContribution())
                 .expectation(dto.getExpectation())
                 .hobbies(dto.getHobbies())
@@ -123,7 +120,7 @@ public class UserAdapter {
                 .build();
     }
 
-    public UserDto toDtoLight(User model) {
+    public UserDto toDtoLight(final User model) {
         final List<String> roles = rolesToDtos(model);
 
         final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : null;
@@ -136,7 +133,7 @@ public class UserAdapter {
                 .build();
     }
 
-    private List<String> rolesToDtos(User model) {
+    private List<String> rolesToDtos(final User model) {
         return isNotEmpty(model.getRoles()) ? model.getRoles()
                 .stream()
                 .map(Role::getName)

@@ -114,11 +114,10 @@ public class AuthService {
         final User user = userRepository.findByActivationKey(activationKey)
                 .orElseThrow(() -> new AuthenticationException(ACTIVATION_KEY_NOT_FOUND, activationKey));
 
-        if (user.getActivatedAt() != null) {
+        if (user.isActive()) {
             throw new AuthenticationException(USER_ALREADY_ACTIVATED, activationKey);
         }
 
-        user.setActivatedAt(now());
         user.setActive(true);
 
         // TODO: MAIL-NOTIFICATION à revoir

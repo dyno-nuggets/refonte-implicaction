@@ -30,7 +30,6 @@ public class UserUtils {
         final String firstname = randomAlphabetic(10);
         final String lastname = randomAlphabetic(10);
         final Instant registeredAt = generateRandomDate();
-        final Instant activatedAt = isActive ? generateRandomDate(registeredAt) : null;
         final String email = format("%s.%s@mail.com", firstname, lastname);
         final String url = format("%s.%s.com", firstname, lastname);
 
@@ -59,7 +58,6 @@ public class UserUtils {
                 .contribution(randomAlphabetic(200))
                 .phoneNumber(randomNumeric(10))
                 .registeredAt(registeredAt)
-                .activatedAt(activatedAt)
                 .activationKey(randomAlphabetic(25))
                 .active(isActive)
                 .image(null)
@@ -81,7 +79,6 @@ public class UserUtils {
         final String firstname = randomAlphabetic(generateRandomNumber());
         final String lastname = randomAlphabetic(generateRandomNumber());
         final Instant registeredAt = generateRandomDate();
-        final Instant activatedAt = generateRandomDate(registeredAt);
         final String email = format("%s.%s@mail.com", firstname, lastname);
         final String url = format("%s.%s.com", firstname, lastname);
         final LocalDate birthday = toLocalDate(
@@ -102,7 +99,6 @@ public class UserUtils {
                 .experiences(null)
                 .purpose(randomAlphabetic(200))
                 .registeredAt(registeredAt)
-                .activatedAt(activatedAt)
                 .presentation(randomAlphabetic(200))
                 .contribution(randomAlphabetic(200))
                 .birthday(birthday)

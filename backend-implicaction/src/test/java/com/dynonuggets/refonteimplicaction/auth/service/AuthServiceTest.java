@@ -33,6 +33,7 @@ import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateR
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
+import static java.util.Optional.of;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -149,8 +150,7 @@ class AuthServiceTest {
         void should_activate_corresponding_user() {
             // given
             final User user = generateRandomUser(List.of(RoleEnum.USER), false);
-            given(userRepository.findByActivationKey(any())).willReturn(Optional.of(user));
-            final Instant activatedAt = now();
+            given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when
             authService.verifyAccount("activationKey");
@@ -160,9 +160,8 @@ class AuthServiceTest {
             final User savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     // les champs activatedAt et active doivent être différents donc on les ignore
-                    .usingRecursiveComparison().ignoringFields("activatedAt", "active")
+                    .usingRecursiveComparison().ignoringFields("active")
                     .isEqualTo(user);
-            assertThat(savedUser.getActivatedAt()).isAfterOrEqualTo(activatedAt);
             assertThat(savedUser.isActive()).isTrue();
             verify(userRepository, times(1)).findByActivationKey(any());
         }
@@ -188,8 +187,8 @@ class AuthServiceTest {
         void should_throw_exception_when_user_is_already_activated() {
             // given
             final String activationKey = "activationKey";
-            final User user = User.builder().activatedAt(now()).build();
-            given(userRepository.findByActivationKey(any())).willReturn(Optional.ofNullable(user));
+            final User user = User.builder().active(true).build();
+            given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when
             final ImplicactionException actualException =
@@ -219,7 +218,7 @@ class AuthServiceTest {
             given(authenticationManager.authenticate(any())).willReturn(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             given(jwtProvider.generateToken(any())).willReturn(jwtToken);
             given(refreshTokenService.generateRefreshToken()).willReturn(RefreshTokenDto.builder().token(refreshToken).build());
-            given(userRepository.findByUsername(any())).willReturn(Optional.of(user));
+            given(userRepository.findByUsername(any())).willReturn(of(user));
             given(userAdapter.toDtoLight(any())).willReturn(expectedUserDto);
 
             // when

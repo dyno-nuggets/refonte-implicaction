@@ -65,12 +65,10 @@ public class User {
     @Column(name = "registered_at")
     private Instant registeredAt;
 
-    @Column(name = "activated_at")
-    private Instant activatedAt;
-
     @Column(name = "activation_key")
     private String activationKey;
 
+    // TODO: modifier en enabled
     private boolean active;
 
     @ManyToOne

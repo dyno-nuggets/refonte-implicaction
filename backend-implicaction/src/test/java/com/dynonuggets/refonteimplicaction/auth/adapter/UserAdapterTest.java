@@ -63,9 +63,7 @@ class UserAdapterTest {
             "contribution",
             "phoneNumber",
             "registeredAt",
-            "activatedAt",
             "activationKey",
-            "active",
             "relationTypeOfCurrentUser"
     };
 

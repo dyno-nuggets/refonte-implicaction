@@ -9,7 +9,6 @@ export interface User {
   email?: string;
   url?: string;
   registeredAt?: string;
-  activatedAt?: string;
   active?: boolean;
   activationKey?: string;
   status?: string;

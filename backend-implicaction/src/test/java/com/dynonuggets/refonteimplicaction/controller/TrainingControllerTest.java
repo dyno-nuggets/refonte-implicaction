@@ -49,7 +49,6 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
                 .hobbies("surf,gaming,judo")
                 .purpose("")
                 .registeredAt(null)
-                .activatedAt(null)
                 .roles(roles)
                 .active(true)
                 .build();

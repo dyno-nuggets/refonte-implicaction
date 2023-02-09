@@ -19,7 +19,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email);
 
-    Page<User> findAllByActivatedAtIsNull(Pageable pageable);
+    // TODO: à modifier par EnableIsFalse
+    Page<User> findAllByActiveIsFalse(Pageable pageable);
 
     List<User> findAllByRoles_NameIn(List<String> roleName);
 

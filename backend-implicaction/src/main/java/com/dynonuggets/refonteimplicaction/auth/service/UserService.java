@@ -109,7 +109,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public Page<UserDto> getAllPendingActivationUsers(final Pageable pageable) {
-        return userRepository.findAllByActivatedAtIsNull(pageable)
+        return userRepository.findAllByActiveIsFalse(pageable)
                 .map(userAdapter::toDto);
     }
 

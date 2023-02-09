@@ -50,7 +50,6 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .hobbies("surf,gaming,judo")
                 .purpose("")
                 .registeredAt(null)
-                .activatedAt(null)
                 .roles(roles)
                 .active(true)
                 .build();
@@ -188,10 +187,9 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
         final String json = gson.toJson(experienceDto);
 
-
         // when
         final ResultActions resultActions = mvc.perform(
-                put(EXPERIENCES_BASE_URI).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
+                put(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
         );
 
         // then

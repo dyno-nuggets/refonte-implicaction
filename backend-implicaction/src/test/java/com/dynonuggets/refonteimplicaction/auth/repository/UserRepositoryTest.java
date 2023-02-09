@@ -50,14 +50,14 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
     void should_find_all_pending_users() {
         // given
         final List<Long> activeUserIds =
-                dbContent.stream().filter(u -> u.getActivatedAt() == null).map(User::getId).collect(toList());
+                dbContent.stream().filter(u -> !u.isActive()).map(User::getId).collect(toList());
 
         // when
-        final Page<User> result = userRepository.findAllByActivatedAtIsNull(unpaged());
+        final Page<User> result = userRepository.findAllByActiveIsFalse(unpaged());
 
         // then
         assertThat(result.getContent())
-                .allSatisfy(user -> assertThat(user.getActivatedAt()).isNull())
+                .allSatisfy(user -> assertThat(user.isActive()).isFalse())
                 .hasSameSizeAs(activeUserIds)
                 .map(User::getId)
                 .containsAll(activeUserIds);

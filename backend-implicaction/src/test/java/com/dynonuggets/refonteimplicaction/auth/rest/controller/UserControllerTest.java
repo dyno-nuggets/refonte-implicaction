@@ -21,7 +21,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +31,7 @@ import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.utils.GroupUtils.generateRandomGroupDto;
 import static java.lang.String.format;
+import static java.time.Instant.now;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -85,7 +85,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     void resultActionsValidationForSingleUser(final UserDto userDto, final ResultActions resultActions, final Integer index) throws Exception {
         final String prefix = index != null ? format("$.content[%d]", index) : "$";
         final String registeredAt = callIfNotNull(userDto.getRegisteredAt(), Object::toString);
-        final String activatedAt = callIfNotNull(userDto.getActivatedAt(), Object::toString);
         resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath(format("%s.id", prefix), is(userDto.getId().intValue())))
@@ -102,7 +101,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath(format("%s.expectation", prefix), is(userDto.getExpectation())))
                 .andExpect(jsonPath(format("%s.contribution", prefix), is(userDto.getContribution())))
                 .andExpect(jsonPath(format("%s.registeredAt", prefix), is(registeredAt)))
-                .andExpect(jsonPath(format("%s.activatedAt", prefix), is(activatedAt)))
                 .andExpect(jsonPath(format("%s.imageUrl", prefix), is(userDto.getImageUrl())));
     }
 
@@ -138,8 +136,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .url("www.google.fr")
                     .hobbies("surf,gaming,judo")
                     .purpose("")
-                    .registeredAt(Instant.now())
-                    .activatedAt(Instant.now())
+                    .registeredAt(now())
                     .roles(roles)
                     .active(true)
                     .build();
@@ -209,8 +206,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .url("www.google.fr")
                     .hobbies("surf,gaming,judo")
                     .purpose("")
-                    .registeredAt(Instant.now())
-                    .activatedAt(Instant.now())
+                    .registeredAt(now())
                     .roles(roles)
                     .active(true)
                     .build();
@@ -262,8 +258,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .url("www.google.fr")
                     .hobbies("surf,gaming,judo")
                     .purpose("")
-                    .registeredAt(Instant.now())
-                    .activatedAt(Instant.now())
+                    .registeredAt(now())
                     .roles(roles)
                     .active(true)
                     .build();
@@ -368,8 +363,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .url("www.google.fr")
                     .hobbies("surf,gaming,judo")
                     .purpose("")
-                    .registeredAt(Instant.now())
-                    .activatedAt(Instant.now())
+                    .registeredAt(now())
                     .roles(roles)
                     .active(true)
                     .build();
@@ -383,8 +377,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     .url("www.google.fr")
                     .hobbies("surf,gaming,judo")
                     .purpose("")
-                    .registeredAt(Instant.now())
-                    .activatedAt(Instant.now())
+                    .registeredAt(now())
                     .roles(roles)
                     .active(true)
                     .build();
@@ -481,8 +474,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             );
 
             // then
-            resultActions
-                    .andExpect(status().isForbidden());
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(userService);
         }
     }
@@ -499,7 +491,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             // il faut mettre toutes les dates à null, sinon l'objet envoyé n'est pas reconnu comme un UserDto et la
             // réponse la requête est traitée en 400
             mockedUserDto.setBirthday(null);
-            mockedUserDto.setActivatedAt(null);
             mockedUserDto.setRegisteredAt(null);
 
             // when
@@ -521,8 +512,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             );
 
             // then
-            resultActions
-                    .andExpect(status().isForbidden());
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(userService);
         }
     }
@@ -555,8 +545,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
                     get(USER_BASE_URI + GET_USER_URI, mockedUserDto.getId())
             );
 
-            resultActions
-                    .andExpect(status().isForbidden());
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(userService);
         }
     }
@@ -591,8 +580,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             );
 
             // then
-            resultActions.
-                    andExpect(status().isForbidden());
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(userService);
         }
     }
@@ -626,8 +614,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             );
 
             // then
-            resultActions
-                    .andExpect(status().isForbidden());
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(userService);
         }
 

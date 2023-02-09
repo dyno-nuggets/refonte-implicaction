@@ -12,10 +12,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
+import static lombok.AccessLevel.PRIVATE;
+
 @Data
 @Builder
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public class UserDto {
     private Long id;
     private String username;
@@ -31,9 +33,8 @@ public class UserDto {
     private String contribution;
     private String phoneNumber;
     private Instant registeredAt;
-    private Instant activatedAt;
     private String activationKey;
-    private Boolean active;
+    private boolean active;
     private String imageUrl;
     private List<String> roles;
     private List<TrainingDto> trainings;
