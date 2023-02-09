@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.PostAdapter;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
@@ -19,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.*;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
 
 
 @Service
@@ -37,16 +38,16 @@ public class PostService {
     private final NotificationService notificationService;
 
     @Transactional
-    public PostResponse saveOrUpdate(PostRequest postRequest) {
+    public PostResponse saveOrUpdate(final PostRequest postRequest) {
         if (StringUtils.isEmpty(postRequest.getName())) {
             throw new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME);
         }
 
-        Group group = groupRepository.findById(postRequest.getGroupId())
+        final Group group = groupRepository.findById(postRequest.getGroupId())
                 .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId())));
 
-        Post post = postAdapter.toPost(postRequest, group, authService.getCurrentUser());
-        Post save = postRepository.save(post);
+        final Post post = postAdapter.toPost(postRequest, group, authService.getCurrentUser());
+        final Post save = postRepository.save(post);
 
         // création de la notification
         if (post.getGroup() != null) {
@@ -57,24 +58,24 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponse getPost(Long postId) {
-        Post post = postRepository.findById(postId)
+    public PostResponse getPost(final Long postId) {
+        final Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
         return getPostResponse(post);
     }
 
     @Transactional(readOnly = true)
-    public Page<PostResponse> getAllPosts(Pageable pageable) {
+    public Page<PostResponse> getAllPosts(final Pageable pageable) {
         final Page<Post> allPosts = postRepository.findAll(pageable);
         return allPosts.map(this::getPostResponse);
     }
 
-    private PostResponse getPostResponse(Post post) {
+    private PostResponse getPostResponse(final Post post) {
         return postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post));
     }
 
-    public List<PostResponse> getLatestPosts(int postsCount) {
+    public List<PostResponse> getLatestPosts(final int postsCount) {
         return postRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, postsCount))
                 .map(post -> postAdapter.toPostResponse(post, commentService.commentCount(post), voteService.isPostUpVoted(post), voteService.isPostDownVoted(post)))
                 .getContent();

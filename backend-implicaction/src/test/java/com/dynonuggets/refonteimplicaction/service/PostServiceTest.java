@@ -1,12 +1,13 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.PostAdapter;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import org.springframework.data.domain.*;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.*;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;

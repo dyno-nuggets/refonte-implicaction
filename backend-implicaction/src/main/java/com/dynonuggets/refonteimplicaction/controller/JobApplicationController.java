@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
-import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,8 +12,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.APPLY_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_APPLY_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.APPLY_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_APPLY_URI;
 
 @RestController
 @RequestMapping(APPLY_BASE_URI)
@@ -23,9 +23,9 @@ public class JobApplicationController {
     private final JobApplicationService applyService;
 
     @PostMapping
-    public ResponseEntity<JobApplicationDto> createApply(@RequestBody JobApplicationRequest requestDto) throws ImplicactionException {
+    public ResponseEntity<JobApplicationDto> createApply(@RequestBody final JobApplicationRequest requestDto) throws ImplicactionException {
         final JobApplicationDto saveDto = applyService.createApplyIfNotExists(requestDto);
-        URI location = UriComponentsBuilder.fromPath(APPLY_BASE_URI + GET_APPLY_URI)
+        final URI location = UriComponentsBuilder.fromPath(APPLY_BASE_URI + GET_APPLY_URI)
                 .buildAndExpand(saveDto.getId())
                 .toUri();
 
@@ -34,18 +34,18 @@ public class JobApplicationController {
 
     @GetMapping()
     public ResponseEntity<List<JobApplicationDto>> getAllAppliesByUserId() {
-        List<JobApplicationDto> applies = applyService.getAllAppliesForCurrentUser();
+        final List<JobApplicationDto> applies = applyService.getAllAppliesForCurrentUser();
         return ResponseEntity.ok(applies);
     }
 
     @PatchMapping
-    public ResponseEntity<JobApplicationDto> updateApply(@RequestBody JobApplicationRequest requestDto) {
+    public ResponseEntity<JobApplicationDto> updateApply(@RequestBody final JobApplicationRequest requestDto) {
         final JobApplicationDto updateDto = applyService.updateApplyForCurrentUser(requestDto);
         return ResponseEntity.ok(updateDto);
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteApplyByJobId(@RequestParam("jobId") long jobId) {
+    public ResponseEntity<Void> deleteApplyByJobId(@RequestParam("jobId") final long jobId) {
         applyService.deleteApplyByJobId(jobId);
         return ResponseEntity.noContent().build();
     }

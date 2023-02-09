@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 
 @RestController
 @RequestMapping(POSTS_BASE_URI)
@@ -28,9 +28,9 @@ public class PostController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<PostResponse> createPost(@RequestBody PostRequest postRequest) {
-        PostResponse post = postService.saveOrUpdate(postRequest);
-        URI location = UriComponentsBuilder.fromPath(POSTS_BASE_URI + GET_POST_URI)
+    public ResponseEntity<PostResponse> createPost(@RequestBody final PostRequest postRequest) {
+        final PostResponse post = postService.saveOrUpdate(postRequest);
+        final URI location = UriComponentsBuilder.fromPath(POSTS_BASE_URI + GET_POST_URI)
                 .buildAndExpand(post.getId())
                 .toUri();
 
@@ -38,40 +38,40 @@ public class PostController {
     }
 
     @GetMapping(GET_POST_URI)
-    public ResponseEntity<PostResponse> getPost(@PathVariable Long postId) {
-        PostResponse response = postService.getPost(postId);
+    public ResponseEntity<PostResponse> getPost(@PathVariable final Long postId) {
+        final PostResponse response = postService.getPost(postId);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(GET_LATEST_POSTS_URI)
-    public ResponseEntity<List<PostResponse>> getLatestPosts(@PathVariable int postsCount) {
-        List<PostResponse> response = postService.getLatestPosts(postsCount);
+    public ResponseEntity<List<PostResponse>> getLatestPosts(@PathVariable final int postsCount) {
+        final List<PostResponse> response = postService.getLatestPosts(postsCount);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping
     public ResponseEntity<Page<PostResponse>> getAllPosts(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "rows", defaultValue = "10") int rows,
-            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+            @RequestParam(value = "page", defaultValue = "0") final int page,
+            @RequestParam(value = "rows", defaultValue = "10") final int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") final String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") final String sortOrder
     ) {
-        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<PostResponse> postResponses = postService.getAllPosts(pageable);
+        final Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        final Page<PostResponse> postResponses = postService.getAllPosts(pageable);
 
         return ResponseEntity.ok(postResponses);
     }
 
     @GetMapping(GET_POST_COMMENTS_URI)
     public ResponseEntity<Page<CommentDto>> getAllCommentsForPost(
-            @PathVariable Long postId,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "rows", defaultValue = "10") int rows,
-            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+            @PathVariable final Long postId,
+            @RequestParam(value = "page", defaultValue = "0") final int page,
+            @RequestParam(value = "rows", defaultValue = "10") final int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") final String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") final String sortOrder
     ) {
-        Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
-        Page<CommentDto> comments = commentService.getAllCommentsForPost(pageable, postId);
+        final Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
+        final Page<CommentDto> comments = commentService.getAllCommentsForPost(pageable, postId);
 
         return ResponseEntity.ok(comments);
     }

@@ -1,8 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.service.TrainingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.DELETE_TRAINING_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.TRAINING_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_TRAINING_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.TRAINING_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -48,7 +49,6 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
                 .hobbies("surf,gaming,judo")
                 .purpose("")
                 .registeredAt(null)
-                .activatedAt(null)
                 .roles(roles)
                 .active(true)
                 .build();
@@ -58,15 +58,15 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_training_when_authenticated() throws Exception {
         // given
-        TrainingDto trainingDto = TrainingDto.builder()
+        final TrainingDto trainingDto = TrainingDto.builder()
                 .school("SDV")
                 .date(null)
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(trainingDto);
+        final String json = gson.toJson(trainingDto);
 
-        TrainingDto expectedDto = TrainingDto.builder()
+        final TrainingDto expectedDto = TrainingDto.builder()
                 .id(123L)
                 .school("SDV")
                 .date(null)
@@ -97,13 +97,13 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_create_training_and_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        TrainingDto trainingDto = TrainingDto.builder()
+        final TrainingDto trainingDto = TrainingDto.builder()
                 .school("SDV")
                 .date(null)
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(trainingDto);
+        final String json = gson.toJson(trainingDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -119,15 +119,15 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_update_training_when_authenticated() throws Exception {
 // given
-        TrainingDto trainingDto = TrainingDto.builder()
+        final TrainingDto trainingDto = TrainingDto.builder()
                 .school("SDV")
                 .date(null)
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(trainingDto);
+        final String json = gson.toJson(trainingDto);
 
-        TrainingDto expectedDto = TrainingDto.builder()
+        final TrainingDto expectedDto = TrainingDto.builder()
                 .id(123L)
                 .school("SDV")
                 .date(null)
@@ -158,13 +158,13 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_update_training_and_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        TrainingDto trainingDto = TrainingDto.builder()
+        final TrainingDto trainingDto = TrainingDto.builder()
                 .school("SDV")
                 .date(null)
                 .label("Label")
                 .build();
 
-        String json = gson.toJson(trainingDto);
+        final String json = gson.toJson(trainingDto);
 
         // when
         final ResultActions resultActions = mvc.perform(

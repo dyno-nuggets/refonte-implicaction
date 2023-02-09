@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
@@ -17,9 +18,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
-import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.utils.Message.POST_SHOULD_HAVE_A_NAME;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_SHOULD_HAVE_A_NAME;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,16 +47,16 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_create_post_when_authenticated() throws Exception {
         // given
-        PostRequest postRequest = PostRequest.builder()
+        final PostRequest postRequest = PostRequest.builder()
                 .groupId(125L)
                 .name("coucou post")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
                 .build();
 
-        String json = gson.toJson(postRequest);
+        final String json = gson.toJson(postRequest);
 
-        PostResponse expectedResponse = PostResponse.builder()
+        final PostResponse expectedResponse = PostResponse.builder()
                 .id(123L)
                 .name("coucou post")
                 .url("http://url.com")
@@ -101,14 +102,14 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_response_bad_request_when_postname_is_null() throws Exception {
         // given
-        PostRequest postRequest = PostRequest.builder()
+        final PostRequest postRequest = PostRequest.builder()
                 .groupId(125L)
                 .name("")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
                 .build();
 
-        String json = gson.toJson(postRequest);
+        final String json = gson.toJson(postRequest);
 
         given(postService.saveOrUpdate(any(PostRequest.class))).willThrow(new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME));
 
@@ -128,14 +129,14 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_not_authenticated() throws Exception {
         // given
-        PostRequest postRequest = PostRequest.builder()
+        final PostRequest postRequest = PostRequest.builder()
                 .groupId(125L)
                 .name("coucou post")
                 .url("http://url.com")
                 .description("Il est super cool ce post")
                 .build();
 
-        String json = gson.toJson(postRequest);
+        final String json = gson.toJson(postRequest);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -152,7 +153,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_get_post_when_authenticated_and_post_exists() throws Exception {
         // given
-        PostResponse expectedResponse = PostResponse.builder()
+        final PostResponse expectedResponse = PostResponse.builder()
                 .id(123L)
                 .username("toto")
                 .description("Wahou awesome")
@@ -189,7 +190,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_response_notfound_when_getting_post_and_authenticated_and_not_exists() throws Exception {
         // given
-        long postId = 123L;
+        final long postId = 123L;
         given(postService.getPost(anyLong())).willThrow(new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
         // when
@@ -206,7 +207,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_getting_post_and_not_authenticated() throws Exception {
         // given
-        long postId = 123L;
+        final long postId = 123L;
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -223,8 +224,8 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_list_all_post_when_getAllPost_and_authenticated() throws Exception {
         // given
-        PostResponse postRequest1 = PostResponse.builder().id(1L).name("Post Name").url("http://url.site").build();
-        PostResponse postRequest2 = PostResponse.builder().id(2L).name("Post Name 2").url("http://url2.site2").build();
+        final PostResponse postRequest1 = PostResponse.builder().id(1L).name("Post Name").url("http://url.site").build();
+        final PostResponse postRequest2 = PostResponse.builder().id(2L).name("Post Name 2").url("http://url2.site2").build();
 
         final List<PostResponse> postResponses = asList(postRequest1, postRequest2);
         final Page<PostResponse> expectedPages = new PageImpl<>(postResponses);
@@ -245,7 +246,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.totalPages", is(1)));
 
         for (int i = 0; i < expectedSize; i++) {
-            String contentPath = String.format("$.content[%d]", i);
+            final String contentPath = String.format("$.content[%d]", i);
             resultActions.andExpect(jsonPath(contentPath + ".id", is(postResponses.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + ".name", is(postResponses.get(i).getName())))
                     .andExpect(jsonPath(contentPath + ".url", is(postResponses.get(i).getUrl())));
@@ -258,7 +259,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_page_of_comments_when_post_exists_and_authenticated() throws Exception {
         // given
-        long postId = 123L;
+        final long postId = 123L;
         final List<CommentDto> commentDtos = asList(
                 CommentDto.builder().id(1L).postId(postId).build(),
                 CommentDto.builder().id(2L).postId(postId).build()
@@ -280,7 +281,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.totalPages", is(1)));
 
         for (int i = 0; i < expectedSize; i++) {
-            String contentPath = String.format("$.content[%d]", i);
+            final String contentPath = String.format("$.content[%d]", i);
             resultActions.andExpect(jsonPath(contentPath + ".id", is(commentDtos.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + ".postId", is(commentDtos.get(i).getPostId().intValue())));
         }
@@ -292,7 +293,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_notfound_when_getting_comments_and_post_not_exists_and_authenticated() throws Exception {
         // given
-        long postId = 123L;
+        final long postId = 123L;
         given(commentService.getAllCommentsForPost(any(), anyLong())).willThrow(new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
         // when
@@ -309,7 +310,7 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
     @Test
     void should_return_forbidden_when_getting_comments_and_not_authenticated() throws Exception {
         // given
-        long postId = 123L;
+        final long postId = 123L;
 
         // when
         final ResultActions resultActions = mvc.perform(

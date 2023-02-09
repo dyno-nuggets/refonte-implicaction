@@ -1,8 +1,9 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.service.GroupService;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;
@@ -18,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.is;
@@ -48,7 +49,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .name("coucou subreddit")
                 .description("Elle est super bien ma description")
                 .build();
-        String json = gson.toJson(sentDto);
+        final String json = gson.toJson(sentDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -123,8 +124,8 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_get_all_by_top_posting_when_authenticated() throws Exception {
         // given
-        int limit = 5;
-        List<GroupDto> expectedDtos = asList(
+        final int limit = 5;
+        final List<GroupDto> expectedDtos = asList(
                 GroupDto.builder().id(1L).numberOfPosts(5).build(),
                 GroupDto.builder().id(1L).numberOfPosts(4).build(),
                 GroupDto.builder().id(1L).numberOfPosts(3).build(),
@@ -159,7 +160,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_top_posting_and_not_authenticated() throws Exception {
         // given
-        int limit = 5;
+        final int limit = 5;
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -176,16 +177,16 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_get_all_pending_groups_when_authenticated() throws Exception {
         //given
-        List<GroupDto> groupDtos = Arrays.asList(
+        final List<GroupDto> groupDtos = Arrays.asList(
                 GroupDto.builder().id(1L).valid(false).build(),
                 GroupDto.builder().id(2L).valid(false).build(),
                 GroupDto.builder().id(3L).valid(false).build()
         );
-        Page<GroupDto> groupPageMockResponse = new PageImpl<>(groupDtos);
+        final Page<GroupDto> groupPageMockResponse = new PageImpl<>(groupDtos);
         given(groupService.getAllPendingGroups(any())).willReturn(groupPageMockResponse);
 
         // when
-        ResultActions resultActions = mvc.perform(
+        final ResultActions resultActions = mvc.perform(
                 get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
 
         // then

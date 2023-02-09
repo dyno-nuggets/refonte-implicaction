@@ -1,16 +1,16 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.RelationAdapter;
-import com.dynonuggets.refonteimplicaction.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
-import com.dynonuggets.refonteimplicaction.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Relation;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
-import com.dynonuggets.refonteimplicaction.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +39,7 @@ public class RelationService {
     public RelationsDto requestRelation(Long senderId, Long receiverId) {
         // TODO: gérer avec une exception plus appropriée
         if (senderId.equals(receiverId)) {
-            throw new ImplicactionException("Cannot create relation with same user as sender and receiver");
+            throw new RuntimeException("Cannot create relation with same user as sender and receiver");
         }
 
         final User sender = userRepository.findById(senderId)
@@ -48,7 +48,7 @@ public class RelationService {
                 .orElseThrow(() -> new UserNotFoundException("No user found with id " + receiverId));
 
         if (relationRepository.isInRelation(senderId, receiverId)) {
-            throw new ImplicactionException("déjà en relation");
+            throw new RuntimeException("déjà en relation");
         }
 
         final Relation relation = Relation.builder()

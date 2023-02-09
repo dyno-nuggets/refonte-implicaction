@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
@@ -30,32 +30,32 @@ public class GroupController {
 
     @ResponseBody
     @PostMapping(consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<GroupDto> createSubreddit(@RequestPart("group") GroupDto group, @RequestParam("file") MultipartFile image) {
+    public ResponseEntity<GroupDto> createSubreddit(@RequestPart("group") final GroupDto group, @RequestParam("file") final MultipartFile image) {
         final GroupDto saveDto = groupService.save(image, group);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
     @PostMapping(CREATE_NO_IMAGE)
-    public ResponseEntity<GroupDto> createSubreddit(@RequestBody GroupDto group) {
+    public ResponseEntity<GroupDto> createSubreddit(@RequestBody final GroupDto group) {
         final GroupDto saveDto = groupService.save(group);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
     @GetMapping(GET_VALIDATED_GROUPS_URI)
     public ResponseEntity<Page<GroupDto>> getAllValidGroups(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "rows", defaultValue = "10") int rows,
-            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+            @RequestParam(value = "page", defaultValue = "0") final int page,
+            @RequestParam(value = "rows", defaultValue = "10") final int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") final String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") final String sortOrder
     ) {
-        Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
-        Page<GroupDto> subredditDtos = groupService.getAllValidGroups(pageable);
+        final Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
+        final Page<GroupDto> subredditDtos = groupService.getAllValidGroups(pageable);
         return ResponseEntity.ok(subredditDtos);
     }
 
     @GetMapping(GET_ALL_BY_TOP_POSTING_URI)
-    public ResponseEntity<List<GroupDto>> getAllByTopPosting(@RequestParam int limit) {
-        List<GroupDto> groupDtos = groupService.getAllByTopPosting(limit);
+    public ResponseEntity<List<GroupDto>> getAllByTopPosting(@RequestParam final int limit) {
+        final List<GroupDto> groupDtos = groupService.getAllByTopPosting(limit);
         return ResponseEntity.ok(groupDtos);
     }
 
@@ -67,13 +67,13 @@ public class GroupController {
 
     @GetMapping(GET_PENDING_GROUP_URI)
     public ResponseEntity<Page<GroupDto>> getAllPendingGroups(
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "rows", defaultValue = "10") int rows,
-            @RequestParam(value = "sortBy", defaultValue = "id") String sortBy,
-            @RequestParam(value = "sortOrder", defaultValue = "ASC") String sortOrder
+            @RequestParam(value = "page", defaultValue = "0") final int page,
+            @RequestParam(value = "rows", defaultValue = "10") final int rows,
+            @RequestParam(value = "sortBy", defaultValue = "id") final String sortBy,
+            @RequestParam(value = "sortOrder", defaultValue = "ASC") final String sortOrder
     ) {
-        Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
-        Page<GroupDto> pendingGroups = groupService.getAllPendingGroups(pageable);
+        final Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
+        final Page<GroupDto> pendingGroups = groupService.getAllPendingGroups(pageable);
         return ResponseEntity.ok(pendingGroups);
     }
 

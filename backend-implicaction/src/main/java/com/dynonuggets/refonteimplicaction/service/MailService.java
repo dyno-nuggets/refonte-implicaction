@@ -1,7 +1,6 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.dto.NotificationEmailDto;
-import com.dynonuggets.refonteimplicaction.exception.ImplicactionException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.internet.InternetAddress;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.GENERIC_MAIL_ERROR_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.GENERIC_MAIL_ERROR_MESSAGE;
 import static javax.mail.Message.RecipientType.TO;
 
 @Service
@@ -29,19 +28,19 @@ public class MailService {
     private String contactMail;
 
     @Async
-    public void sendMail(NotificationEmailDto notificationEmail) throws ImplicactionException {
-        MimeMessagePreparator messagePreparator = mimeMessage -> {
+    public void sendMail(final NotificationEmailDto notificationEmail) {
+        final MimeMessagePreparator messagePreparator = mimeMessage -> {
             mimeMessage.addRecipients(TO, InternetAddress.parse(String.join(",", notificationEmail.getRecipients())));
-            MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
+            final MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, "utf-8");
             messageHelper.setFrom(contactMail);
             messageHelper.setSubject(notificationEmail.getSubject());
             messageHelper.setText(mailContentBuilder.build(notificationEmail.getBody()), true);
         };
         try {
             mailSender.send(messagePreparator);
-        } catch (MailException e) {
+        } catch (final MailException e) {
             log.error(GENERIC_MAIL_ERROR_MESSAGE);
-            throw new ImplicactionException(GENERIC_MAIL_ERROR_MESSAGE);
+            throw new RuntimeException(GENERIC_MAIL_ERROR_MESSAGE);
         }
     }
 }

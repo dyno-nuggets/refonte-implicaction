@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.User;
-import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;

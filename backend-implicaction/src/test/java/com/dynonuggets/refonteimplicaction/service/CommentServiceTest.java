@@ -1,15 +1,16 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.model.User;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
-import com.dynonuggets.refonteimplicaction.utils.DateUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -23,8 +24,8 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.utils.Message.COMMENT_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.COMMENT_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;

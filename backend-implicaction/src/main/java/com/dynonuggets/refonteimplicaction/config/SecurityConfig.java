@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.config;
 
-import com.dynonuggets.refonteimplicaction.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.security.JwtAuthenticationFilter;
+import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.auth.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 
 @EnableWebSecurity
 @AllArgsConstructor
@@ -29,6 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // api
             "/api/auth/signup",
             "/api/auth/login",
+            "/api/auth/logout",
             "/api/auth/refresh/token",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
@@ -78,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
+    protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().disable()
                 .csrf().ignoringAntMatchers(AUTH_WHITELIST)
@@ -94,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+    public void configureGlobal(final AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder.userDetailsService(userDetailsService)
                 .passwordEncoder(passwordEncoder());
     }

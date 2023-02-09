@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.FILE_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_FILE_BY_KEY;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.FILE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_FILE_BY_KEY;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -37,8 +38,8 @@ class FileControllerIntegrationTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_return_file_when_file_exists_and_authenticated() throws Exception {
         // given
-        String objectKey = "blablabla";
-        byte[] expectedBytes = "Je suis un tableau d'octets on dirait pas mais si !".getBytes();
+        final String objectKey = "blablabla";
+        final byte[] expectedBytes = "Je suis un tableau d'octets on dirait pas mais si !".getBytes();
         given(cloudService.getFileAsBytes(anyString())).willReturn(expectedBytes);
 
         // when

@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
+import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.model.Relation;
 import lombok.AllArgsConstructor;

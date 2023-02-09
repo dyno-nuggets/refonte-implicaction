@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -16,6 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "post")
 public class Post {
     @Id
     @GeneratedValue(strategy = IDENTITY)

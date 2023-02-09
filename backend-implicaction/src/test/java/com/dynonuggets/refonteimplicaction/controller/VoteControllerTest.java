@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.model.VoteType;
 import com.dynonuggets.refonteimplicaction.service.VoteService;
@@ -9,7 +10,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.VOTE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.VOTE_BASE_URI;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -28,8 +29,8 @@ class VoteControllerTest extends ControllerIntegrationTestBase {
     @WithMockUser
     void should_vote() throws Exception {
         // given
-        VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
-        String json = gson.toJson(voteDto);
+        final VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
+        final String json = gson.toJson(voteDto);
 
         // when
         final ResultActions resultActions = mvc.perform(
@@ -47,8 +48,8 @@ class VoteControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_no_authenticated() throws Exception {
         // given
-        VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
-        String json = gson.toJson(voteDto);
+        final VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
+        final String json = gson.toJson(voteDto);
 
         // when
         final ResultActions resultActions = mvc.perform(post(VOTE_BASE_URI).content(json).contentType(APPLICATION_JSON));

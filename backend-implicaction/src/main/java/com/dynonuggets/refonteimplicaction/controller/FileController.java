@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.FILE_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.utils.ApiUrls.GET_FILE_BY_KEY;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.FILE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_FILE_BY_KEY;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 @Controller
