@@ -4,10 +4,9 @@ import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.auth.service.UserService;
-import com.dynonuggets.refonteimplicaction.controller.UserController;
+import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.service.RelationService;
 import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.service.RelationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -155,7 +154,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
             // when
             final ResultActions resultActions = mvc.perform(
-                            get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
+                            get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
                     .andExpect(status().isOk());
 
 
@@ -185,7 +184,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_forbidden_when_getting_all_sent_invitations_with_no_authentication() throws Exception {
             // when
             final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_FRIEND_REQUESTS_SENT_URI)
+                    get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_SENT_URI)
             );
 
             // then
@@ -225,7 +224,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
             // when
             final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI)
+                    get(USER_BASE_URI + GET_ALL_RELATION_REQUESTS_RECEIVED_URI)
             );
 
             // then
@@ -237,7 +236,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_forbidden_when_getting_all_received_invitations_with_no_authentication() throws Exception {
             // when
             final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_FRIEND_REQUESTS_RECEIVED_URI)
+                    get(USER_BASE_URI + GET_ALL_RELATION_REQUESTS_RECEIVED_URI)
             );
 
             // then
@@ -277,7 +276,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
             // when
             final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_PENDING_USER_URI)
+                    get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI)
             );
 
             // then
@@ -289,7 +288,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_forbidden_when_getting_all_pending_user_with_no_authentication() throws Exception {
             // when
             final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_PENDING_USER_URI)
+                    get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI)
             );
 
             // then
@@ -389,7 +388,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
             when(relationService.getAllFriendsByUserId(anyLong(), any())).thenReturn(userPageMockResponse);
 
-            final ResultActions actions = mvc.perform(get(USER_BASE_URI + GET_FRIEND_URI, sender.getId()).contentType(APPLICATION_JSON))
+            final ResultActions actions = mvc.perform(get(USER_BASE_URI + GET_ALL_RELATIONS_URI, sender.getId()).contentType(APPLICATION_JSON))
                     .andExpect(status().isOk());
 
             for (int i = 0; i < friendsList.size(); i++) {
@@ -416,7 +415,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         @Test
         void getAllFriendsForOneUserShouldReturnForbidden() throws Exception {
-            mvc.perform(get(USER_BASE_URI + GET_FRIEND_URI, 125L).contentType(APPLICATION_JSON))
+            mvc.perform(get(USER_BASE_URI + GET_ALL_RELATIONS_URI, 125L).contentType(APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isForbidden());
 

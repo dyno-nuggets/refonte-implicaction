@@ -1,17 +1,17 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
-import com.dynonuggets.refonteimplicaction.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
+import com.dynonuggets.refonteimplicaction.community.adapter.GroupAdapter;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Relation;
+import com.dynonuggets.refonteimplicaction.community.domain.repository.RelationRepository;
+import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.Relation;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;

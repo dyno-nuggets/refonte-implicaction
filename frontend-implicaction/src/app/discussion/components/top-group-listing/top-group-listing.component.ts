@@ -7,7 +7,7 @@ import {CreateGroupFormComponent} from '../create-group-form/create-group-form.c
 import {finalize} from 'rxjs/operators';
 import {Constants} from '../../../config/constants';
 import {AuthService} from '../../../shared/services/auth.service';
-import {UserService} from '../../../user/services/user.service';
+import {UserService} from '../../../profile/services/user.service';
 import {User} from '../../../shared/models/user';
 import {Univers} from '../../../shared/enums/univers';
 

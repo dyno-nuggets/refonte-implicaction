@@ -5,11 +5,11 @@ public class ApiUrls {
     // COMPANIES
     public static final String COMPANIES_BASE_URI = "/api/companies";
 
-    //Experience
+    // EXPERIENCES
     public static final String EXPERIENCES_BASE_URI = "/api/experiences";
     public static final String DELETE_EXPERIENCES_URI = "/{experienceId}";
 
-    //Training
+    // TRAINING
     public static final String TRAINING_BASE_URI = "/api/trainings";
     public static final String DELETE_TRAINING_URI = "/{trainingId}";
 
@@ -49,13 +49,16 @@ public class ApiUrls {
     // USERS
     public static final String USER_BASE_URI = "/api/users";
     public static final String GET_USER_URI = "/{userId}";
-    public static final String GET_FRIEND_URI = "/{userId}/friends";
-    public static final String GET_FRIEND_REQUESTS_SENT_URI = "/friends/sent";
-    public static final String GET_FRIEND_REQUESTS_RECEIVED_URI = "/friends/received";
     public static final String GET_PENDING_USER_URI = "/pending";
     public static final String GET_COMMUNITY_URI = "/community";
     public static final String SET_USER_IMAGE = "/image";
     public static final String GET_USER_GROUPS_URI = "/{userId}/groups";
+
+    // RELATION
+    public static final String RELATION_BASE_URI = "/api/relations";
+    public static final String GET_ALL_RELATIONS_URI = "/{userId}";
+    public static final String GET_ALL_RELATIONS_REQUESTS_SENT_URI = "/sent";
+    public static final String GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI = "/received";
 
     // FILES
     public static final String FILE_BASE_URI = "/api/files";

@@ -1,6 +1,10 @@
 package com.dynonuggets.refonteimplicaction.auth.domain.model;
 
-import com.dynonuggets.refonteimplicaction.model.*;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.model.Notification;
+import com.dynonuggets.refonteimplicaction.model.Training;
+import com.dynonuggets.refonteimplicaction.model.WorkExperience;
 import lombok.*;
 
 import javax.persistence.*;
@@ -21,6 +25,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @Getter
 @Setter
+@EqualsAndHashCode
 @Table(name = "user")
 public class User {
     @Id

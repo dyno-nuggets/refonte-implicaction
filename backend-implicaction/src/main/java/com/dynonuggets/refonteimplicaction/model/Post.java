@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.model;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
 import lombok.*;
 import org.springframework.lang.Nullable;
 

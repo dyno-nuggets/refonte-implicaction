@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.community.adapter.RelationAdapter;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.model.WorkExperience;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +50,7 @@ class WorkExperienceAdapterTest {
 
     @Test
     void workExperienceToDtoWithoutUser() {
-        WorkExperienceDto workExperienceDto = workExperienceAdapter.toDtoWithoutUser(experience);
+        final WorkExperienceDto workExperienceDto = workExperienceAdapter.toDtoWithoutUser(experience);
         assertThat(workExperienceDto.getId()).isEqualTo(experience.getId());
         assertThat(workExperienceDto.getStartedAt()).isEqualTo(workExperienceDto.getStartedAt());
         assertThat(workExperienceDto.getFinishedAt()).isEqualTo(workExperienceDto.getFinishedAt());
