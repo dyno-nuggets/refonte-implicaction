@@ -17,7 +17,7 @@
     <ng-container *ngIf="trainings?.length else emptyInfo">
       <div class="resume-info">
         <div
-          *ngFor="let training of trainings"
+          *ngFor="let training of trainings; trackBy: trackByTrainingId"
           class="resume-data"
         >
           <div class="year">{{training.date | date: 'YYYY'}}</div>

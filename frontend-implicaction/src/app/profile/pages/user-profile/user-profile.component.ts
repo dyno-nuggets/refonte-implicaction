@@ -17,9 +17,10 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
   user: User = {};
   canEdit = false;
-
-  private subscription: Subscription;
   isLoading = true;
+  private subscription: Subscription;
+
+  private sortByDateDesc = (a, b) => a.date ? new Date(b.date).getFullYear() - new Date(a.date).getFullYear() : -1;
 
   constructor(
     private authService: AuthService,
@@ -31,6 +32,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.route.paramMap.subscribe(paramMap => {
       const userId = paramMap.get('userId');
       this.userService
@@ -39,10 +41,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
           finalize(() => this.isLoading = false),
           map(user => {
               // tri des dates par ordre décroissant
-              user.trainings = [...user.trainings]
-                .sort((a, b) => a.date ? new Date(b.date).getFullYear() - new Date(a.date).getFullYear() : -1);
-              user.experiences = [...user.experiences]
-                .sort((a, b) => a.finishedAt ? new Date(b.startedAt).getFullYear() - new Date(a.finishedAt).getFullYear() : -1);
+              user.trainings = [...user.trainings].sort(this.sortByDateDesc);
+              user.experiences = [...user.experiences].sort(this.sortByDateDesc);
               return user;
             }
           )

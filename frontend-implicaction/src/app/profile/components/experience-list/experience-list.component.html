@@ -17,7 +17,7 @@
     <ng-container *ngIf="experiences?.length else emptyInfo">
       <div class="resume-info">
         <div
-          *ngFor="let experience of experiences"
+          *ngFor="let experience of experiences; trackBy: trackByExperienceId"
           class="resume-data"
         >
           <div class="year">{{experience.startedAt | date: 'YYYY'}} - {{experience.finishedAt | date: 'YYYY'}}</div>

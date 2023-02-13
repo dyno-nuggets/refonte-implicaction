@@ -17,9 +17,9 @@ import {Criteria} from '../../../shared/models/Criteria';
 
 enum UserListType {
   ALL_USERS = '/community',
-  FRIENDS = '/community/friends',
+  FRIENDS = 'friends',
   FRIENDS_RECEIVED = 'received',
-  FRIENDS_SENT = '/community/sent'
+  FRIENDS_SENT = 'sent'
 }
 
 @Component({
@@ -31,11 +31,11 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
 
   readonly univer = Univers;
 
+  user$: Observable<any>
   currentUser: User;
   action: string;
   listType: UserListType;
   relationType = RelationType;
-  isLoading = true;
   univers = Univers;
   menuItems: MenuItem[] = [
     {
@@ -89,25 +89,29 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
 
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
+
+    // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
+    this.route.url.subscribe(urlSegments => {
+      if (urlSegments.length === 2 && urlSegments[1].path === UserListType.FRIENDS_RECEIVED) {
+        this.user$ = this.relationService.getAllRelationRequestsReceived(this.pageable);
+        this.listType = UserListType.FRIENDS_RECEIVED;
+      } else if (urlSegments.length === 2 && urlSegments[1].path === UserListType.FRIENDS_SENT) {
+        this.user$ = this.relationService.getAllRelationRequestSent(this.pageable);
+        this.listType = UserListType.FRIENDS_SENT;
+      } else if (urlSegments.length === 1) {
+        this.user$ = this.relationService.getAllRelationsByUserId(this.currentUser?.id, this.pageable);
+        this.listType = UserListType.FRIENDS;
+      } else {
+        this.user$ = this.userService.getAllCommunity(this.pageable);
+        this.listType = UserListType.ALL_USERS;
+      }
+    });
     // chargement des données
     this.paginate();
   }
 
   protected innerPaginate(): void {
-    let user$: Observable<any>;
-
-    // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
-    if (this.listType === UserListType.ALL_USERS) {
-      user$ = this.userService.getAllCommunity(this.pageable);
-    } else if (this.listType === UserListType.FRIENDS) {
-      user$ = this.relationService.getAllRelationsByUserId(this.currentUser?.id, this.pageable);
-    } else if (this.listType === UserListType.FRIENDS_RECEIVED) {
-      user$ = this.relationService.getAllRelationRequestsReceived(this.pageable);
-    } else if (this.listType === UserListType.FRIENDS_SENT) {
-      user$ = this.relationService.getAllRelationRequestSent(this.pageable);
-    }
-
-    user$.pipe(finalize(() => this.isLoading = false))
+    this.user$.pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;
