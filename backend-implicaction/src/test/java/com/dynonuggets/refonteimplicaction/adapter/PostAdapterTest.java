@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.Test;
@@ -31,10 +31,10 @@ class PostAdapterTest {
     @Test
     void toPost() {
         // given
-        User currentUser = User.builder().id(123L).username("test user").build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), group);
-        PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
+        final User currentUser = User.builder().id(123L).username("test user").build();
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
+        final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), group);
+        final PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
 
         // when
         final Post actual = postAdapter.toPost(postRequest, group, currentUser);
@@ -48,8 +48,8 @@ class PostAdapterTest {
 
     @Test
     void should_return_post_with_no_subreddit_and_poster_has_no_image() {
-        User currentUser = User.builder().id(123L).username("test user").build();
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), null);
+        final User currentUser = User.builder().id(123L).username("test user").build();
+        final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), null);
         final int expectedCommentCount = 10;
 
         // when
@@ -61,9 +61,9 @@ class PostAdapterTest {
 
     @Test
     void should_return_post_with_subreddit_image_null() {
-        User currentUser = User.builder().id(123L).username("test user").build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
+        final User currentUser = User.builder().id(123L).username("test user").build();
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
+        final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
 
         // when
@@ -76,9 +76,9 @@ class PostAdapterTest {
     @Test
     void toPostResponse() {
         // given
-        User currentUser = User.builder().id(123L).username("test user").image(FileModel.builder().url("http://url.com").build()).build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build(), emptyList(), true);
-        Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
+        final User currentUser = User.builder().id(123L).username("test user").image(FileModel.builder().url("http://url.com").build()).build();
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build(), emptyList(), true);
+        final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
 
         // when

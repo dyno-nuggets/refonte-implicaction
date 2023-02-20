@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUser;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;

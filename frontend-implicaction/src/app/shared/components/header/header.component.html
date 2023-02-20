@@ -13,16 +13,18 @@
       </a>
     </div>
     <ul class="d-none d-lg-inline-flex justify-content-between nav align-items-center">
-      <li *ngFor="let u of allowedUnivers">
-        <a
-          [routerLinkActiveOptions]="{exact: u === univers.HOME}"
-          [routerLink]="[u.url]"
-          class="nav-link px-3"
-          routerLinkActive="theme-primary active fw-bold"
-        >
-          {{u.title}}
-        </a>
-      </li>
+      <ng-container *ngFor="let u of allowedUnivers">
+        <li *ngIf="u.isMenuItem">
+          <a
+            [routerLinkActiveOptions]="{exact: u === univers.HOME}"
+            [routerLink]="[u.url]"
+            class="nav-link px-3"
+            routerLinkActive="theme-primary active fw-bold"
+          >
+            {{u.title}}
+          </a>
+        </li>
+      </ng-container>
     </ul>
     <ng-container *ngIf="isLoggedIn; else registrationOptions">
       <div class="d-flex justify-content-end">
@@ -65,7 +67,7 @@
               <li *ngIf="currentUser && displayProfile">
                 <a
                   class="dropdown-item cursor-pointer"
-                  routerLink="/{{univers.USERS.url}}/{{currentUser.id}}/profile"
+                  routerLink="/{{univers.PROFILE.url}}/{{currentUser.id}}"
                 >
                   Profil
                 </a>

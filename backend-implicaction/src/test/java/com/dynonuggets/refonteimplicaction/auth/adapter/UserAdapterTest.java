@@ -19,8 +19,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUserDto;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUserDto;
 import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generateRandomExperience;
 import static com.dynonuggets.refonteimplicaction.utils.ExperienceUtils.generateRandomExperienceDto;
 import static com.dynonuggets.refonteimplicaction.utils.TrainingUtils.generateRandomTraining;
@@ -82,7 +82,7 @@ class UserAdapterTest {
     @BeforeEach
     void setUp() {
         mockedUser = generateRandomUser(of(USER), true);
-        mockedUserDto = generateRandomUserDto(of(USER.name()));
+        mockedUserDto = generateRandomUserDto(of(USER.name()), true);
     }
 
     @Test

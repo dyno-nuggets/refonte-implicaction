@@ -18,9 +18,6 @@ export class Uris {
     static readonly COMMUNITY_LIST = 'users/community';
     static readonly BY_ID = 'users';
     static readonly UPDATE_IMAGE = 'users/image';
-    static readonly GET_FRIENDS = 'users';
-    static readonly GET_FRIEND_REQUEST_RECEIVED = 'users/friends/received';
-    static readonly GET_FRIEND_REQUEST_SENT = 'users/friends/sent';
     static readonly GET_ALL_PENDING_USERS = 'users/pending';
     static readonly GROUP_LIST = 'users';
   };
@@ -44,7 +41,9 @@ export class Uris {
    */
   static readonly RELATIONS = class {
     static readonly BASE_URI = 'relations';
-    static readonly ALL_BY_USER_ID = 'relations/list';
+    static readonly ALL_BY_USER_ID = 'relations';
+    static readonly GET_FRIEND_REQUEST_RECEIVED = 'relations/received';
+    static readonly GET_FRIEND_REQUEST_SENT = 'relations/sent';
     static readonly REQUEST = 'relations/request';
   };
 
