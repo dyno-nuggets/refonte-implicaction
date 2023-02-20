@@ -1,8 +1,5 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.adapter.CompanyAdapter;
-import com.dynonuggets.refonteimplicaction.adapter.TrainingAdapter;
-import com.dynonuggets.refonteimplicaction.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Relation;
@@ -11,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.Instant;
@@ -20,15 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @ExtendWith(MockitoExtension.class)
 class RelationAdapterTest {
-
-    @Mock
-    WorkExperienceAdapter workExperienceAdapter;
-
-    @Mock
-    TrainingAdapter trainingAdapter;
-
-    @Mock
-    CompanyAdapter companyAdapter;
 
     @InjectMocks
     UserAdapter userAdapter;

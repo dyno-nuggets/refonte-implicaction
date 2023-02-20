@@ -24,13 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUserDto;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.*;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.utils.GroupUtils.generateRandomGroupDto;
 import static java.lang.String.format;
-import static java.time.Instant.now;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
@@ -39,7 +36,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = UserController.class)
@@ -58,51 +54,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @MockBean
     AuthService authService;
 
-    private void resultActionsValidationForPageUser(final Page<UserDto> userMockPage, final ResultActions resultActions) throws Exception {
-        final List<UserDto> pageElements = userMockPage.getContent();
-
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON))
-                .andExpect(jsonPath(TOTAL_PAGES_PATH).value(userMockPage.getTotalPages()))
-                .andExpect(jsonPath(TOTAL_ELEMENTS_PATH).value(userMockPage.getTotalElements()));
-
-        for (int i = 0; i < pageElements.size(); i++) {
-            final UserDto userDto = pageElements.get(i);
-            resultActionsValidationForSingleUser(userDto, resultActions, i);
-        }
-    }
-
-    private void resultActionsValidationForSingleUser(final UserDto userDto, final ResultActions resultActions) throws Exception {
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON));
-
-        resultActionsValidationForSingleUser(userDto, resultActions, null);
-    }
-
-    void resultActionsValidationForSingleUser(final UserDto userDto, final ResultActions resultActions, final Integer index) throws Exception {
-        final String prefix = index != null ? format("$.content[%d]", index) : "$";
-        final String registeredAt = callIfNotNull(userDto.getRegisteredAt(), Object::toString);
-        resultActions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath(format("%s.id", prefix), is(userDto.getId().intValue())))
-                .andExpect(jsonPath(format("%s.username", prefix), is(userDto.getUsername())))
-                .andExpect(jsonPath(format("%s.email", prefix), is(userDto.getEmail())))
-                .andExpect(jsonPath(format("%s.firstname", prefix), is(userDto.getFirstname())))
-                .andExpect(jsonPath(format("%s.lastname", prefix), is(userDto.getLastname())))
-                .andExpect(jsonPath(format("%s.username", prefix), is(userDto.getUsername())))
-                .andExpect(jsonPath(format("%s.url", prefix), is(userDto.getUrl())))
-                .andExpect(jsonPath(format("%s.hobbies", prefix), is(userDto.getHobbies())))
-                .andExpect(jsonPath(format("%s.purpose", prefix), is(userDto.getPurpose())))
-                .andExpect(jsonPath(format("%s.presentation", prefix), is(userDto.getPresentation())))
-                .andExpect(jsonPath(format("%s.username", prefix), is(userDto.getUsername())))
-                .andExpect(jsonPath(format("%s.expectation", prefix), is(userDto.getExpectation())))
-                .andExpect(jsonPath(format("%s.contribution", prefix), is(userDto.getContribution())))
-                .andExpect(jsonPath(format("%s.registeredAt", prefix), is(registeredAt)))
-                .andExpect(jsonPath(format("%s.imageUrl", prefix), is(userDto.getImageUrl())));
-    }
-
     @BeforeEach
     void setUp() {
         roles.add(USER.getLongName());
@@ -116,186 +67,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
         mockedUserDto = generateRandomUserDto();
         mockedUserPage = new PageImpl<>(mockedUserDtos);
-    }
-
-
-    // TODO: déplacer ces méthode dans une classe de tests pour un controller de relations quand celui-ci sera implémenté
-    @Nested
-    class RelationMethodsTest {
-        @Test
-        @WithMockUser
-        void should_return_list_of_invitations_sent() throws Exception {
-            // given
-            final UserDto receiver = UserDto.builder()
-                    .id(3L)
-                    .username("paul-sdv")
-                    .firstname("Paul")
-                    .lastname("Flu")
-                    .email("paul@implicaction.fr")
-                    .url("www.google.fr")
-                    .hobbies("surf,gaming,judo")
-                    .purpose("")
-                    .registeredAt(now())
-                    .roles(roles)
-                    .active(true)
-                    .build();
-
-            final User userTest = User.builder()
-                    .id(10L)
-                    .build();
-
-            final ArrayList<UserDto> friendsList = new ArrayList<>();
-            friendsList.add(receiver);
-
-            final Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
-
-            given(authService.getCurrentUser()).willReturn(userTest);
-            given(relationService.getSentFriendRequest(anyLong(), any())).willReturn(userPageMockResponse);
-
-            // when
-            final ResultActions resultActions = mvc.perform(
-                            get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_SENT_URI).contentType(APPLICATION_JSON))
-                    .andExpect(status().isOk());
-
-
-            // then
-            for (int i = 0; i < friendsList.size(); i++) {
-                final String contentPath = format("$.content[%d]", i);
-                resultActions.andExpect(jsonPath(contentPath + ".id", is(friendsList.get(i).getId().intValue())))
-                        .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
-                        .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
-                        .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
-                        .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
-                        .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
-                        .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
-                        .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
-                        .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
-                        .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
-                        .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
-                        .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
-                        .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
-                        .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
-            }
-
-            verify(relationService, times(1)).getSentFriendRequest(anyLong(), any());
-        }
-
-        @Test
-        void should_response_forbidden_when_getting_all_sent_invitations_with_no_authentication() throws Exception {
-            // when
-            final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_SENT_URI)
-            );
-
-            // then
-            resultActions.andExpect(status().isForbidden());
-            verifyNoInteractions(relationService);
-        }
-
-        @Test
-        @WithMockUser
-        void should_return_list_of_invitations_received() throws Exception {
-            // given
-            final UserDto sender = UserDto.builder()
-                    .id(3L)
-                    .username("paul-sdv")
-                    .firstname("Paul")
-                    .lastname("Flu")
-                    .email("paul@implicaction.fr")
-                    .url("www.google.fr")
-                    .hobbies("surf,gaming,judo")
-                    .purpose("")
-                    .registeredAt(now())
-                    .roles(roles)
-                    .active(true)
-                    .build();
-
-            final User userTest = User.builder()
-                    .id(10L)
-                    .build();
-
-            final ArrayList<UserDto> friendsList = new ArrayList<>();
-            friendsList.add(sender);
-
-            final Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
-
-            given(authService.getCurrentUser()).willReturn(userTest);
-            given(relationService.getReceivedFriendRequest(anyLong(), any())).willReturn(userPageMockResponse);
-
-            // when
-            final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_ALL_RELATION_REQUESTS_RECEIVED_URI)
-            );
-
-            // then
-            resultActionsValidationForPageUser(new PageImpl<>(friendsList), resultActions);
-            verify(relationService, times(1)).getReceivedFriendRequest(anyLong(), any());
-        }
-
-        @Test
-        void should_response_forbidden_when_getting_all_received_invitations_with_no_authentication() throws Exception {
-            // when
-            final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_ALL_RELATION_REQUESTS_RECEIVED_URI)
-            );
-
-            // then
-            resultActions.andExpect(status().isForbidden());
-            verifyNoInteractions(relationService);
-        }
-
-        @Test
-        @WithMockUser
-        void should_return_list_of_pending() throws Exception {
-            // given
-            final UserDto sender = UserDto.builder()
-                    .id(3L)
-                    .username("paul-sdv")
-                    .firstname("Paul")
-                    .lastname("Flu")
-                    .email("paul@implicaction.fr")
-                    .url("www.google.fr")
-                    .hobbies("surf,gaming,judo")
-                    .purpose("")
-                    .registeredAt(now())
-                    .roles(roles)
-                    .active(true)
-                    .build();
-
-            final User userTest = User.builder()
-                    .id(10L)
-                    .build();
-
-            final ArrayList<UserDto> friendsList = new ArrayList<>();
-            friendsList.add(sender);
-
-            final Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
-
-            given(authService.getCurrentUser()).willReturn(userTest);
-            given(userService.getAllPendingActivationUsers(any())).willReturn(userPageMockResponse);
-
-            // when
-            final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI)
-            );
-
-            // then
-            resultActionsValidationForPageUser(userPageMockResponse, resultActions);
-            verify(userService, times(1)).getAllPendingActivationUsers(any());
-        }
-
-        @Test
-        void should_response_forbidden_when_getting_all_pending_user_with_no_authentication() throws Exception {
-            // when
-            final ResultActions resultActions = mvc.perform(
-                    get(USER_BASE_URI + GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI)
-            );
-
-            // then
-            resultActions.andDo(print()).andExpect(status().isForbidden());
-            verifyNoInteractions(userService);
-
-        }
     }
 
     @Nested
@@ -347,81 +118,6 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         }
     }
 
-    @Nested
-    @DisplayName("# getAllFriends")
-    class GetAllFriendsTests {
-        @Test
-        @WithMockUser
-        void getAllFriendsForOneUserShouldReturnUserList() throws Exception {
-            final UserDto sender = UserDto.builder()
-                    .id(2L)
-                    .username("paul-sdv")
-                    .firstname("Paul")
-                    .lastname("Flu")
-                    .email("paul@implicaction.fr")
-                    .url("www.google.fr")
-                    .hobbies("surf,gaming,judo")
-                    .purpose("")
-                    .registeredAt(now())
-                    .roles(roles)
-                    .active(true)
-                    .build();
-
-            final UserDto receiver = UserDto.builder()
-                    .id(3L)
-                    .username("paul-sdv")
-                    .firstname("Paul")
-                    .lastname("Flu")
-                    .email("paul@implicaction.fr")
-                    .url("www.google.fr")
-                    .hobbies("surf,gaming,judo")
-                    .purpose("")
-                    .registeredAt(now())
-                    .roles(roles)
-                    .active(true)
-                    .build();
-
-            final List<UserDto> friendsList = new ArrayList<>();
-            friendsList.add(receiver);
-
-            final Page<UserDto> userPageMockResponse = new PageImpl<>(friendsList);
-
-            when(relationService.getAllFriendsByUserId(anyLong(), any())).thenReturn(userPageMockResponse);
-
-            final ResultActions actions = mvc.perform(get(USER_BASE_URI + GET_ALL_RELATIONS_URI, sender.getId()).contentType(APPLICATION_JSON))
-                    .andExpect(status().isOk());
-
-            for (int i = 0; i < friendsList.size(); i++) {
-                final String contentPath = format("$.content[%d]", i);
-                actions
-                        .andExpect(jsonPath(contentPath + ".id", is(friendsList.get(i).getId().intValue())))
-                        .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
-                        .andExpect(jsonPath(contentPath + ".email", is(friendsList.get(i).getEmail())))
-                        .andExpect(jsonPath(contentPath + ".firstname", is(friendsList.get(i).getFirstname())))
-                        .andExpect(jsonPath(contentPath + ".lastname", is(friendsList.get(i).getLastname())))
-                        .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
-                        .andExpect(jsonPath(contentPath + ".url", is(friendsList.get(i).getUrl())))
-                        .andExpect(jsonPath(contentPath + ".hobbies", is(friendsList.get(i).getHobbies())))
-                        .andExpect(jsonPath(contentPath + ".purpose", is(friendsList.get(i).getPurpose())))
-                        .andExpect(jsonPath(contentPath + ".presentation", is(friendsList.get(i).getPresentation())))
-                        .andExpect(jsonPath(contentPath + ".username", is(friendsList.get(i).getUsername())))
-                        .andExpect(jsonPath(contentPath + ".expectation", is(friendsList.get(i).getExpectation())))
-                        .andExpect(jsonPath(contentPath + ".contribution", is(friendsList.get(i).getContribution())))
-                        .andExpect(jsonPath(contentPath + ".registeredAt", is(friendsList.get(i).getRegisteredAt().toString())));
-            }
-
-            verify(relationService, times(1)).getAllFriendsByUserId(anyLong(), any());
-        }
-
-        @Test
-        void getAllFriendsForOneUserShouldReturnForbidden() throws Exception {
-            mvc.perform(get(USER_BASE_URI + GET_ALL_RELATIONS_URI, 125L).contentType(APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isForbidden());
-
-            verify(relationService, never()).getAllFriendsByUserId(anyLong(), any());
-        }
-    }
 
     @Nested
     @DisplayName("# getUserGroups")
@@ -617,5 +313,40 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             verifyNoInteractions(userService);
         }
 
+    }
+
+    @Nested
+    @DisplayName("# getAllPendingUsers")
+    class GetAllPendingUsers {
+        @Test
+        @WithMockUser(roles = "ADMIN")
+        @DisplayName("doit répondre OK avec la liste des utilisateurs dont le compte n'est pas encore activé quand l'utilisateur est admin")
+        void should_response_ok_with_list_of_non_activated_users_when_user_is_authenticated_as_admin() throws Exception {
+            // given
+            final Page<UserDto> expectedUsers = new PageImpl<>(of(generateRandomUserDto(), generateRandomUserDto()));
+            given(userService.getAllPendingActivationUsers(any())).willReturn(expectedUsers);
+
+            // when
+            final ResultActions resultActions = mvc.perform(
+                    get(USER_BASE_URI + GET_PENDING_USER_URI)
+            );
+
+            // then
+            resultActionsValidationForPageUser(expectedUsers, resultActions);
+            verify(userService, times(1)).getAllPendingActivationUsers(any());
+        }
+
+        @Test
+        @DisplayName("doit répondre OK avec la liste des utilisateurs dont le compte n'est pas encore activé")
+        void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
+            // when
+            final ResultActions resultActions = mvc.perform(
+                    get(USER_BASE_URI + GET_PENDING_USER_URI)
+            );
+
+            // then
+            resultActions.andExpect(status().isForbidden());
+            verifyNoInteractions(userService);
+        }
     }
 }

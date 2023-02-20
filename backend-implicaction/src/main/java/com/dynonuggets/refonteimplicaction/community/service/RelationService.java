@@ -16,9 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-
 import static com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum.*;
+import static java.time.Instant.now;
 
 @Service
 @AllArgsConstructor
@@ -52,7 +51,7 @@ public class RelationService {
         }
 
         final Relation relation = Relation.builder()
-                .sentAt(Instant.now())
+                .sentAt(now())
                 .sender(sender)
                 .receiver(receiver)
                 .build();
@@ -67,7 +66,7 @@ public class RelationService {
      */
     public void deleteRelation(final Long senderId, final Long receiverId) {
         final Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
-                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
+                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to receiver " + receiverId));
         relationRepository.delete(relation);
     }
 
@@ -92,7 +91,7 @@ public class RelationService {
     public RelationsDto confirmRelation(final Long senderId, final Long receiverId) {
         final Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
                 .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
-        relation.setConfirmedAt(Instant.now());
+        relation.setConfirmedAt(now());
         final Relation relationUpdate = relationRepository.save(relation);
         return relationAdapter.toDto(relationUpdate);
     }

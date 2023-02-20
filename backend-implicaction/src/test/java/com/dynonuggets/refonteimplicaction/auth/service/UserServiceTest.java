@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.*;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtils.generateRandomUserDto;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUserDto;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USERNAME_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_NOT_FOUND_MESSAGE;
 import static java.lang.String.format;

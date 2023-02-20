@@ -1,15 +1,14 @@
 package com.dynonuggets.refonteimplicaction.auth.rest.controller;
 
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.auth.service.UserService;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.community.service.RelationService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,8 +22,6 @@ import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 public class UserController {
 
     private final UserService userService;
-    private final RelationService relationService;
-    private final AuthService authService;
 
     @GetMapping
     public ResponseEntity<Page<UserDto>> getAll(
@@ -36,7 +33,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(path = GET_COMMUNITY_URI)
+    @GetMapping(GET_COMMUNITY_URI)
     public ResponseEntity<Page<UserDto>> getAllCommunity(
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int rows
@@ -46,7 +43,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(path = GET_USER_URI)
+    @GetMapping(GET_USER_URI)
     public ResponseEntity<UserDto> getUserProfile(@PathVariable final Long userId) {
         final UserDto userdto = userService.getUserById(userId);
         return ResponseEntity.ok(userdto);
@@ -58,7 +55,8 @@ public class UserController {
         return ResponseEntity.ok(userUpdate);
     }
 
-    @GetMapping(path = GET_PENDING_USER_URI)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping(GET_PENDING_USER_URI)
     public ResponseEntity<Page<UserDto>> getAllPendingUsers(
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int rows

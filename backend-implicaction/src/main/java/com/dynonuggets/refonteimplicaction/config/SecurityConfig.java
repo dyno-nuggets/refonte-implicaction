@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ADMIN_PROTECTEDS = {
-            "/api/auth/accountVerification/**"
+            "/api/auth/accountVerification/**",
     };
 
     private static final String[] PREMIUM_PROTECTEDS = {

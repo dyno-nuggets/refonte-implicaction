@@ -16,7 +16,7 @@ import {
 import {Criteria} from '../../../shared/models/Criteria';
 
 enum UserListType {
-  ALL_USERS = '/community',
+  ALL_USERS = 'community',
   FRIENDS = 'friends',
   FRIENDS_RECEIVED = 'received',
   FRIENDS_SENT = 'sent'

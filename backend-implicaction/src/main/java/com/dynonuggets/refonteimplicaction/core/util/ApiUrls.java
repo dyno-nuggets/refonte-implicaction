@@ -1,5 +1,10 @@
 package com.dynonuggets.refonteimplicaction.core.util;
 
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class ApiUrls {
 
     // COMPANIES
@@ -30,15 +35,6 @@ public class ApiUrls {
     public static final String GET_POST_COMMENTS_URI = "/{postId}/comments";
     public static final String GET_LATEST_POSTS_URI = "/latest/{postsCount}";
 
-    // GROUPS
-    public static final String GROUPS_BASE_URI = "/api/groups";
-    public static final String GET_ALL_BY_TOP_POSTING_URI = "/top-posting";
-    public static final String CREATE_NO_IMAGE = "/no-image";
-    public static final String GET_PENDING_GROUP_URI = "/pending";
-    public static final String VALIDATE_GROUP_URI = "{groupName}/validate";
-    public static final String GET_VALIDATED_GROUPS_URI = "/validated";
-    public static final String SUBSCRIBE_GROUP = "/{groupName}/subscribe";
-
     // COMMENTS
     public static final String COMMENTS_BASE_URI = "/api/comments";
     public static final String GET_COMMENT_URI = "/{commentId}";
@@ -54,12 +50,6 @@ public class ApiUrls {
     public static final String SET_USER_IMAGE = "/image";
     public static final String GET_USER_GROUPS_URI = "/{userId}/groups";
 
-    // RELATION
-    public static final String RELATION_BASE_URI = "/api/relations";
-    public static final String GET_ALL_RELATIONS_URI = "/{userId}";
-    public static final String GET_ALL_RELATIONS_REQUESTS_SENT_URI = "/sent";
-    public static final String GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI = "/received";
-
     // FILES
     public static final String FILE_BASE_URI = "/api/files";
     public static final String GET_FILE_BY_KEY = "/{objectKey}";
@@ -67,8 +57,4 @@ public class ApiUrls {
     // APPLICATION
     public static final String APPLY_BASE_URI = "/api/applies";
     public static final String GET_APPLY_URI = "/{applyId}";
-
-    private ApiUrls() {
-        // empêche la construction d'un objet ApiUrls
-    }
 }

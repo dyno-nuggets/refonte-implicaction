@@ -2,10 +2,9 @@ package com.dynonuggets.refonteimplicaction.community.rest.controller;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.community.rest.controller.GroupController;
-import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.service.GroupService;
+import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
@@ -20,7 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.community.util.GroupUris.*;
+import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.JOBS_BASE_URI;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.is;
