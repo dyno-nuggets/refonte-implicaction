@@ -4,7 +4,7 @@ import {GroupService} from '../../services/group.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {User} from '../../../shared/models/user';
 import {AuthService} from '../../../shared/services/auth.service';
-import {UserService} from '../../../user/services/user.service';
+import {UserService} from '../../../profile/services/user.service';
 import {Univers} from '../../../shared/enums/univers';
 
 @Component({

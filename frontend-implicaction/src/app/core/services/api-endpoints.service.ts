@@ -144,8 +144,11 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_ALL_PENDING_USERS, pageable);
   }
 
-  getAllFriendsByUserIdEndPoint(userId: string, pageable: Pageable<any>): string {
-    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GET_FRIENDS, [userId, 'friends'])
+  /**
+   * RELATIONS
+   */
+  getAllRelationsByUserIdEndPoint(userId: string, pageable: Pageable<any>): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId])
       // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
       .replace(`${Constants.API_ENDPOINT}/`, '');
@@ -153,12 +156,12 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
-  getFriendRequestReceivedEndpoint(pageable: Pageable<any>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_RECEIVED, pageable);
+  getAllRelationRequestsReceivedEndpoint(pageable: Pageable<any>): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_FRIEND_REQUEST_RECEIVED, pageable);
   }
 
-  getFriendRequestSentEndPoint(pageable: Pageable<any>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_FRIEND_REQUEST_SENT, pageable);
+  getAllRelationRequestSentEndPoint(pageable: Pageable<any>): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_FRIEND_REQUEST_SENT, pageable);
   }
 
   createRelationEndpoint(receiverId: string): string {
@@ -209,7 +212,7 @@ export class ApiEndpointsService {
    * Relations
    */
 
-  getAllRelationsByUserIdEndpoint(userId: string): string {
+  getAllFriendsByUserIdEndpoint(userId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId]);
   }
 

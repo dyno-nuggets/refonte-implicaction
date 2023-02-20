@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.auth.rest.dto;
 
-import com.dynonuggets.refonteimplicaction.dto.RelationTypeEnum;
+import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum;
 import com.dynonuggets.refonteimplicaction.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.dto.WorkExperienceDto;
 import lombok.AllArgsConstructor;

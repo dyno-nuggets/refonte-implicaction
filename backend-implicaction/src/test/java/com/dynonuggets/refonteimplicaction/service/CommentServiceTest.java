@@ -3,11 +3,11 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Comment;
-import com.dynonuggets.refonteimplicaction.model.Group;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
@@ -61,7 +61,7 @@ class CommentServiceTest {
     @Test
     void should_return_post_count() {
         // given
-        Post post = new Post();
+        final Post post = new Post();
         final List<Comment> expectedComments = asList(new Comment(), new Comment(), new Comment(), new Comment());
         given(commentRepository.findByPost(any())).willReturn(expectedComments);
 
@@ -75,11 +75,11 @@ class CommentServiceTest {
     @Test
     void should_save_comment_when_post_exists() {
         // given
-        Post post = Post.builder().id(789L).build();
-        User user = User.builder().id(666L).username("lucifer").build();
-        CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null);
-        Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user);
-        CommentDto expectedDto = commentAdapter.toDto(commentTosave);
+        final Post post = Post.builder().id(789L).build();
+        final User user = User.builder().id(666L).username("lucifer").build();
+        final CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null);
+        final Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user);
+        final CommentDto expectedDto = commentAdapter.toDto(commentTosave);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(authService.getCurrentUser()).willReturn(user);
@@ -100,9 +100,9 @@ class CommentServiceTest {
     @Test
     void should_thorw_exception_on_save_comment_when_post_not_exists() {
         // given
-        long postId = 123L;
-        CommentDto commentDto = CommentDto.builder().postId(postId).build();
-        NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId));
+        final long postId = 123L;
+        final CommentDto commentDto = CommentDto.builder().postId(postId).build();
+        final NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId));
         given(postRepository.findById(postId)).willThrow(expectedException);
 
         // when
@@ -115,10 +115,10 @@ class CommentServiceTest {
     @Test
     void should_return_comment_when_exists() {
         // given
-        User user = User.builder().id(666L).username("lucifer").build();
-        Post post = Post.builder().id(789L).build();
-        Comment comment = new Comment(123L, "coucou", post, Instant.now(), user);
-        CommentDto expectedDto = commentAdapter.toDto(comment);
+        final User user = User.builder().id(666L).username("lucifer").build();
+        final Post post = Post.builder().id(789L).build();
+        final Comment comment = new Comment(123L, "coucou", post, Instant.now(), user);
+        final CommentDto expectedDto = commentAdapter.toDto(comment);
         given(commentRepository.findById(anyLong())).willReturn(java.util.Optional.of(comment));
         given(commentAdapter.toDto(any())).willReturn(expectedDto);
 
@@ -132,10 +132,10 @@ class CommentServiceTest {
     @Test
     void should_throw_exception_when_not_exists() {
         // given
-        long commentId = 123L;
+        final long commentId = 123L;
 
         // when
-        Exception actualException = assertThrows(NotFoundException.class, () -> commentService.getComment(commentId));
+        final Exception actualException = assertThrows(NotFoundException.class, () -> commentService.getComment(commentId));
 
         // then
         assertThat(actualException.getMessage()).isEqualTo(String.format(COMMENT_NOT_FOUND, 123L));
@@ -144,15 +144,15 @@ class CommentServiceTest {
     @Test
     void should_get_comments_for_post_when_exists() {
         // given
-        User currentUser = User.builder().id(123L).username("Sankukai").build();
-        Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null, emptyList(), true);
-        Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
-        List<Comment> comments = asList(
+        final User currentUser = User.builder().id(123L).username("Sankukai").build();
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), currentUser, null, emptyList(), true);
+        final Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
+        final List<Comment> comments = asList(
                 new Comment(3L, "comment1", post, Instant.now(), currentUser),
                 new Comment(2L, "comment2", post, Instant.now(), currentUser),
                 new Comment(1L, "comment3", post, Instant.now(), currentUser)
         );
-        Page<Comment> commentPage = new PageImpl<>(comments);
+        final Page<Comment> commentPage = new PageImpl<>(comments);
         final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(commentRepository.findByPostOrderById(any(), any())).willReturn(commentPage);
@@ -167,11 +167,11 @@ class CommentServiceTest {
     @Test
     void should_throw_exception_when_getting_comments_and_post_not_exists() {
         // given
-        long postId = 123L;
+        final long postId = 123L;
         final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
 
         // when
-        Exception exception = assertThrows(NotFoundException.class, () -> commentService.getAllCommentsForPost(pageable, postId));
+        final Exception exception = assertThrows(NotFoundException.class, () -> commentService.getAllCommentsForPost(pageable, postId));
 
         // then
         assertTrue(exception.getMessage().contains(String.format(POST_NOT_FOUND_MESSAGE, postId)));

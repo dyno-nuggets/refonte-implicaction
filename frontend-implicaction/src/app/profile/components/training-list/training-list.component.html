@@ -1,0 +1,60 @@
+<div class="card mt-md-3 mb-5 py-4 px-4 shadow-sm border-0">
+  <div class="d-flex flex-row justify-content-between mb-2">
+    <h2>Formations</h2>
+    <div *ngIf="!readOnly">
+      <i-feather
+        (click)="onAddTraining()"
+        class="cursor-pointer secondary-on-hover"
+        data-placement="bottom"
+        data-toggle="tooltip"
+        name="plus"
+        title="Ajouter une formation"
+      >
+      </i-feather>
+    </div>
+  </div>
+  <section class="resume-item resume-training">
+    <ng-container *ngIf="trainings?.length else emptyInfo">
+      <div class="resume-info">
+        <div
+          *ngFor="let training of trainings; trackBy: trackByTrainingId"
+          class="resume-data"
+        >
+          <div class="year">{{training.date | date: 'YYYY'}}</div>
+          <div class="content pe-1">
+            <div
+              *ngIf="!readOnly"
+              class="float-end"
+            >
+              <i-feather
+                (click)="editTraining(training)"
+                class="cursor-pointer me-1 me-xl-2 secondary-on-hover"
+                data-placement="bottom"
+                style="width: 20px; height: 20px"
+                data-toggle="tooltip"
+                name="edit-2"
+                title="Editer cette formation"
+              >
+              </i-feather>
+              <i-feather
+                (click)="deleteTraining(training)"
+                class="cursor-pointer danger-on-hover"
+                data-placement="bottom"
+                style="width: 20px; height: 20px"
+                data-toggle="tooltip"
+                name="trash-2"
+                title="Supprimer cette formation"
+              >
+              </i-feather>
+            </div>
+            <p class="text-primary text-uppercase fw-bold">{{training.label}}</p>
+            <p class="text-info">{{training.school}}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </section>
+  <ng-template #emptyInfo>
+    <span class="fst-italic">Non renseigné.</span>
+  </ng-template>
+</div>

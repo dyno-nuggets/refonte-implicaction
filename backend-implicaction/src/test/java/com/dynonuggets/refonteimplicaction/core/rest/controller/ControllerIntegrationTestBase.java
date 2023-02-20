@@ -13,9 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 public class ControllerIntegrationTestBase {
-    protected static final String TOTAL_ELEMENTS_PATH = "$.totalElements";
-    protected static final String TOTAL_PAGES_PATH = "$.totalPages";
-
     protected static final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10);
     protected final Gson gson = new GsonBuilder().serializeNulls().create();
 
