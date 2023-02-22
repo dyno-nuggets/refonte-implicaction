@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.controller;
+package com.dynonuggets.refonteimplicaction.core.rest.controller;
 
 import org.springframework.boot.autoconfigure.web.ErrorProperties;
 import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorController;
