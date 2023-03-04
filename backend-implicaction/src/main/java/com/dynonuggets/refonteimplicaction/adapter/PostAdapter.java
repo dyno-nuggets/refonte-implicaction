@@ -35,7 +35,6 @@ public class PostAdapter {
         final Group group = post.getGroup();
         final String subredditImageUrl = group != null && group.getImage() != null ? group.getImage().getUrl() : null;
         final String subredditName = group != null ? group.getName() : "";
-        final String userImageKey = post.getUser().getImage() != null ? fileService.buildFileUri(post.getUser().getImage().getObjectKey()) : null;
 
         return PostResponse.builder()
                 .id(post.getId())
@@ -51,7 +50,7 @@ public class PostAdapter {
                 .downVote(isPostDownVoted)
                 .voteCount(post.getVoteCount())
                 .subredditImageUrl(subredditImageUrl)
-                .userImageUrl(userImageKey)
+                .userImageUrl(null)
                 .build();
     }
 

@@ -10,7 +10,7 @@ import java.util.Map;
 public class ValidationExceptionResponse extends ExceptionResponse {
 
     /**
-     * Map contenant le nom des champs en erreur de validation → raison de la non validation
+     * Map contenant le nom des champs en erreur de validation → raison de la non-validation
      */
     private final Map<String, String> errors;
 

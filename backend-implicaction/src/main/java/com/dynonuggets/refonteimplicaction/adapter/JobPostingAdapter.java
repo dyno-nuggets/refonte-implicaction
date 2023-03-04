@@ -8,17 +8,19 @@ import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+
 
 @Component
 @AllArgsConstructor
 public class JobPostingAdapter {
     private final CompanyAdapter companyAdapter;
 
-    public JobPostingDto toDto(JobPosting model) {
+    public JobPostingDto toDto(final JobPosting model) {
 
-        final String username = model.getPoster() != null ? model.getPoster().getUsername() : "";
-        final Long userId = model.getPoster() != null ? model.getPoster().getId() : null;
-        CompanyDto companyDto = companyAdapter.toDto(model.getCompany());
+        final String username = callIfNotNull(model.getPoster(), User::getUsername);
+        final Long userId = callIfNotNull(model.getPoster(), User::getId);
+        final CompanyDto companyDto = companyAdapter.toDto(model.getCompany());
 
         return JobPostingDto.builder()
                 .id(model.getId())
@@ -39,9 +41,9 @@ public class JobPostingAdapter {
                 .build();
     }
 
-    public JobPosting toModel(JobPostingDto dto, User user) {
+    public JobPosting toModel(final JobPostingDto dto, final User user) {
 
-        Company company = companyAdapter.toModel(dto.getCompany());
+        final Company company = companyAdapter.toModel(dto.getCompany());
 
         return JobPosting.builder()
                 .id(dto.getId())

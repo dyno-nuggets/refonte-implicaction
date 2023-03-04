@@ -1,5 +1,10 @@
 spring:
-
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:mysql:8:///
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+      
   mail:
     host: smtp.mailtrap.io
     port: 2525

@@ -14,6 +14,8 @@ import {
   BaseWithPaginationAndFilterComponent
 } from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Criteria} from '../../../shared/models/Criteria';
+import {ProfileService} from "../../../profile/services/profile.service";
+import {Relation} from "../../models/relation";
 
 enum UserListType {
   ALL_USERS = 'community',
@@ -27,16 +29,15 @@ enum UserListType {
   templateUrl: './relation-list.component.html',
   styleUrls: ['./relation-list.component.scss']
 })
-export class RelationListComponent extends BaseWithPaginationAndFilterComponent<User, Criteria> implements OnInit {
+export class RelationListComponent extends BaseWithPaginationAndFilterComponent<Relation, Criteria> implements OnInit {
 
-  readonly univer = Univers;
+  readonly univers = Univers;
 
   user$: Observable<any>
   currentUser: User;
   action: string;
   listType: UserListType;
   relationType = RelationType;
-  univers = Univers;
   menuItems: MenuItem[] = [
     {
       label: 'Tous les utilisateurs',
@@ -59,6 +60,7 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private profileService: ProfileService,
     private toastService: ToasterService,
     private relationService: RelationService,
     private router: Router,
@@ -81,28 +83,17 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
     }
   }
 
-  private static isFriend = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.FRIEND;
-
-  private static isSender = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.SENDER;
-
-  private static isReceiver = (user: User): boolean => user.relationTypeOfCurrentUser === RelationType.RECEIVER;
-
   ngOnInit(): void {
     this.currentUser = this.authService.getCurrentUser();
-
-    // on détermine quel est l'observable auquel s'abonner en fonction du type d'utilisateurs à afficher
+    // on détermine quel est l’observable auquel s’abonner en fonction du type d’utilisateurs à afficher
     this.route.url.subscribe(urlSegments => {
       if (urlSegments.length === 2 && urlSegments[1].path === UserListType.FRIENDS_RECEIVED) {
-        this.user$ = this.relationService.getAllRelationRequestsReceived(this.pageable);
         this.listType = UserListType.FRIENDS_RECEIVED;
       } else if (urlSegments.length === 2 && urlSegments[1].path === UserListType.FRIENDS_SENT) {
-        this.user$ = this.relationService.getAllRelationRequestSent(this.pageable);
         this.listType = UserListType.FRIENDS_SENT;
       } else if (urlSegments.length === 1) {
-        this.user$ = this.relationService.getAllRelationsByUserId(this.currentUser?.id, this.pageable);
         this.listType = UserListType.FRIENDS;
       } else {
-        this.user$ = this.userService.getAllCommunity(this.pageable);
         this.listType = UserListType.ALL_USERS;
       }
     });
@@ -111,6 +102,19 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
   }
 
   protected innerPaginate(): void {
+    switch (this.listType) {
+      case UserListType.FRIENDS:
+        this.user$ = this.relationService.getAllRelationsByUsername(this.currentUser?.username, this.pageable);
+        break;
+      case UserListType.FRIENDS_RECEIVED:
+        this.user$ = this.relationService.getAllRelationRequestsReceived(this.pageable);
+        break;
+      case UserListType.FRIENDS_SENT:
+        this.user$ = this.relationService.getAllRelationRequestSent(this.pageable);
+        break;
+      default:
+        this.user$ = this.relationService.getAllCommunity(this.pageable);
+    }
     this.user$.pipe(finalize(() => this.isLoading = false))
       .subscribe(
         data => {
@@ -123,23 +127,29 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
       );
   }
 
-  requestUserAsFriend(user: User): void {
+  requestUserAsFriend(relation: Relation): void {
     this.relationService
-      .requestFriend(user.id)
+      .requestFriend(relation.receiver.username)
       .subscribe(
-        () => user.relationTypeOfCurrentUser = RelationType.SENDER,
+        r => {
+          relation.relationType = RelationType.SENDER;
+          relation.id = r.id;
+          relation.sender = r.sender;
+          relation.receiver = r.receiver;
+          relation.sentAt = r.sentAt;
+        },
         () => this.toastService.error('Oops', 'Une erreur est survenue'),
-        () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${user.firstname}`)
+        () => this.toastService.success('Demande effectuée', `Votre demande a bien été envoyée à ${relation.receiver.username}`)
       );
   }
 
-  confirmUserAsFriend(sender: User): void {
+  confirmRelation(relation: Relation): void {
     this.userService
-      .confirmUserAsFriend(sender.id)
+      .confirmRelation(relation.id)
       .subscribe(
         () => {
           if (this.listType === UserListType.ALL_USERS) {
-            sender.relationTypeOfCurrentUser = RelationType.FRIEND;
+            relation.relationType = RelationType.FRIEND;
           } else {
             this.paginate();
           }
@@ -150,23 +160,29 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
   }
 
   /**
-   * permet de refuser, annuler une demande d'ami ou de supprimer un ami
+   * permet de refuser, annuler une demande d’ami ou de supprimer un ami
    */
-  removeUserRelation(user: User): void {
+  deleteRelation(relation: Relation): void {
     let message = '';
     this.userService
-      .removeUserFromFriends(user.id)
+      .removeRelation(relation.id)
       .subscribe(
         () => {
-          if (RelationListComponent.isFriend(user)) {
-            message = `L'utilisateur ${user.firstname} a bien été supprimé de vos amis`;
-          } else if (RelationListComponent.isSender(user)) {
-            message = `Vous avez annulé la demande d'ami avec ${user.firstname}`;
-          } else if (RelationListComponent.isReceiver(user)) {
-            message = `Vous avez refusé la demande d'ami de ${user.firstname}`;
+          if (relation.relationType === RelationType.FRIEND) {
+            message = `L'utilisateur a bien été supprimé de vos relations`;
+          } else if (relation.relationType === RelationType.SENDER) {
+            message = `Vous avez annulé la demande de mise en relation`;
+          } else if (relation.relationType === RelationType.RECEIVER) {
+            message = `Vous avez refusé la demande de mise en relation`;
           }
-          user.relationTypeOfCurrentUser = RelationType.NONE;
-          // il faut relancer la pagination dans le cas de l'affichage des amis / demandes
+
+          relation.receiver = relation.receiver.username === this.currentUser.username ? relation.sender : relation.receiver;
+          relation.relationType = RelationType.NONE;
+          relation.id = null;
+          relation.sentAt = null;
+          relation.confirmedAt = null;
+
+          // il faut relancer la pagination dans le cas de l’affichage des amis / demandes
           if (this.listType !== UserListType.ALL_USERS) {
             this.paginate();
           }

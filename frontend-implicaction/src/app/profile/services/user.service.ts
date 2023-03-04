@@ -25,32 +25,20 @@ export class UserService {
     return this.http.get(this.apiEndpointsService.getAllUserEndpoint(pageable));
   }
 
-  getAllCommunity(pageable: Pageable<User>): Observable<any> {
-    return this.http.get(this.apiEndpointsService.getAllUserCommunityEndpoint(pageable));
+  confirmRelation(relationId: string): Observable<Relation> {
+    return this.http.get(this.apiEndpointsService.confirmUserAsFriendEndpoint(relationId));
   }
 
-  getUserById(userId: string): Observable<User> {
-    return this.http.get(this.apiEndpointsService.getUserByIdEndpoint(userId));
-  }
-
-  confirmUserAsFriend(senderId: string): Observable<Relation> {
-    return this.http.get(this.apiEndpointsService.confirmUserAsFriendEndpoint(senderId));
-  }
-
-  removeUserFromFriends(userId: string): Observable<any> {
-    return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(userId));
-  }
-
-  updateUser(user: User): Observable<any> {
-    return this.http.put<User>(this.apiEndpointsService.updateUserEndpoint(), user);
+  removeRelation(relationId: string): Observable<any> {
+    return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(relationId));
   }
 
   getAllPendingActivationUsers(pageable: Pageable<User>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
 
-  updateUserImage(formData: FormData): Observable<User> {
-    return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(), formData);
+  updateUserImage(username: string, formData: FormData): Observable<User> {
+    return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(username), formData);
   }
 
   getUserGroups(userId: string): Observable<Group[]> {

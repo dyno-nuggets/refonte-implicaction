@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,31 +15,27 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
 
     @Query("select case when count (r) > 0 then true else false end " +
             "from Relation r " +
-            "where (r.sender.id = ?1 and r.receiver.id = ?2) or (r.sender.id = ?2 and r.receiver.id = ?1)")
-    boolean isInRelation(@Param("user1") Long userId1, Long userId2);
+            "where (r.sender.user.username = ?1 and r.receiver.user.username = ?2) " +
+            "or (r.sender.user.username = ?2 and r.receiver.user.username = ?1)")
+    boolean isInRelation(String userId1, String userId2);
 
     @Query("select r from Relation r " +
-            "where (r.sender.id = ?1 or r.receiver.id = ?1)")
-    List<Relation> findAllByUserId(Long userId);
-
-    @Query("select r from Relation r " +
-            "where (r.sender.id = ?1 or r.receiver.id = ?1) " +
+            "where (r.sender.user.username = ?1 or r.receiver.user.username = ?1) " +
             "and r.confirmedAt is not null")
-    Page<Relation> findAllFriendsByUserId(Long userId, Pageable pageable);
+    Page<Relation> findAllByUser_UsernameAndConfirmedAtIsNotNull(String username, Pageable pageable);
 
-    Page<Relation> findAllByReceiver_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
+    Page<Relation> findAllByReceiver_User_UsernameAndConfirmedAtIsNull(String username, Pageable pageable);
 
-    Page<Relation> findAllBySender_IdAndConfirmedAtIsNull(Long userId, Pageable pageable);
-
-    Optional<Relation> findBySender_IdAndReceiver_Id(Long senderId, Long receiverId);
+    Page<Relation> findAllBySender_User_UsernameAndConfirmedAtIsNull(String username, Pageable pageable);
 
     @Query("select r " +
             "from Relation r " +
-            "where (r.sender.id = ?1 and r.receiver.id = ?2) or (r.sender.id = ?2 and r.receiver.id = ?1)")
-    Optional<Relation> findRelationBetween(Long userId1, Long userId2);
+            "where (r.sender.user.username = ?1 and r.receiver.user.username = ?2) or (r.sender.user.username = ?2 and r.receiver.user.username = ?1)")
+    Optional<Relation> findRelationBetween(String user1, String user2);
 
     @Query("select r " +
             "from Relation r " +
-            "where (r.sender.id in ?2 and r.receiver.id = ?1) or (r.receiver.id in ?2 and r.sender.id = ?1)")
-    List<Relation> findAllRelatedToUserByUserIdIn(Long userId, List<Long> userIds);
+            "where r.sender.user.username in ?2 and r.receiver.user.username = ?1 " +
+            "or (r.receiver.user.username in ?2 and r.sender.user.username = ?1)")
+    List<Relation> findAllRelationByUsernameWhereUserListAreSenderOrReceiver(String username, List<String> usernames, Pageable pageable);
 }

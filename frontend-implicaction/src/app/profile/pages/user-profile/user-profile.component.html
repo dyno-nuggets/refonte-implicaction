@@ -1,7 +1,7 @@
 <div class="row">
   <ng-container *ngIf="!isLoading; else loadingTemplate">
     <div class="col-12 col-md-5 col-xl-4 mb-2 sidebar-profile">
-      <app-sidebar-profile [readOnly]="!canEdit" [user]="user"></app-sidebar-profile>
+      <app-sidebar-profile [readOnly]="!canEdit" [profile]="profile"></app-sidebar-profile>
     </div>
     <div class="col-12 col-md-7 col-xl-8 flex-grow-1 flex-shrink-1 ps-0 ps-2 ps-lg-3 ps-xl-5">
       <app-experience-list [readOnly]="!canEdit"></app-experience-list>

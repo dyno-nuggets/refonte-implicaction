@@ -16,7 +16,9 @@ import com.dynonuggets.refonteimplicaction.model.Notification;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,13 +37,16 @@ import java.util.UUID;
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.ADMIN;
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_BODY;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_TITLE;
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Collections.singletonList;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Service
 @Slf4j
@@ -75,6 +80,7 @@ public class AuthService {
         final String activationKey = generateActivationKey();
         final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(ADMIN.getLongName()));
         registerUser(reqisterRequest, activationKey);
+
 
         // TODO: MAIL-NOTIFICATION à revoir
         final Notification notification = Notification.builder()
@@ -190,22 +196,20 @@ public class AuthService {
                 .orElseThrow(() -> new AuthenticationException(USER_NOT_FOUND));
     }
 
-    private void registerUser(final RegisterRequest reqisterRequest, final String activationKey) {
+    private User registerUser(final RegisterRequest reqisterRequest, final String activationKey) {
         final List<Role> roles = roleRepository.findAllByNameIn(List.of(USER.name()));
 
         final User user = User.builder()
                 .username(reqisterRequest.getUsername())
                 .email(reqisterRequest.getEmail())
                 .password(passwordEncoder.encode(reqisterRequest.getPassword()))
-                .firstname(reqisterRequest.getFirstname())
-                .lastname(reqisterRequest.getLastname())
                 .registeredAt(now())
                 .active(false)
                 .activationKey(activationKey)
                 .registeredAt(now())
                 .roles(roles)
                 .build();
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private String generateActivationKey() {
@@ -215,5 +219,19 @@ public class AuthService {
     public boolean isLoggedIn() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
+    }
+
+    public void verifyUserIsCurrent(@NonNull final String username) {
+        final String currentUsername = callIfNotNull(getCurrentUser(), User::getUsername);
+
+        if (!StringUtils.equals(currentUsername, username)) {
+            throw new ImplicactionException(OPERATION_NOT_PERMITTED);
+        }
+    }
+
+    public void verifyCurrentUserIsAdmin(@NonNull final String username) {
+        if (!isTrue(callIfNotNull(getCurrentUser(), User::isAdmin))) {
+            throw new ImplicactionException(OPERATION_NOT_PERMITTED);
+        }
     }
 }

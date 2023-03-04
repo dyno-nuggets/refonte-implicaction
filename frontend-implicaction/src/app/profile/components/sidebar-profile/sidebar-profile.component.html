@@ -30,8 +30,8 @@
       <img
         #userImage
         (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
-        [src]="user.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
-        alt="photo de {{user.firstname}}"
+        [src]="profile.avatar || constant.USER_IMAGE_DEFAULT_URI"
+        alt="photo de {{profile.firstname}}"
         class="rounded-circle shadow-sm"
       >
       <ng-container *ngIf="isEditing">
@@ -50,17 +50,17 @@
   </div>
 
   <div class="card-body mt-5 px-5">
-    <h1 class="mt-4">{{user.firstname}} {{user.lastname}}</h1>
+    <h1 class="mt-4">{{profile.firstname}} {{profile.lastname}}</h1>
 
     <section class="user-contacts mt-5">
       <ul class="list-unstyled">
         <li class="list-item item-mail">
           <ng-container *ngIf="!isEditing; else mailEditionTemplate">
-            <app-user-info [value]="user.email"></app-user-info>
+            <app-user-info [value]="profile.email"></app-user-info>
           </ng-container>
           <ng-template #mailEditionTemplate>
             <input
-              [(ngModel)]="user.email"
+              [(ngModel)]="profile.email"
               class="form-control px-4"
               placeholder="Email"
             >
@@ -68,23 +68,23 @@
         </li>
         <li class="list-item item-phone">
           <ng-container *ngIf="!isEditing; else phoneEditionTemplate">
-            <app-user-info [value]="user.phoneNumber"></app-user-info>
+            <app-user-info [value]="profile.phoneNumber"></app-user-info>
           </ng-container>
           <ng-template #phoneEditionTemplate>
             <input
-              [(ngModel)]="user.phoneNumber"
+              [(ngModel)]="profile.phoneNumber"
               class="form-control px-4"
-              placeholder="Email"
+              placeholder="Numéro de téléphone"
             >
           </ng-template>
         </li>
         <li class="list-item item-birthday">
           <ng-container *ngIf="!isEditing; else birthdayEditionTemplate">
-            <app-user-info [value]="user.birthday"></app-user-info>
+            <app-user-info [value]="profile.birthday"></app-user-info>
           </ng-container>
           <ng-template #birthdayEditionTemplate>
             <p-calendar
-              [(ngModel)]="user.birthday"
+              [(ngModel)]="profile.birthday"
               [yearNavigator]="true"
               [yearRange]="constant.DEFAULT_YEAR_RANGE"
               dateFormat="yy-mm-dd"
@@ -103,13 +103,13 @@
         <h2>Loisirs / Hobbies</h2>
         <div *ngIf="!isEditing; else hobbiesEditionTemplate" class="">
           <p>
-            <app-user-info [value]="user.hobbies"></app-user-info>
+            <app-user-info [value]="profile.hobbies"></app-user-info>
           </p>
         </div>
         <ng-template #hobbiesEditionTemplate>
           <div class="mb-4">
                 <textarea
-                  [(ngModel)]="user.hobbies"
+                  [(ngModel)]="profile.hobbies"
                   class="form-control px-4"
                   rows="4"
                 ></textarea>
@@ -121,13 +121,13 @@
         <h2>Présentation</h2>
         <div *ngIf="!isEditing; else presentationEditionTemplate">
           <p>
-            <app-user-info [value]="user.presentation"></app-user-info>
+            <app-user-info [value]="profile.presentation"></app-user-info>
           </p>
         </div>
         <ng-template #presentationEditionTemplate>
           <div class="mb-4">
                 <textarea
-                  [(ngModel)]="user.presentation"
+                  [(ngModel)]="profile.presentation"
                   class="form-control px-4"
                   rows="4"
                 ></textarea>
@@ -139,13 +139,13 @@
         <h2>Quel est mon objectif professionnel</h2>
         <div *ngIf="!isEditing; else purposeEditionTemplate">
           <p>
-            <app-user-info [value]="user.purpose"></app-user-info>
+            <app-user-info [value]="profile.purpose"></app-user-info>
           </p>
         </div>
         <ng-template #purposeEditionTemplate>
           <div class="mb-4">
                 <textarea
-                  [(ngModel)]="user.purpose"
+                  [(ngModel)]="profile.purpose"
                   class="form-control px-4"
                 ></textarea>
           </div>
@@ -156,13 +156,13 @@
         <h2>Ce que j'attends du réseau</h2>
         <div *ngIf="!isEditing; else expectationEditionTemplate">
           <p>
-            <app-user-info [value]="user.expectation"></app-user-info>
+            <app-user-info [value]="profile.expectation"></app-user-info>
           </p>
         </div>
         <ng-template #expectationEditionTemplate>
           <div class="mb-4">
                 <textarea
-                  [(ngModel)]="user.expectation"
+                  [(ngModel)]="profile.expectation"
                   class="form-control px-4"
                   rows="4"
                 ></textarea>
@@ -174,13 +174,13 @@
         <h2>Ce que je peux apporter au réseau</h2>
         <div *ngIf="!isEditing; else contributionEditionTemplate">
           <p>
-            <app-user-info [value]="user.contribution"></app-user-info>
+            <app-user-info [value]="profile.contribution"></app-user-info>
           </p>
         </div>
         <ng-template #contributionEditionTemplate>
           <div class="mb-4">
                 <textarea
-                  [(ngModel)]="user.contribution"
+                  [(ngModel)]="profile.contribution"
                   class="form-control px-4"
                   rows="4"
                 ></textarea>

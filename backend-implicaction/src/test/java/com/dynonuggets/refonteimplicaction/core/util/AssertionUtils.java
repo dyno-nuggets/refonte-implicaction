@@ -25,7 +25,12 @@ public class AssertionUtils {
                 .isExactlyInstanceOf(errorResult.getClass())
                 .isSameAs(errorResult);
 
-        assertThat(actualException.getMessage())
-                .isEqualTo(format(errorResult.getMessage(), value));
+        if (value != null) {
+            assertThat(actualException.getMessage()).isEqualTo(format(errorResult.getMessage(), value));
+        }
+    }
+
+    public static void assertImplicactionException(final ImplicactionException actualException, final Class<?> classException, final BaseErrorResult errorResult) {
+        assertImplicactionException(actualException, classException, errorResult, null);
     }
 }

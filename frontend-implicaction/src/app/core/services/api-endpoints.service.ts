@@ -6,6 +6,8 @@ import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/Criteria';
+import {Profile} from "../../profile/models/profile";
+import {Relation} from "../../community/models/relation";
 
 @Injectable({
   providedIn: 'root'
@@ -101,8 +103,20 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.AUTH.LOGOUT);
   }
 
-  getUserByIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.BY_ID, [userId]);
+  /**
+   * Profiles
+   */
+
+  getProfileByUsernameEndpoint(username: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.PROFILES.BY_USERNAME, [username]);
+  }
+
+  updateProfileEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.PROFILES.BASE_URI);
+  }
+
+  getAllProfilesEndpoint(pageable: Pageable<Profile>): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.PROFILES.BASE_URI, pageable);
   }
 
   getActivateUserEndpoint(activationKey: string): string {
@@ -117,12 +131,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
-  updateImageProfileEndpoint(): string {
-    return ApiEndpointsService.createUrl(Uris.USERS.UPDATE_IMAGE);
-  }
-
-  getAllUserCommunityEndpoint(pageable: Pageable<any>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.COMMUNITY_LIST, pageable);
+  updateImageProfileEndpoint(username: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.PROFILES.BASE_URI, [username]);
   }
 
   getAllPendingActivationUsersEndpoint(pageable: Pageable<any>): string {
@@ -132,8 +142,8 @@ export class ApiEndpointsService {
   /**
    * RELATIONS
    */
-  getAllRelationsByUserIdEndPoint(userId: string, pageable: Pageable<any>): string {
-    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId])
+  getAllRelationsByUsernameEndPoint(userId: string, pageable: Pageable<Relation>): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USERNAME, [userId])
       // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
       .replace(`${Constants.API_ENDPOINT}/`, '');
@@ -141,11 +151,15 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
-  getAllRelationRequestsReceivedEndpoint(pageable: Pageable<any>): string {
+  getAllRelationRequestsReceivedEndpoint(pageable: Pageable<Relation>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_FRIEND_REQUEST_RECEIVED, pageable);
   }
 
-  getAllRelationRequestSentEndPoint(pageable: Pageable<any>): string {
+  getAllCommunity(pageable: Pageable<Relation>): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_ALL_COMMUNITY, pageable);
+  }
+
+  getAllRelationRequestSentEndPoint(pageable: Pageable<Relation>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_FRIEND_REQUEST_SENT, pageable);
   }
 
@@ -189,24 +203,20 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.TRAINING.BASE_URI, [trainingId]);
   }
 
-  updateUserEndpoint(): string {
-    return ApiEndpointsService.createUrl(Uris.USERS.BASE_URI);
-  }
-
   /**
    * Relations
    */
 
   getAllFriendsByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USER_ID, [userId]);
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USERNAME, [userId]);
   }
 
-  confirmUserAsFriendEndpoint(senderId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [senderId, 'confirm']);
+  confirmUserAsFriendEndpoint(relationId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [relationId, 'confirm']);
   }
 
-  cancelRelationByUserEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [userId, 'cancel']);
+  cancelRelationByUserEndpoint(relationId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [relationId]);
   }
 
   /**

@@ -37,6 +37,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = ImplicactionException.class)
     ResponseEntity<ExceptionResponse> implicactionException(final ImplicactionException ex) {
+        log.error(ex.getMessage());
         return ResponseEntity
                 .status(ex.getErrorResult().getStatus().value())
                 .body(from(ex, ex.getErrorResult().getStatus()));
