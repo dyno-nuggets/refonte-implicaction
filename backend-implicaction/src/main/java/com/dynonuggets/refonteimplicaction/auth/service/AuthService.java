@@ -68,23 +68,22 @@ public class AuthService {
 
 
     /**
-     * Enregistre un utilisateur en base de données et lui envoie un mail d'activation
-     * crée également une entrée dans la table wp_signups
+     * Enregistre un utilisateur en base de données
      *
-     * @param reqisterRequest données d'identification de l'utilisateur
-     * @throws AuthenticationException si l'envoi du mail échoue
+     * @param registerRequest données d’identification de l’utilisateur
+     * @throws AuthenticationException si l’envoi du mail échoue
      */
     @Transactional
-    public void signup(@Valid final RegisterRequest reqisterRequest) throws ImplicactionException {
-        validateRegisterRequest(reqisterRequest);
+    public void signup(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
+        validateRegisterRequest(registerRequest);
         final String activationKey = generateActivationKey();
         final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(ADMIN.getLongName()));
-        registerUser(reqisterRequest, activationKey);
+        registerUser(registerRequest, activationKey);
 
 
         // TODO: MAIL-NOTIFICATION à revoir
         final Notification notification = Notification.builder()
-                .message(format(USER_REGISTER_MAIL_BODY, reqisterRequest.getUsername()))
+                .message(format(USER_REGISTER_MAIL_BODY, registerRequest.getUsername()))
                 .sent(false)
                 .read(false)
                 .date(now())
@@ -111,9 +110,9 @@ public class AuthService {
     }
 
     /**
-     * Vérifie existence et l'activation d'une clé d'activation et l'active si elle ne l'est pas déjà
+     * Vérifie existence et l’activation d’une clé d’activation et l’active si elle ne l’est pas déjà
      *
-     * @throws AuthenticationException Si la clé n'existe pas, ou si la clé est déjà activée
+     * @throws AuthenticationException Si la clé n’existe pas, ou si la clé est déjà activée
      */
     @Transactional
     public void verifyAccount(final String activationKey) throws ImplicactionException {
@@ -167,7 +166,6 @@ public class AuthService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
     public User getCurrentUser() {
         final org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -196,13 +194,13 @@ public class AuthService {
                 .orElseThrow(() -> new AuthenticationException(USER_NOT_FOUND));
     }
 
-    private User registerUser(final RegisterRequest reqisterRequest, final String activationKey) {
+    private User registerUser(final RegisterRequest registerRequest, final String activationKey) {
         final List<Role> roles = roleRepository.findAllByNameIn(List.of(USER.name()));
 
         final User user = User.builder()
-                .username(reqisterRequest.getUsername())
-                .email(reqisterRequest.getEmail())
-                .password(passwordEncoder.encode(reqisterRequest.getPassword()))
+                .username(registerRequest.getUsername())
+                .email(registerRequest.getEmail())
+                .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .registeredAt(now())
                 .active(false)
                 .activationKey(activationKey)
@@ -221,6 +219,7 @@ public class AuthService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
+    @Transactional(readOnly = true)
     public void verifyUserIsCurrent(@NonNull final String username) {
         final String currentUsername = callIfNotNull(getCurrentUser(), User::getUsername);
 
@@ -229,7 +228,8 @@ public class AuthService {
         }
     }
 
-    public void verifyCurrentUserIsAdmin(@NonNull final String username) {
+    @Transactional(readOnly = true)
+    public void verifyCurrentUserIsAdmin() {
         if (!isTrue(callIfNotNull(getCurrentUser(), User::isAdmin))) {
             throw new ImplicactionException(OPERATION_NOT_PERMITTED);
         }
