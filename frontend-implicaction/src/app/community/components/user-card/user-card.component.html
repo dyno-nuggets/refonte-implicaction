@@ -4,8 +4,8 @@
     <img
       #userImage
       (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
-      [src]="user.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
-      alt="photo de {{user.firstname}} {{user.lastname}}"
+      [src]="profile.avatar || constant.USER_IMAGE_DEFAULT_URI"
+      alt="photo de {{profile.firstname}} {{profile.lastname}}"
       class="shadow-sm"
     >
   </div>
@@ -14,10 +14,10 @@
       <span class="link-profile overflow-ellipsis">
         <a
           class="text-decoration-none"
-          title="{{user.firstname}} {{user.lastname}}"
-          routerLink="/{{univer.PROFILE.url}}/{{user.id}}"
+          title="{{profile.firstname}} {{profile.lastname}}"
+          routerLink="/{{univer.PROFILE.url}}/{{profile.username}}"
         >
-          {{user.firstname}} {{user.lastname}}
+          {{profile.firstname}} {{profile.lastname}}
         </a>
       </span>
     </div>

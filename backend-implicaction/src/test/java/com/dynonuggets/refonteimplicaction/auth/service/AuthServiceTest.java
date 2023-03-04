@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;

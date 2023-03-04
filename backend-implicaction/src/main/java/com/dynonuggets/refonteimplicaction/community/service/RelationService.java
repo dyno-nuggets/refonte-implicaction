@@ -1,135 +1,182 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.RelationAdapter;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Relation;
+import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.RelationRepository;
+import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
-import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum.*;
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.time.Instant.now;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.of;
 
 @Service
 @AllArgsConstructor
 public class RelationService {
 
-    private final UserRepository userRepository;
+    private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
     private final RelationRepository relationRepository;
     private final RelationAdapter relationAdapter;
-    private final UserAdapter userAdapter;
+    private final AuthService authService;
 
     /**
-     * Crée une nouvelle relation entre le senderId et le receiverId
+     * Crée une nouvelle relation entre le senderId et le receiverName
      *
      * @return la nouvelle relation créée avec confirmedAt à null
-     * @throws UserNotFoundException si l'un des deux utilisateurs au moins n'existe pas
-     * @throws ImplicactionException si sender et receiver correspondent au même utilisateur
+     * @throws CommunityException <li>si le sender et le receiver sont les mêmes</li>
+     *                            <li>l’un des deux utilisateurs n'existe pas</li>
+     *                            <li>les 2 utilisateurs sont déjà en relation</li>
      */
-    public RelationsDto requestRelation(final Long senderId, final Long receiverId) {
-        // TODO: gérer avec une exception plus appropriée
-        if (senderId.equals(receiverId)) {
-            throw new RuntimeException("Cannot create relation with same user as sender and receiver");
+    public RelationsDto requestRelation(final String senderName, final String receiverName) {
+        if (senderName.equals(receiverName)) {
+            throw new CommunityException(SENDER_EQUALS_RECEIVER);
         }
 
-        final User sender = userRepository.findById(senderId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id " + receiverId));
-        final User receiver = userRepository.findById(receiverId)
-                .orElseThrow(() -> new UserNotFoundException("No user found with id " + receiverId));
+        final Profile sender = profileService.getByUsernameIfExists(senderName);
+        final Profile receiver = profileService.getByUsernameIfExists(receiverName);
 
-        if (relationRepository.isInRelation(senderId, receiverId)) {
-            throw new RuntimeException("déjà en relation");
+        if (relationRepository.isInRelation(senderName, receiverName)) {
+            throw new CommunityException(RELATION_ALREADY_EXISTS);
         }
 
-        final Relation relation = Relation.builder()
-                .sentAt(now())
-                .sender(sender)
-                .receiver(receiver)
-                .build();
+        final Relation relation = Relation.builder().sentAt(now()).sender(sender).receiver(receiver).build();
         final Relation save = relationRepository.save(relation);
         return relationAdapter.toDto(save);
     }
 
     /**
-     * Supprime la relation entre le sender et le receiver dont les ids sont passé en paramètres
+     * Supprime la relation dont l’id est fournie si elle existe et si l’utilisateur courant en fait partie
      *
-     * @throws NotFoundException si l'un des deux utilisateurs au moins n'existe pas
+     * @param relationId l'id de la relation à supprimer
+     * @throws CommunityException si la relation n’existe pas ou si l’utilisateur n’est pas autorisé
      */
-    public void deleteRelation(final Long senderId, final Long receiverId) {
-        final Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
-                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to receiver " + receiverId));
+    public void removeRelation(final Long relationId) {
+        final Relation relation = getRelationIfExists(relationId);
+        verifyThatCurrentUserCanEditRelation(relation);
+
         relationRepository.delete(relation);
     }
 
     /**
-     * Supprime la relation entre les utilisateurs dont les ids sont passés en paramètres, sans tenir compte de la notion
-     * de sender / receiver
+     * Confirme la relation dont l’id est fourni
      *
-     * @throws NotFoundException si l'un des deux utilisateurs au moins n'existe pas
+     * @param relationId l'id de la relation à confirmer
+     * @return la relation entre senderName et receiverName
+     * @throws CommunityException si la relation n’existe pas ou si l’utilisateur n’est pas autorisé
      */
-    public void cancelRelation(final Long userId1, final Long userId2) {
-        final Relation relation = relationRepository.findRelationBetween(userId1, userId2)
-                .orElseThrow(() -> new NotFoundException("No relation found between " + userId1 + " and " + userId2));
-        relationRepository.delete(relation);
-    }
+    public RelationsDto confirmRelation(final Long relationId) {
+        final Relation relation = getRelationIfExists(relationId);
 
-    /**
-     * Confirme la relation entre les utilisateurs dont les ids sont passés en paramètres
-     *
-     * @return la relation entre senderId et receiverId
-     * @throws NotFoundException si l'un des deux utilisateurs au moins n'existe pas
-     */
-    public RelationsDto confirmRelation(final Long senderId, final Long receiverId) {
-        final Relation relation = relationRepository.findBySender_IdAndReceiver_Id(senderId, receiverId)
-                .orElseThrow(() -> new NotFoundException("No relation found from sender " + senderId + " to reveiver " + receiverId));
+        verifyThatCurrentUserCanEditRelation(relation);
+
         relation.setConfirmedAt(now());
         final Relation relationUpdate = relationRepository.save(relation);
         return relationAdapter.toDto(relationUpdate);
     }
 
     /**
-     * @return tous les utilisateurs qui sont amis avec userId
+     * @return tous les utilisateurs qui sont amis avec username
      */
-    public Page<UserDto> getAllFriendsByUserId(final Long userId, final Pageable pageable) {
-        final Page<Relation> relations = relationRepository.findAllFriendsByUserId(userId, pageable);
+    public Page<RelationsDto> getAllRelationsByUserId(final String username, final Pageable pageable) {
+        final Page<Relation> relations = relationRepository.findAllByUser_UsernameAndConfirmedAtIsNotNull(username, pageable);
         return relations.map(relation -> {
-            final User friend = userId.equals(relation.getReceiver().getId()) ? relation.getSender() : relation.getReceiver();
-            final UserDto userDto = userAdapter.toDto(friend);
-            userDto.setRelationTypeOfCurrentUser(FRIEND);
-            return userDto;
+            final RelationsDto relationsDto = relationAdapter.toDto(relation);
+            relationsDto.setRelationType(FRIEND);
+            return relationsDto;
         });
     }
 
     /**
-     * @return tous les utilisateurs à qui userId a envoyé une demande d'ami qui n'a pas encore été confirmée
+     * @return tous les utilisateurs à qui username a envoyé une demande d’ami qui n’a pas encore été confirmée
      */
-    public Page<UserDto> getSentFriendRequest(final Long userId, final Pageable pageable) {
-        final Page<Relation> relations = relationRepository.findAllBySender_IdAndConfirmedAtIsNull(userId, pageable);
+    public Page<RelationsDto> getSentFriendRequest(final String username, final Pageable pageable) {
+        return relationRepository.findAllBySender_User_UsernameAndConfirmedAtIsNull(username, pageable)
+                .map(relation -> {
+                    final RelationsDto relationsDto = relationAdapter.toDto(relation);
+                    relationsDto.setRelationType(SENDER);
+                    return relationsDto;
+                });
+    }
+
+    /**
+     * @return tous les utilisateurs qui ont envoyé une demande d’ami à userId
+     */
+    public Page<RelationsDto> getReceivedFriendRequest(final String username, final Pageable pageable) {
+        final Page<Relation> relations = relationRepository.findAllByReceiver_User_UsernameAndConfirmedAtIsNull(username, pageable);
         return relations.map(relation -> {
-            final UserDto userDto = userAdapter.toDto(relation.getReceiver());
-            userDto.setRelationTypeOfCurrentUser(SENDER);
-            return userDto;
+            final RelationsDto relationsDto = relationAdapter.toDto(relation);
+            relationsDto.setRelationType(RECEIVER);
+            return relationsDto;
         });
     }
 
     /**
-     * @return tous les utilisateurs qui ont envoyé une demande d'ami à userId
+     * @return Retourne tous les utilisateurs sous forme de relation
      */
-    public Page<UserDto> getReceivedFriendRequest(final Long userId, final Pageable pageable) {
-        final Page<Relation> relations = relationRepository.findAllByReceiver_IdAndConfirmedAtIsNull(userId, pageable);
-        return relations.map(relation -> {
-            final UserDto userDto = userAdapter.toDto(relation.getSender());
-            userDto.setRelationTypeOfCurrentUser(RECEIVER);
-            return userDto;
-        });
+    public Page<RelationsDto> getAllCommunity(final Pageable pageable) {
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final Page<Profile> allProfiles = profileRepository.findAllByUser_UsernameNot(currentUsername, pageable);
+        final List<String> allProfilesUsernames = allProfiles.get().map(p -> p.getUser().getUsername()).collect(toList());
+        final List<Relation> currentUsersRelations = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allProfilesUsernames, pageable);
+        return allProfiles
+                .map(profile -> {
+                    final Relation relation = currentUsersRelations.stream()
+                            // On recherche la relation entre l’utilisateur courant et le profil de la liste des profils
+                            .filter(r -> isPartOfRelation(profile.getUser().getUsername(), r))
+                            .findAny()
+                            // Si elle n’existe pas, on crée une relation dont le profil est receiver et un sender null.
+                            .orElse(Relation.builder().receiver(profile).build());
+
+                    final RelationsDto relationsDto = relationAdapter.toDto(relation);
+                    if (relationsDto.getConfirmedAt() != null) {
+                        relationsDto.setRelationType(FRIEND);
+                    } else if (relationsDto.getSender() == null) {
+                        relationsDto.setRelationType(NONE);
+                    } else {
+                        relationsDto.setRelationType(relationsDto.getSender().getUsername().equals(currentUsername) ? SENDER : RECEIVER);
+                    }
+
+                    return relationsDto;
+                });
+    }
+
+    private static boolean isPartOfRelation(final String username, final Relation r) {
+        return isSender(username, r) || isReceiver(username, r);
+    }
+
+    private static boolean isReceiver(final String username, final Relation r) {
+        return r.getReceiver().getUser().getUsername().equals(username);
+    }
+
+    private static boolean isSender(final String username, final Relation r) {
+        return r.getSender().getUser().getUsername().equals(username);
+    }
+
+    private Relation getRelationIfExists(final Long relationId) {
+        return relationRepository.findById(relationId)
+                .orElseThrow(() -> new CommunityException(RELATION_NOT_FOUND));
+    }
+
+    private void verifyThatCurrentUserCanEditRelation(final Relation relation) {
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+
+        if (of(relation.getSender().getUser().getUsername(), relation.getReceiver().getUser().getUsername())
+                .noneMatch(username -> username.equals(currentUsername))) {
+            throw new CommunityException(USER_UNAUTHORIZED_TO_CONFIRM_RELATION);
+        }
     }
 }

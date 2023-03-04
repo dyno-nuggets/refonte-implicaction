@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.dto.NotificationEmailDto;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.model.Notification;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.JOB_ACTIVATION;
@@ -36,27 +36,27 @@ public class NotificationService {
     private String appUrl;
 
     public void createJobNotification(final JobPosting jobPosting) {
-        List<User> users = userRepository.findAll();
-        String url = String.format("%s/jobs/%s", appUrl, jobPosting.getId());
+        final List<User> users = userRepository.findAll();
+        final String url = String.format("%s/jobs/%s", appUrl, jobPosting.getId());
         final String message = String.format("Une nouvelle offre a été publiée sur le site implic'action : <a href=\"%s\">%s</a>.", url, jobPosting.getTitle());
         final String title = "[Implic'action] Une nouvelle offre a été publiée";
         createNotification(users, message, title, JOB_ACTIVATION);
     }
 
     public void createPostNotification(final Post post) {
-        final List<User> users = new ArrayList<>(post.getGroup().getUsers());
-        String url = String.format("%s/discussions/%s", appUrl, post.getId());
+        final List<User> users = post.getGroup().getProfiles().stream().map(Profile::getUser).collect(toList());
+        final String url = String.format("%s/discussions/%s", appUrl, post.getId());
         final String message = String.format("Une nouvelle discussion a été publiée sur le site implic'action : <a href=\"%s\">%s</a>.", url, post.getName());
         final String title = "[Implic'action] Une nouvelle discussion a été publiée";
         createNotification(users, message, title, POST_CREATION);
     }
 
-    private void createNotification(List<User> users, String message, String title, NotificationTypeEnum type) {
+    private void createNotification(final List<User> users, final String message, final String title, final NotificationTypeEnum type) {
         if (users.isEmpty()) {
             return;
         }
 
-        Notification notification = Notification.builder()
+        final Notification notification = Notification.builder()
                 .type(type)
                 .users(users)
                 .date(Instant.now())
@@ -73,7 +73,7 @@ public class NotificationService {
     @Scheduled(fixedDelay = 5000)
     protected void doNotify() {
         // TODO: déplacer cette logique dans un repositoryCustom
-        TypedQuery<Notification> q = entityManager.createQuery("select distinct n from Notification n left join fetch n.users where n.sent = false", Notification.class);
+        final TypedQuery<Notification> q = entityManager.createQuery("select distinct n from Notification n left join fetch n.users where n.sent = false", Notification.class);
         final List<Notification> notifications = q.getResultList();
 
         notifications.forEach(notification -> {

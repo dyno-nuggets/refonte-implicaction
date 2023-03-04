@@ -1,13 +1,15 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static java.util.Optional.ofNullable;
+import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 @Component
 @AllArgsConstructor
@@ -17,32 +19,31 @@ public class GroupAdapter {
 
     private FileService fileService;
 
-    public Group toModel(final GroupDto dto, final User user) {
+    public Group toModel(final GroupDto dto, final Profile profile) {
         return Group.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .description(dto.getDescription())
                 .createdAt(dto.getCreatedAt())
                 .valid(dto.isValid())
-                .user(user)
+                .profile(profile)
                 .build();
     }
 
     public GroupDto toDto(final Group model) {
-        final String imageUrl = model.getImage() != null ? fileService.buildFileUri(model.getImage().getObjectKey()) : DEFAULT_GROUP_IMAGE_URI;
-        final String username = model.getUser() != null ? model.getUser().getUsername() : "";
-        final Long userId = model.getUser() != null ? model.getUser().getId() : null;
+        final String imageUrl = ofNullable(fileService.buildFileUri(model.getImage())).orElse(DEFAULT_GROUP_IMAGE_URI);
+        final String username = model.getProfile() != null ? model.getProfile().getUser().getUsername() : "";
         return GroupDto.builder()
                 .id(model.getId())
                 .name(model.getName())
-                .numberOfPosts(isNotEmpty(model.getPosts()) ? model.getPosts().size() : 0)
+                .numberOfPosts(emptyIfNull(model.getPosts()).size())
                 .description(model.getDescription())
                 .createdAt(model.getCreatedAt())
                 .imageUrl(imageUrl)
                 .valid(model.isValid())
                 .username(username)
-                .userId(userId)
-                .numberOfUsers(isNotEmpty(model.getUsers()) ? model.getUsers().size() : 0)
+                .userId(callIfNotNull(model.getProfile(), Profile::getId))
+                .numberOfUsers(emptyIfNull(model.getProfiles()).size())
                 .build();
     }
 }

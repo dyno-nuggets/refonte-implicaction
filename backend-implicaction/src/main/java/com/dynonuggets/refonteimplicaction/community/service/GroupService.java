@@ -1,11 +1,13 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.GroupRepository;
+import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
+import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
@@ -21,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Instant;
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.GROUP_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -33,17 +37,20 @@ public class GroupService {
     private final AuthService authService;
     private final CloudService cloudService;
     private final FileRepository fileRepository;
-    private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
 
     @Transactional
     public GroupDto save(final MultipartFile image, final GroupDto groupDto) {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
-        final User user = authService.getCurrentUser();
-        final Group group = groupAdapter.toModel(groupDto, user);
+        final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final Profile profile = profileRepository.findByUser_Username(username)
+                .orElseThrow(() -> new CommunityException(PROFILE_NOT_FOUND, username));
+
+        final Group group = groupAdapter.toModel(groupDto, profile);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
-        group.setUser(authService.getCurrentUser());
+        group.setProfile(profile);
 
         final Group save = groupRepository.save(group);
 
@@ -52,10 +59,12 @@ public class GroupService {
 
     @Transactional
     public GroupDto save(final GroupDto groupDto) {
-        final User user = authService.getCurrentUser();
-        final Group group = groupAdapter.toModel(groupDto, user);
+        final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final Profile profile = profileRepository.findByUser_Username(username)
+                .orElseThrow(() -> new CommunityException(PROFILE_NOT_FOUND, username));
+        final Group group = groupAdapter.toModel(groupDto, profile);
         group.setCreatedAt(Instant.now());
-        group.setUser(authService.getCurrentUser());
+        group.setProfile(profile);
         final Group save = groupRepository.save(group);
         return groupAdapter.toDto(save);
     }
@@ -74,14 +83,18 @@ public class GroupService {
                 .collect(toList());
     }
 
+    // TODO: déplacer dans le ProfileController : /profiles/{username}/groups/{groupId}/subscribe + faire unsubscribe
     @Transactional
     public List<GroupDto> addGroup(final String groupName) {
-        final User user = authService.getCurrentUser();
+        final Profile user = profileRepository.findById(authService.getCurrentUser().getId())
+                // TODO: lancer une exception appropriée
+                .orElseThrow(() -> new NotFoundException(""));
         final Group group = groupRepository.findByName(groupName)
+                // TODO: lancer une exception appropriée
                 .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
 
         user.getGroups().add(group);
-        userRepository.save(user);
+        profileRepository.save(user);
         return user.getGroups().stream()
                 .map(groupAdapter::toDto)
                 .collect(toList());

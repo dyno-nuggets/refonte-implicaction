@@ -1,13 +1,14 @@
 package com.dynonuggets.refonteimplicaction.community.rest.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Data
 @Builder
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class GroupDto {
