@@ -1,0 +1,250 @@
+package com.dynonuggets.refonteimplicaction.community.service;
+
+import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.community.adapter.ProfileAdapter;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
+import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
+import com.dynonuggets.refonteimplicaction.community.rest.dto.ProfileDto;
+import com.dynonuggets.refonteimplicaction.community.rest.dto.ProfileUpdateRequest;
+import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.service.CloudService;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.mock.web.MockMultipartFile;
+
+import java.util.Optional;
+
+import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.community.utils.ProfileTestUtils.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
+import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
+import static java.util.List.of;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.*;
+import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
+
+@ExtendWith(MockitoExtension.class)
+class ProfileServiceTest {
+    @Mock
+    AuthService authService;
+    @Mock
+    ProfileRepository profileRepository;
+    @Mock
+    ProfileAdapter profileAdapter;
+    @Mock
+    CloudService cloudService;
+    @InjectMocks
+    ProfileService profileService;
+
+    @Nested
+    @DisplayName("# getByUsernameIfExists")
+    class GetByUsernameIfExistsTest {
+        @Test
+        @DisplayName("doit retourner un utilisateur quand getByUsernameIfExists est appelé et qu'un utilisateur existe pour le nom d'utilisateur fourni")
+        void should_return_profile_when_getByUsernameIfExists_and_username_exists() {
+            // given
+            final Profile expectedProfile = generateRandomProfile();
+            given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(expectedProfile));
+
+            // when
+            final Profile actualProfile = profileService.getByUsernameIfExists(expectedProfile.getUser().getUsername());
+
+            assertThat(expectedProfile)
+                    .usingRecursiveComparison()
+                    .isEqualTo(actualProfile);
+            verify(profileRepository, times(1)).findByUser_Username(any());
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand getByUsernameIfExists est appelé mais que l'utilisateur n'existe pas")
+        void should_throw_exception_when_getByUsernameIfExists_and_username_not_exists() {
+            // given
+            final String username = "usernameInexistant";
+            given(profileRepository.findByUser_Username(any())).willThrow(new CommunityException(PROFILE_NOT_FOUND, username));
+
+            // when - then
+            final ImplicactionException e = assertThrows(CommunityException.class, () -> profileRepository.findByUser_Username(username));
+            assertImplicactionException(e, CommunityException.class, PROFILE_NOT_FOUND, username);
+            verify(profileRepository, times(1)).findByUser_Username(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("# getByUsername")
+    class GetByUsernameTest {
+        @Test
+        @DisplayName("doit retourner le ProfileDto correspondant quand getByUsername est appelé et qu'un utilisateur existe pour le nom d'utilisateur fourni")
+        void should_return_ProfileDto_when_getByUsername_and_username_exists() {
+            // given
+            final Profile expectedProfile = generateRandomProfile();
+            final ProfileDto expectedProfileDto = ProfileDto.builder().username(expectedProfile.getUser().getUsername()).build();
+            given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(expectedProfile));
+            given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
+
+            // when
+            final ProfileDto profileDto = profileService.getByUsername(expectedProfile.getUser().getUsername());
+
+            // then
+            assertThat(profileDto.getUsername()).isEqualTo(expectedProfile.getUser().getUsername());
+            verify(profileRepository, times(1)).findByUser_Username(any());
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand getByUsername est appelé mais que le nom d'utilisateur n'existe pas")
+        void should_throw_exception_when_getByUsername_but_username_not_exists() {
+            final String username = "usernameInexistant";
+            given(profileRepository.findByUser_Username(any())).willThrow(new CommunityException(PROFILE_NOT_FOUND, username));
+
+            // when - then
+            final ImplicactionException e = assertThrows(CommunityException.class, () -> profileService.getByUsername(username));
+            assertImplicactionException(e, CommunityException.class, PROFILE_NOT_FOUND, username);
+            verify(profileRepository, times(1)).findByUser_Username(any());
+        }
+    }
+
+    @Nested
+    @DisplayName("# updateProfile")
+    class UpdateProfileTest {
+        @Test
+        @DisplayName("doit retourner le profileDto modifié quand updateProfile est appelée")
+        void should_return_modified_profileDto_when_updateProfile() {
+            // given
+            final ProfileDto expectedProfileDto = generateRandomProfileDto();
+            final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest(expectedProfileDto.getUsername());
+            final Profile profile = Profile.builder().build();
+            willDoNothing().given(authService).verifyUserIsCurrent(any());
+            given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
+            given(profileRepository.save(any())).willReturn(profile);
+            given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
+            expectedProfileDto.setFirstname(updateRequest.getFirstname());
+            expectedProfileDto.setLastname(updateRequest.getLastname());
+            expectedProfileDto.setBirthday(updateRequest.getBirthday());
+            expectedProfileDto.setHobbies(updateRequest.getHobbies());
+            expectedProfileDto.setPurpose(updateRequest.getPurpose());
+            expectedProfileDto.setPresentation(updateRequest.getPresentation());
+            expectedProfileDto.setExpectation(updateRequest.getExpectation());
+            expectedProfileDto.setContribution(updateRequest.getContribution());
+            expectedProfileDto.setPhoneNumber(updateRequest.getPhoneNumber());
+
+            // when
+            final ProfileDto actualProfileDto = profileService.updateProfile(updateRequest);
+
+            // then
+            assertThat(actualProfileDto).isEqualTo(expectedProfileDto);
+            verify(authService, times(1)).verifyUserIsCurrent(any());
+            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).save(any());
+            verify(profileAdapter, times(1)).toDto(any());
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand updateProfile est lancé pour un profil différent de l'utilisateur courant")
+        void should_throw_exception_when_profile_to_update_does_not_belong_to_current_user() {
+            // given
+            final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest();
+            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyUserIsCurrent(any());
+
+            // when - then
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateProfile(updateRequest));
+            assertImplicactionException(e, ImplicactionException.class, OPERATION_NOT_PERMITTED);
+            verify(authService, times(1)).verifyUserIsCurrent(any());
+            verifyNoInteractions(profileRepository);
+            verifyNoInteractions(profileAdapter);
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand updateProfile est lancé et que l'utilisateur courant est null")
+        void should() {
+            // given
+            final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest();
+            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyUserIsCurrent(any());
+
+            // when - then
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateProfile(updateRequest));
+            assertImplicactionException(e, ImplicactionException.class, OPERATION_NOT_PERMITTED);
+            verify(authService, times(1)).verifyUserIsCurrent(any());
+            verifyNoInteractions(profileRepository);
+            verifyNoInteractions(profileAdapter);
+        }
+    }
+
+    @Nested
+    @DisplayName("# updateAvatar")
+    class UpdateAvatarTest {
+        @Test
+        @DisplayName("doit mettre à jour l'avatar de l'utilisateur quand updateAvatar est lancé avec un fichier valide et que l'utilisateur correspond à l'utilisateur courant")
+        void should_update_avatar_when_updateAvatar_and_file_is_valid_and_current_user_is_user_to_update() {
+            // given
+            final User currentUser = User.builder().username("currentUser").build();
+            final String username = "currentUser";
+            final MockMultipartFile mockMultipartFile = new MockMultipartFile("avatar", "avatar.png", IMAGE_PNG_VALUE, "je suis un png".getBytes());
+            final Profile profile = Profile.builder().user(currentUser).build();
+            final FileModel fileModel = FileModel.builder().build();
+            profile.setAvatar(fileModel);
+            willDoNothing().given(authService).verifyUserIsCurrent(any());
+            given(profileRepository.findByUser_Username(username)).willReturn(Optional.of(profile));
+            given(cloudService.uploadImage(any())).willReturn(fileModel);
+            given(profileRepository.save(any())).willReturn(profile);
+            given(profileAdapter.toDto(any())).willReturn(ProfileDto.builder().username(username).avatar("avatar.png").build());
+
+            // when
+            final ProfileDto profileDto = profileService.updateAvatar(mockMultipartFile, username);
+
+            // then
+            assertThat(profileDto)
+                    .isNotNull()
+                    .extracting(ProfileDto::getAvatar)
+                    .isEqualTo("avatar.png");
+            verify(authService, times(1)).verifyUserIsCurrent(any());
+            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(cloudService, times(1)).uploadImage(any());
+            verify(profileRepository, times(1)).save(any());
+            verify(profileAdapter, times(1)).toDto(any());
+        }
+
+        @Test
+        @DisplayName("doit retourner une exception lorsque updateAvatar est lancé pour un autre utilisateur que l'utilisateur courant")
+        void should_throw_exception_when_updateAvatar_with_currentUser_is_not_user_updated() {
+            // given
+            final MockMultipartFile mockMultipartFile = new MockMultipartFile("avatar", "avatar.png", IMAGE_PNG_VALUE, "je suis un png".getBytes());
+            final String username = "notCurrentUser";
+            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyUserIsCurrent(username);
+
+            // then
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateAvatar(mockMultipartFile, username));
+            assertImplicactionException(e, ImplicactionException.class, OPERATION_NOT_PERMITTED);
+            verifyNoInteractions(cloudService);
+            verifyNoInteractions(profileRepository);
+            verifyNoInteractions(profileAdapter);
+        }
+    }
+
+    @Test
+    @DisplayName("doit retourner la liste des profils des utilisateurs")
+    void should_get_all_profiles_when_getAllProfiles() {
+        final Page<Profile> profiles = new PageImpl<>(of(generateRandomProfile(), generateRandomProfile(), generateRandomProfile()));
+        given(profileRepository.findAll(any(Pageable.class))).willReturn(profiles);
+
+        // when
+        final Page<ProfileDto> result = profileService.getAllProfiles(Pageable.unpaged());
+
+        // then
+        final int size = profiles.getSize();
+        assertThat(result).hasSize(size);
+        verify(profileRepository, times(1)).findAll(any(Pageable.class));
+        verify(profileAdapter, times(size)).toDto(any());
+    }
+}

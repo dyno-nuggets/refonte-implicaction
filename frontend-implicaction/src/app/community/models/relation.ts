@@ -1,9 +1,11 @@
-import {User} from '../../shared/models/user';
+import {Profile} from "../../profile/models/profile";
+import {RelationType} from "./relation-type.enum";
 
 export interface Relation {
   id?: string;
   confirmedAt?: string;
   sentAt?: string;
-  receiver?: User;
-  sender?: User;
+  receiver?: Profile;
+  sender?: Profile;
+  relationType?: RelationType;
 }

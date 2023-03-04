@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.rest.dto;
 
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Instant;
 
@@ -12,8 +12,10 @@ import java.time.Instant;
 @AllArgsConstructor
 public class RelationsDto {
     private Long id;
-    private UserDto sender;
-    private UserDto receiver;
+    private ProfileDto sender;
+    private ProfileDto receiver;
     private Instant sentAt;
     private Instant confirmedAt;
+    @Setter
+    private RelationTypeEnum relationType;
 }

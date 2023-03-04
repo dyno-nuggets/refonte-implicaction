@@ -29,19 +29,19 @@
 
     <ng-template #userList>
       <app-user-card
-        *ngFor="let user of pageable.content; trackBy: trackByItemId; let isOdd = odd; let isEven = even"
+        *ngFor="let relation of pageable.content; let isOdd = odd; let isEven = even"
         class="col-12 col-sm-6 col-xl-4 col-xxl-3 d-flex justify-content-center justify-content-md-center mb-4"
-        [user]="user"
+        [profile]="relation.receiver.username !== currentUser.username ? relation.receiver : relation.sender"
         [ngClass]="{'pe-sm-3 pe-lg-0 pe-xl-3 justify-content-sm-start': isEven, 'ps-sm-3 px-lg-3 ps-xl-0 justify-content-sm-end': isOdd}"
         [innerTemplate]="innerControls"
       >
         <ng-template #innerControls>
           <div class="d-flex flex-column gap-2 mt-5 inner-controls">
-            <ng-container [ngSwitch]="user.relationTypeOfCurrentUser">
+            <ng-container [ngSwitch]="relation.relationType">
               <ng-template [ngSwitchCase]="relationType.FRIEND">
                 <p class="text-center">Vous êtes amis</p>
                 <button
-                  (click)="removeUserRelation(user)"
+                  (click)="deleteRelation(relation)"
                   class="btn btn-primary"
                   data-bs-placement="top"
                   data-bs-toggle="tooltip"
@@ -55,7 +55,7 @@
               <ng-template [ngSwitchCase]="relationType.SENDER">
                 <p class="text-center">Demande effectuée</p>
                 <button
-                  (click)="removeUserRelation(user)"
+                  (click)="deleteRelation(relation)"
                   class="btn btn-primary"
                   data-bs-placement="top"
                   data-bs-toggle="tooltip"
@@ -70,7 +70,7 @@
                 <p class="text-center">Demande reçue</p>
                 <div class="d-flex gap-1">
                   <button
-                    (click)="confirmUserAsFriend(user)"
+                    (click)="confirmRelation(relation)"
                     class="btn btn-primary col-6 px-0"
                     data-bs-placement="top"
                     data-bs-toggle="tooltip"
@@ -80,7 +80,7 @@
                     Valider
                   </button>
                   <button
-                    (click)="removeUserRelation(user)"
+                    (click)="deleteRelation(relation)"
                     class="btn btn-outline-primary btn-deny col-6 p-0"
                     data-bs-placement="top"
                     data-bs-toggle="tooltip"
@@ -96,13 +96,13 @@
                 <p class="text-center">
                   <a
                     class="text-decoration-none text-light-gray"
-                    routerLink="/{{univer.PROFILE.url}}/{{user.id}}/profile"
+                    routerLink="/{{univers.PROFILE.url}}/{{(relation.receiver.username !== currentUser.username ? relation.receiver : relation.sender)?.username}}"
                   >
                     En savoir plus
                   </a>
                 </p>
                 <button
-                  (click)="requestUserAsFriend(user)"
+                  (click)="requestUserAsFriend(relation)"
                   class="btn btn-primary"
                   data-bs-placement="top"
                   data-bs-toggle="tooltip"

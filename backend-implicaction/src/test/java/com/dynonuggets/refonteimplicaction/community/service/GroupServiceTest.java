@@ -1,12 +1,13 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.GroupRepository;
+import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
@@ -26,6 +27,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -53,7 +55,7 @@ class GroupServiceTest {
     UserRepository userRepository;
 
     @Mock
-    UserAdapter userAdapter;
+    ProfileRepository profileRepository;
 
     @InjectMocks
     GroupService groupService;
@@ -102,10 +104,7 @@ class GroupServiceTest {
                 "test data".getBytes()
         );
 
-        final User user = User.builder()
-                .id(1L)
-                .username("test")
-                .build();
+        final Profile profile = Profile.builder().user(currentUser).build();
 
         when(cloudService.uploadImage(any())).thenReturn(fileModel);
         when(fileRepository.save(fileModel)).thenReturn(fileModel);
@@ -113,6 +112,7 @@ class GroupServiceTest {
         when(authService.getCurrentUser()).thenReturn(currentUser);
         when(groupRepository.save(any())).thenReturn(saveModel);
         when(groupAdapter.toDto(any())).thenReturn(expectedDto);
+        given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
 
         // when
         groupService.save(mockMultipartFile, sentDto);
@@ -150,13 +150,11 @@ class GroupServiceTest {
                 .description("Elle est super bien ma description")
                 .build();
 
-        final User user = User.builder()
-                .id(1L)
-                .username("test")
-                .build();
+        final Profile profile = Profile.builder().user(currentUser).build();
 
         given(groupAdapter.toModel(any(), any())).willReturn(sentModel);
         given(authService.getCurrentUser()).willReturn(currentUser);
+        given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
         given(groupRepository.save(any())).willReturn(saveModel);
 
         // when

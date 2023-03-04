@@ -32,7 +32,7 @@ class PostAdapterTest {
     void toPost() {
         // given
         final User currentUser = User.builder().id(123L).username("test user").build();
-        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), null, null, emptyList(), true);
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), group);
         final PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
 
@@ -62,7 +62,7 @@ class PostAdapterTest {
     @Test
     void should_return_post_with_subreddit_image_null() {
         final User currentUser = User.builder().id(123L).username("test user").build();
-        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, null, emptyList(), true);
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), null, null, emptyList(), true);
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
 
@@ -76,8 +76,8 @@ class PostAdapterTest {
     @Test
     void toPostResponse() {
         // given
-        final User currentUser = User.builder().id(123L).username("test user").image(FileModel.builder().url("http://url.com").build()).build();
-        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), currentUser, FileModel.builder().url("http://img.com").build(), emptyList(), true);
+        final User currentUser = User.builder().id(123L).username("test user").build();
+        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), null, FileModel.builder().url("http://img.com").build(), emptyList(), true);
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
 

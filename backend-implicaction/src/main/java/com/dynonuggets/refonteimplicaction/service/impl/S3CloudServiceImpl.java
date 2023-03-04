@@ -22,19 +22,21 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
-import static java.util.Arrays.asList;
+import static java.lang.String.format;
+import static java.util.List.of;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.MediaType.*;
 
 @Service
 @RequiredArgsConstructor
 public class S3CloudServiceImpl implements CloudService {
 
     private static final Integer MAX_IMAGE_SIZE_IN_BIT = 40000000;
-    private static final List<String> IMAGE_CONTENT_TYPES = asList("image/jpeg", "image/png");
+    private static final List<String> IMAGE_CONTENT_TYPES = of(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE);
     private final AmazonS3Client client;
     private final FileRepository fileRepository;
     @Value("${app.s3.bucket-name}")
-    private String bucketName = "refonte-implicaction";
+    private String bucketName;
 
     @Override
     public FileModel uploadFile(final MultipartFile file) {
@@ -62,27 +64,28 @@ public class S3CloudServiceImpl implements CloudService {
                     .objectKey(key)
                     .build();
         } catch (final IOException exception) {
-            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, String.format(UNKNOWN_FILE_UPLOAD_MESSAGE, originalFilename));
+            throw new ResponseStatusException(INTERNAL_SERVER_ERROR, format(UNKNOWN_FILE_UPLOAD_MESSAGE, originalFilename));
         }
     }
 
     @Override
     public FileModel uploadImage(final MultipartFile file) {
         if (file.getSize() > MAX_IMAGE_SIZE_IN_BIT) {
-            throw new RuntimeException(String.format(FILE_SIZE_TOO_LARGE_MESSAGE, file.getOriginalFilename(), MAX_IMAGE_SIZE_IN_BIT));
+            throw new RuntimeException(format(FILE_SIZE_TOO_LARGE_MESSAGE, file.getOriginalFilename(), MAX_IMAGE_SIZE_IN_BIT));
         }
 
         if (!IMAGE_CONTENT_TYPES.contains(file.getContentType())) {
-            throw new RuntimeException(String.format(UNAUTHORIZED_CONTENT_TYPE_MESSAGE, file.getOriginalFilename()));
+            throw new RuntimeException(format(UNAUTHORIZED_CONTENT_TYPE_MESSAGE, file.getOriginalFilename()));
         }
 
-        return uploadFile(file);
+        final FileModel fileModel = uploadFile(file);
+        return fileRepository.save(fileModel);
     }
 
     @Override
     public byte[] getFileAsBytes(final String objectKey) throws IOException {
         final FileModel fileModel = fileRepository.findByObjectKey(objectKey)
-                .orElseThrow(() -> new NotFoundException(String.format(FILE_NOT_FOUND_MESSAGE, objectKey)));
+                .orElseThrow(() -> new NotFoundException(format(FILE_NOT_FOUND_MESSAGE, objectKey)));
 
         final S3Object s3Object = client.getObject(new GetObjectRequest(bucketName, fileModel.getObjectKey()));
         return IOUtils.toByteArray(s3Object.getObjectContent());
