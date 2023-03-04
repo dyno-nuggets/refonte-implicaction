@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.community.util;
+package com.dynonuggets.refonteimplicaction.community.utils;
 
 import lombok.NoArgsConstructor;
 

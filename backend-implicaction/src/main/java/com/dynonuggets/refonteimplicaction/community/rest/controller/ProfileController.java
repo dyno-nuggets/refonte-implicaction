@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.dynonuggets.refonteimplicaction.community.util.ProfileUris.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.ProfileUris.*;
 import static org.springframework.data.domain.PageRequest.of;
 
 @Slf4j

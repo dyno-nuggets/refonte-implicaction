@@ -10,8 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUserDto;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUserDto;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;

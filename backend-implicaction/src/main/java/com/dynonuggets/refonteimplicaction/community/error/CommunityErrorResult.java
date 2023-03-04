@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import static com.dynonuggets.refonteimplicaction.community.util.CommunityMessages.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.CommunityMessages.*;
 import static org.springframework.http.HttpStatus.*;
 
 @Getter

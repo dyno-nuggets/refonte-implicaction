@@ -1,5 +1,10 @@
-package com.dynonuggets.refonteimplicaction.community.util;
+package com.dynonuggets.refonteimplicaction.community.utils;
 
+import lombok.NoArgsConstructor;
+
+import static lombok.AccessLevel.PRIVATE;
+
+@NoArgsConstructor(access = PRIVATE)
 public class CommunityMessages {
 
     // PROFILE

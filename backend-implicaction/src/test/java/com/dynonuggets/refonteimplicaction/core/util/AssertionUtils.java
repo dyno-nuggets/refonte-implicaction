@@ -14,9 +14,9 @@ public class AssertionUtils {
      * Réalise les assertions de base sur les exceptions de type ImplicactionException
      *
      * @param actualException l'exception sur laquelle effectuer les assertions
-     * @param classException  la classe de l'exception attendue
-     * @param errorResult     l'objet ErrorResult de l'exception attendue
-     * @param value           la valeur injectée dans le message de l'exception
+     * @param classException  la classe de l’exception attendue
+     * @param errorResult     l'objet ErrorResult de l’exception attendue
+     * @param value           la valeur injectée dans le message de l’exception
      */
     public static void assertImplicactionException(final ImplicactionException actualException, final Class<?> classException, final BaseErrorResult errorResult, final String value) {
         assertThat(actualException)

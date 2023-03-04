@@ -10,7 +10,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = PRIVATE)
-public class GroupUtils {
+public class GroupTestUtils {
 
     public static GroupDto generateRandomGroupDto() {
         return GroupDto.builder()

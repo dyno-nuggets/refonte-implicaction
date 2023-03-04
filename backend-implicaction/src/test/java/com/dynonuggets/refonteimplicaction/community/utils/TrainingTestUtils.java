@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.community.util;
+package com.dynonuggets.refonteimplicaction.community.utils;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.TrainingDto;
@@ -9,7 +9,7 @@ import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class TrainingUtils {
+public class TrainingTestUtils {
 
     public static Training generateRandomTraining() {
         return Training.builder()

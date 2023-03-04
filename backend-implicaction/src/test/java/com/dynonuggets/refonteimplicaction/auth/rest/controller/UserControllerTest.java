@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.*;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_PENDING_USER_URI;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.USER_BASE_URI;
 import static java.util.List.of;

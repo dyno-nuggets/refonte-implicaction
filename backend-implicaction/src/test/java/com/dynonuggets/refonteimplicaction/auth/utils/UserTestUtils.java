@@ -24,7 +24,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @NoArgsConstructor(access = PRIVATE)
-public class UserUtilTest {
+public class UserTestUtils {
 
     public static User generateRandomUser() {
         return generateRandomUser(null, generateRandomBoolean());

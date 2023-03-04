@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.community.util.GroupUris.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.GroupUris.*;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.JOBS_BASE_URI;
 import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;

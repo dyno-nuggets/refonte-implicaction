@@ -26,7 +26,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.community.util.ProfileUtilTest.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.ProfileTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.util.List.of;

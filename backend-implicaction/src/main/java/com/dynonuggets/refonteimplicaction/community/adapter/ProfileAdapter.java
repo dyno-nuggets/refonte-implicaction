@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.community.util.CommunityConstants.DEFAULT_USER_AVATAR_URI;
+import static com.dynonuggets.refonteimplicaction.community.utils.CommunityConstants.DEFAULT_USER_AVATAR_URI;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.*;
 import static java.util.stream.Collectors.toList;
 
@@ -60,7 +60,7 @@ public class ProfileAdapter {
         }
 
         final User user = profile.getUser(); // ne peut pas être null par design
-        
+
         return ProfileDto.builder()
                 .username(callIfNotNull(user, User::getUsername))
                 .email(callIfNotNull(user, User::getEmail))

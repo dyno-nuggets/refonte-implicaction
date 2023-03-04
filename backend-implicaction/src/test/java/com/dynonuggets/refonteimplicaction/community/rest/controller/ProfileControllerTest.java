@@ -19,9 +19,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.Charset;
 
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.community.util.CommunityMessages.PROFILE_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.community.util.ProfileUris.PROFILES_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.community.util.ProfileUtilTest.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.CommunityMessages.PROFILE_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.community.utils.ProfileTestUtils.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.ProfileUris.PROFILES_BASE_URI;
 import static java.lang.String.format;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.is;

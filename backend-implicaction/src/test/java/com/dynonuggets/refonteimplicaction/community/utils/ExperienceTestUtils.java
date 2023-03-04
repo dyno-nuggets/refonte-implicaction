@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.community.util;
+package com.dynonuggets.refonteimplicaction.community.utils;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.WorkExperienceDto;
@@ -9,7 +9,7 @@ import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ExperienceUtils {
+public class ExperienceTestUtils {
 
     public static WorkExperience generateRandomExperience() {
         return WorkExperience.builder()

@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.community.util;
+package com.dynonuggets.refonteimplicaction.community.utils;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
@@ -12,7 +12,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserUtilTest.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.lang.String.format;
@@ -25,7 +25,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @NoArgsConstructor(access = PRIVATE)
-public class ProfileUtilTest {
+public class ProfileTestUtils {
 
     public static Profile generateRandomProfile() {
         return Profile.builder()

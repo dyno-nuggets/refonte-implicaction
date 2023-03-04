@@ -9,7 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.community.util.RelationUris.*;
+import static com.dynonuggets.refonteimplicaction.community.utils.RelationUris.*;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static org.springframework.data.domain.PageRequest.of;
 
