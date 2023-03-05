@@ -39,7 +39,6 @@ import java.util.UUID;
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.ADMIN;
 import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
-import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_BODY;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_TITLE;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
@@ -220,19 +219,18 @@ public class AuthService {
         return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
+    /**
+     * Vérifie que le nom d’utilisateur en paramètre correspond à l’utilisateur courant OU que l’utilisateur courant est admin
+     *
+     * @param username le nom de l’utilisateur dont il faut vérifier l’autorisation
+     * @throws AuthenticationException si l’utilisateur n’est pas autorisé
+     */
     @Transactional(readOnly = true)
-    public void verifyUserIsCurrent(@NonNull final String username) {
-        final String currentUsername = callIfNotNull(getCurrentUser(), User::getUsername);
-
-        if (!StringUtils.equals(currentUsername, username)) {
-            throw new ImplicactionException(OPERATION_NOT_PERMITTED);
-        }
-    }
-
-    @Transactional(readOnly = true)
-    public void verifyCurrentUserIsAdmin() {
-        if (!isTrue(callIfNotNull(getCurrentUser(), User::isAdmin))) {
-            throw new ImplicactionException(OPERATION_NOT_PERMITTED);
+    public void verifyAccessIsGranted(@NonNull final String username) {
+        final User currentUser = getCurrentUser();
+        final String currentUsername = callIfNotNull(currentUser, User::getUsername);
+        if (!(StringUtils.equals(currentUsername, username) || isTrue(callIfNotNull(currentUser, User::isAdmin)))) {
+            throw new AuthenticationException(OPERATION_NOT_PERMITTED);
         }
     }
 

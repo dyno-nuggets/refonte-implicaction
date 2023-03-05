@@ -23,12 +23,12 @@ public class RelationController {
     private final AuthService authService;
 
     @GetMapping(GET_ALL_RELATIONS_URI)
-    public ResponseEntity<Page<RelationsDto>> getAllFriends(
+    public ResponseEntity<Page<RelationsDto>> getAllRelationsByUsername(
             @RequestParam(defaultValue = "0") final int page,
             @RequestParam(defaultValue = "10") final int rows,
             @PathVariable final String username
     ) {
-        return ResponseEntity.ok(relationService.getAllRelationsByUserId(username, of(page, rows)));
+        return ResponseEntity.ok(relationService.getAllRelationsByUsername(username, of(page, rows)));
     }
 
     @GetMapping(GET_ALL_COMMUNITY)
@@ -42,18 +42,18 @@ public class RelationController {
     @GetMapping(GET_ALL_RELATIONS_REQUESTS_SENT_URI)
     public ResponseEntity<Page<RelationsDto>> getSentFriendRequest(
             @RequestParam(defaultValue = "0") final int page,
-            @RequestParam(defaultValue = "10") final int rows
+            @RequestParam(defaultValue = "10") final int rows,
+            @PathVariable final String username
     ) {
-        final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
         return ResponseEntity.ok(relationService.getSentFriendRequest(username, of(page, rows)));
     }
 
     @GetMapping(GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI)
     public ResponseEntity<Page<RelationsDto>> getReceivedFriendRequest(
             @RequestParam(defaultValue = "0") final int page,
-            @RequestParam(defaultValue = "10") final int rows
+            @RequestParam(defaultValue = "10") final int rows,
+            @PathVariable final String username
     ) {
-        final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
         return ResponseEntity.ok(relationService.getReceivedFriendRequest(username, of(page, rows)));
     }
 
@@ -69,7 +69,7 @@ public class RelationController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(CONFIRM_RELATION)
+    @PostMapping(CONFIRM_RELATION)
     public ResponseEntity<RelationsDto> confirmRelation(@PathVariable final Long relationId) {
         final RelationsDto relation = relationService.confirmRelation(relationId);
         return ResponseEntity.ok(relation);

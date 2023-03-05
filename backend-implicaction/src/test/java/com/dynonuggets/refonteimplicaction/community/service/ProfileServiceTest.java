@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.ProfileAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
@@ -25,9 +26,9 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Optional;
 
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.utils.ProfileTestUtils.*;
-import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -125,7 +126,7 @@ class ProfileServiceTest {
             final ProfileDto expectedProfileDto = generateRandomProfileDto();
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest(expectedProfileDto.getUsername());
             final Profile profile = Profile.builder().build();
-            willDoNothing().given(authService).verifyUserIsCurrent(any());
+            willDoNothing().given(authService).verifyAccessIsGranted(any());
             given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
             given(profileRepository.save(any())).willReturn(profile);
             given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
@@ -144,7 +145,7 @@ class ProfileServiceTest {
 
             // then
             assertThat(actualProfileDto).isEqualTo(expectedProfileDto);
-            verify(authService, times(1)).verifyUserIsCurrent(any());
+            verify(authService, times(1)).verifyAccessIsGranted(any());
             verify(profileRepository, times(1)).findByUser_Username(any());
             verify(profileRepository, times(1)).save(any());
             verify(profileAdapter, times(1)).toDto(any());
@@ -155,12 +156,12 @@ class ProfileServiceTest {
         void should_throw_exception_when_profile_to_update_does_not_belong_to_current_user() {
             // given
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest();
-            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyUserIsCurrent(any());
+            willThrow(new AuthenticationException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(any());
 
             // when - then
-            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateProfile(updateRequest));
-            assertImplicactionException(e, ImplicactionException.class, OPERATION_NOT_PERMITTED);
-            verify(authService, times(1)).verifyUserIsCurrent(any());
+            final AuthenticationException e = assertThrows(AuthenticationException.class, () -> profileService.updateProfile(updateRequest));
+            assertImplicactionException(e, AuthenticationException.class, OPERATION_NOT_PERMITTED);
+            verify(authService, times(1)).verifyAccessIsGranted(any());
             verifyNoInteractions(profileRepository);
             verifyNoInteractions(profileAdapter);
         }
@@ -170,12 +171,12 @@ class ProfileServiceTest {
         void should() {
             // given
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest();
-            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyUserIsCurrent(any());
+            willThrow(new AuthenticationException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(any());
 
             // when - then
-            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateProfile(updateRequest));
-            assertImplicactionException(e, ImplicactionException.class, OPERATION_NOT_PERMITTED);
-            verify(authService, times(1)).verifyUserIsCurrent(any());
+            final AuthenticationException e = assertThrows(AuthenticationException.class, () -> profileService.updateProfile(updateRequest));
+            assertImplicactionException(e, AuthenticationException.class, OPERATION_NOT_PERMITTED);
+            verify(authService, times(1)).verifyAccessIsGranted(any());
             verifyNoInteractions(profileRepository);
             verifyNoInteractions(profileAdapter);
         }
@@ -194,7 +195,7 @@ class ProfileServiceTest {
             final Profile profile = Profile.builder().user(currentUser).build();
             final FileModel fileModel = FileModel.builder().build();
             profile.setAvatar(fileModel);
-            willDoNothing().given(authService).verifyUserIsCurrent(any());
+            willDoNothing().given(authService).verifyAccessIsGranted(any());
             given(profileRepository.findByUser_Username(username)).willReturn(Optional.of(profile));
             given(cloudService.uploadImage(any())).willReturn(fileModel);
             given(profileRepository.save(any())).willReturn(profile);
@@ -208,7 +209,7 @@ class ProfileServiceTest {
                     .isNotNull()
                     .extracting(ProfileDto::getAvatar)
                     .isEqualTo("avatar.png");
-            verify(authService, times(1)).verifyUserIsCurrent(any());
+            verify(authService, times(1)).verifyAccessIsGranted(any());
             verify(profileRepository, times(1)).findByUser_Username(any());
             verify(cloudService, times(1)).uploadImage(any());
             verify(profileRepository, times(1)).save(any());
@@ -221,7 +222,7 @@ class ProfileServiceTest {
             // given
             final MockMultipartFile mockMultipartFile = new MockMultipartFile("avatar", "avatar.png", IMAGE_PNG_VALUE, "je suis un png".getBytes());
             final String username = "notCurrentUser";
-            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyUserIsCurrent(username);
+            willThrow(new ImplicactionException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(username);
 
             // then
             final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateAvatar(mockMultipartFile, username));

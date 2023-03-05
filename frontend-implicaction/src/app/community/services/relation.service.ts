@@ -20,19 +20,27 @@ export class RelationService {
     return this.http.get<Pageable<Relation>>(this.apiEndpointsService.getAllRelationsByUsernameEndPoint(username, pageable));
   }
 
-  getAllRelationRequestsReceived(pageable: Pageable<Relation>): Observable<Pageable<Relation>> {
-    return this.http.get<Pageable<Relation>>(this.apiEndpointsService.getAllRelationRequestsReceivedEndpoint(pageable));
+  getAllRelationRequestsReceived(username: string, pageable: Pageable<Relation>): Observable<Pageable<Relation>> {
+    return this.http.get<Pageable<Relation>>(this.apiEndpointsService.getAllRelationRequestsReceivedEndpoint(username, pageable));
   }
 
-  getAllRelationRequestSent(pageable: Pageable<Relation>): Observable<Pageable<Relation>> {
-    return this.http.get<Pageable<Relation>>(this.apiEndpointsService.getAllRelationRequestSentEndPoint(pageable));
+  getAllRelationRequestSent(username: string, pageable: Pageable<Relation>): Observable<Pageable<Relation>> {
+    return this.http.get<Pageable<Relation>>(this.apiEndpointsService.getAllRelationRequestSentEndPoint(username, pageable));
   }
 
-  requestFriend(receiverId: string): Observable<Relation> {
-    return this.http.post(this.apiEndpointsService.createRelationEndpoint(receiverId), null);
+  requestRelation(receiverName: string): Observable<Relation> {
+    return this.http.post(this.apiEndpointsService.createRelationEndpoint(receiverName), null);
   }
 
   getAllCommunity(pageable: Pageable<Relation>): Observable<Pageable<Relation>> {
     return this.http.get<Pageable<Relation>>(this.apiEndpointsService.getAllCommunity(pageable));
+  }
+
+  confirmRelation(relationId: string): Observable<Relation> {
+    return this.http.post<Relation>(this.apiEndpointsService.confirmRelationEndpoint(relationId), null);
+  }
+
+  removeRelation(relationId: string): Observable<void> {
+    return this.http.delete<void>(this.apiEndpointsService.cancelRelationEndpoint(relationId));
   }
 }

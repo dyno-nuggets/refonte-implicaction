@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {UserService} from '../../../profile/services/user.service';
 import {User} from '../../../shared/models/user';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RelationService} from '../../services/relation.service';
@@ -59,7 +58,6 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
 
   constructor(
     private authService: AuthService,
-    private userService: UserService,
     private profileService: ProfileService,
     private toastService: ToasterService,
     private relationService: RelationService,
@@ -107,10 +105,10 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
         this.user$ = this.relationService.getAllRelationsByUsername(this.currentUser?.username, this.pageable);
         break;
       case UserListType.FRIENDS_RECEIVED:
-        this.user$ = this.relationService.getAllRelationRequestsReceived(this.pageable);
+        this.user$ = this.relationService.getAllRelationRequestsReceived(this.currentUser?.username, this.pageable);
         break;
       case UserListType.FRIENDS_SENT:
-        this.user$ = this.relationService.getAllRelationRequestSent(this.pageable);
+        this.user$ = this.relationService.getAllRelationRequestSent(this.currentUser?.username, this.pageable);
         break;
       default:
         this.user$ = this.relationService.getAllCommunity(this.pageable);
@@ -129,7 +127,7 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
 
   requestUserAsFriend(relation: Relation): void {
     this.relationService
-      .requestFriend(relation.receiver.username)
+      .requestRelation(relation.receiver.username)
       .subscribe(
         r => {
           relation.relationType = RelationType.SENDER;
@@ -144,7 +142,7 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
   }
 
   confirmRelation(relation: Relation): void {
-    this.userService
+    this.relationService
       .confirmRelation(relation.id)
       .subscribe(
         () => {
@@ -164,7 +162,7 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
    */
   deleteRelation(relation: Relation): void {
     let message = '';
-    this.userService
+    this.relationService
       .removeRelation(relation.id)
       .subscribe(
         () => {

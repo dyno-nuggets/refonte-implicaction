@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.emptyStreamIfNull;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
-import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 
 @Component
@@ -39,7 +39,7 @@ public class UserAdapter {
             return null;
         }
 
-        final List<Role> roles = emptyIfNull(dto.getRoles()).stream()
+        final List<Role> roles = emptyStreamIfNull(dto.getRoles())
                 .map(roleLabel -> {
                     final RoleEnum role = RoleEnum.valueOf(roleLabel);
                     return new Role(role.getId(), role.name(), emptySet());
@@ -70,7 +70,7 @@ public class UserAdapter {
     }
 
     private List<String> rolesToRoleNames(final User model) {
-        return emptyIfNull(model.getRoles()).stream()
+        return emptyStreamIfNull(model.getRoles())
                 .map(Role::getName)
                 .collect(toList());
     }

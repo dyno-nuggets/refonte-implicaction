@@ -154,28 +154,46 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_ALL_PENDING_USERS, pageable);
   }
 
+
   /**
-   * RELATIONS
+   * Relations
    */
+
+  confirmRelationEndpoint(relationId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [relationId, 'confirm']);
+  }
+
+  cancelRelationEndpoint(relationId: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [relationId]);
+  }
+
   getAllRelationsByUsernameEndPoint(userId: string, pageable: Pageable<Relation>): string {
     const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USERNAME, [userId])
-      // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent l’url de base ('/api/') de l’api au début de l’adresse générée,
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
       .replace(`${Constants.API_ENDPOINT}/`, '');
 
     return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
-  getAllRelationRequestsReceivedEndpoint(pageable: Pageable<Relation>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_FRIEND_REQUEST_RECEIVED, pageable);
+  getAllRelationRequestsReceivedEndpoint(username: string, pageable: Pageable<Relation>): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.GET_FRIEND_REQUEST_RECEIVED, [username, 'received'])
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent l’url de base ('/api/') de l’api en début de l’adresse générée,
+      // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
+      .replace(`${Constants.API_ENDPOINT}/`, '');
+    return ApiEndpointsService.createUrlWithPageable(uri, pageable);
+  }
+
+  getAllRelationRequestSentEndPoint(username: string, pageable: Pageable<Relation>): string {
+    const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.GET_FRIEND_REQUEST_SENT, [username, 'sent'])
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent l’url de base ('/api/') de l’api en début de l’adresse générée,
+      // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
+      .replace(`${Constants.API_ENDPOINT}/`, '');
+    return ApiEndpointsService.createUrlWithPageable(uri, pageable);
   }
 
   getAllCommunity(pageable: Pageable<Relation>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_ALL_COMMUNITY, pageable);
-  }
-
-  getAllRelationRequestSentEndPoint(pageable: Pageable<Relation>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_FRIEND_REQUEST_SENT, pageable);
   }
 
   createRelationEndpoint(receiverId: string): string {
@@ -216,22 +234,6 @@ export class ApiEndpointsService {
 
   deleteTrainingEndpoint(trainingId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.TRAINING.BASE_URI, [trainingId]);
-  }
-
-  /**
-   * Relations
-   */
-
-  getAllFriendsByUserIdEndpoint(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.ALL_BY_USERNAME, [userId]);
-  }
-
-  confirmUserAsFriendEndpoint(relationId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [relationId, 'confirm']);
-  }
-
-  cancelRelationByUserEndpoint(relationId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.BASE_URI, [relationId]);
   }
 
   /**
@@ -354,7 +356,7 @@ export class ApiEndpointsService {
 
   getPostCommentsEndpoint(pageable: any, postId: string): string {
     const uri = ApiEndpointsService.createUrlWithPathVariables(Uris.POSTS.BASE_URI, [postId, 'comments'])
-      // createUrlWithPathVariables et createUrlWithPageable ajoutent le endpoint ('/api/') de l'api en début de l'adresse générée
+      // createUrlWithPathVariables et createUrlWithPageable ajoutent l’endpoint ('/api/') de l’api en début de l’adresse générée,
       // on se retrouve donc avec une répétition en les chaînant. Il faut donc en supprimer un
       .replace(`${Constants.API_ENDPOINT}/`, '');
 
@@ -513,7 +515,7 @@ export class ApiEndpointsService {
   }
 
   /**
-   * Ajoute les attributs filtrés d'un objet de paramétrage de requête à un QueryStringParameters
+   * Ajoute les attributs filtrés d’un objet de paramétrage de requête à un QueryStringParameters
    * @return qs le QueryStringParameters modifié
    */
   private buildQueryStringFromFilters(filter: any, qs: QueryStringParameters): QueryStringParameters {

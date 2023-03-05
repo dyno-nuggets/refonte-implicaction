@@ -33,7 +33,7 @@ public class ProfileTestUtils {
                 .user(generateRandomUser())
                 .firstname(randomAlphabetic(20))
                 .lastname(randomAlphabetic(20))
-                .birthday(toLocalDate(generateRandomDate()))
+                .birthday(toLocalDate(generateRandomInstant()))
                 .hobbies(randomAlphabetic(100))
                 .purpose(randomAlphabetic(100))
                 .presentation(randomAlphabetic(100))
@@ -47,15 +47,19 @@ public class ProfileTestUtils {
     }
 
     public static ProfileDto generateRandomProfileDto() {
+        return generateRandomProfileDto(randomAlphabetic(20));
+    }
+
+    public static ProfileDto generateRandomProfileDto(final String username) {
         final String firstname = randomAlphabetic(20);
         final String lastname = randomAlphabetic(20);
         return ProfileDto.builder()
-                .username(randomAlphabetic(20))
+                .username(username)
                 .email(format("%s.%s@mail.com", firstname, lastname))
                 .avatar(randomAlphabetic(20))
                 .firstname(firstname)
                 .lastname(lastname)
-                .birthday(toLocalDate(generateRandomDate()))
+                .birthday(toLocalDate(generateRandomInstant()))
                 .hobbies(randomAlphabetic(100))
                 .purpose(randomAlphabetic(100))
                 .presentation(randomAlphabetic(100))
@@ -73,7 +77,7 @@ public class ProfileTestUtils {
                 .username(username)
                 .firstname(randomAlphabetic(20))
                 .lastname(randomAlphabetic(20))
-                .birthday(toLocalDate(generateRandomDate()))
+                .birthday(toLocalDate(generateRandomInstant()))
                 .hobbies(randomAlphabetic(120))
                 .purpose(randomAlphabetic(120))
                 .presentation(randomAlphabetic(120))
@@ -97,16 +101,16 @@ public class ProfileTestUtils {
                 .andExpect(jsonPath("$.totalElements").value(profileDtos.getTotalElements()));
 
         for (int i = 0; i < pageElements.size(); i++) {
-            final ProfileDto userDto = pageElements.get(i);
-            resultActionsValidationForSingleProfile(userDto, resultActions, i);
+            final ProfileDto profileDto = pageElements.get(i);
+            resultActionsAssertionsForSingleProfile(profileDto, resultActions, i);
         }
     }
 
-    public static void resultActionsValidationForSingleProfile(final ProfileDto profileDto, final ResultActions resultActions) throws Exception {
-        resultActionsValidationForSingleProfile(profileDto, resultActions, null);
+    public static void resultActionsAssertionsForSingleProfile(final ProfileDto profileDto, final ResultActions resultActions) throws Exception {
+        resultActionsAssertionsForSingleProfile(profileDto, resultActions, null);
     }
 
-    public static void resultActionsValidationForSingleProfile(final ProfileDto profileDto, final ResultActions resultActions, final Integer index) throws Exception {
+    public static void resultActionsAssertionsForSingleProfile(final ProfileDto profileDto, final ResultActions resultActions, final Integer index) throws Exception {
         final String prefix = index != null ? format("$.content[%d]", index) : "$";
         final String birthday = callIfNotNull(profileDto.getBirthday(), Object::toString);
         resultActions

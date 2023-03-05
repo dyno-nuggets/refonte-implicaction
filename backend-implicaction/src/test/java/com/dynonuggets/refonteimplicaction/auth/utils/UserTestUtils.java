@@ -33,7 +33,7 @@ public class UserTestUtils {
     public static User generateRandomUser(final List<RoleEnum> roleEnums, final boolean isActive) {
         final String firstname = randomAlphabetic(10);
         final String lastname = randomAlphabetic(10);
-        final Instant registeredAt = generateRandomDate();
+        final Instant registeredAt = generateRandomInstant();
         final String email = format("%s.%s@mail.com", firstname, lastname);
 
         final List<Role> roles = ofNullable(roleEnums).orElse(emptyList())

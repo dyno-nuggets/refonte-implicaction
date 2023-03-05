@@ -5,7 +5,6 @@ import {Observable} from 'rxjs';
 import {User} from '../../shared/models/user';
 import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
-import {Relation} from '../../community/models/relation';
 import {Group} from '../../discussion/model/group';
 
 @Injectable({
@@ -23,14 +22,6 @@ export class UserService {
 
   getAll(pageable: Pageable<any>): Observable<any> {
     return this.http.get(this.apiEndpointsService.getAllUserEndpoint(pageable));
-  }
-
-  confirmRelation(relationId: string): Observable<Relation> {
-    return this.http.get(this.apiEndpointsService.confirmUserAsFriendEndpoint(relationId));
-  }
-
-  removeRelation(relationId: string): Observable<any> {
-    return this.http.delete(this.apiEndpointsService.cancelRelationByUserEndpoint(relationId));
   }
 
   getAllPendingActivationUsers(pageable: Pageable<User>): Observable<any> {

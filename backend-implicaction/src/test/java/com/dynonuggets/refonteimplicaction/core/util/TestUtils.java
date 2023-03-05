@@ -22,11 +22,11 @@ public class TestUtils {
         return random.nextBoolean();
     }
 
-    public static Instant generateRandomDate() {
-        return generateRandomDate(Instant.parse("2020-12-03T10:15:30.00Z"));
+    public static Instant generateRandomInstant() {
+        return generateRandomInstant(Instant.parse("2020-12-03T10:15:30.00Z"));
     }
 
-    public static Instant generateRandomDate(final Instant minDate) {
+    public static Instant generateRandomInstant(final Instant minDate) {
         final long startSeconds = minDate.getEpochSecond();
         final long endSeconds = Instant.now().getEpochSecond();
         final long random = ThreadLocalRandom
