@@ -6,11 +6,11 @@
   <parent>
     <groupId>com.dyno-nuggets</groupId>
     <artifactId>refonte-implicaction</artifactId>
-    <version>RELEASE-2023-SNAPSHOT</version>
+    <version>2023.4</version>
   </parent>
 
   <artifactId>frontend-implicaction</artifactId>
-  <version>${project.parent.version}</version>
+  <version>2023.4</version>
 
   <build>
     <plugins>
