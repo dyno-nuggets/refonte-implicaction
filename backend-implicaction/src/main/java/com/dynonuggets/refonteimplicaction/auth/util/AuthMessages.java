@@ -18,4 +18,5 @@ public class AuthMessages {
     public static final String USER_IS_NOT_ACTIVATED_MESSAGE = "Votre compte utilisateur doit d'abord être validé par un utilisateur";
     public static final String PUBLIC_KEY_ERROR_MESSAGE = "Une exception s'est produite lors de la récupération de la clé publique";
     public static final String USERNAME_NOT_FOUND_MESSAGE = "L'utilisateur {%s} n'existe pas";
+    public static final String OPERATION_NOT_PERMITTED_MESSAGE = "L'opération n'est pas autorisée";
 }

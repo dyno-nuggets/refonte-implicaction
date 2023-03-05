@@ -6,7 +6,8 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static com.dynonuggets.refonteimplicaction.community.utils.CommunityMessages.*;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CONFLICT;
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
 @AllArgsConstructor
@@ -17,7 +18,6 @@ public enum CommunityErrorResult implements BaseErrorResult {
 
     // Relation
     RELATION_NOT_FOUND(NOT_FOUND, RELATION_NOT_FOUND_MESSAGE),
-    USER_UNAUTHORIZED_TO_CONFIRM_RELATION(UNAUTHORIZED, USER_UNAUTHORIZED_TO_CONFIRM_RELATION_MESSAGE),
     SENDER_EQUALS_RECEIVER(CONFLICT, SENDER_IS_EQUALS_RECEIVER_MESSAGE),
     RELATION_ALREADY_EXISTS(CONFLICT, RELATION_ALREADY_EXISTS_MESSAGE);
 

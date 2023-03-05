@@ -7,9 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
-// supprime les warnings sur les noms des méthodes ne respectant pas la convention de nommage (cf named queries)
+// Supprime les warnings sur les noms des méthodes ne respectant pas la convention de nommage (cf. named queries)
 @SuppressWarnings("squid:S00100")
 public interface RelationRepository extends JpaRepository<Relation, Long> {
 
@@ -17,7 +16,7 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
             "from Relation r " +
             "where (r.sender.user.username = ?1 and r.receiver.user.username = ?2) " +
             "or (r.sender.user.username = ?2 and r.receiver.user.username = ?1)")
-    boolean isInRelation(String userId1, String userId2);
+    boolean areInRelation(String userId1, String userId2);
 
     @Query("select r from Relation r " +
             "where (r.sender.user.username = ?1 or r.receiver.user.username = ?1) " +
@@ -27,11 +26,6 @@ public interface RelationRepository extends JpaRepository<Relation, Long> {
     Page<Relation> findAllByReceiver_User_UsernameAndConfirmedAtIsNull(String username, Pageable pageable);
 
     Page<Relation> findAllBySender_User_UsernameAndConfirmedAtIsNull(String username, Pageable pageable);
-
-    @Query("select r " +
-            "from Relation r " +
-            "where (r.sender.user.username = ?1 and r.receiver.user.username = ?2) or (r.sender.user.username = ?2 and r.receiver.user.username = ?1)")
-    Optional<Relation> findRelationBetween(String user1, String user2);
 
     @Query("select r " +
             "from Relation r " +

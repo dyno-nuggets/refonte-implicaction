@@ -65,7 +65,7 @@ public class ProfileService {
     @Transactional
     public ProfileDto updateProfile(@NonNull final ProfileUpdateRequest updateRequest) {
         final String requestUsername = updateRequest.getUsername();
-        authService.verifyUserIsCurrent(requestUsername);
+        authService.verifyAccessIsGranted(requestUsername);
 
         final Profile profile = getByUsernameIfExists(requestUsername);
 
@@ -91,7 +91,7 @@ public class ProfileService {
      */
     @Transactional
     public ProfileDto updateAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
-        authService.verifyUserIsCurrent(username);
+        authService.verifyAccessIsGranted(username);
 
         final Profile profile = getByUsernameIfExists(username);
         final FileModel avatar = cloudService.uploadImage(file);

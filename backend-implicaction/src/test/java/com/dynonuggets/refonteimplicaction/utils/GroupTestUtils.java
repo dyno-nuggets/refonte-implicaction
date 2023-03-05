@@ -19,7 +19,7 @@ public class GroupTestUtils {
                 .description(randomAlphabetic(120))
                 .numberOfPosts(generateRandomNumber())
                 .imageUrl(randomAlphabetic(20))
-                .createdAt(generateRandomDate(Instant.parse("1950-12-03T10:15:30.00Z")))
+                .createdAt(generateRandomInstant(Instant.parse("1950-12-03T10:15:30.00Z")))
                 .valid(generateRandomBoolean())
                 .numberOfUsers(generateRandomNumber())
                 .username(randomAlphabetic(20))
