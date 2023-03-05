@@ -87,7 +87,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
             final ResultActions resultActions = mvc.perform(get(format("%s/%s", PROFILES_BASE_URI, expectedProfile.getUsername())));
 
             // then
-            resultActionsValidationForSingleProfile(expectedProfile, resultActions);
+            resultActionsAssertionsForSingleProfile(expectedProfile, resultActions);
             verify(profileService, times(1)).getByUsername(any());
         }
 
@@ -154,7 +154,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
                     .contentType(APPLICATION_JSON));
 
             // then
-            resultActionsValidationForSingleProfile(expectedProfile, resultActions);
+            resultActionsAssertionsForSingleProfile(expectedProfile, resultActions);
             verify(profileService, times(1)).updateProfile(any());
         }
 

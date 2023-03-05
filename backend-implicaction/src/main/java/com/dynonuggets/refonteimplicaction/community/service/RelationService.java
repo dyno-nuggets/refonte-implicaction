@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.RelationAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum.*;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
@@ -49,7 +51,7 @@ public class RelationService {
         final Profile sender = profileService.getByUsernameIfExists(senderName);
         final Profile receiver = profileService.getByUsernameIfExists(receiverName);
 
-        if (relationRepository.isInRelation(senderName, receiverName)) {
+        if (relationRepository.areInRelation(senderName, receiverName)) {
             throw new CommunityException(RELATION_ALREADY_EXISTS);
         }
 
@@ -91,7 +93,7 @@ public class RelationService {
     /**
      * @return tous les utilisateurs qui sont amis avec username
      */
-    public Page<RelationsDto> getAllRelationsByUserId(final String username, final Pageable pageable) {
+    public Page<RelationsDto> getAllRelationsByUsername(final String username, final Pageable pageable) {
         final Page<Relation> relations = relationRepository.findAllByUser_UsernameAndConfirmedAtIsNotNull(username, pageable);
         return relations.map(relation -> {
             final RelationsDto relationsDto = relationAdapter.toDto(relation);
@@ -104,6 +106,7 @@ public class RelationService {
      * @return tous les utilisateurs à qui username a envoyé une demande d’ami qui n’a pas encore été confirmée
      */
     public Page<RelationsDto> getSentFriendRequest(final String username, final Pageable pageable) {
+        authService.verifyAccessIsGranted(username);
         return relationRepository.findAllBySender_User_UsernameAndConfirmedAtIsNull(username, pageable)
                 .map(relation -> {
                     final RelationsDto relationsDto = relationAdapter.toDto(relation);
@@ -116,6 +119,7 @@ public class RelationService {
      * @return tous les utilisateurs qui ont envoyé une demande d’ami à userId
      */
     public Page<RelationsDto> getReceivedFriendRequest(final String username, final Pageable pageable) {
+        authService.verifyAccessIsGranted(username);
         final Page<Relation> relations = relationRepository.findAllByReceiver_User_UsernameAndConfirmedAtIsNull(username, pageable);
         return relations.map(relation -> {
             final RelationsDto relationsDto = relationAdapter.toDto(relation);
@@ -159,10 +163,18 @@ public class RelationService {
     }
 
     private static boolean isReceiver(final String username, final Relation r) {
+        if (r.getReceiver() == null) {
+            return false;
+        }
+
         return r.getReceiver().getUser().getUsername().equals(username);
     }
 
     private static boolean isSender(final String username, final Relation r) {
+        if (r.getSender() == null) {
+            return false;
+        }
+
         return r.getSender().getUser().getUsername().equals(username);
     }
 
@@ -176,7 +188,7 @@ public class RelationService {
 
         if (of(relation.getSender().getUser().getUsername(), relation.getReceiver().getUser().getUsername())
                 .noneMatch(username -> username.equals(currentUsername))) {
-            throw new CommunityException(USER_UNAUTHORIZED_TO_CONFIRM_RELATION);
+            throw new AuthenticationException(OPERATION_NOT_PERMITTED);
         }
     }
 }

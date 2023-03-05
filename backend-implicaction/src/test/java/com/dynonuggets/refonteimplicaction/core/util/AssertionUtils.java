@@ -3,10 +3,14 @@ package com.dynonuggets.refonteimplicaction.core.util;
 import com.dynonuggets.refonteimplicaction.core.error.BaseErrorResult;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import lombok.NoArgsConstructor;
+import org.springframework.test.web.servlet.ResultActions;
 
 import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @NoArgsConstructor(access = PRIVATE)
 public class AssertionUtils {
@@ -32,5 +36,12 @@ public class AssertionUtils {
 
     public static void assertImplicactionException(final ImplicactionException actualException, final Class<?> classException, final BaseErrorResult errorResult) {
         assertImplicactionException(actualException, classException, errorResult, null);
+    }
+
+    public static void assertErrorResult(final ResultActions resultActions, final BaseErrorResult errorResult) throws Exception {
+        resultActions
+                .andExpect(status().is(errorResult.getStatus().value()))
+                .andExpect(jsonPath("$.errorMessage", is(errorResult.getMessage())))
+                .andExpect(jsonPath("$.errorCode", is(errorResult.getStatus().value())));
     }
 }

@@ -16,7 +16,7 @@ public class TrainingTestUtils {
                 .id((long) generateRandomNumber())
                 .profile(null)
                 .label(randomAlphabetic(20))
-                .date(toLocalDate(generateRandomDate()))
+                .date(toLocalDate(generateRandomInstant()))
                 .school(randomAlphabetic(20))
                 .build();
     }
@@ -25,7 +25,7 @@ public class TrainingTestUtils {
         return TrainingDto.builder()
                 .id((long) generateRandomNumber())
                 .label(randomAlphabetic(20))
-                .date(toLocalDate(generateRandomDate()))
+                .date(toLocalDate(generateRandomInstant()))
                 .school(randomAlphabetic(20))
                 .build();
     }
