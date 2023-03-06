@@ -1,6 +1,6 @@
-package com.dynonuggets.refonteimplicaction.auth.domain.repository;
+package com.dynonuggets.refonteimplicaction.core.domain.repository;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.auth.rest.dto;
 
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

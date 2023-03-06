@@ -1,9 +1,9 @@
-package com.dynonuggets.refonteimplicaction.auth.adapter;
+package com.dynonuggets.refonteimplicaction.core.adapter;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

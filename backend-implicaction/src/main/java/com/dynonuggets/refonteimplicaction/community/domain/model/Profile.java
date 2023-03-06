@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.domain.model;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import lombok.*;
 

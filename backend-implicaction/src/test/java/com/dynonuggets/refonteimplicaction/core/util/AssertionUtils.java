@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @NoArgsConstructor(access = PRIVATE)
 public class AssertionUtils {
+    
     /**
      * Réalise les assertions de base sur les exceptions de type ImplicactionException
      *
@@ -31,9 +32,18 @@ public class AssertionUtils {
 
         if (value != null) {
             assertThat(actualException.getMessage()).isEqualTo(format(errorResult.getMessage(), value));
+        } else {
+            assertThat(actualException.getMessage()).isEqualTo(errorResult.getMessage());
         }
     }
 
+    /**
+     * Réalise les assertions de base sur les exceptions de type ImplicactionException
+     *
+     * @param actualException l'exception sur laquelle effectuer les assertions
+     * @param classException  la classe de l’exception attendue
+     * @param errorResult     l'objet ErrorResult de l’exception attendue
+     */
     public static void assertImplicactionException(final ImplicactionException actualException, final Class<?> classException, final BaseErrorResult errorResult) {
         assertImplicactionException(actualException, classException, errorResult, null);
     }

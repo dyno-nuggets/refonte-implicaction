@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.auth.domain.model;
+package com.dynonuggets.refonteimplicaction.core.domain.model;
 
 import com.dynonuggets.refonteimplicaction.model.Notification;
 import lombok.*;
@@ -11,7 +11,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.ADMIN;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.ADMIN;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.emptyStreamIfNull;
 import static javax.persistence.GenerationType.IDENTITY;
 

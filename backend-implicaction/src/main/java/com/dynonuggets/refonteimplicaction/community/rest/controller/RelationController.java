@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.service.RelationService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

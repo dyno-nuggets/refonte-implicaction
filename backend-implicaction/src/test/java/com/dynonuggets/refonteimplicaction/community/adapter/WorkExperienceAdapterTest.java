@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.adapter.CompanyAdapter;
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.WorkExperienceDto;
 import org.junit.jupiter.api.BeforeEach;

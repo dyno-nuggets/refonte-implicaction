@@ -1,7 +1,7 @@
-package com.dynonuggets.refonteimplicaction.config;
+package com.dynonuggets.refonteimplicaction.core.config;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.auth.security.JwtAuthenticationFilter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
 @AllArgsConstructor
@@ -45,7 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
     };
 
-    // Toutes les routes front doivent être autorisées en back car c'est angular qui en gère l'accès
+    // Toutes les routes du front doivent être autorisées en back car c’est angular qui en gère l’accès
     private static final String[] ANGULAR_WHITELIST = {
             "/",
             "/entreprise/**",
@@ -90,7 +91,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(ADMIN_PROTECTEDS).hasRole(RoleEnum.ADMIN.name())
                 .antMatchers(PREMIUM_PROTECTEDS).hasRole(RoleEnum.PREMIUM.name())
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(STATELESS);
+        ;
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

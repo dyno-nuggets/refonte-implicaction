@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.REFRESH_TOKEN_EXPIRED;
+import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -71,14 +72,10 @@ public class RefreshTokenServiceTest {
             given(refreshTokenRepository.findByToken(any())).willReturn(empty());
 
             // when
-            final var actualException =
-                    assertThrows(ImplicactionException.class, () -> refreshTokenService.validateRefreshToken("token"));
+            final var actualException = assertThrows(AuthenticationException.class, () -> refreshTokenService.validateRefreshToken("token"));
 
             // then
-            assertThat(actualException)
-                    .isExactlyInstanceOf(expectedException.getClass())
-                    .usingRecursiveComparison()
-                    .isEqualTo(expectedException);
+            assertImplicactionException(actualException, AuthenticationException.class, REFRESH_TOKEN_EXPIRED);
         }
     }
 
