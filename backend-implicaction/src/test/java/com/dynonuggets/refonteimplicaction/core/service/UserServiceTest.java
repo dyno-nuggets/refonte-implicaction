@@ -1,10 +1,11 @@
-package com.dynonuggets.refonteimplicaction.auth.service;
+package com.dynonuggets.refonteimplicaction.core.service;
 
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,11 +21,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.*;
-import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.USER_ID_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUserDto;
-import static java.lang.String.format;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.USER_ID_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.util.List.of;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -97,12 +98,11 @@ class UserServiceTest {
         void should_throw_UserNotFoundException_when_getUserById_and_user_not_exists() {
             // given
             final long userId = mockedUser.getId();
-            final String expectedMessage = format(USER_ID_NOT_FOUND_MESSAGE, userId);
             given(userRepository.findById(userId)).willReturn(empty());
 
             // when / then
-            final AuthenticationException exception = assertThrows(AuthenticationException.class, () -> userService.getUserById(userId));
-            assertThat(exception.getMessage()).isEqualTo(expectedMessage);
+            final ImplicactionException exception = assertThrows(CoreException.class, () -> userService.getUserById(userId));
+            assertImplicactionException(exception, CoreException.class, USER_ID_NOT_FOUND, Long.toString(userId));
         }
     }
 
@@ -137,12 +137,11 @@ class UserServiceTest {
         @DisplayName("doit lancer une exception lorsque l'on essaye de mettre à jour un utilisateur qui n'existe pas")
         void should_throw_UserNotFoundException_when_updateUser_and_user_not_exists() {
             // given
-            final String expectedMessage = format(USER_ID_NOT_FOUND_MESSAGE, mockedUserDto.getId());
             given(userRepository.findById(any())).willReturn(empty());
 
             // when / then
-            final AuthenticationException exception = assertThrows(AuthenticationException.class, () -> userService.updateUser(mockedUserDto));
-            assertThat(exception.getMessage()).isEqualTo(expectedMessage);
+            final ImplicactionException exception = assertThrows(CoreException.class, () -> userService.updateUser(mockedUserDto));
+            assertImplicactionException(exception, CoreException.class, USER_ID_NOT_FOUND, Long.toString(mockedUserDto.getId()));
             verify(userRepository, times(1)).findById(any());
             verify(userRepository, times(0)).save(any());
             verify(userAdapter, times(0)).toDto(any());
@@ -170,12 +169,11 @@ class UserServiceTest {
         void should_throw_exception_when_getUserByIdIfExists_and_userId_not_exists() {
             // given
             final Long userId = mockedUser.getId();
-            final String expectedMessage = format(USER_ID_NOT_FOUND_MESSAGE, userId);
             given(userRepository.findById(userId)).willReturn(empty());
 
             // when / then
-            final AuthenticationException exception = assertThrows(AuthenticationException.class, () -> userService.getUserById(userId));
-            assertThat(exception.getMessage()).isEqualTo(expectedMessage);
+            final ImplicactionException exception = assertThrows(CoreException.class, () -> userService.getUserById(userId));
+            assertImplicactionException(exception, CoreException.class, USER_ID_NOT_FOUND, Long.toString(userId));
         }
     }
 }

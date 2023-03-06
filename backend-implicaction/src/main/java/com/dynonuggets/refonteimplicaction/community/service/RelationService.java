@@ -1,7 +1,5 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.RelationAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
@@ -10,6 +8,8 @@ import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRe
 import com.dynonuggets.refonteimplicaction.community.domain.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,9 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.time.Instant.now;
 import static java.util.stream.Collectors.toList;
@@ -188,7 +188,7 @@ public class RelationService {
 
         if (of(relation.getSender().getUser().getUsername(), relation.getReceiver().getUser().getUsername())
                 .noneMatch(username -> username.equals(currentUsername))) {
-            throw new AuthenticationException(OPERATION_NOT_PERMITTED);
+            throw new CoreException(OPERATION_NOT_PERMITTED);
         }
     }
 }

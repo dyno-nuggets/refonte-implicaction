@@ -6,13 +6,6 @@ package com.dynonuggets.refonteimplicaction.core.util;
  */
 @Deprecated(since = "v.2023")
 public class Message {
-
-    // Users messages
-    @Deprecated(since = "v.2023")
-    public static final String USER_NOT_FOUND_MESSAGE = "No user found with id [%d]";
-    @Deprecated(since = "v.2023")
-    public static final String USERNAME_NOT_FOUND_MESSAGE = "No user found with username [%s]";
-
     // Jobs messages
     @Deprecated(since = "v.2023")
     public static final String JOB_NOT_FOUND_MESSAGE = "No job found with id [%d]";

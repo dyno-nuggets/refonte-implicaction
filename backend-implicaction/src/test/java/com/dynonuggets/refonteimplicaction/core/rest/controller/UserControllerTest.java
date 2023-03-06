@@ -1,11 +1,10 @@
-package com.dynonuggets.refonteimplicaction.auth.rest.controller;
+package com.dynonuggets.refonteimplicaction.core.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.auth.service.UserService;
 import com.dynonuggets.refonteimplicaction.community.service.RelationService;
-import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,10 +20,10 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.*;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_PENDING_USER_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.USER_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.core.util.CoreUris.GET_PENDING_USER_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.CoreUris.USER_BASE_URI;
 import static java.util.List.of;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
@@ -68,7 +67,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         @Test
         @WithMockUser
         @DisplayName("doit répondre OK avec la liste paginées des utilisateurs quand l'utilisateur est identifié")
-        void should_response_ok_with_userList_when_getAllUser_and_authenicated() throws Exception {
+        void should_response_ok_with_userList_when_getAllUser_and_authenticated() throws Exception {
             // given
             given(userService.getAll(any(Pageable.class))).willReturn(mockedUserPage);
 

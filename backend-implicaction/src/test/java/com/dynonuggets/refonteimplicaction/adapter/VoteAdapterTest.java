@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Vote;

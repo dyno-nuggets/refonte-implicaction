@@ -1,16 +1,17 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginRequest;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginResponse;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.security.JwtProvider;
+import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.model.Notification;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
@@ -34,9 +35,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.ADMIN;
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.USER_ALREADY_ACTIVATED;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.ADMIN;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_BODY;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_TITLE;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
@@ -100,11 +102,11 @@ public class AuthService {
      */
     private void validateRegisterRequest(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new AuthenticationException(USERNAME_ALREADY_EXISTS, registerRequest.getUsername());
+            throw new CoreException(USERNAME_ALREADY_EXISTS, registerRequest.getUsername());
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new AuthenticationException(EMAIL_ALREADY_EXISTS, registerRequest.getEmail());
+            throw new CoreException(EMAIL_ALREADY_EXISTS, registerRequest.getEmail());
         }
     }
 
@@ -116,7 +118,7 @@ public class AuthService {
     @Transactional
     public void verifyAccount(final String activationKey) throws ImplicactionException {
         final User user = userRepository.findByActivationKey(activationKey)
-                .orElseThrow(() -> new AuthenticationException(ACTIVATION_KEY_NOT_FOUND, activationKey));
+                .orElseThrow(() -> new CoreException(ACTIVATION_KEY_NOT_FOUND, activationKey));
 
         if (user.isActive()) {
             throw new AuthenticationException(USER_ALREADY_ACTIVATED, activationKey);
@@ -155,7 +157,7 @@ public class AuthService {
         final String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
         final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new AuthenticationException(USER_NOT_FOUND));
+                .orElseThrow(() -> new CoreException(USER_NOT_FOUND));
 
         return LoginResponse.builder()
                 .authenticationToken(token)
@@ -188,9 +190,9 @@ public class AuthService {
                 .build();
     }
 
-    private User getUserIfExists(final String username) {
+    public User getUserIfExists(final String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new AuthenticationException(USER_NOT_FOUND));
+                .orElseThrow(() -> new CoreException(USER_NOT_FOUND));
     }
 
     private User registerUser(final RegisterRequest registerRequest, final String activationKey) {
@@ -229,7 +231,7 @@ public class AuthService {
         final User currentUser = getCurrentUser();
         final String currentUsername = callIfNotNull(currentUser, User::getUsername);
         if (!(StringUtils.equals(currentUsername, username) || isTrue(callIfNotNull(currentUser, User::isAdmin)))) {
-            throw new AuthenticationException(OPERATION_NOT_PERMITTED);
+            throw new CoreException(OPERATION_NOT_PERMITTED);
         }
     }
 }

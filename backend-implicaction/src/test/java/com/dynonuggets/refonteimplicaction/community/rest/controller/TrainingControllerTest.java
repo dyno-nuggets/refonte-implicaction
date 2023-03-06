@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.community.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.service.TrainingService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;

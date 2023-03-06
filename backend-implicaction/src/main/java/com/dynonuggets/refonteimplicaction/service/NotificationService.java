@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.service;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.dto.NotificationEmailDto;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;

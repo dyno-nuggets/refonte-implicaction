@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.ProfileDto;

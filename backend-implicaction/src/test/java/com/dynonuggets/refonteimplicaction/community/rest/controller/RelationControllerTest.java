@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.community.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.service.RelationService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,10 +19,10 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.RELATION_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.utils.RelationTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.community.utils.RelationUris.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertErrorResult;
 import static java.util.List.of;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
@@ -150,7 +150,7 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN avec un ErrorResult correspondant quand l'utilisateur courant n'est pas autorisé à accéder aux demandes de relations de l'utilisateur")
         void should_response_forbidden_with_ErrorResult() throws Exception {
             // given
-            given(relationService.getSentFriendRequest(anyString(), any(Pageable.class))).willThrow(new AuthenticationException(OPERATION_NOT_PERMITTED));
+            given(relationService.getSentFriendRequest(anyString(), any(Pageable.class))).willThrow(new CoreException(OPERATION_NOT_PERMITTED));
 
             // when
             final ResultActions resultActions = mvc.perform(get(TEST_URI, "requestUsername"));
@@ -204,7 +204,7 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN avec un ErrorResult correspondant")
         void should_response_forbidden_with_ErrorResult() throws Exception {
             // given
-            given(relationService.getReceivedFriendRequest(anyString(), any(Pageable.class))).willThrow(new AuthenticationException(OPERATION_NOT_PERMITTED));
+            given(relationService.getReceivedFriendRequest(anyString(), any(Pageable.class))).willThrow(new CoreException(OPERATION_NOT_PERMITTED));
 
             // when
             final ResultActions resultActions = mvc.perform(get(TEST_URI, "requestUsername"));
@@ -362,7 +362,7 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur est identifié mais qu'il n'est pas autorisé à modifier la relation")
         void should_response_forbidden_when_user_is_not_granted_to_update_relation() throws Exception {
             // given
-            given(relationService.confirmRelation(anyLong())).willThrow(new AuthenticationException(OPERATION_NOT_PERMITTED));
+            given(relationService.confirmRelation(anyLong())).willThrow(new CoreException(OPERATION_NOT_PERMITTED));
 
             // when
             final ResultActions resultActions = mvc.perform(post(TEST_URI, 12L).with(csrf()));

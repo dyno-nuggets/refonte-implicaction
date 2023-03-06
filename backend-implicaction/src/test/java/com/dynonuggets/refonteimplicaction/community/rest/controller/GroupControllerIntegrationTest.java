@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.service.GroupService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;

@@ -1,17 +1,17 @@
-package com.dynonuggets.refonteimplicaction.auth.adapter;
+package com.dynonuggets.refonteimplicaction.core.adapter;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUserDto;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.USER;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;

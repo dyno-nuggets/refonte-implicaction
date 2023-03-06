@@ -1,7 +1,6 @@
-package com.dynonuggets.refonteimplicaction.auth.repository;
+package com.dynonuggets.refonteimplicaction.core.domain.repository;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.repository.AbstractContainerBaseTest;
 import lombok.var;
 import org.junit.jupiter.api.*;
@@ -10,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.USER;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;

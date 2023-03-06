@@ -1,7 +1,7 @@
-package com.dynonuggets.refonteimplicaction.config;
+package com.dynonuggets.refonteimplicaction.core.config;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.auth.security.JwtAuthenticationFilter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,13 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
 @AllArgsConstructor
 @EnableScheduling
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private static final String[] AUTH_WHITELIST = {
+    private static final String[] NO_AUTHENTICATION_URIS = {
             // api
             "/api/auth/signup",
             "/api/auth/login",
@@ -45,8 +46,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
     };
 
-    // Toutes les routes front doivent être autorisées en back car c'est angular qui en gère l'accès
-    private static final String[] ANGULAR_WHITELIST = {
+    private static final String[] CSRF_DISABLED_URIS = {
+            "/api/auth/signup",
+            "/api/auth/login",
+            "/api/auth/logout",
+            "/api/auth/refresh/token"
+    };
+
+    // Toutes les routes du front doivent être autorisées en back car c’est angular qui en gère l’accès
+    private static final String[] FRONT_URIS = {
             "/",
             "/entreprise/**",
             "/users/**",
@@ -71,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/accountVerification/**",
     };
 
-    private static final String[] PREMIUM_PROTECTEDS = {
+    private static final String[] PREMIUM_RESTRICTED_URIS = {
             APPLY_BASE_URI + "/**",
     };
 
@@ -82,15 +90,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().disable()
-                .csrf().ignoringAntMatchers(AUTH_WHITELIST)
+                .csrf().ignoringAntMatchers(CSRF_DISABLED_URIS)
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
                 .authorizeRequests()
-                .antMatchers(AUTH_WHITELIST).permitAll()
-                .antMatchers(ANGULAR_WHITELIST).permitAll()
+                .antMatchers(NO_AUTHENTICATION_URIS).permitAll()
+                .antMatchers(FRONT_URIS).permitAll()
                 .antMatchers(ADMIN_PROTECTEDS).hasRole(RoleEnum.ADMIN.name())
-                .antMatchers(PREMIUM_PROTECTEDS).hasRole(RoleEnum.PREMIUM.name())
+                .antMatchers(PREMIUM_RESTRICTED_URIS).hasRole(RoleEnum.PREMIUM.name())
                 .anyRequest()
-                .authenticated();
+                .authenticated()
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(STATELESS);
+        
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
