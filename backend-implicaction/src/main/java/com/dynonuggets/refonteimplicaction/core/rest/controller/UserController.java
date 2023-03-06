@@ -1,7 +1,7 @@
-package com.dynonuggets.refonteimplicaction.auth.rest.controller;
+package com.dynonuggets.refonteimplicaction.core.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.auth.service.UserService;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_PENDING_USER_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.USER_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.CoreUris.GET_PENDING_USER_URI;
+import static com.dynonuggets.refonteimplicaction.core.util.CoreUris.USER_BASE_URI;
 
 @RestController
 @AllArgsConstructor

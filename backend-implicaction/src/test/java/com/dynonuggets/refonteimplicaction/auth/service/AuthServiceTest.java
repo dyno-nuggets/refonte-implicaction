@@ -1,15 +1,19 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.*;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginRequest;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginResponse;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenDto;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.security.JwtProvider;
+import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -28,8 +32,9 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.USER_ALREADY_ACTIVATED;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
@@ -111,17 +116,10 @@ class AuthServiceTest {
             given(userRepository.existsByUsername(any())).willReturn(true);
 
             // when
-            final ImplicactionException actualException =
-                    assertThrows(AuthenticationException.class, () -> authService.signup(validLoginRequest));
+            final ImplicactionException actualException = assertThrows(CoreException.class, () -> authService.signup(validLoginRequest));
 
             // then
-            assertThat(actualException)
-                    .extracting(ImplicactionException::getErrorResult)
-                    .isInstanceOf(AuthErrorResult.class)
-                    .isExactlyInstanceOf(AuthErrorResult.class)
-                    .isSameAs(USERNAME_ALREADY_EXISTS);
-            assertThat(actualException.getMessage())
-                    .isEqualTo(format(USERNAME_ALREADY_EXISTS.getMessage(), validLoginRequest.getUsername()));
+            assertImplicactionException(actualException, CoreException.class, USERNAME_ALREADY_EXISTS, validLoginRequest.getUsername());
             verify(userRepository, never()).save(any());
         }
 
@@ -133,11 +131,10 @@ class AuthServiceTest {
             given(userRepository.existsByEmail(any())).willReturn(true);
 
             // when
-            final ImplicactionException actualException =
-                    assertThrows(ImplicactionException.class, () -> authService.signup(validLoginRequest));
+            final ImplicactionException actualException = assertThrows(CoreException.class, () -> authService.signup(validLoginRequest));
 
             // then
-            assertImplicactionException(actualException, AuthenticationException.class, EMAIL_ALREADY_EXISTS, validLoginRequest.getEmail());
+            assertImplicactionException(actualException, CoreException.class, EMAIL_ALREADY_EXISTS, validLoginRequest.getEmail());
             verify(userRepository, never()).save(any());
         }
     }
@@ -174,11 +171,10 @@ class AuthServiceTest {
             given(userRepository.findByActivationKey(any())).willReturn(Optional.empty());
 
             // when
-            final ImplicactionException actualException =
-                    assertThrows(AuthenticationException.class, () -> authService.verifyAccount(activationKey));
+            final ImplicactionException actualException = assertThrows(CoreException.class, () -> authService.verifyAccount(activationKey));
 
             // then
-            assertImplicactionException(actualException, AuthenticationException.class, ACTIVATION_KEY_NOT_FOUND, activationKey);
+            assertImplicactionException(actualException, CoreException.class, ACTIVATION_KEY_NOT_FOUND, activationKey);
             verify(userRepository, never()).save(any());
         }
 

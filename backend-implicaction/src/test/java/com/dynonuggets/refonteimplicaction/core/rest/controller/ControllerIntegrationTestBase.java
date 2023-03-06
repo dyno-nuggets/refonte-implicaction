@@ -9,14 +9,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
 public class ControllerIntegrationTestBase {
-    protected static final Pageable DEFAULT_PAGEABLE = PageRequest.of(0, 10);
+    
     protected final Gson gson = new GsonBuilder().serializeNulls().create();
 
     @Autowired

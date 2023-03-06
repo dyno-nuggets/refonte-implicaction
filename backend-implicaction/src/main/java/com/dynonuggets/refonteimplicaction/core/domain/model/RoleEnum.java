@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.auth.domain.model;
+package com.dynonuggets.refonteimplicaction.core.domain.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

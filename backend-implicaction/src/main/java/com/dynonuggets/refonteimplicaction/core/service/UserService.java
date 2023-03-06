@@ -1,17 +1,18 @@
-package com.dynonuggets.refonteimplicaction.auth.service;
+package com.dynonuggets.refonteimplicaction.core.service;
 
-import com.dynonuggets.refonteimplicaction.auth.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
-import com.dynonuggets.refonteimplicaction.auth.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.USER_ID_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.USER_ID_NOT_FOUND;
 
 @Service
 @AllArgsConstructor
@@ -53,6 +54,11 @@ public class UserService {
 
     public User getUserByIdIfExists(final Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new AuthenticationException(USER_ID_NOT_FOUND, userId.toString()));
+                .orElseThrow(() -> new CoreException(USER_ID_NOT_FOUND, userId.toString()));
+    }
+
+    public User getUserByIdIfExists(final String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new CoreException(USERNAME_NOT_FOUND, username));
     }
 }

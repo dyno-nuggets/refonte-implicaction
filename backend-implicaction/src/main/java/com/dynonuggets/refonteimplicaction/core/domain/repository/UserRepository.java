@@ -1,6 +1,6 @@
-package com.dynonuggets.refonteimplicaction.auth.domain.repository;
+package com.dynonuggets.refonteimplicaction.core.domain.repository;
 
-import com.dynonuggets.refonteimplicaction.auth.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

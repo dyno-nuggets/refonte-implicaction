@@ -8,7 +8,7 @@ import static org.apache.logging.log4j.util.Strings.isNotEmpty;
 
 @Getter
 @AllArgsConstructor
-public class ImplicactionException extends RuntimeException {
+public abstract class ImplicactionException extends RuntimeException {
 
     private final BaseErrorResult errorResult;
     private final String value;

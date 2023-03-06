@@ -42,14 +42,6 @@ public class ApiUrls {
     // VOTES
     public static final String VOTE_BASE_URI = "/api/votes";
 
-    // USERS
-    public static final String USER_BASE_URI = "/api/users";
-    public static final String GET_USER_URI = "/{userId}";
-    public static final String GET_PENDING_USER_URI = "/pending";
-    public static final String GET_COMMUNITY_URI = "/community";
-    public static final String SET_USER_IMAGE = "/image";
-    public static final String GET_USER_GROUPS_URI = "/{userId}/groups";
-
     // FILES
     public static final String FILE_BASE_URI = "/api/files";
     public static final String GET_FILE_BY_KEY = "/{objectKey}";

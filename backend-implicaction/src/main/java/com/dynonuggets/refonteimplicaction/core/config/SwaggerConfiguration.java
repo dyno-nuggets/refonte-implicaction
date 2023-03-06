@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.config;
+package com.dynonuggets.refonteimplicaction.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
