@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.core.service;
 import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,8 +101,8 @@ class UserServiceTest {
             given(userRepository.findById(userId)).willReturn(empty());
 
             // when / then
-            final ImplicactionException exception = assertThrows(CoreException.class, () -> userService.getUserById(userId));
-            assertImplicactionException(exception, CoreException.class, USER_ID_NOT_FOUND, Long.toString(userId));
+            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserById(userId));
+            assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(userId));
         }
     }
 
@@ -140,8 +140,8 @@ class UserServiceTest {
             given(userRepository.findById(any())).willReturn(empty());
 
             // when / then
-            final ImplicactionException exception = assertThrows(CoreException.class, () -> userService.updateUser(mockedUserDto));
-            assertImplicactionException(exception, CoreException.class, USER_ID_NOT_FOUND, Long.toString(mockedUserDto.getId()));
+            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.updateUser(mockedUserDto));
+            assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(mockedUserDto.getId()));
             verify(userRepository, times(1)).findById(any());
             verify(userRepository, times(0)).save(any());
             verify(userAdapter, times(0)).toDto(any());
@@ -172,8 +172,8 @@ class UserServiceTest {
             given(userRepository.findById(userId)).willReturn(empty());
 
             // when / then
-            final ImplicactionException exception = assertThrows(CoreException.class, () -> userService.getUserById(userId));
-            assertImplicactionException(exception, CoreException.class, USER_ID_NOT_FOUND, Long.toString(userId));
+            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserById(userId));
+            assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(userId));
         }
     }
 }

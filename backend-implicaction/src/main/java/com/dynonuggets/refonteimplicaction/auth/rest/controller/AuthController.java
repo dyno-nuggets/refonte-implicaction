@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.REFRESH_TOKEN_DELETED_SUCESSFULLY_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.REFRESH_TOKEN_DELETED_SUCCESSFULLY_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.USER_SIGNUP_SUCCESS_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
 import static org.springframework.http.HttpStatus.OK;
@@ -57,6 +57,6 @@ public class AuthController {
     @PostMapping(AUTH_LOGOUT_URI)
     public ResponseEntity<String> logout(@RequestBody @Valid final RefreshTokenRequest refreshTokenRequest) {
         refreshTokenService.deleteRefreshToken(refreshTokenRequest.getRefreshToken());
-        return ResponseEntity.ok(REFRESH_TOKEN_DELETED_SUCESSFULLY_MESSAGE);
+        return ResponseEntity.ok(REFRESH_TOKEN_DELETED_SUCCESSFULLY_MESSAGE);
     }
 }

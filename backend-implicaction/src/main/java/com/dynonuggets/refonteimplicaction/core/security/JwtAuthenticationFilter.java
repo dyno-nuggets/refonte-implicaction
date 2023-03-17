@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.auth.security;
+package com.dynonuggets.refonteimplicaction.core.security;
 
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.rest.dto.ExceptionResponse;

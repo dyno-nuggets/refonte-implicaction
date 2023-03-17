@@ -5,14 +5,16 @@ import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginRequest;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginResponse;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.rest.dto.RegisterRequest;
-import com.dynonuggets.refonteimplicaction.auth.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.model.Notification;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +37,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.USER_ALREADY_ACTIVATED;
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.ADMIN;
 import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.USER;
-import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_BODY;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_TITLE;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
@@ -56,6 +58,7 @@ public class AuthService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
+    private final UserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
@@ -102,11 +105,11 @@ public class AuthService {
      */
     private void validateRegisterRequest(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
-            throw new CoreException(USERNAME_ALREADY_EXISTS, registerRequest.getUsername());
+            throw new AuthenticationException(USERNAME_ALREADY_EXISTS, registerRequest.getUsername());
         }
 
         if (userRepository.existsByEmail(registerRequest.getEmail())) {
-            throw new CoreException(EMAIL_ALREADY_EXISTS, registerRequest.getEmail());
+            throw new AuthenticationException(EMAIL_ALREADY_EXISTS, registerRequest.getEmail());
         }
     }
 
@@ -118,7 +121,7 @@ public class AuthService {
     @Transactional
     public void verifyAccount(final String activationKey) throws ImplicactionException {
         final User user = userRepository.findByActivationKey(activationKey)
-                .orElseThrow(() -> new CoreException(ACTIVATION_KEY_NOT_FOUND, activationKey));
+                .orElseThrow(() -> new EntityNotFoundException(ACTIVATION_KEY_NOT_FOUND, activationKey));
 
         if (user.isActive()) {
             throw new AuthenticationException(USER_ALREADY_ACTIVATED, activationKey);
@@ -157,7 +160,7 @@ public class AuthService {
         final String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
         final User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new CoreException(USER_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(BAD_CREDENTIALS));
 
         return LoginResponse.builder()
                 .authenticationToken(token)
@@ -170,13 +173,13 @@ public class AuthService {
     public User getCurrentUser() {
         final org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return getUserIfExists(principal.getUsername());
+        return userService.getUserByUsernameIfExists(principal.getUsername());
     }
 
     @Transactional(readOnly = true)
     public LoginResponse refreshToken(final RefreshTokenRequest refreshTokenRequest) throws ImplicactionException {
         final String username = refreshTokenRequest.getUsername();
-        final User user = getUserIfExists(username);
+        final User user = userService.getUserByUsernameIfExists(username);
 
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
         final String token = jwtProvider.generateTokenWithUsername(username);
@@ -188,11 +191,6 @@ public class AuthService {
                 .expiresAt(expiresAt)
                 .currentUser(userAdapter.toDtoLight(user))
                 .build();
-    }
-
-    public User getUserIfExists(final String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new CoreException(USER_NOT_FOUND));
     }
 
     private User registerUser(final RegisterRequest registerRequest, final String activationKey) {
@@ -222,6 +220,7 @@ public class AuthService {
 
     /**
      * Vérifie que le nom d’utilisateur en paramètre correspond à l’utilisateur courant OU que l’utilisateur courant est admin
+     * TODO: refacto cette méthode en prenant en paramètre une liste de rôles autorisés
      *
      * @param username le nom de l’utilisateur dont il faut vérifier l’autorisation
      * @throws AuthenticationException si l’utilisateur n’est pas autorisé

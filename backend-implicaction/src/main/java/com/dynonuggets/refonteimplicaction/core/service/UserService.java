@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.core.service;
 import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -52,13 +52,13 @@ public class UserService {
                 .map(userAdapter::toDto);
     }
 
-    public User getUserByIdIfExists(final Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new CoreException(USER_ID_NOT_FOUND, userId.toString()));
+    public User getUserByUsernameIfExists(final String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new EntityNotFoundException(USERNAME_NOT_FOUND, username));
     }
 
-    public User getUserByIdIfExists(final String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new CoreException(USERNAME_NOT_FOUND, username));
+    public User getUserByIdIfExists(final Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException(USER_ID_NOT_FOUND, userId.toString()));
     }
 }
