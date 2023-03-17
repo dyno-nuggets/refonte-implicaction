@@ -10,6 +10,7 @@ import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -180,7 +181,7 @@ public class RelationService {
 
     private Relation getRelationIfExists(final Long relationId) {
         return relationRepository.findById(relationId)
-                .orElseThrow(() -> new CommunityException(RELATION_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(RELATION_NOT_FOUND));
     }
 
     private void verifyThatCurrentUserCanEditRelation(final Relation relation) {

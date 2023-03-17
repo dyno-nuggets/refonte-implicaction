@@ -1,20 +1,19 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginRequest;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginResponse;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenDto;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.RegisterRequest;
-import com.dynonuggets.refonteimplicaction.auth.security.JwtProvider;
+import com.dynonuggets.refonteimplicaction.auth.rest.dto.*;
 import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,15 +25,18 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.USER_ALREADY_ACTIVATED;
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.*;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
@@ -43,8 +45,7 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -53,13 +54,15 @@ class AuthServiceTest {
     @Mock
     UserRepository userRepository;
     @Mock
+    UserService userService;
+    @Mock
+    UserAdapter userAdapter;
+    @Mock
     AuthenticationManager authenticationManager;
     @Mock
     JwtProvider jwtProvider;
     @Mock
     RefreshTokenService refreshTokenService;
-    @Mock
-    UserAdapter userAdapter;
     @Mock
     RoleRepository roleRepository;
     @Mock
@@ -78,6 +81,17 @@ class AuthServiceTest {
                 .lastname(randomAlphabetic(10)).build();
     }
 
+    Authentication authentication;
+    SecurityContext securityContext;
+
+
+    @BeforeEach
+    void setUp() {
+        authentication = mock(Authentication.class);
+        securityContext = mock(SecurityContext.class);
+        SecurityContextHolder.setContext(securityContext);
+    }
+
     @Nested
     @DisplayName("# signup")
     class SignupTest {
@@ -86,7 +100,7 @@ class AuthServiceTest {
         void should_register_user_when_request_is_valid_and_user_not_already_exists() {
             // given
             final RegisterRequest validLoginRequest = generateValidRegisterRequest();
-            final String expectedPassword = "encriptedPassword";
+            final String expectedPassword = "encryptedPassword";
             given(userRepository.existsByUsername(any())).willReturn(false);
             given(userRepository.existsByEmail(any())).willReturn(false);
             given(passwordEncoder.encode(any())).willReturn(expectedPassword);
@@ -116,10 +130,10 @@ class AuthServiceTest {
             given(userRepository.existsByUsername(any())).willReturn(true);
 
             // when
-            final ImplicactionException actualException = assertThrows(CoreException.class, () -> authService.signup(validLoginRequest));
+            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> authService.signup(validLoginRequest));
 
             // then
-            assertImplicactionException(actualException, CoreException.class, USERNAME_ALREADY_EXISTS, validLoginRequest.getUsername());
+            assertImplicactionException(actualException, AuthenticationException.class, USERNAME_ALREADY_EXISTS, validLoginRequest.getUsername());
             verify(userRepository, never()).save(any());
         }
 
@@ -131,10 +145,10 @@ class AuthServiceTest {
             given(userRepository.existsByEmail(any())).willReturn(true);
 
             // when
-            final ImplicactionException actualException = assertThrows(CoreException.class, () -> authService.signup(validLoginRequest));
+            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> authService.signup(validLoginRequest));
 
             // then
-            assertImplicactionException(actualException, CoreException.class, EMAIL_ALREADY_EXISTS, validLoginRequest.getEmail());
+            assertImplicactionException(actualException, AuthenticationException.class, EMAIL_ALREADY_EXISTS, validLoginRequest.getEmail());
             verify(userRepository, never()).save(any());
         }
     }
@@ -156,7 +170,7 @@ class AuthServiceTest {
             verify(userRepository, times(1)).save(userArgumentCaptorCaptor.capture());
             final User savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
-                    // les champs activatedAt et active doivent être différents donc on les ignore
+                    // les champs activatedAt et active doivent être différents donc, on les ignore
                     .usingRecursiveComparison().ignoringFields("active")
                     .isEqualTo(user);
             assertThat(savedUser.isActive()).isTrue();
@@ -171,10 +185,10 @@ class AuthServiceTest {
             given(userRepository.findByActivationKey(any())).willReturn(Optional.empty());
 
             // when
-            final ImplicactionException actualException = assertThrows(CoreException.class, () -> authService.verifyAccount(activationKey));
+            final ImplicactionException actualException = assertThrows(EntityNotFoundException.class, () -> authService.verifyAccount(activationKey));
 
             // then
-            assertImplicactionException(actualException, CoreException.class, ACTIVATION_KEY_NOT_FOUND, activationKey);
+            assertImplicactionException(actualException, EntityNotFoundException.class, ACTIVATION_KEY_NOT_FOUND, activationKey);
             verify(userRepository, never()).save(any());
         }
 
@@ -236,5 +250,98 @@ class AuthServiceTest {
         }
 
         // TODO: chercher comment faire les tests en cas d'échec
+    }
+
+    @Nested
+    @DisplayName("# getCurrentUser")
+    class GetCurrentUserClass {
+        @Test
+        @DisplayName("doit retourner l'utilisateur courant")
+        void test() {
+            // given
+            final String username = "username";
+            final String password = "password";
+            final org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(username, password, List.of());
+            given(securityContext.getAuthentication()).willReturn(authentication);
+            given(securityContext.getAuthentication().getPrincipal()).willReturn(user);
+            given(userService.getUserByUsernameIfExists(anyString())).willReturn(User.builder().username("username").build());
+
+            // when
+            final User currentUser = authService.getCurrentUser();
+
+            // then
+            assertThat(currentUser)
+                    .isNotNull()
+                    .extracting(User::getUsername)
+                    .isEqualTo(username);
+        }
+    }
+
+    @Nested
+    @DisplayName("# refreshToken")
+    class RefreshToken {
+        @Test
+        @DisplayName("doit retourner un LoginResponse si l'utilisateur existe et le refresh token est valide")
+        void should_return_LoginResponse_when_token_is_valid() {
+            // given
+            final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
+            final String username = refreshTokenRequest.getUsername();
+            final User user = User.builder().username(username).build();
+            final LoginResponse expectedResponse = LoginResponse.builder().refreshToken("refreshToken").authenticationToken("jwtToken").expiresAt(now().plusMillis(jwtProvider.getJwtExpirationInMillis())).build();
+            given(userService.getUserByUsernameIfExists(username)).willReturn(user);
+            willDoNothing().given(refreshTokenService).validateRefreshToken(anyString());
+            given(jwtProvider.generateTokenWithUsername(username)).willReturn("jwtToken");
+
+            // when
+            final LoginResponse loginResponse = authService.refreshToken(refreshTokenRequest);
+
+            // then
+            assertThat(loginResponse)
+                    .usingRecursiveComparison()
+                    .ignoringFields("expiresAt", "currentUser")
+                    .isEqualTo(expectedResponse);
+
+            assertThat(loginResponse.getExpiresAt())
+                    .isBetween(expectedResponse.getExpiresAt(), now().plusMillis(jwtProvider.getJwtExpirationInMillis()));
+            verify(userService, times(1)).getUserByUsernameIfExists(username);
+            verify(refreshTokenService, times(1)).validateRefreshToken(anyString());
+            verify(jwtProvider, times(1)).generateTokenWithUsername(username);
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception si le nom d'utilisateur contenu dans la requête n'existe pas")
+        void should_throw_exception_when_username_requests_not_exists() {
+            // given
+            final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
+            final String username = refreshTokenRequest.getUsername();
+            given(userService.getUserByUsernameIfExists(username)).willThrow(new EntityNotFoundException(USERNAME_NOT_FOUND, username));
+
+            // when
+            final ImplicactionException actualException = assertThrows(EntityNotFoundException.class, () -> authService.refreshToken(refreshTokenRequest));
+
+            // then
+            assertImplicactionException(actualException, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
+            verifyNoInteractions(refreshTokenService);
+            verifyNoInteractions(jwtProvider);
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception si le refresh token n'existe pas")
+        void should_throw_exception_when_refresh_token_not_exists() {
+            // given
+            final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
+            final String username = refreshTokenRequest.getUsername();
+            final User user = User.builder().username(username).build();
+            given(userService.getUserByUsernameIfExists(username)).willReturn(user);
+            willThrow(new AuthenticationException(REFRESH_TOKEN_EXPIRED)).given(refreshTokenService).validateRefreshToken(anyString());
+
+            // when
+            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> authService.refreshToken(refreshTokenRequest));
+
+            // then
+            assertImplicactionException(actualException, AuthenticationException.class, REFRESH_TOKEN_EXPIRED);
+            verify(refreshTokenService, times(1)).validateRefreshToken(anyString());
+            verifyNoInteractions(jwtProvider);
+        }
     }
 }

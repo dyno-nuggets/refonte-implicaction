@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.core.config;
 
-import com.dynonuggets.refonteimplicaction.auth.security.JwtAuthenticationFilter;
 import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.security.JwtAuthenticationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
+import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -47,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] CSRF_DISABLED_URIS = {
-            "/api/auth/signup",
-            "/api/auth/login",
-            "/api/auth/logout",
-            "/api/auth/refresh/token"
+            AUTH_BASE_URI + AUTH_SIGNUP_URI,
+            AUTH_BASE_URI + AUTH_LOGIN_URI,
+            AUTH_BASE_URI + AUTH_LOGOUT_URI,
+            AUTH_BASE_URI + AUTH_REFRESH_TOKENS_URI
     };
 
     // Toutes les routes du front doivent être autorisées en back car c’est angular qui en gère l’accès
@@ -75,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/**.woff"
     };
 
-    private static final String[] ADMIN_PROTECTEDS = {
+    private static final String[] ADMIN_RESTRICTED_URIS = {
             "/api/auth/accountVerification/**",
     };
 
@@ -90,19 +91,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().disable()
-                .csrf().ignoringAntMatchers(CSRF_DISABLED_URIS)
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()).and()
+                .csrf().ignoringAntMatchers(CSRF_DISABLED_URIS).csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
                 .authorizeRequests()
                 .antMatchers(NO_AUTHENTICATION_URIS).permitAll()
                 .antMatchers(FRONT_URIS).permitAll()
-                .antMatchers(ADMIN_PROTECTEDS).hasRole(RoleEnum.ADMIN.name())
+                .antMatchers(ADMIN_RESTRICTED_URIS).hasRole(RoleEnum.ADMIN.name())
                 .antMatchers(PREMIUM_RESTRICTED_URIS).hasRole(RoleEnum.PREMIUM.name())
-                .anyRequest()
-                .authenticated()
+                .anyRequest().authenticated()
                 .and()
-                .sessionManagement()
-                .sessionCreationPolicy(STATELESS);
-        
+                .sessionManagement().sessionCreationPolicy(STATELESS);
+
         httpSecurity.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
@@ -9,6 +8,8 @@ import com.dynonuggets.refonteimplicaction.community.domain.repository.GroupRepo
 import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
@@ -45,7 +46,7 @@ public class GroupService {
         final FileModel fileSave = fileRepository.save(fileModel);
         final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
         final Profile profile = profileRepository.findByUser_Username(username)
-                .orElseThrow(() -> new CommunityException(PROFILE_NOT_FOUND, username));
+                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setImage(fileSave);
