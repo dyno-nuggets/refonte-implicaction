@@ -25,7 +25,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) {
-        final User user = userService.getUserByIdIfExists(username);
+        final User user = userService.getUserByUsernameIfExists(username);
 
         if (!user.isActive()) {
             throw new AuthenticationException(USER_IS_NOT_ACTIVATED);

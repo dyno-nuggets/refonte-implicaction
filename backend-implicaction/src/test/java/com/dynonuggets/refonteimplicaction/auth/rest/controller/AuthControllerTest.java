@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.UUID;
 
-import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.REFRESH_TOKEN_DELETED_SUCESSFULLY_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.REFRESH_TOKEN_DELETED_SUCCESSFULLY_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.USER_SIGNUP_SUCCESS_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUserDto;
@@ -333,7 +333,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             // then
             resultActions
                     .andExpect(status().isOk())
-                    .andExpect(content().string(REFRESH_TOKEN_DELETED_SUCESSFULLY_MESSAGE));
+                    .andExpect(content().string(REFRESH_TOKEN_DELETED_SUCCESSFULLY_MESSAGE));
             verify(refreshTokenService, times(1)).deleteRefreshToken(any());
         }
     }

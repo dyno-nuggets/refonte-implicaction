@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.core.rest.controller;
 
-import com.dynonuggets.refonteimplicaction.auth.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.auth.service.UserDetailsServiceImpl;
+import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
 public class ControllerIntegrationTestBase {
-    
+
     protected final Gson gson = new GsonBuilder().serializeNulls().create();
 
     @Autowired

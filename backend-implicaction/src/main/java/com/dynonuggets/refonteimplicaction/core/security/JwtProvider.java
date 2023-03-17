@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.auth.security;
+package com.dynonuggets.refonteimplicaction.core.security;
 
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.PUBLIC_KEY_ERROR;
 
-@Service
 @Slf4j
+@Service
 public class JwtProvider {
 
     private static final String AUTHORITIES_KEY = "scopes";
@@ -50,19 +50,19 @@ public class JwtProvider {
     public void init() {
         try {
             keyStore = KeyStore.getInstance(keyStoreType);
-            InputStream ressourceAsStream = getClass().getResourceAsStream(keyStoreFile);
+            final InputStream ressourceAsStream = getClass().getResourceAsStream(keyStoreFile);
             keyStore.load(ressourceAsStream, keyStorePassword.toCharArray());
-        } catch (KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
+        } catch (final KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
             log.error(e.getMessage());
         }
     }
 
-    public String generateToken(Authentication authentication) throws ImplicactionException {
-        User principal = (User) authentication.getPrincipal();
+    public String generateToken(final Authentication authentication) throws ImplicactionException {
+        final User principal = (User) authentication.getPrincipal();
         final String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
-        Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
+        final Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
         return Jwts.builder()
                 .setSubject(principal.getUsername())
                 .claim(AUTHORITIES_KEY, authorities)
@@ -71,8 +71,8 @@ public class JwtProvider {
                 .compact();
     }
 
-    public String generateTokenWithUsername(String username) throws ImplicactionException {
-        Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
+    public String generateTokenWithUsername(final String username) throws ImplicactionException {
+        final Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
         return Jwts.builder()
                 .setSubject(username)
                 .signWith(getPrivateKey())
@@ -80,20 +80,20 @@ public class JwtProvider {
                 .compact();
     }
 
-    private JwtParser buildJwtsParser() throws ImplicactionException {
+    private JwtParser buildJwsParser() throws ImplicactionException {
         return Jwts.parserBuilder()
                 .setSigningKey(getPublicKey())
                 .build();
     }
 
-    public boolean validateToken(String jwt) throws ImplicactionException {
-        buildJwtsParser().parseClaimsJws(jwt);
+    public boolean validateToken(final String jwt) throws ImplicactionException {
+        buildJwsParser().parseClaimsJws(jwt);
         // Toujours vrai car si erreur => exception lancée
         return true;
     }
 
-    public String getUsernameFromJwt(String token) throws ImplicactionException {
-        return buildJwtsParser()
+    public String getUsernameFromJwt(final String token) throws ImplicactionException {
+        return buildJwsParser()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -102,7 +102,7 @@ public class JwtProvider {
     private PublicKey getPublicKey() throws ImplicactionException {
         try {
             return keyStore.getCertificate(keyStoreName).getPublicKey();
-        } catch (KeyStoreException e) {
+        } catch (final KeyStoreException e) {
             log.error("Exception occured while retrieving public key");
             throw new AuthenticationException(PUBLIC_KEY_ERROR);
         }
@@ -111,7 +111,7 @@ public class JwtProvider {
     private Key getPrivateKey() throws ImplicactionException {
         try {
             return keyStore.getKey(keyStoreName, keyStorePassword.toCharArray());
-        } catch (KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
+        } catch (final KeyStoreException | NoSuchAlgorithmException | UnrecoverableKeyException e) {
             log.error("Exception occured while retrieving public key from keystore");
             throw new AuthenticationException(PUBLIC_KEY_ERROR);
         }
