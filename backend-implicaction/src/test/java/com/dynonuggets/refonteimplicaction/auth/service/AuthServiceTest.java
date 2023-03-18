@@ -1,18 +1,17 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
+import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.*;
-import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
-import com.dynonuggets.refonteimplicaction.core.service.UserService;
-import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
+import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.RoleRepository;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,7 +35,7 @@ import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.user.error.UserErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
@@ -65,8 +64,6 @@ class AuthServiceTest {
     RefreshTokenService refreshTokenService;
     @Mock
     RoleRepository roleRepository;
-    @Mock
-    NotificationRepository notificationRepository;
     @InjectMocks
     AuthService authService;
     @Captor

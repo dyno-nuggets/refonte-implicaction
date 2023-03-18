@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.ProfileDto;
+import com.dynonuggets.refonteimplicaction.community.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

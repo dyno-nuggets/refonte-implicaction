@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Relation;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
+import com.dynonuggets.refonteimplicaction.community.dto.RelationsDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

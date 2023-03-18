@@ -1,11 +1,10 @@
 package com.dynonuggets.refonteimplicaction.core.handler;
 
+import com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse;
+import com.dynonuggets.refonteimplicaction.core.dto.ValidationExceptionResponse;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.rest.dto.ExceptionResponse;
-import com.dynonuggets.refonteimplicaction.core.rest.dto.ValidationExceptionResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
-import com.dynonuggets.refonteimplicaction.exception.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.dynonuggets.refonteimplicaction.core.rest.dto.ExceptionResponse.from;
+import static com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse.from;
 import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.BAD_CREDENTIAL_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_DISABLED_MESSAGE;
@@ -48,7 +47,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(UNAUTHORIZED).body(from(ex, UNAUTHORIZED));
     }
 
-    @ExceptionHandler(value = {NotFoundException.class, UserNotFoundException.class})
+    @ExceptionHandler(value = {NotFoundException.class})
     public ResponseEntity<ExceptionResponse> userNotFoundException(final Exception ex) {
         return ResponseEntity.status(NOT_FOUND).body(from(ex, NOT_FOUND));
     }

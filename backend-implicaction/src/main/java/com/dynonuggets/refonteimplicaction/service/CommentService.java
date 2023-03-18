@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.Comment;
@@ -31,7 +31,7 @@ public class CommentService {
     private final CommentAdapter commentAdapter;
 
     public int commentCount(final Post post) {
-        return commentRepository.findByPost(post).size();
+        return commentRepository.countAllByPost_Id(post.getId());
     }
 
     @Transactional

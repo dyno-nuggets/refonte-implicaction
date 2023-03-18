@@ -2,10 +2,9 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.RefreshToken;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.RefreshTokenRepository;
+import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenDto;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenDto;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import lombok.var;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -68,11 +67,10 @@ public class RefreshTokenServiceTest {
         @DisplayName("doit lancer une excéption quand le token n'existe pas")
         void should_throw_exception_when_token_does_not_exists() {
             // given
-            final ImplicactionException expectedException = new AuthenticationException(REFRESH_TOKEN_EXPIRED);
             given(refreshTokenRepository.findByToken(any())).willReturn(empty());
 
             // when
-            final var actualException = assertThrows(AuthenticationException.class, () -> refreshTokenService.validateRefreshToken("token"));
+            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> refreshTokenService.validateRefreshToken("token"));
 
             // then
             assertImplicactionException(actualException, AuthenticationException.class, REFRESH_TOKEN_EXPIRED);

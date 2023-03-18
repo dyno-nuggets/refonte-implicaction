@@ -6,11 +6,11 @@ import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Relation;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.RelationRepository;
+import com.dynonuggets.refonteimplicaction.community.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +18,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.community.dto.RelationTypeEnum.*;
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.*;
-import static com.dynonuggets.refonteimplicaction.community.rest.dto.RelationTypeEnum.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.time.Instant.now;

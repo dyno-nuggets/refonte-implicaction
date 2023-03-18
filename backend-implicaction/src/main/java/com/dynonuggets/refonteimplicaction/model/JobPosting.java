@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import lombok.*;
 
 import javax.persistence.*;

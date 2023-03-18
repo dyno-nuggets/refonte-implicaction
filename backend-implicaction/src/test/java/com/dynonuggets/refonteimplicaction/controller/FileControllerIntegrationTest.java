@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.dynonuggets.refonteimplicaction.core.rest.controller.ControllerIntegrationTestBase;
+import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
 import org.junit.jupiter.api.Test;

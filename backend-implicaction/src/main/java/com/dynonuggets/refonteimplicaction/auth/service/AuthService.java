@@ -1,22 +1,20 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
+import com.dynonuggets.refonteimplicaction.auth.dto.LoginRequest;
+import com.dynonuggets.refonteimplicaction.auth.dto.LoginResponse;
+import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
+import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginRequest;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.LoginResponse;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenRequest;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.RegisterRequest;
-import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
-import com.dynonuggets.refonteimplicaction.core.service.UserService;
-import com.dynonuggets.refonteimplicaction.model.Notification;
-import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
+import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.RoleRepository;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -33,20 +31,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
-import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.ADMIN;
-import static com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_BODY;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_REGISTER_MAIL_TITLE;
+import static com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum.ADMIN;
+import static com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_ACTIVATION;
-import static com.dynonuggets.refonteimplicaction.model.NotificationTypeEnum.USER_REGISTRATION;
-import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
@@ -64,7 +56,6 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
     private final RoleRepository roleRepository;
-    private final NotificationRepository notificationRepository;
 
 
     @Value("${app.url}")
@@ -84,20 +75,7 @@ public class AuthService {
         final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(ADMIN.getLongName()));
         registerUser(registerRequest, activationKey);
 
-
-        // TODO: MAIL-NOTIFICATION à revoir
-        final Notification notification = Notification.builder()
-                .message(format(USER_REGISTER_MAIL_BODY, registerRequest.getUsername()))
-                .sent(false)
-                .read(false)
-                .date(now())
-                .title(USER_REGISTER_MAIL_TITLE)
-                .type(USER_REGISTRATION)
-                .build();
-
-        final Notification save = notificationRepository.save(notification);
-        admins.forEach(admin -> admin.getNotifications().add(save));
-        userRepository.saveAll(admins);
+        // todo : envoyer un mail d'activation
     }
 
     /**
@@ -129,25 +107,12 @@ public class AuthService {
 
         user.setActive(true);
 
-        // TODO: MAIL-NOTIFICATION à revoir
-        final Notification notification = Notification.builder()
-                .type(USER_ACTIVATION)
-                .users(singletonList(user))
-                .date(now())
-                .sent(false)
-                .read(false)
-                .message(format("Félicitation, votre compte <a href=\"%s/auth/login\">implicaction</a> est désormais actif.", appUrl))
-                .title("[Implicaction] Activation de votre compte")
-                .build();
-        final Notification notificationSave = notificationRepository.save(notification);
-        if (user.getNotifications() == null) {
-            user.setNotifications(new ArrayList<>());
-        }
-        user.getNotifications().add(notificationSave);
+        // todo : email notification
+
         userRepository.save(user);
     }
 
-    // TODO: revoir potentiellement la logique des tokens (ex: suppression des refresh tokens associés précédemment)
+    // TODO: revoir potentiellement la logique des jetons (ex: suppression des refresh tokens associés précédemment)
     @Transactional
     public LoginResponse login(@Valid final LoginRequest loginRequest) throws ImplicactionException {
         final String username = loginRequest.getUsername();
