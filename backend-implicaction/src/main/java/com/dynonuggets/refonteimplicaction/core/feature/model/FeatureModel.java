@@ -1,8 +1,10 @@
 package com.dynonuggets.refonteimplicaction.core.feature.model;
 
 import com.dynonuggets.refonteimplicaction.core.feature.model.enums.FeatureKey;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
@@ -10,7 +12,9 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "feature")
 public class FeatureModel {
     @Id
