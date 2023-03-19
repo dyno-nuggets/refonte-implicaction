@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
@@ -71,7 +71,7 @@ class JobPostingAdapterTest {
 
     @Test
     void toDtoTest() {
-        JobPostingDto jobPostingDto = jobPostingAdapter.toDto(jobPosting);
+        final JobPostingDto jobPostingDto = jobPostingAdapter.toDto(jobPosting);
 
         assertThat(jobPostingDto).usingRecursiveComparison()
                 .isEqualTo(expectedJobPostingDto);

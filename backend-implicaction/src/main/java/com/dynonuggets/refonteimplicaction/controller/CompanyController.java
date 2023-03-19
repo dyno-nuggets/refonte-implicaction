@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
-import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.service.CompanyService;
 import lombok.AllArgsConstructor;
@@ -35,7 +34,7 @@ public class CompanyController {
     }
 
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.PUT})
-    public ResponseEntity<CompanyDto> createOrUpdate(@RequestBody final CompanyDto companyDto) throws ImplicactionException {
+    public ResponseEntity<CompanyDto> createOrUpdate(@RequestBody final CompanyDto companyDto) {
         final CompanyDto companyCreated = companyService.saveOrUpdateCompany(companyDto);
         return ResponseEntity.ok(companyCreated);
     }

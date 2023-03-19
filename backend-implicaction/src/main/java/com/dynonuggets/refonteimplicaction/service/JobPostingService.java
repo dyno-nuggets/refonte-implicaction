@@ -1,9 +1,10 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.notification.service.NotificationService;
+import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
@@ -45,9 +46,6 @@ public class JobPostingService {
                 .anyMatch(role -> role.getName().equals(RoleEnum.ADMIN.getLongName()));
         jobPosting.setValid(isAdmin);
         final JobPosting jobSaved = jobPostingRepository.save(jobPosting);
-        if (jobSaved.isValid()) {
-            notificationService.createJobNotification(jobSaved);
-        }
         return jobPostingAdapter.toDto(jobSaved);
     }
 
@@ -127,9 +125,6 @@ public class JobPostingService {
         final JobPosting job = findById(jobId);
         job.setValid(true);
         final JobPosting jobValidate = jobPostingRepository.save(job);
-
-        // creation de la notification
-        notificationService.createJobNotification(jobValidate);
 
         return jobPostingAdapter.toDto(jobValidate);
     }

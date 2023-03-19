@@ -1,14 +1,14 @@
 package com.dynonuggets.refonteimplicaction.community.service;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;

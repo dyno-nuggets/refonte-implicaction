@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.core.config;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
 import com.dynonuggets.refonteimplicaction.core.security.JwtAuthenticationFilter;
+import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +20,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.util.CoreUris.FEATURE_BASE_URI;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
@@ -33,9 +34,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/login",
             "/api/auth/logout",
             "/api/auth/refresh/token",
+            "/api/auth/accountVerification/**",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
             JOBS_BASE_URI + VALIDATED_JOBS + "?**",
+            FEATURE_BASE_URI,
 
             // swagger
             "/v2/api-docs",
@@ -77,7 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ADMIN_RESTRICTED_URIS = {
-            "/api/auth/accountVerification/**",
     };
 
     private static final String[] PREMIUM_RESTRICTED_URIS = {

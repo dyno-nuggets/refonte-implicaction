@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
@@ -61,9 +61,9 @@ class CommentServiceTest {
     @Test
     void should_return_post_count() {
         // given
-        final Post post = new Post();
+        final Post post = Post.builder().id(12L).build();
         final List<Comment> expectedComments = asList(new Comment(), new Comment(), new Comment(), new Comment());
-        given(commentRepository.findByPost(any())).willReturn(expectedComments);
+        given(commentRepository.countAllByPost_Id(anyLong())).willReturn(expectedComments.size());
 
         // when
         final int actualCount = commentService.commentCount(post);

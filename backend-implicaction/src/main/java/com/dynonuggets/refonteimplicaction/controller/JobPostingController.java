@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
-import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
@@ -26,7 +25,7 @@ public class JobPostingController {
     private final JobPostingService jobPostingService;
 
     @PostMapping
-    public ResponseEntity<JobPostingDto> create(@RequestBody final JobPostingDto jobPostingDto) throws ImplicactionException {
+    public ResponseEntity<JobPostingDto> create(@RequestBody final JobPostingDto jobPostingDto) {
         final JobPostingDto jobCreated = jobPostingService.createJob(jobPostingDto);
         return ResponseEntity.ok(jobCreated);
     }

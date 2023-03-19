@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
-import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
@@ -23,7 +22,7 @@ public class JobApplicationController {
     private final JobApplicationService applyService;
 
     @PostMapping
-    public ResponseEntity<JobApplicationDto> createApply(@RequestBody final JobApplicationRequest requestDto) throws ImplicactionException {
+    public ResponseEntity<JobApplicationDto> createApply(@RequestBody final JobApplicationRequest requestDto) {
         final JobApplicationDto saveDto = applyService.createApplyIfNotExists(requestDto);
         final URI location = UriComponentsBuilder.fromPath(APPLY_BASE_URI + GET_APPLY_URI)
                 .buildAndExpand(saveDto.getId())
