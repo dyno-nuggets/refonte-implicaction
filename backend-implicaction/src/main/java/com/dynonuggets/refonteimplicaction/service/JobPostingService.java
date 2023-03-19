@@ -46,9 +46,6 @@ public class JobPostingService {
                 .anyMatch(role -> role.getName().equals(RoleEnum.ADMIN.getLongName()));
         jobPosting.setValid(isAdmin);
         final JobPosting jobSaved = jobPostingRepository.save(jobPosting);
-        if (jobSaved.isValid()) {
-            notificationService.createJobNotification(jobSaved);
-        }
         return jobPostingAdapter.toDto(jobSaved);
     }
 
@@ -128,9 +125,6 @@ public class JobPostingService {
         final JobPosting job = findById(jobId);
         job.setValid(true);
         final JobPosting jobValidate = jobPostingRepository.save(job);
-
-        // creation de la notification
-        notificationService.createJobNotification(jobValidate);
 
         return jobPostingAdapter.toDto(jobValidate);
     }

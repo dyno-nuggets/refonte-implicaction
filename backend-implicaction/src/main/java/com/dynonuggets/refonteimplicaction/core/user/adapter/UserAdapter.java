@@ -30,6 +30,7 @@ public class UserAdapter {
                 .registeredAt(model.getRegisteredAt())
                 .activationKey(model.getActivationKey())
                 .active(model.isActive())
+                .emailVerified(model.isEmailVerified())
                 .roles(rolesToRoleNames(model))
                 .build();
     }
@@ -53,6 +54,7 @@ public class UserAdapter {
                 .active(dto.isActive())
                 .email(dto.getEmail())
                 .registeredAt(dto.getRegisteredAt())
+                .emailVerified(dto.isEmailVerified())
                 .roles(roles)
                 .build();
     }

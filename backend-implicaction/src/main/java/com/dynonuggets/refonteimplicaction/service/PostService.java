@@ -49,12 +49,6 @@ public class PostService {
 
         final Post post = postAdapter.toPost(postRequest, group, authService.getCurrentUser());
         final Post save = postRepository.save(post);
-
-        // création de la notification
-        if (post.getGroup() != null) {
-            notificationService.createPostNotification(post);
-        }
-
         return getPostResponse(save);
     }
 

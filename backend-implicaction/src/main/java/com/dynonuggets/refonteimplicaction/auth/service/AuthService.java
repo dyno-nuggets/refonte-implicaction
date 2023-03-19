@@ -5,9 +5,11 @@ import com.dynonuggets.refonteimplicaction.auth.dto.LoginResponse;
 import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
+import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
 import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.core.user.domain.model.Role;
@@ -36,11 +38,9 @@ import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum.ADMIN;
 import static com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.time.Instant.now;
-import static java.util.Collections.singletonList;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Service
@@ -56,6 +56,8 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final UserAdapter userAdapter;
     private final RoleRepository roleRepository;
+    private final NotificationService notificationService;
+    private final EmailValidationNotificationMapper emailValidationNotificationMapper;
 
 
     @Value("${app.url}")
@@ -66,20 +68,19 @@ public class AuthService {
      * Enregistre un utilisateur en base de données
      *
      * @param registerRequest données d’identification de l’utilisateur
-     * @throws AuthenticationException si l’envoi du mail échoue
      */
     @Transactional
     public void signup(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         validateRegisterRequest(registerRequest);
         final String activationKey = generateActivationKey();
-        final List<User> admins = userRepository.findAllByRoles_NameIn(singletonList(ADMIN.getLongName()));
-        registerUser(registerRequest, activationKey);
-
-        // todo : envoyer un mail d'activation
+        final User user = registerUser(registerRequest, activationKey);
+        notificationService.notify(user, emailValidationNotificationMapper);
     }
 
     /**
      * Vérifie la validité de la requête de sign-up
+     *
+     * @throws AuthenticationException si le nom d'utilisateur ou l'email est déjà utilisé
      */
     private void validateRegisterRequest(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -92,23 +93,21 @@ public class AuthService {
     }
 
     /**
-     * Vérifie existence et l’activation d’une clé d’activation et l’active si elle ne l’est pas déjà
+     * Définit l’adresse email de l’utilisateur correspondant à la clé d’activation comme vérifié si elle ne l’est pas déjà
      *
-     * @throws AuthenticationException Si la clé n’existe pas, ou si la clé est déjà activée
+     * @throws EntityNotFoundException Si la clé n’existe pas
+     * @throws AuthenticationException si l'email de l'utilisateur est déjà vérifié
      */
     @Transactional
     public void verifyAccount(final String activationKey) throws ImplicactionException {
         final User user = userRepository.findByActivationKey(activationKey)
                 .orElseThrow(() -> new EntityNotFoundException(ACTIVATION_KEY_NOT_FOUND, activationKey));
 
-        if (user.isActive()) {
-            throw new AuthenticationException(USER_ALREADY_ACTIVATED, activationKey);
+        if (user.isEmailVerified()) {
+            throw new AuthenticationException(USER_MAIL_IS_ALREADY_VERIFIED, user.getUsername());
         }
 
-        user.setActive(true);
-
-        // todo : email notification
-
+        user.setEmailVerified(true);
         userRepository.save(user);
     }
 

@@ -19,8 +19,8 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Table(name = "user")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -49,6 +49,7 @@ public class User {
 
     // TODO: modifier en enabled
     private boolean active;
+    private boolean emailVerified;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",

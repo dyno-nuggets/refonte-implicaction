@@ -7,9 +7,9 @@ import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRe
 import com.dynonuggets.refonteimplicaction.community.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
 import org.junit.jupiter.api.DisplayName;

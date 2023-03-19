@@ -154,7 +154,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
     @DisplayName("# verifyAccount")
     class VerifyAccountTest {
         @Test
-        @DisplayName("doit répondre FORBIDDEN quand on une clé de validation valide est fournie")
+        @DisplayName("doit répondre OK quand une clé de validation valide est fournie")
         void should_response_forbidden_with_validation_key() throws Exception {
             // given
             willDoNothing().given(authService).verifyAccount(anyString());
@@ -163,8 +163,8 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             final ResultActions resultActions = mvc.perform(get(AUTH_BASE_URI + AUTH_ACCOUNT_VERIFICATION_URI, "uneCleDactivation"));
 
             // then
-            resultActions.andExpect(status().isForbidden());
-            verifyNoInteractions(authService);
+            resultActions.andExpect(status().isOk());
+            verify(authService, times(1)).verifyAccount(anyString());
         }
     }
 

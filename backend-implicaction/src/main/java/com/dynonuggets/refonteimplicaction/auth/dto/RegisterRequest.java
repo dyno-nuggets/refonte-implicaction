@@ -29,9 +29,7 @@ public class RegisterRequest {
     @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
     private String password;
 
-    // TODO: à déplacer dans la partie profil
     private String firstname;
 
-    // TODO: à déplacer dans la partie profil
     private String lastname;
 }

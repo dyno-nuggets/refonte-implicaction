@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.core.notification.model.enums;
+package com.dynonuggets.refonteimplicaction.core.notification.dto.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public enum MailTemplateEnum {
 
-    DEFAULT_TEMPLATE("mail-template");
+    DEFAULT_MAIL_TEMPLATE("mail-template"),
+    VALIDATE_SIGNUP_MAIL_TEMPLATE("validate-signup-mail-template");
 
     private final String templateName;
 }

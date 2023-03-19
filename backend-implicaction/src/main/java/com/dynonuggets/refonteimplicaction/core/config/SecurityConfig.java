@@ -34,6 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/api/auth/login",
             "/api/auth/logout",
             "/api/auth/refresh/token",
+            "/api/auth/accountVerification/**",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
             JOBS_BASE_URI + VALIDATED_JOBS + "?**",
@@ -79,7 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     };
 
     private static final String[] ADMIN_RESTRICTED_URIS = {
-            "/api/auth/accountVerification/**",
     };
 
     private static final String[] PREMIUM_RESTRICTED_URIS = {
