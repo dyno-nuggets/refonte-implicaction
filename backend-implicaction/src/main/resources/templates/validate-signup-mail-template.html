@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Implicaction</title>
+</head>
+<body>
+<h1>Validation d'email requise</h1>
+<p>
+    Bonjour <span th:text="${emailDataObject.username}"></span>, vous venez de créer un compte sur le réseau Implic'action, veuillez cliquer sur <a
+        th:href="${emailDataObject.validationLink}">ce lien</a> pour valider votre adresse
+    email.</p>
+</p>
+</body>
+</html>

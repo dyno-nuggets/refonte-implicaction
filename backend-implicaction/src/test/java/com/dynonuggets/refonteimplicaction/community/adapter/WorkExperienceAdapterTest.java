@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.adapter.CompanyAdapter;
-import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Vote;
 import org.springframework.data.jpa.repository.JpaRepository;

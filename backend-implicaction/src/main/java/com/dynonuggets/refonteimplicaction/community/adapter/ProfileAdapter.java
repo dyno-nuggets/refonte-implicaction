@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.ProfileDto;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.dto.ProfileDto;
+import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;

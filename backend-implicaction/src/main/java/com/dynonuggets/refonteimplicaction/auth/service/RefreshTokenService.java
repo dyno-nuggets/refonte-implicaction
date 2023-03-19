@@ -2,8 +2,8 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.domain.model.RefreshToken;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.RefreshTokenRepository;
+import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenDto;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.RefreshTokenDto;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

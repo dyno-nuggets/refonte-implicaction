@@ -54,8 +54,6 @@ public class Message {
 
     // Mail messages
     @Deprecated(since = "v.2023")
-    public static final String GENERIC_MAIL_ERROR_MESSAGE = "Exception occurred when sending mail.";
-    @Deprecated(since = "v.2023")
     public static final String USER_REGISTER_MAIL_BODY = "L'utilisateur %s vient de s'inscrire et est en attente de validation";
     @Deprecated(since = "v.2023")
     public static final String USER_REGISTER_MAIL_TITLE = "[Implicaction] Un utilisateur est en attente de validation";

@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @NoArgsConstructor(access = PRIVATE)
 public class AssertionUtils {
-    
+
     /**
      * Réalise les assertions de base sur les exceptions de type ImplicactionException
      *

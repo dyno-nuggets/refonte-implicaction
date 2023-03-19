@@ -1,18 +1,19 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
+import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.rest.dto.*;
-import com.dynonuggets.refonteimplicaction.core.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
-import com.dynonuggets.refonteimplicaction.core.service.UserService;
-import com.dynonuggets.refonteimplicaction.repository.NotificationRepository;
+import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.RoleRepository;
+import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.core.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,7 +37,7 @@ import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.user.error.UserErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
@@ -66,7 +67,9 @@ class AuthServiceTest {
     @Mock
     RoleRepository roleRepository;
     @Mock
-    NotificationRepository notificationRepository;
+    NotificationService notificationService;
+    @Mock
+    EmailValidationNotificationMapper emailValidationNotificationMapper;
     @InjectMocks
     AuthService authService;
     @Captor
@@ -104,6 +107,8 @@ class AuthServiceTest {
             given(userRepository.existsByUsername(any())).willReturn(false);
             given(userRepository.existsByEmail(any())).willReturn(false);
             given(passwordEncoder.encode(any())).willReturn(expectedPassword);
+            willDoNothing().given(notificationService).notify(any(User.class), any(EmailValidationNotificationMapper.class));
+            given(userRepository.save(any())).willReturn(User.builder().build());
 
             // when
             authService.signup(validLoginRequest);
@@ -113,13 +118,15 @@ class AuthServiceTest {
             final User savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     .usingRecursiveComparison()
-                    .ignoringFields("password", "birthday", "image", "purpose", "activatedAt", "roles", "registeredAt", "trainings", "active", "groups", "expectation", "activationKey", "experiences", "url", "presentation", "contribution", "phoneNumber", "hobbies", "id", "notifications")
+                    .ignoringFields("password", "birthday", "image", "purpose", "activatedAt", "roles", "registeredAt", "trainings", "active", "emailVerified", "groups", "expectation", "activationKey", "experiences", "url", "presentation", "contribution", "phoneNumber", "hobbies", "id", "notifications")
                     .isEqualTo(validLoginRequest);
             assertThat(savedUser.getPassword()).isEqualTo(expectedPassword);
             assertThat(savedUser.getActivationKey()).isNotNull();
             verify(userRepository, times(1)).existsByUsername(any());
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
+            verify(userRepository, times(1)).save(any());
+            verify(notificationService, times(1)).notify(any(User.class), any(EmailValidationNotificationMapper.class));
         }
 
         @Test
@@ -171,9 +178,9 @@ class AuthServiceTest {
             final User savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     // les champs activatedAt et active doivent être différents donc, on les ignore
-                    .usingRecursiveComparison().ignoringFields("active")
+                    .usingRecursiveComparison().ignoringFields("emailVerified")
                     .isEqualTo(user);
-            assertThat(savedUser.isActive()).isTrue();
+            assertThat(savedUser.isEmailVerified()).isTrue();
             verify(userRepository, times(1)).findByActivationKey(any());
         }
 
@@ -197,7 +204,7 @@ class AuthServiceTest {
         void should_throw_exception_when_user_is_already_activated() {
             // given
             final String activationKey = "activationKey";
-            final User user = User.builder().active(true).build();
+            final User user = User.builder().username("username").emailVerified(true).build();
             given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when
@@ -205,7 +212,7 @@ class AuthServiceTest {
                     assertThrows(AuthenticationException.class, () -> authService.verifyAccount(activationKey));
 
             // then
-            assertImplicactionException(actualException, AuthenticationException.class, USER_ALREADY_ACTIVATED, activationKey);
+            assertImplicactionException(actualException, AuthenticationException.class, USER_MAIL_IS_ALREADY_VERIFIED, user.getUsername());
             verify(userRepository, never()).save(any());
         }
     }

@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.utils;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

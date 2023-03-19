@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

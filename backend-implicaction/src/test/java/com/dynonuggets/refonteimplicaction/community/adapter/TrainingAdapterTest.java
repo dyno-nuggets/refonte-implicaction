@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.community.rest.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

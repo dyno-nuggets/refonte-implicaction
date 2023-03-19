@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.utils;
 
-import com.dynonuggets.refonteimplicaction.community.rest.dto.RelationsDto;
+import com.dynonuggets.refonteimplicaction.community.dto.RelationsDto;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.test.web.servlet.ResultActions;
 

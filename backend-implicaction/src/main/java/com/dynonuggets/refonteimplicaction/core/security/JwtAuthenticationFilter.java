@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.core.security;
 
+import com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.rest.dto.ExceptionResponse;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -17,7 +17,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import static com.dynonuggets.refonteimplicaction.core.rest.dto.ExceptionResponse.from;
+import static com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse.from;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 

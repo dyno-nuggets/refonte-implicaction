@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.auth.utils;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.rest.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.core.user.dto.UserDto;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.ResultActions;
@@ -50,7 +50,6 @@ public class UserTestUtils {
                 .activationKey(randomAlphabetic(25))
                 .active(isActive)
                 .roles(roles)
-                .notifications(null)
                 .build();
     }
 
