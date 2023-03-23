@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.community.adapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TrainingAdapterTest {
-    User user;
+    UserModel user;
     List<WorkExperience> experiences;
     List<Training> trainings;
 
@@ -35,7 +35,7 @@ class TrainingAdapterTest {
         training = new Training(2L, null, "label", LocalDate.now(), "supdevinci");
         trainings.add(training);
 
-        user = User.builder()
+        user = UserModel.builder()
                 .id(10L)
                 .username("username")
                 .email("test@test.fr")

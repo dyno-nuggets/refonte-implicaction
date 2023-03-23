@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.model;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 import org.springframework.lang.Nullable;
 
@@ -38,7 +38,7 @@ public class Post {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    private User user;
+    private UserModel user;
 
     @Column(name = "created_at")
     private Instant createdAt;

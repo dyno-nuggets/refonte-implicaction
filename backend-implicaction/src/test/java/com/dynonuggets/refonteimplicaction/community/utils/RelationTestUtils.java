@@ -8,9 +8,9 @@ import java.time.Instant;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.community.utils.ProfileTestUtils.generateRandomProfileDto;
-import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.generateRandomInstant;
-import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.generateRandomNumber;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomInstant;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static java.lang.String.format;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;

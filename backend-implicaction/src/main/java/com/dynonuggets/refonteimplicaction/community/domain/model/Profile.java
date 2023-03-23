@@ -1,13 +1,13 @@
 package com.dynonuggets.refonteimplicaction.community.domain.model;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
+import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -22,12 +22,9 @@ public class Profile {
     @Column(name = "user_id")
     private Long id;
     @MapsId
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = ALL)
     @JoinColumn(name = "user_id")
-    private User user;
-    private String firstname;
-    private String lastname;
-    private LocalDate birthday;
+    private UserModel user;
     private String hobbies;
     private String purpose;
     private String presentation;

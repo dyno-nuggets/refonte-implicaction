@@ -11,6 +11,7 @@ public class ProfileUpdateRequest {
     private String username;
     private String firstname;
     private String lastname;
+    private String email;
     private LocalDate birthday;
     private String hobbies;
     private String purpose;

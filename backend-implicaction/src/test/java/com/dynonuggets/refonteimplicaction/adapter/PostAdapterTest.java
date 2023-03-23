@@ -1,12 +1,12 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.service.FileService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,7 +31,7 @@ class PostAdapterTest {
     @Test
     void toPost() {
         // given
-        final User currentUser = User.builder().id(123L).username("test user").build();
+        final UserModel currentUser = UserModel.builder().id(123L).username("test user").build();
         final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), null, null, emptyList(), true);
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, currentUser, now(), group);
         final PostRequest postRequest = new PostRequest(123L, null, "Super Post", "http://url.site", "Test");
@@ -48,7 +48,7 @@ class PostAdapterTest {
 
     @Test
     void should_return_post_with_no_subreddit_and_poster_has_no_image() {
-        final User currentUser = User.builder().id(123L).username("test user").build();
+        final UserModel currentUser = UserModel.builder().id(123L).username("test user").build();
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), null);
         final int expectedCommentCount = 10;
 
@@ -61,7 +61,7 @@ class PostAdapterTest {
 
     @Test
     void should_return_post_with_subreddit_image_null() {
-        final User currentUser = User.builder().id(123L).username("test user").build();
+        final UserModel currentUser = UserModel.builder().id(123L).username("test user").build();
         final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), null, null, emptyList(), true);
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;
@@ -76,7 +76,7 @@ class PostAdapterTest {
     @Test
     void toPostResponse() {
         // given
-        final User currentUser = User.builder().id(123L).username("test user").build();
+        final UserModel currentUser = UserModel.builder().id(123L).username("test user").build();
         final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), now(), null, FileModel.builder().url("http://img.com").build(), emptyList(), true);
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 12, currentUser, now(), group);
         final int expectedCommentCount = 10;

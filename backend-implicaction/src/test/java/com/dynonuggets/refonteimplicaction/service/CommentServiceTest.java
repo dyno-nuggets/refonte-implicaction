@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.service;
 import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
@@ -11,6 +10,7 @@ import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.repository.CommentRepository;
 import com.dynonuggets.refonteimplicaction.repository.PostRepository;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -76,7 +76,7 @@ class CommentServiceTest {
     void should_save_comment_when_post_exists() {
         // given
         final Post post = Post.builder().id(789L).build();
-        final User user = User.builder().id(666L).username("lucifer").build();
+        final UserModel user = UserModel.builder().id(666L).username("lucifer").build();
         final CommentDto dtoToSave = new CommentDto(null, post.getId(), DateUtils.getDurationAsString(Instant.now()), "coucou", "lucifer", 14L, null);
         final Comment commentTosave = new Comment(123L, "coucou", post, Instant.now(), user);
         final CommentDto expectedDto = commentAdapter.toDto(commentTosave);
@@ -115,7 +115,7 @@ class CommentServiceTest {
     @Test
     void should_return_comment_when_exists() {
         // given
-        final User user = User.builder().id(666L).username("lucifer").build();
+        final UserModel user = UserModel.builder().id(666L).username("lucifer").build();
         final Post post = Post.builder().id(789L).build();
         final Comment comment = new Comment(123L, "coucou", post, Instant.now(), user);
         final CommentDto expectedDto = commentAdapter.toDto(comment);
@@ -144,7 +144,7 @@ class CommentServiceTest {
     @Test
     void should_get_comments_for_post_when_exists() {
         // given
-        final User currentUser = User.builder().id(123L).username("Sankukai").build();
+        final UserModel currentUser = UserModel.builder().id(123L).username("Sankukai").build();
         final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), null, null, emptyList(), true);
         final Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
         final List<Comment> comments = asList(

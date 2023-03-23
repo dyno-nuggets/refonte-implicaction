@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Post;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -18,7 +18,7 @@ class CommentAdapterTest {
     @Test
     void toModel() {
         // given
-        final User user = User.builder().id(123L).username("Marc Elbichon").build();
+        final UserModel user = UserModel.builder().id(123L).username("Marc Elbichon").build();
         final Post post = Post.builder().id(243L).build();
         final CommentDto dto = CommentDto.builder()
                 .id(123L)
@@ -47,7 +47,7 @@ class CommentAdapterTest {
     @Test
     void toDto() {
         // given
-        final User user = User.builder().id(123L).username("Marc Elbichon").build();
+        final UserModel user = UserModel.builder().id(123L).username("Marc Elbichon").build();
         final Post post = Post.builder().id(243L).build();
         final Comment comment = Comment.builder()
                 .id(123L)

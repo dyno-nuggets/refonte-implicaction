@@ -19,7 +19,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
       .pipe(
         tap(
           () => {
-            // on ne fait rien car on veut seulement récupérer les erreurs
+            // on ne fait rien, car on veut seulement récupérer les erreurs
           },
           error => {
             // on ne s'intéresse qu'aux erreurs http différentes des 403 (car déjà gérées par le jwt-interceptor)

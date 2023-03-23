@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
-import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 

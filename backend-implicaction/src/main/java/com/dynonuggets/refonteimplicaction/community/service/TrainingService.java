@@ -6,8 +6,8 @@ import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.TrainingRepository;
 import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +25,7 @@ public class TrainingService {
     @Transactional
     public TrainingDto saveOrUpdateTraining(final TrainingDto trainingDto) {
         final Training training = trainingAdapter.toModel(trainingDto);
-        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final Profile profile = profileService.getByUsernameIfExists(currentUsername);
         training.setProfile(profile);
         final Training save = trainingRepository.save(training);

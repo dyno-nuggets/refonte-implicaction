@@ -46,13 +46,13 @@ export class AuthService {
         loginRequestPayload
       )
       .pipe(
+        tap(console.log),
         map(loginResponse => {
           this.localStorage.store('authenticationToken', loginResponse.authenticationToken);
-          // le localStorage ne  peut pas enregistrer d'objet alors il faut le serialiser
+          // le localStorage ne peut pas enregistrer d’objet, il faut le serialiser
           this.localStorage.store('currentUser', JSON.stringify(loginResponse.currentUser));
           this.localStorage.store('refreshToken', loginResponse.refreshToken);
           this.localStorage.store('expiresAt', loginResponse.expiresAt);
-
           this.loggedIn.emit(true);
           this.currentUser.emit(loginResponse.currentUser);
           return true;
@@ -121,7 +121,7 @@ export class AuthService {
     return this.getJwtToken() != null;
   }
 
-  activateUser(activationKey: string): Observable<void> {
-    return this.http.get<void>(this.apiEndpointsService.getActivateUserEndpoint(activationKey));
+  enableUser(username: string): Observable<void> {
+    return this.http.post<void>(this.apiEndpointsService.getActivateUserEndpoint(username), null);
   }
 }

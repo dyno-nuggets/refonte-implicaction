@@ -7,7 +7,7 @@ export class Uris {
     static readonly SIGNUP = 'auth/signup';
     static readonly REFRESH_TOKEN = 'auth/refresh/token';
     static readonly LOGOUT = 'auth/logout';
-    static readonly ACTIVATE_USER = 'auth/accountVerification';
+    static readonly ACTIVATE_USER = 'users/{username}/enable';
   };
 
   /**

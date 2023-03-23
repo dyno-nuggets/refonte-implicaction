@@ -5,7 +5,8 @@ import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomLocalDate;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,7 +17,7 @@ public class TrainingTestUtils {
                 .id((long) generateRandomNumber())
                 .profile(null)
                 .label(randomAlphabetic(20))
-                .date(toLocalDate(generateRandomInstant()))
+                .date(generateRandomLocalDate())
                 .school(randomAlphabetic(20))
                 .build();
     }
@@ -25,7 +26,7 @@ public class TrainingTestUtils {
         return TrainingDto.builder()
                 .id((long) generateRandomNumber())
                 .label(randomAlphabetic(20))
-                .date(toLocalDate(generateRandomInstant()))
+                .date(generateRandomLocalDate())
                 .school(randomAlphabetic(20))
                 .build();
     }
