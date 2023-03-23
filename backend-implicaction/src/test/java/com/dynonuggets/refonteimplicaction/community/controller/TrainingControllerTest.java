@@ -3,8 +3,8 @@ package com.dynonuggets.refonteimplicaction.community.controller;
 import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.service.TrainingService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -45,7 +45,7 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
                 .email("paul@implicaction.fr")
                 .registeredAt(null)
                 .roles(roles)
-                .active(true)
+                .enabled(true)
                 .build();
     }
 

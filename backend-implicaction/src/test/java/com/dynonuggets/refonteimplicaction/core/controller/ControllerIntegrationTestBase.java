@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.core.controller;
 
+import com.dynonuggets.refonteimplicaction.auth.service.JwtProvider;
 import com.dynonuggets.refonteimplicaction.auth.service.UserDetailsServiceImpl;
-import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

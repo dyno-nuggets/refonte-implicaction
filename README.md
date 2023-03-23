@@ -168,7 +168,7 @@ Il se découpe en 3 projets maven :
 * KS_PATH : chemin du fichier KeyStore
 * KS_NAME : nom du certificat de sécurité (par défaut mettre implicaction)
 * KS_PASSWORD : mot de passe du certificat
-* APP_URL : url de l'applicaction
+* APP_URL : url de l'application
 * CONTACT_EMAIL : adresse mail du contact
 * AWS_ACCESS_KEY(*): access key du compte aws
 * AWS_SECRET_KEY(*): client secret du compte aws

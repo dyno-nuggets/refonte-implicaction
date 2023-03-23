@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.auth.dto;
 
-import com.dynonuggets.refonteimplicaction.core.notification.dto.EmailDataObject;
+import com.dynonuggets.refonteimplicaction.notification.dto.EmailDataObject;
 import lombok.Builder;
 import lombok.Getter;
 

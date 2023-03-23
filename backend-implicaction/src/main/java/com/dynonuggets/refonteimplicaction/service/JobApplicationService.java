@@ -2,7 +2,6 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.JobApplicationAdapter;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
@@ -10,6 +9,7 @@ import com.dynonuggets.refonteimplicaction.model.JobApplication;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,7 +37,7 @@ public class JobApplicationService {
         final JobPosting job = jobRepository.findById(applyRequest.getJobId())
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, applyRequest.getJobId())));
 
-        final User currentUser = authService.getCurrentUser();
+        final UserModel currentUser = authService.getCurrentUser();
 
         if (applyRepository.findByJob_IdAndUser_id(job.getId(), currentUser.getId()).isPresent()) {
             throw new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, job.getId()));
@@ -61,7 +61,7 @@ public class JobApplicationService {
      */
     @Transactional(readOnly = true)
     public List<JobApplicationDto> getAllAppliesForCurrentUser() {
-        final User currentUser = authService.getCurrentUser();
+        final UserModel currentUser = authService.getCurrentUser();
 
         return applyRepository.findAllByUserAndArchiveIsFalse(currentUser)
                 .stream()
@@ -71,7 +71,7 @@ public class JobApplicationService {
 
     @Transactional
     public JobApplicationDto updateApplyForCurrentUser(final JobApplicationRequest requestDto) {
-        final User currentUser = authService.getCurrentUser();
+        final UserModel currentUser = authService.getCurrentUser();
         final Long jobId = requestDto.getJobId();
         final Long currentUserId = currentUser.getId();
 

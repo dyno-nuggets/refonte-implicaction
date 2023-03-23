@@ -134,8 +134,6 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest();
             final ProfileDto expectedProfile = generateRandomProfileDto();
             expectedProfile.setUsername(updateRequest.getUsername());
-            expectedProfile.setFirstname(updateRequest.getFirstname());
-            expectedProfile.setLastname(updateRequest.getLastname());
             expectedProfile.setBirthday(updateRequest.getBirthday());
             expectedProfile.setHobbies(updateRequest.getHobbies());
             expectedProfile.setPurpose(updateRequest.getPurpose());

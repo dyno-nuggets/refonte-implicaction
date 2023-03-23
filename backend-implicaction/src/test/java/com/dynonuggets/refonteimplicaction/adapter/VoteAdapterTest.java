@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import com.dynonuggets.refonteimplicaction.model.Vote;
@@ -16,7 +16,7 @@ class VoteAdapterTest {
     @Test
     void toModel() {
         // given
-        final User user = User.builder().id(666L).username("lucifer").build();
+        final UserModel user = UserModel.builder().id(666L).username("lucifer").build();
         final Post post = Post.builder().id(123L).build();
         final Vote expectedVote = new Vote(null, VoteType.UPVOTE, post, user);
         final VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 666L);

@@ -6,17 +6,16 @@ import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
-import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.user.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.core.user.service.UserService;
+import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
+import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -38,9 +37,10 @@ import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
 import static java.time.Instant.now;
+import static java.util.List.of;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Service
@@ -73,14 +73,14 @@ public class AuthService {
     public void signup(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         validateRegisterRequest(registerRequest);
         final String activationKey = generateActivationKey();
-        final User user = registerUser(registerRequest, activationKey);
+        final UserModel user = registerUser(registerRequest, activationKey);
         notificationService.notify(user, emailValidationNotificationMapper);
     }
 
     /**
      * Vérifie la validité de la requête de sign-up
      *
-     * @throws AuthenticationException si le nom d'utilisateur ou l'email est déjà utilisé
+     * @throws AuthenticationException si le nom d’utilisateur ou l’email est déjà utilisé
      */
     private void validateRegisterRequest(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -95,12 +95,12 @@ public class AuthService {
     /**
      * Définit l’adresse email de l’utilisateur correspondant à la clé d’activation comme vérifié si elle ne l’est pas déjà
      *
-     * @throws EntityNotFoundException Si la clé n’existe pas
-     * @throws AuthenticationException si l'email de l'utilisateur est déjà vérifié
+     * @throws EntityNotFoundException si aucun n'utilisateur n'est associé à cette clé d'activation
+     * @throws AuthenticationException si l’email de l’utilisateur est déjà vérifié
      */
     @Transactional
     public void verifyAccount(final String activationKey) throws ImplicactionException {
-        final User user = userRepository.findByActivationKey(activationKey)
+        final UserModel user = userRepository.findByActivationKey(activationKey)
                 .orElseThrow(() -> new EntityNotFoundException(ACTIVATION_KEY_NOT_FOUND, activationKey));
 
         if (user.isEmailVerified()) {
@@ -123,7 +123,7 @@ public class AuthService {
         final Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         final String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
-        final User user = userRepository.findByUsername(username)
+        final UserModel user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new EntityNotFoundException(BAD_CREDENTIALS));
 
         return LoginResponse.builder()
@@ -134,7 +134,7 @@ public class AuthService {
                 .build();
     }
 
-    public User getCurrentUser() {
+    public UserModel getCurrentUser() {
         final org.springframework.security.core.userdetails.User principal =
                 (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return userService.getUserByUsernameIfExists(principal.getUsername());
@@ -143,9 +143,11 @@ public class AuthService {
     @Transactional(readOnly = true)
     public LoginResponse refreshToken(final RefreshTokenRequest refreshTokenRequest) throws ImplicactionException {
         final String username = refreshTokenRequest.getUsername();
-        final User user = userService.getUserByUsernameIfExists(username);
 
+        // une exception sera levée si l'utilisateur ou le refresh token n'existe pas
+        final UserModel user = userService.getUserByUsernameIfExists(username);
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
+
         final String token = jwtProvider.generateTokenWithUsername(username);
         final Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
@@ -157,15 +159,17 @@ public class AuthService {
                 .build();
     }
 
-    private User registerUser(final RegisterRequest registerRequest, final String activationKey) {
-        final List<Role> roles = roleRepository.findAllByNameIn(List.of(USER.name()));
-
-        final User user = User.builder()
+    private UserModel registerUser(final RegisterRequest registerRequest, final String activationKey) {
+        final List<Role> roles = roleRepository.findAllByNameIn(of(USER.name()));
+        final UserModel user = UserModel.builder()
                 .username(registerRequest.getUsername())
+                .firstname(registerRequest.getFirstname())
+                .lastname(registerRequest.getLastname())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .registeredAt(now())
-                .active(false)
+                .enabled(false)
+                .emailVerified(false)
                 .activationKey(activationKey)
                 .registeredAt(now())
                 .roles(roles)
@@ -191,9 +195,9 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public void verifyAccessIsGranted(@NonNull final String username) {
-        final User currentUser = getCurrentUser();
-        final String currentUsername = callIfNotNull(currentUser, User::getUsername);
-        if (!(StringUtils.equals(currentUsername, username) || isTrue(callIfNotNull(currentUser, User::isAdmin)))) {
+        final UserModel currentUser = getCurrentUser();
+        final String currentUsername = callIfNotNull(currentUser, UserModel::getUsername);
+        if (!(StringUtils.equals(currentUsername, username) || isTrue(callIfNotNull(currentUser, UserModel::isAdmin)))) {
             throw new CoreException(OPERATION_NOT_PERMITTED);
         }
     }

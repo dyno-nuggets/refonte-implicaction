@@ -25,7 +25,7 @@ export class JwtInterceptor implements HttpInterceptor {
     }
     const jwtToken = this.authService.getJwtToken();
     if (jwtToken) {
-      JwtInterceptor.addToken(request, jwtToken);
+      request = JwtInterceptor.addToken(request, jwtToken);
     }
     return next.handle(request)
       .pipe(

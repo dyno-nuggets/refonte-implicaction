@@ -6,9 +6,9 @@ import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.WorkExperienceRepository;
 import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class WorkExperienceService {
     @Transactional
     public WorkExperienceDto saveOrUpdateExperience(final WorkExperienceDto experienceDto) {
         final WorkExperience experience = experienceAdapter.toModel(experienceDto);
-        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final Profile user = profileService.getByUsernameIfExists(currentUsername);
         experience.setProfile(user);
         final WorkExperience saved = experienceRepository.save(experience);

@@ -9,11 +9,11 @@ import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRe
 import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +44,7 @@ public class GroupService {
     public GroupDto save(final MultipartFile image, final GroupDto groupDto) {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
-        final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final Profile profile = profileRepository.findByUser_Username(username)
                 .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
@@ -60,7 +60,7 @@ public class GroupService {
 
     @Transactional
     public GroupDto save(final GroupDto groupDto) {
-        final String username = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final Profile profile = profileRepository.findByUser_Username(username)
                 .orElseThrow(() -> new CommunityException(PROFILE_NOT_FOUND, username));
         final Group group = groupAdapter.toModel(groupDto, profile);

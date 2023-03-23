@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.user.service.UserService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,9 +25,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(final String username) {
-        final User user = userService.getUserByUsernameIfExists(username);
+        final UserModel user = userService.getUserByUsernameIfExists(username);
 
-        if (!user.isActive()) {
+        if (!user.isEnabled()) {
             throw new AuthenticationException(USER_IS_NOT_ACTIVATED);
         }
 
@@ -37,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         );
     }
 
-    private Set<? extends GrantedAuthority> getAuthorities(final User user) {
+    private Set<? extends GrantedAuthority> getAuthorities(final UserModel user) {
         return user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(toSet());

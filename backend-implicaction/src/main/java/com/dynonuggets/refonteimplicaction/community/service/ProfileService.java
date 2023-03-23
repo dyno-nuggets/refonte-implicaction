@@ -9,6 +9,8 @@ import com.dynonuggets.refonteimplicaction.community.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +31,7 @@ public class ProfileService {
     private final ProfileAdapter profileAdapter;
     private final AuthService authService;
     private final CloudService cloudService;
+    private final UserRepository userRepository;
 
     /**
      * @param username le nom d’utilisateur associé au profil
@@ -48,12 +53,30 @@ public class ProfileService {
     }
 
     /**
+     * Renvoie le profil s’il existe, sinon, si l’utilisateur existe, le profil est créé
+     *
      * @param username le nom d’utilisateur pour lequel on recherche le profil
      * @return le ProfileDto associé au nom d’utilisateur en paramètres s’il existe
+     * @throws CommunityException si aucun utilisateur dont le nom est 'username' n’existe
      */
     @Transactional(readOnly = true)
     public ProfileDto getByUsername(final String username) {
-        return profileAdapter.toDto(getByUsernameIfExists(username));
+        final Profile profile = profileRepository.findByUser_Username(username)
+                .or(() -> {
+                    // - si le profil n’existe pas, c’est qu’il n’a pas été créé ou que l’utilisateur n’existe pas
+                    // - si l'utilisateur existe, on crée son profil
+                    final UserModel user = userRepository.findByUsernameAndEnabledTrue(username).orElse(null);
+
+                    if (user == null) {
+                        return empty();
+                    }
+
+                    final Profile newProfile = Profile.builder().user(user).build();
+                    return of(profileRepository.save(newProfile));
+                })
+                .orElseThrow(() -> new CommunityException(PROFILE_NOT_FOUND, username));
+
+        return profileAdapter.toDto(profile);
     }
 
     /**
@@ -69,9 +92,12 @@ public class ProfileService {
 
         final Profile profile = getByUsernameIfExists(requestUsername);
 
-        profile.setFirstname(updateRequest.getFirstname());
-        profile.setLastname(updateRequest.getLastname());
-        profile.setBirthday(updateRequest.getBirthday());
+        final UserModel user = profile.getUser();
+        user.setFirstname(updateRequest.getFirstname());
+        user.setLastname(updateRequest.getLastname());
+        user.setEmail(updateRequest.getEmail());
+        user.setBirthday(updateRequest.getBirthday());
+
         profile.setHobbies(updateRequest.getHobbies());
         profile.setPurpose(updateRequest.getPurpose());
         profile.setPresentation(updateRequest.getPresentation());

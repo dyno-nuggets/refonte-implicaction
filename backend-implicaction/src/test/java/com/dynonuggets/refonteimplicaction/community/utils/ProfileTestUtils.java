@@ -12,9 +12,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
 import static java.lang.String.format;
 import static java.util.List.of;
 import static lombok.AccessLevel.PRIVATE;
@@ -31,9 +30,6 @@ public class ProfileTestUtils {
         return Profile.builder()
                 .id((long) generateRandomNumber())
                 .user(generateRandomUser())
-                .firstname(randomAlphabetic(20))
-                .lastname(randomAlphabetic(20))
-                .birthday(toLocalDate(generateRandomInstant()))
                 .hobbies(randomAlphabetic(100))
                 .purpose(randomAlphabetic(100))
                 .presentation(randomAlphabetic(100))
@@ -57,9 +53,7 @@ public class ProfileTestUtils {
                 .username(username)
                 .email(format("%s.%s@mail.com", firstname, lastname))
                 .avatar(randomAlphabetic(20))
-                .firstname(firstname)
-                .lastname(lastname)
-                .birthday(toLocalDate(generateRandomInstant()))
+                .birthday(generateRandomLocalDate())
                 .hobbies(randomAlphabetic(100))
                 .purpose(randomAlphabetic(100))
                 .presentation(randomAlphabetic(100))
@@ -75,9 +69,7 @@ public class ProfileTestUtils {
     public static ProfileUpdateRequest generateRandomProfileUpdateRequest(final String username) {
         return ProfileUpdateRequest.builder()
                 .username(username)
-                .firstname(randomAlphabetic(20))
-                .lastname(randomAlphabetic(20))
-                .birthday(toLocalDate(generateRandomInstant()))
+                .birthday(generateRandomLocalDate())
                 .hobbies(randomAlphabetic(120))
                 .purpose(randomAlphabetic(120))
                 .presentation(randomAlphabetic(120))
@@ -118,8 +110,6 @@ public class ProfileTestUtils {
                 .andExpect(jsonPath(format("%s.username", prefix), is(profileDto.getUsername())))
                 .andExpect(jsonPath(format("%s.email", prefix), is(profileDto.getEmail())))
                 .andExpect(jsonPath(format("%s.avatar", prefix), is(profileDto.getAvatar())))
-                .andExpect(jsonPath(format("%s.firstname", prefix), is(profileDto.getFirstname())))
-                .andExpect(jsonPath(format("%s.lastname", prefix), is(profileDto.getLastname())))
                 .andExpect(jsonPath(format("%s.birthday", prefix), is(birthday)))
                 .andExpect(jsonPath(format("%s.hobbies", prefix), is(profileDto.getHobbies())))
                 .andExpect(jsonPath(format("%s.purpose", prefix), is(profileDto.getPurpose())))

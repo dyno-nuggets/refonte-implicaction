@@ -7,11 +7,11 @@ import com.dynonuggets.refonteimplicaction.community.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.community.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -88,7 +88,7 @@ class GroupServiceTest {
                 .description("Elle est super bien ma description")
                 .build();
 
-        final User currentUser = User.builder().id(123L).build();
+        final UserModel currentUser = UserModel.builder().id(123L).build();
 
         final FileModel fileModel = FileModel.builder()
                 .id(123L)
@@ -142,7 +142,7 @@ class GroupServiceTest {
                 .description("Elle est super bien ma description")
                 .build();
 
-        final User currentUser = User.builder().id(123L).build();
+        final UserModel currentUser = UserModel.builder().id(123L).build();
 
         final Group saveModel = Group.builder()
                 .id(123L)

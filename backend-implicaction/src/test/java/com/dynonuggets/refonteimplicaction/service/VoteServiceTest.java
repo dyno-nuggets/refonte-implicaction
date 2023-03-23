@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.VoteAdapter;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
@@ -71,7 +71,7 @@ class VoteServiceTest {
     void is_post_up_voted_should_return_true_when_logged_in() {
         // given
         final Post post = Post.builder().id(123L).build();
-        final User user = User.builder().id(123L).build();
+        final UserModel user = UserModel.builder().id(123L).build();
         final Vote vote = new Vote(123L, VoteType.UPVOTE, post, user);
         given(authService.isLoggedIn()).willReturn(true);
         given(voteRepository.findTopByPostAndUserOrderByIdDesc(any(), any())).willReturn(Optional.of(vote));
@@ -87,7 +87,7 @@ class VoteServiceTest {
     void is_post_up_voted_should_return_false_when_logged_in_and_not_voted() {
         // given
         final Post post = Post.builder().id(123L).build();
-        final User user = User.builder().id(123L).build();
+        final UserModel user = UserModel.builder().id(123L).build();
         given(authService.isLoggedIn()).willReturn(true);
         given(voteRepository.findTopByPostAndUserOrderByIdDesc(any(), any())).willReturn(Optional.empty());
 
@@ -114,7 +114,7 @@ class VoteServiceTest {
     void is_post_down_voted_should_return_true_when_logged_in() {
         // given
         final Post post = Post.builder().id(123L).build();
-        final User user = User.builder().id(123L).build();
+        final UserModel user = UserModel.builder().id(123L).build();
         final Vote vote = new Vote(123L, VoteType.DOWNVOTE, post, user);
         given(authService.isLoggedIn()).willReturn(true);
         given(voteRepository.findTopByPostAndUserOrderByIdDesc(any(), any())).willReturn(Optional.of(vote));
@@ -143,10 +143,10 @@ class VoteServiceTest {
     @Test
     void should_upvote_when_user_has_no_vote_and_post_exists() {
         // given
-        VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
-        User user = User.builder().id(666L).username("lucifer").build();
-        Post post = Post.builder().id(123L).voteCount(0).build();
-        Vote vote = new Vote(23L, VoteType.UPVOTE, post, user);
+        final VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
+        final UserModel user = UserModel.builder().id(666L).username("lucifer").build();
+        final Post post = Post.builder().id(123L).voteCount(0).build();
+        final Vote vote = new Vote(23L, VoteType.UPVOTE, post, user);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(voteRepository.findTopByPostAndUserOrderByIdDesc(any(), any())).willReturn(Optional.empty());
@@ -166,11 +166,11 @@ class VoteServiceTest {
     @Test
     void should_downvote_when_user_already_upvote() {
         // given
-        VoteDto voteDto = new VoteDto(VoteType.DOWNVOTE, 123L);
-        User user = User.builder().id(666L).username("lucifer").build();
-        Post post = Post.builder().id(123L).voteCount(1).build();
-        Vote oldVote = new Vote(23L, VoteType.UPVOTE, post, user);
-        Vote newVote = new Vote(null, VoteType.DOWNVOTE, post, user);
+        final VoteDto voteDto = new VoteDto(VoteType.DOWNVOTE, 123L);
+        final UserModel user = UserModel.builder().id(666L).username("lucifer").build();
+        final Post post = Post.builder().id(123L).voteCount(1).build();
+        final Vote oldVote = new Vote(23L, VoteType.UPVOTE, post, user);
+        final Vote newVote = new Vote(null, VoteType.DOWNVOTE, post, user);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(voteRepository.findTopByPostAndUserOrderByIdDesc(any(), any())).willReturn(Optional.of(oldVote));
@@ -190,9 +190,9 @@ class VoteServiceTest {
     @Test
     void should_throw_exception_when_voting_and_post_not_exists() {
         // given
-        long postId = 123L;
-        VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 3L);
-        NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId));
+        final long postId = 123L;
+        final VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 3L);
+        final NotFoundException expectedException = new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId));
         given(postRepository.findById(anyLong())).willThrow(expectedException);
 
         // when
@@ -205,10 +205,10 @@ class VoteServiceTest {
     @Test
     void should_throw_exception_when_already_vote_same_type() {
         // given
-        VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
-        User user = User.builder().id(666L).username("lucifer").build();
-        Post post = Post.builder().id(123L).voteCount(0).build();
-        Vote vote = new Vote(23L, VoteType.UPVOTE, post, user);
+        final VoteDto voteDto = new VoteDto(VoteType.UPVOTE, 123L);
+        final UserModel user = UserModel.builder().id(666L).username("lucifer").build();
+        final Post post = Post.builder().id(123L).voteCount(0).build();
+        final Vote vote = new Vote(23L, VoteType.UPVOTE, post, user);
 
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
         given(voteRepository.findTopByPostAndUserOrderByIdDesc(any(), any())).willReturn(Optional.of(vote));

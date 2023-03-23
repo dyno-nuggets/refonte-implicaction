@@ -3,17 +3,16 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.core.security.JwtProvider;
-import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.user.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.core.user.dto.UserDto;
-import com.dynonuggets.refonteimplicaction.core.user.service.UserService;
+import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
+import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,12 +35,13 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
-import static com.dynonuggets.refonteimplicaction.auth.utils.UserTestUtils.generateRandomUser;
-import static com.dynonuggets.refonteimplicaction.core.user.error.UserErrorResult.USERNAME_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
+import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomUser;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Optional.of;
+import static org.apache.commons.lang3.BooleanUtils.isFalse;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -73,7 +73,7 @@ class AuthServiceTest {
     @InjectMocks
     AuthService authService;
     @Captor
-    private ArgumentCaptor<User> userArgumentCaptorCaptor;
+    private ArgumentCaptor<UserModel> userArgumentCaptorCaptor;
 
     RegisterRequest generateValidRegisterRequest() {
         return RegisterRequest.builder()
@@ -107,26 +107,29 @@ class AuthServiceTest {
             given(userRepository.existsByUsername(any())).willReturn(false);
             given(userRepository.existsByEmail(any())).willReturn(false);
             given(passwordEncoder.encode(any())).willReturn(expectedPassword);
-            willDoNothing().given(notificationService).notify(any(User.class), any(EmailValidationNotificationMapper.class));
-            given(userRepository.save(any())).willReturn(User.builder().build());
+            willDoNothing().given(notificationService).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
+            given(userRepository.save(any())).willReturn(UserModel.builder().build());
 
             // when
             authService.signup(validLoginRequest);
 
             // then
             verify(userRepository, times(1)).save(userArgumentCaptorCaptor.capture());
-            final User savedUser = userArgumentCaptorCaptor.getValue();
+            final UserModel savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     .usingRecursiveComparison()
-                    .ignoringFields("password", "birthday", "image", "purpose", "activatedAt", "roles", "registeredAt", "trainings", "active", "emailVerified", "groups", "expectation", "activationKey", "experiences", "url", "presentation", "contribution", "phoneNumber", "hobbies", "id", "notifications")
+                    .ignoringFields("password", "birthday", "image", "purpose", "activatedAt", "roles", "registeredAt", "trainings", "enabled", "emailVerified", "groups", "expectation", "activationKey", "experiences", "url", "presentation", "contribution", "phoneNumber", "hobbies", "id", "notifications")
                     .isEqualTo(validLoginRequest);
             assertThat(savedUser.getPassword()).isEqualTo(expectedPassword);
             assertThat(savedUser.getActivationKey()).isNotNull();
+            assertThat(savedUser)
+                    .extracting(UserModel::isEnabled, UserModel::isEmailVerified)
+                    .allMatch(value -> isFalse((Boolean) value));
             verify(userRepository, times(1)).existsByUsername(any());
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
             verify(userRepository, times(1)).save(any());
-            verify(notificationService, times(1)).notify(any(User.class), any(EmailValidationNotificationMapper.class));
+            verify(notificationService, times(1)).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
         }
 
         @Test
@@ -167,7 +170,7 @@ class AuthServiceTest {
         @DisplayName("doit activer l'utilisateur correspondant à la clé d'activation transmise s'il n'est pas déjà activé")
         void should_activate_corresponding_user() {
             // given
-            final User user = generateRandomUser(List.of(RoleEnum.USER), false);
+            final UserModel user = generateRandomUser(List.of(RoleEnum.USER), false);
             given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when
@@ -175,7 +178,7 @@ class AuthServiceTest {
 
             // then
             verify(userRepository, times(1)).save(userArgumentCaptorCaptor.capture());
-            final User savedUser = userArgumentCaptorCaptor.getValue();
+            final UserModel savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     // les champs activatedAt et active doivent être différents donc, on les ignore
                     .usingRecursiveComparison().ignoringFields("emailVerified")
@@ -204,7 +207,7 @@ class AuthServiceTest {
         void should_throw_exception_when_user_is_already_activated() {
             // given
             final String activationKey = "activationKey";
-            final User user = User.builder().username("username").emailVerified(true).build();
+            final UserModel user = UserModel.builder().username("username").emailVerified(true).build();
             given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when
@@ -224,7 +227,7 @@ class AuthServiceTest {
         @DisplayName("doit identifier l'utilisateur quand il existe")
         void should_log_user_when_exists() {
             // given
-            final User user = generateRandomUser();
+            final UserModel user = generateRandomUser();
             final String username = user.getUsername();
             final LoginRequest loginRequest = LoginRequest.builder().username(username).password("password").build();
             final String jwtToken = "jwt-token";
@@ -271,15 +274,15 @@ class AuthServiceTest {
             final org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(username, password, List.of());
             given(securityContext.getAuthentication()).willReturn(authentication);
             given(securityContext.getAuthentication().getPrincipal()).willReturn(user);
-            given(userService.getUserByUsernameIfExists(anyString())).willReturn(User.builder().username("username").build());
+            given(userService.getUserByUsernameIfExists(anyString())).willReturn(UserModel.builder().username("username").build());
 
             // when
-            final User currentUser = authService.getCurrentUser();
+            final UserModel currentUser = authService.getCurrentUser();
 
             // then
             assertThat(currentUser)
                     .isNotNull()
-                    .extracting(User::getUsername)
+                    .extracting(UserModel::getUsername)
                     .isEqualTo(username);
         }
     }
@@ -293,7 +296,7 @@ class AuthServiceTest {
             // given
             final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
             final String username = refreshTokenRequest.getUsername();
-            final User user = User.builder().username(username).build();
+            final UserModel user = UserModel.builder().username(username).build();
             final LoginResponse expectedResponse = LoginResponse.builder().refreshToken("refreshToken").authenticationToken("jwtToken").expiresAt(now().plusMillis(jwtProvider.getJwtExpirationInMillis())).build();
             given(userService.getUserByUsernameIfExists(username)).willReturn(user);
             willDoNothing().given(refreshTokenService).validateRefreshToken(anyString());
@@ -338,7 +341,7 @@ class AuthServiceTest {
             // given
             final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
             final String username = refreshTokenRequest.getUsername();
-            final User user = User.builder().username(username).build();
+            final UserModel user = UserModel.builder().username(username).build();
             given(userService.getUserByUsernameIfExists(username)).willReturn(user);
             willThrow(new AuthenticationException(REFRESH_TOKEN_EXPIRED)).given(refreshTokenService).validateRefreshToken(anyString());
 
