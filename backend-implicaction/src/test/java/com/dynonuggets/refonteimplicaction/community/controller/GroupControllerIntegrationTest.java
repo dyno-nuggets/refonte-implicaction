@@ -3,8 +3,8 @@ package com.dynonuggets.refonteimplicaction.community.controller;
 import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.service.GroupService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
-import com.dynonuggets.refonteimplicaction.core.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.google.common.collect.Ordering;
 import com.google.gson.reflect.TypeToken;
 import org.junit.jupiter.api.Test;
@@ -80,7 +80,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
                 GroupDto.builder().id(14L).build(),
                 GroupDto.builder().id(15L).build()
         ));
-        final User user = User.builder()
+        final UserModel user = UserModel.builder()
                 .id(1L)
                 .username("test")
                 .build();

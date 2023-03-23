@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.Company;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ class JobPostingAdapterTest {
     JobPostingDto expectedJobPostingDto;
     JobPostingAdapter jobPostingAdapter;
     CompanyAdapter companyAdapter;
-    User user;
+    UserModel user;
     Instant createdAt;
 
     @BeforeEach
@@ -30,7 +30,7 @@ class JobPostingAdapterTest {
         jobPostingAdapter = new JobPostingAdapter(companyAdapter);
         company = new Company(1L, "urlModel", "logo", "name", "description");
         companyDto = new CompanyDto(1L, "urlModel", "logo", "name", "description");
-        user = User.builder().id(2L).username("user").build();
+        user = UserModel.builder().id(2L).username("user").build();
         createdAt = Instant.now();
 
         jobPosting = JobPosting.builder()

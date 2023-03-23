@@ -2,16 +2,16 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.core.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.core.user.domain.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.repository.JobPostingRepository;
+import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +40,7 @@ public class JobPostingService {
         final JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
         jobPosting.setCreatedAt(Instant.now());
         // si l'utilisateur qui crée une offre est admin, alors elle est validée par défaut
-        final User currentUser = authService.getCurrentUser();
+        final UserModel currentUser = authService.getCurrentUser();
         final boolean isAdmin = currentUser.getRoles()
                 .stream()
                 .anyMatch(role -> role.getName().equals(RoleEnum.ADMIN.getLongName()));

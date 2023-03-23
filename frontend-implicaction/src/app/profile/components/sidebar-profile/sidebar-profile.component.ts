@@ -62,6 +62,7 @@ export class SidebarProfileComponent {
       expectation: this.profile.expectation,
       contribution: this.profile.contribution,
       phoneNumber: this.profile.phoneNumber,
+      email: this.profile.email
     };
 
     this.profileService

@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.repository;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.Comment;
 import com.dynonuggets.refonteimplicaction.model.Post;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +14,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     Page<Comment> findByPostOrderById(Post post, Pageable pageable);
 
-    List<Comment> findAllByUser(User user);
+    List<Comment> findAllByUser(UserModel user);
 
 }

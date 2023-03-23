@@ -26,13 +26,13 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
 
     @PostMapping(AUTH_SIGNUP_URI)
-    public ResponseEntity<String> signup(@RequestBody @Valid final RegisterRequest reqisterRequest) {
-        authService.signup(reqisterRequest);
+    public ResponseEntity<String> signup(@RequestBody @Valid final RegisterRequest registerRequest) {
+        authService.signup(registerRequest);
         return new ResponseEntity<>(USER_SIGNUP_SUCCESS_MESSAGE, OK);
     }
 
     /**
-     * @param activationKey la clé d’activation correspondant à l'utilisateur à valider
+     * @param activationKey la clé d’activation correspondant à l'utilisateur dont on souhaite valider l'adresse email
      * @return réponse ok {@link org.springframework.http.HttpStatus#OK}
      */
     @GetMapping(AUTH_ACCOUNT_VERIFICATION_URI)

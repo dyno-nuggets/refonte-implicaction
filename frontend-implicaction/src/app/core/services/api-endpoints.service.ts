@@ -119,8 +119,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.PROFILES.BASE_URI, pageable);
   }
 
-  getActivateUserEndpoint(activationKey: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.AUTH.ACTIVATE_USER, [activationKey]);
+  getActivateUserEndpoint(username: string): string {
+    return ApiEndpointsService.createUrl(Uris.AUTH.ACTIVATE_USER.replace('{username}', username));
   }
 
   /**

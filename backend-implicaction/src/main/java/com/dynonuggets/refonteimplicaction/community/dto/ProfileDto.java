@@ -16,10 +16,10 @@ import static lombok.AccessLevel.PRIVATE;
 @AllArgsConstructor(access = PRIVATE)
 public class ProfileDto {
     private String username;
-    private String email;
-    private String avatar;
     private String firstname;
     private String lastname;
+    private String email;
+    private String avatar;
     private LocalDate birthday;
     private String hobbies;
     private String purpose;

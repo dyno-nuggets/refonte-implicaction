@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.model.Company;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,8 +18,8 @@ public class JobPostingAdapter {
 
     public JobPostingDto toDto(final JobPosting model) {
 
-        final String username = callIfNotNull(model.getPoster(), User::getUsername);
-        final Long userId = callIfNotNull(model.getPoster(), User::getId);
+        final String username = callIfNotNull(model.getPoster(), UserModel::getUsername);
+        final Long userId = callIfNotNull(model.getPoster(), UserModel::getId);
         final CompanyDto companyDto = companyAdapter.toDto(model.getCompany());
 
         return JobPostingDto.builder()
@@ -41,7 +41,7 @@ public class JobPostingAdapter {
                 .build();
     }
 
-    public JobPosting toModel(final JobPostingDto dto, final User user) {
+    public JobPosting toModel(final JobPostingDto dto, final UserModel user) {
 
         final Company company = companyAdapter.toModel(dto.getCompany());
 

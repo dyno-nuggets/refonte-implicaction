@@ -3,8 +3,8 @@ package com.dynonuggets.refonteimplicaction.community.adapter;
 import com.dynonuggets.refonteimplicaction.adapter.CompanyAdapter;
 import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.core.user.adapter.UserAdapter;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class WorkExperienceAdapterTest {
-    User user;
+    UserModel user;
     List<WorkExperience> experiences;
 
     @Mock

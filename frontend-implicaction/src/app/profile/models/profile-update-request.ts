@@ -2,6 +2,7 @@ export interface ProfileUpdateRequest {
   username: string;
   firstname: string;
   lastname: string;
+  email: string;
   birthday: string;
   hobbies: string;
   purpose: string;

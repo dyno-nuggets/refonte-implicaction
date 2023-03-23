@@ -10,7 +10,7 @@ import com.dynonuggets.refonteimplicaction.community.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -133,7 +133,7 @@ public class RelationService {
      * @return Retourne tous les utilisateurs sous forme de relation
      */
     public Page<RelationsDto> getAllCommunity(final Pageable pageable) {
-        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final Page<Profile> allProfiles = profileRepository.findAllByUser_UsernameNot(currentUsername, pageable);
         final List<String> allProfilesUsernames = allProfiles.get().map(p -> p.getUser().getUsername()).collect(toList());
         final List<Relation> currentUsersRelations = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allProfilesUsernames, pageable);
@@ -185,7 +185,7 @@ public class RelationService {
     }
 
     private void verifyThatCurrentUserCanEditRelation(final Relation relation) {
-        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
 
         if (of(relation.getSender().getUser().getUsername(), relation.getReceiver().getUser().getUsername())
                 .noneMatch(username -> username.equals(currentUsername))) {

@@ -5,7 +5,8 @@ import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import static com.dynonuggets.refonteimplicaction.core.util.TestUtils.*;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomLocalDate;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,8 +16,8 @@ public class ExperienceTestUtils {
         return WorkExperience.builder()
                 .id((long) generateRandomNumber())
                 .profile(null)
-                .startedAt(toLocalDate(generateRandomInstant()))
-                .finishedAt(toLocalDate(generateRandomInstant()))
+                .startedAt(generateRandomLocalDate())
+                .finishedAt(generateRandomLocalDate())
                 .label(randomAlphabetic(20))
                 .description(randomAlphabetic(120))
                 .companyName(randomAlphabetic(15))
@@ -27,8 +28,8 @@ public class ExperienceTestUtils {
         return WorkExperienceDto.builder()
                 .id((long) generateRandomNumber())
                 .profile(null)
-                .startedAt(toLocalDate(generateRandomInstant()))
-                .finishedAt(toLocalDate(generateRandomInstant()))
+                .startedAt(generateRandomLocalDate())
+                .finishedAt(generateRandomLocalDate())
                 .label(randomAlphabetic(20))
                 .description(randomAlphabetic(20))
                 .companyName(randomAlphabetic(20))

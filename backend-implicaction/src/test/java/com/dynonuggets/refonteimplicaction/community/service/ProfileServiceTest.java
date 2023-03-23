@@ -9,9 +9,9 @@ import com.dynonuggets.refonteimplicaction.community.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import java.util.Optional;
 import static com.dynonuggets.refonteimplicaction.community.error.CommunityErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.utils.ProfileTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertImplicactionException;
+import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -125,13 +125,11 @@ class ProfileServiceTest {
             // given
             final ProfileDto expectedProfileDto = generateRandomProfileDto();
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest(expectedProfileDto.getUsername());
-            final Profile profile = Profile.builder().build();
+            final Profile profile = Profile.builder().user(UserModel.builder().build()).build();
             willDoNothing().given(authService).verifyAccessIsGranted(any());
             given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
             given(profileRepository.save(any())).willReturn(profile);
             given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
-            expectedProfileDto.setFirstname(updateRequest.getFirstname());
-            expectedProfileDto.setLastname(updateRequest.getLastname());
             expectedProfileDto.setBirthday(updateRequest.getBirthday());
             expectedProfileDto.setHobbies(updateRequest.getHobbies());
             expectedProfileDto.setPurpose(updateRequest.getPurpose());
@@ -189,7 +187,7 @@ class ProfileServiceTest {
         @DisplayName("doit mettre à jour l'avatar de l'utilisateur quand updateAvatar est lancé avec un fichier valide et que l'utilisateur correspond à l'utilisateur courant")
         void should_update_avatar_when_updateAvatar_and_file_is_valid_and_current_user_is_user_to_update() {
             // given
-            final User currentUser = User.builder().username("currentUser").build();
+            final UserModel currentUser = UserModel.builder().username("currentUser").build();
             final String username = "currentUser";
             final MockMultipartFile mockMultipartFile = new MockMultipartFile("avatar", "avatar.png", IMAGE_PNG_VALUE, "je suis un png".getBytes());
             final Profile profile = Profile.builder().user(currentUser).build();

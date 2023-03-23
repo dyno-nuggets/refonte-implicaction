@@ -8,7 +8,7 @@ import static lombok.AccessLevel.PRIVATE;
 public class CommunityMessages {
 
     // PROFILE
-    public static final String PROFILE_NOT_FOUND_MESSAGE = "Le profil {%s} est introuvable";
+    public static final String PROFILE_NOT_FOUND_MESSAGE = "Le profil {%s} est introuvable, l'utilisateur n'existe pas ou n'est pas activé";
 
     // RELATION
     public static final String RELATION_NOT_FOUND_MESSAGE = "La relation est introuvable";

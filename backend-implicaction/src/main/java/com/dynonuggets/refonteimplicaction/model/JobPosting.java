@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -61,6 +61,6 @@ public class JobPosting {
 
     @ManyToOne
     @JoinColumn(name = "posted_by")
-    private User poster;
+    private UserModel poster;
 
 }

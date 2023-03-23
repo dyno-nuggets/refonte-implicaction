@@ -5,8 +5,8 @@ import com.dynonuggets.refonteimplicaction.community.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.error.CommunityException;
 import com.dynonuggets.refonteimplicaction.community.service.RelationService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import static com.dynonuggets.refonteimplicaction.community.error.CommunityError
 import static com.dynonuggets.refonteimplicaction.community.utils.RelationTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.community.utils.RelationUris.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.util.AssertionUtils.assertErrorResult;
+import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertErrorResult;
 import static java.util.List.of;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.mockito.ArgumentMatchers.any;
@@ -238,7 +238,7 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_with_created_relation_when_user_is_authenticated_and_csf_is_present() throws Exception {
             // given
             final String receiverName = "receiverName";
-            final User currentUser = User.builder().username("currentUser").build();
+            final UserModel currentUser = UserModel.builder().username("currentUser").build();
             given(authService.getCurrentUser()).willReturn(currentUser);
             final RelationsDto relationsDto = generateRandomRelationDto(false, currentUser.getUsername(), receiverName);
             given(relationService.requestRelation(anyString(), anyString())).willReturn(relationsDto);

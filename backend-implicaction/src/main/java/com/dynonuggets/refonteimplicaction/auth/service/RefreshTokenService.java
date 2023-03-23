@@ -28,8 +28,12 @@ public class RefreshTokenService {
         return toTokenDto(refreshTokenRepository.save(refreshToken));
     }
 
+    /**
+     * @param token refresh token
+     * @throws ImplicactionException si le token n'est pas retrouvé en base de données
+     */
     public void validateRefreshToken(final String token) throws ImplicactionException {
-        if (!refreshTokenRepository.findByToken(token).isPresent()) {
+        if (refreshTokenRepository.findByToken(token).isEmpty()) {
             throw new AuthenticationException(REFRESH_TOKEN_EXPIRED);
         }
     }

@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.community.controller;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.service.RelationService;
-import com.dynonuggets.refonteimplicaction.core.user.domain.model.User;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -59,7 +59,7 @@ public class RelationController {
 
     @PostMapping(REQUEST_RELATION)
     public ResponseEntity<RelationsDto> requestRelation(@PathVariable final String receiverName) {
-        final String currentUsername = callIfNotNull(authService.getCurrentUser(), User::getUsername);
+        final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         return ResponseEntity.ok(relationService.requestRelation(currentUsername, receiverName));
     }
 
