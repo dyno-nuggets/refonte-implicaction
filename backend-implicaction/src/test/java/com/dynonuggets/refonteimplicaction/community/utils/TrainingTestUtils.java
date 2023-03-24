@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.utils;
 
-import com.dynonuggets.refonteimplicaction.community.domain.model.Training;
-import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
+import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 

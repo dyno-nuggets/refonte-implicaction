@@ -1,7 +1,8 @@
 package com.dynonuggets.refonteimplicaction.community.controller;
 
-import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.community.service.WorkExperienceService;
+import com.dynonuggets.refonteimplicaction.community.workexperience.controller.ExperienceController;
+import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.community.workexperience.sercice.WorkExperienceService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;

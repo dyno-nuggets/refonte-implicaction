@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.utils;
 
-import com.dynonuggets.refonteimplicaction.community.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;

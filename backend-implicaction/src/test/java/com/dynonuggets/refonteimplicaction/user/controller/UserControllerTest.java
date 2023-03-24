@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.user.controller;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.service.RelationService;
+import com.dynonuggets.refonteimplicaction.community.relation.service.RelationService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;

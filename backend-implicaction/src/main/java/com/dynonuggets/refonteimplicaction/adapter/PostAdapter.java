@@ -1,11 +1,10 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.model.Post;
-import com.dynonuggets.refonteimplicaction.service.FileService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,8 +14,6 @@ import java.time.Instant;
 @Component
 @AllArgsConstructor
 public class PostAdapter {
-
-    private FileService fileService;
 
     public Post toPost(final PostRequest postRequest, final Group group, final UserModel currentUser) {
         return Post.builder()

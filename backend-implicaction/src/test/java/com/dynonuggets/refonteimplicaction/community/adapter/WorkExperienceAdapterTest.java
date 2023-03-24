@@ -1,7 +1,8 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.community.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
