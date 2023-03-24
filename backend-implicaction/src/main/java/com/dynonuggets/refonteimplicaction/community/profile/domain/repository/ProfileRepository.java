@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+@SuppressWarnings("squid:S00100")
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
     Optional<Profile> findByUser_Username(String username);
 
