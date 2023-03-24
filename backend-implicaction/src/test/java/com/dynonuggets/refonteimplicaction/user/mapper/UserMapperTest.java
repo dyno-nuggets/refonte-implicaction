@@ -1,4 +1,4 @@
-package com.dynonuggets.refonteimplicaction.user.adapter;
+package com.dynonuggets.refonteimplicaction.user.mapper;
 
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -8,15 +8,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mapstruct.factory.Mappers;
 
 import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomUser;
 import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserAdapterTest {
+class UserMapperTest {
 
     static final RecursiveComparisonConfiguration TO_DTO_COMPARISON_CONFIGURATION =
             RecursiveComparisonConfiguration.builder()
@@ -36,12 +37,20 @@ class UserAdapterTest {
             "email",
             "registeredAt",
             "activationKey",
+            "firstname",
+            "lastname",
+            "birthday",
+            "email",
+            "registeredAt",
+            "activationKey",
+            "enabled",
+            "emailVerified"
     };
 
     UserModel mockedUser;
     UserDto mockedUserDto;
 
-    UserAdapter userAdapter = new UserAdapter();
+    public UserMapper mapper = Mappers.getMapper(UserMapper.class);
 
     @BeforeEach
     void setUp() {
@@ -56,7 +65,7 @@ class UserAdapterTest {
         @DisplayName("doit retourner un dto correspondant au model fourni quand on utilise toDto")
         void should_map_fields_when_toDto() {
             // when
-            final UserDto userDto = userAdapter.toDto(mockedUser);
+            final UserDto userDto = mapper.toDto(mockedUser);
 
             // then
             assertThat(userDto)
@@ -73,7 +82,7 @@ class UserAdapterTest {
         @Test
         @DisplayName("doit retourner null quand on utilise toDto et que le model est null")
         void should_return_null_when_toDto_and_model_is_null() {
-            assertThat(userAdapter.toDto(null)).isNull();
+            assertThat(mapper.toDto(null)).isNull();
         }
     }
 
@@ -84,14 +93,14 @@ class UserAdapterTest {
         @DisplayName("doit retourner un dto avec seulement les champs requis correspondants au model fourni quand on utilise toDtoLight")
         void should_only_map_required_fields_when_toDtoLight() {
             // when
-            final UserDto dtoLight = userAdapter.toDtoLight(mockedUser);
+            final UserDto dtoLight = mapper.toDtoLight(mockedUser);
 
             // then
             assertThat(dtoLight)
                     .usingRecursiveComparison(TO_DTO_LIGHT_COMPARISON_CONFIGURATION)
                     .isEqualTo(mockedUser);
 
-            // on vérifie que tous les champs que l'on ne veut pas transmettre son bien nuls NULL_FIELDS_FOR_LIGHT_DTO
+            // on vérifie que tous les champs que l’on ne veut pas transmettre sont bien nuls NULL_FIELDS_FOR_LIGHT_DTO
             assertThat(dtoLight)
                     .extracting(NULL_FIELDS_FOR_LIGHT_DTO)
                     .allSatisfy(field -> assertThat(field).isNull());
@@ -100,7 +109,7 @@ class UserAdapterTest {
         @Test
         @DisplayName("doit retourner null quand on utilise toDtoLight et que le model est null")
         void should_return_null_when_toDtoLight_and_model_is_null() {
-            assertThat(userAdapter.toDtoLight(null)).isNull();
+            assertThat(mapper.toDtoLight(null)).isNull();
         }
     }
 
@@ -111,7 +120,7 @@ class UserAdapterTest {
         @DisplayName("doit retourner un model correspondant au dto fourni quand on utilise toModel")
         void should_map_when_toModel() {
             // when
-            final UserModel model = userAdapter.toModel(mockedUserDto);
+            final UserModel model = mapper.toModel(mockedUserDto);
 
             // vérification champ par champ
             assertThat(model)
@@ -127,7 +136,7 @@ class UserAdapterTest {
         @Test
         @DisplayName("doit retourner null quand on utilise toModel et que le dto est null")
         void should_return_null_when_toDtoLight_and_model_is_null() {
-            assertThat(userAdapter.toModel(null)).isNull();
+            assertThat(mapper.toModel(null)).isNull();
         }
     }
 }

@@ -2,10 +2,10 @@ package com.dynonuggets.refonteimplicaction.user.service;
 
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,9 +24,9 @@ import java.util.Optional;
 import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.*;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USER_ID_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomUser;
 import static java.util.List.of;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,7 +45,7 @@ class UserServiceTest {
     @Mock
     UserRepository userRepository;
     @Mock
-    UserAdapter userAdapter;
+    UserMapper userMapper;
     @InjectMocks
     UserService userService;
 
@@ -73,7 +73,7 @@ class UserServiceTest {
         // then
         assertThat(result).hasSize(nbUsers);
         verify(userRepository, times(1)).findAll(any(Pageable.class));
-        verify(userAdapter, times(nbUsers)).toDto(any());
+        verify(userMapper, times(nbUsers)).toDto(any());
     }
 
     @Nested
@@ -86,12 +86,12 @@ class UserServiceTest {
             final Long expectedId = mockedUser.getId();
             final UserDto userDto = UserDto.builder().id(expectedId).build();
             given(userRepository.findById(expectedId)).willReturn(Optional.of(mockedUser));
-            given(userAdapter.toDto(any())).willReturn(userDto);
+            given(userMapper.toDto(any())).willReturn(userDto);
 
             // then
             assertThat(userService.getUserById(expectedId)).hasFieldOrPropertyWithValue("id", expectedId);
             verify(userRepository, times(1)).findById(anyLong());
-            verify(userAdapter, times(1)).toDto(any());
+            verify(userMapper, times(1)).toDto(any());
         }
 
         @Test
@@ -117,7 +117,7 @@ class UserServiceTest {
             final UserDto expectedDto = UserDto.builder().id(mockedUser.getId()).build();
             given(userRepository.findById(mockedUser.getId())).willReturn(Optional.of(mockedUser));
             given(userRepository.save(any())).willReturn(mockedUser);
-            given(userAdapter.toDto(any())).willReturn(expectedDto);
+            given(userMapper.toDto(any())).willReturn(expectedDto);
 
             // when
             final UserDto actualDto = userService.updateUser(expectedDto);
@@ -131,7 +131,7 @@ class UserServiceTest {
 
             verify(userRepository, times(1)).findById(anyLong());
             verify(userRepository, times(1)).save(any());
-            verify(userAdapter, times(1)).toDto(any());
+            verify(userMapper, times(1)).toDto(any());
         }
 
         @Test
@@ -145,7 +145,7 @@ class UserServiceTest {
             assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(mockedUserDto.getId()));
             verify(userRepository, times(1)).findById(any());
             verify(userRepository, times(0)).save(any());
-            verify(userAdapter, times(0)).toDto(any());
+            verify(userMapper, times(0)).toDto(any());
         }
     }
 

@@ -1,15 +1,22 @@
 package com.dynonuggets.refonteimplicaction.user.utils;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.Instant;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
 import static java.lang.String.format;
+import static java.util.Collections.emptyList;
+import static java.util.Optional.ofNullable;
+import static java.util.stream.Collectors.toList;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.Matchers.is;
@@ -28,6 +35,7 @@ public class UserTestUtils {
                 .id((long) generateRandomNumber())
                 .username(randomAlphabetic(10))
                 .enabled(isActive)
+                .emailVerified(isActive)
                 .roles(roles)
                 .build();
     }
@@ -58,5 +66,35 @@ public class UserTestUtils {
                 .andExpect(jsonPath(format("%s.username", prefix), is(userDto.getUsername())))
                 .andExpect(jsonPath(format("%s.username", prefix), is(userDto.getUsername())))
                 .andExpect(jsonPath(format("%s.registeredAt", prefix), is(registeredAt)));
+    }
+
+    public static UserModel generateRandomUser() {
+        return generateRandomUser(null, generateRandomBoolean());
+    }
+
+    public static UserModel generateRandomUser(final List<RoleEnum> roleEnums, final boolean isEnabled) {
+        final String firstname = randomAlphabetic(10);
+        final String lastname = randomAlphabetic(10);
+        final Instant registeredAt = generateRandomInstant();
+        final String email = format("%s.%s@mail.com", firstname, lastname);
+
+        final List<Role> roles = ofNullable(roleEnums).orElse(emptyList())
+                .stream()
+                .map(roleEnum -> Role.builder().id(roleEnum.getId()).name(roleEnum.name()).build())
+                .collect(toList());
+
+        return UserModel.builder()
+                .id((long) generateRandomNumber())
+                .username(randomAlphabetic(10))
+                .firstname(randomAlphabetic(20))
+                .lastname(randomAlphabetic(20))
+                .password(randomAlphabetic(10))
+                .birthday(generateRandomLocalDate())
+                .email(email)
+                .registeredAt(registeredAt)
+                .activationKey(randomAlphabetic(25))
+                .enabled(isEnabled)
+                .roles(roles)
+                .build();
     }
 }

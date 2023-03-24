@@ -7,11 +7,11 @@ import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,8 +36,8 @@ import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomUser;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Optional.of;
@@ -57,7 +57,7 @@ class AuthServiceTest {
     @Mock
     UserService userService;
     @Mock
-    UserAdapter userAdapter;
+    UserMapper userMapper;
     @Mock
     AuthenticationManager authenticationManager;
     @Mock
@@ -239,7 +239,7 @@ class AuthServiceTest {
             given(jwtProvider.generateToken(any())).willReturn(jwtToken);
             given(refreshTokenService.generateRefreshToken()).willReturn(RefreshTokenDto.builder().token(refreshToken).build());
             given(userRepository.findByUsername(any())).willReturn(of(user));
-            given(userAdapter.toDtoLight(any())).willReturn(expectedUserDto);
+            given(userMapper.toDtoLight(any())).willReturn(expectedUserDto);
 
             // when
             final LoginResponse actualResponse = authService.login(loginRequest);
@@ -256,7 +256,7 @@ class AuthServiceTest {
             verify(jwtProvider, times(1)).generateToken(any());
             verify(refreshTokenService, times(1)).generateRefreshToken();
             verify(userRepository, times(1)).findByUsername(any());
-            verify(userAdapter, times(1)).toDtoLight(any());
+            verify(userMapper, times(1)).toDtoLight(any());
         }
 
         // TODO: chercher comment faire les tests en cas d'échec

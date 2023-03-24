@@ -12,7 +12,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.AUTH_ACCOUNT_VERIFICATION_URI;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.AUTH_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.notification.dto.enums.MailTemplateEnum.VALIDATE_SIGNUP_MAIL_TEMPLATE;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;
 

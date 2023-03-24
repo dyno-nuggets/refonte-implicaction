@@ -19,11 +19,20 @@ public class Utils {
                 .orElse(null);
     }
 
+    /**
+     * @param <T> le type de valeur
+     * @return <code>defaultValue</code> si <code>nullableValue</code> est null sinon renvoi <code>nullableValue</code>
+     */
     public static <T> T defaultIfNull(final T nullableValue, final T defaultValue) {
         return nullableValue != null ? nullableValue : defaultValue;
     }
 
-    public static <T> Stream<T> emptyStreamIfNull(final Collection<T> collection) {
-        return emptyIfNull(collection).stream().filter(Objects::nonNull);
+    /**
+     * @param nullableCollection une collection potentiellement nulle
+     * @param <T>                type de la collection
+     * @return un stream vide si <code>collection</code> est nul ou un stream débarrassé de toutes les valeurs nulles
+     */
+    public static <T> Stream<T> emptyStreamIfNull(final Collection<T> nullableCollection) {
+        return emptyIfNull(nullableCollection).stream().filter(Objects::nonNull);
     }
 }
