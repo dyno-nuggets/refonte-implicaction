@@ -23,9 +23,7 @@ import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.user.util.UserUris.*;
-import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
-import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.resultActionsValidationForPageUser;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.*;
 import static java.util.List.of;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;

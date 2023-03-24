@@ -1,24 +1,15 @@
 package com.dynonuggets.refonteimplicaction.utils;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static java.lang.String.format;
 import static java.time.LocalDate.now;
-import static java.util.Collections.emptyList;
-import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
-import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TestUtils {
@@ -59,35 +50,5 @@ public class TestUtils {
                 .nextLong(startEpochDay, endEpochDay);
 
         return LocalDate.ofEpochDay(randomDay);
-    }
-
-    public static UserModel generateRandomUser() {
-        return generateRandomUser(null, generateRandomBoolean());
-    }
-
-    public static UserModel generateRandomUser(final List<RoleEnum> roleEnums, final boolean isEnabled) {
-        final String firstname = randomAlphabetic(10);
-        final String lastname = randomAlphabetic(10);
-        final Instant registeredAt = generateRandomInstant();
-        final String email = format("%s.%s@mail.com", firstname, lastname);
-
-        final List<Role> roles = ofNullable(roleEnums).orElse(emptyList())
-                .stream()
-                .map(roleEnum -> Role.builder().id(roleEnum.getId()).name(roleEnum.name()).build())
-                .collect(toList());
-
-        return UserModel.builder()
-                .id((long) generateRandomNumber())
-                .username(randomAlphabetic(10))
-                .firstname(randomAlphabetic(20))
-                .lastname(randomAlphabetic(20))
-                .password(randomAlphabetic(10))
-                .birthday(generateRandomLocalDate())
-                .email(email)
-                .registeredAt(registeredAt)
-                .activationKey(randomAlphabetic(25))
-                .enabled(isEnabled)
-                .roles(roles)
-                .build();
     }
 }

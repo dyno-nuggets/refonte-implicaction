@@ -1,10 +1,10 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
-import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,7 @@ import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USE
 public class UserService {
 
     private final UserRepository userRepository;
-    private final UserAdapter userAdapter;
+    private final UserMapper userMapper;
 
     /**
      * @return la liste paginée de tous les utilisateurs
@@ -28,12 +28,12 @@ public class UserService {
     @Transactional(readOnly = true)
     public Page<UserDto> getAll(final Pageable pageable) {
         return userRepository.findAll(pageable)
-                .map(userAdapter::toDto);
+                .map(userMapper::toDto);
     }
 
     @Transactional
     public UserDto getUserById(final Long userId) {
-        return userAdapter.toDto(getUserByIdIfExists(userId));
+        return userMapper.toDto(getUserByIdIfExists(userId));
     }
 
     @Transactional
@@ -44,13 +44,13 @@ public class UserService {
         // vers le modèle de l'adapter des champs modifiés afin de mettre à jour le user entier directement dans la BD
         user.setEmail(userDto.getEmail());
 
-        return userAdapter.toDto(userRepository.save(user));
+        return userMapper.toDto(userRepository.save(user));
     }
 
     @Transactional(readOnly = true)
     public Page<UserDto> getAllPendingActivationUsers(final Pageable pageable) {
         return userRepository.findAllByEnabledIsFalse(pageable)
-                .map(userAdapter::toDto);
+                .map(userMapper::toDto);
     }
 
     public UserModel getUserByUsernameIfExists(final String username) {

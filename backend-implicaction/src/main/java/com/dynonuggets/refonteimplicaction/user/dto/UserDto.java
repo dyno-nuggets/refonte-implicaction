@@ -24,7 +24,7 @@ public class UserDto {
     private String email;
     private Instant registeredAt;
     private String activationKey;
-    private boolean enabled;
-    private boolean emailVerified;
+    private Boolean enabled;
+    private Boolean emailVerified;
     private List<String> roles;
 }
