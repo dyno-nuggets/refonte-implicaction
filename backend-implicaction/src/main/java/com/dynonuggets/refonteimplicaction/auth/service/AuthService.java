@@ -12,14 +12,13 @@ import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.user.adapter.UserAdapter;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,14 +56,11 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-    private final UserAdapter userAdapter;
+    private final UserMapper userMapper;
     private final RoleRepository roleRepository;
     private final NotificationService notificationService;
     private final EmailValidationNotificationMapper emailValidationNotificationMapper;
 
-
-    @Value("${app.url}")
-    private String appUrl;
 
     /**
      * Enregistre un utilisateur en base de données
@@ -132,7 +128,7 @@ public class AuthService {
                 .authenticationToken(token)
                 .refreshToken(refreshToken)
                 .expiresAt(expiresAt)
-                .currentUser(userAdapter.toDtoLight(user))
+                .currentUser(userMapper.toDtoLight(user))
                 .build();
     }
 
@@ -157,7 +153,7 @@ public class AuthService {
                 .authenticationToken(token)
                 .refreshToken(refreshTokenRequest.getRefreshToken())
                 .expiresAt(expiresAt)
-                .currentUser(userAdapter.toDtoLight(user))
+                .currentUser(userMapper.toDtoLight(user))
                 .build();
     }
 

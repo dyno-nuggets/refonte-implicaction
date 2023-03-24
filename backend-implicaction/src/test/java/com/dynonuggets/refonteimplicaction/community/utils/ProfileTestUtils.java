@@ -13,7 +13,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
+import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomLocalDate;
+import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static java.lang.String.format;
 import static java.util.List.of;
 import static lombok.AccessLevel.PRIVATE;
