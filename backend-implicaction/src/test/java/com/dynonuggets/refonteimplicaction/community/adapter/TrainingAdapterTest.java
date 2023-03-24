@@ -1,8 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.domain.model.Training;
-import com.dynonuggets.refonteimplicaction.community.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
+import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
