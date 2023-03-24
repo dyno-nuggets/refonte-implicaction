@@ -40,9 +40,9 @@ public class UserModel {
     @NotBlank(message = "password is required")
     private String password;
 
+    @Email
     @Column(name = "email", unique = true)
     @NotEmpty(message = "Email is required")
-    @Email
     private String email;
 
     @Column
