@@ -1,7 +1,8 @@
 package com.dynonuggets.refonteimplicaction.community.controller;
 
-import com.dynonuggets.refonteimplicaction.community.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.community.service.TrainingService;
+import com.dynonuggets.refonteimplicaction.community.training.controller.TrainingController;
+import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.training.service.TrainingService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
