@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.profile.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.group.adapter.GroupAdapter;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
@@ -39,7 +39,7 @@ class ProfileAdapterTest {
         @DisplayName("doit créer un dto quand toDto est appelé et que le model n'est pas null")
         void should_map_to_dto_when_toDto_and_model_is_not_null() {
             // given
-            final Profile profile = generateRandomProfile();
+            final ProfileModel profile = generateRandomProfile();
 
             // when
             final ProfileDto profileDto = profileAdapter.toDto(profile);
@@ -79,7 +79,7 @@ class ProfileAdapterTest {
         @DisplayName("doit retourner un dto_light quand toDtoLight est appelé et que le model n'est pas nul")
         void should_return_dto_light_when_toDtoLight_and_model_is_not_null() {
             // given
-            final Profile profile = generateRandomProfile();
+            final ProfileModel profile = generateRandomProfile();
 
             // when
             final ProfileDto profileDto = profileAdapter.toDtoLight(profile);

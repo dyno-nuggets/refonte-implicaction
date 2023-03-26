@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.training.domain.model;
 
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,7 +23,7 @@ public class Training {
     private Long id;
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    private Profile profile;
+    private ProfileModel profile;
     private String label;
     private LocalDate date;
     private String school;

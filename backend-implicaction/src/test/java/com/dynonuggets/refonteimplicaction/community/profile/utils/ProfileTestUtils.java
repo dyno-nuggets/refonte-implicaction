@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.profile.utils;
 
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @NoArgsConstructor(access = PRIVATE)
 public class ProfileTestUtils {
 
-    public static Profile generateRandomProfile() {
-        return Profile.builder()
+    public static ProfileModel generateRandomProfile() {
+        return ProfileModel.builder()
                 .id((long) generateRandomNumber())
                 .user(generateRandomUser())
                 .hobbies(randomAlphabetic(100))

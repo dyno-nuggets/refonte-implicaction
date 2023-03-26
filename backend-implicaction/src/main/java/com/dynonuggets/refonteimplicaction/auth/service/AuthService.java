@@ -6,8 +6,6 @@ import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
@@ -47,7 +45,6 @@ import static org.apache.commons.lang3.BooleanUtils.isTrue;
 @Slf4j
 @RequiredArgsConstructor
 public class AuthService {
-
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserService userService;
@@ -58,8 +55,6 @@ public class AuthService {
     private final NotificationService notificationService;
     private final RoleService roleService;
     private final EmailValidationNotificationMapper emailValidationNotificationMapper;
-    private final ProfileRepository profileRepository;
-
 
     /**
      * Enregistre un utilisateur en base de données
@@ -171,9 +166,7 @@ public class AuthService {
                 .registeredAt(now())
                 .roles(of(roleUser))
                 .build();
-
         userRepository.save(user);
-        profileRepository.save(Profile.builder().user(user).build());
 
         return user;
     }

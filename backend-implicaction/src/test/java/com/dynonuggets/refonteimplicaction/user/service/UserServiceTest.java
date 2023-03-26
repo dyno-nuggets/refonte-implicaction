@@ -5,15 +5,19 @@ import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.event.UserEnabledEvent;
 import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -43,11 +47,16 @@ class UserServiceTest {
     UserDto mockedUserDto;
 
     @Mock
+    ApplicationEventPublisher publisher;
+    @Mock
     UserRepository userRepository;
     @Mock
     UserMapper userMapper;
     @InjectMocks
     UserService userService;
+
+    @Captor
+    ArgumentCaptor<UserModel> argumentCaptor;
 
     @BeforeEach
     void setMockOutput() {
@@ -108,48 +117,6 @@ class UserServiceTest {
     }
 
     @Nested
-    @DisplayName("# updateUser")
-    class UpdateUserTest {
-        @Test
-        @DisplayName("doit mettre à jour les champs de l'utilisateur fourni en paramètres quand celui-ci existe")
-        void should_get_user_updated_when_updateUser_and_user_exists() {
-            // given
-            final UserDto expectedDto = UserDto.builder().id(mockedUser.getId()).build();
-            given(userRepository.findById(mockedUser.getId())).willReturn(Optional.of(mockedUser));
-            given(userRepository.save(any())).willReturn(mockedUser);
-            given(userMapper.toDto(any())).willReturn(expectedDto);
-
-            // when
-            final UserDto actualDto = userService.updateUser(expectedDto);
-
-            // then
-            assertThat(actualDto)
-                    .isNotNull()
-                    .usingRecursiveComparison()
-                    .comparingOnlyFields("firstname", "lastname")
-                    .isEqualTo(expectedDto);
-
-            verify(userRepository, times(1)).findById(anyLong());
-            verify(userRepository, times(1)).save(any());
-            verify(userMapper, times(1)).toDto(any());
-        }
-
-        @Test
-        @DisplayName("doit lancer une exception lorsque l'on essaye de mettre à jour un utilisateur qui n'existe pas")
-        void should_throw_UserNotFoundException_when_updateUser_and_user_not_exists() {
-            // given
-            given(userRepository.findById(any())).willReturn(empty());
-
-            // when / then
-            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.updateUser(mockedUserDto));
-            assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(mockedUserDto.getId()));
-            verify(userRepository, times(1)).findById(any());
-            verify(userRepository, times(0)).save(any());
-            verify(userMapper, times(0)).toDto(any());
-        }
-    }
-
-    @Nested
     @DisplayName("# getUserByIdIfExists")
     class getUserByIdIfExistsTest {
         @Test
@@ -204,6 +171,45 @@ class UserServiceTest {
             // when / then
             final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserByUsernameIfExists(username));
             assertImplicactionException(exception, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
+        }
+    }
+
+    @Nested
+    @DisplayName("# enableUser")
+    class EnableUserTests {
+        @Test
+        @DisplayName("doit activer l'utilisateur et un évènement doit être publié")
+        void should_enable_user_and_send_envent() {
+            // given
+            final UserModel expectedUser = generateRandomUser(of(USER), false);
+            final String username = expectedUser.getUsername();
+            given(userRepository.findByUsername(username)).willReturn(Optional.of(expectedUser));
+            given(userRepository.save(expectedUser)).willReturn(expectedUser);
+
+            // when
+            userService.enableUser(username);
+
+            // then
+            verify(userRepository, times(1)).save(argumentCaptor.capture());
+            verify(publisher, times(1)).publishEvent(any(UserEnabledEvent.class));
+            final UserModel actualUser = argumentCaptor.getValue();
+            assertThat(actualUser.isEnabled()).isTrue();
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand l'utilisateur n'existe pas et aucun évènement ne doit être publié")
+        void should_throw_exception_and_no_event_should_be_published() {
+            // given
+            final UserModel expectedUser = generateRandomUser(of(USER), false);
+            final String username = expectedUser.getUsername();
+            given(userRepository.findByUsername(username)).willReturn(Optional.empty());
+
+            // when
+            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserByUsernameIfExists(username));
+            assertImplicactionException(exception, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
+            verify(userRepository, times(1)).findByUsername(anyString());
+            verifyNoMoreInteractions(userRepository);
+            verifyNoInteractions(publisher);
         }
     }
 }
