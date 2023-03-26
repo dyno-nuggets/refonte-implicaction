@@ -51,22 +51,22 @@ class ProfileServiceTest {
     ProfileService profileService;
 
     @Nested
-    @DisplayName("# getByUsernameIfExists")
+    @DisplayName("# getByUsernameIfExistsAndUserEnabled")
     class GetByUsernameIfExistsTest {
         @Test
         @DisplayName("doit retourner un utilisateur quand getByUsernameIfExists est appelé et qu'un utilisateur existe pour le nom d'utilisateur fourni")
         void should_return_profile_when_getByUsernameIfExists_and_username_exists() {
             // given
             final Profile expectedProfile = generateRandomProfile();
-            given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(expectedProfile));
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willReturn(Optional.of(expectedProfile));
 
             // when
-            final Profile actualProfile = profileService.getByUsernameIfExists(expectedProfile.getUser().getUsername());
+            final Profile actualProfile = profileService.getByUsernameIfExistsAndUserEnabled(expectedProfile.getUser().getUsername());
 
             assertThat(expectedProfile)
                     .usingRecursiveComparison()
                     .isEqualTo(actualProfile);
-            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
         }
 
         @Test
@@ -74,12 +74,12 @@ class ProfileServiceTest {
         void should_throw_exception_when_getByUsernameIfExists_and_username_not_exists() {
             // given
             final String username = "usernameInexistant";
-            given(profileRepository.findByUser_Username(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
             // when - then
-            final ImplicactionException e = assertThrows(EntityNotFoundException.class, () -> profileRepository.findByUser_Username(username));
+            final ImplicactionException e = assertThrows(EntityNotFoundException.class, () -> profileService.getByUsernameIfExistsAndUserEnabled(username));
             assertImplicactionException(e, EntityNotFoundException.class, PROFILE_NOT_FOUND, username);
-            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
         }
     }
 
@@ -92,7 +92,7 @@ class ProfileServiceTest {
             // given
             final Profile expectedProfile = generateRandomProfile();
             final ProfileDto expectedProfileDto = ProfileDto.builder().username(expectedProfile.getUser().getUsername()).build();
-            given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(expectedProfile));
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willReturn(Optional.of(expectedProfile));
             given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
 
             // when
@@ -100,19 +100,19 @@ class ProfileServiceTest {
 
             // then
             assertThat(profileDto.getUsername()).isEqualTo(expectedProfile.getUser().getUsername());
-            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
         }
 
         @Test
         @DisplayName("doit lancer une exception quand getByUsername est appelé mais que le nom d'utilisateur n'existe pas")
         void should_throw_exception_when_getByUsername_but_username_not_exists() {
             final String username = "usernameInexistant";
-            given(profileRepository.findByUser_Username(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
             // when - then
             final ImplicactionException e = assertThrows(EntityNotFoundException.class, () -> profileService.getByUsername(username));
             assertImplicactionException(e, EntityNotFoundException.class, PROFILE_NOT_FOUND, username);
-            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
         }
     }
 
@@ -127,7 +127,7 @@ class ProfileServiceTest {
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest(expectedProfileDto.getUsername());
             final Profile profile = Profile.builder().user(UserModel.builder().build()).build();
             willDoNothing().given(authService).verifyAccessIsGranted(any());
-            given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willReturn(Optional.of(profile));
             given(profileRepository.save(any())).willReturn(profile);
             given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
             expectedProfileDto.setBirthday(updateRequest.getBirthday());
@@ -144,7 +144,7 @@ class ProfileServiceTest {
             // then
             assertThat(actualProfileDto).isEqualTo(expectedProfileDto);
             verify(authService, times(1)).verifyAccessIsGranted(any());
-            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
             verify(profileRepository, times(1)).save(any());
             verify(profileAdapter, times(1)).toDto(any());
         }
@@ -194,7 +194,7 @@ class ProfileServiceTest {
             final FileModel fileModel = FileModel.builder().build();
             profile.setAvatar(fileModel);
             willDoNothing().given(authService).verifyAccessIsGranted(any());
-            given(profileRepository.findByUser_Username(username)).willReturn(Optional.of(profile));
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.of(profile));
             given(cloudService.uploadImage(any())).willReturn(fileModel);
             given(profileRepository.save(any())).willReturn(profile);
             given(profileAdapter.toDto(any())).willReturn(ProfileDto.builder().username(username).avatar("avatar.png").build());
@@ -208,7 +208,7 @@ class ProfileServiceTest {
                     .extracting(ProfileDto::getAvatar)
                     .isEqualTo("avatar.png");
             verify(authService, times(1)).verifyAccessIsGranted(any());
-            verify(profileRepository, times(1)).findByUser_Username(any());
+            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
             verify(cloudService, times(1)).uploadImage(any());
             verify(profileRepository, times(1)).save(any());
             verify(profileAdapter, times(1)).toDto(any());

@@ -6,11 +6,13 @@ import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
@@ -31,7 +33,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
@@ -54,9 +55,10 @@ public class AuthService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
-    private final RoleRepository roleRepository;
     private final NotificationService notificationService;
+    private final RoleService roleService;
     private final EmailValidationNotificationMapper emailValidationNotificationMapper;
+    private final ProfileRepository profileRepository;
 
 
     /**
@@ -90,7 +92,7 @@ public class AuthService {
     /**
      * Définit l’adresse email de l’utilisateur correspondant à la clé d’activation comme vérifié si elle ne l’est pas déjà
      *
-     * @throws EntityNotFoundException si aucun n'utilisateur n'est associé à cette clé d'activation
+     * @throws EntityNotFoundException si aucun utilisateur n’est associé à cette clé d’activation
      * @throws AuthenticationException si l’email de l’utilisateur est déjà vérifié
      */
     @Transactional
@@ -139,7 +141,7 @@ public class AuthService {
     public LoginResponse refreshToken(final RefreshTokenRequest refreshTokenRequest) throws ImplicactionException {
         final String username = refreshTokenRequest.getUsername();
 
-        // une exception sera levée si l'utilisateur ou le refresh token n'existe pas
+        // une exception sera levée si l’utilisateur ou le refresh token n’existe pas
         final UserModel user = userService.getUserByUsernameIfExists(username);
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 
@@ -155,7 +157,7 @@ public class AuthService {
     }
 
     private UserModel registerUser(final RegisterRequest registerRequest, final String activationKey) {
-        final List<Role> roles = roleRepository.findAllByNameIn(of(USER.name()));
+        final Role roleUser = roleService.getRoleByName(USER.getLongName());
         final UserModel user = UserModel.builder()
                 .username(registerRequest.getUsername())
                 .firstname(registerRequest.getFirstname())
@@ -167,9 +169,13 @@ public class AuthService {
                 .emailVerified(false)
                 .activationKey(activationKey)
                 .registeredAt(now())
-                .roles(roles)
+                .roles(of(roleUser))
                 .build();
-        return userRepository.save(user);
+
+        userRepository.save(user);
+        profileRepository.save(Profile.builder().user(user).build());
+
+        return user;
     }
 
     private String generateActivationKey() {
