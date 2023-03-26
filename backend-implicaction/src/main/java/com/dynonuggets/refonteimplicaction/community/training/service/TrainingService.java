@@ -27,7 +27,7 @@ public class TrainingService {
     public TrainingDto saveOrUpdateTraining(final TrainingDto trainingDto) {
         final Training training = trainingAdapter.toModel(trainingDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile profile = profileService.getByUsernameIfExists(currentUsername);
+        final Profile profile = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         training.setProfile(profile);
         final Training save = trainingRepository.save(training);
         return trainingAdapter.toDto(save);
