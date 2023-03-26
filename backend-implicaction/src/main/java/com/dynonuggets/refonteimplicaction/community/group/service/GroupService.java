@@ -5,7 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.group.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
@@ -44,7 +44,7 @@ public class GroupService {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
         final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
+        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
 
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setImage(fileSave);
@@ -59,7 +59,7 @@ public class GroupService {
     @Transactional
     public GroupDto save(final GroupDto groupDto) {
         final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
+        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setCreatedAt(Instant.now());
         group.setProfile(profile);
@@ -84,7 +84,7 @@ public class GroupService {
     // TODO: déplacer dans le ProfileController : /profiles/{username}/groups/{groupId}/subscribe + faire unsubscribe
     @Transactional
     public List<GroupDto> addGroup(final String groupName) {
-        final Profile user = profileService.getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
+        final ProfileModel user = profileService.getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
         final Group group = groupRepository.findByName(groupName)
                 // TODO: lancer une exception appropriée
                 .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));

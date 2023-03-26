@@ -5,14 +5,13 @@ import com.dynonuggets.refonteimplicaction.community.group.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -46,8 +45,6 @@ class GroupServiceTest {
     S3CloudServiceImpl cloudService;
     @Mock
     FileRepository fileRepository;
-    @Mock
-    UserRepository userRepository;
     @Mock
     ProfileRepository profileRepository;
     @Mock
@@ -99,7 +96,7 @@ class GroupServiceTest {
                 "test data".getBytes()
         );
 
-        final Profile profile = Profile.builder().user(currentUser).build();
+        final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
 
         when(cloudService.uploadImage(any())).thenReturn(fileModel);
         when(fileRepository.save(fileModel)).thenReturn(fileModel);
@@ -145,7 +142,7 @@ class GroupServiceTest {
                 .description("Elle est super bien ma description")
                 .build();
 
-        final Profile profile = Profile.builder().user(currentUser).build();
+        final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
 
         given(groupAdapter.toModel(any(), any())).willReturn(sentModel);
         given(authService.getCurrentUser()).willReturn(currentUser);

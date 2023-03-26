@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.community.profile.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.group.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
@@ -28,7 +28,7 @@ public class ProfileAdapter {
     private final GroupAdapter groupAdapter;
     private final FileService fileService;
 
-    public ProfileDto toDto(final Profile profile) {
+    public ProfileDto toDto(final ProfileModel profile) {
         if (profile == null) {
             return null;
         }
@@ -61,7 +61,7 @@ public class ProfileAdapter {
                 .build();
     }
 
-    public ProfileDto toDtoLight(final Profile profile) {
+    public ProfileDto toDtoLight(final ProfileModel profile) {
         if (profile == null) {
             return null;
         }

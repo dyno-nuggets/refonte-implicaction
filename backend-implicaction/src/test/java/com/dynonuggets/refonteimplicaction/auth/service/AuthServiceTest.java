@@ -3,10 +3,9 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
@@ -69,8 +68,6 @@ class AuthServiceTest {
     @Mock
     RefreshTokenService refreshTokenService;
     @Mock
-    RoleRepository roleRepository;
-    @Mock
     RoleService roleService;
     @Mock
     ProfileRepository profileRepository;
@@ -83,7 +80,7 @@ class AuthServiceTest {
     @Captor
     private ArgumentCaptor<UserModel> userArgumentCaptorCaptor;
     @Captor
-    private ArgumentCaptor<Profile> profileArgumentCaptorCaptor;
+    private ArgumentCaptor<ProfileModel> profileArgumentCaptorCaptor;
 
     RegisterRequest generateValidRegisterRequest() {
         return RegisterRequest.builder()
@@ -118,7 +115,6 @@ class AuthServiceTest {
             given(userRepository.existsByEmail(any())).willReturn(false);
             given(passwordEncoder.encode(any())).willReturn(expectedPassword);
             willDoNothing().given(notificationService).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
-            given(profileRepository.save(any(Profile.class))).willReturn(Profile.builder().build());
             given(userRepository.save(any())).willReturn(UserModel.builder().build());
             given(roleService.getRoleByName(anyString())).willReturn(Role.builder().name(RoleEnum.USER.getLongName()).build());
 
@@ -127,14 +123,11 @@ class AuthServiceTest {
 
             // then
             verify(userRepository, times(1)).save(userArgumentCaptorCaptor.capture());
-            verify(profileRepository, times(1)).save(profileArgumentCaptorCaptor.capture());
             final UserModel savedUser = userArgumentCaptorCaptor.getValue();
-            final Profile savedProfile = profileArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     .usingRecursiveComparison()
                     .ignoringFields("password", "birthday", "image", "purpose", "activatedAt", "roles", "registeredAt", "trainings", "enabled", "emailVerified", "groups", "expectation", "activationKey", "experiences", "url", "presentation", "contribution", "phoneNumber", "hobbies", "id", "notifications")
                     .isEqualTo(validLoginRequest);
-            assertThat(savedProfile).isNotNull();
             assertThat(savedUser.getPassword()).isEqualTo(expectedPassword);
             assertThat(savedUser.getActivationKey()).isNotNull();
             assertThat(savedUser)
@@ -144,7 +137,6 @@ class AuthServiceTest {
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
             verify(userRepository, times(1)).save(any());
-            verify(profileRepository, times(1)).save(any());
             verify(notificationService, times(1)).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
         }
 

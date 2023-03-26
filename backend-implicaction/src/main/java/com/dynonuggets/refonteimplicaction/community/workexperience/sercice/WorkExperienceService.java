@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.workexperience.sercice;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
@@ -29,7 +29,7 @@ public class WorkExperienceService {
     public WorkExperienceDto saveOrUpdateExperience(final WorkExperienceDto experienceDto) {
         final WorkExperience experience = experienceAdapter.toModel(experienceDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile user = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
+        final ProfileModel user = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         experience.setProfile(user);
         final WorkExperience saved = experienceRepository.save(experience);
         return experienceAdapter.toDto(saved);

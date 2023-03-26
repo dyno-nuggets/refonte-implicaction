@@ -10,7 +10,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
-import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.CascadeType.MERGE;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
@@ -20,12 +20,12 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "profile")
-public class Profile {
+public class ProfileModel {
     @Id
     @Column(name = "user_id")
     private Long id;
     @MapsId
-    @OneToOne(cascade = ALL)
+    @OneToOne(cascade = MERGE)
     @JoinColumn(name = "user_id")
     private UserModel user;
     private String hobbies;

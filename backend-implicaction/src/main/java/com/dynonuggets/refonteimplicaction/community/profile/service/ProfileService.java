@@ -2,15 +2,18 @@ package com.dynonuggets.refonteimplicaction.community.profile.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.adapter.ProfileAdapter;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
@@ -19,22 +22,50 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_ALREADY_EXISTS_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_CREATED_SUCCESSFULLY_MESSAGE;
+import static java.lang.String.format;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final UserService userService;
     private final ProfileAdapter profileAdapter;
     private final AuthService authService;
     private final CloudService cloudService;
+
+    /**
+     * crée un nouveau profil si l’utilisateur existe
+     *
+     * @throws TechnicalException      si le profil existe déjà
+     * @throws EntityNotFoundException si l’utilisateur n’existe pas
+     */
+    @Transactional
+    public void createProfile(final String username) {
+        final UserModel user = userService.getUserByUsernameIfExists(username);
+        profileRepository.findByUser_Username(username)
+                .ifPresentOrElse(
+                        profileModel -> {
+                            final String message = format(PROFILE_ALREADY_EXISTS_MESSAGE, username);
+                            log.error(message);
+                            throw new TechnicalException(message);
+                        },
+                        () -> {
+                            log.info(PROFILE_CREATED_SUCCESSFULLY_MESSAGE);
+                            profileRepository.save(ProfileModel.builder().user(user).build());
+                        }
+                );
+    }
 
     /**
      * @param username le nom d’utilisateur associé au profil
      * @return le profil utilisateur s’il existe
      * @throws EntityNotFoundException si le profil utilisateur n’existe pas
      */
-    public Profile getByUsernameIfExistsAndUserEnabled(final String username) {
+    public ProfileModel getByUsernameIfExistsAndUserEnabled(final String username) {
         return profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)
                 .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
     }
@@ -71,7 +102,7 @@ public class ProfileService {
         final String requestUsername = updateRequest.getUsername();
         authService.verifyAccessIsGranted(requestUsername);
 
-        final Profile profile = getByUsernameIfExistsAndUserEnabled(requestUsername);
+        final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(requestUsername);
 
         final UserModel user = profile.getUser();
         user.setFirstname(updateRequest.getFirstname());
@@ -100,7 +131,7 @@ public class ProfileService {
     public ProfileDto updateAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
         authService.verifyAccessIsGranted(username);
 
-        final Profile profile = getByUsernameIfExistsAndUserEnabled(username);
+        final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(username);
         final FileModel avatar = cloudService.uploadImage(file);
         profile.setAvatar(avatar);
 
