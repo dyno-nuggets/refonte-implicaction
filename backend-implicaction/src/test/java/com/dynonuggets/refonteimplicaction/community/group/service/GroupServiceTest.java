@@ -182,7 +182,7 @@ class GroupServiceTest {
         final Pageable pageable = PageRequest.of(first, first * size);
         final Page<Group> subredditsPage = new PageImpl<>(groups.subList(0, size - 1));
 
-        given(groupRepository.findAllByValidIsTrue(any(Pageable.class))).willReturn(subredditsPage);
+        given(groupRepository.findAllByEnabled(any(Pageable.class), anyBoolean())).willReturn(subredditsPage);
         // when
         final Page<GroupDto> actuals = groupService.getAllValidGroups(pageable);
 

@@ -49,7 +49,7 @@ public class GroupService {
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setImage(fileSave);
         group.setCreatedAt(Instant.now());
-        group.setProfile(profile);
+        group.setCreator(profile);
 
         final Group save = groupRepository.save(group);
 
@@ -62,23 +62,15 @@ public class GroupService {
         final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setCreatedAt(Instant.now());
-        group.setProfile(profile);
+        group.setCreator(profile);
         final Group save = groupRepository.save(group);
         return groupAdapter.toDto(save);
     }
 
     @Transactional(readOnly = true)
     public Page<GroupDto> getAllValidGroups(final Pageable pageable) {
-        final Page<Group> subreddits = groupRepository.findAllByValidIsTrue(pageable);
+        final Page<Group> subreddits = groupRepository.findAllByEnabled(pageable, true);
         return subreddits.map(groupAdapter::toDto);
-    }
-
-    @Transactional(readOnly = true)
-    public List<GroupDto> getAllByTopPosting(final int limit) {
-        final List<Group> topPostings = groupRepository.findAllByTopPosting(Pageable.ofSize(limit));
-        return topPostings.stream()
-                .map(groupAdapter::toDto)
-                .collect(toList());
     }
 
     // TODO: déplacer dans le ProfileController : /profiles/{username}/groups/{groupId}/subscribe + faire unsubscribe
@@ -98,16 +90,16 @@ public class GroupService {
 
     @Transactional
     public Page<GroupDto> getAllPendingGroups(final Pageable pageable) {
-        return groupRepository.findAllByValidIsFalse(pageable)
+        return groupRepository.findAllByEnabled(pageable, false)
                 .map(groupAdapter::toDto);
     }
 
     @Transactional
-    public GroupDto validateGroup(final String groupName) {
+    public GroupDto enableGroup(final String groupName) {
         final Group group = groupRepository.findByName(groupName)
                 .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
 
-        group.setValid(true);
+        group.setEnabled(true);
         final Group groupUpdate = groupRepository.save(group);
         return groupAdapter.toDto(groupUpdate);
     }

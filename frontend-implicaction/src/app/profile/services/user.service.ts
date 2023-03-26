@@ -33,7 +33,7 @@ export class UserService {
   }
 
   getUserGroups(userId: string): Observable<Group[]> {
-    return this.http.get<Group[]>(this.apiEndpointsService.getAllGroups(userId));
+    return this.http.get<Group[]>(this.apiEndpointsService.getAllGroupsByMemberUsername(userId));
   }
 
 }

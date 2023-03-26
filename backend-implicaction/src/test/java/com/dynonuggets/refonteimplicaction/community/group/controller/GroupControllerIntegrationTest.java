@@ -179,9 +179,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_get_all_pending_groups_when_authenticated() throws Exception {
         //given
         final List<GroupDto> groupDtos = Arrays.asList(
-                GroupDto.builder().id(1L).valid(false).build(),
-                GroupDto.builder().id(2L).valid(false).build(),
-                GroupDto.builder().id(3L).valid(false).build()
+                GroupDto.builder().id(1L).enabled(false).build(),
+                GroupDto.builder().id(2L).enabled(false).build(),
+                GroupDto.builder().id(3L).enabled(false).build()
         );
         final Page<GroupDto> groupPageMockResponse = new PageImpl<>(groupDtos);
         given(groupService.getAllPendingGroups(any())).willReturn(groupPageMockResponse);
@@ -197,7 +197,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         for (int i = 0; i < groupDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
             resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(groupDtos.get(i).getId()))));
-            resultActions.andExpect(jsonPath(contentPath + ".valid", is(groupDtos.get(i).isValid())));
+            resultActions.andExpect(jsonPath(contentPath + ".valid", is(groupDtos.get(i).isEnabled())));
         }
 
         verify(groupService, times(1)).getAllPendingGroups(any());

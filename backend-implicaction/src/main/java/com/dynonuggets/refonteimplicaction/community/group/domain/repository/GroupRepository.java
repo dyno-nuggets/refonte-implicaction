@@ -4,18 +4,13 @@ import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface GroupRepository extends JpaRepository<Group, Long> {
-    @Query("select s from Group s order by s.posts.size desc")
-    List<Group> findAllByTopPosting(Pageable pageable);
-
     Optional<Group> findByName(String name);
 
-    Page<Group> findAllByValidIsFalse(Pageable pageable);
+    Page<Group> findAllByEnabled(Pageable pageable, boolean enabled);
 
-    Page<Group> findAllByValidIsTrue(Pageable pageable);
+    Page<Group> findAllByEnabledIsTrue(Pageable pageable);
 }

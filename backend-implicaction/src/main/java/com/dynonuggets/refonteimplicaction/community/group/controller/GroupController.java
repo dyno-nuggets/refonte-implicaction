@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,13 +31,16 @@ public class GroupController {
 
     @ResponseBody
     @PostMapping(consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<GroupDto> createSubreddit(@RequestPart("group") final GroupDto group, @RequestParam("file") final MultipartFile image) {
-        final GroupDto saveDto = groupService.save(image, group);
+    public ResponseEntity<GroupDto> createGroup(
+            @RequestPart final GroupDto group,
+            @RequestParam final MultipartFile file
+    ) {
+        final GroupDto saveDto = groupService.save(file, group);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
     @PostMapping(CREATE_NO_IMAGE)
-    public ResponseEntity<GroupDto> createSubreddit(@RequestBody final GroupDto group) {
+    public ResponseEntity<GroupDto> createGroup(@RequestBody final GroupDto group) {
         final GroupDto saveDto = groupService.save(group);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
@@ -51,12 +55,6 @@ public class GroupController {
         final Pageable pageable = PageRequest.of(page, rows, Sort.by(Direction.valueOf(sortOrder), sortBy));
         final Page<GroupDto> subredditDtos = groupService.getAllValidGroups(pageable);
         return ResponseEntity.ok(subredditDtos);
-    }
-
-    @GetMapping(GET_ALL_BY_TOP_POSTING_URI)
-    public ResponseEntity<List<GroupDto>> getAllByTopPosting(@RequestParam final int limit) {
-        final List<GroupDto> groupDtos = groupService.getAllByTopPosting(limit);
-        return ResponseEntity.ok(groupDtos);
     }
 
     @PostMapping(SUBSCRIBE_GROUP)
@@ -77,9 +75,11 @@ public class GroupController {
         return ResponseEntity.ok(pendingGroups);
     }
 
-    @PatchMapping(VALIDATE_GROUP_URI)
-    public ResponseEntity<GroupDto> validateGroup(@PathVariable final String groupName) {
-        final GroupDto groupDto = groupService.validateGroup(groupName);
+
+    @PatchMapping(ENABLE_GROUP_URI)
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<GroupDto> enableGroup(@PathVariable final String groupName) {
+        final GroupDto groupDto = groupService.enableGroup(groupName);
         return ResponseEntity.ok(groupDto);
     }
 }
