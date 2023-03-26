@@ -7,7 +7,7 @@ import com.dynonuggets.refonteimplicaction.community.group.domain.repository.Gro
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
-import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
@@ -23,7 +23,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.Instant;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.GROUP_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
 import static java.util.stream.Collectors.toList;
@@ -38,14 +37,14 @@ public class GroupService {
     private final CloudService cloudService;
     private final FileRepository fileRepository;
     private final ProfileRepository profileRepository;
+    private final ProfileService profileService;
 
     @Transactional
     public GroupDto save(final MultipartFile image, final GroupDto groupDto) {
         final FileModel fileModel = cloudService.uploadImage(image);
         final FileModel fileSave = fileRepository.save(fileModel);
         final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile profile = profileRepository.findByUser_Username(username)
-                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
+        final Profile profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
 
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setImage(fileSave);
@@ -60,8 +59,7 @@ public class GroupService {
     @Transactional
     public GroupDto save(final GroupDto groupDto) {
         final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile profile = profileRepository.findByUser_Username(username)
-                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
+        final Profile profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
         final Group group = groupAdapter.toModel(groupDto, profile);
         group.setCreatedAt(Instant.now());
         group.setProfile(profile);
@@ -86,9 +84,7 @@ public class GroupService {
     // TODO: déplacer dans le ProfileController : /profiles/{username}/groups/{groupId}/subscribe + faire unsubscribe
     @Transactional
     public List<GroupDto> addGroup(final String groupName) {
-        final Profile user = profileRepository.findById(authService.getCurrentUser().getId())
-                // TODO: lancer une exception appropriée
-                .orElseThrow(() -> new NotFoundException(""));
+        final Profile user = profileService.getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
         final Group group = groupRepository.findByName(groupName)
                 // TODO: lancer une exception appropriée
                 .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));

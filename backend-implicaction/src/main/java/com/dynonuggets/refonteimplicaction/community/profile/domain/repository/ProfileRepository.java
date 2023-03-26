@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @SuppressWarnings("squid:S00100")
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
-    Optional<Profile> findByUser_Username(String username);
+    Optional<Profile> findByUser_UsernameAndUser_EnabledTrue(String username);
 
-    Page<Profile> findAllByUser_UsernameNot(String id, Pageable pageable);
+    Page<Profile> findAllByUser_UsernameNotAndUser_EnabledTrue(String id, Pageable pageable);
 }

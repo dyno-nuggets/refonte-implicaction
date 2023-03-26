@@ -29,7 +29,7 @@ public class WorkExperienceService {
     public WorkExperienceDto saveOrUpdateExperience(final WorkExperienceDto experienceDto) {
         final WorkExperience experience = experienceAdapter.toModel(experienceDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile user = profileService.getByUsernameIfExists(currentUsername);
+        final Profile user = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         experience.setProfile(user);
         final WorkExperience saved = experienceRepository.save(experience);
         return experienceAdapter.toDto(saved);

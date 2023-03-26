@@ -7,6 +7,7 @@ import com.dynonuggets.refonteimplicaction.community.group.domain.repository.Gro
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
+import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.repository.FileRepository;
 import com.dynonuggets.refonteimplicaction.service.impl.S3CloudServiceImpl;
@@ -27,7 +28,6 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -38,25 +38,20 @@ class GroupServiceTest {
 
     @Mock
     GroupRepository groupRepository;
-
     @Mock
     GroupAdapter groupAdapter;
-
     @Mock
     AuthService authService;
-
     @Mock
     S3CloudServiceImpl cloudService;
-
     @Mock
     FileRepository fileRepository;
-
     @Mock
     UserRepository userRepository;
-
     @Mock
     ProfileRepository profileRepository;
-
+    @Mock
+    ProfileService profileService;
     @InjectMocks
     GroupService groupService;
 
@@ -112,7 +107,7 @@ class GroupServiceTest {
         when(authService.getCurrentUser()).thenReturn(currentUser);
         when(groupRepository.save(any())).thenReturn(saveModel);
         when(groupAdapter.toDto(any())).thenReturn(expectedDto);
-        given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
+        given(profileService.getByUsernameIfExistsAndUserEnabled(any())).willReturn(profile);
 
         // when
         groupService.save(mockMultipartFile, sentDto);
@@ -154,7 +149,7 @@ class GroupServiceTest {
 
         given(groupAdapter.toModel(any(), any())).willReturn(sentModel);
         given(authService.getCurrentUser()).willReturn(currentUser);
-        given(profileRepository.findByUser_Username(any())).willReturn(Optional.of(profile));
+        given(profileService.getByUsernameIfExistsAndUserEnabled(any())).willReturn(profile);
         given(groupRepository.save(any())).willReturn(saveModel);
 
         // when

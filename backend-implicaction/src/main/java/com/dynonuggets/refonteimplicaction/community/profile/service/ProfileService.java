@@ -10,7 +10,6 @@ import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,8 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
-import static java.util.Optional.empty;
-import static java.util.Optional.of;
 
 @Service
 @AllArgsConstructor
@@ -31,15 +28,14 @@ public class ProfileService {
     private final ProfileAdapter profileAdapter;
     private final AuthService authService;
     private final CloudService cloudService;
-    private final UserRepository userRepository;
 
     /**
      * @param username le nom d’utilisateur associé au profil
      * @return le profil utilisateur s’il existe
      * @throws EntityNotFoundException si le profil utilisateur n’existe pas
      */
-    public Profile getByUsernameIfExists(final String username) {
-        return profileRepository.findByUser_Username(username)
+    public Profile getByUsernameIfExistsAndUserEnabled(final String username) {
+        return profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)
                 .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
     }
 
@@ -61,22 +57,7 @@ public class ProfileService {
      */
     @Transactional(readOnly = true)
     public ProfileDto getByUsername(final String username) {
-        final Profile profile = profileRepository.findByUser_Username(username)
-                .or(() -> {
-                    // - si le profil n’existe pas, c’est qu’il n’a pas été créé ou que l’utilisateur n’existe pas
-                    // - si l'utilisateur existe, on crée son profil
-                    final UserModel user = userRepository.findByUsernameAndEnabledTrue(username).orElse(null);
-
-                    if (user == null) {
-                        return empty();
-                    }
-
-                    final Profile newProfile = Profile.builder().user(user).build();
-                    return of(profileRepository.save(newProfile));
-                })
-                .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
-
-        return profileAdapter.toDto(profile);
+        return profileAdapter.toDto(getByUsernameIfExistsAndUserEnabled(username));
     }
 
     /**
@@ -90,7 +71,7 @@ public class ProfileService {
         final String requestUsername = updateRequest.getUsername();
         authService.verifyAccessIsGranted(requestUsername);
 
-        final Profile profile = getByUsernameIfExists(requestUsername);
+        final Profile profile = getByUsernameIfExistsAndUserEnabled(requestUsername);
 
         final UserModel user = profile.getUser();
         user.setFirstname(updateRequest.getFirstname());
@@ -119,7 +100,7 @@ public class ProfileService {
     public ProfileDto updateAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
         authService.verifyAccessIsGranted(username);
 
-        final Profile profile = getByUsernameIfExists(username);
+        final Profile profile = getByUsernameIfExistsAndUserEnabled(username);
         final FileModel avatar = cloudService.uploadImage(file);
         profile.setAvatar(avatar);
 

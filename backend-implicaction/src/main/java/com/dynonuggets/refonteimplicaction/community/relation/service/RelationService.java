@@ -50,8 +50,8 @@ public class RelationService {
             throw new RelationException(SENDER_EQUALS_RECEIVER);
         }
 
-        final Profile sender = profileService.getByUsernameIfExists(senderName);
-        final Profile receiver = profileService.getByUsernameIfExists(receiverName);
+        final Profile sender = profileService.getByUsernameIfExistsAndUserEnabled(senderName);
+        final Profile receiver = profileService.getByUsernameIfExistsAndUserEnabled(receiverName);
 
         if (relationRepository.areInRelation(senderName, receiverName)) {
             throw new RelationException(RELATION_ALREADY_EXISTS);
@@ -135,7 +135,7 @@ public class RelationService {
      */
     public Page<RelationsDto> getAllCommunity(final Pageable pageable) {
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Page<Profile> allProfiles = profileRepository.findAllByUser_UsernameNot(currentUsername, pageable);
+        final Page<Profile> allProfiles = profileRepository.findAllByUser_UsernameNotAndUser_EnabledTrue(currentUsername, pageable);
         final List<String> allProfilesUsernames = allProfiles.get().map(p -> p.getUser().getUsername()).collect(toList());
         final List<Relation> currentUsersRelations = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allProfilesUsernames, pageable);
         return allProfiles
