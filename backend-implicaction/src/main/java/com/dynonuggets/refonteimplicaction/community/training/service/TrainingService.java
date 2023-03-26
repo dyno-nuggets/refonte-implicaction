@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.training.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
@@ -27,7 +27,7 @@ public class TrainingService {
     public TrainingDto saveOrUpdateTraining(final TrainingDto trainingDto) {
         final Training training = trainingAdapter.toModel(trainingDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final Profile profile = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
+        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         training.setProfile(profile);
         final Training save = trainingRepository.save(training);
         return trainingAdapter.toDto(save);

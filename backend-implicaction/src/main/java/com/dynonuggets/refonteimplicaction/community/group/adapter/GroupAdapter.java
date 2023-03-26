@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.community.group.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class GroupAdapter {
 
     private FileService fileService;
 
-    public Group toModel(final GroupDto dto, final Profile profile) {
+    public Group toModel(final GroupDto dto, final ProfileModel profile) {
         return Group.builder()
                 .id(dto.getId())
                 .name(dto.getName())
@@ -42,7 +42,7 @@ public class GroupAdapter {
                 .imageUrl(imageUrl)
                 .valid(model.isValid())
                 .username(username)
-                .userId(callIfNotNull(model.getProfile(), Profile::getId))
+                .userId(callIfNotNull(model.getProfile(), ProfileModel::getId))
                 .numberOfUsers(emptyIfNull(model.getProfiles()).size())
                 .build();
     }

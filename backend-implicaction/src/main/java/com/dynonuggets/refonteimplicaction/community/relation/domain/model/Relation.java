@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.relation.domain.model;
 
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,10 +22,10 @@ public class Relation {
     private Long id;
     @ManyToOne
     @JoinColumn(name = "sender_id", nullable = false)
-    private Profile sender;
+    private ProfileModel sender;
     @ManyToOne
     @JoinColumn(name = "receiver_id", nullable = false)
-    private Profile receiver;
+    private ProfileModel receiver;
 
     @Column(name = "sent_at")
     private Instant sentAt;

@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.group.domain.model;
 
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profile;
+import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.model.FileModel;
 import com.dynonuggets.refonteimplicaction.model.Post;
 import lombok.*;
@@ -38,13 +38,13 @@ public class Group {
     private Instant createdAt;
 
     @ManyToOne(fetch = LAZY)
-    private Profile profile;
+    private ProfileModel profile;
 
     @ManyToOne(fetch = LAZY)
     private FileModel image;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = ALL, mappedBy = "groups")
-    private List<Profile> profiles;
+    private List<ProfileModel> profiles;
 
     @Column(name = "valid")
     private boolean valid;
