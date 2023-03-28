@@ -1,21 +1,21 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {WorkExperience} from '../models/work-experience';
-import {User} from '../models/user';
 import {Training} from '../models/training';
+import {Profile} from "../../profile/models/profile";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserContextService {
 
-  private behaviorSubject = new BehaviorSubject<User>({});
+  private behaviorSubject = new BehaviorSubject<Profile>({});
 
-  setUser(user: User): void {
+  setUser(user: Profile): void {
     this.behaviorSubject.next(user);
   }
 
-  observeUser(): Observable<User> {
+  observeUser(): Observable<Profile> {
     return this.behaviorSubject.asObservable();
   }
 

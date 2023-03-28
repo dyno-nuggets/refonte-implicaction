@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.profile.utils;
 
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
@@ -40,7 +40,7 @@ public class ProfileTestUtils {
                 .phoneNumber(randomNumeric(8))
                 .experiences(of(WorkExperience.builder().build()))
                 .trainings(of(Training.builder().build()))
-                .groups(of(Group.builder().build()))
+                .groups(of(GroupModel.builder().build()))
                 .build();
     }
 

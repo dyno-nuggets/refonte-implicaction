@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.model;
 
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -45,5 +45,5 @@ public class Post {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "group_id", referencedColumnName = "id")
-    private Group group;
+    private GroupModel group;
 }

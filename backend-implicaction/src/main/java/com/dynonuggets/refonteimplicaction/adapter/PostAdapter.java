@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
@@ -11,17 +11,19 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
+import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+
 @Component
 @AllArgsConstructor
 public class PostAdapter {
 
-    public Post toPost(final PostRequest postRequest, final Group group, final UserModel currentUser) {
+    public Post toPost(final PostRequest postRequest, final GroupModel group, final UserModel currentUser) {
         return Post.builder()
                 .id(postRequest.getId())
                 .name(postRequest.getName())
                 .url(postRequest.getUrl())
                 .description(postRequest.getDescription())
-                .voteCount(0) // 0 car cette méthode n'est utilisée que lors de la création d'un post
+                .voteCount(0) // 0, car cette méthode n’est utilisée que lors de la création d’un post
                 .user(currentUser)
                 .createdAt(Instant.now())
                 .group(group)
@@ -29,9 +31,9 @@ public class PostAdapter {
     }
 
     public PostResponse toPostResponse(final Post post, final int commentCount, final boolean isPostUpVoted, final boolean isPostDownVoted) {
-        final Group group = post.getGroup();
-        final String subredditImageUrl = group != null && group.getImage() != null ? group.getImage().getUrl() : null;
-        final String subredditName = group != null ? group.getName() : "";
+        final GroupModel group = post.getGroup();
+        final String subredditImageUrl = callIfNotNull(group, GroupModel::getImageUrl);
+        final String subredditName = callIfNotNull(group, GroupModel::getName);
 
         return PostResponse.builder()
                 .id(post.getId())

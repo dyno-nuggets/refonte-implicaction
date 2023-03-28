@@ -1,15 +1,15 @@
 package com.dynonuggets.refonteimplicaction.community.profile.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.group.adapter.GroupAdapter;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.group.mapper.GroupMapper;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.service.FileService;
+import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
+import com.dynonuggets.refonteimplicaction.filemanagement.service.FileService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toList;
 public class ProfileAdapter {
     private final WorkExperienceAdapter workExperienceAdapter;
     private final TrainingAdapter trainingAdapter;
-    private final GroupAdapter groupAdapter;
+    private final GroupMapper groupMapper;
     private final FileService fileService;
 
     public ProfileDto toDto(final ProfileModel profile) {
@@ -35,7 +35,7 @@ public class ProfileAdapter {
 
         final List<WorkExperienceDto> experienceDtos = emptyStreamIfNull(profile.getExperiences()).map(workExperienceAdapter::toDto).collect(toList());
         final List<TrainingDto> trainingDtos = emptyStreamIfNull(profile.getTrainings()).map(trainingAdapter::toDto).collect(toList());
-        final List<GroupDto> groupDtos = emptyStreamIfNull(profile.getGroups()).map(groupAdapter::toDto).collect(toList());
+        final List<GroupDto> groupDtos = emptyStreamIfNull(profile.getGroups()).map(groupMapper::toDto).collect(toList());
         final UserModel user = profile.getUser();
         final ProfileDto.ProfileDtoBuilder builder = ProfileDto.builder();
 
