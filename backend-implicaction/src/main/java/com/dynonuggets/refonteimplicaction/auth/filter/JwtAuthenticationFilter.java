@@ -30,7 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
-    private static final String BEARER = "Bearer ";
+    private static final String BEARER_PREFIX = "Bearer ";
     private static final List<String> JWT_DEACTIVATED_URIS = getPublicUris();
 
     private final JwtProvider jwtProvider;
@@ -74,8 +74,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private String getJwtFromRequest(final HttpServletRequest request) {
         final String bearerToken = request.getHeader(HEADER_AUTHORIZATION_KEY);
         // le header 'Authorization' est de la forme 'Bearer <token>', pour obtenir le token il suffit de supprimer 'Bearer '
-        if (isNotBlank(bearerToken) && bearerToken.startsWith(BEARER)) {
-            return bearerToken.substring(BEARER.length());
+        if (isNotBlank(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return bearerToken;
     }
