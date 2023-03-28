@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS;
 
-public class ControllerIntegrationTestBase {
+public abstract class ControllerIntegrationTestBase {
 
     protected final Gson gson = new GsonBuilder().serializeNulls().create();
 
@@ -35,5 +35,11 @@ public class ControllerIntegrationTestBase {
 
     protected static String toJson(final Object o) throws JsonProcessingException {
         return mapper.writeValueAsString(o);
+    }
+
+    protected abstract String getBaseUri();
+
+    protected String getFullPath(final String uri) {
+        return getBaseUri().concat(uri);
     }
 }

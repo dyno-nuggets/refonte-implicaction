@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegration
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,6 +36,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = USER_BASE_URI;
 
     UserModel mockedUser;
     UserDto mockedUserDto;

@@ -8,6 +8,7 @@ import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.auth.service.RefreshTokenService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -41,6 +42,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = AuthController.class)
 class AuthControllerTest extends ControllerIntegrationTestBase {
 
+    @Getter
+    protected String baseUri = AUTH_BASE_URI;
+
     static RegisterRequest getValidReggisterRequest() {
         return RegisterRequest.builder()
                 .username(randomAlphabetic(5))
@@ -67,7 +71,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             willDoNothing().given(authService).signup(registerRequest);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_SIGNUP_URI)
+            final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_SIGNUP_URI))
                     .content(toJson(registerRequest))
                     .accept(TEXT_PLAIN)
                     .contentType(APPLICATION_JSON));
@@ -91,7 +95,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                 willDoNothing().given(authService).signup(registerRequest);
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_SIGNUP_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_SIGNUP_URI))
                         .content(toJson(registerRequest))
                         .accept(APPLICATION_JSON)
                         .contentType(APPLICATION_JSON));
@@ -113,7 +117,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                 willDoNothing().given(authService).signup(registerRequest);
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_SIGNUP_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_SIGNUP_URI))
                         .content(toJson(registerRequest))
                         .accept(APPLICATION_JSON)
                         .contentType(APPLICATION_JSON));
@@ -135,7 +139,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                 willDoNothing().given(authService).signup(registerRequest);
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_SIGNUP_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_SIGNUP_URI))
                         .content(toJson(registerRequest))
                         .accept(APPLICATION_JSON)
                         .contentType(APPLICATION_JSON));
@@ -160,7 +164,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             willDoNothing().given(authService).verifyAccount(anyString());
 
             // when
-            final ResultActions resultActions = mvc.perform(get(AUTH_BASE_URI + AUTH_ACCOUNT_VERIFICATION_URI, "uneCleDactivation"));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(AUTH_ACCOUNT_VERIFICATION_URI), "uneCleDactivation"));
 
             // then
             resultActions.andExpect(status().isOk());
@@ -181,7 +185,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             given(authService.login(any())).willReturn(response);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_LOGIN_URI)
+            final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_LOGIN_URI))
                     .content(toJson(request))
                     .contentType(APPLICATION_JSON)
                     .accept(APPLICATION_JSON));
@@ -208,7 +212,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                         .build();
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_LOGIN_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_LOGIN_URI))
                         .content(toJson(request))
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON));
@@ -227,7 +231,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                 final LoginRequest request = LoginRequest.builder().username(randomAlphabetic(8)).password(randomAlphabetic(3)).build();
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_LOGIN_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_LOGIN_URI))
                         .content(toJson(request))
                         .contentType(APPLICATION_JSON)
                         .accept(APPLICATION_JSON));
@@ -252,7 +256,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             given(authService.refreshToken(any())).willReturn(loginResponse);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_REFRESH_TOKENS_URI)
+            final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_REFRESH_TOKENS_URI))
                     .content(toJson(refreshTokenRequest))
                     .accept(APPLICATION_JSON)
                     .contentType(APPLICATION_JSON));
@@ -276,7 +280,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                 final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().refreshToken(randomAlphabetic(20)).build();
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_REFRESH_TOKENS_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_REFRESH_TOKENS_URI))
                         .content(toJson(refreshTokenRequest))
                         .accept(APPLICATION_JSON)
                         .contentType(APPLICATION_JSON));
@@ -297,7 +301,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                 final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username(randomAlphabetic(10)).build();
 
                 // when
-                final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_REFRESH_TOKENS_URI)
+                final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_REFRESH_TOKENS_URI))
                         .content(toJson(refreshTokenRequest))
                         .accept(APPLICATION_JSON)
                         .contentType(APPLICATION_JSON));
@@ -325,7 +329,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             willDoNothing().given(refreshTokenService).deleteRefreshToken(any());
 
             // when
-            final ResultActions resultActions = mvc.perform(post(AUTH_BASE_URI + AUTH_LOGOUT_URI)
+            final ResultActions resultActions = mvc.perform(post(getFullPath(AUTH_LOGOUT_URI))
                     .content(toJson(refreshTokenRequest))
                     .accept(TEXT_PLAIN)
                     .contentType(APPLICATION_JSON));

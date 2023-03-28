@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRe
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import lombok.Getter;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -21,6 +22,7 @@ import java.nio.charset.Charset;
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_NOT_FOUND_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileTestUtils.*;
+import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.GET_PROFILE_BY_USERNAME;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.PROFILES_BASE_URI;
 import static java.lang.String.format;
 import static java.util.List.of;
@@ -38,6 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ProfileController.class)
 class ProfileControllerTest extends ControllerIntegrationTestBase {
 
+    @Getter
+    protected String baseUri = PROFILES_BASE_URI;
+
     @MockBean
     ProfileService profileService;
 
@@ -53,7 +58,9 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
             given(profileService.getAllProfiles(any())).willReturn(expectedPages);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(PROFILES_BASE_URI));
+            final ResultActions resultActions = mvc.perform(get(baseUri)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActionsValidationForPageProfile(expectedPages, resultActions);
@@ -64,7 +71,9 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas connecté")
         void should_response_forbidden_when_getAllProfile_and_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(PROFILES_BASE_URI));
+            final ResultActions resultActions = mvc.perform(get(baseUri)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -84,7 +93,9 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
             given(profileService.getByUsername(any())).willReturn(expectedProfile);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(format("%s/%s", PROFILES_BASE_URI, expectedProfile.getUsername())));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PROFILE_BY_USERNAME), expectedProfile.getUsername())
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActionsAssertionsForSingleProfile(expectedProfile, resultActions);
@@ -96,12 +107,13 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre NOT_FOUND quand le profil utilisateur n'existe pas et que l'utilisateur est identifié")
         void should_response_not_found_when_getProfileByUsername_and_username_not_exists_and_authenticated() throws Exception {
             // given
-            final ProfileDto expectedProfile = generateRandomProfileDto();
             final String username = "notfoundusername";
             given(profileService.getByUsername(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
             // when
-            final ResultActions resultActions = mvc.perform(get(format("%s/%s", PROFILES_BASE_URI, expectedProfile.getUsername())));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PROFILE_BY_USERNAME), username)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions
@@ -115,7 +127,9 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(format("%s/%s", PROFILES_BASE_URI, "username")));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PROFILE_BY_USERNAME), "username")
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -144,7 +158,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
             given(profileService.updateProfile(any())).willReturn(expectedProfile);
 
             // when
-            final ResultActions resultActions = mvc.perform(put(PROFILES_BASE_URI)
+            final ResultActions resultActions = mvc.perform(put(baseUri)
                     .with(csrf())
                     .content(toJson(updateRequest))
                     .accept(APPLICATION_JSON)
@@ -160,7 +174,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(put(PROFILES_BASE_URI)
+            final ResultActions resultActions = mvc.perform(put(baseUri)
                     .with(csrf())
                     .content(toJson(generateRandomProfileUpdateRequest()))
                     .accept(APPLICATION_JSON)

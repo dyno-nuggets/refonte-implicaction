@@ -1,12 +1,11 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
-import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.model.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.model.Company;
 import com.dynonuggets.refonteimplicaction.model.JobApplication;
 import com.dynonuggets.refonteimplicaction.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -15,7 +14,7 @@ import static com.dynonuggets.refonteimplicaction.model.ApplyStatusEnum.PENDING;
 import static com.dynonuggets.refonteimplicaction.model.ContractTypeEnum.CDD;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class JobApplicationAdapterTest extends ControllerIntegrationTestBase {
+class JobApplicationAdapterTest {
     JobApplicationAdapter adapter = new JobApplicationAdapter();
 
     @Test

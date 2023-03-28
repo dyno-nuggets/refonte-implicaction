@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.training.service.TrainingSe
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = TrainingController.class)
 class TrainingControllerTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = TRAINING_BASE_URI;
 
     @MockBean
     TrainingService trainingService;
@@ -72,9 +76,11 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
         given(trainingService.saveOrUpdateTraining(any())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
@@ -101,9 +107,10 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(trainingDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
@@ -133,9 +140,11 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
         given(trainingService.saveOrUpdateTraining(any())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                put(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(put(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
@@ -162,9 +171,10 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(trainingDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                put(TRAINING_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(put(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
@@ -176,9 +186,10 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
     void should_delete_experience_when_authenticated() throws Exception {
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                delete(TRAINING_BASE_URI + DELETE_TRAINING_URI, 123L).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(delete(getFullPath(DELETE_TRAINING_URI), 123L)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions.andExpect(status().isNoContent());
@@ -188,9 +199,9 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_delete_experience_when_not_authenticated_and_should_return_forbidden() throws Exception {
         // when
-        final ResultActions resultActions = mvc.perform(
-                delete(TRAINING_BASE_URI + DELETE_TRAINING_URI, 123L)
-        );
+        final ResultActions resultActions = mvc.perform(delete(getFullPath(DELETE_TRAINING_URI), 123L)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());

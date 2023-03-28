@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.feature.controller;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.feature.dto.FeatureDto;
 import com.dynonuggets.refonteimplicaction.feature.service.FeatureService;
+import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = FeatureController.class)
 class FeatureControllerTest extends ControllerIntegrationTestBase {
 
+    @Getter
+    protected String baseUri = FEATURE_BASE_URI;
+
     @MockBean
     FeatureService featureService;
 
@@ -38,7 +42,9 @@ class FeatureControllerTest extends ControllerIntegrationTestBase {
             given(featureService.getAll()).willReturn(features);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(FEATURE_BASE_URI));
+            final ResultActions resultActions = mvc.perform(get(baseUri)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions
@@ -71,7 +77,9 @@ class FeatureControllerTest extends ControllerIntegrationTestBase {
             given(featureService.getAll()).willReturn(features);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(FEATURE_BASE_URI));
+            final ResultActions resultActions = mvc.perform(get(baseUri)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());

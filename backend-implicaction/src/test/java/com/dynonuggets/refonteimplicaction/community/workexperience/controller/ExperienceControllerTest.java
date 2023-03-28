@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.workexperience.sercice.Work
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = ExperienceController.class)
 class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
+    @Getter
+    protected String baseUri = EXPERIENCES_BASE_URI;
+
     @MockBean
     WorkExperienceService experienceService;
     ArrayList<String> roles = new ArrayList<>();
@@ -44,7 +48,6 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .id(3L)
                 .username("paul-sdv")
                 .email("paul@implicaction.fr")
-                .registeredAt(null)
                 .roles(roles)
                 .enabled(true)
                 .build();
@@ -55,11 +58,8 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     void should_create_experience_when_authenticated() throws Exception {
         // given
         final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
-                .profile(null)
                 .companyName("Idemia")
                 .description("Creation")
-                .startedAt(null)
-                .finishedAt(null)
                 .label("Label")
                 .build();
 
@@ -69,21 +69,19 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .id(123L)
                 .companyName("Idemia")
                 .description("Creation")
-                .startedAt(null)
-                .finishedAt(null)
                 .label("Label")
                 .build();
-
-
         given(experienceService.saveOrUpdateExperience(any())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions.andDo(print())
+        resultActions
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
@@ -92,7 +90,6 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.startedAt", is(expectedDto.getStartedAt())))
                 .andExpect(jsonPath("$.finishedAt", is(expectedDto.getFinishedAt())))
                 .andExpect(jsonPath("$.label", is(expectedDto.getLabel())));
-
         verify(experienceService, times(1)).saveOrUpdateExperience(any());
     }
 
@@ -101,23 +98,22 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
         // given
         final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
                 .id(123L)
-                .profile(null)
                 .companyName("Idemia")
                 .description("Creation")
                 .startedAt(LocalDate.now())
                 .finishedAt(LocalDate.now())
                 .label("Label")
                 .build();
-
         final String json = gson.toJson(experienceDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isForbidden());
+        resultActions.andExpect(status().isForbidden());
         verify(experienceService, never()).saveOrUpdateExperience(any());
     }
 
@@ -126,11 +122,8 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     void should_update_experience_when_authenticated() throws Exception {
         // given
         final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
-                .profile(null)
                 .companyName("Idemia")
                 .description("Creation")
-                .startedAt(null)
-                .finishedAt(null)
                 .label("Label")
                 .build();
 
@@ -140,8 +133,6 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .id(123L)
                 .companyName("Idemia")
                 .description("Creation")
-                .startedAt(null)
-                .finishedAt(null)
                 .label("Label")
                 .build();
 
@@ -149,12 +140,14 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
         given(experienceService.saveOrUpdateExperience(any())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                put(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(put(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions.andDo(print())
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
@@ -163,7 +156,6 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.startedAt", is(expectedDto.getStartedAt())))
                 .andExpect(jsonPath("$.finishedAt", is(expectedDto.getFinishedAt())))
                 .andExpect(jsonPath("$.label", is(expectedDto.getLabel())));
-
         verify(experienceService, times(1)).saveOrUpdateExperience(any());
     }
 
@@ -172,25 +164,23 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
         // given
         final WorkExperienceDto experienceDto = WorkExperienceDto.builder()
                 .id(123L)
-                .profile(null)
                 .companyName("Idemia")
                 .description("Creation")
                 .startedAt(LocalDate.now())
                 .finishedAt(LocalDate.now())
                 .label("Label")
                 .build();
-
         final String json = gson.toJson(experienceDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                put(EXPERIENCES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(put(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
         verify(experienceService, never()).saveOrUpdateExperience(any());
-
     }
 
     @Test
@@ -198,9 +188,10 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     void should_delete_experience_when_authenticated() throws Exception {
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                delete(EXPERIENCES_BASE_URI + DELETE_EXPERIENCES_URI, 123L).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(delete(getFullPath(DELETE_EXPERIENCES_URI), 123L)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions.andExpect(status().isNoContent());
@@ -210,9 +201,9 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_not_delete_experience_when_not_authenticated_and_should_return_forbidden() throws Exception {
         // when
-        final ResultActions resultActions = mvc.perform(
-                delete(EXPERIENCES_BASE_URI + DELETE_EXPERIENCES_URI, 123L)
-        );
+        final ResultActions resultActions = mvc.perform(delete(getFullPath(DELETE_EXPERIENCES_URI), 123L)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());

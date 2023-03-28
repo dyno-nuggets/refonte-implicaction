@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.group.service.GroupService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import lombok.Getter;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -40,6 +41,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     @MockBean
     GroupService groupService;
 
+    @Getter
+    protected String baseUri = GROUPS_BASE_URI;
+
     @Nested
     @DisplayName("# createGroup - no image")
     class CreateGroupNoImageTests {
@@ -53,9 +57,11 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.createGroup(any(), any())).willReturn(expectedDto);
 
             // when
-            final ResultActions resultActions = mvc.perform(
-                    post(GROUPS_BASE_URI + CREATE_NO_IMAGE).content(toJson(createGroupRequest)).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-            );
+            final ResultActions resultActions = mvc.perform(post(getFullPath(CREATE_NO_IMAGE))
+                    .content(toJson(createGroupRequest))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions
@@ -77,9 +83,11 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("name").description("description").build();
 
             // when
-            final ResultActions resultActions = mvc.perform(
-                    post(GROUPS_BASE_URI + CREATE_NO_IMAGE).content(toJson(createGroupRequest)).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-            );
+            final ResultActions resultActions = mvc.perform(post(getFullPath(CREATE_NO_IMAGE))
+                    .content(toJson(createGroupRequest))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -99,9 +107,11 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("name").description("description").build();
 
             // when
-            final ResultActions resultActions = mvc.perform(
-                    post(GROUPS_BASE_URI).content(toJson(createGroupRequest)).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-            );
+            final ResultActions resultActions = mvc.perform(post(getFullPath(GROUPS_BASE_URI))
+                    .content(toJson(createGroupRequest))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -114,14 +124,17 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     class SubscribeGroupTests {
         @Test
         @WithMockUser
-        @DisplayName("doit répondre OK quand un utilisateur identifié souscrit à un groupe auquel dont il n'est pas membre")
+        @DisplayName("doit répondre OK quand un utilisateur identifié souscrit à un groupe dont il n'est pas membre")
         void should_response_ok_when_authenticated_user_subscribes_group_not_already_subscribed() throws Exception {
             // when
             final long groupId = 12L;
             willDoNothing().given(groupService).subscribeGroup(groupId);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(GROUPS_BASE_URI + SUBSCRIBE_GROUP, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(SUBSCRIBE_GROUP), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions.andExpect(status().isOk());
@@ -137,7 +150,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             willThrow(new EntityNotFoundException(GROUP_NOT_FOUND, Long.toString(groupId))).given(groupService).subscribeGroup(groupId);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(GROUPS_BASE_URI + SUBSCRIBE_GROUP, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(SUBSCRIBE_GROUP), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             assertErrorResultWithValue(resultActions, GROUP_NOT_FOUND, Long.toString(groupId));
@@ -154,7 +170,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             willThrow(new EntityNotFoundException(USER_ALREADY_SUBSCRIBED_TO_GROUP, groupName)).given(groupService).subscribeGroup(groupId);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(GROUPS_BASE_URI + SUBSCRIBE_GROUP, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(SUBSCRIBE_GROUP), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             assertErrorResultWithValue(resultActions, USER_ALREADY_SUBSCRIBED_TO_GROUP, groupName);
@@ -169,7 +188,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             final long groupId = 12L;
 
             // when
-            final ResultActions resultActions = mvc.perform(post(GROUPS_BASE_URI + SUBSCRIBE_GROUP, groupId));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(SUBSCRIBE_GROUP), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -183,7 +204,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             final long groupId = 12L;
 
             // when
-            final ResultActions resultActions = mvc.perform(post(GROUPS_BASE_URI + SUBSCRIBE_GROUP, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(SUBSCRIBE_GROUP), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -196,6 +220,7 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
     class GetAllEnabledGroupsTests {
         @Test
         @WithMockUser
+        @DisplayName("doit répondre OK avec la liste des groupes actifs quand l'utilisateur est identifié")
         void should_response_ok_with_list_of_subreddit_when_authentication() throws Exception {
             final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
             // given
@@ -207,7 +232,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.getAllEnabledGroups(pageable)).willReturn(subreddits);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_VALIDATED_GROUPS_URI));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_VALIDATED_GROUPS_URI))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions
@@ -219,9 +246,12 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         }
 
         @Test
+        @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_no_authentication() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(JOBS_BASE_URI).contentType(APPLICATION_JSON));
+            final ResultActions resultActions = mvc.perform(get(JOBS_BASE_URI).contentType(APPLICATION_JSON)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -247,7 +277,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.getAllPendingGroups(any())).willReturn(groupPageMockResponse);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_GROUP_URI))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions
@@ -267,7 +299,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre forbidden quand l'utilisateur n'est pas ADMIN")
         void should_response_forbidden_when_pending_groups_and_not_ADMIN() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_GROUP_URI))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -278,7 +312,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre forbidden quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_pending_groups_and_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(GROUPS_BASE_URI + GET_PENDING_GROUP_URI).contentType(APPLICATION_JSON));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_GROUP_URI))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andDo(print()).andExpect(status().isForbidden());
@@ -298,7 +334,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.enableGroup(groupId)).willReturn(GroupDto.builder().id(groupId).enabled(true).build());
 
             // when
-            final ResultActions resultActions = mvc.perform(patch(GROUPS_BASE_URI + ENABLE_GROUP_URI, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(patch(getFullPath(ENABLE_GROUP_URI), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions
@@ -318,7 +357,9 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.enableGroup(groupId)).willReturn(GroupDto.builder().id(groupId).enabled(true).build());
 
             // when
-            final ResultActions resultActions = mvc.perform(patch(GROUPS_BASE_URI + ENABLE_GROUP_URI, groupId));
+            final ResultActions resultActions = mvc.perform(patch(getFullPath(ENABLE_GROUP_URI), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -334,7 +375,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.enableGroup(groupId)).willReturn(GroupDto.builder().id(groupId).enabled(true).build());
 
             // when
-            final ResultActions resultActions = mvc.perform(patch(GROUPS_BASE_URI + ENABLE_GROUP_URI, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(patch(getFullPath(ENABLE_GROUP_URI), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -349,7 +393,10 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
             given(groupService.enableGroup(groupId)).willReturn(GroupDto.builder().id(groupId).enabled(true).build());
 
             // when
-            final ResultActions resultActions = mvc.perform(patch(GROUPS_BASE_URI + ENABLE_GROUP_URI, groupId).with(csrf()));
+            final ResultActions resultActions = mvc.perform(patch(getFullPath(ENABLE_GROUP_URI), groupId)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActions.andExpect(status().isForbidden());
