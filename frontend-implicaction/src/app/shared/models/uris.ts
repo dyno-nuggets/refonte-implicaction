@@ -101,7 +101,7 @@ export class Uris {
     static readonly TOP_POSTING = 'groups/top-posting';
     static readonly CREATE_NO_IMAGE = 'groups/no-image';
     static readonly GET_ALL_PENDING_GROUPS = 'groups/pending';
-    static readonly VALIDATED_GROUPS = 'groups/validated';
+    static readonly VALIDATED_GROUPS = 'groups/enabled';
   };
 
   /**

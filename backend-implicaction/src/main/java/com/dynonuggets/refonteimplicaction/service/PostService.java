@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.PostAdapter;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
@@ -44,7 +44,7 @@ public class PostService {
             throw new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME);
         }
 
-        final Group group = groupRepository.findById(postRequest.getGroupId())
+        final GroupModel group = groupRepository.findById(postRequest.getGroupId())
                 .orElseThrow(() -> new NotFoundException(String.format(SUBREDDIT_NOT_FOUND_MESSAGE, postRequest.getGroupId())));
 
         final Post post = postAdapter.toPost(postRequest, group, authService.getCurrentUser());

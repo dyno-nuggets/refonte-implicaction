@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegration
 import com.dynonuggets.refonteimplicaction.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobPostingService;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,12 +30,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = JobPostingController.class)
 class JobsPostingControllerTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = JOBS_BASE_URI;
 
     @MockBean
     JobPostingService jobPostingService;
@@ -60,13 +63,15 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.getAllWithCriteria(any(), anyString(), any(), any(), anyBoolean(), anyBoolean(), any())).willReturn(jobPostingPageMockResponse);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(JOBS_BASE_URI).param("contractType", CDD.name()).param("archive", "true")
-
-        ).andDo(print());
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .param("contractType", CDD.name())
+                .param("archive", "true")
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalPages").value(jobPostingPageMockResponse.getTotalPages()))
                 .andExpect(jsonPath("$.totalElements").value(jobPostings.size()));
 
@@ -79,21 +84,25 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".keywords", is(jobPostings.get(i).getKeywords())))
                     .andExpect(jsonPath(contentPath + ".salary", is(jobPostings.get(i).getSalary())));
         }
-
         verify(jobPostingService, times(1)).getAllWithCriteria(any(), anyString(), any(), any(), anyBoolean(), anyBoolean(), any());
     }
 
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
-        mvc.perform(get(JOBS_BASE_URI)).andDo(print())
-                .andExpect(status().isForbidden());
+        // when
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
+        // then
+        resultActions.andExpect(status().isForbidden());
         verify(jobPostingService, times(0)).getAllWithCriteria(any(), anyString(), any(), any(), anyBoolean(), anyBoolean(), any());
     }
 
     @Test
     @WithMockUser
     void getJobByIdShouldReturnOneJob() throws Exception {
+        // given
         final JobPostingDto jobPostingDto = JobPostingDto.builder()
                 .id(1L)
                 .createdAt(Instant.now())
@@ -102,10 +111,15 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
                 .keywords("toto,yoyo")
                 .salary("1111$")
                 .build();
-
         given(jobPostingService.getJobById(jobPostingDto.getId())).willReturn(jobPostingDto);
 
-        mvc.perform(get(JOBS_BASE_URI + GET_JOB_URI, jobPostingDto.getId()).contentType(APPLICATION_JSON)).andDo(print())
+        // when
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_JOB_URI), jobPostingDto.getId())
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
+
+        // then
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(Math.toIntExact(jobPostings.get(0).getId()))))
                 .andExpect(jsonPath("$.description", is(jobPostings.get(0).getDescription())))
@@ -119,22 +133,33 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
     @Test
     @WithMockUser
     void getJobByIdWhithUnexistingIdShouldThrowException() throws Exception {
+        // given
         final long jobId = 123L;
         final NotFoundException exception = new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId));
         given(jobPostingService.getJobById(anyLong())).willThrow(exception);
 
-        mvc.perform(get(JOBS_BASE_URI + GET_JOB_URI, jobId)).andExpect(status().isNotFound());
+        // when
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_JOB_URI), jobId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
+        // then
+        resultActions.andExpect(status().isNotFound());
         verify(jobPostingService, times(1)).getJobById(anyLong());
     }
 
     @Test
     void getJobByIdWithoutJwtShouldBeForbidden() throws Exception {
+        // given
         final long jobId = 123L;
-        mvc.perform(get(JOBS_BASE_URI + GET_JOB_URI, jobId).contentType(APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isForbidden());
 
+        // when
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_JOB_URI), jobId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
+
+        // then
+        resultActions.andExpect(status().isForbidden());
         verify(jobPostingService, times(0)).getJobById(anyLong());
     }
 
@@ -156,12 +181,13 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
 
         // when
         final ResultActions resultActions = mvc.perform(
-                patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, givenDto.getId()).contentType(APPLICATION_JSON).with(csrf())
-        );
+                patch(getFullPath(ARCHIVE_JOB_URI), givenDto.getId())
+                        .accept(APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
+                        .with(csrf()));
 
         // then
         resultActions
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is((givenDto.getId().intValue()))))
                 .andExpect(jsonPath("$.archive", is(!givenDto.isArchive())));
@@ -191,14 +217,14 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.toggleArchiveAll(anyList())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(patch(getFullPath(ARCHIVE_JOBS_URI))
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isOk());
-
+        resultActions.andExpect(status().isOk());
         for (int i = 0; i < givenDto.size(); i++) {
             final String contentPath = String.format("$[%d]", i);
             resultActions
@@ -217,9 +243,10 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.toggleArchiveJobPosting(anyLong())).willThrow(exception);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(patch(getFullPath(ARCHIVE_JOB_URI), jobId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions.andExpect(status().isNotFound());
@@ -232,11 +259,12 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         final long jobId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOB_URI, jobId).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(patch(getFullPath(ARCHIVE_JOB_URI), jobId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isForbidden());
+        resultActions.andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveJobPosting(anyLong());
     }
 
@@ -252,11 +280,13 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(givenDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(patch(JOBS_BASE_URI + ARCHIVE_JOBS_URI).contentType(APPLICATION_JSON).content(json));
+        final ResultActions resultActions = mvc.perform(patch(getFullPath(ARCHIVE_JOBS_URI))
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isForbidden());
+        resultActions.andExpect(status().isForbidden());
         verify(jobPostingService, never()).toggleArchiveAll(Collections.singletonList(anyLong()));
     }
 
@@ -273,31 +303,29 @@ class JobsPostingControllerTest extends ControllerIntegrationTestBase {
         given(jobPostingService.getAllPendingJobs(any())).willReturn(jobPageMockResponse);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_JOB_URI))
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print())
-                .andExpect(status().isOk());
-
+        resultActions.andExpect(status().isOk());
         for (int i = 0; i < jobPostingDtos.size(); i++) {
             final String contentPath = String.format("$.content[%d]", i);
             resultActions.andExpect(jsonPath(contentPath + ".id", is(Math.toIntExact(jobPostingDtos.get(i).getId()))));
             resultActions.andExpect(jsonPath(contentPath + ".valid", is(jobPostingDtos.get(i).isValid())));
         }
-
         verify(jobPostingService, times(1)).getAllPendingJobs(any());
     }
 
     @Test
     void should_response_forbidden_when_pending_jobs_and_not_authenticated() throws Exception {
-
         // when
-        final ResultActions resultActions = mvc.perform(get(JOBS_BASE_URI + GET_PENDING_JOB_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_JOB_URI))
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isForbidden());
-
+        resultActions.andExpect(status().isForbidden());
         verify(jobPostingService, never()).getAllPendingJobs(any());
     }
 

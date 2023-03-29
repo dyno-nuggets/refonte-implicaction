@@ -98,10 +98,16 @@ export class ApiEndpointsService {
     };
   }
 
+  buildUriFromTemplate(url: string, params: Map<string, string>): string {
+    return Object.keys(params)
+      .reduce((accu, key) => {
+        return accu.replace(`{${key}}`, params.get(key));
+      }, url);
+  }
+
   /**
    * Auth
    */
-
   getLoginEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.AUTH.LOGIN);
   }
@@ -198,10 +204,6 @@ export class ApiEndpointsService {
 
   createRelationEndpoint(receiverId: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
-  }
-
-  getAllGroups(userId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GROUP_LIST, [userId, 'groups']);
   }
 
   /**
@@ -399,6 +401,10 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.GROUP.TOP_POSTING, (qs: QueryStringParameters) => qs.push('limit', limit)
     );
+  }
+
+  getAllGroupsByMemberUsername(username: string): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.GROUP_LIST, [username, 'groups']);
   }
 
   findAllActiveGroupsEndpoint(pageable: Pageable<any>): string {

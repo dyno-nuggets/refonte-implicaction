@@ -50,7 +50,7 @@ export class CommentListComponent extends BaseWithPaginationAndFilterComponent<C
   }
 
   ngOnInit(): void {
-    this.currentUserImageUrl = this.authService.getCurrentUser().imageUrl ?? Constants.USER_IMAGE_DEFAULT_URI;
+    this.currentUserImageUrl = Constants.USER_IMAGE_DEFAULT_URI;
     this.subscription = this.route.paramMap.subscribe(paramMap => {
       this.postId = paramMap.get('postId');
       this.commentPayload = {

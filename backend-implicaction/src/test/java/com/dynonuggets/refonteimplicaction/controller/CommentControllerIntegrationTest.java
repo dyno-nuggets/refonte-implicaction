@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.CommentService;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -30,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = CommentController.class)
 class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = COMMENTS_BASE_URI;
 
     @MockBean
     CommentService commentService;
@@ -58,12 +62,14 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(commentService.saveOrUpdate(any())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(COMMENTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions.andDo(print())
+        resultActions
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
@@ -71,7 +77,6 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.duration", is(DateUtils.getDurationAsString(Instant.now()))))
                 .andExpect(jsonPath("$.text", is(expectedDto.getText())))
                 .andExpect(jsonPath("$.username", is(expectedDto.getUsername())));
-
         verify(commentService, times(1)).saveOrUpdate(any());
     }
 
@@ -87,12 +92,13 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(sentDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(COMMENTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isForbidden());
+        resultActions.andExpect(status().isForbidden());
     }
 
     @Test
@@ -106,16 +112,15 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .text("voici mon commentaire sur ce point !")
                 .username("Marc Elbichon")
                 .build();
-
         given(commentService.getComment(anyLong())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(COMMENTS_BASE_URI + GET_COMMENT_URI, expectedDto.getId()).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_COMMENT_URI), expectedDto.getId())
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print())
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
@@ -135,13 +140,12 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(commentService.getComment(anyLong())).willThrow(new NotFoundException(String.format(COMMENT_NOT_FOUND, commentId)));
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(COMMENTS_BASE_URI + GET_COMMENT_URI, commentId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_COMMENT_URI), commentId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isNotFound());
-
+        resultActions.andExpect(status().isNotFound());
         verify(commentService, times(1)).getComment(anyLong());
     }
 
@@ -151,13 +155,12 @@ class CommentControllerIntegrationTest extends ControllerIntegrationTestBase {
         final long commentId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(COMMENTS_BASE_URI + GET_COMMENT_URI, commentId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_COMMENT_URI), commentId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
-
         verify(commentService, never()).getComment(anyLong());
     }
 }

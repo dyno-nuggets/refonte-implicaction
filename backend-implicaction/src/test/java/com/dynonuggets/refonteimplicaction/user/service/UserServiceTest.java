@@ -111,7 +111,7 @@ class UserServiceTest {
             given(userRepository.findById(userId)).willReturn(empty());
 
             // when / then
-            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserById(userId));
+            final ImplicactionException exception = assertThrows(ImplicactionException.class, () -> userService.getUserById(userId));
             assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(userId));
         }
     }
@@ -140,7 +140,7 @@ class UserServiceTest {
             given(userRepository.findById(userId)).willReturn(empty());
 
             // when / then
-            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserByIdIfExists(userId));
+            final ImplicactionException exception = assertThrows(ImplicactionException.class, () -> userService.getUserByIdIfExists(userId));
             assertImplicactionException(exception, EntityNotFoundException.class, USER_ID_NOT_FOUND, Long.toString(userId));
         }
     }
@@ -169,7 +169,7 @@ class UserServiceTest {
             given(userRepository.findByUsername(username)).willReturn(empty());
 
             // when / then
-            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserByUsernameIfExists(username));
+            final ImplicactionException exception = assertThrows(ImplicactionException.class, () -> userService.getUserByUsernameIfExists(username));
             assertImplicactionException(exception, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
         }
     }
@@ -205,7 +205,7 @@ class UserServiceTest {
             given(userRepository.findByUsername(username)).willReturn(Optional.empty());
 
             // when
-            final ImplicactionException exception = assertThrows(EntityNotFoundException.class, () -> userService.getUserByUsernameIfExists(username));
+            final ImplicactionException exception = assertThrows(ImplicactionException.class, () -> userService.getUserByUsernameIfExists(username));
             assertImplicactionException(exception, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
             verify(userRepository, times(1)).findByUsername(anyString());
             verifyNoMoreInteractions(userRepository);

@@ -42,10 +42,6 @@ public class ApiUrls {
     // VOTES
     public static final String VOTE_BASE_URI = "/api/votes";
 
-    // FILES
-    public static final String FILE_BASE_URI = "/api/files";
-    public static final String GET_FILE_BY_KEY = "/{objectKey}";
-
     // APPLICATION
     public static final String APPLY_BASE_URI = "/api/applies";
     public static final String GET_APPLY_URI = "/{applyId}";

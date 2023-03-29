@@ -6,6 +6,7 @@ import com.dynonuggets.refonteimplicaction.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.dto.JobApplicationRequest;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.JobApplicationService;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -28,11 +29,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = JobApplicationController.class)
 class JobApplicationControllerTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = APPLY_BASE_URI;
 
     @MockBean
     JobApplicationService applicationService;
@@ -47,9 +50,11 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(request);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
@@ -61,7 +66,6 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.companyName", is(response.getCompanyName())))
                 .andExpect(jsonPath("$.companyImageUri", is(response.getCompanyImageUri())))
                 .andExpect(jsonPath("$.statusCode", is(response.getStatusCode())));
-
         verify(applicationService, times(1)).createApplyIfNotExists(any());
     }
 
@@ -75,15 +79,16 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage", is(exception.getMessage())));
-
         verify(applicationService, times(1)).createApplyIfNotExists(any());
     }
 
@@ -97,15 +102,16 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         given(applicationService.createApplyIfNotExists(any())).willThrow(exception);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is(exception.getMessage())));
-
         verify(applicationService, times(1)).createApplyIfNotExists(any());
     }
 
@@ -116,13 +122,13 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(request);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isForbidden());
-
         verify(applicationService, never()).createApplyIfNotExists(any());
     }
 
@@ -134,13 +140,13 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(request);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isForbidden());
-
         verify(applicationService, never()).createApplyIfNotExists(any());
     }
 
@@ -157,7 +163,9 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         given(applicationService.getAllAppliesForCurrentUser()).willReturn(expecteds);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(APPLY_BASE_URI));
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions
@@ -174,14 +182,15 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + "statusCode", is(expecteds.get(i).getStatusCode())))
                     .andExpect(jsonPath(contentPath + "contractType", is(expecteds.get(i).getContractType().name())));
         }
-
         verify(applicationService, times(1)).getAllAppliesForCurrentUser();
     }
 
     @Test
     void should_response_forbidden_when_listing_and_no_auth() throws Exception {
         // when
-        final ResultActions resultActions = mvc.perform(get(APPLY_BASE_URI));
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isForbidden());
@@ -190,7 +199,9 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
     @Test
     void should_response_forbidden_when_listing_and_no_premium() throws Exception {
         // when
-        final ResultActions resultActions = mvc.perform(get(APPLY_BASE_URI));
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isForbidden());
@@ -206,18 +217,18 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         given(applicationService.updateApplyForCurrentUser(any())).willReturn(applyExpected);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                patch(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(patch(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(applyExpected.getId().intValue())))
                 .andExpect(jsonPath("$.jobId", is(applyExpected.getJobId().intValue())))
                 .andExpect(jsonPath("$.statusCode", is(applyExpected.getStatusCode())));
-
         verify(applicationService, times(1)).updateApplyForCurrentUser(any());
     }
 
@@ -229,15 +240,14 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(request);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                patch(APPLY_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(patch(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions
-                .andDo(print())
-                .andExpect(status().isForbidden());
-
+        resultActions.andExpect(status().isForbidden());
         verify(applicationService, times(0)).updateApplyForCurrentUser(any());
     }
 
@@ -248,14 +258,14 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final long jobId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId)).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(delete(baseUri)
+                .param("jobId", String.valueOf(jobId))
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions
-                .andDo(print())
-                .andExpect(status().isNoContent());
+        resultActions.andExpect(status().isNoContent());
     }
 
     @Test
@@ -268,13 +278,14 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         doThrow(exception).when(applicationService).deleteApplyByJobId(anyLong());
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId)).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(delete(baseUri)
+                .param("jobId", String.valueOf(jobId))
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
-                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorMessage", is(exception.getMessage())));
     }
@@ -285,7 +296,10 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final long jobId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+        final ResultActions resultActions = mvc.perform(delete(baseUri)
+                .param("jobId", String.valueOf(jobId))
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isForbidden());
@@ -298,7 +312,10 @@ class JobApplicationControllerTest extends ControllerIntegrationTestBase {
         final long jobId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(delete(APPLY_BASE_URI).param("jobId", String.valueOf(jobId))).andDo(print());
+        final ResultActions resultActions = mvc.perform(delete(baseUri)
+                .param("jobId", String.valueOf(jobId))
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andExpect(status().isForbidden());

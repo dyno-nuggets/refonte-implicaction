@@ -18,9 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
+import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.AUTH_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
-import static com.dynonuggets.refonteimplicaction.core.util.CoreUris.FEATURE_BASE_URI;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
@@ -29,16 +28,10 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] NO_AUTHENTICATION_URIS = {
-            // api
-            "/api/auth/signup",
-            "/api/auth/login",
-            "/api/auth/logout",
-            "/api/auth/refresh/token",
-            "/api/auth/accountVerification/**",
+            AUTH_BASE_URI + "/**",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
             JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
             JOBS_BASE_URI + VALIDATED_JOBS + "?**",
-            FEATURE_BASE_URI,
 
             // swagger
             "/v2/api-docs",
@@ -48,23 +41,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/webjars/**",
+            "/assets/**"
     };
 
     private static final String[] CSRF_DISABLED_URIS = {
-            AUTH_BASE_URI + AUTH_SIGNUP_URI,
-            AUTH_BASE_URI + AUTH_LOGIN_URI,
-            AUTH_BASE_URI + AUTH_LOGOUT_URI,
-            AUTH_BASE_URI + AUTH_REFRESH_TOKENS_URI
+            AUTH_BASE_URI + "/**"
     };
 
     // Toutes les routes du front doivent être autorisées en back car c’est angular qui en gère l’accès
     private static final String[] FRONT_URIS = {
             "/",
             "/entreprise/**",
-            "/users/**",
-            "/jobs/**",
-            "/board/**",
-            "/admin/**",
             "/auth/**",
             "/error",
             "/index.html",

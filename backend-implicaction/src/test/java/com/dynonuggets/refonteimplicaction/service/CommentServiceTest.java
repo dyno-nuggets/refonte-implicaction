@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.CommentAdapter;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
@@ -27,7 +27,6 @@ import java.util.Optional;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.COMMENT_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -145,7 +144,7 @@ class CommentServiceTest {
     void should_get_comments_for_post_when_exists() {
         // given
         final UserModel currentUser = UserModel.builder().id(123L).username("Sankukai").build();
-        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), null, null, emptyList(), true);
+        final GroupModel group = GroupModel.builder().build();
         final Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
         final List<Comment> comments = asList(
                 new Comment(3L, "comment1", post, Instant.now(), currentUser),
