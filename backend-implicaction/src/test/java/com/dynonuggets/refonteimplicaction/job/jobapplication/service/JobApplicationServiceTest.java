@@ -136,7 +136,7 @@ class JobApplicationServiceTest {
         final List<JobApplicationDto> allAppliesForCurrentUser = jobApplicationService.getAllAppliesForCurrentUser();
 
         // then
-        assertThat(allAppliesForCurrentUser.size()).isEqualTo(expecteds.size());
+        assertThat(allAppliesForCurrentUser).hasSameSizeAs(expecteds);
     }
 
     @Test
@@ -156,7 +156,9 @@ class JobApplicationServiceTest {
         final JobApplicationDto actualDto = jobApplicationService.updateApplyForCurrentUser(request);
 
         // then
-        assertThat(actualDto).usingRecursiveComparison().isEqualTo(expectedDto);
+        assertThat(actualDto)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedDto);
     }
 
     @Test
@@ -176,7 +178,9 @@ class JobApplicationServiceTest {
         final JobApplicationDto actualDto = jobApplicationService.updateApplyForCurrentUser(request);
 
         // then
-        assertThat(actualDto).usingRecursiveComparison().isEqualTo(expectedDto);
+        assertThat(actualDto)
+                .usingRecursiveComparison()
+                .isEqualTo(expectedDto);
     }
 
     @Test
