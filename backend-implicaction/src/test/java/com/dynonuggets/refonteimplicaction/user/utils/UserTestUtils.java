@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.user.utils;
 
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.ResultActions;
@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.Instant;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;
@@ -80,7 +80,7 @@ public class UserTestUtils {
 
         final List<Role> roles = ofNullable(roleEnums).orElse(emptyList())
                 .stream()
-                .map(roleEnum -> Role.builder().id(roleEnum.getId()).name(roleEnum.name()).build())
+                .map(roleEnum -> Role.builder().name(roleEnum.name()).build())
                 .collect(toList());
 
         return UserModel.builder()

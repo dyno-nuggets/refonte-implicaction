@@ -22,7 +22,7 @@ import java.util.List;
 import static com.dynonuggets.refonteimplicaction.community.relation.dto.RelationTypeEnum.*;
 import static com.dynonuggets.refonteimplicaction.community.relation.error.RelationErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
 import static java.time.Instant.now;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Stream.of;

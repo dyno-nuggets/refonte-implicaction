@@ -38,7 +38,7 @@ import java.util.Optional;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.GROUP_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.USER_ALREADY_SUBSCRIBED_TO_GROUP;
 import static com.dynonuggets.refonteimplicaction.community.group.utils.GroupTestUtils.generateRandomGroup;
-import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.PREMIUM;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.PREMIUM;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.time.Instant.now;

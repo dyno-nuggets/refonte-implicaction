@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static java.util.List.of;
 import static org.assertj.core.api.Assertions.assertThat;

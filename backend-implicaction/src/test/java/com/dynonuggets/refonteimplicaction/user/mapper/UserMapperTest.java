@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
 import static java.util.List.of;
@@ -27,10 +27,6 @@ class UserMapperTest {
             RecursiveComparisonConfiguration.builder()
                     .withComparedFields("id", "username")
                     .withIgnoredFields("relationTypeOfCurrentUser", "imageUrl")
-                    .build();
-    static final RecursiveComparisonConfiguration TO_MODEL_COMPARISON_CONFIGURATION =
-            RecursiveComparisonConfiguration.builder()
-                    .withIgnoredFields("password", "notifications", "roles")
                     .build();
 
     static final String[] NULL_FIELDS_FOR_LIGHT_DTO = {
@@ -110,33 +106,6 @@ class UserMapperTest {
         @DisplayName("doit retourner null quand on utilise toDtoLight et que le model est null")
         void should_return_null_when_toDtoLight_and_model_is_null() {
             assertThat(mapper.toDtoLight(null)).isNull();
-        }
-    }
-
-    @Nested
-    @DisplayName("# toModel")
-    class ToModelTest {
-        @Test
-        @DisplayName("doit retourner un model correspondant au dto fourni quand on utilise toModel")
-        void should_map_when_toModel() {
-            // when
-            final UserModel model = mapper.toModel(mockedUserDto);
-
-            // vérification champ par champ
-            assertThat(model)
-                    .usingRecursiveComparison(TO_MODEL_COMPARISON_CONFIGURATION)
-                    .isEqualTo(mockedUserDto);
-
-            // on vérifie ques les rôles correspondent
-            assertThat(model)
-                    .extracting(UserModel::getRoles).asList().map(o -> (Role) o)
-                    .allMatch(role -> mockedUserDto.getRoles().contains(role.getName()));
-        }
-
-        @Test
-        @DisplayName("doit retourner null quand on utilise toModel et que le dto est null")
-        void should_return_null_when_toDtoLight_and_model_is_null() {
-            assertThat(mapper.toModel(null)).isNull();
         }
     }
 }

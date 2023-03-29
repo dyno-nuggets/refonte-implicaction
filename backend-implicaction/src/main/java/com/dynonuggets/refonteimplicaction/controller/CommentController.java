@@ -9,8 +9,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.COMMENTS_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_COMMENT_URI;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.COMMENTS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.GET_COMMENT_URI;
 
 @RestController
 @AllArgsConstructor

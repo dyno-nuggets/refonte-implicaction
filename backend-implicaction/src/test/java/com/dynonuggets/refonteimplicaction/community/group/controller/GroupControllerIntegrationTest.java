@@ -21,7 +21,7 @@ import java.util.List;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.GROUP_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.USER_ALREADY_SUBSCRIBED_TO_GROUP;
 import static com.dynonuggets.refonteimplicaction.community.group.utils.GroupUris.*;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.JOBS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.job.jobposting.utils.JobPostingUris.JOBS_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertErrorResultWithValue;
 import static java.time.Instant.now;
 import static java.util.List.of;

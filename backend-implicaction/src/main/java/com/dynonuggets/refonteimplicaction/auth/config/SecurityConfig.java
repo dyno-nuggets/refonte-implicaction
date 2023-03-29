@@ -1,7 +1,6 @@
 package com.dynonuggets.refonteimplicaction.auth.config;
 
 import com.dynonuggets.refonteimplicaction.auth.filter.JwtAuthenticationFilter;
-import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +18,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.AUTH_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.getPublicUris;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.*;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
@@ -29,9 +29,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String[] NO_AUTHENTICATION_URIS = {
             AUTH_BASE_URI + "/**",
+            PUBLIC_BASE_URI + "/**",
             POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
-            JOBS_BASE_URI + GET_LATEST_JOBS_URI + "/**",
-            JOBS_BASE_URI + VALIDATED_JOBS + "?**",
+            //JOBS_BASE_URI + VALIDATED_JOBS + "?**",
 
             // swagger
             "/v2/api-docs",
@@ -41,18 +41,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-ui.html",
             "/swagger-ui/**",
             "/webjars/**",
-            "/assets/**"
-    };
+            "/assets/**",
 
-    private static final String[] CSRF_DISABLED_URIS = {
-            AUTH_BASE_URI + "/**"
-    };
-
-    // Toutes les routes du front doivent être autorisées en back car c’est angular qui en gère l’accès
-    private static final String[] FRONT_URIS = {
+            // Toutes les routes du front doivent être autorisées en back car c’est angular qui en gère l’accès
             "/",
+            "/community/**",
             "/entreprise/**",
+            "/profiles/**",
+            "/jobs/**",
+            "/board/**",
+            "/forum/**",
             "/auth/**",
+            "/admin/**",
             "/error",
             "/index.html",
             "/*.js",
@@ -63,15 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/assets/img/*.jpg",
             "/favicon.ico",
             "/**.ttf",
-            "/**.woff"
+            "/**.woff",
+            "/**.woff2"
     };
 
-    private static final String[] ADMIN_RESTRICTED_URIS = {
-    };
-
-    private static final String[] PREMIUM_RESTRICTED_URIS = {
-            APPLY_BASE_URI + "/**",
-    };
+    private static final String[] CSRF_DISABLED_URIS = getPublicUris().toArray(String[]::new);
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -84,9 +80,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(NO_AUTHENTICATION_URIS).permitAll()
-                .antMatchers(FRONT_URIS).permitAll()
-                .antMatchers(ADMIN_RESTRICTED_URIS).hasRole(RoleEnum.ADMIN.name())
-                .antMatchers(PREMIUM_RESTRICTED_URIS).hasRole(RoleEnum.PREMIUM.name())
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(STATELESS);

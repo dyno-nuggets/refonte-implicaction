@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.controller;
 
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
+import com.dynonuggets.refonteimplicaction.core.utils.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.CommentDto;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.CommentService;
@@ -14,9 +14,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.COMMENTS_BASE_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.GET_COMMENT_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.COMMENT_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.COMMENTS_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.GET_COMMENT_URI;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.COMMENT_NOT_FOUND;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

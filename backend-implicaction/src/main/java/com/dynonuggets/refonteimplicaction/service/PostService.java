@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.*;
 
 
 @Service
