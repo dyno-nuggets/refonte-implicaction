@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
-import com.dynonuggets.refonteimplicaction.core.util.DateUtils;
+import com.dynonuggets.refonteimplicaction.core.utils.DateUtils;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.model.Post;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
 
 @Component
 @AllArgsConstructor

@@ -60,10 +60,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (final RuntimeException ex) {
-            // Si une exception est lancée dans le filter, elle n'est pas traitée par le GlobalExceptionHandler
-            // on force donc une erreur dans la réponse.
+            // Si une exception est lancée dans le filter, elle n’est pas traitée par le GlobalExceptionHandler, on force donc une erreur dans la réponse.
             final ExceptionResponse exceptionResponse = ex instanceof ImplicactionException ?
-                    from(((ImplicactionException) ex).getErrorResult()) : ExceptionResponse.from(ex, INTERNAL_SERVER_ERROR);
+                    from(((ImplicactionException) ex).getErrorResult()) : from(ex, INTERNAL_SERVER_ERROR);
 
             response.setStatus(exceptionResponse.getErrorCode());
             response.setContentType(APPLICATION_JSON_VALUE);

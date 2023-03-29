@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.user.util.UserUris.*;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.*;
 import static java.util.List.of;

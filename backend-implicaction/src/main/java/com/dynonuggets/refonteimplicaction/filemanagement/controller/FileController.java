@@ -21,8 +21,8 @@ public class FileController {
 
     private final CloudService cloudService;
 
-    @GetMapping(value = GET_FILE_BY_KEY, produces = APPLICATION_OCTET_STREAM_VALUE)
     @ResponseBody
+    @GetMapping(value = GET_FILE_BY_KEY, produces = APPLICATION_OCTET_STREAM_VALUE)
     public byte[] getFile(@PathVariable final String objectKey) throws IOException {
         return cloudService.getFileAsBytes(objectKey);
     }

@@ -17,7 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.*;
 
 @RestController
 @RequestMapping(POSTS_BASE_URI)

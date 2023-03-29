@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_TRAINING_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.TRAINING_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.community.training.utils.TrainingUris.DELETE_TRAINING_URI;
+import static com.dynonuggets.refonteimplicaction.community.training.utils.TrainingUris.TRAINING_BASE_URI;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController

@@ -25,7 +25,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.*;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.*;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USER_ID_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;

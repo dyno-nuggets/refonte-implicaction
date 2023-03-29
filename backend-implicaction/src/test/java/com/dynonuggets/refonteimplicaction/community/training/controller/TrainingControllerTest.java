@@ -3,8 +3,8 @@ package com.dynonuggets.refonteimplicaction.community.training.controller;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.training.service.TrainingService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,8 +15,8 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_TRAINING_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.TRAINING_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.community.training.utils.TrainingUris.DELETE_TRAINING_URI;
+import static com.dynonuggets.refonteimplicaction.community.training.utils.TrainingUris.TRAINING_BASE_URI;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;

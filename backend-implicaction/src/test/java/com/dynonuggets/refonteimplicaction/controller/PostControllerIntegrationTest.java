@@ -19,9 +19,9 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.*;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_SHOULD_HAVE_A_NAME;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.POST_SHOULD_HAVE_A_NAME;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;

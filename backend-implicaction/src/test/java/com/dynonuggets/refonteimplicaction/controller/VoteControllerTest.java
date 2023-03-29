@@ -11,7 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.VOTE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.VOTE_BASE_URI;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

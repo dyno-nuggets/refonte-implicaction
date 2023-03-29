@@ -22,7 +22,7 @@ import java.util.UUID;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.REFRESH_TOKEN_DELETED_SUCCESSFULLY_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.USER_SIGNUP_SUCCESS_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
-import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
 import static java.time.Instant.now;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;

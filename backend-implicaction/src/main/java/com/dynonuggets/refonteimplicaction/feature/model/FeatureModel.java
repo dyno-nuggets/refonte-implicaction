@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.feature.model;
 
-import com.dynonuggets.refonteimplicaction.feature.model.enums.FeatureKey;
+import com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
