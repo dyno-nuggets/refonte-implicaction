@@ -7,6 +7,7 @@ import com.dynonuggets.refonteimplicaction.dto.PostResponse;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.service.CommentService;
 import com.dynonuggets.refonteimplicaction.service.PostService;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -31,11 +32,13 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = PostController.class)
 class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = POSTS_BASE_URI;
 
     @MockBean
     PostService postService;
@@ -74,13 +77,14 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(postService.saveOrUpdate(any(PostRequest.class))).willReturn(expectedResponse);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
-                .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedResponse.getId().intValue())))
@@ -114,13 +118,14 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(postService.saveOrUpdate(any(PostRequest.class))).willThrow(new IllegalArgumentException(POST_SHOULD_HAVE_A_NAME));
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(POSTS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
         resultActions
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorMessage", is(POST_SHOULD_HAVE_A_NAME)))
                 .andExpect(jsonPath("$.errorCode", is(BAD_REQUEST.value())));
@@ -139,13 +144,13 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(postRequest);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(JOBS_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isForbidden());
-
+        resultActions.andExpect(status().isForbidden());
         verify(postService, never()).saveOrUpdate(any());
     }
 
@@ -163,12 +168,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(postService.getPost(anyLong())).willReturn(expectedResponse);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI + GET_POST_URI, expectedResponse.getId()).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_POST_URI), expectedResponse.getId())
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print())
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(expectedResponse.getId().intValue())))
@@ -182,7 +187,6 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                 .andExpect(jsonPath("$.duration", is(expectedResponse.getDuration())))
                 .andExpect(jsonPath("$.upVote", is(expectedResponse.isUpVote())))
                 .andExpect(jsonPath("$.downVote", is(expectedResponse.isDownVote())));
-
         verify(postService, times(1)).getPost(anyLong());
     }
 
@@ -194,13 +198,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(postService.getPost(anyLong())).willThrow(new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI + GET_POST_URI, postId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_POST_URI), postId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isNotFound());
-
+        resultActions.andExpect(status().isNotFound());
         verify(postService, times(1)).getPost(anyLong());
     }
 
@@ -210,13 +213,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         final long postId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI + GET_POST_URI, postId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_POST_URI), postId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isForbidden());
-
+        resultActions.andExpect(status().isForbidden());
         verify(postService, never()).getPost(any());
     }
 
@@ -234,12 +236,13 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(postService.getAllPosts(any(Pageable.class))).willReturn(expectedPages);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.numberOfElements", is((int) expectedSize)))
                 .andExpect(jsonPath("$.last", is(true)))
@@ -251,7 +254,6 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
                     .andExpect(jsonPath(contentPath + ".name", is(postResponses.get(i).getName())))
                     .andExpect(jsonPath(contentPath + ".url", is(postResponses.get(i).getUrl())));
         }
-
         verify(postService, times(1)).getAllPosts(any());
     }
 
@@ -269,12 +271,13 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(commentService.getAllCommentsForPost(any(), anyLong())).willReturn(expectedPages);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI + GET_POST_COMMENTS_URI, postId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_POST_COMMENTS_URI), postId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andExpect(status().isOk())
+        resultActions
+                .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON))
                 .andExpect(jsonPath("$.numberOfElements", is((int) expectedSize)))
                 .andExpect(jsonPath("$.last", is(true)))
@@ -285,7 +288,6 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
             resultActions.andExpect(jsonPath(contentPath + ".id", is(commentDtos.get(i).getId().intValue())))
                     .andExpect(jsonPath(contentPath + ".postId", is(commentDtos.get(i).getPostId().intValue())));
         }
-
         verify(commentService, times(1)).getAllCommentsForPost(any(), anyLong());
     }
 
@@ -297,13 +299,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         given(commentService.getAllCommentsForPost(any(), anyLong())).willThrow(new NotFoundException(String.format(POST_NOT_FOUND_MESSAGE, postId)));
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI + GET_POST_COMMENTS_URI, postId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_POST_COMMENTS_URI), postId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isNotFound());
-
+        resultActions.andExpect(status().isNotFound());
         verify(commentService, times(1)).getAllCommentsForPost(any(), anyLong());
     }
 
@@ -313,13 +314,12 @@ class PostControllerIntegrationTest extends ControllerIntegrationTestBase {
         final long postId = 123L;
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                get(POSTS_BASE_URI + GET_POST_COMMENTS_URI, postId).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(get(getFullPath(GET_POST_COMMENTS_URI), postId)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        resultActions.andDo(print()).andExpect(status().isForbidden());
-
+        resultActions.andExpect(status().isForbidden());
         verify(commentService, never()).getAllCommentsForPost(any(), anyLong());
     }
 }

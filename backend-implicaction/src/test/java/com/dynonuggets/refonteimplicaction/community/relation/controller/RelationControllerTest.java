@@ -7,6 +7,7 @@ import com.dynonuggets.refonteimplicaction.community.relation.service.RelationSe
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -36,6 +37,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = RelationController.class)
 public class RelationControllerTest extends ControllerIntegrationTestBase {
+
+    @Getter
+    protected String baseUri = RELATION_BASE_URI;
+
     @MockBean
     RelationService relationService;
     @MockBean
@@ -44,9 +49,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @Nested
     @DisplayName("# getAllCommunity")
     class GetAllCommunityTest {
-
-        static final String TEST_URI = RELATION_BASE_URI + GET_ALL_COMMUNITY;
-
         @Test
         @WithMockUser
         @DisplayName("doit répondre OK avec la liste de toutes les relations à l'utilisateur quand l'utilisateur est identifié")
@@ -60,7 +62,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.getAllCommunity(any(Pageable.class))).willReturn(expected);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_COMMUNITY))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActionsAssertionsForRelations(resultActions, expected);
@@ -71,7 +75,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_COMMUNITY))
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -82,8 +88,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @Nested
     @DisplayName("# getAllRelationsByUsername")
     class GetAllRelationsByUsername {
-
-        static final String TEST_URI = RELATION_BASE_URI + GET_ALL_RELATIONS_URI;
 
         @Test
         @WithMockUser
@@ -99,7 +103,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.getAllRelationsByUsername(anyString(), any(Pageable.class))).willReturn(expected);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, currentUsername));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_URI), currentUsername)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActionsAssertionsForRelations(resultActions, expected);
@@ -110,7 +116,7 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, "username"));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_URI), "username"));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -121,9 +127,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @Nested
     @DisplayName("# getSentFriendRequest")
     class GetSentFriendRequestTest {
-
-        static final String TEST_URI = RELATION_BASE_URI + GET_ALL_RELATIONS_REQUESTS_SENT_URI;
-
         @Test
         @WithMockUser
         @DisplayName("doit répondre OK avec la liste des relations de l'utilisateur quand l'utilisateur est identifié")
@@ -138,7 +141,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.getSentFriendRequest(anyString(), any(Pageable.class))).willReturn(expected);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, currentUsername).contentType(APPLICATION_JSON));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_REQUESTS_SENT_URI), currentUsername)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActionsAssertionsForRelations(resultActions, expected);
@@ -153,7 +158,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.getSentFriendRequest(anyString(), any(Pageable.class))).willThrow(new CoreException(OPERATION_NOT_PERMITTED));
 
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, "requestUsername"));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_REQUESTS_SENT_URI), "requestUsername")
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             assertErrorResult(resultActions, OPERATION_NOT_PERMITTED);
@@ -164,7 +171,7 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, "noMatter"));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_REQUESTS_SENT_URI), "noMatter"));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -175,9 +182,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @Nested
     @DisplayName("# getReceivedFriendRequest")
     class GetReceivedFriendRequestTest {
-
-        static final String TEST_URI = RELATION_BASE_URI + GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI;
-
         @Test
         @WithMockUser
         @DisplayName("doit répondre OK avec la liste des relations de l'utilisateur quand l'utilisateur est identifié")
@@ -192,7 +196,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.getReceivedFriendRequest(anyString(), any(Pageable.class))).willReturn(expected);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, currentUsername).contentType(APPLICATION_JSON));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI), currentUsername)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActionsAssertionsForRelations(resultActions, expected);
@@ -207,7 +213,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.getReceivedFriendRequest(anyString(), any(Pageable.class))).willThrow(new CoreException(OPERATION_NOT_PERMITTED));
 
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, "requestUsername"));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI), "requestUsername")
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             assertErrorResult(resultActions, OPERATION_NOT_PERMITTED);
@@ -218,7 +226,9 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(TEST_URI, "noMatter"));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_ALL_RELATIONS_REQUESTS_RECEIVED_URI), "noMatter")
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -230,7 +240,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @DisplayName("# requestRelation")
     class RequestRelationTest {
 
-        static final String TEST_URI = RELATION_BASE_URI + REQUEST_RELATION;
 
         @Test
         @WithMockUser
@@ -244,7 +253,10 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.requestRelation(anyString(), anyString())).willReturn(relationsDto);
 
             // when
-            final ResultActions resultActions = mvc.perform(post(TEST_URI, receiverName).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(REQUEST_RELATION), receiverName)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActionsAssertionForSingleRelation(resultActions, relationsDto);
@@ -256,8 +268,13 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @WithMockUser
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur est identifié et que token csrf est manquant")
         void should_response_forbidden_when_user_is_authenticated_and_csrf_is_missing() throws Exception {
-            // when - then
-            mvc.perform(post(TEST_URI, "receiverName")).andExpect(status().isForbidden());
+            // when
+            final ResultActions resultActions = mvc.perform(post(getFullPath(REQUEST_RELATION), "receiverName")
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(authService);
             verifyNoInteractions(relationService);
         }
@@ -265,8 +282,13 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @Test
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
-            // when - then
-            mvc.perform(post(TEST_URI, "receiverName")).andExpect(status().isForbidden());
+            // when
+            final ResultActions resultActions = mvc.perform(post(getFullPath(REQUEST_RELATION), "receiverName")
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(authService);
             verifyNoInteractions(relationService);
         }
@@ -275,7 +297,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @Nested
     @DisplayName("# removeRelation")
     class RemoveRelationTest {
-        static final String TEST_URI = RELATION_BASE_URI + REMOVE_RELATION;
 
         @Test
         @WithMockUser
@@ -285,7 +306,13 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             willDoNothing().given(relationService).removeRelation(anyLong());
 
             // when
-            mvc.perform(delete(TEST_URI, 12L).with(csrf())).andExpect(status().isNoContent());
+            final ResultActions resultActions = mvc.perform(delete(getFullPath(REMOVE_RELATION), 12L)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
+
+            // then
+            resultActions.andExpect(status().isNoContent());
             verify(relationService, times(1)).removeRelation(anyLong());
         }
 
@@ -294,7 +321,12 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur est identifié mais que le token csrf est absent")
         void should_response_forbidden_when_removeRelation_and_user_is_authenticated_but_csrf_is_missing() throws Exception {
             // when
-            mvc.perform(delete(TEST_URI, 12L)).andExpect(status().isForbidden());
+            final ResultActions resultActions = mvc.perform(delete(getFullPath(REMOVE_RELATION), 12L)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(relationService);
         }
 
@@ -306,7 +338,12 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             willThrow(new RelationException(RELATION_NOT_FOUND)).given(relationService).removeRelation(anyLong());
 
             // when
-            final ResultActions resultActions = mvc.perform(delete(TEST_URI, 12L).with(csrf()));
+            final ResultActions resultActions = mvc.perform(delete(getFullPath(REMOVE_RELATION), 12L)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
+
+            // then
             assertErrorResult(resultActions, RELATION_NOT_FOUND);
             verify(relationService, times(1)).removeRelation(anyLong());
         }
@@ -315,7 +352,12 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_removeRelation_and_user_is_not_authenticated() throws Exception {
             // when
-            mvc.perform(delete(TEST_URI, 12L)).andExpect(status().isForbidden());
+            final ResultActions resultActions = mvc.perform(delete(getFullPath(REMOVE_RELATION), 12L)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(relationService);
         }
     }
@@ -323,7 +365,6 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
     @Nested
     @DisplayName("# confirmRelation")
     class ConfirmRelationTest {
-        static final String TEST_URI = RELATION_BASE_URI + CONFIRM_RELATION;
 
         @Test
         @WithMockUser
@@ -334,7 +375,10 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.confirmRelation(anyLong())).willReturn(relationsDto);
 
             //when
-            final ResultActions resultActions = mvc.perform(post(TEST_URI, relationsDto.getId()).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(CONFIRM_RELATION), relationsDto.getId())
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             resultActionsAssertionForSingleRelation(resultActions, relationsDto);
@@ -350,7 +394,10 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.confirmRelation(anyLong())).willThrow(new RelationException(RELATION_NOT_FOUND));
 
             //when
-            final ResultActions resultActions = mvc.perform(post(TEST_URI, relationsDto.getId()).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(CONFIRM_RELATION), relationsDto.getId())
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             assertErrorResult(resultActions, RELATION_NOT_FOUND);
@@ -365,7 +412,10 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
             given(relationService.confirmRelation(anyLong())).willThrow(new CoreException(OPERATION_NOT_PERMITTED));
 
             // when
-            final ResultActions resultActions = mvc.perform(post(TEST_URI, 12L).with(csrf()));
+            final ResultActions resultActions = mvc.perform(post(getFullPath(CONFIRM_RELATION), 12L)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
+                    .with(csrf()));
 
             // then
             assertErrorResult(resultActions, OPERATION_NOT_PERMITTED);
@@ -377,15 +427,20 @@ public class RelationControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur est identifié mais que le token csrf est absent")
         void should_response_forbidden_when_user_is_authenticated_but_csrf_is_missing() throws Exception {
             //when - then
-            mvc.perform(post(TEST_URI, 12L)).andExpect(status().isForbidden());
+            mvc.perform(post(getFullPath(CONFIRM_RELATION), 12L)).andExpect(status().isForbidden());
             verifyNoInteractions(relationService);
         }
 
         @Test
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
-            //when - then
-            mvc.perform(post(TEST_URI, 12L)).andExpect(status().isForbidden());
+            //when
+            final ResultActions resultActions = mvc.perform(post(getFullPath(CONFIRM_RELATION), 12L)
+                    .accept(APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
             verifyNoInteractions(relationService);
         }
     }

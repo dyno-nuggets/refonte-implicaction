@@ -1,31 +1,15 @@
-import {WorkExperience} from './work-experience';
-import {Training} from './training';
-import {RelationType} from '../../community/models/relation-type.enum';
 import {RoleEnumCode} from '../enums/role.enum';
 
 export interface User {
   id?: string;
   username?: string;
-  email?: string;
-  url?: string;
-  registeredAt?: string;
-  enabled?: boolean;
-  activationKey?: string;
-  status?: string;
   firstname?: string;
   lastname?: string;
   birthday?: string;
-  phoneNumber?: string;
-  hobbies?: string;
-  presentation?: string;
-  purpose?: string;
-  expectation?: string;
-  contribution?: string;
-  armyCorps?: string;
-  rank?: string;
-  experiences?: WorkExperience[];
-  trainings?: Training[];
-  relationTypeOfCurrentUser?: RelationType;
+  email?: string;
+  registeredAt?: string;
+  activationKey?: string;
+  enabled?: boolean;
+  emailVerified?: boolean;
   roles?: RoleEnumCode[];
-  imageUrl?: string;
 }

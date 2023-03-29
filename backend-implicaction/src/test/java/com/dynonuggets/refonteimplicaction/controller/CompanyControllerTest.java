@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.controller;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.service.CompanyService;
+import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,7 +33,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = CompanyController.class)
 class CompanyControllerTest extends ControllerIntegrationTestBase {
 
-    private final String BASE_URI = "/api/companies";
+    @Getter
+    protected String baseUri = COMPANIES_BASE_URI;
 
     List<CompanyDto> companyDtos;
 
@@ -55,7 +57,10 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
         given(companyService.getAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
 
         // when
-        final ResultActions resultActions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions
@@ -85,11 +90,12 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
         // when
         // test des données de pagination
         given(companyService.getAllWithCriteria(any(), anyString())).willReturn(companyDtoPage);
-        final ResultActions actions = mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON));
+        final ResultActions actions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
-        actions.andDo(print())
-                .andExpect(status().isOk());
+        actions.andExpect(status().isOk());
 
         // test des propriétés de chaque éléments de la liste reçue
         for (int i = 0; i < companyDtos.size(); i++) {
@@ -105,9 +111,13 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
 
     @Test
     void getAllWithoutJwtShouldBeForbidden() throws Exception {
-        mvc.perform(get(BASE_URI).contentType(APPLICATION_JSON)).andDo(print())
-                .andExpect(status().isForbidden());
+        // when
+        final ResultActions resultActions = mvc.perform(get(baseUri)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
+        // then
+        resultActions.andExpect(status().isForbidden());
         verify(companyService, never()).getAll(any());
     }
 
@@ -130,24 +140,23 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
                 .name("Implicaction")
                 .url("url")
                 .build();
-
-
         given(companyService.saveOrUpdateCompany(any())).willReturn(expectedDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(COMPANIES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions.andDo(print())
+        resultActions
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_VALUE))
                 .andExpect(jsonPath("$.id", is(expectedDto.getId().intValue())))
                 .andExpect(jsonPath("$.description", is(expectedDto.getDescription())))
                 .andExpect(jsonPath("$.name", is(expectedDto.getName())))
                 .andExpect(jsonPath("$.url", is(expectedDto.getUrl())));
-
         verify(companyService, times(1)).saveOrUpdateCompany(any());
     }
 
@@ -163,9 +172,10 @@ class CompanyControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(companyDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(COMPANIES_BASE_URI).content(json).accept(APPLICATION_JSON).contentType(APPLICATION_JSON)
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());

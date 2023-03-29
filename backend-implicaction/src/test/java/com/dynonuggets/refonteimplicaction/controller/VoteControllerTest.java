@@ -4,6 +4,7 @@ import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegration
 import com.dynonuggets.refonteimplicaction.dto.VoteDto;
 import com.dynonuggets.refonteimplicaction.model.VoteType;
 import com.dynonuggets.refonteimplicaction.service.VoteService;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -22,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(controllers = VoteController.class)
 class VoteControllerTest extends ControllerIntegrationTestBase {
 
+    @Getter
+    protected String baseUri = VOTE_BASE_URI;
+
     @MockBean
     VoteService voteService;
 
@@ -33,15 +37,14 @@ class VoteControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(voteDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(
-                post(VOTE_BASE_URI).content(json).contentType(APPLICATION_JSON).with(csrf())
-        );
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON)
+                .with(csrf()));
 
         // then
-        resultActions
-                .andDo(print())
-                .andExpect(status().isOk());
-
+        resultActions.andExpect(status().isOk());
         verify(voteService, times(1)).vote(any());
     }
 
@@ -52,11 +55,13 @@ class VoteControllerTest extends ControllerIntegrationTestBase {
         final String json = gson.toJson(voteDto);
 
         // when
-        final ResultActions resultActions = mvc.perform(post(VOTE_BASE_URI).content(json).contentType(APPLICATION_JSON));
+        final ResultActions resultActions = mvc.perform(post(baseUri)
+                .content(json)
+                .accept(APPLICATION_JSON)
+                .contentType(APPLICATION_JSON));
 
         // then
         resultActions.andDo(print()).andExpect(status().isForbidden());
-
         verify(voteService, never()).vote(any());
     }
 }

@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.dynonuggets.refonteimplicaction.feature.utils.FeatureUris.FEATURE_BASE_URI;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/features")
+@RequestMapping(FEATURE_BASE_URI)
 public class FeatureController {
     private final FeatureService featureService;
 

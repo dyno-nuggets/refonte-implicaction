@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
@@ -79,8 +78,6 @@ class AuthServiceTest {
     AuthService authService;
     @Captor
     private ArgumentCaptor<UserModel> userArgumentCaptorCaptor;
-    @Captor
-    private ArgumentCaptor<ProfileModel> profileArgumentCaptorCaptor;
 
     RegisterRequest generateValidRegisterRequest() {
         return RegisterRequest.builder()
@@ -148,7 +145,7 @@ class AuthServiceTest {
             given(userRepository.existsByUsername(any())).willReturn(true);
 
             // when
-            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> authService.signup(validLoginRequest));
+            final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> authService.signup(validLoginRequest));
 
             // then
             assertImplicactionException(actualException, AuthenticationException.class, USERNAME_ALREADY_EXISTS, validLoginRequest.getUsername());
@@ -163,7 +160,7 @@ class AuthServiceTest {
             given(userRepository.existsByEmail(any())).willReturn(true);
 
             // when
-            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> authService.signup(validLoginRequest));
+            final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> authService.signup(validLoginRequest));
 
             // then
             assertImplicactionException(actualException, AuthenticationException.class, EMAIL_ALREADY_EXISTS, validLoginRequest.getEmail());
@@ -203,7 +200,7 @@ class AuthServiceTest {
             given(userRepository.findByActivationKey(any())).willReturn(Optional.empty());
 
             // when
-            final ImplicactionException actualException = assertThrows(EntityNotFoundException.class, () -> authService.verifyAccount(activationKey));
+            final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> authService.verifyAccount(activationKey));
 
             // then
             assertImplicactionException(actualException, EntityNotFoundException.class, ACTIVATION_KEY_NOT_FOUND, activationKey);
@@ -220,7 +217,7 @@ class AuthServiceTest {
 
             // when
             final ImplicactionException actualException =
-                    assertThrows(AuthenticationException.class, () -> authService.verifyAccount(activationKey));
+                    assertThrows(ImplicactionException.class, () -> authService.verifyAccount(activationKey));
 
             // then
             assertImplicactionException(actualException, AuthenticationException.class, USER_MAIL_IS_ALREADY_VERIFIED, user.getUsername());
@@ -335,7 +332,7 @@ class AuthServiceTest {
             given(userService.getUserByUsernameIfExists(username)).willThrow(new EntityNotFoundException(USERNAME_NOT_FOUND, username));
 
             // when
-            final ImplicactionException actualException = assertThrows(EntityNotFoundException.class, () -> authService.refreshToken(refreshTokenRequest));
+            final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> authService.refreshToken(refreshTokenRequest));
 
             // then
             assertImplicactionException(actualException, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
@@ -354,7 +351,7 @@ class AuthServiceTest {
             willThrow(new AuthenticationException(REFRESH_TOKEN_EXPIRED)).given(refreshTokenService).validateRefreshToken(anyString());
 
             // when
-            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> authService.refreshToken(refreshTokenRequest));
+            final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> authService.refreshToken(refreshTokenRequest));
 
             // then
             assertImplicactionException(actualException, AuthenticationException.class, REFRESH_TOKEN_EXPIRED);

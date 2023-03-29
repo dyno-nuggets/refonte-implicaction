@@ -19,24 +19,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
+import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.getPublicUris;
 import static com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse.from;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 @AllArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String ERROR_RESPONSE_CONTENT_TYPE = "application/json";
-    private static final String HEADER_AUTH_PREFIX = "Authorization";
-    private static final String AUTH_TYPE_PREFIX = "Bearer ";
-    private static final List<String> JWT_DEACTIVATED_URIS = List.of(
-            AUTH_BASE_URI + AUTH_SIGNUP_URI,
-            AUTH_BASE_URI + AUTH_LOGIN_URI,
-            AUTH_BASE_URI + AUTH_LOGOUT_URI,
-            AUTH_BASE_URI + AUTH_REFRESH_TOKENS_URI
-    );
+    private static final String HEADER_AUTHORIZATION_KEY = "Authorization";
+    private static final String BEARER_PREFIX = "Bearer ";
+    private static final List<String> JWT_DEACTIVATED_URIS = getPublicUris();
 
     private final JwtProvider jwtProvider;
     private final UserDetailsService userDetailsService;
@@ -71,16 +66,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     from(((ImplicactionException) ex).getErrorResult()) : ExceptionResponse.from(ex, INTERNAL_SERVER_ERROR);
 
             response.setStatus(exceptionResponse.getErrorCode());
-            response.setContentType(ERROR_RESPONSE_CONTENT_TYPE);
+            response.setContentType(APPLICATION_JSON_VALUE);
             response.getWriter().write(exceptionResponse.toString());
         }
     }
 
     private String getJwtFromRequest(final HttpServletRequest request) {
-        final String bearerToken = request.getHeader(HEADER_AUTH_PREFIX);
+        final String bearerToken = request.getHeader(HEADER_AUTHORIZATION_KEY);
         // le header 'Authorization' est de la forme 'Bearer <token>', pour obtenir le token il suffit de supprimer 'Bearer '
-        if (isNotBlank(bearerToken) && bearerToken.startsWith(AUTH_TYPE_PREFIX)) {
-            return bearerToken.substring(AUTH_TYPE_PREFIX.length());
+        if (isNotBlank(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
         }
         return bearerToken;
     }

@@ -1,17 +1,18 @@
 package com.dynonuggets.refonteimplicaction.community.group.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.group.adapter.GroupAdapter;
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
+import com.dynonuggets.refonteimplicaction.community.group.dto.CreateGroupRequest;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.group.error.GroupException;
+import com.dynonuggets.refonteimplicaction.community.group.mapper.GroupMapper;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
-import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.repository.FileRepository;
-import com.dynonuggets.refonteimplicaction.service.CloudService;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
+import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
+import com.dynonuggets.refonteimplicaction.filemanagement.service.FileService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,95 +21,86 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.Instant;
-import java.util.List;
-
-import static com.dynonuggets.refonteimplicaction.core.util.Message.GROUP_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
-import static java.util.stream.Collectors.toList;
+import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.GROUP_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.USER_ALREADY_SUBSCRIBED_TO_GROUP;
+import static java.time.Instant.now;
 
 @Service
 @AllArgsConstructor
 public class GroupService {
 
-    private final GroupAdapter groupAdapter;
+    private final GroupMapper groupMapper;
     private final GroupRepository groupRepository;
     private final AuthService authService;
     private final CloudService cloudService;
-    private final FileRepository fileRepository;
-    private final ProfileRepository profileRepository;
+    private final FileService fileService;
     private final ProfileService profileService;
 
     @Transactional
-    public GroupDto save(final MultipartFile image, final GroupDto groupDto) {
-        final FileModel fileModel = cloudService.uploadImage(image);
-        final FileModel fileSave = fileRepository.save(fileModel);
-        final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
+    public GroupDto createGroup(final CreateGroupRequest createGroupRequest, final MultipartFile image) {
+        final UserModel currentUser = authService.getCurrentUser();
+        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(currentUser.getUsername());
 
-        final Group group = groupAdapter.toModel(groupDto, profile);
-        group.setImage(fileSave);
-        group.setCreatedAt(Instant.now());
-        group.setProfile(profile);
+        final GroupModel.GroupModelBuilder builder = GroupModel.builder()
+                .name(createGroupRequest.getName())
+                .description(createGroupRequest.getDescription())
+                .createdAt(now())
+                .creator(profile)
+                .enabled(currentUser.isAdmin())
+                .createdAt(now());
 
-        final Group save = groupRepository.save(group);
+        if (image != null) {
+            final FileModel fileModel = cloudService.uploadImage(image);
+            builder.imageUrl(fileService.save(fileModel));
+        }
 
-        return groupAdapter.toDto(save);
-    }
-
-    @Transactional
-    public GroupDto save(final GroupDto groupDto) {
-        final String username = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
-        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
-        final Group group = groupAdapter.toModel(groupDto, profile);
-        group.setCreatedAt(Instant.now());
-        group.setProfile(profile);
-        final Group save = groupRepository.save(group);
-        return groupAdapter.toDto(save);
+        return groupMapper.toDto(groupRepository.save(builder.build()));
     }
 
     @Transactional(readOnly = true)
-    public Page<GroupDto> getAllValidGroups(final Pageable pageable) {
-        final Page<Group> subreddits = groupRepository.findAllByValidIsTrue(pageable);
-        return subreddits.map(groupAdapter::toDto);
+    public Page<GroupDto> getAllEnabledGroups(final Pageable pageable) {
+        return groupRepository.findAllByEnabled(pageable, true)
+                .map(groupMapper::toDto);
+    }
+
+    @Transactional
+    public void subscribeGroup(final Long groupId) {
+        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
+        final GroupModel group = groupRepository.findByIdAndEnabledTrue(groupId)
+                .orElseThrow(() -> new EntityNotFoundException(GROUP_NOT_FOUND, groupId.toString()));
+
+        group.getProfiles().stream()
+                .filter(p -> profile.getId().equals(p.getId()))
+                .findAny()
+                .ifPresentOrElse(
+                        p -> {
+                            throw new GroupException(USER_ALREADY_SUBSCRIBED_TO_GROUP, group.getName());
+                        },
+                        () -> {
+                            group.getProfiles().add(profile);
+                            groupRepository.save(group);
+                        }
+                );
     }
 
     @Transactional(readOnly = true)
-    public List<GroupDto> getAllByTopPosting(final int limit) {
-        final List<Group> topPostings = groupRepository.findAllByTopPosting(Pageable.ofSize(limit));
-        return topPostings.stream()
-                .map(groupAdapter::toDto)
-                .collect(toList());
-    }
-
-    // TODO: déplacer dans le ProfileController : /profiles/{username}/groups/{groupId}/subscribe + faire unsubscribe
-    @Transactional
-    public List<GroupDto> addGroup(final String groupName) {
-        final ProfileModel user = profileService.getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
-        final Group group = groupRepository.findByName(groupName)
-                // TODO: lancer une exception appropriée
-                .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
-
-        user.getGroups().add(group);
-        profileRepository.save(user);
-        return user.getGroups().stream()
-                .map(groupAdapter::toDto)
-                .collect(toList());
-    }
-
-    @Transactional
     public Page<GroupDto> getAllPendingGroups(final Pageable pageable) {
-        return groupRepository.findAllByValidIsFalse(pageable)
-                .map(groupAdapter::toDto);
+        return groupRepository.findAllByEnabled(pageable, false)
+                .map(groupMapper::toDto);
     }
 
     @Transactional
-    public GroupDto validateGroup(final String groupName) {
-        final Group group = groupRepository.findByName(groupName)
-                .orElseThrow(() -> new NotFoundException(String.format(GROUP_NOT_FOUND_MESSAGE, groupName)));
+    public GroupDto enableGroup(final Long groupId) {
+        final GroupModel group = getByIdIfExists(groupId);
 
-        group.setValid(true);
-        final Group groupUpdate = groupRepository.save(group);
-        return groupAdapter.toDto(groupUpdate);
+        group.setEnabled(true);
+        final GroupModel groupUpdate = groupRepository.save(group);
+        return groupMapper.toDto(groupUpdate);
+    }
+
+    @Transactional(readOnly = true)
+    public GroupModel getByIdIfExists(final Long groupId) {
+        return groupRepository.findById(groupId)
+                .orElseThrow(() -> new EntityNotFoundException(GROUP_NOT_FOUND, groupId.toString()));
     }
 }

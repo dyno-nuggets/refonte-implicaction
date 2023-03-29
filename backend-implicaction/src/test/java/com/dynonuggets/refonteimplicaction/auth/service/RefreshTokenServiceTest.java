@@ -70,7 +70,7 @@ public class RefreshTokenServiceTest {
             given(refreshTokenRepository.findByToken(any())).willReturn(empty());
 
             // when
-            final ImplicactionException actualException = assertThrows(AuthenticationException.class, () -> refreshTokenService.validateRefreshToken("token"));
+            final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> refreshTokenService.validateRefreshToken("token"));
 
             // then
             assertImplicactionException(actualException, AuthenticationException.class, REFRESH_TOKEN_EXPIRED);

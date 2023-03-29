@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.profile.domain.model;
 
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
+import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
@@ -20,9 +20,11 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "profile")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ProfileModel {
     @Id
     @Column(name = "user_id")
+    @EqualsAndHashCode.Include
     private Long id;
     @MapsId
     @OneToOne(cascade = MERGE)
@@ -45,5 +47,5 @@ public class ProfileModel {
     @JoinTable(name = "profile_group",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")})
-    private List<Group> groups;
+    private List<GroupModel> groups;
 }

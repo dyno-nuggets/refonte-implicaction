@@ -2,24 +2,22 @@ package com.dynonuggets.refonteimplicaction.community.group.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.Instant;
 
-@Data
+import static lombok.AccessLevel.PRIVATE;
+
+@Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public class GroupDto {
     private Long id;
     private String name;
     private String description;
-    private Integer numberOfPosts;
-    private String imageUrl;
     private Instant createdAt;
-    private boolean valid;
+    private String creator;
+    private String imageUrl;
+    private boolean enabled;
     private Integer numberOfUsers;
-    private String username;
-    private Long userId;
 }

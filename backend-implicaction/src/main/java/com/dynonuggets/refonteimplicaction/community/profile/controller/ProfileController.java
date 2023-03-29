@@ -4,7 +4,6 @@ import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.*;
 import static org.springframework.data.domain.PageRequest.of;
 
-@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping(PROFILES_BASE_URI)

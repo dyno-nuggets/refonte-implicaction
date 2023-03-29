@@ -54,4 +54,11 @@ public class AssertionUtils {
                 .andExpect(jsonPath("$.errorMessage", is(errorResult.getMessage())))
                 .andExpect(jsonPath("$.errorCode", is(errorResult.getStatus().value())));
     }
+
+    public static void assertErrorResultWithValue(final ResultActions resultActions, final BaseErrorResult errorResult, final String value) throws Exception {
+        resultActions
+                .andExpect(status().is(errorResult.getStatus().value()))
+                .andExpect(jsonPath("$.errorMessage", is(String.format(errorResult.getMessage(), value))))
+                .andExpect(jsonPath("$.errorCode", is(errorResult.getStatus().value())));
+    }
 }

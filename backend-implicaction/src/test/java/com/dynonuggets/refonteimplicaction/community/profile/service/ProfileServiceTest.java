@@ -10,8 +10,8 @@ import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
-import com.dynonuggets.refonteimplicaction.model.FileModel;
-import com.dynonuggets.refonteimplicaction.service.CloudService;
+import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
+import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
@@ -91,10 +91,11 @@ class ProfileServiceTest {
         void should_throw_exception_if_user_not_exists() {
             // given
             final String username = "username";
-            given(userService.getUserByUsernameIfExists(username)).willThrow(new EntityNotFoundException(USERNAME_NOT_FOUND));
+            given(userService.getUserByUsernameIfExists(username)).willThrow(new EntityNotFoundException(USERNAME_NOT_FOUND, username));
 
             // when
-            assertThrows(EntityNotFoundException.class, () -> profileService.createProfile("username"));
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.createProfile("username"));
+            assertImplicactionException(e, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
             verifyNoInteractions(profileRepository);
         }
 
@@ -143,7 +144,7 @@ class ProfileServiceTest {
             given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
             // when - then
-            final ImplicactionException e = assertThrows(EntityNotFoundException.class, () -> profileService.getByUsernameIfExistsAndUserEnabled(username));
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.getByUsernameIfExistsAndUserEnabled(username));
             assertImplicactionException(e, EntityNotFoundException.class, PROFILE_NOT_FOUND, username);
             verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
         }
@@ -176,7 +177,7 @@ class ProfileServiceTest {
             given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willThrow(new EntityNotFoundException(PROFILE_NOT_FOUND, username));
 
             // when - then
-            final ImplicactionException e = assertThrows(EntityNotFoundException.class, () -> profileService.getByUsername(username));
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.getByUsername(username));
             assertImplicactionException(e, EntityNotFoundException.class, PROFILE_NOT_FOUND, username);
             verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
         }
@@ -223,7 +224,7 @@ class ProfileServiceTest {
             willThrow(new CoreException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(any());
 
             // when - then
-            final ImplicactionException e = assertThrows(CoreException.class, () -> profileService.updateProfile(updateRequest));
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateProfile(updateRequest));
             assertImplicactionException(e, CoreException.class, OPERATION_NOT_PERMITTED);
             verify(authService, times(1)).verifyAccessIsGranted(any());
             verifyNoInteractions(profileRepository);
@@ -238,7 +239,7 @@ class ProfileServiceTest {
             willThrow(new CoreException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(any());
 
             // when - then
-            final ImplicactionException e = assertThrows(CoreException.class, () -> profileService.updateProfile(updateRequest));
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateProfile(updateRequest));
             assertImplicactionException(e, CoreException.class, OPERATION_NOT_PERMITTED);
             verify(authService, times(1)).verifyAccessIsGranted(any());
             verifyNoInteractions(profileRepository);
@@ -289,7 +290,7 @@ class ProfileServiceTest {
             willThrow(new CoreException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(username);
 
             // then
-            final ImplicactionException e = assertThrows(CoreException.class, () -> profileService.updateAvatar(mockMultipartFile, username));
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateAvatar(mockMultipartFile, username));
             assertImplicactionException(e, CoreException.class, OPERATION_NOT_PERMITTED);
             verifyNoInteractions(cloudService);
             verifyNoInteractions(profileRepository);

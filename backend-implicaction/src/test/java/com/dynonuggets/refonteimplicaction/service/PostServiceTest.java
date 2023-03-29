@@ -2,7 +2,7 @@ package com.dynonuggets.refonteimplicaction.service;
 
 import com.dynonuggets.refonteimplicaction.adapter.PostAdapter;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.group.domain.model.Group;
+import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
 import com.dynonuggets.refonteimplicaction.dto.PostRequest;
 import com.dynonuggets.refonteimplicaction.dto.PostResponse;
@@ -24,7 +24,6 @@ import java.util.Optional;
 
 import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
 import static java.util.Arrays.asList;
-import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -64,7 +63,7 @@ class PostServiceTest {
     void should_save_post_if_subreddit_exists() {
         // given
         final UserModel currentUser = UserModel.builder().id(123L).username("test user").build();
-        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), null, null, emptyList(), true);
+        final GroupModel group = GroupModel.builder().build();
         final Post expected = new Post(123L, "Super Post", "http://url.site", "Test", 0, null, Instant.now(), null);
         final PostRequest postRequest = new PostRequest(123L, 123L, "First Subreddit", "http://url.site", "Test");
 
@@ -129,7 +128,7 @@ class PostServiceTest {
     void should_get_post_when_exists() {
         // given
         final UserModel currentUser = UserModel.builder().id(123L).username("Sankukai").build();
-        final Group group = new Group(123L, "Super Subreddit", "Subreddit Description", emptyList(), Instant.now(), null, null, emptyList(), true);
+        final GroupModel group = GroupModel.builder().build();
         final Post post = new Post(12L, "Super Post", "http://url.site", "Test", 88000, currentUser, Instant.now(), group);
         final PostResponse expectedResponse = new PostResponse(123L, "Super post", "http://url.site", "Test", "Sankukai", currentUser.getId(), null, "Super Subreddit", 88000, 12, null, true, false, null);
         given(postRepository.findById(anyLong())).willReturn(Optional.of(post));
@@ -159,7 +158,7 @@ class PostServiceTest {
     void should_list_all_posts() {
         // given
         final UserModel currentUser = UserModel.builder().id(1345L).username("gustave").build();
-        final Group group = new Group(123L, "Sub 1", "Description Sub 1", null, Instant.now(), null, null, emptyList(), true);
+        final GroupModel group = GroupModel.builder().build();
         final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
         final Page<Post> expectedPages = new PageImpl<>(asList(
                 new Post(1L, "Post 1", null, "Description 1", 0, currentUser, Instant.now(), group),
