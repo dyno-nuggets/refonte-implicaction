@@ -22,7 +22,7 @@ import org.springframework.data.domain.*;
 import java.time.Instant;
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.*;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

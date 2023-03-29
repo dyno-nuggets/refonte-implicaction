@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.DELETE_EXPERIENCES_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.EXPERIENCES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.community.workexperience.utils.WorkExperienceUris.DELETE_EXPERIENCES_URI;
+import static com.dynonuggets.refonteimplicaction.community.workexperience.utils.WorkExperienceUris.EXPERIENCES_BASE_URI;
+
 
 @RestController
 @AllArgsConstructor

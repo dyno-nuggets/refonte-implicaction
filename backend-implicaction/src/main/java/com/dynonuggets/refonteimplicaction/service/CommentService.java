@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Message.COMMENT_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.COMMENT_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.POST_NOT_FOUND_MESSAGE;
 
 @Service
 @AllArgsConstructor

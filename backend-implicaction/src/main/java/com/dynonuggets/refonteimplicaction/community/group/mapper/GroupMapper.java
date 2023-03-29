@@ -10,8 +10,8 @@ import org.mapstruct.Mapping;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.community.group.utils.GroupConstants.DEFAULT_GROUP_IMAGE_URI;
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.defaultIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.defaultIfNull;
 import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 @Mapper

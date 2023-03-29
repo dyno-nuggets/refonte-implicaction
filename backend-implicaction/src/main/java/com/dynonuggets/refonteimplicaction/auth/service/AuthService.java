@@ -35,8 +35,8 @@ import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static java.time.Instant.now;
 import static java.util.List.of;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
@@ -136,7 +136,7 @@ public class AuthService {
     public LoginResponse refreshToken(final RefreshTokenRequest refreshTokenRequest) throws ImplicactionException {
         final String username = refreshTokenRequest.getUsername();
 
-        // une exception sera levée si l’utilisateur ou le refresh token n’existe pas
+        // une exception sera levée si l’utilisateur ou le refresh token n’existent pas
         final UserModel user = userService.getUserByUsernameIfExists(username);
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 

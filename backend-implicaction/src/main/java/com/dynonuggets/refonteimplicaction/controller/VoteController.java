@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.dynonuggets.refonteimplicaction.core.util.ApiUrls.VOTE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.VOTE_BASE_URI;
 
 @RestController
 @RequestMapping(VOTE_BASE_URI)

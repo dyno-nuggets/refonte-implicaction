@@ -26,6 +26,16 @@
         <spring-cloud-aws.version>2.4.2</spring-cloud-aws.version>
         <org.mapstruct.version>1.5.3.Final</org.mapstruct.version>
         <lombok.version>1.18.26</lombok.version>
+        <sonar.coverage.exclusions>
+            **/config/**/*,
+            **/domain/domain/**/*,
+            **/*Repository.java,
+            **/dto/**/*,
+            **/error/**/*,
+            **/*Constants.java,
+            **/*Messages.java,
+            **/*Uris.java,
+        </sonar.coverage.exclusions>
     </properties>
 
     <artifactId>backend-implicaction</artifactId>

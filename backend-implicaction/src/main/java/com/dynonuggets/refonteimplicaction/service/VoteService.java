@@ -16,8 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Message.POST_NOT_FOUND_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_ALREADY_VOTE_FOR_POST;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.POST_NOT_FOUND_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.USER_ALREADY_VOTE_FOR_POST;
 import static com.dynonuggets.refonteimplicaction.model.VoteType.DOWNVOTE;
 import static com.dynonuggets.refonteimplicaction.model.VoteType.UPVOTE;
 

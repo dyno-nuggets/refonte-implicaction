@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.user.domain.model;
 
 import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
-import com.dynonuggets.refonteimplicaction.user.domain.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Utils.emptyStreamIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;

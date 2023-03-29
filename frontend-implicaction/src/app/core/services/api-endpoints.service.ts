@@ -59,14 +59,31 @@ export class ApiEndpointsService {
   private static createUrlWithQueryParameters(
     action: string,
     queryStringHandler?:
-      (queryStringParameters: QueryStringParameters) => void
+      (queryStringParameters: QueryStringParameters) => void,
+    isPublicEndpoint = false
   ): string {
-    return ApiEndpointsService.createUrlWithOptions(action, {queryStringHandler});
+    const urlBuilder: UrlBuilder = new UrlBuilder(
+      isPublicEndpoint ? Constants.PUBLIC_ENDPOINT : Constants.API_ENDPOINT,
+      action
+    );
+    // Push extra query string params
+    if (queryStringHandler) {
+      queryStringHandler(urlBuilder.queryString);
+    }
+    return urlBuilder.toString();
   }
 
   // URL WITH PATH VARIABLES
-  private static createUrlWithPathVariables(action: string, pathVariables: any[] = []): string {
-    return ApiEndpointsService.createUrlWithOptions(action, {pathVariables});
+  private static createUrlWithPathVariables(action: string, pathVariables: any[] = [], isPublicEndpoint = false): string {
+    let encodedPathVariablesUrl = '';
+    // Push extra path variables
+    for (const pathVariable of pathVariables) {
+      if (pathVariable !== null) {
+        encodedPathVariablesUrl += `/${encodeURIComponent(pathVariable.toString())}`;
+      }
+    }
+    const urlBuilder: UrlBuilder = new UrlBuilder(isPublicEndpoint ? Constants.PUBLIC_ENDPOINT : Constants.API_ENDPOINT, `${action}${encodedPathVariablesUrl}`);
+    return urlBuilder.toString();
   }
 
   private static createUrlWithPageable(uri: string, pageable: Pageable<any>): string {
@@ -88,7 +105,7 @@ export class ApiEndpointsService {
       });
   }
 
-  private static concatCriterias(criteria: Criteria, pageable: Pageable<any>): any {
+  private static concatCriteria(criteria: Criteria, pageable: Pageable<any>): any {
     return {
       ...criteria,
       rows: pageable.rows,
@@ -281,8 +298,15 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.BASE_URI, [jobId]);
   }
 
-  getLatestJobsEndpoint(jobsCount: number): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.JOBS.LATEST_JOBS, [jobsCount]);
+  getLatestJobsEndpoint(jobCount: number = undefined): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.JOBS.LATEST_JOBS,
+      (qs: QueryStringParameters) => {
+        if (jobCount) {
+          qs.push('rows', jobCount)
+        }
+      },
+      true);
   }
 
   createJobPostingEndpoint(): string {
@@ -319,7 +343,7 @@ export class ApiEndpointsService {
 
   getAllCompanyByCriteriaEndpoint(pageable: Pageable<any>, criteria: Criteria): string {
     // on merge les filtres et les attributs de pagination
-    const objectParam = ApiEndpointsService.concatCriterias(criteria, pageable);
+    const objectParam = ApiEndpointsService.concatCriteria(criteria, pageable);
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.COMPANIES.BASE_URI,
       (qs: QueryStringParameters) =>
@@ -388,7 +412,6 @@ export class ApiEndpointsService {
   /**
    * Groups
    */
-
   createGroupEndpoint(): string {
     return ApiEndpointsService.createUrl(Uris.GROUP.BASE_URI);
   }

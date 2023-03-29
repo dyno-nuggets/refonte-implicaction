@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
-import static com.dynonuggets.refonteimplicaction.core.util.Message.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.*;
 import static java.lang.String.format;
 import static java.util.List.of;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;

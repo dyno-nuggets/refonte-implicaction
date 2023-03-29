@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse.from;
-import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.BAD_CREDENTIAL_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.core.util.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.core.util.Message.USER_DISABLED_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.BAD_CREDENTIAL_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.Message.USER_DISABLED_MESSAGE;
 import static org.springframework.http.HttpStatus.*;
 
 @Slf4j
