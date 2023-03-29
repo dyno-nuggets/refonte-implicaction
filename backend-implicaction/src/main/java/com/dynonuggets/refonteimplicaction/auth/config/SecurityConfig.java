@@ -67,7 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/**.woff2"
     };
 
-    private static final String[] CSRF_DISABLED_URIS = getPublicUris().toArray(String[]::new);
+    private static final String[] PUBLIC_AUTH_URIS = getPublicUris().toArray(String[]::new);
 
     private final UserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -76,7 +76,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(final HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .cors().disable()
-                .csrf().ignoringAntMatchers(CSRF_DISABLED_URIS).csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .csrf().ignoringAntMatchers(PUBLIC_AUTH_URIS).csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeRequests()
                 .antMatchers(NO_AUTHENTICATION_URIS).permitAll()
@@ -93,8 +93,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordEncoder(passwordEncoder());
     }
 
-    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

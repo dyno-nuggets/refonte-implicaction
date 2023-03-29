@@ -28,8 +28,10 @@
         <lombok.version>1.18.26</lombok.version>
         <sonar.coverage.exclusions>
             **/config/**/*,
-            **/domain/**/*,
+            **/domain/domain/**/*,
+            **/*Repository.java,
             **/dto/**/*,
+            **/error/**/*,
             **/*Constants.java,
             **/*Messages.java,
             **/*Uris.java,
