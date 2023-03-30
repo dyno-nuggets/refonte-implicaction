@@ -1,22 +1,19 @@
 <p *ngIf="!isLoading && !latestJobs?.length; else jobList">Il n'y a aucune offre pour le moment.</p>
 <ng-template #jobList>
-  <ng-container *ngIf="!isLoading; else loadingElements">
-    <div class="row col flex-column flex-md-row">
+  <div class="row col flex-column flex-md-row">
+    <ng-container *ngIf="!isLoading; else loadingElements">
       <ng-container *ngFor="let job of latestJobs; trackBy: trackByJobId">
-        <div class="job-column col-12 col-md-6 col-xl-3 mb-3 px-md-2">
+        <div class="job-column col-12 col-md-6 col-xl-3 mb-3 px-1">
           <app-job-card [job]="job"></app-job-card>
         </div>
       </ng-container>
+    </ng-container>
+  </div>
+</ng-template>
+<ng-template #loadingElements>
+  <ng-container *ngFor="let i of [1,2,3,4]">
+    <div class="job-column col-12 col-md-6 col-xl-3 mb-3 px-1">
+      <app-job-cart-skeleton></app-job-cart-skeleton>
     </div>
-  </ng-container
-  >
-  <ng-template #loadingElements>
-    <div class="row col flex-column flex-md-row">
-      <ng-container *ngFor="let i of [1,2,3,4]">
-        <div class="job-column col-12 col-md-6 col-xl-3 mb-3 px-md-2">
-          <app-job-cart-skeleton></app-job-cart-skeleton>
-        </div>
-      </ng-container>
-    </div>
-  </ng-template>
+  </ng-container>
 </ng-template>

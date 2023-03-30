@@ -65,17 +65,18 @@
       ></app-post-list>
     </app-home-heading-column>
   </div>
-
-  <app-home-heading-column
-    [title]="'Nouvelles offres'"
-    class="col-12 mt-3"
-    buttonLink="/{{univers.JOBS.url}}"
-  >
-    <app-job-list
-      [latestJobs]="latestJobs"
-      [isLoading]="isLoading"
-    ></app-job-list>
-  </app-home-heading-column>
+  <div class="p-1">
+    <app-home-heading-column
+      [title]="'Nouvelles offres'"
+      class="col-12 mt-3"
+      buttonLink="/{{univers.JOBS.url}}"
+    >
+      <app-job-list
+        [latestJobs]="latestJobs"
+        [isLoading]="isLoading"
+      ></app-job-list>
+    </app-home-heading-column>
+  </div>
 </div>
 <div>
 </div>
