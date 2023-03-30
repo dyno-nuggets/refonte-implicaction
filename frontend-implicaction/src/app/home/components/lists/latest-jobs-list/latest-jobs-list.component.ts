@@ -1,9 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {JobPosting} from '../../../../shared/models/job-posting';
 
 @Component({
   selector: 'app-latest-jobs-list',
   templateUrl: './latest-jobs-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LatestJobsListComponent {
 

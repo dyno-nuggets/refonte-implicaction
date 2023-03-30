@@ -1,9 +1,10 @@
-import {Component, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {Post} from 'src/app/discussion/model/post';
 
 @Component({
   selector: 'app-latest-posts-list',
   templateUrl: './latest-posts-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LatestPostsListComponent {
 
@@ -11,7 +12,6 @@ export class LatestPostsListComponent {
   latestPosts: Post[] = [];
   @Input()
   isLoading = false;
-
   trackByPostId = (index: number, post: Post) => post.id;
 
 }
