@@ -1,0 +1,16 @@
+.card-event {
+  background-color: #f6f8ff;
+  border-radius: 11px;
+  position: relative;
+  min-width: 0;
+  background-clip: border-box;
+  height: 115px;
+
+  // breakpoint sm
+  @media screen and (min-width: 576px) {
+    .date-section {
+      border-right: 1px solid #dee2e6 !important;
+    }
+  }
+}
+

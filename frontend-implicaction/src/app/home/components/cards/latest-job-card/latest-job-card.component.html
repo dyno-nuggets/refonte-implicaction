@@ -1,0 +1,50 @@
+<div class="card card-job col row flex-column m-0 p-0 py-2 mx-2">
+  <div class="card-header row align-items-center justify-content-between">
+    <div class="company-logo col-2 p-0">
+      <img
+        #companyLogo
+        (error)="companyLogo.src = constant.COMPANY_IMAGE_DEFAULT_URI"
+        [src]="job.company?.logo || constant.COMPANY_IMAGE_DEFAULT_URI"
+        alt="company-logo"
+        class="icon"
+      >
+    </div>
+    <div class="col-6 text-center p-0 overflow-ellipsis">{{job.company?.name}}</div>
+
+    <div class="col-3 p-0 d-flex justify-content-end">
+      <app-contract-type [type]="job.contractType"></app-contract-type>
+    </div>
+
+  </div>
+  <div class="card-body row align-items-center">
+    <h3 class="text-center m-0 p-0 text-uppercase">
+      <a
+        [title]="job.title"
+        class="job-title"
+        routerLink="/{{univers.JOBS.url}}/{{job.id}}"
+      >
+        <span class="d-inline-block d-sm-none">{{job.title | textEllipsis: 20}}</span>
+        <span class="d-none d-sm-inline-block d-md-none">{{job.title | textEllipsis: 40}}</span>
+        <span class="d-none d-md-inline-block d-lg-none">{{job.title | textEllipsis: 25}}</span>
+        <span class="d-none d-lg-inline-block d-xl-none">{{job.title | textEllipsis: 40}}</span>
+        <span class="d-none d-xl-inline-block d-xxl-none">{{job.title | textEllipsis: 20}}</span>
+        <span class="d-none d-xxl-inline-block">{{job.title | textEllipsis: 30}}</span>
+      </a>
+    </h3>
+  </div>
+  <div class="card-footer bg-transparent border-0">
+    <div class="d-flex justify-content-center">
+      <div class="col-auto d-xl-none d-xxl-block">{{job.location | textEllipsis: 20}}</div>
+      <div class="col-auto d-none d-xl-block d-xxl-none">{{job.location | textEllipsis: 10}}</div>
+      <div
+        *ngIf="job.createdAt"
+        class="col-auto"
+      >
+        <span class="ps-2">
+          <span class="pe-2">•</span>
+          <span>{{job.durationAsString}}</span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

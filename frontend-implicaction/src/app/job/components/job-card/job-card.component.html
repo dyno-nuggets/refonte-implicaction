@@ -17,7 +17,7 @@
     <ng-container *ngIf="job.createdAt">
       <span class="d-none d-sm-inline ps-2">•</span>
       <span class="ps-2">
-        <app-date-timelapse [date]="job.createdAt"></app-date-timelapse>
+        <span>{{job.durationAsString}}</span>
       </span>
     </ng-container>
   </div>

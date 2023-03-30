@@ -9,7 +9,6 @@ import {AlertComponent} from './components/alert/alert.component';
 import {SidebarContentDirective} from './directives/sidebar-content.directive';
 import {BrPipe} from './pipes/br.pipe';
 import {ContractTypeComponent} from './components/contract-type/contract-type.component';
-import {DateTimelapseComponent} from './components/date-timelapse/date-timelapse.component';
 import {JobFilterComponent} from './components/job-filter/job-filter.component';
 import {CompanyFilterComponent} from './components/company-filter/company-filter.component';
 import {BaseWithPaginationAndFilterComponent} from './components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
@@ -28,7 +27,6 @@ import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
     BrPipe,
     ContractTypeComponent,
     ContractTypeComponent,
-    DateTimelapseComponent,
     JobFilterComponent,
     BaseWithPaginationAndFilterComponent,
     CompanyFilterComponent,
@@ -42,7 +40,6 @@ import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
     BrPipe,
     ContractTypeComponent,
     ContractTypeComponent,
-    DateTimelapseComponent,
     JobFilterComponent,
     TextEllipsisPipe,
   ],

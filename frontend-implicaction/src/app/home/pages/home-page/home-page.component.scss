@@ -1,0 +1,28 @@
+@import "src/assets/variables";
+
+.heading {
+  font-size: 48px;
+}
+
+@media screen and (max-width: 575px) {
+  .heading {
+    font-size: 28px;
+    word-wrap: break-word;
+  }
+}
+
+p {
+  font-size: 14px;
+  color: $primary;
+  font-weight: bold;
+}
+
+.key-points, .latest-section {
+  margin-top: 3rem;
+}
+
+@media screen and (min-width: 576px) {
+  .key-points, .latest-section {
+    margin-top: 5rem;
+  }
+}

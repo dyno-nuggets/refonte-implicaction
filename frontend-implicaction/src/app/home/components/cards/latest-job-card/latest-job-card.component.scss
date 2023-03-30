@@ -1,0 +1,27 @@
+.card-job {
+  border-radius: 11px;
+  justify-items: center;
+  align-items: center;
+  height: 200px;
+
+  .card-header {
+    height: 66px;
+    background: transparent;
+    border: none
+  }
+
+  .card-body {
+    max-height: 92px;
+
+    .job-title {
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

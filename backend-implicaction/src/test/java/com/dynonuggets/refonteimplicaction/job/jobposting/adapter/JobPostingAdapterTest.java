@@ -74,8 +74,11 @@ class JobPostingAdapterTest {
     void toDtoTest() {
         final JobPostingDto jobPostingDto = jobPostingAdapter.toDto(jobPosting);
 
-        assertThat(jobPostingDto).usingRecursiveComparison()
+        assertThat(jobPostingDto)
+                .usingRecursiveComparison()
+                .ignoringFields("durationAsString")
                 .isEqualTo(expectedJobPostingDto);
+        assertThat(jobPostingDto.getDurationAsString()).isNotEmpty();
     }
 
     @Test
@@ -84,7 +87,8 @@ class JobPostingAdapterTest {
 
         final JobPosting expectedJobPosting = jobPostingAdapter.toModel(dto, user);
 
-        assertThat(jobPosting).usingRecursiveComparison()
+        assertThat(jobPosting)
+                .usingRecursiveComparison()
                 .isEqualTo(expectedJobPosting);
     }
 }

@@ -11,6 +11,7 @@ export interface JobPosting {
   shortDescription?: string;
   description?: string;
   createdAt?: Date;
+  durationAsString?: string;
   contractType?: ContractEnumCode;
   businessSector?: BusinessSectorEnumCode;
   company?: Company;
