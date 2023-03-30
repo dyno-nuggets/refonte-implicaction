@@ -2,12 +2,12 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ImplicactionEvent} from "../../../../shared/models/implicactionEvent";
 
 @Component({
-  selector: 'app-event-list',
-  templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.scss'],
+  selector: 'app-events-list',
+  templateUrl: './latest-events-list.component.html',
+  styleUrls: ['./latest-events-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EventListComponent {
+export class LatestEventsListComponent {
 
   @Input()
   latestEvents: ImplicactionEvent[] = []

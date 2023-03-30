@@ -5,12 +5,12 @@ import {Constants} from '../../../../config/constants';
 
 
 @Component({
-  selector: 'app-post-card',
-  templateUrl: './post-card.component.html',
-  styleUrls: ['./post-card.component.scss'],
+  selector: 'app-latest-post-card',
+  templateUrl: './latest-post-card.component.html',
+  styleUrls: ['./latest-post-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PostCardComponent {
+export class LatestPostCardComponent {
 
   @Input()
   post: Post;

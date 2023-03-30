@@ -4,12 +4,12 @@ import {Univers} from '../../../../shared/enums/univers';
 import {Constants} from '../../../../config/constants';
 
 @Component({
-  selector: 'app-job-card',
-  templateUrl: './job-card.component.html',
-  styleUrls: ['./job-card.component.scss'],
+  selector: 'app-latest-job-card',
+  templateUrl: './latest-job-card.component.html',
+  styleUrls: ['./latest-job-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class JobCardComponent {
+export class LatestJobCardComponent {
 
   @Input()
   job: JobPosting = {};

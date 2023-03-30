@@ -4,7 +4,7 @@
     <ng-container *ngIf="!isLoading; else loadingElements">
       <ng-container *ngFor="let job of latestJobs; trackBy: trackByJobId">
         <div class="job-column col-12 col-md-6 col-xl-3 p-0 mb-3">
-          <app-job-card [job]="job"></app-job-card>
+          <app-latest-job-card [job]="job"></app-latest-job-card>
         </div>
       </ng-container>
     </ng-container>
@@ -13,7 +13,7 @@
 <ng-template #loadingElements>
   <ng-container *ngFor="let i of [1,2,3,4]">
     <div class="job-column col-12 col-md-6 col-xl-3 p-O mb-3">
-      <app-job-cart-skeleton></app-job-cart-skeleton>
+      <app-latest-job-cart-skeleton></app-latest-job-cart-skeleton>
     </div>
   </ng-container>
 </ng-template>

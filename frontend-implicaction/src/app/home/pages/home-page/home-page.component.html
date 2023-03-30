@@ -48,10 +48,10 @@
       class="col-md-6 m-0 p-0"
       buttonLink="/"
     >
-      <app-event-list
+      <app-events-list
         [latestEvents]="latestEvents"
         [isLoading]="isLoading"
-      ></app-event-list>
+      ></app-events-list>
     </app-home-heading-column>
 
     <app-home-heading-column
@@ -59,22 +59,22 @@
       class="col-md-6 m-0 p-0"
       buttonLink="/{{univers.DISCUSSIONS.url}}"
     >
-      <app-post-list
+      <app-latest-posts-list
         [latestPosts]="latestPosts"
         [isLoading]="isLoading"
-      ></app-post-list>
+      ></app-latest-posts-list>
     </app-home-heading-column>
   </div>
-  <div class="p-1">
+  <div class="px-1">
     <app-home-heading-column
       [title]="'Nouvelles offres'"
       class="col-12 mt-3"
       buttonLink="/{{univers.JOBS.url}}"
     >
-      <app-job-list
+      <app-latest-jobs-list
         [latestJobs]="latestJobs"
         [isLoading]="isLoading"
-      ></app-job-list>
+      ></app-latest-jobs-list>
     </app-home-heading-column>
   </div>
 </div>

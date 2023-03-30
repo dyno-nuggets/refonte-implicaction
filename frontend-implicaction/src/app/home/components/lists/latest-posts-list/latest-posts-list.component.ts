@@ -2,10 +2,10 @@ import {Component, Input} from '@angular/core';
 import {Post} from 'src/app/discussion/model/post';
 
 @Component({
-  selector: 'app-post-list',
-  templateUrl: './post-list.component.html',
+  selector: 'app-latest-posts-list',
+  templateUrl: './latest-posts-list.component.html',
 })
-export class PostListComponent {
+export class LatestPostsListComponent {
 
   @Input()
   latestPosts: Post[] = [];
