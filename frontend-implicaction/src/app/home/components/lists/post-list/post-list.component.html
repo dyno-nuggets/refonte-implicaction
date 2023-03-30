@@ -1,0 +1,18 @@
+<p *ngIf="!isLoading && !latestPosts?.length; else postList">Il n'y a aucune publication pour le moment</p>
+<ng-template #postList>
+  <ng-container *ngIf="!isLoading; else loadingElements">
+    <div *ngFor="let post of latestPosts; trackBy: trackByPostId">
+      <div class="mb-3">
+        <app-post-card [post]="post"></app-post-card>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingElements>
+    <div *ngFor="let i of [1,2,3]">
+      <div class="mb-3">
+        <app-post-card-skeleton></app-post-card-skeleton>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

@@ -1,0 +1,19 @@
+<p *ngIf="!isLoading && !latestEvents?.length; else postList">Il n'y a aucun évènement pour le moment</p>
+<ng-template #postList>
+  <ng-container *ngIf="!isLoading; else loadingElements">
+    <div
+      *ngFor="let event of latestEvents; trackBy: trackById"
+      class="latest-events-list"
+    >
+      <app-event-card [event]="event"></app-event-card>
+    </div>
+  </ng-container>
+
+  <ng-template #loadingElements>
+    <div *ngFor="let i of [1,2,3]">
+      <div class="mb-3">
+        <app-event-card-skeleton></app-event-card-skeleton>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

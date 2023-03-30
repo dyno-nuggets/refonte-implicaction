@@ -9,6 +9,7 @@ import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.dynonuggets.refonteimplicaction.core.utils.DateUtils.getDurationAsString;
 import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
 
 
@@ -34,6 +35,7 @@ public class JobPostingAdapter {
                 .keywords(model.getKeywords())
                 .contractType(model.getContractType())
                 .createdAt(model.getCreatedAt())
+                .durationAsString(getDurationAsString(model.getCreatedAt()))
                 .archive(model.isArchive())
                 .businessSector(model.getBusinessSector())
                 .valid(model.isValid())

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
-import {RelationListComponent} from "./pages/user-list/relation-list.component";
+import {RelationListComponent} from "./pages/relation-list/relation-list.component";
 
 const routes: Routes = [
   {
