@@ -10,17 +10,14 @@
   .card-title {
     font-size: 16px;
   }
-}
 
-.event-day {
-  font-weight: 700 !important;
+  .event-day {
+    font-weight: 700 !important;
+  }
 }
 
 // breakpoint sm
 @media screen and (min-width: 576px) {
-  .date-section span {
-    display: block;
-  }
   .event-day {
     // équivalent ) fs-3
     font-size: 28px !important;
@@ -29,6 +26,10 @@
 
   .date-section {
     border-right: 1px solid #dee2e6 !important;
+
+    span {
+      display: block;
+    }
   }
 }
 

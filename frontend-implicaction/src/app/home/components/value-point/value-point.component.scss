@@ -1,30 +1,30 @@
 @import "src/assets/variables";
 
-.ahead {
+.title {
   font-size: 24px;
   font-weight: bold;
-  padding-bottom: 10px;
+  padding: 10px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  color: $primary;
+
+  // permet d'afficher la ligne rouge de séparation
+  &::after {
+    height: 3px;
+    display: block;
+    width: 200px;
+    background: $danger;
+    content: '';
+    margin: 15px auto 0;
+  }
 }
 
-.ahead::after {
-  height: 3px;
-  display: block;
-  width: 200px;
-  background: $danger;
-  content: '';
-  margin-top: 15px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.img-intro {
+img {
   height: 130px;
 }
 
-p {
+.content-text {
   font-size: 14px;
   color: $primary;
   font-weight: bold;
