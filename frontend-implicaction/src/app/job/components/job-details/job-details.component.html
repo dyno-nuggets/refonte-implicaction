@@ -35,7 +35,7 @@
       <span>{{job.location}}</span>
       <ng-container *ngIf="job.createdAt">
         <span class="d-none d-sm-inline px-2">•</span>
-        <app-date-timelapse [date]="job.createdAt"></app-date-timelapse>
+        <span>{{job.durationAsString}}</span>
       </ng-container>
     </div>
     <div class="card-body mt-3 p-0">

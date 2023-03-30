@@ -10,8 +10,14 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class DateUtils {
+
+    private static final PrettyTime prettyTime = new PrettyTime(new Locale("fr"));
+
     public static String getDurationAsString(final Instant time) {
-        final PrettyTime p = new PrettyTime(new Locale("fr"));
-        return p.format(time);
+        if (time == null) {
+            return "";
+        }
+
+        return prettyTime.format(time);
     }
 }

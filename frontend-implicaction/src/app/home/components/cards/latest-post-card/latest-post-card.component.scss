@@ -1,0 +1,33 @@
+.duration {
+  font-size: 10px;
+}
+
+a {
+  text-decoration: none;
+}
+
+.card-post {
+  border-radius: 11px;
+  position: relative;
+  min-width: 0;
+  word-wrap: break-word;
+  background-clip: border-box;
+  background-color: white;
+  height: 115px;
+
+  .card-body {
+    padding: 12px;
+
+    .avatar {
+      width: 48px;
+    }
+  }
+
+  .post-card-link {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

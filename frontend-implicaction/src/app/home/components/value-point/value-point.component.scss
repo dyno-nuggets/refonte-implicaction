@@ -1,0 +1,31 @@
+@import "src/assets/variables";
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: $primary;
+
+  // permet d'afficher la ligne rouge de séparation
+  &::after {
+    height: 3px;
+    display: block;
+    width: 200px;
+    background: $danger;
+    content: '';
+    margin: 15px auto 0;
+  }
+}
+
+img {
+  height: 130px;
+}
+
+.content-text {
+  font-size: 14px;
+  color: $primary;
+  font-weight: bold;
+}

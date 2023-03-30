@@ -27,6 +27,7 @@ public class JobPostingDto {
     private ContractTypeEnum contractType;
     private BusinessSectorEnum businessSector;
     private Instant createdAt;
+    private String durationAsString;
     private boolean archive;
     private boolean apply;
     private boolean valid;

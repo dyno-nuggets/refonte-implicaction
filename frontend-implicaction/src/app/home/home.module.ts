@@ -1,35 +1,49 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {IndexComponent} from './components/index/index.component';
+import {HomePageComponent} from './pages/home-page/home-page.component';
 import {FeatherModule} from 'angular-feather';
-import {EventCardComponent} from './components/event-card/event-card.component';
-import {PostCardComponent} from './components/post-card/post-card.component';
-import {PostListComponent} from './components/post-list/post-list.component';
+import {LatestEventCardComponent} from './components/cards/latest-event-card/latest-event-card.component';
+import {LatestPostCardComponent} from './components/cards/latest-post-card/latest-post-card.component';
+import {LatestPostsListComponent} from './components/lists/latest-posts-list/latest-posts-list.component';
 import {HomeRoutingModule} from './home-routing.module';
 import {AvatarModule} from 'primeng/avatar';
-import {JobCardComponent} from './components/job-card/job-card.component';
-import {JobListComponent} from './components/job-list/job-list.component';
+import {LatestJobCardComponent} from './components/cards/latest-job-card/latest-job-card.component';
+import {LatestJobsListComponent} from './components/lists/latest-jobs-list/latest-jobs-list.component';
 import {SharedModule} from '../shared/shared.module';
+import {HomeHeadingColumnComponent} from './components/home-heading-column/home-heading-column.component';
+import {LatestPostCardSkeletonComponent} from './components/cards/latest-post-card-skeleton/latest-post-card-skeleton.component';
+import {SkeletonModule} from "primeng/skeleton";
+import {LatestEventCardSkeletonComponent} from './components/cards/latest-event-card-skeleton/latest-event-card-skeleton.component';
+import {LatestEventsListComponent} from './components/lists/latest-events-list/latest-events-list.component';
+import {ValuePointComponent} from './components/value-point/value-point.component';
+import {LatestJobCartSkeletonComponent} from './components/cards/latest-job-cart-skeleton/latest-job-cart-skeleton.component';
 
 
 @NgModule({
   declarations: [
-    IndexComponent,
-    EventCardComponent,
-    PostCardComponent,
-    PostListComponent,
-    JobCardComponent,
-    JobListComponent
+    HomePageComponent,
+    LatestEventCardComponent,
+    LatestPostCardComponent,
+    LatestPostsListComponent,
+    LatestJobCardComponent,
+    LatestJobsListComponent,
+    HomeHeadingColumnComponent,
+    LatestPostCardSkeletonComponent,
+    LatestEventCardSkeletonComponent,
+    LatestEventsListComponent,
+    ValuePointComponent,
+    LatestJobCartSkeletonComponent
   ],
   imports: [
     CommonModule,
     FeatherModule,
     HomeRoutingModule,
     AvatarModule,
-    SharedModule
+    SharedModule,
+    SkeletonModule
   ],
   exports: [
-    PostListComponent
+    LatestPostsListComponent
   ]
 })
 export class HomeModule {
