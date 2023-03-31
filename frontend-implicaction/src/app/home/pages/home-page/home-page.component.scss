@@ -1,28 +1,22 @@
 @import "src/assets/variables";
 
 .heading {
-  font-size: 48px;
+  font-size: 3rem;
 }
 
 @media screen and (max-width: 575px) {
   .heading {
-    font-size: 28px;
+    font-size: 1.75rem;
     word-wrap: break-word;
   }
 }
 
 p {
-  font-size: 14px;
+  font-size: 1rem;
   color: $primary;
-  font-weight: bold;
+  font-weight: 600;
 }
 
-.key-points, .latest-section {
-  margin-top: 3rem;
-}
-
-@media screen and (min-width: 576px) {
-  .key-points, .latest-section {
-    margin-top: 5rem;
-  }
+.key-points, .latest-events-and-jobs {
+  margin-top: 5rem;
 }
