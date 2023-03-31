@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {FilterContextService} from '../../shared/services/filter-context.service';
-import {Criteria} from '../../shared/models/Criteria';
+import {FilterContextService} from './filter-context.service';
+import {Criteria} from '../models/Criteria';
 
 @Injectable({
   providedIn: 'root'

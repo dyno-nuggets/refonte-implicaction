@@ -32,7 +32,7 @@ import {LatestJobCartSkeletonComponent} from './components/cards/latest-job-cart
     LatestEventCardSkeletonComponent,
     LatestEventsListComponent,
     ValuePointComponent,
-    LatestJobCartSkeletonComponent
+    LatestJobCartSkeletonComponent,
   ],
   imports: [
     CommonModule,
