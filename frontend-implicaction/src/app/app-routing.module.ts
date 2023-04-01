@@ -4,6 +4,7 @@ import {AuthGuard} from './core/guards/auth.guard.service';
 import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
 import {Univers} from './shared/enums/univers';
 import {BoardComponent} from './board/board.component';
+import {CompanyAreaComponent} from "./company-area/company-area.component";
 
 const routes: Routes = [
   {
@@ -67,8 +68,8 @@ const routes: Routes = [
     }
   },
   {
-    path: Univers.BUSINESS_AREA.url,
-    loadChildren: () => import('./company/company.module').then(m => m.CompanyModule),
+    path: Univers.COMPANY_AREA.url,
+    component: CompanyAreaComponent,
   },
   {
     path: Univers.FORUM.url,

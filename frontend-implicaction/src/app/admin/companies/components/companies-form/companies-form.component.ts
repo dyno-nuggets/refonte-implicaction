@@ -7,7 +7,7 @@ import {Observable} from 'rxjs';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {Company} from '../../../../shared/models/company';
-import {CompanyService} from '../../../../company/services/company.service';
+import {CompanyService} from '../../../../shared/services/company.service';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 
 export type CompaniesFormProps = { company: Company } | undefined;

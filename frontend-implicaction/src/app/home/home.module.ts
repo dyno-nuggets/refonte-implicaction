@@ -15,7 +15,7 @@ import {LatestPostCardSkeletonComponent} from './components/cards/latest-post-ca
 import {SkeletonModule} from "primeng/skeleton";
 import {LatestEventCardSkeletonComponent} from './components/cards/latest-event-card-skeleton/latest-event-card-skeleton.component';
 import {LatestEventsListComponent} from './components/lists/latest-events-list/latest-events-list.component';
-import {ValuePointComponent} from './components/value-point/value-point.component';
+import {HighlightPointComponent} from './components/highlight-point/highlight-point.component';
 import {LatestJobCartSkeletonComponent} from './components/cards/latest-job-cart-skeleton/latest-job-cart-skeleton.component';
 
 
@@ -31,8 +31,8 @@ import {LatestJobCartSkeletonComponent} from './components/cards/latest-job-cart
     LatestPostCardSkeletonComponent,
     LatestEventCardSkeletonComponent,
     LatestEventsListComponent,
-    ValuePointComponent,
-    LatestJobCartSkeletonComponent
+    HighlightPointComponent,
+    LatestJobCartSkeletonComponent,
   ],
   imports: [
     CommonModule,
@@ -41,9 +41,6 @@ import {LatestJobCartSkeletonComponent} from './components/cards/latest-job-cart
     AvatarModule,
     SharedModule,
     SkeletonModule
-  ],
-  exports: [
-    LatestPostsListComponent
   ]
 })
 export class HomeModule {

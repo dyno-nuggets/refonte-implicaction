@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {finalize, take} from 'rxjs/operators';
 import {Company} from '../../../../shared/models/company';
-import {CompanyService} from '../../../../company/services/company.service';
+import {CompanyService} from '../../../../shared/services/company.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {SidebarService} from '../../../../shared/services/sidebar.service';
 import {CompaniesFormComponent} from '../companies-form/companies-form.component';
-import {CompanyFilterContextService} from '../../../../company/services/company-filter-context.service';
+import {CompanyFilterContextService} from '../../../../shared/services/company-filter-context.service';
 import {ActivatedRoute} from '@angular/router';
-import {CompanySortEnum} from '../../../../company/enums/company-sort.enum';
+import {CompanySortEnum} from '../../../../shared/enums/company-sort.enum';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Subscription} from 'rxjs';

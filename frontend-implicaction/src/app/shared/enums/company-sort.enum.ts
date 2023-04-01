@@ -1,5 +1,5 @@
-import {EnumCodeLabelAbstract} from '../../shared/enums/enum-code-label-abstract.enum';
-import {SortDirectionEnum} from '../../shared/enums/sort-direction.enum';
+import {EnumCodeLabelAbstract} from './enum-code-label-abstract.enum';
+import {SortDirectionEnum} from './sort-direction.enum';
 
 export enum CompanySortEnumCode {
   NAME_ASC = 'NAME_ASC',
@@ -25,8 +25,8 @@ export class CompanySortEnum extends EnumCodeLabelAbstract<CompanySortEnumCode> 
 
   /**
    * @param code code associé à la constante de tri
-   * @param label label à afficher (ex: 'Nom de la compagnie par ordre alphabétique')
-   * @param sortBy correspond au nom de l'attribut du modèle dans le back (ex: company.name permet de trier par nom de compagnie)
+   * @param label label à afficher (ex : 'Nom de la compagnie par ordre alphabétique')
+   * @param sortBy correspond au nom de l’attribut du modèle dans le back (ex : company.name permet de trier par nom de compagnie)
    * @param sortDirection ASC pour tri ascendant, DESC pour descendant
    */
   constructor(
