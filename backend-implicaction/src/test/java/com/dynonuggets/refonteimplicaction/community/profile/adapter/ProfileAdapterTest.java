@@ -47,7 +47,7 @@ class ProfileAdapterTest {
             // then
             assertThat(profileDto.getUsername()).isEqualTo(profile.getUser().getUsername());
             assertThat(profileDto.getEmail()).isEqualTo(profile.getUser().getEmail());
-            assertThat(profileDto.getAvatar()).isNotEmpty();
+            assertThat(profileDto.getImageUrl()).isNotEmpty();
             assertThat(profileDto.getBirthday()).isEqualTo(profile.getUser().getBirthday());
             assertThat(profileDto.getHobbies()).isEqualTo(profile.getHobbies());
             assertThat(profileDto.getPurpose()).isEqualTo(profile.getPurpose());
@@ -87,7 +87,7 @@ class ProfileAdapterTest {
             // then
             assertThat(profileDto.getUsername()).isEqualTo(profile.getUser().getUsername());
             assertThat(profileDto.getEmail()).isEqualTo(profile.getUser().getEmail());
-            assertThat(profileDto.getAvatar()).isNotEmpty();
+            assertThat(profileDto.getImageUrl()).isNotEmpty();
             assertThat(profileDto.getBirthday()).isNull();
             assertThat(profileDto.getHobbies()).isNull();
             assertThat(profileDto.getPurpose()).isNull();

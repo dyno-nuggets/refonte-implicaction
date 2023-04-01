@@ -5,11 +5,11 @@ import {CreateTopicFormComponent} from "../create-topic-form/create-topic-form.c
 @Component({
   selector: 'app-create-topic-button',
   templateUrl: './create-topic-button.component.html',
-  styleUrls: ['./create-topic-button.component.scss']
 })
 export class CreateTopicButtonComponent {
 
-  @Input() buttonName: string = '';
+  @Input()
+  buttonName: string = '';
 
   constructor(private sidebarService: SidebarService) {
   }

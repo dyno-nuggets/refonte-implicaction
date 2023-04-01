@@ -37,8 +37,8 @@ export class TopicService {
   deleteTopic(topicId: number): Observable<Object> {
     return this.http.delete(this.apiEndpointsService.deleteTopic(topicId));
   }
-  
-  getLatest(topicCount: number) {
+
+  getLatestTopics(topicCount: number) {
     return this.http.get<Topic[]>(this.apiEndpointsService.getLatestTopics(topicCount));
   }
 }

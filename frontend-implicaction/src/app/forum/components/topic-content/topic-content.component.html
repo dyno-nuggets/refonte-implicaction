@@ -1,9 +1,9 @@
 <div *ngIf="topic$ | async as topic">
   <app-edit-topic-button [topic]="topic" buttonName="Edit"></app-edit-topic-button>
   <div>
-    <h2>{{ topic.title }}</h2>
+    <h1>{{ topic.title }}</h1>
     <app-delete-topic-button [topicId]="topic.id"></app-delete-topic-button>
-    <div *ngIf="pageable.page === 0">
+    <div *ngIf="pageable.page !== 0">
       <div class="title">{{ topic.title }} by {{ topic.author.username }}</div>
       <p>{{ topic.message }}</p>
     </div>

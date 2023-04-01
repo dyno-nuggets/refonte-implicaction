@@ -7,9 +7,7 @@ import {map, switchMap} from "rxjs/operators";
 export type CategoryWithChildren = Omit<Category, "children"> & { children: Category[] };
 
 @Component({
-  selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
   categories$: Observable<CategoryWithChildren[]>;

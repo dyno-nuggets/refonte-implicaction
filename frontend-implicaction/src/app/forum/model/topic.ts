@@ -1,6 +1,6 @@
 import {Category} from "./category";
-import {User} from "../../shared/models/user";
 import {Response} from "./response";
+import {Profile} from "../../profile/models/profile";
 
 export interface Topic {
   id: number;
@@ -10,9 +10,10 @@ export interface Topic {
   editedAt: number;
   locked: boolean;
   pinned: boolean;
-  author: User;
+  author: Profile;
   response: Response[];
   category: Category;
   responsesCount: number;
   lastResponse?: Response;
+  durationAsString?: string;
 }

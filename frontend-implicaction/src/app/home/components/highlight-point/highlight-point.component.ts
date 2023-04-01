@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ValuePoint} from "../../models/value-point";
+import {HighlightPoint} from "../../models/highlight-point";
 
 @Component({
   selector: 'app-highlight-point',
@@ -9,5 +9,5 @@ import {ValuePoint} from "../../models/value-point";
 })
 export class HighlightPointComponent {
   @Input()
-  valuePoint: ValuePoint;
+  valuePoint: HighlightPoint;
 }

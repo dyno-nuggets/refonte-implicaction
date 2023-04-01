@@ -6,11 +6,10 @@ export class Univers {
   static readonly COMPANY_AREA = new Univers('Espace entreprise', 'entreprise', true);
   static readonly PROFILE = new Univers('Profil', 'profiles', false, [RoleEnumCode.USER]);
   static readonly COMMUNITY = new Univers('Communauté', 'community', true, [RoleEnumCode.USER]);
+  static readonly FORUM = new Univers('Forum', 'forums', true, [RoleEnumCode.USER]);
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', true, [RoleEnumCode.USER]);
   static readonly BOARD = new Univers('Job Board', 'board', true, [RoleEnumCode.PREMIUM]);
-  static readonly DISCUSSIONS = new Univers('Discussions', 'old_forum', true, [RoleEnumCode.USER]);
   static readonly ADMIN = new Univers('Admin', 'admin', false, [RoleEnumCode.ADMIN]);
-  static readonly FORUM = new Univers('Forum', 'forum', [RoleEnumCode.USER]);
 
   constructor(
     readonly title: string,

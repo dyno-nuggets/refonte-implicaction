@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -22,7 +23,8 @@ public class ProfileDto {
     private String firstname;
     private String lastname;
     private String email;
-    private String avatar;
+    private String imageUrl;
+    private Instant registeredAt;
     private LocalDate birthday;
     private String hobbies;
     private String purpose;

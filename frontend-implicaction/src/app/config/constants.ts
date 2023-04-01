@@ -18,8 +18,8 @@ export class Constants {
     last: true
   };
   /**
-   * Cette constante est utilisée pour outrepasser la pagination d'une réponse : la page contiendra tous les résultats entre 0 et la
-   * valeur maximale d'un entier en java
+   * Cette constante est utilisée pour outrepasser la pagination d’une réponse : la page contiendra tous les résultats entre 0 et la
+   * valeur maximale d’un entier en java.
    */
   public static readonly ALL_VALUE_PAGEABLE: Pageable<any> = {
     page: 0,

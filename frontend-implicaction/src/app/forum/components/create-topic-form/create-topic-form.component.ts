@@ -13,7 +13,6 @@ import {Observable} from 'rxjs';
 @Component({
   selector: 'app-create-topic-form',
   templateUrl: './create-topic-form.component.html',
-  styleUrls: ['./create-topic-form.component.scss']
 })
 export class CreateTopicFormComponent extends SidebarContentComponent<never> implements OnInit {
 
@@ -48,12 +47,15 @@ export class CreateTopicFormComponent extends SidebarContentComponent<never> imp
       locked: this.topicForm.value.isLocked,
       categoryId: this.topicForm.value.category.id
     };
-    this.topicService.createTopic(createTopic).subscribe(res => {
-      this.toastService.success('Topic créé!', 'Le topic a bien été créé');
-    }, error => {
-      this.toastService.error('Oops', 'Une erreur est survenue');
-    }, () => {
-      this.sidebarService.close();
-    });
+    this.topicService.createTopic(createTopic).subscribe(
+      () => {
+        this.toastService.success('Topic créé!', 'Le topic a bien été créé');
+      },
+      () => {
+        this.toastService.error('Oops', 'Une erreur est survenue');
+      },
+      () => {
+        this.sidebarService.close();
+      });
   }
 }

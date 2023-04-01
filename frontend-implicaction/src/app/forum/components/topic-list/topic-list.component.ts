@@ -9,14 +9,11 @@ import {Constants} from '../../../config/constants';
   styleUrls: ['./topic-list.component.scss']
 })
 export class TopicListComponent {
-  
+
   constants = Constants;
   univers = Univers;
 
   @Input()
   topics: Topic[];
-
-  constructor() {
-  }
 
 }

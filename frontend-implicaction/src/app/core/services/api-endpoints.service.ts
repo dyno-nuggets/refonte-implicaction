@@ -501,7 +501,14 @@ export class ApiEndpointsService {
   }
 
   getLatestTopics(topicCount: number) {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.LATEST_TOPICS, [topicCount]);
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.FORUM.LATEST_TOPICS,
+      (queryParams) => {
+        queryParams.push('rows', topicCount);
+        return queryParams;
+      },
+      true
+    );
   }
 
   getTopicResponses(id: number, pageable: Pageable<Response>): string {

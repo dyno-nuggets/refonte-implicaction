@@ -43,12 +43,13 @@ public class ProfileAdapter {
             builder.username(user.getUsername())
                     .firstname(user.getFirstname())
                     .lastname(user.getLastname())
+                    .registeredAt(user.getRegisteredAt())
                     .email(user.getEmail())
                     .birthday(user.getBirthday());
         }
 
         return builder
-                .avatar(getAvatarUrl(profile.getAvatar()))
+                .imageUrl(getAvatarUrl(profile.getAvatar()))
                 .hobbies(profile.getHobbies())
                 .purpose(profile.getPurpose())
                 .presentation(profile.getPresentation())
@@ -74,7 +75,7 @@ public class ProfileAdapter {
                 .lastname(callIfNotNull(user, UserModel::getLastname))
                 .email(callIfNotNull(user, UserModel::getEmail))
                 .username(callIfNotNull(user, UserModel::getUsername))
-                .avatar(getAvatarUrl(profile.getAvatar()))
+                .imageUrl(getAvatarUrl(profile.getAvatar()))
                 .build();
     }
 

@@ -45,13 +45,7 @@
               data-bs-toggle="dropdown"
               id="dropdownUser2"
             >
-              <img
-                #userImage
-                (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
-                [src]="currentUser.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
-                alt="avatar de {{currentUser.username}}"
-                class="rounded-circle shadow-sm avatar"
-              >
+              <app-user-avatar [author]="currentUser" shape="rounded-circle" size="xs"></app-user-avatar>
             </a>
             <ul
               aria-labelledby="dropdownUser"

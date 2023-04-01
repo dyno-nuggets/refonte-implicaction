@@ -1,8 +1,8 @@
-<p *ngIf="!isLoading && !latestPosts?.length; else postList">Il n'y a aucune publication pour le moment</p>
+<p *ngIf="!isLoading && !latestTopics?.length; else postList">Il n'y a aucune publication pour le moment</p>
 <ng-template #postList>
   <ng-container *ngIf="!isLoading; else loadingElements">
-    <div *ngFor="let post of latestPosts; trackBy: trackByPostId">
-      <app-latest-post-card [post]="post"></app-latest-post-card>
+    <div *ngFor="let post of latestTopics; trackBy: trackByPostId">
+      <app-latest-post-card [topic]="post"></app-latest-post-card>
     </div>
   </ng-container>
 

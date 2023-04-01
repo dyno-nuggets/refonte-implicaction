@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {ForumComponent} from './forum.component';
+import {ForumComponent} from './pages/forum.component';
 import {HomeComponent} from "./components/home/home.component";
 import {CategoryContentComponent} from "./components/category-content/category-content.component";
 import {TopicContentComponent} from "./components/topic-content/topic-content.component";
@@ -18,7 +18,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'category/:id',
+    path: 'categories/:id',
     component: ForumComponent,
     children: [
       {
@@ -29,7 +29,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'topic/:id',
+    path: 'topics/:id',
     component: ForumComponent,
     children: [
       {

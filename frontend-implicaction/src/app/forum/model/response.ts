@@ -1,11 +1,11 @@
-import {User} from "../../shared/models/user";
 import {Topic} from "./topic"
+import {Profile} from "../../profile/models/profile";
 
 export interface Response {
   id: number;
   message: string;
   createdAt: number;
   editedAt: number;
-  author: User;
+  author: Profile;
   topic: Topic;
 }

@@ -76,10 +76,4 @@ public class UserModel {
     public boolean isAdmin() {
         return emptyStreamIfNull(roles).anyMatch(role -> RoleEnum.ADMIN.name().equals(role.getName()));
     }
-
-    @OneToMany(mappedBy = "author")
-    private List<Topic> topics;
-
-    @OneToMany(mappedBy = "author")
-    private List<Response> responses;
 }

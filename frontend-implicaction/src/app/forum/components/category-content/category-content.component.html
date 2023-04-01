@@ -1,5 +1,5 @@
 <div *ngIf="category$ | async as category">
-  <h2>{{ category.title }}</h2>
+  <h1>{{ category.title }}</h1>
   <p>{{ category.description }}</p>
 
   <app-forum-block *ngIf="subCategories$ | async as subCategories">

@@ -52,14 +52,6 @@ const routes: Routes = [
     component: UnauthorizedComponent
   },
   {
-    path: Univers.DISCUSSIONS.url,
-    loadChildren: () => import('./discussion/discussion.module').then(m => m.DiscussionModule),
-    canActivate: [AuthGuard],
-    data: {
-      allowedRoles: Univers.DISCUSSIONS.roles
-    }
-  },
-  {
     path: Univers.BOARD.url,
     component: BoardComponent,
     canActivate: [AuthGuard],
@@ -74,6 +66,10 @@ const routes: Routes = [
   {
     path: Univers.FORUM.url,
     loadChildren: () => import('./forum/forum.module').then(m => m.ForumModule),
+    canActivate: [AuthGuard],
+    data: {
+      allowedRoles: Univers.FORUM.roles
+    }
   }
 ];
 

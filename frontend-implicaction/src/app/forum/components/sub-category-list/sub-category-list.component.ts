@@ -14,7 +14,4 @@ export class SubCategoryListComponent {
   @Input()
   categories: Category[];
 
-  constructor() {
-  }
-
 }

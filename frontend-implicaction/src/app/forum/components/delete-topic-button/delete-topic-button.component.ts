@@ -5,7 +5,6 @@ import {DeleteTopicValidationComponent} from "../delete-topic-validation/delete-
 @Component({
   selector: 'app-delete-topic-button',
   templateUrl: './delete-topic-button.component.html',
-  styleUrls: ['./delete-topic-button.component.scss']
 })
 export class DeleteTopicButtonComponent {
 

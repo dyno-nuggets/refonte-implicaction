@@ -6,7 +6,7 @@ import {AvatarModule} from 'primeng/avatar';
 import {SkeletonModule} from 'primeng/skeleton';
 import {EditorModule} from 'primeng/editor';
 import {TableModule} from 'primeng/table';
-import {ForumComponent} from './forum.component';
+import {ForumComponent} from './pages/forum.component';
 import {ForumRoutingModule} from './forum-routing.module';
 import {SharedModule} from '../shared/shared.module';
 import {IconsModule} from '../icons/icons.module';

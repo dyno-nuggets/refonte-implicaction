@@ -1,7 +1,3 @@
-.duration {
-  font-size: 10px;
-}
-
 a {
   text-decoration: none;
 }
@@ -29,5 +25,9 @@ a {
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  .duration {
+    font-size: 10px;
   }
 }

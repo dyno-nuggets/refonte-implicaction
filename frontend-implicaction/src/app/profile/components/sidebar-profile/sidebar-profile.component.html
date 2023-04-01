@@ -30,7 +30,7 @@
       <img
         #userImage
         (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
-        [src]="profile.avatar || constant.USER_IMAGE_DEFAULT_URI"
+        [src]="profile.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
         alt="photo de {{profile.firstname}}"
         class="rounded-circle shadow-sm"
       >

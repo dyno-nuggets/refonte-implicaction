@@ -10,10 +10,6 @@ public class Message {
     @Deprecated(since = "v.2023")
     public static final String JOB_NOT_FOUND_MESSAGE = "No job found with id [%d]";
 
-    // Groups messages
-    @Deprecated(since = "v.2023")
-    public static final String GROUP_NOT_FOUND_MESSAGE = "No group found with id [%s]";
-
     // Subreddit messages
     @Deprecated(since = "v.2023")
     public static final String SUBREDDIT_NOT_FOUND_MESSAGE = "No subreddit found with id [%s]";
@@ -57,12 +53,6 @@ public class Message {
     public static final String USER_REGISTER_MAIL_BODY = "L'utilisateur %s vient de s'inscrire et est en attente de validation";
     @Deprecated(since = "v.2023")
     public static final String USER_REGISTER_MAIL_TITLE = "[Implicaction] Un utilisateur est en attente de validation";
-
-    // Forum messages
-    public static final String CATEGORY_NOT_FOUND_MESSAGE = "No category with id [%s]";
-    public static final String TOPIC_NOT_FOUND_MESSAGE = "No topic with id [%s]";
-
-    public static final String RESPONSE_NOT_FOUND_MESSAGE = "No response with id [%s]";
 
 
     private Message() {

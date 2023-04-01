@@ -4,9 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {map, switchMap} from "rxjs/operators";
 import {Observable, of} from "rxjs";
 import {Category} from "../../model/category";
-import {
-  BaseWithPaginationAndFilterComponent
-} from "../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component";
+import {BaseWithPaginationAndFilterComponent} from "../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component";
 import {Criteria} from "../../../shared/models/Criteria";
 import {Topic} from "../../model/topic";
 import {Pageable} from "../../../shared/models/pageable";
@@ -14,7 +12,6 @@ import {Pageable} from "../../../shared/models/pageable";
 @Component({
   selector: 'app-category-content',
   templateUrl: './category-content.component.html',
-  styleUrls: ['./category-content.component.scss']
 })
 export class CategoryContentComponent extends BaseWithPaginationAndFilterComponent<Topic, Criteria> implements OnInit {
 

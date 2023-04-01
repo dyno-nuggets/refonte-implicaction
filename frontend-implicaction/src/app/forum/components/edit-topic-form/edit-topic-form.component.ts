@@ -15,7 +15,6 @@ export type EditTopicFormProps = Topic | number;
 @Component({
   selector: 'app-edit-topic-form',
   templateUrl: './edit-topic-form.component.html',
-  styleUrls: ['./edit-topic-form.component.scss']
 })
 export class EditTopicFormComponent extends SidebarContentComponent<EditTopicFormProps> implements OnInit {
 
@@ -73,12 +72,15 @@ export class EditTopicFormComponent extends SidebarContentComponent<EditTopicFor
       categoryId: topicForm.value.category.id
     };
 
-    this.topicService.editTopic(editedTopic).subscribe(res => {
-      this.toastService.success('Topic modifié!', 'Le topic a bien été modifié');
-    }, error => {
-      this.toastService.error('Oops', 'Une erreur est survenue');
-    }, () => {
-      this.sidebarService.close();
-    });
+    this.topicService.editTopic(editedTopic).subscribe(
+      () => {
+        this.toastService.success('Topic modifié!', 'Le topic a bien été modifié');
+      },
+      () => {
+        this.toastService.error('Oops', 'Une erreur est survenue');
+      },
+      () => {
+        this.sidebarService.close();
+      });
   }
 }

@@ -7,7 +7,6 @@ import {Constants} from '../../../config/constants';
 @Component({
   selector: 'app-message-block',
   templateUrl: './message-block.component.html',
-  styleUrls: ['./message-block.component.scss']
 })
 export class MessageBlockComponent {
 
@@ -17,8 +16,5 @@ export class MessageBlockComponent {
 
   @Input()
   message: Topic | Response;
-
-  constructor() {
-  }
 
 }

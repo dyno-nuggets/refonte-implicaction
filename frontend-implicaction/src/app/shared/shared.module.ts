@@ -17,6 +17,7 @@ import {FormsModule} from '@angular/forms';
 import {DropdownModule} from 'primeng/dropdown';
 import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
 import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text/implicaction-logo-text.component";
+import {UserAvatarComponent} from './components/user-avatar/user-avatar.component';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text
     BaseWithPaginationAndFilterComponent,
     CompanyFilterComponent,
     TextEllipsisPipe,
-    ImplicactionLogoTextComponent
+    ImplicactionLogoTextComponent,
+    UserAvatarComponent
   ],
   exports: [
     HeaderComponent,
@@ -45,6 +47,7 @@ import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text
     JobFilterComponent,
     TextEllipsisPipe,
     ImplicactionLogoTextComponent,
+    UserAvatarComponent,
   ],
   imports: [
     CommonModule,
