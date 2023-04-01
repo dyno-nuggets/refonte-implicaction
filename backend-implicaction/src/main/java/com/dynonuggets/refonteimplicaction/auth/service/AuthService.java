@@ -38,8 +38,8 @@ import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static java.time.Instant.now;
 import static java.util.List.of;

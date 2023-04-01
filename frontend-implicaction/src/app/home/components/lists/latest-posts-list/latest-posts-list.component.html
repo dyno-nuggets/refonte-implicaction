@@ -1,7 +1,7 @@
 <p *ngIf="!isLoading && !latestTopics?.length; else postList">Il n'y a aucune publication pour le moment</p>
 <ng-template #postList>
   <ng-container *ngIf="!isLoading; else loadingElements">
-    <div *ngFor="let post of latestTopics; trackBy: trackByPostId">
+    <div *ngFor="let post of latestTopics; trackBy: trackByTopicId">
       <app-latest-post-card [topic]="post"></app-latest-post-card>
     </div>
   </ng-container>

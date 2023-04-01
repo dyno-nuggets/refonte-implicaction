@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.defaultIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.defaultIfNull;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UtilsTest {
+class AppUtilsTest {
 
     @Nested
     @DisplayName("# emptyStreamIfNull")
@@ -25,7 +25,7 @@ class UtilsTest {
             final List<String> collection = asList("Unos", "Dos", "Tres");
 
             // when
-            final Stream<String> stringStream = Utils.emptyStreamIfNull(collection);
+            final Stream<String> stringStream = AppUtils.emptyStreamIfNull(collection);
 
             // then
             assertThat(stringStream)
@@ -39,7 +39,7 @@ class UtilsTest {
         @DisplayName("doit retourner un stream vide à l'appel de emptyStreamIfNull avec une collection nulle")
         void should_return_empty_stream_when_emptyStreamIfNull_and_collection_is_null() {
             // when
-            final Stream<String> stringStream = Utils.emptyStreamIfNull(null);
+            final Stream<String> stringStream = AppUtils.emptyStreamIfNull(null);
 
             // then
             assertThat(stringStream)
@@ -54,7 +54,7 @@ class UtilsTest {
             final List<String> collection = asList("Unos", null, "Dos");
 
             // when
-            final Stream<String> stringStream = Utils.emptyStreamIfNull(collection);
+            final Stream<String> stringStream = AppUtils.emptyStreamIfNull(collection);
 
             // then
             assertThat(stringStream)

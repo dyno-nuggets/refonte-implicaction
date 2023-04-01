@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static com.dynonuggets.refonteimplicaction.community.relation.utils.RelationUris.*;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static org.springframework.data.domain.PageRequest.of;
 
 

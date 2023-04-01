@@ -7,14 +7,17 @@ import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.Work
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.repository.WorkExperienceRepository;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
+import com.dynonuggets.refonteimplicaction.core.error.CoreException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.community.workexperience.error.WorkExperienceErrorResult.XP_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static java.lang.String.valueOf;
 
 @Service
 @AllArgsConstructor
@@ -36,15 +39,13 @@ public class WorkExperienceService {
     }
 
     @Transactional
-    public void deleteExperience(final Long idToDelete) {
-
+    public void deleteExperience(final Long id) {
         final Long currentUserId = authService.getCurrentUser().getId();
-
-        final WorkExperience workExperience = experienceRepository.findById(idToDelete)
-                .orElseThrow(() -> new NotFoundException("Aucune expérience avec l'Id : " + idToDelete + " trouvée."));
+        final WorkExperience workExperience = experienceRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(XP_NOT_FOUND, valueOf(id)));
 
         if (!workExperience.getProfile().getId().equals(currentUserId)) {
-            throw new UnauthorizedException("Impossible de supprimer les expériences d'un autre utilisateur.");
+            throw new CoreException(OPERATION_NOT_PERMITTED);
         }
 
         experienceRepository.delete(workExperience);

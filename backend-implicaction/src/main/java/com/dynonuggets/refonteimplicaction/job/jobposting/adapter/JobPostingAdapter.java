@@ -9,8 +9,8 @@ import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.core.utils.DateUtils.getDurationAsString;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
 
 
 @Component
