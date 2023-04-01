@@ -1,50 +1,33 @@
-<div class="card card-job col row flex-column m-0 p-0 py-2 mx-2">
-  <div class="card-header row align-items-center justify-content-between">
-    <div class="company-logo col-2 p-0">
+<div class="card col row flex-column px-0 py-2 mx-0 my-0 card-job">
+  <div class="card-header col row align-items-center justify-content-between">
+    <div class="col-2 d-sm-none d-md-block p-0 company-logo">
       <img
         #companyLogo
+        alt=""
+        class="icon"
         (error)="companyLogo.src = constant.COMPANY_IMAGE_DEFAULT_URI"
         [src]="job.company?.logo || constant.COMPANY_IMAGE_DEFAULT_URI"
-        alt="company-logo"
-        class="icon"
       >
     </div>
-    <div class="col-6 text-center p-0 overflow-ellipsis">{{job.company?.name}}</div>
+    <div class="col-auto text-center text-sm-end text-md-center p-0 overflow-ellipsis">{{job.company?.name}}</div>
 
-    <div class="col-3 p-0 d-flex justify-content-end">
+    <div class="col-2 d-flex justify-content-end p-0">
       <app-contract-type [type]="job.contractType"></app-contract-type>
     </div>
 
   </div>
   <div class="card-body row align-items-center">
-    <h3 class="text-center m-0 p-0 text-uppercase">
+    <h3 class="text-center text-uppercase m-0 p-0">
       <a
-        [title]="job.title"
         class="job-title"
         routerLink="/{{univers.JOBS.url}}/{{job.id}}"
+        [title]="job.title"
       >
-        <span class="d-inline-block d-sm-none">{{job.title | textEllipsis: 20}}</span>
-        <span class="d-none d-sm-inline-block d-md-none">{{job.title | textEllipsis: 40}}</span>
-        <span class="d-none d-md-inline-block d-lg-none">{{job.title | textEllipsis: 25}}</span>
-        <span class="d-none d-lg-inline-block d-xl-none">{{job.title | textEllipsis: 40}}</span>
-        <span class="d-none d-xl-inline-block d-xxl-none">{{job.title | textEllipsis: 20}}</span>
-        <span class="d-none d-xxl-inline-block">{{job.title | textEllipsis: 30}}</span>
+        <span class="d-block overflow-ellipsis">{{job.title}}</span>
       </a>
     </h3>
   </div>
   <div class="card-footer bg-transparent border-0">
-    <div class="d-flex justify-content-center">
-      <div class="col-auto d-xl-none d-xxl-block">{{job.location | textEllipsis: 20}}</div>
-      <div class="col-auto d-none d-xl-block d-xxl-none">{{job.location | textEllipsis: 10}}</div>
-      <div
-        *ngIf="job.createdAt"
-        class="col-auto"
-      >
-        <span class="ps-2">
-          <span class="pe-2">•</span>
-          <span>{{job.durationAsString}}</span>
-        </span>
-      </div>
-    </div>
+    <div class="d-block overflow-ellipsis text-center">{{job.location}} <span *ngIf="job.durationAsString"> • {{job.durationAsString}}</span></div>
   </div>
 </div>

@@ -1,12 +1,10 @@
-<div class="px-2">
-  <div class="d-flex align-items-start justify-content-between mb-3">
-    <h2 class="text-start align-self-center">{{title}}</h2>
-    <a
-      [routerLink]="buttonLink"
-      class="btn btn-primary"
-    >
-      Tout voir
-    </a>
-  </div>
-  <ng-content></ng-content>
+<div class="d-flex align-items-start justify-content-between mb-1">
+  <h2 class="text-start">{{title}}</h2>
+  <a
+    class="btn btn-primary"
+    [routerLink]="buttonLink"
+  >
+    Tout voir
+  </a>
 </div>
+<ng-content></ng-content>

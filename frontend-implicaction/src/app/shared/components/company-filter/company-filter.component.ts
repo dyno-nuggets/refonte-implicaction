@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CompanyFilterContextService} from '../../../company/services/company-filter-context.service';
+import {CompanyFilterContextService} from '../../services/company-filter-context.service';
 import {Criteria} from '../../models/Criteria';
 
 @Component({

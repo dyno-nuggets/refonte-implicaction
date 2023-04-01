@@ -2,12 +2,12 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {ValuePoint} from "../../models/value-point";
 
 @Component({
-  selector: 'app-value-point',
-  templateUrl: './value-point.component.html',
-  styleUrls: ['./value-point.component.scss'],
+  selector: 'app-highlight-point',
+  templateUrl: './highlight-point.component.html',
+  styleUrls: ['./highlight-point.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ValuePointComponent {
+export class HighlightPointComponent {
   @Input()
   valuePoint: ValuePoint;
 }
