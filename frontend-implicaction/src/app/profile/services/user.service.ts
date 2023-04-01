@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {User} from '../../shared/models/user';
 import {Pageable} from '../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
-import {Group} from '../../discussion/model/group';
+import {Group} from '../../community/models/group';
 
 @Injectable({
   providedIn: 'root'

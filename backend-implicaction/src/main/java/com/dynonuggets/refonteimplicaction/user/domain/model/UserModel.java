@@ -12,7 +12,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.GenerationType.IDENTITY;

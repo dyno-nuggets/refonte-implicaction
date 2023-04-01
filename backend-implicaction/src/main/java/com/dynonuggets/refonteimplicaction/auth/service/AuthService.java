@@ -38,8 +38,8 @@ import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static java.time.Instant.now;
 import static java.util.List.of;
@@ -203,9 +203,8 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public void ensureCurrentUserAllowed(final RoleEnum... roles) {
-        final UserModel currentUser = getCurrentUser();
         final List<String> requiredRoles = Arrays.stream(roles).map(RoleEnum::getLongName).collect(toList());
-        final boolean isAllowed = emptyStreamIfNull(currentUser.getRoles()).anyMatch(role -> requiredRoles.contains(role.getName()));
+        final boolean isAllowed = emptyStreamIfNull(getCurrentUser().getRoles()).anyMatch(role -> requiredRoles.contains(role.getName()));
 
         if (!isAllowed) {
             throw new CoreException(OPERATION_NOT_PERMITTED);

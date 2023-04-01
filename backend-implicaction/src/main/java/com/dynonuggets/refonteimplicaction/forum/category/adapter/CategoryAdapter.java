@@ -9,8 +9,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static java.util.stream.Collectors.toList;
 
 @AllArgsConstructor

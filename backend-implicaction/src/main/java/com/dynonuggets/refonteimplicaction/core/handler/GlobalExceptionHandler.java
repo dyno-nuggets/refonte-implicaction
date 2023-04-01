@@ -4,7 +4,6 @@ import com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse;
 import com.dynonuggets.refonteimplicaction.core.dto.ValidationExceptionResponse;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.exception.UnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,7 +41,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .body(from(ex, ex.getErrorResult().getStatus()));
     }
 
-    @ExceptionHandler(value = {UnauthorizedException.class, AuthenticationException.class})
+    @ExceptionHandler(value = AuthenticationException.class)
     public ResponseEntity<ExceptionResponse> unauthorizedException(final Exception ex) {
         return ResponseEntity.status(UNAUTHORIZED).body(from(ex, UNAUTHORIZED));
     }
@@ -91,7 +90,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         final Map<String, String> errors = new HashMap<>();
         ex.getBindingResult()
                 .getAllErrors()
-                .forEach((error) -> {
+                .forEach(error -> {
                     final String fieldName = ((FieldError) error).getField();
                     final String errorMessage = error.getDefaultMessage();
                     errors.put(fieldName, errorMessage);

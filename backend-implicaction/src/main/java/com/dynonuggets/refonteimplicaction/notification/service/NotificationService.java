@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey.EMAIL_NOTIFICATION;
 import static com.dynonuggets.refonteimplicaction.notification.util.NotificationMessages.MAIL_FEATURE_IS_DEACTIVATED_MESSAGE;
 

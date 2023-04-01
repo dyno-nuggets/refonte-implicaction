@@ -12,7 +12,7 @@ import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.collections4.CollectionUtils.emptyIfNull;
 
 @NoArgsConstructor(access = PRIVATE)
-public class Utils {
+public class AppUtils {
     public static <I, O> O callIfNotNull(final I input, final Function<I, O> mapper) {
         return ofNullable(input)
                 .map(mapper)
@@ -29,7 +29,6 @@ public class Utils {
 
     /**
      * @param nullableCollection une collection potentiellement nulle
-     * @param <T>                type de la collection
      * @return un stream vide si <code>collection</code> est nul ou un stream débarrassé de toutes les valeurs nulles
      */
     public static <T> Stream<T> emptyStreamIfNull(final Collection<T> nullableCollection) {

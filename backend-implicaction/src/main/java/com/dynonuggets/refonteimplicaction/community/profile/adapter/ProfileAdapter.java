@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileConstants.DEFAULT_USER_AVATAR_URI;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.*;
 import static java.util.stream.Collectors.toList;
 
 @Component

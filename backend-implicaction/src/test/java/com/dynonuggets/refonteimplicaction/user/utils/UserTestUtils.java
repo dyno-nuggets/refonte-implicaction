@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.time.Instant;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
 import static java.lang.String.format;
 import static java.util.Collections.emptyList;

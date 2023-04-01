@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.dynonuggets.refonteimplicaction.core.utils.DateUtils.getDurationAsString;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 import static org.apache.commons.collections4.CollectionUtils.size;
 
 @AllArgsConstructor
@@ -97,7 +98,7 @@ public class TopicAdapter {
                 .author(profileAdapter.toDto(model.getAuthor()))
                 .category(categoryAdapter.toDtoWithoutChildren(model.getCategory()))
                 .responses(new ArrayList<>())
-                .lastResponse(responses.size() > 0 ? responseAdapter.toDto(responses.get(responses.size() - 1)) : null)
+                .lastResponse(isNotEmpty(responses) ? responseAdapter.toDto(responses.get(responses.size() - 1)) : null)
                 .lastAction(model.getLastAction())
                 .responsesCount(model.getResponses().size())
                 .durationAsString(getDurationAsString(model.getLastAction()))

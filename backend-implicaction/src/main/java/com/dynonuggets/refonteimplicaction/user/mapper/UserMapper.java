@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static java.util.stream.Collectors.toList;
 
 @Mapper

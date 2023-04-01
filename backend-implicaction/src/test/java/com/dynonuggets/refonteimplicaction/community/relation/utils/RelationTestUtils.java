@@ -8,7 +8,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileTestUtils.generateRandomProfileDto;
-import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomInstant;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static java.lang.String.format;

@@ -13,7 +13,7 @@ public abstract class ImplicactionException extends RuntimeException {
     private final BaseErrorResult errorResult;
     private final String value;
 
-    public ImplicactionException(final BaseErrorResult errorResult) {
+    protected ImplicactionException(final BaseErrorResult errorResult) {
         this(errorResult, null);
     }
 
