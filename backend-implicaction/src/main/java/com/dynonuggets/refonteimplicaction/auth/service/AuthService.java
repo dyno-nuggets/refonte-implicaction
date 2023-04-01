@@ -203,9 +203,8 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public void ensureCurrentUserAllowed(final RoleEnum... roles) {
-        final UserModel currentUser = getCurrentUser();
         final List<String> requiredRoles = Arrays.stream(roles).map(RoleEnum::getLongName).collect(toList());
-        final boolean isAllowed = emptyStreamIfNull(currentUser.getRoles()).anyMatch(role -> requiredRoles.contains(role.getName()));
+        final boolean isAllowed = emptyStreamIfNull(getCurrentUser().getRoles()).anyMatch(role -> requiredRoles.contains(role.getName()));
 
         if (!isAllowed) {
             throw new CoreException(OPERATION_NOT_PERMITTED);
