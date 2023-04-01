@@ -264,7 +264,7 @@ class ProfileServiceTest {
             given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.of(profile));
             given(cloudService.uploadImage(any())).willReturn(fileModel);
             given(profileRepository.save(any())).willReturn(profile);
-            given(profileAdapter.toDto(any())).willReturn(ProfileDto.builder().username(username).avatar("avatar.png").build());
+            given(profileAdapter.toDto(any())).willReturn(ProfileDto.builder().username(username).imageUrl("avatar.png").build());
 
             // when
             final ProfileDto profileDto = profileService.updateAvatar(mockMultipartFile, username);
@@ -272,7 +272,7 @@ class ProfileServiceTest {
             // then
             assertThat(profileDto)
                     .isNotNull()
-                    .extracting(ProfileDto::getAvatar)
+                    .extracting(ProfileDto::getImageUrl)
                     .isEqualTo("avatar.png");
             verify(authService, times(1)).verifyAccessIsGranted(any());
             verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());

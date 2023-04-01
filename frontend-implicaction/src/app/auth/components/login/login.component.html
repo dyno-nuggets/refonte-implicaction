@@ -1,7 +1,7 @@
 <section class="vh-100 mt-xl-5">
   <div class="container-fluid">
-    <div class="row d-flex justify-content-center align-items-start">
-      <div class="col-md-9 col-lg-6 col-xl-5 mb-4 pt-5">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col-md-9 col-xl-6 text-center mb-4 mb-xl-0 pt-5">
         <img
           alt="Connexion"
           class="img-fluid"
@@ -9,28 +9,27 @@
         />
       </div>
 
-      <div class="col-md-9 col-lg-6 col-xl-4 offset-xl-1">
+      <div class="col-md-9 col-xl-5 offset-xl-1">
         <div class="divider d-flex align-items-center my-4">
-          <p class="text-center mx-3 mb-0 fs-2">Connexion</p>
+          <h1 class="text-center mx-3 mb-0">Connexion</h1>
         </div>
         <form
           (ngSubmit)="login()"
           [formGroup]="loginForm"
         >
-
           <!-- USERNAME -->
           <div class="form-floating mb-4">
             <input
-              autofocus
-              class="form-control form-control-lg"
-              formControlName="username"
               id="floatingUsername"
+              formControlName="username"
               placeholder="Enter a valid email address"
+              class="form-control form-control-lg"
+              autofocus
               required
             />
             <label
-              class="form-label"
               for="floatingUsername"
+              class="form-label"
             >
               Nom d'utilisateur
             </label>
@@ -39,16 +38,16 @@
           <!-- PASSWORD -->
           <div class="form-floating mb-3">
             <input
-              class="form-control form-control-lg"
-              formControlName="password"
               id="floatingPassword"
-              placeholder="mot de passe"
-              required
               type="password"
+              formControlName="password"
+              placeholder="mot de passe"
+              class="form-control form-control-lg"
+              required
             />
             <label
-              class="form-label"
               for="floatingPassword"
+              class="form-label"
             >
               Mot de passe
             </label>
@@ -83,7 +82,7 @@
 
           <!-- SUBMIT -->
           <div class="text-center text-lg-start mt-4 pt-2">
-            <div class="d-grid gap-2 ">
+            <div class="d-grid gap-2">
               <button
                 [disabled]="isLoading"
                 class="btn btn-primary btn-lg"

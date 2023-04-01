@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Post} from '../../../../discussion/model/post';
 import {Univers} from '../../../../shared/enums/univers';
 import {Constants} from '../../../../config/constants';
+import {Topic} from "../../../../forum/model/topic";
 
 
 @Component({
@@ -13,7 +13,7 @@ import {Constants} from '../../../../config/constants';
 export class LatestPostCardComponent {
 
   @Input()
-  post: Post;
+  topic: Topic;
   univers = Univers;
   constant = Constants;
 }

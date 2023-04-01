@@ -1,0 +1,28 @@
+<div *ngIf="topic$ | async as topic">
+  <app-edit-topic-button [topic]="topic" buttonName="Edit"></app-edit-topic-button>
+  <div>
+    <h1>{{ topic.title }}</h1>
+    <app-delete-topic-button [topicId]="topic.id"></app-delete-topic-button>
+    <div *ngIf="pageable.page !== 0">
+      <div class="title">{{ topic.title }} by {{ topic.author.username }}</div>
+      <p>{{ topic.message }}</p>
+    </div>
+    <app-message-block *ngIf="pageable.page === 0" [message]="topic"></app-message-block>
+
+    <ng-container *ngIf="paginatedResponses$ | async as paginatedResponses">
+      <ng-container *ngFor="let response of paginatedResponses.content">
+        <app-message-block [message]="response"></app-message-block>
+      </ng-container>
+    </ng-container>
+
+    <p-paginator
+      (onPageChange)="paginate($event)"
+      *ngIf="pageable.totalPages > 0"
+      [alwaysShow]="false"
+      [first]="pageable.first"
+      [rowsPerPageOptions]="DEFAULT_ROWS_PER_PAGE_OPTIONS"
+      [rows]="pageable.rows"
+      [totalRecords]="pageable.totalElements"
+    ></p-paginator>
+  </div>
+</div>

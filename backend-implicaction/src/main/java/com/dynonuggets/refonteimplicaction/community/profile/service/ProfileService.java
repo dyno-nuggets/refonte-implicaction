@@ -137,4 +137,9 @@ public class ProfileService {
 
         return profileAdapter.toDto(profileRepository.save(profile));
     }
+
+    @Transactional(readOnly = true)
+    public ProfileModel getCurrentProfile() {
+        return getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
+    }
 }

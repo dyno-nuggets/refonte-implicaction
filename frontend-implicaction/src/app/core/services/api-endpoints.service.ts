@@ -8,6 +8,11 @@ import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/Criteria';
 import {Profile} from "../../profile/models/profile";
 import {Relation} from "../../community/models/relation";
+import {Response} from "../../forum/model/response";
+import {GetCategoriesOptions} from '../../forum/services/category.service';
+
+export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
+export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
 
 @Injectable({
   providedIn: 'root'
@@ -15,14 +20,40 @@ import {Relation} from "../../community/models/relation";
 @Injectable()
 export class ApiEndpointsService {
 
-  // URL
-  private static createUrl(action: string, isMockAPI = false): string {
+  private static preparePathVariables(pathVariables?: CreateUrlOptions['pathVariables']) {
+    let encodedPathVariablesUrl = '';
+    if (pathVariables?.length > 0) {
+      // Push extra path variables
+      for (const pathVariable of pathVariables) {
+        let pathVariableStr = pathVariable instanceof Array ? pathVariable.join(',') : pathVariable;
+
+        if (pathVariable !== null) {
+          encodedPathVariablesUrl += `/${encodeURIComponent(pathVariableStr.toString())}`;
+        }
+      }
+    }
+    return encodedPathVariablesUrl;
+  }
+
+  private static createUrlWithOptions(action: string, opts: CreateUrlOptions) {
+    // path variables
+    const encodedPathVariablesUrl = ApiEndpointsService.preparePathVariables(opts.pathVariables);
+
     const urlBuilder: UrlBuilder = new UrlBuilder(
-      isMockAPI ? Constants.API_MOCK_ENDPOINT : Constants.API_ENDPOINT,
-      action
+      opts.isMockApi ? Constants.API_MOCK_ENDPOINT : Constants.API_ENDPOINT,
+      action + encodedPathVariablesUrl
     );
+
+    opts.queryStringHandler?.(urlBuilder.queryString);
+
     return urlBuilder.toString();
   }
+
+  // URL
+  private static createUrl(action: string, isMockApi = false): string {
+    return ApiEndpointsService.createUrlWithOptions(action, {isMockApi});
+  }
+
 
   // URL WITH QUERY PARAMETERS
   private static createUrlWithQueryParameters(
@@ -413,6 +444,87 @@ export class ApiEndpointsService {
 
   createGroupSubscription(groupName: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.GROUP.BASE_URI, [groupName, 'subscribe']);
+  }
+
+  /**
+   * FORUM CATEGORIES
+   */
+
+  getCategories(opts?: GetCategoriesOptions): string;
+  getCategories(ids: number[], opts?: GetCategoriesOptions): string;
+  getCategories(ids?: number[] | GetCategoriesOptions, opts?: GetCategoriesOptions): string {
+    const options: GetCategoriesOptions | undefined = (ids instanceof Array ? opts : ids);
+    const pathVariables = ids instanceof Array ? [ids] : [];
+    return ApiEndpointsService.createUrlWithOptions(Uris.FORUM.CATEGORIES, {
+      pathVariables,
+      queryStringHandler(queryString) {
+        if (options?.withRecentlyUpdatedTopic) {
+          queryString.push("withRecentlyUpdatedTopic", options.withRecentlyUpdatedTopic);
+        }
+      }
+    });
+  }
+
+  getRootCategories(): string {
+    return ApiEndpointsService.createUrlWithQueryParameters(Uris.FORUM.CATEGORIES, (queryParams) => {
+      queryParams.push('onlyRoot', true);
+      return queryParams;
+    });
+  }
+
+  getCategory(id: number): string {
+    return this.getCategories([id]);
+  }
+
+  getCategoryTopics(id: number, pageable: Pageable<any>): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.FORUM.CATEGORIES_TOPICS(id), pageable);
+  }
+
+  createCategory(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
+  }
+
+  deleteCategory(categoryId: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.CATEGORIES, [categoryId]);
+  }
+
+  editCategory(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.CATEGORIES);
+  }
+
+  /**
+   * FORUM TOPICS
+   */
+
+  getTopic(id: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.TOPICS, [id]);
+  }
+
+  getLatestTopics(topicCount: number) {
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.FORUM.LATEST_TOPICS,
+      (queryParams) => {
+        queryParams.push('rows', topicCount);
+        return queryParams;
+      },
+      true
+    );
+  }
+
+  getTopicResponses(id: number, pageable: Pageable<Response>): string {
+    return ApiEndpointsService.createUrlWithPageable(Uris.FORUM.TOPICS_RESPONSES(id), pageable);
+  }
+
+  createTopic(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.TOPICS);
+  }
+
+  editTopic(): string {
+    return ApiEndpointsService.createUrl(Uris.FORUM.TOPICS);
+  }
+
+  deleteTopic(id: number): string {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.FORUM.TOPICS, [id]);
   }
 
   /**

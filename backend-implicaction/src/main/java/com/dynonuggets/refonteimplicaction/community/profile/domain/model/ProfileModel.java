@@ -4,6 +4,8 @@ import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupMod
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
 import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
+import com.dynonuggets.refonteimplicaction.forum.response.domain.model.ResponseModel;
+import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
@@ -48,4 +50,10 @@ public class ProfileModel {
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")})
     private List<GroupModel> groups;
+
+    @OneToMany(mappedBy = "author")
+    private List<TopicModel> topics;
+
+    @OneToMany(mappedBy = "author")
+    private List<ResponseModel> responses;
 }

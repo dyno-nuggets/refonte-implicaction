@@ -1,5 +1,5 @@
 <div class="row justify-content-center align-items-center">
-  <header class="col-12 col-xxl-5 text-center">
+  <header class="col-12 col-xxl-6 text-center">
     <img
       alt="Association Réseau des Personnels de la Défense"
       class="img-fluid"
@@ -7,7 +7,7 @@
     >
   </header>
 
-  <section class="col-12 col-lg-8 col-xl-8 col-xxl-6 text-center align-self-center mt-4 summary">
+  <section class="col-12 col-xl-8 col-xxl-6 text-center align-self-center mt-4 summary">
     <h1 class="text-center">
       <app-implicaction-logo-text></app-implicaction-logo-text>
     </h1>
@@ -30,7 +30,7 @@
 
 
 <section class="row col-12 justify-content-center justify-content-md-center justify-content-lg-between justify-content-xxl-evenly mx-0 p-0 px-2 key-points">
-  <ng-container *ngFor="let valuePoint of valuePoints">
+  <ng-container *ngFor="let valuePoint of highlightPoints">
     <app-highlight-point
       class="col-lg-3 col-md-6 mb-5 mb-lg-0"
       [valuePoint]="valuePoint"
@@ -54,11 +54,11 @@
 
     <app-home-heading-column
       class="col-lg-6 mt-4 mt-lg-0"
-      buttonLink="/{{univers.DISCUSSIONS.url}}"
+      buttonLink="/{{univers.FORUM.url}}"
       [title]="'Dernières publications'"
     >
       <app-latest-posts-list
-        [latestPosts]="latestPosts"
+        [latestTopics]="latestTopics"
         [isLoading]="isLoading"
       ></app-latest-posts-list>
     </app-home-heading-column>

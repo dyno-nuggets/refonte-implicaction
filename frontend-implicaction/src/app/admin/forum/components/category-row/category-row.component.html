@@ -1,0 +1,56 @@
+<div class="pending-table card mt-4">
+  <div class="card-header pb-0 bg-primary text-light d-flex justify-content-between">
+    <h5 class="panel-title">Ajouter une catégorie</h5>
+    <button (click)="onClickAdd()" class="btn btn-success fw-bold">
+      <i class="fas fa-plus px-1 text-white"></i>
+      Ajouter
+    </button>
+  </div>
+
+  <p-table [value]="categories">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Parent</th>
+        <th>Actions</th>
+      </tr>
+    </ng-template>
+    <ng-template let-category pTemplate="body">
+      <tr>
+        <td>{{category.title}}</td>
+        <td>{{category.description}}</td>
+        <td>{{category.parent?.title ?? "Pas de parent"}}</td>
+
+        <td class="col-4 col-sm-3 col-lg-2 px-2 text-center">
+          <ul class="fa-ul d-flex flex-column flex-lg-row justify-content-center list-unstyled list-inline mb-0">
+            <li class="fa-li list-inline-item m-0 me-lg-2">
+              <button
+                (click)="onClickEdit(category)"
+                class="btn"
+                data-bs-placement="top"
+                data-bs-toggle="tooltip"
+                title="Editer"
+                type="button"
+              >
+                <i class="fas fa-pen border border-primary text-primary rounded-3 px-2 py-1"></i>
+              </button>
+            </li>
+            <li class="fa-li list-inline-item m-0 me-lg-2">
+              <button
+                (click)="onClickDelete(category)"
+                class="btn"
+                data-bs-placement="top"
+                data-bs-toggle="tooltip"
+                title="Supprimer"
+                type="button"
+              >
+                <i class="fas fa-trash border border-danger text-danger rounded-3 px-2 py-1"></i>
+              </button>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

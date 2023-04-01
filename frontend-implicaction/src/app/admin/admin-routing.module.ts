@@ -56,6 +56,15 @@ const routes: Routes = [
       }
     ]
   },
+  {
+    path: 'forum', component: AdminComponent, children: [
+      {
+        path: '',
+        loadChildren: () => import('./forum/forum.module').then(m => m.ForumModule),
+        outlet: 'admin-content'
+      }
+    ]
+  },
 ];
 
 @NgModule({

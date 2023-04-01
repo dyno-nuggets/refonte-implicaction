@@ -10,7 +10,7 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  sidebarProps: SidebarProps;
+  sidebarProps: SidebarProps<unknown>;
   @ViewChild(SidebarContentDirective, {static: true})
   sidebarContent: SidebarContentDirective;
   private sidebarSubject: Subscription;
@@ -34,7 +34,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sidebarSubject?.unsubscribe();
   }
 
-  private loadComponent(content: SidebarProps): void {
+  private loadComponent(content: SidebarProps<unknown>): void {
     if (!content) {
       return;
     }
@@ -46,7 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     viewContainerRef.clear();
 
     // instanciation dynamique du contenu de la sidebar
-    const componentRef = viewContainerRef.createComponent<SidebarContentComponent>(componentFactory);
+    const componentRef = viewContainerRef.createComponent<SidebarContentComponent<unknown>>(componentFactory);
     componentRef.instance.sidebarInput = content.input;
   }
 }

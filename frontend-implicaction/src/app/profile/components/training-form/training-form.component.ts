@@ -10,12 +10,14 @@ import {Observable} from 'rxjs';
 import {TrainingService} from '../../services/training.service';
 import {Constants} from '../../../config/constants';
 
+export type TrainingFormProps = { training: Training } | undefined;
+
 @Component({
   selector: 'app-training-form',
   templateUrl: './training-form.component.html',
   styleUrls: ['./training-form.component.scss']
 })
-export class TrainingFormComponent extends SidebarContentComponent implements OnInit {
+export class TrainingFormComponent extends SidebarContentComponent<TrainingFormProps> implements OnInit {
 
   formTraining: UntypedFormGroup;
   currentUserId: string;

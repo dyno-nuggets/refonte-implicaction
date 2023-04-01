@@ -1,0 +1,8 @@
+<h1>Forum</h1>
+<app-forum-block *ngFor="let category of categories$ | async">
+  <ng-container title>{{ category.title }}</ng-container>
+  <app-sub-category-list
+    [categories]="category.children"
+    content
+  ></app-sub-category-list>
+</app-forum-block>

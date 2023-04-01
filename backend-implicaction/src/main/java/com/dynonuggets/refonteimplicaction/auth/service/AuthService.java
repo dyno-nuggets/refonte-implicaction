@@ -14,6 +14,7 @@ import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +32,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.utils.Utils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.Utils.emptyStreamIfNull;
 import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static java.time.Instant.now;
 import static java.util.List.of;
+import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Service
@@ -192,6 +197,17 @@ public class AuthService {
         final UserModel currentUser = getCurrentUser();
         final String currentUsername = callIfNotNull(currentUser, UserModel::getUsername);
         if (!(StringUtils.equals(currentUsername, username) || isTrue(callIfNotNull(currentUser, UserModel::isAdmin)))) {
+            throw new CoreException(OPERATION_NOT_PERMITTED);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public void ensureCurrentUserAllowed(final RoleEnum... roles) {
+        final UserModel currentUser = getCurrentUser();
+        final List<String> requiredRoles = Arrays.stream(roles).map(RoleEnum::getLongName).collect(toList());
+        final boolean isAllowed = emptyStreamIfNull(currentUser.getRoles()).anyMatch(role -> requiredRoles.contains(role.getName()));
+
+        if (!isAllowed) {
             throw new CoreException(OPERATION_NOT_PERMITTED);
         }
     }

@@ -83,7 +83,7 @@ export class SidebarProfileComponent {
       reader.readAsDataURL(file);
 
       reader.onload = () => {
-        this.profile.avatar = reader.result as string;
+        this.profile.imageUrl = reader.result as string;
         const formData = new FormData();
         formData.set('file', file, file.filename);
         this.userService
@@ -91,11 +91,11 @@ export class SidebarProfileComponent {
           .subscribe(
             // on "valide" le changement d’image en mettant à jour la valeur userCopie.imageUrl de sorte que si on
             // rollback les modifications de l’utilisateur, l’image soit tjs affichée
-            () => this.profileCopy.avatar = this.profile.avatar,
+            () => this.profileCopy.imageUrl = this.profile.imageUrl,
             () => {
               this.toasterService.error('Oops', 'Une erreur est survenue lors de la modification de votre image de profil');
               // on rollback l'image de l’utilisateur
-              this.profile.avatar = this.profileCopy.avatar;
+              this.profile.imageUrl = this.profileCopy.imageUrl;
             },
             () => this.toasterService.success('Succès', 'Votre image de profil a été mise à jour avec succès.')
           );

@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {Univers} from '../../../shared/enums/univers';
-import {PostService} from "../../../discussion/services/post.service";
 import {Constants} from "../../../config/constants";
-import {Post} from "../../../discussion/model/post";
 import {JobService} from "../../../job/services/job.service";
 import {JobPosting} from "../../../shared/models/job-posting";
 import {finalize} from "rxjs/operators";
 import {ImplicactionEventService} from "../../../shared/services/implicaction-event.service";
 import {ImplicactionEvent} from "../../../shared/models/implicactionEvent";
-import {ValuePoint} from "../../models/value-point";
+import {HighlightPoint} from "../../models/highlight-point";
 import {forkJoin} from "rxjs";
+import {TopicService} from "../../../forum/services/topic.service";
+import {Topic} from "../../../forum/model/topic";
 
 
 @Component({
@@ -19,12 +19,12 @@ import {forkJoin} from "rxjs";
 })
 export class HomePageComponent implements OnInit {
 
-  latestPosts: Post[] = [];
+  latestTopics: Topic[] = [];
   latestJobs: JobPosting[] = [];
   latestEvents: ImplicactionEvent[] = [];
   univers = Univers;
   isLoading = true;
-  valuePoints: ValuePoint[] = [
+  highlightPoints: HighlightPoint[] = [
     {
       title: 'Un réseau',
       text: 'Un réseau d’anciens militaires et civils des armés reconvertis ou en phase de reconversion partageant leur expérience et leurs connaissances',
@@ -43,7 +43,7 @@ export class HomePageComponent implements OnInit {
   ]
 
   constructor(
-    private postService: PostService,
+    private topicService: TopicService,
     private jobService: JobService,
     private eventService: ImplicactionEventService
   ) {
@@ -51,14 +51,14 @@ export class HomePageComponent implements OnInit {
 
   ngOnInit(): void {
     forkJoin({
-      latestPost: this.postService.getLatestPosts(Constants.LATEST_POSTS_COUNT),
+      latestTopics: this.topicService.getLatestTopics(Constants.LATEST_TOPICS_COUNT),
       latestJobs: this.jobService.getLatestJobs(Constants.LATEST_JOBS_COUNT),
       latestEvents: this.eventService.getLatestEvents()
     })
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: value => {
-          this.latestPosts = value.latestPost;
+          this.latestTopics = value.latestTopics;
           this.latestJobs = value.latestJobs;
           this.latestEvents = value.latestEvents;
         }

@@ -6,6 +6,7 @@ export interface Profile {
   email?: string;
   firstname?: string;
   lastname?: string;
+  registeredAt?: string;
   birthday?: string;
   hobbies?: string;
   purpose?: string;
@@ -13,7 +14,7 @@ export interface Profile {
   expectation?: string;
   contribution?: string;
   phoneNumber?: string;
-  avatar?: string;
+  imageUrl?: string;
   experiences?: WorkExperience[];
   trainings?: Training[];
 }

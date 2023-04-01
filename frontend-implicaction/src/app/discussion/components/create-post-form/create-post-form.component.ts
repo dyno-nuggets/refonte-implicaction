@@ -18,7 +18,7 @@ import {SidebarService} from '../../../shared/services/sidebar.service';
   templateUrl: './create-post-form.component.html',
   styleUrls: ['./create-post-form.component.scss']
 })
-export class CreatePostFormComponent extends SidebarContentComponent implements OnInit {
+export class CreatePostFormComponent extends SidebarContentComponent<never> implements OnInit {
 
   createPostForm: UntypedFormGroup;
   postPayload: PostPayload = {name: '', groupId: ''};

@@ -1,0 +1,14 @@
+.category {
+  &:first-child {
+    padding-top: 0 !important;
+  }
+
+  &:last-child {
+    border: none !important;
+    padding-bottom: 0 !important;
+  }
+
+  .stats > * {
+    height: fit-content;
+  }
+}

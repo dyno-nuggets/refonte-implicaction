@@ -117,4 +117,14 @@ export class Uris {
   static JOB_APPLICATION = class {
     static readonly BASE_URI = 'applies';
   };
+
+  static FORUM = class {
+    static readonly BASE_URI = 'forums';
+    static readonly CATEGORIES = 'forums/categories';
+    static readonly TOPICS = 'forums/topics';
+    static readonly LATEST_TOPICS = 'forums/topics/latest';
+
+    static readonly CATEGORIES_TOPICS = (id: number) => `${Uris.FORUM.CATEGORIES}/${id}/topics`;
+    static readonly TOPICS_RESPONSES = (id: number) => `${Uris.FORUM.TOPICS}/${id}/responses`;
+  };
 }
