@@ -5,7 +5,6 @@ import {Criteria} from '../../models/Criteria';
 @Component({
   selector: 'app-company-filter',
   templateUrl: './company-filter.component.html',
-  styleUrls: ['./company-filter.component.scss']
 })
 export class CompanyFilterComponent implements OnInit {
 

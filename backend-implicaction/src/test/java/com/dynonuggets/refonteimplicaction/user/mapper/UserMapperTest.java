@@ -10,10 +10,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Set;
+
 import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
-import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -50,8 +51,8 @@ class UserMapperTest {
 
     @BeforeEach
     void setUp() {
-        mockedUser = generateRandomUser(of(USER), true);
-        mockedUserDto = generateRandomUserDto(of(USER.name()), true);
+        mockedUser = generateRandomUser(Set.of(USER), true);
+        mockedUserDto = generateRandomUserDto(Set.of(USER.name()), true);
     }
 
     @Nested
@@ -69,8 +70,7 @@ class UserMapperTest {
                     .isEqualTo(mockedUser);
 
             // on vérifie que les rôles sont bien mappés
-            assertThat(userDto)
-                    .extracting(UserDto::getRoles).asList()
+            assertThat(userDto.getRoles())
                     .isNotEmpty()
                     .containsSequence(mockedUser.getRoles().stream().map(Role::getName).collect(toList()));
         }

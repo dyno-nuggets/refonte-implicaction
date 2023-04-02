@@ -1,7 +1,7 @@
 <img
   #userImage
   class="{{shape}} size-{{size}}" [ngClass]="{'shadow-sm': shadow}"
-  [src]="author.imageUrl || constants.USER_IMAGE_DEFAULT_URI"
-  [alt]="author.username"
+  [src]="profile.imageUrl || constants.USER_IMAGE_DEFAULT_URI"
+  [alt]="profile.username"
   (error)="userImage.src = constants.USER_IMAGE_DEFAULT_URI"
 >

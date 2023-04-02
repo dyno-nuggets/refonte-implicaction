@@ -11,16 +11,18 @@ import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "role")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Role {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+    @EqualsAndHashCode.Include
     @Column(name = "name", nullable = false)
     private String name;
     @ManyToMany(fetch = LAZY, cascade = ALL, mappedBy = "roles")

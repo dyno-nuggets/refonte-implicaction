@@ -1,18 +1,17 @@
-<app-header></app-header>
+<app-header [currentUser]="currentUser"></app-header>
 <main class="mx-2 mx-sm-5 my-3 my-md-5">
   <router-outlet></router-outlet>
   <p-toast
+    position="bottom-right"
     [hideTransformOptions]="'translateX(0)'"
     [showTransformOptions]="'translateX(100%)'"
-    position="bottom-right"
-  >
-  </p-toast>
+  ></p-toast>
   <p-sidebar
+    position="right"
     (onHide)="sidebarService.close()"
     [(visible)]="sidebarService.isOpen"
     [blockScroll]="true"
     [transitionOptions]="'350ms'"
-    position="right"
   >
     <div class="content-container">
       <div class="row no-gutters header align-items-center">

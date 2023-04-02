@@ -7,7 +7,7 @@ import lombok.Getter;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import static lombok.AccessLevel.PRIVATE;
 
@@ -26,5 +26,5 @@ public class UserDto {
     private String activationKey;
     private Boolean enabled;
     private Boolean emailVerified;
-    private List<String> roles;
+    private Set<String> roles;
 }

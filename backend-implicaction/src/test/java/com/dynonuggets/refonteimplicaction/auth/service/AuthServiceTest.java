@@ -3,11 +3,8 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
@@ -35,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
@@ -67,10 +65,6 @@ class AuthServiceTest {
     @Mock
     RefreshTokenService refreshTokenService;
     @Mock
-    RoleService roleService;
-    @Mock
-    ProfileRepository profileRepository;
-    @Mock
     NotificationService notificationService;
     @Mock
     EmailValidationNotificationMapper emailValidationNotificationMapper;
@@ -78,6 +72,9 @@ class AuthServiceTest {
     AuthService authService;
     @Captor
     private ArgumentCaptor<UserModel> userArgumentCaptorCaptor;
+
+    Authentication authentication;
+    SecurityContext securityContext;
 
     RegisterRequest generateValidRegisterRequest() {
         return RegisterRequest.builder()
@@ -87,9 +84,6 @@ class AuthServiceTest {
                 .firstname(randomAlphabetic(10))
                 .lastname(randomAlphabetic(10)).build();
     }
-
-    Authentication authentication;
-    SecurityContext securityContext;
 
 
     @BeforeEach
@@ -113,7 +107,6 @@ class AuthServiceTest {
             given(passwordEncoder.encode(any())).willReturn(expectedPassword);
             willDoNothing().given(notificationService).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
             given(userRepository.save(any())).willReturn(UserModel.builder().build());
-            given(roleService.getRoleByName(anyString())).willReturn(Role.builder().name(RoleEnum.USER.getLongName()).build());
 
             // when
             authService.signup(validLoginRequest);
@@ -127,6 +120,7 @@ class AuthServiceTest {
                     .isEqualTo(validLoginRequest);
             assertThat(savedUser.getPassword()).isEqualTo(expectedPassword);
             assertThat(savedUser.getActivationKey()).isNotNull();
+            assertThat(savedUser.getRoles()).isNullOrEmpty();
             assertThat(savedUser)
                     .extracting(UserModel::isEnabled, UserModel::isEmailVerified)
                     .allMatch(value -> isFalse((Boolean) value));
@@ -175,7 +169,7 @@ class AuthServiceTest {
         @DisplayName("doit activer l'utilisateur correspondant à la clé d'activation transmise s'il n'est pas déjà activé")
         void should_activate_corresponding_user() {
             // given
-            final UserModel user = generateRandomUser(List.of(RoleEnum.USER), false);
+            final UserModel user = generateRandomUser(Set.of(RoleEnum.USER), false);
             given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when

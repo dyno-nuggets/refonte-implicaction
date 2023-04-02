@@ -14,7 +14,8 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.community.workexperience.utils.WorkExperienceUris.DELETE_EXPERIENCES_URI;
 import static com.dynonuggets.refonteimplicaction.community.workexperience.utils.WorkExperienceUris.EXPERIENCES_BASE_URI;
@@ -38,7 +39,7 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
     @MockBean
     WorkExperienceService experienceService;
-    ArrayList<String> roles = new ArrayList<>();
+    Set<String> roles = new HashSet<>();
     UserDto user;
 
     @BeforeEach

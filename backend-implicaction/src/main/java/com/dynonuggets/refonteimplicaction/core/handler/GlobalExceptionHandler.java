@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse.from;
-import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.BAD_CREDENTIAL_MESSAGE;
+import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.BAD_CREDENTIALS_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.core.utils.Message.USER_DISABLED_MESSAGE;
 import static org.springframework.http.HttpStatus.*;
@@ -51,10 +51,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(NOT_FOUND).body(from(ex, NOT_FOUND));
     }
 
-    // L'exception en amont n'est pas catchable, on est obligé de récupérer les BadCredentialsException
+    // L'exception en amont n’est pas catchable, on est obligé de récupérer les BadCredentialsException
     @ExceptionHandler(value = BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> badCredentialsException() {
-        return generateResponse(BAD_CREDENTIAL_MESSAGE, UNAUTHORIZED);
+        return generateResponse(BAD_CREDENTIALS_MESSAGE, NOT_FOUND);
     }
 
     @ExceptionHandler(value = DisabledException.class)

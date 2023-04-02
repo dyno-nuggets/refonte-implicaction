@@ -46,7 +46,6 @@ export class AuthService {
         loginRequestPayload
       )
       .pipe(
-        tap(console.log),
         map(loginResponse => {
           this.localStorage.store('authenticationToken', loginResponse.authenticationToken);
           // le localStorage ne peut pas enregistrer d’objet, il faut le serialiser

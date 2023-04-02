@@ -34,6 +34,7 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.GROUP_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.USER_ALREADY_SUBSCRIBED_TO_GROUP;
@@ -79,7 +80,7 @@ class GroupServiceTest {
             final MockMultipartFile mockedImage = new MockMultipartFile("user-file", "test.jpg", "image/jpeg", "test data".getBytes());
             final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
             final FileModel fileModel = FileModel.builder().contentType(mockedImage.getContentType()).url("http://url.com").filename(mockedImage.getOriginalFilename()).build();
-            final UserModel currentUser = generateRandomUser(of(PREMIUM), true);
+            final UserModel currentUser = generateRandomUser(Set.of(PREMIUM), true);
             final String imageUrl = "http://localhost/imapge.png";
             final String username = currentUser.getUsername();
             final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
@@ -111,7 +112,7 @@ class GroupServiceTest {
         void should_create_group_when_no_image_is_submitted() {
             // given
             final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
-            final UserModel currentUser = generateRandomUser(of(PREMIUM), true);
+            final UserModel currentUser = generateRandomUser(Set.of(PREMIUM), true);
             final String username = currentUser.getUsername();
             final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
             final GroupModel expectedGroup = GroupModel.builder().id(12L).name(createGroupRequest.getName()).description(createGroupRequest.getDescription()).creator(profile).createdAt(now()).enabled(false).build();

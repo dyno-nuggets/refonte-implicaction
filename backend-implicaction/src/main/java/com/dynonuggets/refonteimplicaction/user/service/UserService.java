@@ -1,6 +1,8 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
+import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USER_ID_NOT_FOUND;
 
@@ -23,6 +26,7 @@ public class UserService {
     private final ApplicationEventPublisher publisher;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RoleService roleService;
 
     /**
      * @return la liste paginée de tous les utilisateurs
@@ -70,7 +74,11 @@ public class UserService {
     @Transactional
     public void enableUser(final String username) {
         final UserModel user = getUserByUsernameIfExists(username);
+        final Role roleUser = roleService.getRoleByName(USER.getLongName());
+
         user.setEnabled(true);
+        user.getRoles().add(roleUser);
+
         userRepository.save(user);
         publisher.publishEvent(new UserEnabledEvent(this, user.getUsername()));
     }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.BAD_CREDENTIALS_MESSAGE;
 import static org.springframework.http.HttpStatus.*;
 
 @Getter

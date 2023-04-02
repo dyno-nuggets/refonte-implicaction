@@ -13,7 +13,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.community.training.utils.TrainingUris.DELETE_TRAINING_URI;
 import static com.dynonuggets.refonteimplicaction.community.training.utils.TrainingUris.TRAINING_BASE_URI;
@@ -37,7 +38,7 @@ class TrainingControllerTest extends ControllerIntegrationTestBase {
 
     @MockBean
     TrainingService trainingService;
-    ArrayList<String> roles = new ArrayList<>();
+    Set<String> roles = new HashSet<>();
     UserDto user;
 
     @BeforeEach

@@ -10,13 +10,14 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.*;
 import static java.lang.String.format;
-import static java.util.Collections.emptyList;
+import static java.util.Collections.emptySet;
 import static java.util.Optional.ofNullable;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.Matchers.is;
@@ -30,7 +31,7 @@ public class UserTestUtils {
         return generateRandomUserDto(null, false);
     }
 
-    public static UserDto generateRandomUserDto(final List<String> roles, final boolean isActive) {
+    public static UserDto generateRandomUserDto(final Set<String> roles, final boolean isActive) {
         return UserDto.builder()
                 .id((long) generateRandomNumber())
                 .username(randomAlphabetic(10))
@@ -72,16 +73,16 @@ public class UserTestUtils {
         return generateRandomUser(null, generateRandomBoolean());
     }
 
-    public static UserModel generateRandomUser(final List<RoleEnum> roleEnums, final boolean isEnabled) {
+    public static UserModel generateRandomUser(final Set<RoleEnum> roleEnums, final boolean isEnabled) {
         final String firstname = randomAlphabetic(10);
         final String lastname = randomAlphabetic(10);
         final Instant registeredAt = generateRandomInstant();
         final String email = format("%s.%s@mail.com", firstname, lastname);
 
-        final List<Role> roles = ofNullable(roleEnums).orElse(emptyList())
+        final Set<Role> roles = ofNullable(roleEnums).orElse(emptySet())
                 .stream()
                 .map(roleEnum -> Role.builder().name(roleEnum.name()).build())
-                .collect(toList());
+                .collect(toSet());
 
         return UserModel.builder()
                 .id((long) generateRandomNumber())

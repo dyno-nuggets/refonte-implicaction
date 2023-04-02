@@ -1,24 +1,27 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {SignupRequestPayload} from '../../../shared/models/signup-request-payload';
 import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {finalize} from 'rxjs/operators';
+import {finalize, take} from 'rxjs/operators';
 import {AlertService} from '../../../shared/services/alert.service';
 import {Univers} from '../../../shared/enums/univers';
+import {Subscription} from "rxjs";
+import {Alert} from "../../../shared/models/alert";
 
 @Component({
-  selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.scss']
 })
-export class SignupComponent implements OnInit {
+export class SignupComponent implements OnInit, OnDestroy {
 
   signupForm: UntypedFormGroup;
   signupRequestPayload: SignupRequestPayload;
   isError: boolean;
   isLoading = false;
+  alert: Alert;
+
+  private subscription: Subscription;
 
   constructor(
     private authService: AuthService,
@@ -48,16 +51,16 @@ export class SignupComponent implements OnInit {
       firstname: new UntypedFormControl('', Validators.required),
       lastname: new UntypedFormControl('', Validators.required),
     });
+    this.subscription = this.alertService.onAlert()
+      .subscribe(alert => this.alert = alert);
   }
 
   signup(): void {
-
-    if (!this.signupForm.valid || !this.confirmPassword()) {
+    if (this.signupForm.invalid || !this.confirmPassword()) {
       return;
     }
 
     this.isLoading = true;
-
     this.signupRequestPayload.email = this.signupForm.get('email')?.value;
     this.signupRequestPayload.username = this.signupForm.get('username')?.value;
     this.signupRequestPayload.password = this.signupForm.get('password')?.value;
@@ -66,17 +69,15 @@ export class SignupComponent implements OnInit {
 
     this.authService
       .signup(this.signupRequestPayload)
-      .pipe(finalize(() => this.isLoading = false))
-      .subscribe(
-        () => {
-          this.router.navigate(['/auth/login'])
-            .then(() => this.alertService.success('Félicitations', 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.'));
-        },
-        () => this.isError = true
-      );
+      .pipe(finalize(() => this.isLoading = false), take(1))
+      .subscribe(() => this.router.navigate(['/auth/login'], {queryParams: {signupSuccess: true}}));
   }
 
   private confirmPassword(): boolean {
     return this.signupForm.get('password')?.value === this.signupForm.get('repeatPassword')?.value;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

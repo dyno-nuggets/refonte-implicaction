@@ -27,7 +27,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
               // FIXME: pourquoi le back renvoie du string au lieu d'une erreur si le username/email est déjà utilisé lors d'un signup
               const errorMessage = typeof error.error === 'string' ?
                 JSON.parse(error.error).errorMessage : error.error.errorMessage ?? error.message;
-              this.alertService.error('Erreur', errorMessage);
+              this.alertService.error('Erreur', errorMessage, error.status);
             }
           }
         ));

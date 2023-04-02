@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static javax.persistence.CascadeType.ALL;
@@ -71,7 +71,7 @@ public class UserModel {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    private List<Role> roles;
+    private Set<Role> roles;
 
     public boolean isAdmin() {
         return emptyStreamIfNull(roles).anyMatch(role -> RoleEnum.ADMIN.name().equals(role.getName()));
