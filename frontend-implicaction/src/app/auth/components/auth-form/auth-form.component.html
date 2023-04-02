@@ -1,0 +1,22 @@
+<section class="d-flex flex-column justify-content-center align-items-center">
+  <div class="row d-flex justify-content-center wrapper">
+    <div class="text-center align-self-start">
+      <img
+        alt=""
+        class="img-fluid"
+        src="assets/img/hand-shake.png"
+      >
+    </div>
+
+    <div class="align-self-start mt-4">
+      <div class="d-flex align-items-center mb-4 divider">
+        <h1 class="text-center mb-0 px-3">{{title}}</h1>
+      </div>
+
+      <!-- ici sera injecté le formulaire -->
+      <ng-content></ng-content>
+
+      <app-alert [alert]="alert"></app-alert>
+    </div>
+  </div>
+</section>

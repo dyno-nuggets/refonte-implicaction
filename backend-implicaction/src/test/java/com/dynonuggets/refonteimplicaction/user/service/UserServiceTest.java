@@ -1,7 +1,9 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.*;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
@@ -31,7 +34,6 @@ import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USE
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
-import static java.util.List.of;
 import static java.util.Optional.empty;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -52,6 +54,8 @@ class UserServiceTest {
     UserRepository userRepository;
     @Mock
     UserMapper userMapper;
+    @Mock
+    RoleService roleService;
     @InjectMocks
     UserService userService;
 
@@ -61,10 +65,10 @@ class UserServiceTest {
     @BeforeEach
     void setMockOutput() {
         mockedUsers = List.of(
-                generateRandomUser(of(USER), true),
-                generateRandomUser(of(USER, PREMIUM), true),
-                generateRandomUser(of(ADMIN), true),
-                generateRandomUser(of(USER, ADMIN), true)
+                generateRandomUser(Set.of(USER), true),
+                generateRandomUser(Set.of(USER, PREMIUM), true),
+                generateRandomUser(Set.of(ADMIN), true),
+                generateRandomUser(Set.of(USER, ADMIN), true)
         );
         mockedUser = generateRandomUser();
         mockedUserDto = generateRandomUserDto();
@@ -181,10 +185,12 @@ class UserServiceTest {
         @DisplayName("doit activer l'utilisateur et un évènement doit être publié")
         void should_enable_user_and_send_envent() {
             // given
-            final UserModel expectedUser = generateRandomUser(of(USER), false);
+            final UserModel expectedUser = generateRandomUser(Set.of(USER), false);
             final String username = expectedUser.getUsername();
+            final Role roleUser = Role.builder().name(USER.getLongName()).build();
             given(userRepository.findByUsername(username)).willReturn(Optional.of(expectedUser));
             given(userRepository.save(expectedUser)).willReturn(expectedUser);
+            given(roleService.getRoleByName(USER.getLongName())).willReturn(roleUser);
 
             // when
             userService.enableUser(username);
@@ -194,13 +200,14 @@ class UserServiceTest {
             verify(publisher, times(1)).publishEvent(any(UserEnabledEvent.class));
             final UserModel actualUser = argumentCaptor.getValue();
             assertThat(actualUser.isEnabled()).isTrue();
+            assertThat(actualUser.getRoles()).contains(roleUser);
         }
 
         @Test
         @DisplayName("doit lancer une exception quand l'utilisateur n'existe pas et aucun évènement ne doit être publié")
         void should_throw_exception_and_no_event_should_be_published() {
             // given
-            final UserModel expectedUser = generateRandomUser(of(USER), false);
+            final UserModel expectedUser = generateRandomUser(Set.of(USER), false);
             final String username = expectedUser.getUsername();
             given(userRepository.findByUsername(username)).willReturn(Optional.empty());
 

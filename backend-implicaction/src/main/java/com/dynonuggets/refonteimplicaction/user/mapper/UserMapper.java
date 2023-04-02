@@ -7,10 +7,10 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import java.util.List;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 @Mapper
 public interface UserMapper {
@@ -24,9 +24,9 @@ public interface UserMapper {
     @Mapping(target = "roles", expression = "java(rolesToRoleNames(model.getRoles()))")
     UserDto toDtoLight(final UserModel model);
 
-    default List<String> rolesToRoleNames(final List<Role> roles) {
+    default Set<String> rolesToRoleNames(final Set<Role> roles) {
         return emptyStreamIfNull(roles)
                 .map(Role::getName)
-                .collect(toList());
+                .collect(toSet());
     }
 }

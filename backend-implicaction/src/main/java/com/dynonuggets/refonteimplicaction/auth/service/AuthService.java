@@ -6,11 +6,9 @@ import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
 import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
@@ -40,9 +38,7 @@ import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
-import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
 import static java.time.Instant.now;
-import static java.util.List.of;
 import static java.util.stream.Collectors.toList;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
@@ -58,7 +54,6 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
     private final UserMapper userMapper;
     private final NotificationService notificationService;
-    private final RoleService roleService;
     private final EmailValidationNotificationMapper emailValidationNotificationMapper;
 
     /**
@@ -157,7 +152,6 @@ public class AuthService {
     }
 
     private UserModel registerUser(final RegisterRequest registerRequest, final String activationKey) {
-        final Role roleUser = roleService.getRoleByName(USER.getLongName());
         final UserModel user = UserModel.builder()
                 .username(registerRequest.getUsername())
                 .firstname(registerRequest.getFirstname())
@@ -169,7 +163,6 @@ public class AuthService {
                 .emailVerified(false)
                 .activationKey(activationKey)
                 .registeredAt(now())
-                .roles(of(roleUser))
                 .build();
         userRepository.save(user);
 

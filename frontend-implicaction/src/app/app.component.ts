@@ -3,6 +3,8 @@ import {SidebarService} from './shared/services/sidebar.service';
 import {SidebarContentComponent, SidebarProps} from './shared/models/sidebar-props';
 import {SidebarContentDirective} from './shared/directives/sidebar-content.directive';
 import {Subscription} from 'rxjs';
+import {AuthService} from "./shared/services/auth.service";
+import {User} from "./shared/models/user";
 
 @Component({
   selector: 'app-root',
@@ -10,28 +12,36 @@ import {Subscription} from 'rxjs';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  sidebarProps: SidebarProps<unknown>;
   @ViewChild(SidebarContentDirective, {static: true})
-  sidebarContent: SidebarContentDirective;
-  private sidebarSubject: Subscription;
+  private subscription: Subscription;
   @HostBinding('style.--sidebar-content-width')
   private sidebarContentWidth: string;
 
+  sidebarProps: SidebarProps<unknown>;
+  sidebarContent: SidebarContentDirective;
+  currentUser: User;
+
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
+    private authService: AuthService,
     public sidebarService: SidebarService
   ) {
   }
 
   ngOnInit(): void {
-    this.sidebarSubject = this.sidebarService
+    this.subscription = this.sidebarService
       .getContent()
       .subscribe(content => this.loadComponent(content))
-    ;
+      .add(
+        this.authService
+          .currentUser$
+          .subscribe(currentUser => this.currentUser = currentUser)
+      );
+    this.currentUser = this.authService.getCurrentUser()
   }
 
   ngOnDestroy(): void {
-    this.sidebarSubject?.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 
   private loadComponent(content: SidebarProps<unknown>): void {

@@ -1,15 +1,6 @@
 <div class="card col row flex-column px-0 py-2 mx-0 my-0 card-job">
   <div class="card-header col row align-items-center justify-content-between">
-    <div class="col-2 d-sm-none d-md-block p-0 company-logo">
-      <img
-        #companyLogo
-        alt=""
-        class="icon"
-        (error)="companyLogo.src = constant.COMPANY_IMAGE_DEFAULT_URI"
-        [src]="job.company?.logo || constant.COMPANY_IMAGE_DEFAULT_URI"
-      >
-    </div>
-    <div class="col-auto text-center text-sm-end text-md-center p-0 overflow-ellipsis">{{job.company?.name}}</div>
+    <div class="col-auto flex-grow-1 text-start overflow-ellipsis">{{job.company?.name}}</div>
 
     <div class="col-2 d-flex justify-content-end p-0">
       <app-contract-type [type]="job.contractType"></app-contract-type>

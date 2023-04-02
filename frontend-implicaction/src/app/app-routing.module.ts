@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './core/guards/auth.guard.service';
-import {UnauthorizedComponent} from './auth/components/unauthorized/unauthorized.component';
+import {UnauthorizedComponent} from './auth/pages/unauthorized/unauthorized.component';
 import {Univers} from './shared/enums/univers';
 import {BoardComponent} from './board/board.component';
 import {CompanyAreaComponent} from "./company-area/company-area.component";
