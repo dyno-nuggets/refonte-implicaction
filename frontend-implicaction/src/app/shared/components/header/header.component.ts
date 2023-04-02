@@ -33,6 +33,10 @@ export class HeaderComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.isLoggedIn = !!this.currentUser;
     this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
+    // si l'utilisateur est identifié, on ne souhaite pas afficher l'espace entreprise dans le menu
+    if (this.isLoggedIn) {
+      this.allowedUnivers = this.allowedUnivers.filter(u => u != Univers.COMPANY_AREA);
+    }
     this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
   }
 

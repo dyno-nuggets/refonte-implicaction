@@ -4,10 +4,6 @@
 
 $sidebar-content-width: var(--sidebar-content-width, 1800px);
 
-main.container {
-  height: 100vh;
-}
-
 :host ::ng-deep {
   .p-sidebar-right {
     width: $sidebar-content-width;
