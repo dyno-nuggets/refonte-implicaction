@@ -1,9 +1,5 @@
 @import "src/assets/variables";
 
-header {
-  background-color: white;
-}
-
 .btn-login, .btn-sign-up, .btn-logout {
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -30,4 +26,10 @@ header {
 
 .navbar-toggler:focus {
   box-shadow: none;
+}
+
+@media screen and (max-width: 300px) {
+  .nav-inner-container {
+    flex-direction: column !important;
+  }
 }
