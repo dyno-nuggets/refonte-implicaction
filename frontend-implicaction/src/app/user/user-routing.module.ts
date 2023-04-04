@@ -25,5 +25,5 @@ const routes: Routes = [
   declarations: [],
   imports: [RouterModule.forChild(routes)],
 })
-export class CommunityRoutingModule {
+export class UserRoutingModule {
 }

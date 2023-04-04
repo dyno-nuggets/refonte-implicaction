@@ -1,4 +1,5 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
+import {Profile} from "../../../models/profile";
 
 @Component({
   selector: 'app-edit-profile-tab',
@@ -7,5 +8,7 @@ import {ChangeDetectionStrategy, Component} from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditProfileTabComponent {
+
+  @Input() profile!: Profile;
 
 }

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CommunityRoutingModule} from "./community-routing.module";
+import {UserRoutingModule} from "./user-routing.module";
 import {UserCardComponent} from "./components/user-card/user-card.component";
 import {RelationListComponent} from "./pages/relation-list/relation-list.component";
 import {PaginatorModule} from "primeng/paginator";
@@ -15,12 +15,12 @@ import {SharedModule} from "../shared/shared.module";
   ],
   imports: [
     CommonModule,
-    CommunityRoutingModule,
+    UserRoutingModule,
     PaginatorModule,
     RouterLinkActive,
     RouterLinkWithHref,
     SharedModule,
   ]
 })
-export class CommunityModule {
+export class UserModule {
 }
