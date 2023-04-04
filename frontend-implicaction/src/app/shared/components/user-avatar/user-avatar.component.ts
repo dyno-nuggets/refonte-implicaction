@@ -13,7 +13,7 @@ export class UserAvatarComponent {
 
   @Input() shape: 'rounded' | 'rounded-circle' = 'rounded';
 
-  @Input() size: 'xs' | 'small' | 'medium' | 'large' | 'xlarge' | 'xxlarge' = 'medium';
+  @Input() size: 'xs' | 'small' | 'medium' | 'large' | 'xlarge' = 'medium';
 
   @Input() shadow = false;
 

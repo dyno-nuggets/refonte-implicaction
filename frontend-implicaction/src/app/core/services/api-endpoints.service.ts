@@ -7,7 +7,7 @@ import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/Criteria';
 import {Profile} from "../../profile/models/profile";
-import {Relation} from "../../community/models/relation";
+import {Relation} from "../../user/models/relation";
 import {Response} from "../../forum/model/response";
 import {GetCategoriesOptions} from '../../forum/services/category.service';
 

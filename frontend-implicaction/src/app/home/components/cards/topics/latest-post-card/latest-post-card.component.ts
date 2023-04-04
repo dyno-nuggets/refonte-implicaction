@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Univers} from '../../../../shared/enums/univers';
-import {Constants} from '../../../../config/constants';
-import {Topic} from "../../../../forum/model/topic";
+import {Univers} from '../../../../../shared/enums/univers';
+import {Constants} from '../../../../../config/constants';
+import {Topic} from "../../../../../forum/model/topic";
 
 
 @Component({

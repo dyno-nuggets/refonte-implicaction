@@ -27,41 +27,104 @@
             <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
 
               <li class="nav-item" role="presentation">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="true" role="tab">Profil</button>
+                <button
+                  class="nav-link"
+                  data-bs-toggle="tab"
+                  data-bs-target="#profile-overview"
+                  role="tab"
+                  (click)="selectTab(tabEnum.PROFILE)"
+                  [attr.aria-selected]="activeTab === tabEnum.PROFILE"
+                  [tabIndex]="activeTab === tabEnum.PROFILE ? 1 : -1"
+                  [ngClass]="{'show active': activeTab === tabEnum.PROFILE}"
+                >
+                  Profil
+                </button>
               </li>
 
               <ng-container *appDisplayIfCurrentUser="profile.username">
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" aria-selected="false" tabindex="-1" role="tab">Editer le Profil</button>
+                  <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#profile-edit"
+                    role="tab"
+                    (click)="selectTab(tabEnum.EDIT_PROFILE)"
+                    [attr.aria-selected]="activeTab === tabEnum.EDIT_PROFILE"
+                    [ngClass]="{'active': activeTab === tabEnum.EDIT_PROFILE}"
+                    [tabIndex]="activeTab === tabEnum.EDIT_PROFILE ? 1 : -1"
+                  >
+                    Editer le Profil
+                  </button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings" aria-selected="false" tabindex="-1" role="tab">Réglages</button>
+                  <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#profile-settings"
+                    role="tab"
+                    (click)="selectTab(tabEnum.SETTINGS)"
+                    [attr.aria-selected]="activeTab === tabEnum.SETTINGS"
+                    [ngClass]="{'active': activeTab === tabEnum.SETTINGS}"
+                    [tabIndex]="activeTab === tabEnum.SETTINGS ? 1 : -1"
+                  >
+                    Réglages
+                  </button>
                 </li>
 
                 <li class="nav-item" role="presentation">
-                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" aria-selected="false" tabindex="-1" role="tab">Modifier le mot de passe
+                  <button
+                    class="nav-link"
+                    data-bs-toggle="tab"
+                    data-bs-target="#profile-change-password"
+                    role="tab"
+                    (click)="selectTab(tabEnum.PASSWORD)"
+                    [attr.aria-selected]="activeTab === tabEnum.PASSWORD"
+                    [ngClass]="{'active': activeTab === tabEnum.PASSWORD}"
+                    [tabIndex]="activeTab === tabEnum.PASSWORD ? 1 : -1"
+                  >
+                    Modifier le mot de passe
                   </button>
                 </li>
               </ng-container>
 
             </ul>
-            <div class="tab-content pt-2">
+            <div class="tab-content pt-3">
 
-              <div class="tab-pane fade show active profile-overview" id="profile-overview" role="tabpanel">
+              <div
+                role="tabpanel"
+                id="profile-overview"
+                class="tab-pane fade profile-overview"
+                [ngClass]="{'show active': activeTab === tabEnum.PROFILE}"
+              >
                 <app-profile-overview-tab [profile]="profile"></app-profile-overview-tab>
               </div>
 
               <ng-container *appDisplayIfCurrentUser="profile.username">
-                <div class="tab-pane fade profile-edit pt-3" id="profile-edit" role="tabpanel">
-                  <app-edit-profile-tab></app-edit-profile-tab>
+                <div
+                  role="tabpanel"
+                  id="profile-edit"
+                  class="tab-pane fade profile-edit pt-3"
+                  [ngClass]="{'show active': activeTab === tabEnum.EDIT_PROFILE}"
+                >
+                  <app-edit-profile-tab [profile]="profile"></app-edit-profile-tab>
                 </div>
 
-                <div class="tab-pane fade pt-3" id="profile-settings" role="tabpanel">
+                <div
+                  role="tabpanel"
+                  id="profile-settings"
+                  class="tab-pane fade pt-3"
+                  [ngClass]="{'show active': activeTab === tabEnum.SETTINGS}"
+                >
                   <app-edit-settings-tab></app-edit-settings-tab>
                 </div>
 
-                <div class="tab-pane fade pt-3" id="profile-change-password" role="tabpanel">
+                <div
+                  role="tabpanel"
+                  id="profile-change-password"
+                  class="tab-pane fade pt-3"
+                  [ngClass]="{'show active': activeTab === tabEnum.PASSWORD}"
+                >
                   <app-change-password-tab></app-change-password-tab>
                 </div>
               </ng-container>

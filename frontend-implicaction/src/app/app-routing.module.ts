@@ -33,7 +33,7 @@ const routes: Routes = [
   },
   {
     path: Univers.COMMUNITY.url,
-    loadChildren: () => import('./community/community.module').then(m => m.CommunityModule),
+    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
     canActivate: [AuthGuard],
     data: {
       allowedRoles: Univers.COMMUNITY.roles

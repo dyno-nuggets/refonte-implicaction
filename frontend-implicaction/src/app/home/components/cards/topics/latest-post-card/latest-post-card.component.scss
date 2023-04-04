@@ -19,6 +19,10 @@ a {
     .card-title {
       padding: 0 !important;
       margin: 0 0 15px !important;
+
+      &.topic-title {
+        height: 48px;
+      }
     }
   }
 
