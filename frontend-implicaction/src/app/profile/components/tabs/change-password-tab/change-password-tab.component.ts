@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'app-change-password-tab',
@@ -6,12 +6,5 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./change-password-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ChangePasswordTabComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+export class ChangePasswordTabComponent {
 }

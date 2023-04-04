@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'app-edit-settings-tab',
@@ -6,12 +6,5 @@ import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
   styleUrls: ['./edit-settings-tab.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditSettingsTabComponent implements OnInit {
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
-
+export class EditSettingsTabComponent {
 }
