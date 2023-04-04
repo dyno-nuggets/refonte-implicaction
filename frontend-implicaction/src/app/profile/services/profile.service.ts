@@ -5,7 +5,7 @@ import {HttpClient} from "@angular/common/http";
 import {ApiHttpService} from "../../core/services/api-http.service";
 import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
 import {Profile} from "../models/profile";
-import {Pageable} from "../../shared/models/pageable";
+import {User} from "../../shared/models/user";
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +28,7 @@ export class ProfileService {
     return this.http.put<Profile>(this.apiEndpointsService.updateProfileEndpoint(), updateRequest);
   }
 
-  getAllProfiles(pageable: Pageable<any>): Observable<Pageable<Profile>> {
-    return this.http.get<Pageable<Profile>>(this.apiEndpointsService.getAllProfilesEndpoint(pageable));
+  updateUserImage(username: string, formData: FormData): Observable<User> {
+    return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(username), formData);
   }
 }

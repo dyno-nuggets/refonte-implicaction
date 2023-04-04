@@ -1,12 +1,12 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {UserProfileComponent} from './pages/user-profile/user-profile.component';
+import {UserProfilePageComponent} from "./pages/user-profile-page/user-profile-page.component";
 
 
 const routes: Routes = [
   {
-    path: ':userId',
-    component: UserProfileComponent
+    path: ':username',
+    component: UserProfilePageComponent
   }
 ];
 

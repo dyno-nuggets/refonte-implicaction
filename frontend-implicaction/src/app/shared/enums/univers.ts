@@ -4,7 +4,7 @@ export class Univers {
   // l'ordre de déclaration de ces variables correspond à l'ordre d'affichage dans le menu
   static readonly HOME = new Univers('Accueil', '', true);
   static readonly COMPANY_AREA = new Univers('Espace entreprise', 'entreprise', true);
-  static readonly PROFILE = new Univers('Profil', 'profiles', false, [RoleEnumCode.USER]);
+  static readonly PROFILE = new Univers('Profil', 'community/profiles', false, [RoleEnumCode.USER]);
   static readonly COMMUNITY = new Univers('Communauté', 'community', true, [RoleEnumCode.USER]);
   static readonly FORUM = new Univers('Forum', 'forums', true, [RoleEnumCode.USER]);
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', true, [RoleEnumCode.USER]);
@@ -31,8 +31,9 @@ export class Univers {
     return Univers.all().find(univers => rootUrl.startsWith(univers.url));
   }
 
-  static getAllowedUnivers(roles: RoleEnumCode[] = []): Univers[] {
+  static getAllowedUniversForMenu(roles: RoleEnumCode[] = []): Univers[] {
     return Univers.all()
+      .filter(u => u !== Univers.PROFILE)
       .filter(univers => !univers.roles || univers.roles.filter(roleAllowed => roles.includes(roleAllowed)).length > 0);
   }
 }

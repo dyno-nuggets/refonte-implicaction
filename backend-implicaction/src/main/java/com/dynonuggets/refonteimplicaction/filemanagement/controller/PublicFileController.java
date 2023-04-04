@@ -10,14 +10,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 
-import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.FILE_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.GET_FILE_BY_KEY;
+import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.PUBLIC_FILE_BASE_URI;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 @Controller
-@RequestMapping(FILE_BASE_URI)
+@RequestMapping(PUBLIC_FILE_BASE_URI)
 @AllArgsConstructor
-public class FileController {
+public class PublicFileController {
 
     private final CloudService cloudService;
 

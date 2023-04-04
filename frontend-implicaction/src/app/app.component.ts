@@ -12,14 +12,16 @@ import {User} from "./shared/models/user";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+
   @ViewChild(SidebarContentDirective, {static: true})
-  private subscription: Subscription;
-  @HostBinding('style.--sidebar-content-width')
-  private sidebarContentWidth: string;
+  sidebarContent: SidebarContentDirective;
 
   sidebarProps: SidebarProps<unknown>;
-  sidebarContent: SidebarContentDirective;
   currentUser: User;
+
+  @HostBinding('style.--sidebar-content-width')
+  private sidebarContentWidth: string;
+  private subscription: Subscription;
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
@@ -40,10 +42,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.currentUser = this.authService.getCurrentUser()
   }
 
-  ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
-  }
-
   private loadComponent(content: SidebarProps<unknown>): void {
     if (!content) {
       return;
@@ -58,5 +56,9 @@ export class AppComponent implements OnInit, OnDestroy {
     // instanciation dynamique du contenu de la sidebar
     const componentRef = viewContainerRef.createComponent<SidebarContentComponent<unknown>>(componentFactory);
     componentRef.instance.sidebarInput = content.input;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

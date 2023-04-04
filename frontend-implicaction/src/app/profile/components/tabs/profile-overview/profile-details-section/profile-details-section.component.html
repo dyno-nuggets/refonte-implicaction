@@ -1,0 +1,19 @@
+<app-user-info
+  key="Nom complet"
+  value="{{profile.firstname}} {{profile.lastname}}"
+></app-user-info>
+
+<app-user-info
+  [key]="'Téléphone'"
+  [value]="profile.phoneNumber"
+></app-user-info>
+
+<app-user-info
+  [key]="'Email'"
+  [value]="profile.email"
+></app-user-info>
+
+<app-user-info
+  [key]="'Date de naissance'"
+  value="{{profile.birthday | date: 'dd / MM / yyyy'}}"
+></app-user-info>

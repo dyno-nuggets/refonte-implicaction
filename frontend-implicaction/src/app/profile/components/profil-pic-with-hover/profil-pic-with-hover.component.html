@@ -1,0 +1,23 @@
+<label class="hoverable" for="fileInput">
+  <div class="profilepic shadow-sm">
+    <img
+      #image
+      alt=""
+      class="profilepic__image"
+      (error)="image.src = USER_IMAGE_DEFAULT_URI"
+      [src]="profile.imageUrl"
+
+    >
+    <div class="profilepic__content">
+      <span class="profilepic__icon"><i class="fas fa-camera"></i></span>
+      <span class="profilepic__text">Changer l'image</span>
+    </div>
+  </div>
+</label>
+<br>
+<input
+  (change)="onFileChange($event)"
+  accept=".jpg, .png, .jpeg"
+  id="fileInput"
+  type="file"
+>

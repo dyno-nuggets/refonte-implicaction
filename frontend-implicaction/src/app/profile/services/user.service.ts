@@ -28,10 +28,6 @@ export class UserService {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
 
-  updateUserImage(username: string, formData: FormData): Observable<User> {
-    return this.http.post<User>(this.apiEndpointsService.updateImageProfileEndpoint(username), formData);
-  }
-
   getUserGroups(userId: string): Observable<Group[]> {
     return this.http.get<Group[]>(this.apiEndpointsService.getAllGroupsByMemberUsername(userId));
   }

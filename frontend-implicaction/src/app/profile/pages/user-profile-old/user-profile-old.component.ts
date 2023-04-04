@@ -9,11 +9,11 @@ import {Profile} from "../../models/profile";
 import {ProfileService} from "../../services/profile.service";
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.scss']
+  selector: 'app-user-profile-old',
+  templateUrl: './user-profile-old.component.html',
+  styleUrls: ['./user-profile-old.component.scss']
 })
-export class UserProfileComponent implements OnInit, OnDestroy {
+export class UserProfileOldComponent implements OnInit, OnDestroy {
 
   profile: Profile;
   canEdit = false;

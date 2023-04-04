@@ -33,3 +33,23 @@
     flex-direction: column !important;
   }
 }
+
+@media screen and (max-width: 445px) {
+  .nav-inner-container {
+    flex-direction: column !important;
+
+    button {
+      position: absolute;
+      top: 25px;
+      right: 10px;
+    }
+  }
+
+  .registration-options {
+    button {
+      position: absolute;
+      top: 25px;
+      right: 10px;
+    }
+  }
+}

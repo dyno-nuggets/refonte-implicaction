@@ -1,0 +1,76 @@
+<ng-container *ngIf="profile$ | async as profile">
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-3">
+
+        <div class="card">
+          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+
+            <app-user-avatar
+              size="xlarge"
+              shape="rounded-circle"
+              [profile]="profile"
+            ></app-user-avatar>
+
+            <h2>{{profile.firstname}} {{profile.lastname}}</h2>
+            <h3>@{{profile.username}}</h3>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-9">
+
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
+
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview" aria-selected="true" role="tab">Profil</button>
+              </li>
+
+              <ng-container *appDisplayIfCurrentUser="profile.username">
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit" aria-selected="false" tabindex="-1" role="tab">Editer le Profil</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-settings" aria-selected="false" tabindex="-1" role="tab">Réglages</button>
+                </li>
+
+                <li class="nav-item" role="presentation">
+                  <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password" aria-selected="false" tabindex="-1" role="tab">Modifier le mot de passe
+                  </button>
+                </li>
+              </ng-container>
+
+            </ul>
+            <div class="tab-content pt-2">
+
+              <div class="tab-pane fade show active profile-overview" id="profile-overview" role="tabpanel">
+                <app-profile-overview-tab [profile]="profile"></app-profile-overview-tab>
+              </div>
+
+              <ng-container *appDisplayIfCurrentUser="profile.username">
+                <div class="tab-pane fade profile-edit pt-3" id="profile-edit" role="tabpanel">
+                  <app-edit-profile-tab></app-edit-profile-tab>
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-settings" role="tabpanel">
+                  <app-edit-settings-tab></app-edit-settings-tab>
+                </div>
+
+                <div class="tab-pane fade pt-3" id="profile-change-password" role="tabpanel">
+                  <app-change-password-tab></app-change-password-tab>
+                </div>
+              </ng-container>
+            </div><!-- End Bordered Tabs -->
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</ng-container>

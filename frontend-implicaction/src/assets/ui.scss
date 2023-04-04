@@ -1,3 +1,29 @@
+@import "src/assets/variables";
+
+.card {
+  margin-bottom: 30px !important;
+  border: none !important;
+  border-radius: 5px !important;
+  box-shadow: 0 0 30px rgba(1, 41, 112, 0.1) !important;
+
+  .card-title {
+    color: $primary !important;
+    padding: 20px 0 0 !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+  }
+}
+
+
+.nav-link {
+  border: 0 !important;
+
+  &.active {
+    color: $primary !important;
+    font-weight: 500;
+  }
+}
+
 .btn.btn-outline-primary {
   padding-left: 25px !important;
   padding-right: 25px !important;
