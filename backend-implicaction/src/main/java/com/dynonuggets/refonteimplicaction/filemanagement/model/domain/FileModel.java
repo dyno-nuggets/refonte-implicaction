@@ -24,4 +24,7 @@ public class FileModel {
     private String contentType;
 
     private String objectKey;
+
+    @Builder.Default
+    private Boolean publicAccess = false;
 }

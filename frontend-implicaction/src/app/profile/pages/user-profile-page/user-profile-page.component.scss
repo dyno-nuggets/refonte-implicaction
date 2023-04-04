@@ -1,0 +1,28 @@
+@import "src/assets/variables";
+
+.profile {
+  .profile-card {
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 10px 0 0 0;
+    }
+
+    h3 {
+      font-size: 1.125rem;
+    }
+  }
+
+  ul.nav-tabs-bordered {
+    border-bottom: 2px solid #ebeef4 !important;
+  }
+}
+
+.nav-link {
+  border: 0 !important;
+
+  &.active {
+    border-bottom: 2px solid $primary !important;
+    background-color: white;
+  }
+}

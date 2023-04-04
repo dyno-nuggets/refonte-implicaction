@@ -12,10 +12,13 @@ a {
   height: 115px;
 
   .card-body {
-    padding: 12px;
-
     .avatar {
       width: 48px;
+    }
+
+    .card-title {
+      padding: 0 !important;
+      margin: 0 0 15px !important;
     }
   }
 

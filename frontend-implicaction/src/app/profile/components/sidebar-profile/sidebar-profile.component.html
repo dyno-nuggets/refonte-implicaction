@@ -12,41 +12,35 @@
         </i-feather>
         <ng-template #rollbackAndSaveIcon>
           <i-feather
-            (click)="toggleModeEdition()"
-            class="cursor-pointer danger-on-hover me-2"
             name="rotate-ccw"
+            class="cursor-pointer danger-on-hover me-2"
+            (click)="toggleModeEdition()"
           >
           </i-feather>
           <i-feather
-            (click)="updatePersonalInfo()"
-            class="cursor-pointer success-on-hover"
             name="save"
+            class="cursor-pointer success-on-hover"
+            (click)="updatePersonalInfo()"
           >
           </i-feather>
         </ng-template>
       </ng-container>
     </div>
-    <label [ngClass]="{'hoverable': isEditing}" for="fileInput">
-      <img
-        #userImage
-        (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
-        [src]="profile.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
-        alt="photo de {{profile.firstname}}"
-        class="rounded-circle shadow-sm"
-      >
-      <ng-container *ngIf="isEditing">
-        <div class="hover-text">Modifier</div>
-        <div class="background"></div>
+
+    <div class="img-container">
+      <ng-container *ngIf="readOnly; else userImageFileChooser">
+        <app-user-avatar
+          [profile]="profile"
+          [shadow]="true"
+          size="xlarge"
+          shape="rounded-circle"
+          class="m-0"
+        ></app-user-avatar>
       </ng-container>
-    </label>
-    <br>
-    <input
-      (change)="onFileChange($event)"
-      *ngIf="isEditing"
-      accept=".jpg, .png, .jpeg"
-      id="fileInput"
-      type="file"
-    >
+      <ng-template #userImageFileChooser>
+        <app-profil-pic-with-hover [profile]="profile"></app-profil-pic-with-hover>
+      </ng-template>
+    </div>
   </div>
 
   <div class="card-body mt-5 px-5">

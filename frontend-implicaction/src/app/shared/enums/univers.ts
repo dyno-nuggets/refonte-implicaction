@@ -1,10 +1,10 @@
 import {RoleEnumCode} from './role.enum';
 
 export class Univers {
-  // l'ordre de déclaration de ces variables correspond à l'ordre d'affichage dans le menu
+  // l'ordre de déclaration de ces variables correspond à l’ordre d’affichage dans le menu
   static readonly HOME = new Univers('Accueil', '', true);
   static readonly COMPANY_AREA = new Univers('Espace entreprise', 'entreprise', true);
-  static readonly PROFILE = new Univers('Profil', 'profiles', false, [RoleEnumCode.USER]);
+  static readonly PROFILE = new Univers('Profil', 'community/profiles', false, [RoleEnumCode.USER]);
   static readonly COMMUNITY = new Univers('Communauté', 'community', true, [RoleEnumCode.USER]);
   static readonly FORUM = new Univers('Forum', 'forums', true, [RoleEnumCode.USER]);
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', true, [RoleEnumCode.USER]);
@@ -24,15 +24,15 @@ export class Univers {
   }
 
   /**
-   * Récupère l'Univers correspondant à l'url en paramètres
+   * Récupère l’Univers correspondant à l’url en paramètres
    */
   static fromUrl(url: string): Univers {
-    const rootUrl = url.split('/', 2)[1]; // récupère la racine de l'url (ex: users si /users/1)
+    const rootUrl = url.split('/', 2)[1]; // récupère la racine de l’url (ex : users si /users/1)
     return Univers.all().find(univers => rootUrl.startsWith(univers.url));
   }
 
-  static getAllowedUnivers(roles: RoleEnumCode[] = []): Univers[] {
+  static getMenuItems(roles: RoleEnumCode[] = []): Univers[] {
     return Univers.all()
-      .filter(univers => !univers.roles || univers.roles.filter(roleAllowed => roles.includes(roleAllowed)).length > 0);
+      .filter(u => u !== Univers.PROFILE && !u.roles || u.roles.filter(roleAllowed => roles.includes(roleAllowed)).length > 0);
   }
 }

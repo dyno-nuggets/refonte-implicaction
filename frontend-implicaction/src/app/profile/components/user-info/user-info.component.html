@@ -1,10 +1,6 @@
 <div>
-  <ng-container *ngIf="value; else emptyInfo">
-    <span class="align-middle">
-      {{value}}
-    </span>
-  </ng-container>
-  <ng-template #emptyInfo>
-    <span class="fst-italic">Non renseigné.</span>
-  </ng-template>
+  <div class="row">
+    <div class="col-lg-3 col-md-4 label">{{key}}</div>
+    <div class="col-lg-9 col-md-8">{{value}}</div>
+  </div>
 </div>

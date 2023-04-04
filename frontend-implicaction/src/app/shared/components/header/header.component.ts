@@ -15,8 +15,7 @@ import {Constants} from '../../../config/constants';
 })
 export class HeaderComponent implements OnChanges {
 
-  @Input()
-  currentUser: User;
+  @Input() currentUser: User;
   isLoggedIn: boolean;
   allowedUnivers: Univers[] = [];
   isAdmin = false;
@@ -32,8 +31,9 @@ export class HeaderComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     this.isLoggedIn = !!this.currentUser;
-    this.allowedUnivers = Univers.getAllowedUnivers(this.currentUser?.roles);
-    // si l'utilisateur est identifié, on ne souhaite pas afficher l'espace entreprise dans le menu
+    console.log(this.currentUser);
+    this.allowedUnivers = Univers.getMenuItems(this.currentUser?.roles);
+    // si l’utilisateur est identifié, on ne souhaite pas afficher l’espace entreprise dans le menu
     if (this.isLoggedIn) {
       this.allowedUnivers = this.allowedUnivers.filter(u => u != Univers.COMPANY_AREA);
     }

@@ -1,0 +1,20 @@
+<app-profile-block *ngIf="profile.presentation && profile.presentation.length" title="En quelques mots">
+  <app-profile-about-section [content]="profile.presentation"></app-profile-about-section>
+</app-profile-block>
+
+<app-profile-block title="Détails du profil">
+  <app-profile-details-section [profile]="profile"></app-profile-details-section>
+</app-profile-block>
+
+<app-profile-block title="Présentation">
+  <app-profile-presentation-section [profile]="profile"></app-profile-presentation-section>
+</app-profile-block>
+
+<app-profile-block title="Expériences professionnelles">
+  <app-profile-dated-items-section [inputs]="profile.experiences"></app-profile-dated-items-section>
+</app-profile-block>
+
+<app-profile-block title="Formation">
+  <app-profile-dated-items-section [inputs]="profile.trainings"></app-profile-dated-items-section>
+</app-profile-block>
+

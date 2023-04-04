@@ -1,18 +1,18 @@
 <div class="row">
-  <div class="card card-menu col-12 col-md-4 col-xl-3 border-0 mb-2 bg-transparent">
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item p-0">
+  <div class="col-md-3">
+    <div class="card mb-4">
+      <div class="list-group list-group-flush">
         <a
           *ngFor="let menuItem of menuItems"
-          [routerLinkActiveOptions]="{exact: true}"
           class="list-group-item list-group-item-action"
+          [routerLinkActive]="'active'"
           [routerLink]=menuItem.routerLink
-          routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact: true}"
         >
           {{menuItem.label}}
         </a>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 
   <div

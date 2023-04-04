@@ -51,9 +51,21 @@ body {
   color: $light-gray;
 }
 
+header, footer {
+  border: 0;
+  box-shadow: 0 2px 20px rgba(1, 41, 112, 0.1);
+}
+
 button .icon {
   width: 18px;
   height: 18px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 0;
+  margin-bottom: .5rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 h1 {
@@ -155,4 +167,9 @@ input:focus::placeholder {
 
 .p-treeselect {
   width: 100% !important;
+}
+
+.label {
+  font-weight: 600;
+  color: $primary;
 }

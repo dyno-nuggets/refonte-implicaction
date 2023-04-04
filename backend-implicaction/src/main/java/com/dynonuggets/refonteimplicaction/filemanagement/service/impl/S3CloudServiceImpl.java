@@ -84,7 +84,7 @@ public class S3CloudServiceImpl implements CloudService {
 
     @Override
     public byte[] getFileAsBytes(final String objectKey) throws IOException {
-        final FileModel fileModel = fileRepository.findByObjectKey(objectKey)
+        final FileModel fileModel = fileRepository.findByObjectKeyAndPublicAccessIsTrue(objectKey)
                 .orElseThrow(() -> new NotFoundException(format(FILE_NOT_FOUND_MESSAGE, objectKey)));
 
         final S3Object s3Object = client.getObject(new GetObjectRequest(bucketName, fileModel.getObjectKey()));

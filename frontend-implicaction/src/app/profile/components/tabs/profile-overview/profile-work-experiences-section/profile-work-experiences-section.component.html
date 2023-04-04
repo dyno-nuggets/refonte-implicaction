@@ -1,0 +1,18 @@
+<ng-container *ngIf="inputsCopy.length; else emptyTemplate">
+  <ng-container *ngFor="let item of inputsCopy">
+    <div>
+      <div class="row">
+        <div class="col-lg-3 col-md-4 label">Période</div>
+        <div class="col-lg-9 col-md-8">{{item.date | date: 'dd / MM / YYYY'}}</div>
+      </div>
+    </div>
+    <app-user-info
+      [key]="'Descriptif'"
+      [value]="item.label"
+    ></app-user-info>
+  </ng-container>
+</ng-container>
+
+<ng-template #emptyTemplate>
+  <p>Aucune information</p>
+</ng-template>

@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.FILE_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.GET_FILE_BY_KEY;
+import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.PUBLIC_FILE_BASE_URI;
 
 
 @Service
@@ -29,7 +29,7 @@ public class FileService {
             return null;
         }
 
-        return appUrl + FILE_BASE_URI + GET_FILE_BY_KEY.replace("{objectKey}", file.getObjectKey());
+        return appUrl + PUBLIC_FILE_BASE_URI + GET_FILE_BY_KEY.replace("{objectKey}", file.getObjectKey());
     }
 
 }
