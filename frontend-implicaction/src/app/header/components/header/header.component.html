@@ -18,10 +18,10 @@
         <ng-container *ngFor="let u of allowedUnivers">
           <li *ngIf="u.isMenuItem">
             <a
-              [routerLinkActiveOptions]="{exact: u === univers.HOME}"
-              [routerLink]="[u.url]"
               class="nav-link px-3"
               routerLinkActive="theme-primary active fw-bold"
+              [routerLink]="[u.url]"
+              [routerLinkActiveOptions]="{exact: u === univers.HOME}"
             >
               {{u.title}}
             </a>

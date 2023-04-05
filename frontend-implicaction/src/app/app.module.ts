@@ -16,6 +16,7 @@ import {BoardModule} from './board/board.module';
 import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import {FooterModule} from "./footer/footer.module";
+import {HeaderModule} from "./header/header.module";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {FooterModule} from "./footer/footer.module";
     SidebarModule,
     BoardModule,
     HttpClientXsrfModule,
-    FooterModule
+    FooterModule,
+    HeaderModule
   ],
   providers: [MessageService, {provide: LOCALE_ID, useValue: 'fr'}],
   bootstrap: [AppComponent]

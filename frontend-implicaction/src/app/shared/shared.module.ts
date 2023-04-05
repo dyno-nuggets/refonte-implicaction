@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {HeaderComponent} from './components/header/header.component';
 import {RouterModule} from '@angular/router';
 import {BadgeModule} from 'primeng/badge';
 import {IconsModule} from '../icons/icons.module';
@@ -22,7 +21,6 @@ import {UserAvatarComponent} from './components/user-avatar/user-avatar.componen
 
 @NgModule({
   declarations: [
-    HeaderComponent,
     LoadingComponent,
     AlertComponent,
     SidebarContentDirective,
@@ -37,7 +35,6 @@ import {UserAvatarComponent} from './components/user-avatar/user-avatar.componen
     UserAvatarComponent
   ],
   exports: [
-    HeaderComponent,
     LoadingComponent,
     AlertComponent,
     SidebarContentDirective,

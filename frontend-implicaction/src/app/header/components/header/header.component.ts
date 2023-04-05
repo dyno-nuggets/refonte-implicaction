@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {AuthService} from '../../services/auth.service';
+import {AuthService} from '../../../shared/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {User} from '../../models/user';
-import {Univers} from '../../enums/univers';
-import {RoleEnumCode} from '../../enums/role.enum';
+import {User} from '../../../shared/models/user';
+import {Univers} from '../../../shared/enums/univers';
+import {RoleEnumCode} from '../../../shared/enums/role.enum';
 import {Constants} from '../../../config/constants';
 
 @Component({
