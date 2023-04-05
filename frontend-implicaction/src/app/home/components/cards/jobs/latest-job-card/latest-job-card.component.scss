@@ -1,3 +1,5 @@
+@import "src/assets/variables";
+
 .card-job {
   border-radius: 11px;
   justify-items: center;
@@ -7,7 +9,14 @@
   .card-header {
     height: 66px;
     background: transparent;
-    border: none
+    border: none;
+
+    .company-name:before {
+      font-family: FontAwesome;
+      content: '\f0f2';
+      margin-right: 10px;
+      color: $primary
+    }
   }
 
   .card-body {

@@ -1,0 +1,40 @@
+@import "src/assets/variables";
+
+footer {
+  background-color: $primary;
+
+  * {
+    color: white !important;
+  }
+
+  .footer {
+    color: white !important;
+  }
+
+  .left-section {
+    max-width: 420px;
+  }
+
+  @media screen and (max-width: 767px) {
+    .socials-and-legals::after {
+      width: 300px
+    }
+  }
+
+  .socials-and-legals {
+    &::after {
+      height: 1px;
+      display: block;
+      width: 360px;
+      background: white;
+      content: '';
+      margin: 2rem 0;
+    }
+  }
+}
+
+@media screen and (max-width: 658px) {
+  footer {
+    flex-direction: column-reverse !important;
+  }
+}

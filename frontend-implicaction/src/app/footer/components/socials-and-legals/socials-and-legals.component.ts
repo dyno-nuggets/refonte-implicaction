@@ -1,14 +1,11 @@
 import {Component} from '@angular/core';
-import {RouterLinkWithHref} from "@angular/router";
-import {NgForOf} from "@angular/common";
 
 @Component({
-  standalone: true,
-  imports: [RouterLinkWithHref, NgForOf],
-  selector: 'app-footer',
-  templateUrl: './footer.component.html',
+  selector: 'app-socials-and-legals',
+  templateUrl: './socials-and-legals.component.html',
+  styleUrls: ['./socials-and-legals.component.scss']
 })
-export class FooterComponent {
+export class SocialsAndLegalsComponent {
 
   socials = [
     {
@@ -27,4 +24,5 @@ export class FooterComponent {
       label: 'découvrir notre chaîne youtube'
     }
   ]
+
 }

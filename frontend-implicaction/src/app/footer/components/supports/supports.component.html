@@ -1,0 +1,12 @@
+<p class="fw-bold text-start">Ils nous soutiennent :</p>
+<div class="d-flex flex-wrap gap-2 img-container">
+  <ng-container *ngFor="let support of supports">
+    <a [href]="support.link">
+      <img
+        class="d-block img-support"
+        [src]="support.imageSrc"
+        [alt]="support.label"
+      >
+    </a>
+  </ng-container>
+</div>

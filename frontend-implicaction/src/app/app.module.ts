@@ -15,7 +15,7 @@ import {SidebarModule} from 'primeng/sidebar';
 import {BoardModule} from './board/board.module';
 import {registerLocaleData} from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
-import {FooterComponent} from "./standalone/footer/footer.component";
+import {FooterModule} from "./footer/footer.module";
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import {FooterComponent} from "./standalone/footer/footer.component";
     SidebarModule,
     BoardModule,
     HttpClientXsrfModule,
-    FooterComponent
+    FooterModule
   ],
   providers: [MessageService, {provide: LOCALE_ID, useValue: 'fr'}],
   bootstrap: [AppComponent]
