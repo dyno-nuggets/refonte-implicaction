@@ -1,4 +1,4 @@
-<app-header [currentUser]="currentUser"></app-header>
+<app-header [currentProfile]="profile$ | async" [userRoles]="principal?.roles"></app-header>
 <main class="mx-2 mx-sm-5 my-3 my-md-5">
   <router-outlet></router-outlet>
   <p-toast

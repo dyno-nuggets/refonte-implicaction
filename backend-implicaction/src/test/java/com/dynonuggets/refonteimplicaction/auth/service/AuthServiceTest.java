@@ -8,9 +8,7 @@ import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -56,8 +54,6 @@ class AuthServiceTest {
     UserRepository userRepository;
     @Mock
     UserService userService;
-    @Mock
-    UserMapper userMapper;
     @Mock
     AuthenticationManager authenticationManager;
     @Mock
@@ -232,13 +228,10 @@ class AuthServiceTest {
             final String jwtToken = "jwt-token";
             final String refreshToken = "refreshToken";
             final Instant expiresAt = now();
-            final UserDto expectedUserDto = UserDto.builder().username(username).build();
 
             given(authenticationManager.authenticate(any())).willReturn(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             given(jwtProvider.generateToken(any())).willReturn(jwtToken);
             given(refreshTokenService.generateRefreshToken()).willReturn(RefreshTokenDto.builder().token(refreshToken).build());
-            given(userRepository.findByUsername(any())).willReturn(of(user));
-            given(userMapper.toDtoLight(any())).willReturn(expectedUserDto);
 
             // when
             final LoginResponse actualResponse = authService.login(loginRequest);
@@ -247,15 +240,10 @@ class AuthServiceTest {
             assertThat(actualResponse.getAuthenticationToken()).isEqualTo(jwtToken);
             assertThat(actualResponse.getRefreshToken()).isEqualTo(refreshToken);
             assertThat(actualResponse.getExpiresAt()).isBetween(expiresAt, now());
-            assertThat(actualResponse.getCurrentUser())
-                    .isNotNull()
-                    .extracting(UserDto::getUsername).isEqualTo(username);
 
             verify(authenticationManager, times(1)).authenticate(any());
             verify(jwtProvider, times(1)).generateToken(any());
             verify(refreshTokenService, times(1)).generateRefreshToken();
-            verify(userRepository, times(1)).findByUsername(any());
-            verify(userMapper, times(1)).toDtoLight(any());
         }
 
         // TODO: chercher comment faire les tests en cas d'échec

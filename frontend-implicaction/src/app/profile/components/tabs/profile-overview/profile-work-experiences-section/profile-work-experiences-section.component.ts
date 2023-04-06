@@ -15,7 +15,7 @@ export class ProfileWorkExperiencesSectionComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.inputsCopy = this.inputs.map(item => ({label: item.label, date: 'date' in item ? item.date : item.startedAt}))
+    this.inputsCopy = this.inputs?.map(item => ({label: item.label, date: 'date' in item ? item.date : item.startedAt}))
       .sort((i1, i2) => Utils.sortDateByYearDesc(i1.date, i2.date));
   }
 

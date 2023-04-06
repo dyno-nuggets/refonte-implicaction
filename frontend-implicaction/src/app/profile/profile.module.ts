@@ -20,12 +20,11 @@ import {ProfileOverviewTabComponent} from './components/tabs/profile-overview/pr
 import {EditProfileTabComponent} from './components/tabs/edit-profile-tab/edit-profile-tab.component';
 import {EditSettingsTabComponent} from './components/tabs/edit-settings-tab/edit-settings-tab.component';
 import {ChangePasswordTabComponent} from './components/tabs/change-password-tab/change-password-tab.component';
-import {DisplayIfCurrentUserDirective} from './directives/display-if-current-user.directive';
 import {ProfileBlockComponent} from './components/tabs/profile-overview/profile-block/profile-block.component';
 import {ProfileAboutSectionComponent} from './components/tabs/profile-overview/profile-about-section/profile-about-section.component';
 import {ProfileDetailsSectionComponent} from './components/tabs/profile-overview/profile-details-section/profile-details-section.component';
 import {ProfilePresentationSectionComponent} from './components/tabs/profile-overview/profile-presentation-section/profile-presentation-section.component';
-import { ProfileWorkExperiencesSectionComponent } from './components/tabs/profile-overview/profile-work-experiences-section/profile-work-experiences-section.component';
+import {ProfileWorkExperiencesSectionComponent} from './components/tabs/profile-overview/profile-work-experiences-section/profile-work-experiences-section.component';
 
 
 @NgModule({
@@ -43,7 +42,6 @@ import { ProfileWorkExperiencesSectionComponent } from './components/tabs/profil
     EditProfileTabComponent,
     EditSettingsTabComponent,
     ChangePasswordTabComponent,
-    DisplayIfCurrentUserDirective,
     ProfileBlockComponent,
     ProfileAboutSectionComponent,
     ProfileDetailsSectionComponent,

@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {WorkExperience} from '../../../shared/models/work-experience';
 import {UserService} from '../../services/user.service';
-import {AuthService} from '../../../shared/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {ExperienceFormComponent} from '../experience-form/experience-form.component';

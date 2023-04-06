@@ -3,7 +3,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {ActivatedRoute} from '@angular/router';
 import {UserContextService} from '../../../shared/services/user-context.service';
 import {Subscription} from 'rxjs';
-import {AuthService} from '../../../shared/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {finalize, map} from 'rxjs/operators';
 import {Profile} from "../../models/profile";
 import {ProfileService} from "../../services/profile.service";
@@ -49,7 +49,7 @@ export class UserProfileOldComponent implements OnInit, OnDestroy {
         .subscribe(
           profile => {
             this.profile = profile;
-            this.canEdit = profile.username === this.authService.getCurrentUser()?.username;
+            this.canEdit = profile.username === this.authService.getPrincipal()?.username;
             this.userContexteService.setUser(profile);
           },
           () => this.toasterService.error('Oops', 'Une erreur est survenue !')

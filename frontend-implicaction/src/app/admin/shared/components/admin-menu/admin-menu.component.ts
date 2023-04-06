@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {Univers} from '../../../../shared/enums/univers';
 import {RoleEnumCode} from '../../../../shared/enums/role.enum';
-import {AuthService} from '../../../../shared/services/auth.service';
+import {AuthService} from '../../../../core/services/auth.service';
 
 interface RoleBaseMenuItem {
   label: string;
@@ -57,7 +57,7 @@ export class AdminMenuComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const currentUserRoles = this.authService.getCurrentUser()?.roles;
+    const currentUserRoles = this.authService.getPrincipal()?.roles;
     this.allowedMenuItems = this.getAllowedMenuItems(currentUserRoles);
   }
 

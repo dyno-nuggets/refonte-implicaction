@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from '@angular/router';
-import {AuthService} from '../../shared/services/auth.service';
+import {AuthService} from '../services/auth.service';
 import {RoleEnumCode} from '../../shared/enums/role.enum';
 
 @Injectable({
@@ -35,10 +35,9 @@ export class AuthGuard implements CanActivate {
   }
 
   private checkPermission(allowedUserRoles: RoleEnumCode[]): boolean {
-    return this.authService
-      .getCurrentUser()
-      ?.roles
-      ?.some(role => allowedUserRoles.includes(role)) ?? false;
+    return this.authService.getPrincipal()?.roles
+        ?.some(role => allowedUserRoles.includes(role))
+      ?? false;
   }
 
 }

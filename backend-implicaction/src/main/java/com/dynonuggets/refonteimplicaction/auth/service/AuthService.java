@@ -13,7 +13,6 @@ import com.dynonuggets.refonteimplicaction.notification.service.NotificationServ
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.user.mapper.UserMapper;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +51,6 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-    private final UserMapper userMapper;
     private final NotificationService notificationService;
     private final EmailValidationNotificationMapper emailValidationNotificationMapper;
 
@@ -115,14 +113,10 @@ public class AuthService {
         final Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
         final String refreshToken = refreshTokenService.generateRefreshToken().getToken();
 
-        final UserModel user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException(BAD_CREDENTIALS));
-
         return LoginResponse.builder()
                 .authenticationToken(token)
                 .refreshToken(refreshToken)
                 .expiresAt(expiresAt)
-                .currentUser(userMapper.toDtoLight(user))
                 .build();
     }
 
@@ -137,7 +131,7 @@ public class AuthService {
         final String username = refreshTokenRequest.getUsername();
 
         // une exception sera levée si l’utilisateur ou le refresh token n’existent pas
-        final UserModel user = userService.getUserByUsernameIfExists(username);
+        userService.getUserByUsernameIfExists(username);
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 
         final String token = jwtProvider.generateTokenWithUsername(username);
@@ -147,7 +141,6 @@ public class AuthService {
                 .authenticationToken(token)
                 .refreshToken(refreshTokenRequest.getRefreshToken())
                 .expiresAt(expiresAt)
-                .currentUser(userMapper.toDtoLight(user))
                 .build();
     }
 

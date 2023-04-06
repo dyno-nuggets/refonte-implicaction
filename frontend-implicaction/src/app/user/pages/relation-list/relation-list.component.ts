@@ -2,16 +2,14 @@ import {Component, OnInit} from '@angular/core';
 import {User} from '../../../shared/models/user';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {RelationService} from '../../services/relation.service';
-import {AuthService} from '../../../shared/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {RelationType} from '../../models/relation-type.enum';
 import {finalize} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
 import {MenuItem} from 'primeng/api';
-import {
-  BaseWithPaginationAndFilterComponent
-} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Criteria} from '../../../shared/models/Criteria';
 import {ProfileService} from "../../../profile/services/profile.service";
 import {Relation} from "../../models/relation";
@@ -82,7 +80,7 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
   }
 
   ngOnInit(): void {
-    this.currentUser = this.authService.getCurrentUser();
+    this.currentUser = this.authService.getPrincipal();
     // on détermine quel est l’observable auquel s’abonner en fonction du type d’utilisateurs à afficher
     this.route.url.subscribe(urlSegments => {
       if (urlSegments.length === 2 && urlSegments[1].path === UserListType.FRIENDS_RECEIVED) {

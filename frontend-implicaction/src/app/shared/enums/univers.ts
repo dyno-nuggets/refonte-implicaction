@@ -10,6 +10,7 @@ export class Univers {
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', true, [RoleEnumCode.USER]);
   static readonly BOARD = new Univers('Job Board', 'board', true, [RoleEnumCode.PREMIUM]);
   static readonly ADMIN = new Univers('Admin', 'admin', false, [RoleEnumCode.ADMIN]);
+  static readonly AUTH = new Univers('Auth', 'auth', false);
 
   constructor(
     readonly title: string,
@@ -32,7 +33,9 @@ export class Univers {
   }
 
   static getMenuItems(roles: RoleEnumCode[] = []): Univers[] {
-    return Univers.all()
-      .filter(u => u !== Univers.PROFILE && !u.roles || u.roles.filter(roleAllowed => roles.includes(roleAllowed)).length > 0);
+    return roles?.length
+      ? [Univers.HOME, ...Univers.all().filter(u => u.isMenuItem && u.roles?.length)]
+      // si l'utilisateur n'a pas de rôle, c'est qu'il n'est pas identifié
+      : Univers.all().filter(u => u.isMenuItem && (!u.roles || !u.roles.length));
   }
 }

@@ -1,0 +1,42 @@
+<div class="dropdown show">
+  <a
+    type="button"
+    id="dropdownMenuLink"
+    class="dropdown-toggle"
+    data-bs-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+  >
+    <app-user-avatar
+      size="xs"
+      shape="rounded-circle"
+      [profile]="currentProfile"
+    ></app-user-avatar>
+  </a>
+  <ul
+    class="dropdown-menu dropdown-menu-end"
+    aria-labelledby="dropdownMenuLink"
+  >
+    <li>
+      <span class="dropdown-item fw-bold background-transparent">@{{currentProfile.username}}</span>
+    </li>
+    <li>
+      <hr class="dropdown-divider">
+    </li>
+    <li>
+      <a
+        class="dropdown-item"
+        [routerLink]="[univers.PROFILE.url, currentProfile.username]"
+      >Profil</a>
+    </li>
+    <li>
+      <hr class="dropdown-divider">
+    </li>
+    <li *appRequiredRole="roleAdminCode">
+      <a class="dropdown-item cursor-pointer" [routerLink]="univers.ADMIN.url">Admin</a>
+    </li>
+    <li><a
+      class="dropdown-item cursor-pointer"
+      [routerLink]="[univers.AUTH.url, 'logout']">Se déconnecter</a></li>
+  </ul>
+</div>

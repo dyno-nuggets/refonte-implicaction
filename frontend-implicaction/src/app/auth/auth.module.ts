@@ -7,6 +7,7 @@ import {LoginComponent} from './pages/login/login.component';
 import {UnauthorizedComponent} from './pages/unauthorized/unauthorized.component';
 import {SharedModule} from '../shared/shared.module';
 import {AuthFormComponent} from './components/auth-form/auth-form.component';
+import { LogoutComponent } from './pages/logout/logout.component';
 
 
 @NgModule({
@@ -14,7 +15,8 @@ import {AuthFormComponent} from './components/auth-form/auth-form.component';
     SignupComponent,
     LoginComponent,
     UnauthorizedComponent,
-    AuthFormComponent
+    AuthFormComponent,
+    LogoutComponent
   ],
   exports: [
     SignupComponent

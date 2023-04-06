@@ -41,7 +41,7 @@
                 </button>
               </li>
 
-              <ng-container *appDisplayIfCurrentUser="profile.username">
+              <ng-container *ngIf="isPrincipal">
                 <li class="nav-item" role="presentation">
                   <button
                     class="nav-link"
@@ -100,7 +100,7 @@
                 <app-profile-overview-tab [profile]="profile"></app-profile-overview-tab>
               </div>
 
-              <ng-container *appDisplayIfCurrentUser="profile.username">
+              <ng-container *ngIf="isPrincipal">
                 <div
                   role="tabpanel"
                   id="profile-edit"

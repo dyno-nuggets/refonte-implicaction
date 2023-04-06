@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {SidebarContentComponent} from '../../../shared/models/sidebar-props';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {WorkExperience} from '../../../shared/models/work-experience';
-import {AuthService} from '../../../shared/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {SidebarService} from '../../../shared/services/sidebar.service';
 import {Observable} from 'rxjs';
@@ -42,7 +42,6 @@ export class ExperienceFormComponent extends SidebarContentComponent<ExperienceF
     this.experience = this.sidebarInput ? {...this.sidebarInput.experience} : undefined;
     this.isUpdate = !!this.sidebarInput?.experience?.id;
     this.initForm(this.experience);
-    console.log(this.sidebarInput);
   }
 
   onSubmit(): void {

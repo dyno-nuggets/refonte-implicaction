@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Training} from '../../../shared/models/training';
 import {UserService} from '../../services/user.service';
-import {AuthService} from '../../../shared/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {Subscription} from 'rxjs';
 import {SidebarService} from '../../../shared/services/sidebar.service';

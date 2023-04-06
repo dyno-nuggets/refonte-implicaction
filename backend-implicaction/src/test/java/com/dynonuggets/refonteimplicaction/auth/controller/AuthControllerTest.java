@@ -181,7 +181,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             // given
             final UserDto userDto = generateRandomUserDto();
             final LoginRequest request = LoginRequest.builder().username(userDto.getUsername()).password(randomAlphabetic(8)).build();
-            final LoginResponse response = LoginResponse.builder().authenticationToken(UUID.randomUUID().toString()).refreshToken(UUID.randomUUID().toString()).currentUser(userDto).expiresAt(now()).build();
+            final LoginResponse response = LoginResponse.builder().authenticationToken(UUID.randomUUID().toString()).refreshToken(UUID.randomUUID().toString()).expiresAt(now()).build();
             given(authService.login(any())).willReturn(response);
 
             // when
@@ -195,8 +195,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.authenticationToken", is(response.getAuthenticationToken())))
                     .andExpect(jsonPath("$.refreshToken", is(response.getRefreshToken())))
-                    .andExpect(jsonPath("$.expiresAt", is(response.getExpiresAt().toString())))
-                    .andExpect(jsonPath("$.currentUser.username", is(request.getUsername())));
+                    .andExpect(jsonPath("$.expiresAt", is(response.getExpiresAt().toString())));
             verify(authService, times(1)).login(any());
         }
 
@@ -252,7 +251,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_when_sending_valid_RefreshTokenRequest_and_exists() throws Exception {
             // given
             final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().refreshToken(randomAlphabetic(20)).username(randomAlphabetic(10)).build();
-            final LoginResponse loginResponse = LoginResponse.builder().refreshToken(randomAlphabetic(20)).authenticationToken(randomAlphabetic(26)).currentUser(UserDto.builder().username(refreshTokenRequest.getUsername()).build()).build();
+            final LoginResponse loginResponse = LoginResponse.builder().refreshToken(randomAlphabetic(20)).authenticationToken(randomAlphabetic(26)).build();
             given(authService.refreshToken(any())).willReturn(loginResponse);
 
             // when
@@ -265,8 +264,7 @@ class AuthControllerTest extends ControllerIntegrationTestBase {
             resultActions
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.authenticationToken", is(loginResponse.getAuthenticationToken())))
-                    .andExpect(jsonPath("$.refreshToken", is(loginResponse.getRefreshToken())))
-                    .andExpect(jsonPath("$.currentUser.username", is(loginResponse.getCurrentUser().getUsername())));
+                    .andExpect(jsonPath("$.refreshToken", is(loginResponse.getRefreshToken())));
             verify(authService, times(1)).refreshToken(any());
         }
 

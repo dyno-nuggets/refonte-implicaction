@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {ProfileUpdateRequest} from "../models/profile-update-request";
 import {HttpClient} from "@angular/common/http";
-import {ApiHttpService} from "../../core/services/api-http.service";
 import {ApiEndpointsService} from "../../core/services/api-endpoints.service";
 import {Profile} from "../models/profile";
 import {User} from "../../shared/models/user";
@@ -14,7 +13,6 @@ export class ProfileService {
 
   constructor(
     private http: HttpClient,
-    private apiHttpService: ApiHttpService,
     private apiEndpointsService: ApiEndpointsService
   ) {
   }

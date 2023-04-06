@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {AuthService} from '../../../shared/services/auth.service';
-import {LoginRequestPayload} from '../../../shared/models/login-request-payload';
+import {AuthService} from '../../../core/services/auth.service';
+import {LoginRequestPayload} from '../../models/login-request-payload';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {finalize, take, tap} from 'rxjs/operators';
+import {finalize, takeUntil} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
 import {AlertService} from "../../../shared/services/alert.service";
-import {Subscription} from "rxjs";
+import {Subject} from "rxjs";
 import {Alert, AlertType} from "../../../shared/models/alert";
 
 @Component({
@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   isLoading = false;
   alert: Alert;
 
-  private subscription: Subscription;
+  private onDestroySubject = new Subject<void>();
 
   constructor(
     private authService: AuthService,
@@ -44,9 +44,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: new UntypedFormControl('', Validators.required),
       password: new UntypedFormControl('', Validators.required)
     });
-    this.subscription = this.alertService.onAlert()
-      .pipe(tap(console.log))
+
+    this.alertService.onAlert()
+      .pipe(takeUntil(this.onDestroySubject))
       .subscribe(alert => this.alert = alert);
+
     if (this.activatedRoute.snapshot.queryParams['signupSuccess']) {
       this.alert = {
         title: 'Votre compte a bien été créé',
@@ -66,19 +68,19 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: this.loginForm.get('username').value,
       password: this.loginForm.get('password').value
     };
+
     this.authService
       .login(this.loginRequestPayload)
-      .pipe(finalize(() => this.isLoading = false), take(1))
+      .pipe(finalize(() => this.isLoading = false))
       .subscribe(isLogged => isLogged && this.redirectSuccess());
   }
 
   private redirectSuccess(): void {
-    this.router
-      .navigateByUrl(this.activatedRoute.snapshot.queryParams['returnUrl'] ?? Univers.HOME.url)
+    this.router.navigateByUrl(this.activatedRoute.snapshot.queryParams['returnUrl'] ?? Univers.HOME.url)
       .then(() => this.toaster.success(`Bienvenue ${this.loginRequestPayload.username}`, 'vous êtes maintenant identifié'))
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.onDestroySubject.complete();
   }
 }

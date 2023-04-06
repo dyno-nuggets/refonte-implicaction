@@ -1,6 +1,6 @@
 import {Component, HostListener, Input} from '@angular/core';
 import {UserService} from '../../services/user.service';
-import {AuthService} from '../../../shared/services/auth.service';
+import {AuthService} from '../../../core/services/auth.service';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize} from 'rxjs/operators';
 import {Constants} from '../../../config/constants';
