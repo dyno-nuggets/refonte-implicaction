@@ -1,0 +1,15 @@
+<ul class="navbar-nav my-2 my-lg-0">
+  <ng-container *ngFor="let navItem of navItems">
+    <li class="nav-item">
+      <a
+        aria-current="page"
+        class="nav-link theme-primary"
+        routerLinkActive="active fw-bold"
+        [routerLink]="navItem.url"
+        [routerLinkActiveOptions]="{exact: navItem === universHome}"
+      >
+        {{navItem.title}}
+      </a>
+    </li>
+  </ng-container>
+</ul>

@@ -17,6 +17,8 @@ import {DropdownModule} from 'primeng/dropdown';
 import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
 import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text/implicaction-logo-text.component";
 import {UserAvatarComponent} from './components/user-avatar/user-avatar.component';
+import {RequiredRoleDirective} from './directives/required-role.directive';
+import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
 
 
 @NgModule({
@@ -32,7 +34,9 @@ import {UserAvatarComponent} from './components/user-avatar/user-avatar.componen
     CompanyFilterComponent,
     TextEllipsisPipe,
     ImplicactionLogoTextComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    RequiredRoleDirective,
+    AnyRoleMatchesDirective
   ],
   exports: [
     LoadingComponent,
@@ -45,6 +49,8 @@ import {UserAvatarComponent} from './components/user-avatar/user-avatar.componen
     TextEllipsisPipe,
     ImplicactionLogoTextComponent,
     UserAvatarComponent,
+    RequiredRoleDirective,
+    AnyRoleMatchesDirective,
   ],
   imports: [
     CommonModule,

@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.auth.dto;
 
-import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +17,4 @@ public class LoginResponse {
     private String authenticationToken;
     private String refreshToken;
     private Instant expiresAt;
-    private UserDto currentUser;
 }

@@ -18,6 +18,7 @@ import localeFr from '@angular/common/locales/fr';
 import {FooterModule} from "./footer/footer.module";
 import {HeaderModule} from "./header/header.module";
 
+
 @NgModule({
   declarations: [
     AppComponent,

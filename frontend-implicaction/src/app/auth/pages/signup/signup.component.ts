@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
-import {SignupRequestPayload} from '../../../shared/models/signup-request-payload';
-import {AuthService} from '../../../shared/services/auth.service';
+import {SignupRequestPayload} from '../../models/signup-request-payload';
+import {AuthService} from '../../../core/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';

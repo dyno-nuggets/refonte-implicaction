@@ -10,6 +10,7 @@ export class Univers {
   static readonly JOBS = new Univers(`Offres d'emploi`, 'jobs', true, [RoleEnumCode.USER]);
   static readonly BOARD = new Univers('Job Board', 'board', true, [RoleEnumCode.PREMIUM]);
   static readonly ADMIN = new Univers('Admin', 'admin', false, [RoleEnumCode.ADMIN]);
+  static readonly AUTH = new Univers('Auth', 'auth', false);
 
   constructor(
     readonly title: string,
@@ -21,18 +22,5 @@ export class Univers {
 
   static all(): Univers[] {
     return Object.values(this).filter(val => typeof val === 'object');
-  }
-
-  /**
-   * Récupère l’Univers correspondant à l’url en paramètres
-   */
-  static fromUrl(url: string): Univers {
-    const rootUrl = url.split('/', 2)[1]; // récupère la racine de l’url (ex : users si /users/1)
-    return Univers.all().find(univers => rootUrl.startsWith(univers.url));
-  }
-
-  static getMenuItems(roles: RoleEnumCode[] = []): Univers[] {
-    return Univers.all()
-      .filter(u => u !== Univers.PROFILE && !u.roles || u.roles.filter(roleAllowed => roles.includes(roleAllowed)).length > 0);
   }
 }

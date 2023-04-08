@@ -2,14 +2,18 @@ import {Component, ComponentFactoryResolver, HostBinding, OnDestroy, OnInit, Vie
 import {SidebarService} from './shared/services/sidebar.service';
 import {SidebarContentComponent, SidebarProps} from './shared/models/sidebar-props';
 import {SidebarContentDirective} from './shared/directives/sidebar-content.directive';
-import {Subscription} from 'rxjs';
-import {AuthService} from "./shared/services/auth.service";
-import {User} from "./shared/models/user";
+import {Observable, Subject} from 'rxjs';
+import {AuthService} from "./core/services/auth.service";
+import {ProfileService} from "./profile/services/profile.service";
+import {take, takeUntil} from "rxjs/operators";
+import {Profile} from "./profile/models/profile";
+import {ProfileContextService} from "./core/services/profile-context.service";
+import {Principal} from "./shared/models/principal";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit, OnDestroy {
 
@@ -17,29 +21,48 @@ export class AppComponent implements OnInit, OnDestroy {
   sidebarContent: SidebarContentDirective;
 
   sidebarProps: SidebarProps<unknown>;
-  currentUser: User;
+  principal: Principal;
+  profile$: Observable<Profile>;
 
   @HostBinding('style.--sidebar-content-width')
   private sidebarContentWidth: string;
-  private subscription: Subscription;
+  private onDestroySubject = new Subject<void>();
 
   constructor(
     private componentFactoryResolver: ComponentFactoryResolver,
     private authService: AuthService,
-    public sidebarService: SidebarService
+    public sidebarService: SidebarService,
+    public profileService: ProfileService,
+    private profileContextService: ProfileContextService
   ) {
   }
 
   ngOnInit(): void {
-    this.subscription = this.sidebarService
-      .getContent()
-      .subscribe(content => this.loadComponent(content))
-      .add(
-        this.authService
-          .currentUser$
-          .subscribe(currentUser => this.currentUser = currentUser)
+    this.sidebarService.getContent()
+      .pipe(takeUntil(this.onDestroySubject))
+      .subscribe(
+        content => this.loadComponent(content)
       );
-    this.currentUser = this.authService.getCurrentUser()
+
+    this.authService.principal$
+      .pipe(takeUntil(this.onDestroySubject))
+      .subscribe(
+        principal => this.updateCurrentProfile(principal)
+      );
+
+    this.profile$ = this.profileContextService.observeProfile();
+    this.updateCurrentProfile(this.authService.getPrincipal());
+  }
+
+  private updateCurrentProfile(principal: Principal) {
+    this.principal = principal;
+    if (this.principal?.username) {
+      this.profileService.getProfileByUsername(this.principal.username)
+        .pipe(take(1))
+        .subscribe(profile => this.profileContextService.profile = profile);
+    } else {
+      this.profileContextService.profile = null;
+    }
   }
 
   private loadComponent(content: SidebarProps<unknown>): void {
@@ -59,6 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.onDestroySubject.next()
+    this.onDestroySubject.complete();
   }
 }

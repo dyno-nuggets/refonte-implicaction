@@ -1,0 +1,10 @@
+@import "src/assets/variables";
+
+li a {
+  color: $secondary;
+
+  &:hover {
+    background-color: $primary;
+    color: white;
+  }
+}

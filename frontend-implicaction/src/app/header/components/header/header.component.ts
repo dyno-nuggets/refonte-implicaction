@@ -1,26 +1,26 @@
-import {ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {AuthService} from '../../../shared/services/auth.service';
+import {ChangeDetectionStrategy, Component, Input, OnChanges, OnDestroy, SimpleChanges} from '@angular/core';
+import {AuthService} from '../../../core/services/auth.service';
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {User} from '../../../shared/models/user';
 import {Univers} from '../../../shared/enums/univers';
 import {RoleEnumCode} from '../../../shared/enums/role.enum';
-import {Constants} from '../../../config/constants';
+import {Profile} from "../../../profile/models/profile";
+import {Subject} from "rxjs";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class HeaderComponent implements OnChanges {
+export class HeaderComponent implements OnChanges, OnDestroy {
 
-  @Input() currentUser: User;
-  isLoggedIn: boolean;
-  allowedUnivers: Univers[] = [];
-  isAdmin = false;
+  @Input() currentProfile?: Profile;
+  @Input() userRoles?: RoleEnumCode[];
+
   univers = Univers;
-  constant = Constants;
+  navItems: Univers[];
+
+  private onDestroySubject = new Subject<undefined>();
 
   constructor(
     private authService: AuthService,
@@ -30,22 +30,50 @@ export class HeaderComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.isLoggedIn = !!this.currentUser;
-    console.log(this.currentUser);
-    this.allowedUnivers = Univers.getMenuItems(this.currentUser?.roles);
-    // si l’utilisateur est identifié, on ne souhaite pas afficher l’espace entreprise dans le menu
-    if (this.isLoggedIn) {
-      this.allowedUnivers = this.allowedUnivers.filter(u => u != Univers.COMPANY_AREA);
+    if (changes['userRoles']) {
+      this.navItems = this.getItemsMenu(this.userRoles);
     }
-    this.isAdmin = this.currentUser?.roles.includes(RoleEnumCode.ADMIN);
   }
 
   logout(): void {
     this.authService
       .logout()
-      .subscribe(() => this.router
-        .navigateByUrl('/')
-        .then(() => this.toaster.success('Succès', 'Vous êtes maintenant déconnecté'))
+      .subscribe(
+        () => this.router.navigateByUrl('/')
+          .then(() => this.toaster.success('Succès', 'Vous êtes maintenant déconnecté'))
       );
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroySubject.next();
+    this.onDestroySubject.complete();
+  }
+
+  /**
+   * @return la liste des univers à afficher dans le menu de navigation en fonction des rôles de l'utilisateur
+   */
+  private getItemsMenu(userRoles: RoleEnumCode[]): Univers[] {
+    return userRoles?.length
+      ? Univers.all().filter(univers =>
+        // on ne garde que les univers qui doivent apparaître dans le menu
+        univers.isMenuItem
+        // on n'affiche pas l'espace entreprise pour les utilisateurs identifiés
+        && univers !== Univers.COMPANY_AREA
+        // on garde seulement ceux dont au moins un des rôles nécessaires correspond à un des rôles de l'utilisateur
+        && this.hasCommonRoles(userRoles, univers.roles))
+      : [Univers.HOME, Univers.COMPANY_AREA];
+  }
+
+  private hasCommonRoles(userRoles: RoleEnumCode[], requiredRoles: RoleEnumCode[]): boolean {
+    if (!requiredRoles?.length) {
+      return true;
+    }
+
+    if (!userRoles) {
+      return false;
+    }
+
+    // si au moins un rôle de l'utilisateur correspond à un des rôles requis, alors la condition sera vérifiée
+    return userRoles.some(role => requiredRoles?.includes(role));
   }
 }

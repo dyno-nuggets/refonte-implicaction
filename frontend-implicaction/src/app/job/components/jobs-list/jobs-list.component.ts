@@ -72,7 +72,7 @@ export class JobsListComponent extends BaseWithPaginationAndFilterComponent<JobP
       .open({
         title: 'Ajouter une offre',
         component: JobPostingFormComponent,
-        width: 650
+        width: 950
       });
   }
 

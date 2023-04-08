@@ -1,129 +1,46 @@
 <header>
-  <nav class="py-2 bg-white">
-    <div class="navbar-expand-lg d-flex flex-row align-items-center justify-content-between mx-2 mx-md-5 nav-inner-container">
-      <div class="mb-2 mb-sm-0">
-        <a
-          class="align-items-center text-dark text-decoration-none mb-3 mb-lg-0 me-lg-auto"
-          [routerLink]="univers.HOME.url"
-        >
-          <img
-            alt="implicaction"
-            class="img-fluid"
-            src="assets/img/logo_implicaction.png"
-          >
-        </a>
-      </div>
-      <!-- liens du menu -->
-      <ul class="d-none d-md-inline-flex justify-content-center justify-content-lg-between nav align-items-center">
-        <ng-container *ngFor="let u of allowedUnivers">
-          <li *ngIf="u.isMenuItem">
-            <a
-              class="nav-link px-3"
-              routerLinkActive="theme-primary active fw-bold"
-              [routerLink]="[u.url]"
-              [routerLinkActiveOptions]="{exact: u === univers.HOME}"
-            >
-              {{u.title}}
-            </a>
-          </li>
-        </ng-container>
-      </ul>
-      <div class="d-flex justify-content-end">
-        <ng-container *ngIf="isLoggedIn; else registrationOptions">
-          <ul class="nav d-flex align-items-center justify-content-between user-options me-md-0">
-            <li class="nav-item">
-              <a
-                aria-expanded="false"
-                class="d-block link-dark text-decoration-none dropdown-toggle cursor-pointer"
-                data-bs-toggle="dropdown"
-                id="dropdownUser2"
-              >
-                <app-user-avatar
-                  size="xs"
-                  shape="rounded-circle"
-                  [profile]="currentUser"
-                ></app-user-avatar>
-              </a>
-              <ul
-                aria-labelledby="dropdownUser"
-                class="dropdown-menu text-small dropdown-user shadow m-0"
-              >
-                <li *ngIf="currentUser">
-                <span
-                  class="dropdown-item fw-bold cursor-default background-transparent">@{{currentUser.username}}</span>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li *ngIf="currentUser">
-                  <a class="dropdown-item cursor-pointer" routerLink="/{{univers.PROFILE.url}}/{{currentUser.username}}">Profil</a>
-                </li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li *ngIf="isAdmin">
-                  <a class="dropdown-item cursor-pointer" [routerLink]="univers.ADMIN.url">Admin</a>
-                </li>
-                <li><a (click)="logout()" class="dropdown-item cursor-pointer">Se déconnecter</a></li>
-              </ul>
-            </li>
-            <li class="icon-burger">
-              <button
-                aria-controls="navbarToggleExternalContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                class="navbar-toggler d-md-none ms-3"
-                data-bs-target="#BurgerMenuUniversList"
-                data-bs-toggle="collapse"
-                type="button"
-              >
-                <span class="fas fa-bars"></span>
-              </button>
-            </li>
-          </ul>
-        </ng-container>
-      </div>
-      <ng-template #registrationOptions>
-        <div class="d-flex registration-options">
-          <ul class="nav align-items-center user-options me-sm-5 me-md-0">
-            <li class="nav-item">
-              <a class="btn btn-outline-primary" routerLink="/auth/login">Se connecter</a>
-            </li>
-            <li class="nav-item">
-              <a class="btn btn-primary" routerLink="/auth/sign-up">S'inscrire</a>
-            </li>
-          </ul>
-          <button
-            aria-controls="navbarToggleExternalContent"
-            aria-expanded="false"
-            aria-label="Toggle navigation"
-            class="navbar-toggler d-md-none ms-3"
-            data-bs-target="#BurgerMenuUniversList"
-            data-bs-toggle="collapse"
-            type="button"
-          >
-            <span class="fas fa-bars"></span>
-          </button>
-        </div>
-      </ng-template>
-    </div>
-  </nav>
+  <nav class="navbar navbar-expand-lg bg-white">
+    <!-- wrapper -->
+    <div class="container-fluid">
 
-  <!--Elements du burger menu-->
-  <div class="collapse d-md-none" id="BurgerMenuUniversList">
-    <div class="bg-light shadow-3">
-      <ul class="nav d-flex flex-column align-items-center">
-        <li *ngFor="let u of allowedUnivers" class="d-block w-100 text-center">
-          <a
-            [routerLinkActiveOptions]="{exact: u === univers.HOME}"
-            [routerLink]="[u.url]"
-            class="nav-link px-4"
-            routerLinkActive="theme-primary active fw-bold"
-          >
-            {{u.title}}
-          </a>
-        </li>
-      </ul>
+      <app-navbar-brand></app-navbar-brand>
+
+      <!-- Toggle button -->
+      <button
+        type="button"
+        class="navbar-toggler"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- menu dépliant -->
+      <div
+        id="navbarSupportedContent"
+        class="collapse navbar-collapse"
+      >
+        <app-navbar-nav
+          class="mx-auto text-end"
+          [navItems]="navItems"
+        ></app-navbar-nav>
+
+        <div class="d-flex justify-content-end">
+          <ng-container *ngIf="currentProfile; else registrationOptions">
+            <app-navbar-profile-dropdown [currentProfile]="currentProfile"></app-navbar-profile-dropdown>
+          </ng-container>
+        </div>
+      </div>
+      <!-- menu dépliant -->
     </div>
-  </div>
+    <!-- wrapper -->
+  </nav>
 </header>
+
+
+<ng-template #registrationOptions>
+  <app-navbar-register-options></app-navbar-register-options>
+</ng-template>

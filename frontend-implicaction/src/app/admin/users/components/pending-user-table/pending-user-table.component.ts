@@ -4,7 +4,6 @@ import {finalize, take} from 'rxjs/operators';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {RoleEnum, RoleEnumCode} from '../../../../shared/enums/role.enum';
 import {User} from '../../../../shared/models/user';
-import {AuthService} from '../../../../shared/services/auth.service';
 import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {ActivatedRoute} from '@angular/router';
 import {Criteria} from '../../../../shared/models/Criteria';
@@ -22,7 +21,6 @@ export class PendingUserTableComponent extends BaseWithPaginationAndFilterCompon
   constructor(
     private userService: UserService,
     private toastService: ToasterService,
-    private authService: AuthService,
     protected route: ActivatedRoute
   ) {
     super(route);
@@ -51,15 +49,13 @@ export class PendingUserTableComponent extends BaseWithPaginationAndFilterCompon
   }
 
   activateUser(user: User): void {
-    this.authService
-      .enableUser(user.username)
-      .subscribe(
-        () => this.paginate({first: this.pageable.first, rows: this.pageable.rows}),
-        () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'utilisateur.`),
-        () => {
-          user.enabled = true;
-          this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais autorisé.`)
-        },
-      );
+    this.userService.enableUser(user.username).subscribe(
+      () => this.paginate({first: this.pageable.first, rows: this.pageable.rows}),
+      () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'utilisateur.`),
+      () => {
+        user.enabled = true;
+        this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais activé.`)
+      },
+    );
   }
 }

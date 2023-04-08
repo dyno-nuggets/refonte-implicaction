@@ -10,13 +10,9 @@ import {Profile} from "../../../profile/models/profile";
 export class UserAvatarComponent {
 
   @Input() profile: Profile;
-
   @Input() shape: 'rounded' | 'rounded-circle' = 'rounded';
-
   @Input() size: 'xs' | 'small' | 'medium' | 'large' | 'xlarge' = 'medium';
-
   @Input() shadow = false;
-
   @Input() imageClass;
 
   constants = Constants;
