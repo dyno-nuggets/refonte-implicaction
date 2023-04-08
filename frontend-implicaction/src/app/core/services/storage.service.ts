@@ -31,6 +31,7 @@ export class StorageService {
     this.localStorage.clear(StorageService.JWT_TOKEN_KEY);
     this.localStorage.clear(StorageService.REFRESH_TOKEN_KEY);
     this.localStorage.clear(StorageService.EXPIRE_AT_KEY);
+    this.localStorage.clear(StorageService.PRINCIPAL_KEY);
   }
 
   clearPrincipal() {

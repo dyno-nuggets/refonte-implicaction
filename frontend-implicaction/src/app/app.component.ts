@@ -5,7 +5,7 @@ import {SidebarContentDirective} from './shared/directives/sidebar-content.direc
 import {Observable, Subject} from 'rxjs';
 import {AuthService} from "./core/services/auth.service";
 import {ProfileService} from "./profile/services/profile.service";
-import {take} from "rxjs/operators";
+import {take, takeUntil} from "rxjs/operators";
 import {Profile} from "./profile/models/profile";
 import {ProfileContextService} from "./core/services/profile-context.service";
 import {Principal} from "./shared/models/principal";
@@ -38,15 +38,19 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.sidebarService.getContent().subscribe(
-      content => this.loadComponent(content)
-    );
+    this.sidebarService.getContent()
+      .pipe(takeUntil(this.onDestroySubject))
+      .subscribe(
+        content => this.loadComponent(content)
+      );
 
-    this.authService.principal$.subscribe(
-      principal => this.updateCurrentProfile(principal)
-    );
+    this.authService.principal$
+      .pipe(takeUntil(this.onDestroySubject))
+      .subscribe(
+        principal => this.updateCurrentProfile(principal)
+      );
 
-    this.profile$ = this.profileContextService.observeProfile()
+    this.profile$ = this.profileContextService.observeProfile();
     this.updateCurrentProfile(this.authService.getPrincipal());
   }
 

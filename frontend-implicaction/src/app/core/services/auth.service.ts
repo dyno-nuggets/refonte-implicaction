@@ -24,18 +24,8 @@ export class AuthService {
     private apiEndpointsService: ApiEndpointsService,
     private storageService: StorageService
   ) {
-    const parsedJson = JSON.parse(this.storageService.getPrincipal());
-    if (parsedJson) {
-      this.principalSubject = new BehaviorSubject<Principal>(
-        {
-          username: parsedJson.username,
-          // les rôles sont deserialisé en un string 'ROLE_1,ROLE_2, ...', il faut donc le transformer en tableau de RoleEnumCode
-          roles: parsedJson.roles
-        }
-      );
-    } else {
-      this.principalSubject = new BehaviorSubject<Principal>(null);
-    }
+    const jwtToken = this.storageService.getJwtToken();
+    this.principalSubject = new BehaviorSubject<Principal>(jwtToken ? this.decodeToken(jwtToken) : null);
   }
 
   get principal$(): Observable<Principal> {
@@ -56,14 +46,14 @@ export class AuthService {
         map(loginResponse => {
           const principal = this.decodeToken(loginResponse.authenticationToken);
           this.storageService.storeLoginResponse(loginResponse);
-          this.emitPrincipal(principal);
+          this.storeAndEmitPrincipal(principal);
           return principal;
         }),
         catchError(() => of(null))
       );
   }
 
-  private emitPrincipal(principal: Principal): void {
+  private storeAndEmitPrincipal(principal: Principal): void {
     this.storageService.storePrincipal(principal);
     this.principalSubject.next(principal);
   }
@@ -125,7 +115,7 @@ export class AuthService {
   }
 
   private clearPrincipal(): void {
-    this.emitPrincipal(null);
+    this.storeAndEmitPrincipal(null);
     this.storageService.clearPrincipal();
   }
 

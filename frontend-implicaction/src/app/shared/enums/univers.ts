@@ -23,19 +23,4 @@ export class Univers {
   static all(): Univers[] {
     return Object.values(this).filter(val => typeof val === 'object');
   }
-
-  /**
-   * Récupère l’Univers correspondant à l’url en paramètres
-   */
-  static fromUrl(url: string): Univers {
-    const rootUrl = url.split('/', 2)[1]; // récupère la racine de l’url (ex : users si /users/1)
-    return Univers.all().find(univers => rootUrl.startsWith(univers.url));
-  }
-
-  static getMenuItems(roles: RoleEnumCode[] = []): Univers[] {
-    return roles?.length
-      ? [Univers.HOME, ...Univers.all().filter(u => u.isMenuItem && u.roles?.length)]
-      // si l'utilisateur n'a pas de rôle, c'est qu'il n'est pas identifié
-      : Univers.all().filter(u => u.isMenuItem && (!u.roles || !u.roles.length));
-  }
 }

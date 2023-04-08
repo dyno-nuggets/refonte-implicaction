@@ -1,4 +1,7 @@
-<app-header [currentProfile]="profile$ | async" [userRoles]="principal?.roles"></app-header>
+<app-header
+  [currentProfile]="profile$ | async"
+  [userRoles]="principal?.roles"
+></app-header>
 <main class="mx-2 mx-sm-5 my-3 my-md-5">
   <router-outlet></router-outlet>
   <p-toast
@@ -9,8 +12,8 @@
   <p-sidebar
     position="right"
     (onHide)="sidebarService.close()"
-    [(visible)]="sidebarService.isOpen"
     [blockScroll]="true"
+    [(visible)]="sidebarService.isOpen"
     [transitionOptions]="'350ms'"
   >
     <div class="content-container">

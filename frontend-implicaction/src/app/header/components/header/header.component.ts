@@ -20,7 +20,7 @@ export class HeaderComponent implements OnChanges, OnDestroy {
   univers = Univers;
   navItems: Univers[];
 
-  private onDestroySubject = new Subject<unknown>();
+  private onDestroySubject = new Subject<undefined>();
 
   constructor(
     private authService: AuthService,
@@ -30,7 +30,9 @@ export class HeaderComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.navItems = this.getItemsMenu(this.userRoles);
+    if (changes['userRoles']) {
+      this.navItems = this.getItemsMenu(this.userRoles);
+    }
   }
 
   logout(): void {
@@ -48,19 +50,18 @@ export class HeaderComponent implements OnChanges, OnDestroy {
   }
 
   /**
-   *
    * @return la liste des univers à afficher dans le menu de navigation en fonction des rôles de l'utilisateur
    */
   private getItemsMenu(userRoles: RoleEnumCode[]): Univers[] {
-    return Univers.all()
-      .filter(univers =>
+    return userRoles?.length
+      ? Univers.all().filter(univers =>
         // on ne garde que les univers qui doivent apparaître dans le menu
         univers.isMenuItem
-        // ... si l'utilisateur est identifié (il a au moins un rôle), l'espace entreprise ne doit pas être affiché dans le menu
-        && ((!userRoles?.length && [Univers.HOME, Univers.COMPANY_AREA].includes(univers)) || (userRoles?.length && univers !== Univers.COMPANY_AREA))
-        // ... ceux dont au moins un des rôles nécessaires correspond à un des rôles de l'utilisateur
-        && this.hasCommonRoles(userRoles, univers.roles)
-      );
+        // on n'affiche pas l'espace entreprise pour les utilisateurs identifiés
+        && univers !== Univers.COMPANY_AREA
+        // on garde seulement ceux dont au moins un des rôles nécessaires correspond à un des rôles de l'utilisateur
+        && this.hasCommonRoles(userRoles, univers.roles))
+      : [Univers.HOME, Univers.COMPANY_AREA];
   }
 
   private hasCommonRoles(userRoles: RoleEnumCode[], requiredRoles: RoleEnumCode[]): boolean {
@@ -73,6 +74,6 @@ export class HeaderComponent implements OnChanges, OnDestroy {
     }
 
     // si au moins un rôle de l'utilisateur correspond à un des rôles requis, alors la condition sera vérifiée
-    return userRoles.filter(role => requiredRoles?.includes(role)).length > 0;
+    return userRoles.some(role => requiredRoles?.includes(role));
   }
 }

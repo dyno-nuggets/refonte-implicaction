@@ -24,7 +24,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
 
   private static readonly TAB_KEY_QUERY_PARAM = 'tab';
   private static readonly USER_PARAM_NAME = 'username'
-  private onDestroySubject = new Subject();
+  private onDestroySubject = new Subject<undefined>();
 
   constructor(
     private router: Router,
@@ -48,9 +48,7 @@ export class UserProfilePageComponent implements OnInit, OnDestroy {
 
     this.route.queryParamMap
       .pipe(filter(paramMap => paramMap.has(UserProfilePageComponent.TAB_KEY_QUERY_PARAM)), takeUntil(this.onDestroySubject))
-      .subscribe(
-        paramMap => this.activeTab = this.getActiveTab(paramMap.get(UserProfilePageComponent.TAB_KEY_QUERY_PARAM) as string)
-      );
+      .subscribe(paramMap => this.activeTab = this.getActiveTab(paramMap.get(UserProfilePageComponent.TAB_KEY_QUERY_PARAM) as string));
   }
 
   private getActiveTab(tabAsString: string): ProfileTabEnum {
