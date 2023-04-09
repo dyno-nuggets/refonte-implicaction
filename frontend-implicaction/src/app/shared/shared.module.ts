@@ -25,6 +25,8 @@ import {
   CardWithAvatarDurationAndTitleSkeletonComponent
 } from "./components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component";
 import {SkeletonModule} from "primeng/skeleton";
+import {ProfileInfoDisplayComponent} from './components/profile-info-display/profile-info-display.component';
+import {OverlayPanelModule} from "primeng/overlaypanel";
 
 
 @NgModule({
@@ -45,7 +47,10 @@ import {SkeletonModule} from "primeng/skeleton";
     AnyRoleMatchesDirective,
     CardHorizontalComponent,
     CardWithAvatarDurationAndTitleComponent,
-    CardWithAvatarDurationAndTitleSkeletonComponent
+    CardWithAvatarDurationAndTitleSkeletonComponent,
+    AnyRoleMatchesDirective,
+    UserAvatarComponent,
+    ProfileInfoDisplayComponent,
   ],
   exports: [
     LoadingComponent,
@@ -62,7 +67,8 @@ import {SkeletonModule} from "primeng/skeleton";
     AnyRoleMatchesDirective,
     CardHorizontalComponent,
     CardWithAvatarDurationAndTitleComponent,
-    CardWithAvatarDurationAndTitleSkeletonComponent
+    CardWithAvatarDurationAndTitleSkeletonComponent,
+    ProfileInfoDisplayComponent,
   ],
   imports: [
     CommonModule,
@@ -72,7 +78,8 @@ import {SkeletonModule} from "primeng/skeleton";
     AvatarModule,
     FormsModule,
     DropdownModule,
-    SkeletonModule
+    SkeletonModule,
+    OverlayPanelModule,
   ]
 })
 export class SharedModule {

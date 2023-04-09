@@ -1,0 +1,17 @@
+.panel-overlay {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+}
+
+.avatar-fullname {
+  display: flex;
+  justify-content: stretch;
+  align-items: center;
+}
+
+p {
+  padding-left: 10px;
+  color: black;
+}

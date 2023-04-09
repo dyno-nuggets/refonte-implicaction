@@ -1,0 +1,13 @@
+<div id="under-over" (mouseleave)="panel.hide()" (mouseover)="panel.show($event)">{{ profile.username }}
+  <p-overlayPanel #panel class="panel-overlay">
+    <ng-template pTemplate="content">
+
+      <div class="avatar-fullname">
+        <app-user-avatar [profile]="profile" [shape]="'rounded-circle'" [size]="'large'"></app-user-avatar>
+
+        <p>{{ profile.firstname }} {{ profile.lastname }}</p>
+      </div>
+
+    </ng-template>
+  </p-overlayPanel>
+</div>
