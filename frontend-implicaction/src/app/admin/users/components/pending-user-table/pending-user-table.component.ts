@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-import {UserService} from '../../../../profile/services/user.service';
 import {finalize, take} from 'rxjs/operators';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {RoleEnum, RoleEnumCode} from '../../../../shared/enums/role.enum';
@@ -7,6 +6,7 @@ import {User} from '../../../../shared/models/user';
 import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {ActivatedRoute} from '@angular/router';
 import {Criteria} from '../../../../shared/models/Criteria';
+import {UserService} from "../../../../community/services/profile/user.service";
 
 @Component({
   selector: 'app-pending-user-table',

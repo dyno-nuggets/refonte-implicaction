@@ -24,16 +24,8 @@ const routes: Routes = [
     }
   },
   {
-    path: Univers.PROFILE.url,
-    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule),
-    canActivate: [AuthGuard],
-    data: {
-      allowedRoles: Univers.PROFILE.roles
-    }
-  },
-  {
     path: Univers.COMMUNITY.url,
-    loadChildren: () => import('./user/user.module').then(m => m.UserModule),
+    loadChildren: () => import('./community/community.module').then(m => m.CommunityModule),
     canActivate: [AuthGuard],
     data: {
       allowedRoles: Univers.COMMUNITY.roles

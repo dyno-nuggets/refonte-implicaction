@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
-import {UserService} from '../../../../profile/services/user.service';
 import {ToasterService} from '../../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';
 import {Pageable} from '../../../../shared/models/pageable';
 import {Constants} from '../../../../config/constants';
 import {User} from '../../../../shared/models/user';
+import {UserService} from "../../../../community/services/profile/user.service";
 
 @Component({
   selector: 'app-table-users',

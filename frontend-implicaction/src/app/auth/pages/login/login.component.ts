@@ -4,7 +4,7 @@ import {AuthService} from '../../../core/services/auth.service';
 import {LoginRequestPayload} from '../../models/login-request-payload';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
-import {finalize, takeUntil} from 'rxjs/operators';
+import {finalize, take, takeUntil} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
 import {AlertService} from "../../../shared/services/alert.service";
 import {Subject} from "rxjs";
@@ -16,7 +16,7 @@ import {Alert, AlertType} from "../../../shared/models/alert";
 export class LoginComponent implements OnInit, OnDestroy {
 
   loginForm: UntypedFormGroup;
-  loginRequestPayload: LoginRequestPayload;
+  loginRequestPayload: LoginRequestPayload = {username: '', password: ''};
   isLoading = false;
   alert: Alert;
 
@@ -29,20 +29,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     private toaster: ToasterService,
     private alertService: AlertService
   ) {
-    if (this.authService.isLoggedIn()) {
-      this.router.navigate([Univers.HOME.url]);
-    } else {
-      this.loginRequestPayload = {
-        username: '',
-        password: ''
-      };
-    }
   }
 
   ngOnInit(): void {
     this.loginForm = new UntypedFormGroup({
-      username: new UntypedFormControl('', Validators.required),
-      password: new UntypedFormControl('', Validators.required)
+      username: new UntypedFormControl(this.loginRequestPayload.username, Validators.required),
+      password: new UntypedFormControl(this.loginRequestPayload.password, Validators.required)
     });
 
     this.alertService.onAlert()
@@ -71,7 +63,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.authService
       .login(this.loginRequestPayload)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => this.isLoading = false), take(1))
       .subscribe(isLogged => isLogged && this.redirectSuccess());
   }
 

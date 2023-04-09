@@ -9,7 +9,8 @@
               <h3><a routerLink="/{{ univers.FORUM.url }}/topics/{{ topic.id }}">{{ topic.title }}</a></h3>
             </div>
             <div class="text-justify">
-              <a routerLink="/{{ univers.PROFILE.url }}/{{ topic.author.username }}">{{ topic.author.username }}</a> - {{ topic.createdAt | date: constants.DATETIME_FORMAT  }}
+              <a [routerLink]="['/', univers.COMMUNITY.url, 'profile', topic.author.username]">{{ topic.author.username }}</a>
+              - {{ topic.createdAt | date: constants.DATETIME_FORMAT  }}
             </div>
           </div>
         </div>

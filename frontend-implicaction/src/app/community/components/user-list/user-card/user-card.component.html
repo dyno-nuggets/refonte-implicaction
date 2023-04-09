@@ -1,0 +1,26 @@
+<div class="card card-user">
+  <div class="card-header"></div>
+  <div class="d-flex align-items-center justify-content-center img-container">
+    <img
+      #userImage
+      (error)="userImage.src = constant.USER_IMAGE_DEFAULT_URI"
+      [src]="profile.imageUrl || constant.USER_IMAGE_DEFAULT_URI"
+      alt="photo de {{profile.firstname}} {{profile.lastname}}"
+      class="shadow-sm"
+    >
+  </div>
+  <div class="card-body pt-5">
+    <div class="h5 text-center m-0">
+      <span class="link-profile overflow-ellipsis">
+        <a
+          class="text-decoration-none"
+          title="{{profile.firstname}} {{profile.lastname}}"
+          [routerLink]="['/', univer.COMMUNITY.url, 'profile', profile.username]"
+        >
+          {{profile.firstname}} {{profile.lastname}}
+        </a>
+      </span>
+    </div>
+    <ng-container *ngTemplateOutlet="innerTemplate"></ng-container>
+  </div>
+</div>
