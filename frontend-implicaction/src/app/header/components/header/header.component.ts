@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {Univers} from '../../../shared/enums/univers';
 import {RoleEnumCode} from '../../../shared/enums/role.enum';
-import {Profile} from "../../../profile/models/profile";
 import {Subject} from "rxjs";
+import {Profile} from "../../../community/models/profile/profile";
 
 @Component({
   selector: 'app-header',

@@ -3,7 +3,7 @@ import {Univers} from '../../../shared/enums/univers';
 import {Constants} from "../../../config/constants";
 import {JobService} from "../../../job/services/job.service";
 import {JobPosting} from "../../../shared/models/job-posting";
-import {finalize} from "rxjs/operators";
+import {finalize, take} from "rxjs/operators";
 import {ImplicactionEventService} from "../../../shared/services/implicaction-event.service";
 import {ImplicactionEvent} from "../../../shared/models/implicactionEvent";
 import {HighlightPoint} from "../../models/highlight-point";
@@ -55,7 +55,10 @@ export class HomePageComponent implements OnInit {
       latestJobs: this.jobService.getLatestJobs(Constants.LATEST_JOBS_COUNT),
       latestEvents: this.eventService.getLatestEvents()
     })
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(
+        finalize(() => this.isLoading = false),
+        take(1)
+      )
       .subscribe({
         next: value => {
           this.latestTopics = value.latestTopics;

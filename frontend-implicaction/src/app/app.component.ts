@@ -4,11 +4,11 @@ import {SidebarContentComponent, SidebarProps} from './shared/models/sidebar-pro
 import {SidebarContentDirective} from './shared/directives/sidebar-content.directive';
 import {Observable, Subject} from 'rxjs';
 import {AuthService} from "./core/services/auth.service";
-import {ProfileService} from "./profile/services/profile.service";
 import {take, takeUntil} from "rxjs/operators";
-import {Profile} from "./profile/models/profile";
 import {ProfileContextService} from "./core/services/profile-context.service";
 import {Principal} from "./shared/models/principal";
+import {Profile} from "./community/models/profile/profile";
+import {ProfileService} from "./community/services/profile/profile.service";
 
 @Component({
   selector: 'app-root',

@@ -6,10 +6,10 @@ import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/Criteria';
-import {Profile} from "../../profile/models/profile";
-import {Relation} from "../../user/models/relation";
 import {Response} from "../../forum/model/response";
 import {GetCategoriesOptions} from '../../forum/services/category.service';
+import {Profile} from "../../community/models/profile/profile";
+import {Relation} from "../../community/models/relation";
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
 export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };

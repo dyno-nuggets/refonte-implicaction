@@ -14,7 +14,7 @@
             <div class="username">
               <a
                 class="post-card-link"
-                routerLink="/{{univers.PROFILE.url}}/{{topic.author.username}}"
+                [routerLink]="[univers.COMMUNITY.url, 'profile', topic.author.username]"
               >
                 {{topic.author.username}}
               </a>
