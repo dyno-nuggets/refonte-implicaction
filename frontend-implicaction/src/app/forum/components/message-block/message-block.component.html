@@ -3,7 +3,9 @@
        class="border-end border-dark d-flex align-items-center flex-column p-4 message__author">
     <app-user-avatar [profile]="author" size="medium"></app-user-avatar>
     <div class="author-username">
-      <a [routerLink]="['/', univers.COMMUNITY.url, 'profile', message.author.username]">{{ author.username }}</a>
+      <a [routerLink]="['/', univers.COMMUNITY.url, 'profile', message.author.username]">
+        <app-profile-info-display [profile]="author"></app-profile-info-display>
+      </a>
     </div>
     <div>Inscrit depuis:</div>
     <div>{{ author.registeredAt | date: constants.DATE_FORMAT }}</div>

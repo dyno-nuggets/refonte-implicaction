@@ -1,13 +1,12 @@
-<div id="under-over" (mouseleave)="panel.hide()" (mouseover)="panel.show($event)">{{ profile.username }}
-  <p-overlayPanel #panel class="panel-overlay">
+<div id="under-over" (mouseover)="panel.show($event)" (mouseleave)="initPanelHide()">{{ profile.username }}
+  <p-overlayPanel #panel class="panel-overlay" hideTransitionOptions=".2s linear">
     <ng-template pTemplate="content">
-
-      <div class="avatar-fullname">
-        <app-user-avatar [profile]="profile" [shape]="'rounded-circle'" [size]="'large'"></app-user-avatar>
-
-        <p>{{ profile.firstname }} {{ profile.lastname }}</p>
+      <div class="wrapper" (mouseenter)="cancelPanelHideOperation()" (mouseleave)="initPanelHide()">
+        <div class="avatar-fullname">
+          <app-user-avatar [profile]="profile" [shape]="'rounded-circle'" [size]="'large'"></app-user-avatar>
+          <p>{{ profile.firstname }} {{ profile.lastname }}</p>
+        </div>
       </div>
-
     </ng-template>
   </p-overlayPanel>
 </div>
