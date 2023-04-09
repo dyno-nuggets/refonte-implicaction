@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Profile} from "../../../profile/models/profile";
 import {Univers} from "../../enums/univers";
 
@@ -7,16 +7,10 @@ import {Univers} from "../../enums/univers";
   templateUrl: './profile-info-display.component.html',
   styleUrls: ['./profile-info-display.component.scss']
 })
-export class ProfileInfoDisplayComponent implements OnInit {
+export class ProfileInfoDisplayComponent {
   @Input()
   profile?: Profile;
 
   univer = Univers;
-
-  constructor() {
-  }
-
-  ngOnInit(): void {
-  }
 
 }
