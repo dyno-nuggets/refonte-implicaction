@@ -18,11 +18,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,6 +49,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserService userService;
+    private final UserDetailsService userDetailsService;
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
@@ -120,21 +122,15 @@ public class AuthService {
                 .build();
     }
 
-    public UserModel getCurrentUser() {
-        final org.springframework.security.core.userdetails.User principal =
-                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userService.getUserByUsernameIfExists(principal.getUsername());
-    }
-
     @Transactional(readOnly = true)
     public LoginResponse refreshToken(final RefreshTokenRequest refreshTokenRequest) throws ImplicactionException {
         final String username = refreshTokenRequest.getUsername();
 
         // une exception sera levée si l’utilisateur ou le refresh token n’existent pas
-        userService.getUserByUsernameIfExists(username);
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         refreshTokenService.validateRefreshToken(refreshTokenRequest.getRefreshToken());
 
-        final String token = jwtProvider.generateTokenWithUsername(username);
+        final String token = jwtProvider.generateToken(userDetails);
         final Instant expiresAt = now().plusMillis(jwtProvider.getJwtExpirationInMillis());
 
         return LoginResponse.builder()
@@ -142,6 +138,12 @@ public class AuthService {
                 .refreshToken(refreshTokenRequest.getRefreshToken())
                 .expiresAt(expiresAt)
                 .build();
+    }
+
+    public UserModel getCurrentUser() {
+        final org.springframework.security.core.userdetails.User principal =
+                (org.springframework.security.core.userdetails.User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userService.getUserByUsernameIfExists(principal.getUsername());
     }
 
     private UserModel registerUser(final RegisterRequest registerRequest, final String activationKey) {
@@ -164,11 +166,6 @@ public class AuthService {
 
     private String generateActivationKey() {
         return UUID.randomUUID().toString();
-    }
-
-    public boolean isLoggedIn() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return !(authentication instanceof AnonymousAuthenticationToken) && authentication.isAuthenticated();
     }
 
     /**

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -17,12 +18,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.*;
 import java.security.cert.CertificateException;
-import java.time.Instant;
-import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.PUBLIC_KEY_ERROR;
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.REFRESH_TOKEN_EXPIRED;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
+import static java.time.Instant.now;
+import static java.util.Date.from;
 
 @Slf4j
 @Service
@@ -49,36 +52,37 @@ public class JwtProvider {
     }
 
     @PostConstruct
-    public void init() {
+    public void init() throws CertificateException, KeyStoreException, IOException, NoSuchAlgorithmException {
         try {
             keyStore = KeyStore.getInstance(keyStoreType);
             final InputStream ressourceAsStream = getClass().getResourceAsStream(keyStoreFile);
             keyStore.load(ressourceAsStream, keyStorePassword.toCharArray());
         } catch (final KeyStoreException | CertificateException | IOException | NoSuchAlgorithmException e) {
             log.error(e.getMessage());
+            throw e;
         }
     }
 
     public String generateToken(final Authentication authentication) throws ImplicactionException {
-        final User principal = (User) authentication.getPrincipal();
-        final String authorities = authentication.getAuthorities().stream()
+        final List<String> authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
-        final Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
-        return Jwts.builder()
-                .setSubject(principal.getUsername())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(getPrivateKey())
-                .setExpiration(expirationDate)
-                .compact();
+                .collect(Collectors.toList());
+        return generateToken(((User) authentication.getPrincipal()).getUsername(), authorities);
     }
 
-    public String generateTokenWithUsername(final String username) throws ImplicactionException {
-        final Date expirationDate = Date.from(Instant.now().plusMillis(jwtExpirationInMillis));
+    public String generateToken(final UserDetails userDetails) throws ImplicactionException {
+        final List<String> authorities = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        return generateToken(userDetails.getUsername(), authorities);
+    }
+
+    private String generateToken(final String username, final List<String> authorities) {
         return Jwts.builder()
                 .setSubject(username)
+                .claim(AUTHORITIES_KEY, emptyStreamIfNull(authorities).collect(Collectors.joining(",")))
                 .signWith(getPrivateKey())
-                .setExpiration(expirationDate)
+                .setExpiration(from(now().plusMillis(jwtExpirationInMillis)))
                 .compact();
     }
 

@@ -15,10 +15,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private static getRoutePermissions(route: ActivatedRouteSnapshot): RoleEnumCode[] {
-    if (route.data && route.data.allowedRoles) {
-      return route.data.allowedRoles;
-    }
-    return null;
+    return route.data?.allowedRoles;
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
