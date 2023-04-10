@@ -25,9 +25,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -54,6 +57,8 @@ class AuthServiceTest {
     UserRepository userRepository;
     @Mock
     UserService userService;
+    @Mock
+    UserDetailsService userDetailsService;
     @Mock
     AuthenticationManager authenticationManager;
     @Mock
@@ -230,7 +235,7 @@ class AuthServiceTest {
             final Instant expiresAt = now();
 
             given(authenticationManager.authenticate(any())).willReturn(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-            given(jwtProvider.generateToken(any())).willReturn(jwtToken);
+            given(jwtProvider.generateToken(any(Authentication.class))).willReturn(jwtToken);
             given(refreshTokenService.generateRefreshToken()).willReturn(RefreshTokenDto.builder().token(refreshToken).build());
 
             // when
@@ -242,7 +247,7 @@ class AuthServiceTest {
             assertThat(actualResponse.getExpiresAt()).isBetween(expiresAt, now());
 
             verify(authenticationManager, times(1)).authenticate(any());
-            verify(jwtProvider, times(1)).generateToken(any());
+            verify(jwtProvider, times(1)).generateToken(any(Authentication.class));
             verify(refreshTokenService, times(1)).generateRefreshToken();
         }
 
@@ -283,11 +288,11 @@ class AuthServiceTest {
             // given
             final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
             final String username = refreshTokenRequest.getUsername();
-            final UserModel user = UserModel.builder().username(username).build();
+            final UserDetails userDetails = new org.springframework.security.core.userdetails.User(username, "password", Collections.emptyList());
             final LoginResponse expectedResponse = LoginResponse.builder().refreshToken("refreshToken").authenticationToken("jwtToken").expiresAt(now().plusMillis(jwtProvider.getJwtExpirationInMillis())).build();
-            given(userService.getUserByUsernameIfExists(username)).willReturn(user);
+            given(userDetailsService.loadUserByUsername(refreshTokenRequest.getUsername())).willReturn(userDetails);
             willDoNothing().given(refreshTokenService).validateRefreshToken(anyString());
-            given(jwtProvider.generateTokenWithUsername(username)).willReturn("jwtToken");
+            given(jwtProvider.generateToken(userDetails)).willReturn("jwtToken");
 
             // when
             final LoginResponse loginResponse = authService.refreshToken(refreshTokenRequest);
@@ -298,11 +303,11 @@ class AuthServiceTest {
                     .ignoringFields("expiresAt", "currentUser")
                     .isEqualTo(expectedResponse);
 
-            assertThat(loginResponse.getExpiresAt())
-                    .isBetween(expectedResponse.getExpiresAt(), now().plusMillis(jwtProvider.getJwtExpirationInMillis()));
-            verify(userService, times(1)).getUserByUsernameIfExists(username);
+            assertThat(loginResponse.getExpiresAt()).isBetween(expectedResponse.getExpiresAt(), now().plusMillis(jwtProvider.getJwtExpirationInMillis()));
+
             verify(refreshTokenService, times(1)).validateRefreshToken(anyString());
-            verify(jwtProvider, times(1)).generateTokenWithUsername(username);
+            verify(userDetailsService, times(1)).loadUserByUsername(username);
+            verify(jwtProvider, times(1)).generateToken(userDetails);
         }
 
         @Test
@@ -311,13 +316,14 @@ class AuthServiceTest {
             // given
             final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
             final String username = refreshTokenRequest.getUsername();
-            given(userService.getUserByUsernameIfExists(username)).willThrow(new EntityNotFoundException(USERNAME_NOT_FOUND, username));
+            given(userDetailsService.loadUserByUsername(username)).willThrow(new EntityNotFoundException(USERNAME_NOT_FOUND, username));
 
             // when
             final ImplicactionException actualException = assertThrows(ImplicactionException.class, () -> authService.refreshToken(refreshTokenRequest));
 
             // then
             assertImplicactionException(actualException, EntityNotFoundException.class, USERNAME_NOT_FOUND, username);
+            verify(userDetailsService, times(1)).loadUserByUsername(username);
             verifyNoInteractions(refreshTokenService);
             verifyNoInteractions(jwtProvider);
         }
@@ -328,8 +334,8 @@ class AuthServiceTest {
             // given
             final RefreshTokenRequest refreshTokenRequest = RefreshTokenRequest.builder().username("username").refreshToken("refreshToken").build();
             final String username = refreshTokenRequest.getUsername();
-            final UserModel user = UserModel.builder().username(username).build();
-            given(userService.getUserByUsernameIfExists(username)).willReturn(user);
+            final UserDetails userDetails = new org.springframework.security.core.userdetails.User(username, "password", Collections.emptyList());
+            given(userDetailsService.loadUserByUsername(refreshTokenRequest.getUsername())).willReturn(userDetails);
             willThrow(new AuthenticationException(REFRESH_TOKEN_EXPIRED)).given(refreshTokenService).validateRefreshToken(anyString());
 
             // when

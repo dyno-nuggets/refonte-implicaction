@@ -44,8 +44,8 @@ export class AuthService {
     return this.http.post<LoginResponse>(this.apiEndpointsService.getLoginEndpoint(), loginRequestPayload)
       .pipe(
         map(loginResponse => {
-          const principal = this.decodeToken(loginResponse.authenticationToken);
           this.storageService.storeLoginResponse(loginResponse);
+          const principal = this.decodeToken(loginResponse.authenticationToken);
           this.storeAndEmitPrincipal(principal);
           return principal;
         }),
@@ -91,7 +91,11 @@ export class AuthService {
       this.apiEndpointsService.getJwtRefreshTokenEndpoint(),
       refreshTokenPayload
     )
-      .pipe(tap(response => this.storageService.storeLoginResponse(response)));
+      .pipe(tap(loginResponse => {
+        this.storageService.storeLoginResponse(loginResponse);
+        const principal = this.decodeToken(loginResponse.authenticationToken);
+        this.storeAndEmitPrincipal(principal);
+      }));
   }
 
   getRefreshToken(): string {
