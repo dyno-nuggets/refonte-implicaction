@@ -14,10 +14,6 @@ public class Message {
     @Deprecated(since = "v.2023")
     public static final String UNKNOWN_FILE_UPLOAD_MESSAGE = "Exception occured while uploading the file [%s]";
     @Deprecated(since = "v.2023")
-    public static final String FILE_SIZE_TOO_LARGE_MESSAGE = "Exception occured while uploading the file [%s] : maximum size (%d) exceeded";
-    @Deprecated(since = "v.2023")
-    public static final String UNAUTHORIZED_CONTENT_TYPE_MESSAGE = "Exception occured while uploading the file [%s] : unauthorized content type";
-    @Deprecated(since = "v.2023")
     public static final String FILE_NOT_FOUND_MESSAGE = "No file found with id [%s]";
 
     // JobApplication messages

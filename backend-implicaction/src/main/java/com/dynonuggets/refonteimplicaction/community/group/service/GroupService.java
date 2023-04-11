@@ -10,7 +10,6 @@ import com.dynonuggets.refonteimplicaction.community.group.mapper.GroupMapper;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.FileService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -49,10 +48,11 @@ public class GroupService {
                 .enabled(currentUser.isAdmin())
                 .createdAt(now());
 
-        if (image != null) {
-            final FileModel fileModel = cloudService.uploadImage(image);
-            builder.imageUrl(fileService.save(fileModel));
-        }
+        // TODO: permettre l'upload d'une image de groupe
+        // if (image != null) {
+        //            final FileModel fileModel = cloudService.uploadAvatar(image, username);
+        //    builder.imageUrl(fileService.save(fileModel));
+        //}
 
         return groupMapper.toDto(groupRepository.save(builder.build()));
     }

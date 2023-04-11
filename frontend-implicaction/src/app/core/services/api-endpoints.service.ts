@@ -169,10 +169,6 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
-  updateImageProfileEndpoint(username: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.PROFILES.BASE_URI, [username]);
-  }
-
   getAllPendingActivationUsersEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_ALL_PENDING_USERS, pageable);
   }
@@ -548,6 +544,13 @@ export class ApiEndpointsService {
       Uris.JOB_APPLICATION.BASE_URI,
       (qs: QueryStringParameters) => qs.push('jobId', jobId)
     );
+  }
+
+  /**
+   * FILE
+   */
+  updateImageProfileEndpoint(username: string): string {
+    return ApiEndpointsService.createUrl(Uris.FILES.POST_PROFILE_AVATAR.replace('{username}', username));
   }
 
   /**

@@ -87,7 +87,6 @@ class GroupServiceTest {
             final GroupModel expectedGroup = GroupModel.builder().id(12L).name(createGroupRequest.getName()).description(createGroupRequest.getDescription()).creator(profile).createdAt(now()).imageUrl(imageUrl).enabled(false).build();
             given(authService.getCurrentUser()).willReturn(currentUser);
             given(profileService.getByUsernameIfExistsAndUserEnabled(username)).willReturn(profile);
-            given(cloudService.uploadImage(mockedImage)).willReturn(fileModel);
             given(fileService.save(fileModel)).willReturn(imageUrl);
             given(groupRepository.save(any(GroupModel.class))).willReturn(expectedGroup);
 
@@ -96,7 +95,6 @@ class GroupServiceTest {
 
             // then
             verify(profileService, times(1)).getByUsernameIfExistsAndUserEnabled(username);
-            verify(cloudService, times(1)).uploadImage(mockedImage);
             verify(fileService, times(1)).save(any(FileModel.class));
             verify(groupMapper, times(1)).toDto(any(GroupModel.class));
             verify(groupRepository, times(1)).save(argumentCaptor.capture());

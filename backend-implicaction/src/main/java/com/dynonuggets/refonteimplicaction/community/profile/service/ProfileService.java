@@ -8,8 +8,6 @@ import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
-import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.AllArgsConstructor;
@@ -19,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_ALREADY_EXISTS_MESSAGE;
@@ -35,7 +32,6 @@ public class ProfileService {
     private final UserService userService;
     private final ProfileAdapter profileAdapter;
     private final AuthService authService;
-    private final CloudService cloudService;
 
     /**
      * crée un nouveau profil si l’utilisateur existe
@@ -116,24 +112,6 @@ public class ProfileService {
         profile.setExpectation(updateRequest.getExpectation());
         profile.setContribution(updateRequest.getContribution());
         profile.setPhoneNumber(updateRequest.getPhoneNumber());
-
-        return profileAdapter.toDto(profileRepository.save(profile));
-    }
-
-    /**
-     * Met à jour l’avatar de l’utilisateur username
-     *
-     * @param file     fichier image de l'avatar
-     * @param username nom de l’utilisateur à mettre à jour
-     * @return le profil utilisateur modifié
-     */
-    @Transactional
-    public ProfileDto updateAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
-        authService.verifyAccessIsGranted(username);
-
-        final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(username);
-        final FileModel avatar = cloudService.uploadImage(file);
-        profile.setAvatar(avatar);
 
         return profileAdapter.toDto(profileRepository.save(profile));
     }

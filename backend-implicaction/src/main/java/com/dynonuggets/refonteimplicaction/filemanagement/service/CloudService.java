@@ -7,9 +7,9 @@ import java.io.IOException;
 
 public interface CloudService {
 
-    FileModel uploadFile(MultipartFile file) throws IOException;
+    FileModel uploadFile(MultipartFile file, boolean publicAccess) throws IOException;
 
-    FileModel uploadImage(MultipartFile file);
+    String uploadAvatar(MultipartFile file, String username);
 
     byte[] getFileAsBytes(String objectKey) throws IOException;
 }

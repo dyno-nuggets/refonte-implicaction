@@ -6,15 +6,36 @@
 <!-- Profile Edit Form -->
 <form>
   <div class="row mb-3">
-    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+    <label for="input-avatar" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
     <div class="col-md-8 col-lg-9">
       <app-user-avatar
         size="xlarge"
         [profile]="profile"
       ></app-user-avatar>
       <div class="pt-2">
-        <button class="btn btn-primary btn-sm" title="Upload new profile image"><i class="fa fa-upload" aria-hidden="true"></i></button>
-        <button class="btn btn-danger btn-sm" title="Remove my profile image"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+        <input
+          id="input-avatar"
+          type="file"
+          (change)="selectFile($event)"
+        >
+      </div>
+      <div class="mt-2 upload-options">
+        <button
+          class="btn btn-primary btn-sm"
+          title="Télécharger le fichier"
+          (click)="uploadFile()"
+          [disabled]="!selectedFile"
+        >
+          <i class="fa fa-upload" aria-hidden="true"></i>
+        </button>
+      </div>
+      <div class="progress mt-2" [ngStyle]="{'visibility' : isLoading ? 'visible' : 'hidden'}">
+        <div
+          role="progressbar"
+          class="progress-bar"
+          [attr.aria-valuenow]="progress"
+          [style]="'width: ' + progress + '%'" aria-valuemin="0" aria-valuemax="100"
+        ></div>
       </div>
     </div>
   </div>

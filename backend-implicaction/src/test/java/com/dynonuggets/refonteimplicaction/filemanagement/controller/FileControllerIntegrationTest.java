@@ -13,7 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.GET_FILE_BY_KEY;
-import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.PUBLIC_FILE_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.PUBLIC_FILES_BASE_URI;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class FileControllerIntegrationTest extends ControllerIntegrationTestBase {
 
     @Getter
-    protected String baseUri = PUBLIC_FILE_BASE_URI;
+    protected String baseUri = PUBLIC_FILES_BASE_URI;
 
     @MockBean
     AmazonS3Client client;
@@ -48,7 +48,7 @@ class FileControllerIntegrationTest extends ControllerIntegrationTestBase {
     void should_return_forbidden_when_getting_file_and_not_authenticated() throws Exception {
         should_response_ok_with_file_when_exists();
     }
-    
+
     private void should_response_ok_with_file_when_exists() throws Exception {
         // given
         final String objectKey = "blablabla";
