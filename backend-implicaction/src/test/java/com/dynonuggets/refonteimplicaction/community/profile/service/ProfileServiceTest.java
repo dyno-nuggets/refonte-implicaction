@@ -10,7 +10,6 @@ import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
@@ -26,6 +25,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Optional;
@@ -43,7 +43,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
-import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {
@@ -247,57 +246,6 @@ class ProfileServiceTest {
         }
     }
 
-    @Nested
-    @DisplayName("# updateAvatar")
-    class UpdateAvatarTest {
-        @Test
-        @DisplayName("doit mettre à jour l'avatar de l'utilisateur quand updateAvatar est lancé avec un fichier valide et que l'utilisateur correspond à l'utilisateur courant")
-        void should_update_avatar_when_updateAvatar_and_file_is_valid_and_current_user_is_user_to_update() {
-            // given
-            final UserModel currentUser = UserModel.builder().username("currentUser").build();
-            final String username = "currentUser";
-            final MockMultipartFile mockMultipartFile = new MockMultipartFile("avatar", "avatar.png", IMAGE_PNG_VALUE, "je suis un png".getBytes());
-            final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
-            final FileModel fileModel = FileModel.builder().build();
-            profile.setAvatar(fileModel);
-            willDoNothing().given(authService).verifyAccessIsGranted(any());
-            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.of(profile));
-            given(cloudService.uploadImage(any())).willReturn(fileModel);
-            given(profileRepository.save(any())).willReturn(profile);
-            given(profileAdapter.toDto(any())).willReturn(ProfileDto.builder().username(username).imageUrl("avatar.png").build());
-
-            // when
-            final ProfileDto profileDto = profileService.updateAvatar(mockMultipartFile, username);
-
-            // then
-            assertThat(profileDto)
-                    .isNotNull()
-                    .extracting(ProfileDto::getImageUrl)
-                    .isEqualTo("avatar.png");
-            verify(authService, times(1)).verifyAccessIsGranted(any());
-            verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
-            verify(cloudService, times(1)).uploadImage(any());
-            verify(profileRepository, times(1)).save(any());
-            verify(profileAdapter, times(1)).toDto(any());
-        }
-
-        @Test
-        @DisplayName("doit retourner une exception lorsque updateAvatar est lancé pour un autre utilisateur que l'utilisateur courant")
-        void should_throw_exception_when_updateAvatar_with_currentUser_is_not_user_updated() {
-            // given
-            final MockMultipartFile mockMultipartFile = new MockMultipartFile("avatar", "avatar.png", IMAGE_PNG_VALUE, "je suis un png".getBytes());
-            final String username = "notCurrentUser";
-            willThrow(new CoreException(OPERATION_NOT_PERMITTED)).given(authService).verifyAccessIsGranted(username);
-
-            // then
-            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.updateAvatar(mockMultipartFile, username));
-            assertImplicactionException(e, CoreException.class, OPERATION_NOT_PERMITTED);
-            verifyNoInteractions(cloudService);
-            verifyNoInteractions(profileRepository);
-            verifyNoInteractions(profileAdapter);
-        }
-    }
-
     @Test
     @DisplayName("doit retourner la liste des profils des utilisateurs")
     void should_get_all_profiles_when_getAllProfiles() {
@@ -312,5 +260,43 @@ class ProfileServiceTest {
         assertThat(result).hasSize(size);
         verify(profileRepository, times(1)).findAll(any(Pageable.class));
         verify(profileAdapter, times(size)).toDto(any());
+    }
+
+    @Nested
+    @DisplayName("# uploadAvatar")
+    class UploadAvatarTest {
+        @Test
+        @DisplayName("doit retourner un dtoLight avec l'imageUrl quand l'utilisateur existe")
+        void should_return_profile_when_username_exists() {
+            // given
+            final MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test data".getBytes());
+            final ProfileModel profileModel = generateRandomProfile();
+            final String username = profileModel.getUser().getUsername();
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.of(profileModel));
+            final String imageUrl = "url_du_fichier";
+            given(cloudService.uploadPublicImage(file)).willReturn(imageUrl);
+
+            // when
+            profileService.uploadAvatar(file, username);
+
+            // then
+            verify(cloudService, times(1)).uploadPublicImage(file);
+            verify(profileRepository, times(1)).save(profileCaptor.capture());
+            final ProfileModel actualProfile = profileCaptor.getValue();
+            assertThat(actualProfile.getImageUrl()).isEqualTo(imageUrl);
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand l'utilisateur n'existe pas")
+        void should_throw_exception_when_user_does_not_exists() {
+            // given
+            final MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test data".getBytes());
+            final String username = "username";
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.empty());
+
+            // when - then
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.uploadAvatar(file, username));
+            assertImplicactionException(e, EntityNotFoundException.class, PROFILE_NOT_FOUND, username);
+        }
     }
 }

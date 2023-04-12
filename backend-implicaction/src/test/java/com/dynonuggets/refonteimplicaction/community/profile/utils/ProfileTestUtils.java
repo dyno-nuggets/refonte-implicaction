@@ -41,6 +41,7 @@ public class ProfileTestUtils {
                 .experiences(of(WorkExperience.builder().build()))
                 .trainings(of(Training.builder().build()))
                 .groups(of(GroupModel.builder().build()))
+                .imageUrl("uneUrl")
                 .build();
     }
 

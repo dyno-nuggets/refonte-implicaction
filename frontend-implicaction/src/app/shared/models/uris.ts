@@ -24,6 +24,7 @@ export class Uris {
   static readonly PROFILES = class {
     static readonly BASE_URI = 'profiles';
     static readonly BY_USERNAME = 'profiles';
+    static readonly POST_AVATAR = 'profiles/{username}/avatar'
   }
 
   /**
@@ -118,6 +119,9 @@ export class Uris {
     static readonly BASE_URI = 'applies';
   };
 
+  /**
+   * FORUM
+   */
   static FORUM = class {
     static readonly BASE_URI = 'forums';
     static readonly CATEGORIES = 'forums/categories';

@@ -144,7 +144,6 @@ export class ApiEndpointsService {
   /**
    * Profiles
    */
-
   getProfileByUsernameEndpoint(username: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.PROFILES.BY_USERNAME, [username]);
   }
@@ -161,16 +160,16 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.AUTH.ACTIVATE_USER.replace('{username}', username));
   }
 
+  updateImageProfileEndpoint(username: string): string {
+    return ApiEndpointsService.createUrl(Uris.PROFILES.POST_AVATAR.replace('{username}', username));
+  }
+
   /**
    * Users
    */
 
   getAllUserEndpoint(pageable: Pageable<any>): string {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
-  }
-
-  updateImageProfileEndpoint(username: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.PROFILES.BASE_URI, [username]);
   }
 
   getAllPendingActivationUsersEndpoint(pageable: Pageable<any>): string {

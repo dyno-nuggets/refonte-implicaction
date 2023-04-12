@@ -8,7 +8,6 @@ import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
@@ -120,26 +119,17 @@ public class ProfileService {
         return profileAdapter.toDto(profileRepository.save(profile));
     }
 
-    /**
-     * Met à jour l’avatar de l’utilisateur username
-     *
-     * @param file     fichier image de l'avatar
-     * @param username nom de l’utilisateur à mettre à jour
-     * @return le profil utilisateur modifié
-     */
-    @Transactional
-    public ProfileDto updateAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
-        authService.verifyAccessIsGranted(username);
-
-        final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(username);
-        final FileModel avatar = cloudService.uploadImage(file);
-        profile.setAvatar(avatar);
-
-        return profileAdapter.toDto(profileRepository.save(profile));
-    }
-
     @Transactional(readOnly = true)
     public ProfileModel getCurrentProfile() {
         return getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
     }
+
+    @Transactional
+    public ProfileDto uploadAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
+        final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(username);
+        final String imageUrl = cloudService.uploadPublicImage(file);
+        profile.setImageUrl(imageUrl);
+        return profileAdapter.toDtoLight(profileRepository.save(profile));
+    }
 }
+

@@ -3,7 +3,6 @@ package com.dynonuggets.refonteimplicaction.community.profile.domain.model;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
 import com.dynonuggets.refonteimplicaction.forum.response.domain.model.ResponseModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -37,8 +36,7 @@ public class ProfileModel {
     private String presentation;
     private String expectation;
     private String contribution;
-    @ManyToOne
-    private FileModel avatar;
+    private String imageUrl;
     @Column(name = "phone_number")
     private String phoneNumber;
     @OneToMany(fetch = LAZY, mappedBy = "profile")

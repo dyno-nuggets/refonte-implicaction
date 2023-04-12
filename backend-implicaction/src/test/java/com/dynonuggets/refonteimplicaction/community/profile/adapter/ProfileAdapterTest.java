@@ -5,7 +5,6 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profil
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
-import com.dynonuggets.refonteimplicaction.filemanagement.service.FileService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,8 +26,6 @@ class ProfileAdapterTest {
     TrainingAdapter trainingAdapter;
     @Mock
     GroupMapper groupMapper;
-    @Mock
-    FileService fileService;
     @InjectMocks
     ProfileAdapter profileAdapter;
 
@@ -62,7 +59,6 @@ class ProfileAdapterTest {
             verify(workExperienceAdapter, times(1)).toDto(any());
             verify(trainingAdapter, times(1)).toDto(any());
             verify(groupMapper, times(1)).toDto(any());
-            verify(fileService, times(1)).buildFileUri(any());
         }
 
         @Test

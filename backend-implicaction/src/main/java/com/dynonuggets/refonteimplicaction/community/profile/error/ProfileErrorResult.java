@@ -6,10 +6,11 @@ import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_NOT_FOUND_MESSAGE;
+import static lombok.AccessLevel.PRIVATE;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = PRIVATE)
 public enum ProfileErrorResult implements BaseErrorResult {
 
     PROFILE_NOT_FOUND(NOT_FOUND, PROFILE_NOT_FOUND_MESSAGE);

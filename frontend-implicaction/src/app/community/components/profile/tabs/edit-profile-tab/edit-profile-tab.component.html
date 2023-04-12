@@ -1,21 +1,8 @@
-<div class="alert alert-danger" role="alert">
-  Non encore implémenté
-</div>
-
-
-<!-- Profile Edit Form -->
 <form>
-  <div class="row mb-3">
-    <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+  <div class="row col d-flex mb-3">
+    <div class="col-md-4 col-lg-3 col-form-label">Profile Image</div>
     <div class="col-md-8 col-lg-9">
-      <app-user-avatar
-        size="xlarge"
-        [profile]="profile"
-      ></app-user-avatar>
-      <div class="pt-2">
-        <button class="btn btn-primary btn-sm" title="Upload new profile image"><i class="fa fa-upload" aria-hidden="true"></i></button>
-        <button class="btn btn-danger btn-sm" title="Remove my profile image"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
-      </div>
+      <app-profile-avatar-file-uploader [profile]="profile"></app-profile-avatar-file-uploader>
     </div>
   </div>
 

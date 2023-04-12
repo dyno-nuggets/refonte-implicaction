@@ -26,6 +26,7 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {SkeletonModule} from "primeng/skeleton";
 import {CalendarModule} from "primeng/calendar";
 import {FeatherModule} from "angular-feather";
+import { ProfileAvatarFileUploaderComponent } from './components/profile/profile-avatar-file-uploader/profile-avatar-file-uploader.component';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import {FeatherModule} from "angular-feather";
     ProfileDetailsSectionComponent,
     ProfilePresentationSectionComponent,
     ProfileWorkExperiencesSectionComponent,
+    ProfileAvatarFileUploaderComponent,
   ],
   imports: [
     CommonModule,
