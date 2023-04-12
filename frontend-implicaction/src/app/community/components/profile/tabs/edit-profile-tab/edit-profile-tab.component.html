@@ -7,7 +7,7 @@
 <form>
   <div class="row mb-3">
     <label for="input-avatar" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
-    <div class="col-md-8 col-lg-9">
+    <div class="col-md-4">
       <app-user-avatar
         size="xlarge"
         [profile]="profile"
@@ -19,24 +19,32 @@
           (change)="selectFile($event)"
         >
       </div>
-      <div class="mt-2 upload-options">
-        <button
-          class="btn btn-primary btn-sm"
-          title="Télécharger le fichier"
-          (click)="uploadFile()"
-          [disabled]="!selectedFile"
-        >
-          <i class="fa fa-upload" aria-hidden="true"></i>
-        </button>
+      <div class="d-flex col-12 gap-2 mt-2 upload-options">
+        <div class="col-6 progress mt-2">
+          <div
+            role="progressbar"
+            class="progress-bar"
+            [attr.aria-valuenow]="progress"
+            [style]="'width: ' + progress + '%'" aria-valuemin="0" aria-valuemax="100"
+          >
+            {{progress}}%
+          </div>
+        </div>
+        <div class="col-auto">
+          <button
+            class="d-inline-block btn btn-primary btn-sm me-2"
+            title="Télécharger le fichier"
+            (click)="uploadFile()"
+            [disabled]="!selectedFile"
+          >
+            <i class="fa fa-upload" aria-hidden="true"></i>
+          </button>
+          <button class="btn btn-danger btn-sm">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </div>
       </div>
-      <div class="progress mt-2" [ngStyle]="{'visibility' : isLoading ? 'visible' : 'hidden'}">
-        <div
-          role="progressbar"
-          class="progress-bar"
-          [attr.aria-valuenow]="progress"
-          [style]="'width: ' + progress + '%'" aria-valuemin="0" aria-valuemax="100"
-        ></div>
-      </div>
+
     </div>
   </div>
 

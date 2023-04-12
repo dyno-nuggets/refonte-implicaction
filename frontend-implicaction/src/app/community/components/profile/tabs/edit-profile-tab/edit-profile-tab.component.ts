@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 import {Profile} from "../../../../models/profile/profile";
 import {FileUploadService} from "../../../../../shared/services/file-upload.service";
 import {ToasterService} from "../../../../../core/services/toaster.service";
@@ -11,10 +11,11 @@ import {finalize} from "rxjs/operators";
   templateUrl: './edit-profile-tab.component.html',
   styleUrls: ['./edit-profile-tab.component.scss'],
 })
-export class EditProfileTabComponent {
+export class EditProfileTabComponent implements OnChanges {
 
   @Input() profile!: Profile;
 
+  profileCopy: Profile;
   progress = 0;
   isLoading = false;
   selectedFile: File;
@@ -26,36 +27,45 @@ export class EditProfileTabComponent {
   ) {
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    this.profileCopy = {...this.profile};
+  }
+
   selectFile(event): void {
     const reader = new FileReader();
 
-    if (event.target.files && event.target.files.length) {
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-      this.isLoading = true;
-      this.progress = 0;
-
-      reader.onload = () => {
-        this.fileUploadService
-          .uploadProfileAvatar(file, this.profile.username)
-          .pipe(finalize(() => this.progress = 100))
-          .subscribe({
-            next: (event: any) => {
-              if (event.type === HttpEventType.UploadProgress) {
-                this.progress = Math.round(100 * event.loaded / event.total);
-              } else if (event instanceof HttpResponse) {
-                this.profile.imageUrl = event?.body;
-                this.pcs.profile = this.profile;
-                this.toasterService.success('Succès', 'Votre image de profil a été mise à jour avec succès.')
-              }
-            },
-            error: () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la modification de votre image de profil')
-          });
-      };
+    if (!event.target.files || !event.target.files.length) {
+      return;
+    }
+    const [file] = event.target.files;
+    this.selectedFile = file;
+    reader.readAsDataURL(this.selectedFile);
+    reader.onload = () => {
+      this.profileCopy.imageUrl = reader.result as string;
     }
   }
 
-  uploadFile() {
+  uploadFile(): void {
+    if (!this.selectedFile) {
+      return;
+    }
 
+    this.isLoading = true;
+    this.progress = 0;
+
+    this.fileUploadService
+      .uploadProfileAvatar(this.selectedFile, this.profile.username)
+      .pipe(finalize(() => this.progress = 100))
+      .subscribe({
+        next: (event: any) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            this.progress = Math.round(100 * event.loaded / event.total);
+          } else if (event instanceof HttpResponse) {
+            this.profile.imageUrl = event?.body;
+            this.pcs.profile = this.profile;
+          }
+        },
+        error: () => this.toasterService.error('Oops', 'Une erreur est survenue lors de la modification de votre image de profil')
+      });
   }
 }
