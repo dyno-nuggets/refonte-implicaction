@@ -8,11 +8,9 @@ import {JobPosting} from '../../../../shared/models/job-posting';
 })
 export class LatestJobsListComponent {
 
-  @Input()
-  latestJobs: JobPosting[] = [];
-
-  @Input()
-  isLoading = false;
+  @Input() latestJobs: JobPosting[] = [];
+  @Input() isLoading = false;
+  @Input() size: number;
 
   trackByJobId = (index: number, job: JobPosting) => job.id;
 
