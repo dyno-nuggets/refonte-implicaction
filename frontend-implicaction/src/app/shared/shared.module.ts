@@ -21,7 +21,9 @@ import {RequiredRoleDirective} from './directives/required-role.directive';
 import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
 import {CardHorizontalComponent} from './components/cards/card-horizontal/card-horizontal.component';
 import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-with-avatar-duration-and-title/card-with-avatar-duration-and-title.component';
-import {CardWithAvatarDurationAndTitleSkeleton} from "./components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component";
+import {
+  CardWithAvatarDurationAndTitleSkeletonComponent
+} from "./components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component";
 import {SkeletonModule} from "primeng/skeleton";
 
 
@@ -43,7 +45,7 @@ import {SkeletonModule} from "primeng/skeleton";
     AnyRoleMatchesDirective,
     CardHorizontalComponent,
     CardWithAvatarDurationAndTitleComponent,
-    CardWithAvatarDurationAndTitleSkeleton
+    CardWithAvatarDurationAndTitleSkeletonComponent
   ],
   exports: [
     LoadingComponent,
@@ -60,7 +62,7 @@ import {SkeletonModule} from "primeng/skeleton";
     AnyRoleMatchesDirective,
     CardHorizontalComponent,
     CardWithAvatarDurationAndTitleComponent,
-    CardWithAvatarDurationAndTitleSkeleton
+    CardWithAvatarDurationAndTitleSkeletonComponent
   ],
   imports: [
     CommonModule,
