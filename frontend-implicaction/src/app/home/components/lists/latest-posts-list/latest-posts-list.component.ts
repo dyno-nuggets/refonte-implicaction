@@ -11,6 +11,7 @@ export class LatestPostsListComponent {
 
   @Input() latestTopics: Topic[] = [];
   @Input() isLoading = false;
+  @Input() size = 3;
 
   univers = Univers;
   trackByTopicId = (index: number, topic: Topic) => topic.id;

@@ -14,9 +14,11 @@
 </ng-container>
 
 <ng-template #loadingElements>
-  <div *ngFor="let i of [1,2,3]">
-    <app-latest-post-card-skeleton></app-latest-post-card-skeleton>
-  </div>
+  <ng-container *ngFor="let _ of [].constructor(size)">
+    <div class="mb-2">
+      <app-latest-post-card-skeleton></app-latest-post-card-skeleton>
+    </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #emptyMessage>
