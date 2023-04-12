@@ -24,6 +24,7 @@ export class Uris {
   static readonly PROFILES = class {
     static readonly BASE_URI = 'profiles';
     static readonly BY_USERNAME = 'profiles';
+    static readonly POST_AVATAR = 'profiles/{username}/avatar'
   }
 
   /**
@@ -130,13 +131,4 @@ export class Uris {
     static readonly CATEGORIES_TOPICS = (id: number) => `${Uris.FORUM.CATEGORIES}/${id}/topics`;
     static readonly TOPICS_RESPONSES = (id: number) => `${Uris.FORUM.TOPICS}/${id}/responses`;
   };
-
-  /**
-   * FILES
-   */
-
-  static readonly FILES = class {
-    static readonly BASE_URI = 'files'
-    static readonly POST_PROFILE_AVATAR = 'files/{username}/avatar';
-  }
 }

@@ -14,8 +14,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.nio.charset.Charset;
 
@@ -24,16 +27,17 @@ import static com.dynonuggets.refonteimplicaction.community.profile.utils.Profil
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.GET_PROFILE_BY_USERNAME;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.PROFILES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.POST_PROFILE_AVATAR;
 import static java.lang.String.format;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -174,12 +178,66 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre FORBIDDEN quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(put(baseUri)
+            final MockHttpServletRequestBuilder requestBuilder = put(baseUri)
                     .with(csrf())
                     .content(toJson(generateRandomProfileUpdateRequest()))
                     .accept(APPLICATION_JSON)
                     .characterEncoding(Charset.defaultCharset())
-                    .contentType(APPLICATION_JSON));
+                    .contentType(APPLICATION_JSON);
+            final ResultActions resultActions = mvc.perform(requestBuilder);
+
+            // then
+            resultActions.andExpect(status().isForbidden());
+            verifyNoInteractions(profileService);
+        }
+    }
+
+    @Nested
+    @DisplayName("# postProfileAvatar")
+    class PostProfileAvatarTest {
+        @Test
+        @WithMockUser
+        @DisplayName("doit répondre OK avec une imageUrl quand l'utilisateur est identifié")
+        void should_response_ok_with_not_empty_image_url() throws Exception {
+            // given
+            final MockMultipartFile mockedImage = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test data".getBytes());
+            final String username = "username";
+            final ProfileDto expectedDto = ProfileDto.builder().imageUrl("http://url_du_fichier.jpeg").build();
+            given(profileService.uploadAvatar(mockedImage, username)).willReturn(expectedDto);
+
+            // when
+            final MockHttpServletRequestBuilder requestBuilder = multipart(getFullPath(POST_PROFILE_AVATAR), username)
+                    .file(mockedImage)
+                    .with(csrf())
+                    .content(toJson(generateRandomProfileUpdateRequest()))
+                    .accept(APPLICATION_JSON)
+                    .characterEncoding(Charset.defaultCharset())
+                    .contentType(APPLICATION_JSON);
+            final ResultActions resultActions = mvc.perform(requestBuilder);
+
+            // then
+            resultActions
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.imageUrl", is(notNullValue())));
+            verify(profileService, times(1)).uploadAvatar(mockedImage, username);
+        }
+
+        @Test
+        @DisplayName("doit répondre FORBIDDEN avec une imageUrl quand l'utilisateur n'est pas identifié")
+        void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
+            // given
+            final MockMultipartFile mockedImage = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test data".getBytes());
+            final String username = "username";
+
+            // when
+            final MockHttpServletRequestBuilder requestBuilder = multipart(getFullPath(POST_PROFILE_AVATAR), username)
+                    .file(mockedImage)
+                    .with(csrf())
+                    .content(toJson(generateRandomProfileUpdateRequest()))
+                    .accept(APPLICATION_JSON)
+                    .characterEncoding(Charset.defaultCharset())
+                    .contentType(APPLICATION_JSON);
+            final ResultActions resultActions = mvc.perform(requestBuilder);
 
             // then
             resultActions.andExpect(status().isForbidden());

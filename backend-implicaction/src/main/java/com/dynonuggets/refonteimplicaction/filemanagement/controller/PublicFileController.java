@@ -15,8 +15,8 @@ import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM_VALUE;
 
 @Controller
-@RequestMapping(PUBLIC_FILES_BASE_URI)
 @AllArgsConstructor
+@RequestMapping(PUBLIC_FILES_BASE_URI)
 public class PublicFileController {
 
     private final CloudService cloudService;

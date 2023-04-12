@@ -7,9 +7,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.GET_PROFILE_BY_USERNAME;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.PROFILES_BASE_URI;
+import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.POST_PROFILE_AVATAR;
 import static org.springframework.data.domain.PageRequest.of;
 
 @RestController
@@ -35,5 +37,10 @@ public class ProfileController {
     @GetMapping(GET_PROFILE_BY_USERNAME)
     public ResponseEntity<ProfileDto> getProfileByUsername(@PathVariable final String username) {
         return ResponseEntity.ok(profileService.getByUsername(username));
+    }
+
+    @PostMapping(POST_PROFILE_AVATAR)
+    public ResponseEntity<ProfileDto> postProfileAvatar(@RequestParam final MultipartFile file, @PathVariable final String username) {
+        return ResponseEntity.ok(profileService.uploadAvatar(file, username));
     }
 }

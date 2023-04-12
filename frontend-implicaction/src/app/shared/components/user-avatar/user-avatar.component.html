@@ -1,6 +1,6 @@
 <img
   #userImage
-  class="{{shape}} size-{{size}} {{imageClass}}" [ngClass]="{'shadow-sm': shadow}"
+  class="avatar {{shape}} avatar-{{size}} {{imageClass}}" [ngClass]="{'shadow-sm': shadow}"
   [attr.src]="profile.imageUrl || constants.USER_IMAGE_DEFAULT_URI"
   [alt]="profile.username"
   (error)="userImage.src = constants.USER_IMAGE_DEFAULT_URI"

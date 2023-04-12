@@ -144,7 +144,6 @@ export class ApiEndpointsService {
   /**
    * Profiles
    */
-
   getProfileByUsernameEndpoint(username: string): string {
     return ApiEndpointsService.createUrlWithPathVariables(Uris.PROFILES.BY_USERNAME, [username]);
   }
@@ -159,6 +158,10 @@ export class ApiEndpointsService {
 
   getActivateUserEndpoint(username: string): string {
     return ApiEndpointsService.createUrl(Uris.AUTH.ACTIVATE_USER.replace('{username}', username));
+  }
+
+  updateImageProfileEndpoint(username: string): string {
+    return ApiEndpointsService.createUrl(Uris.PROFILES.POST_AVATAR.replace('{username}', username));
   }
 
   /**
@@ -544,13 +547,6 @@ export class ApiEndpointsService {
       Uris.JOB_APPLICATION.BASE_URI,
       (qs: QueryStringParameters) => qs.push('jobId', jobId)
     );
-  }
-
-  /**
-   * FILE
-   */
-  updateImageProfileEndpoint(username: string): string {
-    return ApiEndpointsService.createUrl(Uris.FILES.POST_PROFILE_AVATAR.replace('{username}', username));
   }
 
   /**

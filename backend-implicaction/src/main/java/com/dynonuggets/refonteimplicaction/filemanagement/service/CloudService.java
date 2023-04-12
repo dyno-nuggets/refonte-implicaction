@@ -9,7 +9,7 @@ public interface CloudService {
 
     FileModel uploadFile(MultipartFile file, boolean publicAccess) throws IOException;
 
-    String uploadAvatar(MultipartFile file, String username);
+    String uploadPublicImage(MultipartFile file);
 
     byte[] getFileAsBytes(String objectKey) throws IOException;
 }

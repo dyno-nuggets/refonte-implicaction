@@ -6,10 +6,6 @@ import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
-import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
-import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
-import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.filemanagement.error.FileException;
 import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
@@ -44,12 +40,9 @@ public class S3CloudServiceImpl implements CloudService {
 
     private static final Integer MAX_IMAGE_SIZE_IN_BIT = 40000000;
     private static final List<String> IMAGE_CONTENT_TYPES = of(IMAGE_JPEG_VALUE, IMAGE_PNG_VALUE, IMAGE_GIF_VALUE);
-    private final AuthService authService;
     private final AmazonS3Client client;
     private final FileRepository fileRepository;
     private final FileService fileService;
-    private final ProfileService profileService;
-    private final ProfileRepository profileRepository;
     @Value("${app.s3.bucket-name}")
     private String bucketName;
 
@@ -86,7 +79,7 @@ public class S3CloudServiceImpl implements CloudService {
 
     @Override
     @Transactional
-    public String uploadAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
+    public String uploadPublicImage(@NonNull final MultipartFile file) {
         if (file.getSize() > MAX_IMAGE_SIZE_IN_BIT) {
             throw new FileException(FILE_IS_TOO_LARGE, file.getOriginalFilename());
         }
@@ -95,12 +88,8 @@ public class S3CloudServiceImpl implements CloudService {
             throw new FileException(UNAUTHORIZED_CONTENT_TYPE, file.getOriginalFilename());
         }
 
-        authService.verifyAccessIsGranted(username);
-        final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(username);
         final FileModel fileModel = uploadFile(file, true);
         fileRepository.save(fileModel);
-        profile.setAvatar(fileModel);
-        profileRepository.save(profile);
 
         return fileService.buildFileUri(fileModel);
     }

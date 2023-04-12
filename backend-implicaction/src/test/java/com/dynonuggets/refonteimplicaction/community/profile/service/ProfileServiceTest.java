@@ -25,6 +25,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import java.util.Optional;
 
@@ -258,5 +260,43 @@ class ProfileServiceTest {
         assertThat(result).hasSize(size);
         verify(profileRepository, times(1)).findAll(any(Pageable.class));
         verify(profileAdapter, times(size)).toDto(any());
+    }
+
+    @Nested
+    @DisplayName("# uploadAvatar")
+    class UploadAvatarTest {
+        @Test
+        @DisplayName("doit retourner un dtoLight avec l'imageUrl quand l'utilisateur existe")
+        void should_return_profile_when_username_exists() {
+            // given
+            final MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test data".getBytes());
+            final ProfileModel profileModel = generateRandomProfile();
+            final String username = profileModel.getUser().getUsername();
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.of(profileModel));
+            final String imageUrl = "url_du_fichier";
+            given(cloudService.uploadPublicImage(file)).willReturn(imageUrl);
+
+            // when
+            profileService.uploadAvatar(file, username);
+
+            // then
+            verify(cloudService, times(1)).uploadPublicImage(file);
+            verify(profileRepository, times(1)).save(profileCaptor.capture());
+            final ProfileModel actualProfile = profileCaptor.getValue();
+            assertThat(actualProfile.getImageUrl()).isEqualTo(imageUrl);
+        }
+
+        @Test
+        @DisplayName("doit lancer une exception quand l'utilisateur n'existe pas")
+        void should_throw_exception_when_user_does_not_exists() {
+            // given
+            final MockMultipartFile file = new MockMultipartFile("file", "test.jpg", MediaType.IMAGE_JPEG_VALUE, "test data".getBytes());
+            final String username = "username";
+            given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(username)).willReturn(Optional.empty());
+
+            // when - then
+            final ImplicactionException e = assertThrows(ImplicactionException.class, () -> profileService.uploadAvatar(file, username));
+            assertImplicactionException(e, EntityNotFoundException.class, PROFILE_NOT_FOUND, username);
+        }
     }
 }

@@ -8,6 +8,7 @@ import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
+import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_ALREADY_EXISTS_MESSAGE;
@@ -32,6 +34,7 @@ public class ProfileService {
     private final UserService userService;
     private final ProfileAdapter profileAdapter;
     private final AuthService authService;
+    private final CloudService cloudService;
 
     /**
      * crée un nouveau profil si l’utilisateur existe
@@ -120,4 +123,13 @@ public class ProfileService {
     public ProfileModel getCurrentProfile() {
         return getByUsernameIfExistsAndUserEnabled(authService.getCurrentUser().getUsername());
     }
+
+    @Transactional
+    public ProfileDto uploadAvatar(@NonNull final MultipartFile file, @NonNull final String username) {
+        final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(username);
+        final String imageUrl = cloudService.uploadPublicImage(file);
+        profile.setImageUrl(imageUrl);
+        return profileAdapter.toDtoLight(profileRepository.save(profile));
+    }
 }
+

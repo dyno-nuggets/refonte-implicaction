@@ -8,16 +8,14 @@ import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAd
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
-import com.dynonuggets.refonteimplicaction.filemanagement.service.FileService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileConstants.DEFAULT_USER_AVATAR_URI;
-import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static java.util.stream.Collectors.toList;
 
 @Component
@@ -26,7 +24,6 @@ public class ProfileAdapter {
     private final WorkExperienceAdapter workExperienceAdapter;
     private final TrainingAdapter trainingAdapter;
     private final GroupMapper groupMapper;
-    private final FileService fileService;
 
     public ProfileDto toDto(final ProfileModel profile) {
         if (profile == null) {
@@ -49,7 +46,7 @@ public class ProfileAdapter {
         }
 
         return builder
-                .imageUrl(getAvatarUrl(profile.getAvatar()))
+                .imageUrl(profile.getImageUrl())
                 .hobbies(profile.getHobbies())
                 .purpose(profile.getPurpose())
                 .presentation(profile.getPresentation())
@@ -75,11 +72,7 @@ public class ProfileAdapter {
                 .lastname(callIfNotNull(user, UserModel::getLastname))
                 .email(callIfNotNull(user, UserModel::getEmail))
                 .username(callIfNotNull(user, UserModel::getUsername))
-                .imageUrl(getAvatarUrl(profile.getAvatar()))
+                .imageUrl(profile.getImageUrl())
                 .build();
-    }
-
-    private String getAvatarUrl(final FileModel avatar) {
-        return defaultIfNull(fileService.buildFileUri(avatar), DEFAULT_USER_AVATAR_URI);
     }
 }

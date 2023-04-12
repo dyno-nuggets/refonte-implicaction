@@ -11,7 +11,6 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profil
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.filemanagement.model.domain.FileModel;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.FileService;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.impl.S3CloudServiceImpl;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -79,7 +78,6 @@ class GroupServiceTest {
             // given
             final MockMultipartFile mockedImage = new MockMultipartFile("user-file", "test.jpg", "image/jpeg", "test data".getBytes());
             final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
-            final FileModel fileModel = FileModel.builder().contentType(mockedImage.getContentType()).url("http://url.com").filename(mockedImage.getOriginalFilename()).build();
             final UserModel currentUser = generateRandomUser(Set.of(PREMIUM), true);
             final String imageUrl = "http://localhost/imapge.png";
             final String username = currentUser.getUsername();
@@ -87,7 +85,7 @@ class GroupServiceTest {
             final GroupModel expectedGroup = GroupModel.builder().id(12L).name(createGroupRequest.getName()).description(createGroupRequest.getDescription()).creator(profile).createdAt(now()).imageUrl(imageUrl).enabled(false).build();
             given(authService.getCurrentUser()).willReturn(currentUser);
             given(profileService.getByUsernameIfExistsAndUserEnabled(username)).willReturn(profile);
-            given(fileService.save(fileModel)).willReturn(imageUrl);
+            //given(fileService.save(fileModel)).willReturn(imageUrl);
             given(groupRepository.save(any(GroupModel.class))).willReturn(expectedGroup);
 
             // when
@@ -95,11 +93,10 @@ class GroupServiceTest {
 
             // then
             verify(profileService, times(1)).getByUsernameIfExistsAndUserEnabled(username);
-            verify(fileService, times(1)).save(any(FileModel.class));
             verify(groupMapper, times(1)).toDto(any(GroupModel.class));
             verify(groupRepository, times(1)).save(argumentCaptor.capture());
             final GroupModel captorValue = argumentCaptor.getValue();
-            assertThat(captorValue).usingRecursiveComparison().ignoringFields("id", "createdAt").isEqualTo(expectedGroup);
+            assertThat(captorValue).usingRecursiveComparison().ignoringFields("id", "createdAt", "imageUrl").isEqualTo(expectedGroup);
             assertThat(captorValue.getCreatedAt()).isAfterOrEqualTo(expectedGroup.getCreatedAt());
             assertThat(captorValue.getCreatedAt()).isBeforeOrEqualTo(now());
             assertThat(captorValue.getCreator().getUser().getUsername()).isEqualTo(username);

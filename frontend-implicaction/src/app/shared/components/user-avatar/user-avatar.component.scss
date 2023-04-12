@@ -1,29 +1,28 @@
-.size-xs {
+.avatar {
+  object-fit: cover;
+}
+
+.avatar-xs {
   width: 22px;
-  height: auto;
-  max-height: 22px;
+  height: 22px;
 }
 
-.size-small {
-  width: 48px;
-  height: auto;
-  max-height: 48px;
+.avatar-small {
+  width: 32px;
+  height: 32px;
 }
 
-.size-medium {
+.avatar-medium {
   width: 66px;
-  height: auto;
-  max-height: 66px;
+  height: 66px;
 }
 
-.size-large {
+.avatar-large {
   width: 88px;
-  height: auto;
-  max-height: 88px;
+  height: 88px;
 }
 
-.size-xlarge {
+.avatar-xlarge {
   width: 120px;
-  height: auto;
-  max-height: 120px;
+  height: 120px;
 }
