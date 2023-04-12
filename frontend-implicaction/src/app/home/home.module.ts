@@ -10,7 +10,6 @@ import {LatestJobCardComponent} from './components/cards/jobs/latest-job-card/la
 import {LatestJobsListComponent} from './components/lists/latest-jobs-list/latest-jobs-list.component';
 import {SharedModule} from '../shared/shared.module';
 import {HomeHeadingColumnComponent} from './components/home-heading-column/home-heading-column.component';
-import {LatestPostCardSkeletonComponent} from './components/cards/topics/latest-post-card-skeleton/latest-post-card-skeleton.component';
 import {SkeletonModule} from "primeng/skeleton";
 import {LatestEventCardSkeletonComponent} from './components/cards/events/latest-event-card-skeleton/latest-event-card-skeleton.component';
 import {LatestEventsListComponent} from './components/lists/latest-events-list/latest-events-list.component';
@@ -26,7 +25,6 @@ import {LatestJobCartSkeletonComponent} from './components/cards/jobs/latest-job
     LatestJobCardComponent,
     LatestJobsListComponent,
     HomeHeadingColumnComponent,
-    LatestPostCardSkeletonComponent,
     LatestEventCardSkeletonComponent,
     LatestEventsListComponent,
     HighlightPointComponent,

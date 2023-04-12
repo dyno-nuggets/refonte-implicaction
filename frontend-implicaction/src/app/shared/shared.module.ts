@@ -21,6 +21,8 @@ import {RequiredRoleDirective} from './directives/required-role.directive';
 import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
 import {CardHorizontalComponent} from './components/cards/card-horizontal/card-horizontal.component';
 import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-with-avatar-duration-and-title/card-with-avatar-duration-and-title.component';
+import {CardWithAvatarDurationAndTitleSkeleton} from "./components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component";
+import {SkeletonModule} from "primeng/skeleton";
 
 
 @NgModule({
@@ -40,7 +42,8 @@ import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-w
     RequiredRoleDirective,
     AnyRoleMatchesDirective,
     CardHorizontalComponent,
-    CardWithAvatarDurationAndTitleComponent
+    CardWithAvatarDurationAndTitleComponent,
+    CardWithAvatarDurationAndTitleSkeleton
   ],
   exports: [
     LoadingComponent,
@@ -57,6 +60,7 @@ import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-w
     AnyRoleMatchesDirective,
     CardHorizontalComponent,
     CardWithAvatarDurationAndTitleComponent,
+    CardWithAvatarDurationAndTitleSkeleton
   ],
   imports: [
     CommonModule,
@@ -65,7 +69,8 @@ import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-w
     IconsModule,
     AvatarModule,
     FormsModule,
-    DropdownModule
+    DropdownModule,
+    SkeletonModule
   ]
 })
 export class SharedModule {
