@@ -36,6 +36,14 @@ input.ng-invalid.ng-touched {
   color: $success;
 }
 
+.underline-on-hover {
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
 .overflow-ellipsis {
   white-space: nowrap;
   overflow: hidden;

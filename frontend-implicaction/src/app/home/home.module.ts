@@ -3,7 +3,6 @@ import {CommonModule} from '@angular/common';
 import {HomePageComponent} from './pages/home-page/home-page.component';
 import {FeatherModule} from 'angular-feather';
 import {LatestEventCardComponent} from './components/cards/events/latest-event-card/latest-event-card.component';
-import {LatestPostCardComponent} from './components/cards/topics/latest-post-card/latest-post-card.component';
 import {LatestPostsListComponent} from './components/lists/latest-posts-list/latest-posts-list.component';
 import {HomeRoutingModule} from './home-routing.module';
 import {AvatarModule} from 'primeng/avatar';
@@ -23,7 +22,6 @@ import {LatestJobCartSkeletonComponent} from './components/cards/jobs/latest-job
   declarations: [
     HomePageComponent,
     LatestEventCardComponent,
-    LatestPostCardComponent,
     LatestPostsListComponent,
     LatestJobCardComponent,
     LatestJobsListComponent,

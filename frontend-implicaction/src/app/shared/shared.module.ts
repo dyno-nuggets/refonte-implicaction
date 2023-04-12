@@ -19,6 +19,8 @@ import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text
 import {UserAvatarComponent} from './components/user-avatar/user-avatar.component';
 import {RequiredRoleDirective} from './directives/required-role.directive';
 import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
+import {CardHorizontalComponent} from './components/cards/card-horizontal/card-horizontal.component';
+import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-with-avatar-duration-and-title/card-with-avatar-duration-and-title.component';
 
 
 @NgModule({
@@ -36,7 +38,9 @@ import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
     ImplicactionLogoTextComponent,
     UserAvatarComponent,
     RequiredRoleDirective,
-    AnyRoleMatchesDirective
+    AnyRoleMatchesDirective,
+    CardHorizontalComponent,
+    CardWithAvatarDurationAndTitleComponent
   ],
   exports: [
     LoadingComponent,
@@ -51,6 +55,8 @@ import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
     UserAvatarComponent,
     RequiredRoleDirective,
     AnyRoleMatchesDirective,
+    CardHorizontalComponent,
+    CardWithAvatarDurationAndTitleComponent,
   ],
   imports: [
     CommonModule,

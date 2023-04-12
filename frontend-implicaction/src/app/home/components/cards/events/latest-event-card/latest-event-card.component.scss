@@ -1,19 +1,5 @@
-.card-event {
-  background-color: transparent;
-  border-radius: 11px;
-  position: relative;
-  min-width: 0;
-  word-wrap: break-word;
-  background-clip: border-box;
-  height: 115px;
-
-  .card-title {
-    font-size: 16px;
-  }
-
-  .event-day {
-    font-weight: 700 !important;
-  }
+.event-day {
+  font-weight: 700 !important;
 }
 
 // breakpoint sm

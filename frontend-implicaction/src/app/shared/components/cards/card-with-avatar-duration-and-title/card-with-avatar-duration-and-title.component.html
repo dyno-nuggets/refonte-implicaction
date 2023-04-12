@@ -1,0 +1,23 @@
+<app-card-horizontal [link]="link">
+  <div class="d-flex flex-column gap-3">
+    <div class="d-flex align-items-center gap-2">
+      <app-user-avatar
+        size="small"
+        shape="rounded-circle"
+        [profile]="profile"
+        [shadow]="true"
+      ></app-user-avatar>
+      <div>
+        <div class="username">
+          <a class="underline-on-hover" [routerLink]="['/', univers.COMMUNITY.url, 'profile', profile.username]">{{profile.username}}</a>
+        </div>
+        <div class="duration">{{duration}}</div>
+      </div>
+    </div>
+    <div class="card-title">
+      <h3 class="theme-primary m-0 overflow-ellipsis">
+        <a class="underline-on-hover" [routerLink]="link">{{title}}</a>
+      </h3>
+    </div>
+  </div>
+</app-card-horizontal>
