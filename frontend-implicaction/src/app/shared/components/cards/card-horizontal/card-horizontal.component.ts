@@ -8,6 +8,6 @@ import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 })
 export class CardHorizontalComponent {
 
-  @Input() link: string | string[];
+  @Input() link: string | string[] = '/';
 
 }

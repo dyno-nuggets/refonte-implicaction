@@ -10,6 +10,7 @@ export class LatestEventsListComponent {
 
   @Input() latestEvents: ImplicactionEvent[] = []
   @Input() isLoading = false;
+  @Input() size = 3;
 
   trackById = (index: number, event: ImplicactionEvent) => event.id;
 

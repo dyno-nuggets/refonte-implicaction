@@ -40,7 +40,7 @@
 
 
 <section class="latest-records">
-  <div class="row mb-4 latest-events-and-topics">
+  <div class="row mb-4 latest-events-and-topics gap-4 gap-lg-0">
     <app-home-heading-column
       class="col-lg-6"
       buttonLink="/"
@@ -49,11 +49,12 @@
       <app-events-list
         [latestEvents]="latestEvents"
         [isLoading]="isLoading"
+        [size]="constant.LATEST_EVENTS_COUNT"
       ></app-events-list>
     </app-home-heading-column>
 
     <app-home-heading-column
-      class="col-lg-6 mt-4 mt-lg-0"
+      class="col-lg-6"
       buttonLink="/{{univers.FORUM.url}}"
       [title]="'Dernières publications'"
     >

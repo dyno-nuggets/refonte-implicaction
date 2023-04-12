@@ -10,6 +10,7 @@ import {HighlightPoint} from "../../models/highlight-point";
 import {forkJoin} from "rxjs";
 import {TopicService} from "../../../forum/services/topic.service";
 import {Topic} from "../../../forum/model/topic";
+import {ToasterService} from "../../../core/services/toaster.service";
 
 
 @Component({
@@ -24,6 +25,7 @@ export class HomePageComponent implements OnInit {
   latestEvents: ImplicactionEvent[] = [];
   univers = Univers;
   isLoading = true;
+  constant = Constants;
   highlightPoints: HighlightPoint[] = [
     {
       title: 'Un réseau',
@@ -40,12 +42,13 @@ export class HomePageComponent implements OnInit {
       text: 'Un espace d’échanges, des réponses à vos questions sur différents sujets liés aux métiers, aux dispositifs de reconversion …',
       imageUrl: '/assets/img/forum.png'
     }
-  ]
+  ];
 
   constructor(
     private topicService: TopicService,
     private jobService: JobService,
-    private eventService: ImplicactionEventService
+    private eventService: ImplicactionEventService,
+    private toasterService: ToasterService
   ) {
   }
 
@@ -64,7 +67,8 @@ export class HomePageComponent implements OnInit {
           this.latestTopics = value.latestTopics;
           this.latestJobs = value.latestJobs;
           this.latestEvents = value.latestEvents;
-        }
+        },
+        error: () => this.toasterService.error('Oops', 'Une erreur est survenue lors du chargement des données')
       });
   }
 

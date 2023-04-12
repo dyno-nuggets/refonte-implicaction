@@ -9,9 +9,11 @@
 </ng-container>
 
 <ng-template #loadingElements>
-  <div *ngFor="let i of [1,2,3]">
-    <app-latest-event-card-skeleton></app-latest-event-card-skeleton>
-  </div>
+  <ng-container *ngFor="let _ of [].constructor(size)">
+    <div class="mb-2">
+      <app-latest-event-card-skeleton></app-latest-event-card-skeleton>
+    </div>
+  </ng-container>
 </ng-template>
 
 <ng-template #emptyMessage>

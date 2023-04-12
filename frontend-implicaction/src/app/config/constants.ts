@@ -39,6 +39,7 @@ export class Constants {
   public static readonly LATEST_JOBS_COUNT = 4;
 
   public static readonly LATEST_TOPICS_COUNT = 3;
+  public static readonly LATEST_EVENTS_COUNT = 3;
 
   public static readonly DEFAULT_YEAR_RANGE = `1900:${new Date().getFullYear() + 1}`;
 
