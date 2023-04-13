@@ -2,7 +2,11 @@
   <ul class="d-flex gap-2 list-inline m-0">
     <ng-container *ngFor="let social of socials">
       <li class="list-inline-item d-block">
-        <a [href]="social.url" class="text-reset" aria-label="{{social.label}}">
+        <a
+          class="text-reset"
+          [href]="social.url"
+          [attr.aria-label]="social.label"
+        >
           <i class="fa fa-2x {{social.icon}}" aria-hidden="true"></i>
         </a>
       </li>
@@ -11,5 +15,5 @@
 </div>
 
 <div class="legals">
-  2023 Implic'action | <a routerLink="/" class="text-danger">Mention légales</a>
+  2023 Implic'action | <a routerLink="/" class="text-danger" aria-label="Parcourir les mentions légales">Mention légales</a>
 </div>

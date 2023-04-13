@@ -19,6 +19,12 @@ import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text
 import {UserAvatarComponent} from './components/user-avatar/user-avatar.component';
 import {RequiredRoleDirective} from './directives/required-role.directive';
 import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
+import {CardHorizontalComponent} from './components/cards/card-horizontal/card-horizontal.component';
+import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-with-avatar-duration-and-title/card-with-avatar-duration-and-title.component';
+import {
+  CardWithAvatarDurationAndTitleSkeletonComponent
+} from "./components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component";
+import {SkeletonModule} from "primeng/skeleton";
 
 
 @NgModule({
@@ -36,7 +42,10 @@ import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
     ImplicactionLogoTextComponent,
     UserAvatarComponent,
     RequiredRoleDirective,
-    AnyRoleMatchesDirective
+    AnyRoleMatchesDirective,
+    CardHorizontalComponent,
+    CardWithAvatarDurationAndTitleComponent,
+    CardWithAvatarDurationAndTitleSkeletonComponent
   ],
   exports: [
     LoadingComponent,
@@ -51,6 +60,9 @@ import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
     UserAvatarComponent,
     RequiredRoleDirective,
     AnyRoleMatchesDirective,
+    CardHorizontalComponent,
+    CardWithAvatarDurationAndTitleComponent,
+    CardWithAvatarDurationAndTitleSkeletonComponent
   ],
   imports: [
     CommonModule,
@@ -59,7 +71,8 @@ import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
     IconsModule,
     AvatarModule,
     FormsModule,
-    DropdownModule
+    DropdownModule,
+    SkeletonModule
   ]
 })
 export class SharedModule {

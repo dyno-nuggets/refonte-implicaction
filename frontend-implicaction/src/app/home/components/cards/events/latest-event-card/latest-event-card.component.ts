@@ -9,7 +9,7 @@ import {ImplicactionEvent} from "../../../../../shared/models/implicactionEvent"
 })
 export class LatestEventCardComponent {
 
-  @Input()
-  event: ImplicactionEvent;
+  @Input() event: ImplicactionEvent;
+  @Input() link = '/';
 
 }

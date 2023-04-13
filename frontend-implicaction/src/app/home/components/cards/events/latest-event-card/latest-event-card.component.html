@@ -1,20 +1,15 @@
-<div class="card mb-2 card-event">
-  <div class="row align-items-center py-4 px-2 mb-3">
-    <div class="col-12 flex-column col-sm-3 text-center text-danger px-0 px-md-2 mb-2 m-md-0 date-section">
+<app-card-horizontal [link]="link">
+  <div class="col-12 d-flex flex-column flex-sm-row">
+    <div class="col-sm-3 flex-column text-center text-danger date-section">
       <span class="fw-light event-day">{{event.date | date: 'dd'}}</span>
-      <span class="fw-bold d-none d-sm-inline-block d-md-inline d-lg-inline d-xl-none m-0 px-1 px-sm-0 px-1 px-sm-0 event-month">{{event.date | date: 'MMM'}}</span>
+      <span class="fw-bold d-none d-sm-inline-block d-md-inline-block d-lg-inline d-xl-none m-0 px-1 px-sm-0 px-1 px-sm-0 event-month">{{event.date | date: 'MMM'}}</span>
       <span class="fw-bold d-sm-none d-md-none d-lg-none d-xl-inline m-0 px-1 px-sm-0 px-1 px-sm-0 event-month">{{event.date | date: 'MMMM'}}</span>
       <span class="fw-bold m-0 event-year">2021</span>
     </div>
-    <div class="col-sm-9 px-0 ps-sm-3 ps-md-1">
-      <div class="card-body m-0 p-0">
-        <h3 class="card-title text-primary fw-bold text-center d-flex justify-content-between align-items-baseline align-items-sm-center">
-          <span class="d-block col-10 ps-3 overflow-ellipsis">{{event.title}}</span>
-          <span class="d-block col py-0 px-1 pe-sm-3">
-            <i class="fas fa-chevron-right"></i>
-          </span>
-        </h3>
-      </div>
+    <div class="col-sm-9 d-flex text-center justify-content-center align-items-center me-3 ps-3">
+      <h3 class="card-title text-primary fw-bold text-center overflow-ellipsis m-0">
+        {{event.title}}
+      </h3>
     </div>
   </div>
-</div>
+</app-card-horizontal>

@@ -1,14 +1,26 @@
-<p *ngIf="!isLoading && !latestTopics?.length; else postList">Il n'y a aucune publication pour le moment</p>
-<ng-template #postList>
-  <ng-container *ngIf="!isLoading; else loadingElements">
-    <div *ngFor="let post of latestTopics; trackBy: trackByTopicId">
-      <app-latest-post-card [topic]="post"></app-latest-post-card>
+<ng-container *ngIf="isLoading || latestTopics?.length; else emptyMessage">
+  <ng-container *ngIf="!isLoading; else loadingTemplate">
+    <ng-container *ngFor="let post of latestTopics; trackBy: trackByTopicId">
+      <div class="mb-2">
+        <app-card-with-avatar-duration-and-title
+          link="/{{univers.FORUM.url}}/topics/{{post.id}}"
+          [profile]="post.author"
+          [duration]="post.durationAsString"
+          [title]="post.title"
+        ></app-card-with-avatar-duration-and-title>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngFor="let _ of [].constructor(size)">
+    <div class="mb-2">
+      <app-card-with-avatar-duration-and-title-skeleton></app-card-with-avatar-duration-and-title-skeleton>
     </div>
   </ng-container>
+</ng-template>
 
-  <ng-template #loadingElements>
-    <div *ngFor="let i of [1,2,3]">
-      <app-latest-post-card-skeleton></app-latest-post-card-skeleton>
-    </div>
-  </ng-template>
+<ng-template #emptyMessage>
+  <p>Il n'y a aucune publication pour le moment</p>
 </ng-template>
