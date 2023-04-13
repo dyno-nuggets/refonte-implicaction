@@ -1,3 +1,9 @@
+@import "src/assets/variables";
+
 .card {
   height: 120px;
+
+  a {
+    color: $primary;
+  }
 }
