@@ -25,7 +25,7 @@ export class SidebarService {
   open<T>(content?: SidebarProps<T>): void {
     if (content) {
       // défini la largeur par défaut si non définie
-      content.width = content.width ?? SidebarService.DEFAULT_WIDTH;
+      content.width ??= SidebarService.DEFAULT_WIDTH;
       this.setContent(content);
     }
     this.isOpen = true;

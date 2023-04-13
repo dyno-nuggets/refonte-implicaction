@@ -1,5 +1,5 @@
 <ng-container *ngIf="isLoading || latestEvents?.length; else emptyMessage">
-  <ng-container *ngIf="!isLoading; else loadingElements">
+  <ng-container *ngIf="!isLoading; else loadingTemplate">
     <ng-container *ngFor="let event of latestEvents; trackBy: trackById">
       <div class="mb-2">
         <app-latest-event-card [event]="event"></app-latest-event-card>
@@ -8,7 +8,7 @@
   </ng-container>
 </ng-container>
 
-<ng-template #loadingElements>
+<ng-template #loadingTemplate>
   <ng-container *ngFor="let _ of [].constructor(size)">
     <div class="mb-2">
       <app-latest-event-card-skeleton></app-latest-event-card-skeleton>

@@ -1,5 +1,5 @@
 <ng-container *ngIf="isLoading || latestTopics?.length; else emptyMessage">
-  <ng-container *ngIf="!isLoading; else loadingElements">
+  <ng-container *ngIf="!isLoading; else loadingTemplate">
     <ng-container *ngFor="let post of latestTopics; trackBy: trackByTopicId">
       <div class="mb-2">
         <app-card-with-avatar-duration-and-title
@@ -13,7 +13,7 @@
   </ng-container>
 </ng-container>
 
-<ng-template #loadingElements>
+<ng-template #loadingTemplate>
   <ng-container *ngFor="let _ of [].constructor(size)">
     <div class="mb-2">
       <app-card-with-avatar-duration-and-title-skeleton></app-card-with-avatar-duration-and-title-skeleton>

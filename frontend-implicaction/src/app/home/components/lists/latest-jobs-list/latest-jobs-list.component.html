@@ -1,6 +1,6 @@
 <div class="row col flex-column flex-sm-row justify-content-between">
   <ng-container *ngIf="isLoading || latestJobs?.length; else emptyMessage">
-    <ng-container *ngIf="!isLoading; else loadingElements">
+    <ng-container *ngIf="!isLoading; else loadingTemplate">
       <ng-container *ngFor="let job of latestJobs; trackBy: trackByJobId">
         <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
           <app-latest-job-card [job]="job"></app-latest-job-card>
@@ -8,16 +8,16 @@
       </ng-container>
     </ng-container>
   </ng-container>
-
-  <ng-template #loadingElements>
-    <ng-container *ngFor="let _ of [].constructor(size)">
-      <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
-        <app-latest-job-cart-skeleton></app-latest-job-cart-skeleton>
-      </div>
-    </ng-container>
-  </ng-template>
-
-  <ng-template #emptyMessage>
-    <p>Il n'y a aucune offre pour le moment.</p>
-  </ng-template>
 </div>
+
+<ng-template #loadingTemplate>
+  <ng-container *ngFor="let _ of [].constructor(size)">
+    <div class="col-sm-6 col-xl-3 mb-2 mb-xl-0">
+      <app-latest-job-cart-skeleton></app-latest-job-cart-skeleton>
+    </div>
+  </ng-container>
+</ng-template>
+
+<ng-template #emptyMessage>
+  <p>Il n'y a aucune offre pour le moment.</p>
+</ng-template>

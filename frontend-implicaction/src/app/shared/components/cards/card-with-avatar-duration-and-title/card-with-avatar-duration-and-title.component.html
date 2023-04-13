@@ -1,8 +1,8 @@
 <app-card-horizontal [link]="link">
   <div class="d-flex flex-column gap-3">
-    <div class="d-flex align-items-center gap-2">
+    <div class="d-flex align-items-center gap-3">
       <app-user-avatar
-        size="small"
+        size="medium"
         shape="rounded-circle"
         [profile]="profile"
         [shadow]="true"
@@ -14,8 +14,8 @@
         <div class="duration">{{duration}}</div>
       </div>
     </div>
-    <div class="card-title">
-      <h3 class="theme-primary m-0 overflow-ellipsis">
+    <div class="card-title m-0">
+      <h3 class="theme-primary overflow-ellipsis m-0">
         <a class="underline-on-hover" [routerLink]="link">{{title}}</a>
       </h3>
     </div>
