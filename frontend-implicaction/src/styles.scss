@@ -155,6 +155,21 @@ textarea, input {
   color: $primary !important;
 }
 
+.title {
+  font-weight: bold;
+  color: $primary;
+  font-size: 1.2rem;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 input:focus::placeholder {
   color: transparent;
 }
@@ -171,14 +186,6 @@ input:focus::placeholder {
 @media screen and (max-width: 768px) {
   .p-sidebar-right {
     width: 100vw !important;
-  }
-}
-
-.home-card-border {
-  border: 1px solid #e2e2e2;
-
-  &:hover {
-    border: 1px solid #cdcdcd;
   }
 }
 

@@ -7,7 +7,7 @@ import {OverlayPanel} from "primeng/overlaypanel";
 @Component({
   selector: 'app-profile-info-display',
   templateUrl: './profile-info-display.component.html',
-  styleUrls: ['profile-info-display.scss'],
+  styleUrls: ['profile-info-display.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ProfileInfoDisplayComponent implements OnInit {
@@ -17,11 +17,11 @@ export class ProfileInfoDisplayComponent implements OnInit {
 
   @Input() profile?: Profile;
 
+  @ViewChild('panel') private panel: OverlayPanel;
+
   profileLink = [];
   transitionOptions = '.0s';
 
-
-  @ViewChild('panel') private panel: OverlayPanel;
   private subscriptionHide: Subscription;
   private subscriptionShow: Subscription;
 
