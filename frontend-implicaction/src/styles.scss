@@ -1,5 +1,6 @@
 @import "src/assets/variables";
 @import "src/assets/ui";
+@import "src/assets/primeng";
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 input.ng-invalid.ng-touched {
@@ -94,6 +95,14 @@ h3 {
   font: normal bold 18px 'Open Sans', Arial, serif;
   line-height: 25px;
   color: $secondary;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 h4 {

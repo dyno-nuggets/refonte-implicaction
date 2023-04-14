@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Univers} from "../../enums/univers";
 import {Profile} from "../../../community/models/profile/profile";
 import {Subscription, timer} from "rxjs";
@@ -7,27 +7,44 @@ import {OverlayPanel} from "primeng/overlaypanel";
 @Component({
   selector: 'app-profile-info-display',
   templateUrl: './profile-info-display.component.html',
-  styleUrls: ['./profile-info-display.component.scss']
+  styleUrls: ['profile-info-display.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileInfoDisplayComponent implements OnDestroy {
+export class ProfileInfoDisplayComponent implements OnInit, OnDestroy {
 
-  private static readonly HIDE_TIMER_DELAY = 200;
+  private static readonly HIDE_TIMER_DELAY = 300;
+  private static readonly SHOW_TIMER_DELAY = 600;
+
   @Input() profile?: Profile;
   @ViewChild('panel') private panel: OverlayPanel;
 
-  univers = Univers;
+  profileLink = [];
 
-  private subscription: Subscription;
+  private subscriptionHide: Subscription;
+  private subscriptionShow: Subscription;
 
-  initPanelHide() {
-    this.subscription = timer(ProfileInfoDisplayComponent.HIDE_TIMER_DELAY).subscribe(() => this.panel.hide());
+  ngOnInit(): void {
+    this.profileLink = ['/', Univers.COMMUNITY.url, 'profile', this.profile.username];
+  }
+
+  initPanelHideOperation() {
+    this.subscriptionHide = timer(ProfileInfoDisplayComponent.HIDE_TIMER_DELAY).subscribe(
+      () => this.panel.hide()
+    );
+  }
+
+  initPanelShowOperation(event) {
+    this.subscriptionShow = timer(ProfileInfoDisplayComponent.SHOW_TIMER_DELAY).subscribe(
+      () => this.panel.show(event)
+    );
   }
 
   cancelPanelHideOperation() {
-    this.subscription?.unsubscribe();
+    this.subscriptionHide?.unsubscribe();
   }
 
   ngOnDestroy(): void {
-    this.subscription?.unsubscribe();
+    this.subscriptionHide?.unsubscribe();
+    this.subscriptionShow?.unsubscribe();
   }
 }

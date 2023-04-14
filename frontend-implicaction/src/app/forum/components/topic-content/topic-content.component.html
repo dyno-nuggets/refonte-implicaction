@@ -4,7 +4,9 @@
     <h1>{{ topic.title }}</h1>
     <app-delete-topic-button [topicId]="topic.id"></app-delete-topic-button>
     <div *ngIf="pageable.page !== 0">
-      <div class="title">{{ topic.title }} by {{ topic.author.username }}</div>
+      <div class="title">{{ topic.title }} by
+        <app-profile-info-display [profile]="topic.author"></app-profile-info-display>
+      </div>
       <p>{{ topic.message }}</p>
     </div>
     <app-message-block *ngIf="pageable.page === 0" [message]="topic"></app-message-block>

@@ -1,0 +1,22 @@
+@import "src/assets/variables";
+
+.wrapper {
+  width: 380px;
+  min-height: 96px
+}
+
+.title {
+  font-weight: bold;
+  color: $primary;
+
+  font-size: 1.3rem;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
