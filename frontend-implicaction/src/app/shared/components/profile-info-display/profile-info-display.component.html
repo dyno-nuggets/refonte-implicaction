@@ -2,11 +2,16 @@
   (mouseover)="initPanelShowOperation($event)"
   (mouseleave)="initPanelHideOperation()"
 >
-  <a class="theme-primary" [routerLink]="profileLink">{{profile.username}}</a>
+  <a
+    class="theme-primary"
+    [routerLink]="profileLink"
+  >
+    {{profile.username}}
+  </a>
   <p-overlayPanel
     #panel
-    hideTransitionOptions=".0s"
-    showTransitionOptions=".0s"
+    [hideTransitionOptions]="transitionOptions"
+    [showTransitionOptions]="transitionOptions"
   >
     <div
       class="wrapper"
@@ -20,10 +25,9 @@
           [size]="'large'"
           [shadow]="true"
         ></app-user-avatar>
-        <div class="mt-2 content">
+        <div class="content mt-2">
           <div class="title mb-0">
             <a
-              class="theme-primary"
               [routerLink]="profileLink"
             >
               {{profile.firstname}} {{profile.lastname}}

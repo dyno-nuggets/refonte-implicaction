@@ -18,6 +18,7 @@ export class ProfileInfoDisplayComponent implements OnInit {
   @Input() profile?: Profile;
 
   profileLink = [];
+  transitionOptions = '.0s';
 
 
   @ViewChild('panel') private panel: OverlayPanel;
