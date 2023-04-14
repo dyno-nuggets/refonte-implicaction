@@ -9,7 +9,7 @@
       ></app-user-avatar>
       <div>
         <div class="username">
-          <a class="underline-on-hover" [routerLink]="['/', univers.COMMUNITY.url, 'profile', profile.username]">{{profile.username}}</a>
+          <app-profile-info-display [profile]="profile"></app-profile-info-display>
         </div>
         <div class="duration">{{duration}}</div>
       </div>
