@@ -1,0 +1,41 @@
+<div
+  (mouseover)="initPanelShowOperation($event)"
+  (mouseleave)="initPanelHideOperation()"
+>
+  <a
+    class="theme-primary"
+    [routerLink]="profileLink"
+  >
+    {{profile.username}}
+  </a>
+  <p-overlayPanel
+    #panel
+    [hideTransitionOptions]="transitionOptions"
+    [showTransitionOptions]="transitionOptions"
+  >
+    <div
+      class="wrapper"
+      (mouseenter)="cancelPanelHideOperation()"
+      (mouseleave)="initPanelHideOperation()"
+    >
+      <div class="d-flex gap-3">
+        <app-user-avatar
+          [profile]="profile"
+          [shape]="'rounded-circle'"
+          [size]="'large'"
+          [shadow]="true"
+        ></app-user-avatar>
+        <div class="content mt-2">
+          <div class="title mb-0">
+            <a
+              [routerLink]="profileLink"
+            >
+              {{profile.firstname}} {{profile.lastname}}
+            </a>
+          </div>
+          <p class="fw-bold">@{{profile.username}}</p>
+        </div>
+      </div>
+    </div>
+  </p-overlayPanel>
+</div>

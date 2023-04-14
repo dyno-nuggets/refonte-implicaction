@@ -26,7 +26,7 @@
             <div class="meta">
               <a class="time" href="#">{{ lastUpdate.createdAt | date: 'dd MMMM yyyy HH:mm' }}</a>
               -
-              <a class="author" href="#">{{ lastUpdate.author.username }}</a>
+              <app-profile-info-display [profile]="lastUpdate.author"></app-profile-info-display>
             </div>
           </div>
         </div>

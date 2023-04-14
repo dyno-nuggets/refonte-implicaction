@@ -19,8 +19,8 @@
   </app-forum-block>
 
   <p-paginator
-    (onPageChange)="paginate($event)"
     *ngIf="pageable.totalPages > 0"
+    (onPageChange)="paginate($event)"
     [alwaysShow]="false"
     [first]="pageable.first"
     [rowsPerPageOptions]="DEFAULT_ROWS_PER_PAGE_OPTIONS"

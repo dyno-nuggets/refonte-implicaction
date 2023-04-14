@@ -1,5 +1,6 @@
 @import "src/assets/variables";
 @import "src/assets/ui";
+@import "src/assets/primeng";
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 input.ng-invalid.ng-touched {
@@ -94,6 +95,14 @@ h3 {
   font: normal bold 18px 'Open Sans', Arial, serif;
   line-height: 25px;
   color: $secondary;
+
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 h4 {
@@ -146,6 +155,21 @@ textarea, input {
   color: $primary !important;
 }
 
+.title {
+  font-weight: bold;
+  color: $primary;
+  font-size: 1.2rem;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
 input:focus::placeholder {
   color: transparent;
 }
@@ -162,14 +186,6 @@ input:focus::placeholder {
 @media screen and (max-width: 768px) {
   .p-sidebar-right {
     width: 100vw !important;
-  }
-}
-
-.home-card-border {
-  border: 1px solid #e2e2e2;
-
-  &:hover {
-    border: 1px solid #cdcdcd;
   }
 }
 
