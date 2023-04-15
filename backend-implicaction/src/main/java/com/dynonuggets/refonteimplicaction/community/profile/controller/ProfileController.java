@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.GET_PROFILE_BY_USERNAME;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.PROFILES_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.POST_PROFILE_AVATAR;
@@ -30,7 +32,7 @@ public class ProfileController {
     }
 
     @PutMapping
-    public ResponseEntity<ProfileDto> updateProfile(@RequestBody final ProfileUpdateRequest updateRequest) {
+    public ResponseEntity<ProfileDto> updateProfile(@Valid @RequestBody final ProfileUpdateRequest updateRequest) {
         return ResponseEntity.ok(profileService.updateProfile(updateRequest));
     }
 
