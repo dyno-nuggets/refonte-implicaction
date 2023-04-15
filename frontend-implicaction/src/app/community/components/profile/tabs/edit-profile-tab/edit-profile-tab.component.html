@@ -1,4 +1,7 @@
-<form>
+<form
+  [ngClass]="{'was-validated': isSubmitted}"
+  [formGroup]="userForm"
+>
   <div class="row col d-flex mb-3">
     <div class="col-md-4 col-lg-3 col-form-label">Profile Image</div>
     <div class="col-md-8 col-lg-9">
@@ -6,91 +9,153 @@
     </div>
   </div>
 
-  <div class="row mb-3">
-    <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
-    </div>
-  </div>
+  <fieldset>
+    <legend>Informations Personnelles</legend>
 
-  <div class="row mb-3">
-    <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
-    <div class="col-md-8 col-lg-9">
-      <textarea name="about" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+    <!-- firstname -->
+    <div class="row mb-3">
+      <label for="inputFirstname" class="col-md-4 col-lg-3 col-form-label mandatory">Prénom</label>
+      <div class="col-md-8 col-lg-9">
+        <input
+          id="inputFirstname"
+          type="text"
+          class="form-control"
+          name="inputFirstname"
+          aria-describedby="inputFirstnameFeedback"
+          formControlName="firstname"
+          placeholder="Prénom"
+          [ngClass]="{'is-invalid': firstname.invalid && (firstname.dirty || firstname.touched)}"
+        >
+        <div id="inputFirstnameFeedback" class="invalid-feedback">
+          Vous devez saisir votre prénom
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="company" type="text" class="form-control" id="company" value="Lueilwitz, Wisoky and Leuschke">
+    <div class="row mb-3">
+      <label for="inputLastname" class="col-md-4 col-lg-3 col-form-label mandatory">Nom</label>
+      <div class="col-md-8 col-lg-9">
+        <input
+          id="inputLastname"
+          type="text"
+          class="form-control"
+          name="inputLastname"
+          aria-describedby="inputLastnameFeedback"
+          formControlName="lastname"
+          placeholder="Nom de famille"
+          [ngClass]="{'is-invalid': lastname.invalid && (lastname.dirty || lastname.touched)}"
+        >
+        <div id="inputLastnameFeedback" class="invalid-feedback">
+          Vous devez saisir votre nom de famille
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="job" type="text" class="form-control" id="Job" value="Web Designer">
+    <div class="row mb-3">
+      <label for="inputEmail" class="col-md-4 col-lg-3 col-form-label mandatory">Adresse email</label>
+      <div class="col-md-8 col-lg-9">
+        <input
+          id="inputEmail"
+          type="text"
+          class="form-control"
+          name="inputEmail"
+          aria-describedby="inputEmailFeedback"
+          formControlName="email"
+          placeholder="Nom de famille"
+          [ngClass]="{'is-invalid': email.invalid && (email.dirty || email.touched)}"
+        >
+        <div id="inputEmailFeedback" class="invalid-feedback">
+          Vous devez saisir une adresse email valide
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="country" type="text" class="form-control" id="Country" value="USA">
+    <div class="row mb-3">
+      <label for="phoneNumber" class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
+      <div class="col-md-8 col-lg-9">
+        <input name="phoneNumber" type="tel" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="0609">
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="address" type="text" class="form-control" id="Address" value="A108 Adam Street, New York, NY 535022">
+    <div class="row mb-3">
+      <label for="birthday" class="col-md-4 col-lg-3 col-form-label">Date de naissance</label>
+      <div class="col-md-8 col-lg-9">
+        <input name="birthday" type="date" class="form-control" id="birthday" formControlName="birthday" placeholder="nom.prenom@mail.com">
+      </div>
     </div>
-  </div>
+  </fieldset>
 
-  <div class="row mb-3">
-    <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="phone" type="text" class="form-control" id="Phone" value="(436) 486-3538 x29071">
-    </div>
-  </div>
+  <fieldset>
+    <legend>Présentation</legend>
 
-  <div class="row mb-3">
-    <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="email" type="email" class="form-control" id="Email" value="k.anderson@example.com">
+    <div class="row mb-3">
+      <label for="presentation" class="col-md-4 col-lg-3 col-form-label">&Agrave; propos de moi</label>
+      <div class="col-md-8 col-lg-9">
+      <textarea
+        name="presentation"
+        class="form-control"
+        id="presentation"
+        formControlName="presentation"
+        placeholder="Décrivez vous en quelques mots ... "
+      ></textarea>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
+    <div class="row mb-3">
+      <label for="purpose" class="col-md-4 col-lg-3 col-form-label">Mon objectif professionnel</label>
+      <div class="col-md-8 col-lg-9">
+      <textarea
+        name="purpose"
+        class="form-control"
+        id="purpose"
+        formControlName="purpose"
+        placeholder="Décrivez vos attentes, votre projet professionnel, ... "
+      ></textarea>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
+    <div class="row mb-3">
+      <label for="expectation" class="col-md-4 col-lg-3 col-form-label">Ce que j'attends du réseau</label>
+      <div class="col-md-8 col-lg-9">
+      <textarea
+        name="expectation"
+        class="form-control"
+        id="expectation"
+        formControlName="expectation"
+        placeholder="Décrivez vos attentes du réseau"
+      ></textarea>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
+    <div class="row mb-3">
+      <label for="contribution" class="col-md-4 col-lg-3 col-form-label">Ce que je peux apporter au réseau</label>
+      <div class="col-md-8 col-lg-9">
+      <textarea
+        name="contribution"
+        class="form-control"
+        id="contribution"
+        formControlName="contribution"
+        placeholder="Présentez en quelques lignes ce que vous pouvez apporter au réseau "
+      ></textarea>
+      </div>
     </div>
-  </div>
 
-  <div class="row mb-3">
-    <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
-    <div class="col-md-8 col-lg-9">
-      <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
-    </div>
-  </div>
+  </fieldset>
 
   <div class="text-center">
-    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <button
+      type="submit"
+      class="btn btn-primary btn-lg px-5"
+      (click)="submit()"
+      [disabled]="isLoading"
+    >
+      <span
+        *ngIf="isLoading"
+        aria-hidden="true"
+        class="spinner-border spinner-border-sm"
+        role="status"
+      ></span>
+      Enregistrer
+    </button>
   </div>
-</form><!-- End Profile Edit Form -->
+</form>

@@ -170,6 +170,14 @@ textarea, input {
   }
 }
 
+.mandatory {
+  &:after {
+    content: '*';
+    color: $danger;
+    margin-left: 3px;
+  }
+}
+
 input:focus::placeholder {
   color: transparent;
 }

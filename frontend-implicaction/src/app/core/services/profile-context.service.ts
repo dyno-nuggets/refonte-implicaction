@@ -7,7 +7,7 @@ import {Profile} from "../../community/models/profile/profile";
 })
 export class ProfileContextService {
 
-  profileSubject: BehaviorSubject<Profile> = new BehaviorSubject<Profile>({});
+  profileSubject: BehaviorSubject<Profile> = new BehaviorSubject<Profile>(null);
 
   observeProfile(): Observable<Profile> {
     return this.profileSubject.asObservable();
