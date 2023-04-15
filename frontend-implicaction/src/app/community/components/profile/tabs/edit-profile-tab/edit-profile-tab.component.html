@@ -145,15 +145,15 @@
   <div class="text-center">
     <button
       type="submit"
-      class="btn btn-primary btn-lg px-5"
+      class="btn btn-primary btn-lg"
       (click)="submit()"
       [disabled]="isLoading"
     >
       <span
-        *ngIf="isLoading"
         aria-hidden="true"
         class="spinner-border spinner-border-sm"
         role="status"
+        [ngStyle]="{'visibility' : isLoading ? 'visible' : 'hidden'}"
       ></span>
       Enregistrer
     </button>

@@ -1,22 +1,26 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {Profile} from "../../../../models/profile/profile";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {ProfileContextService} from "../../../../../core/services/profile-context.service";
 import {ProfileService} from "../../../../services/profile/profile.service";
 import {ToasterService} from "../../../../../core/services/toaster.service";
+import {Subject} from "rxjs";
+import {takeUntil} from "rxjs/operators";
 
 @Component({
   selector: 'app-edit-profile-tab',
   templateUrl: './edit-profile-tab.component.html',
   styleUrls: ['./edit-profile-tab.component.scss']
 })
-export class EditProfileTabComponent implements OnInit {
+export class EditProfileTabComponent implements OnInit, OnDestroy {
 
   @Input() profile: Profile;
 
   userForm: FormGroup;
   isSubmitted = false;
   isLoading = false;
+
+  private onDestroySubject = new Subject<undefined>();
 
   constructor(
     private fb: FormBuilder,
@@ -40,6 +44,10 @@ export class EditProfileTabComponent implements OnInit {
       expectation: [this.profile.expectation],
       contribution: [this.profile.contribution],
     });
+
+    this.userForm.valueChanges
+      .pipe(takeUntil(this.onDestroySubject))
+      .subscribe(() => this.isSubmitted = false);
   }
 
   get firstname() {
@@ -72,5 +80,10 @@ export class EditProfileTabComponent implements OnInit {
         error: () => this.toasterService.error('Oops', 'Une erreur est survenue lors de l\'enregistrement des informations de votre profil'),
         complete: () => this.isLoading = false
       });
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroySubject.next();
+    this.onDestroySubject.complete();
   }
 }
