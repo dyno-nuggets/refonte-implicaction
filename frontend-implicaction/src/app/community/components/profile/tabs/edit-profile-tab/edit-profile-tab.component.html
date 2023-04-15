@@ -12,6 +12,20 @@
   <fieldset>
     <legend>Informations Personnelles</legend>
 
+    <!-- username -->
+    <div class="row mb-3">
+      <label for="inputUsername" class="col-md-4 col-lg-3 col-form-label">Nom d'utilisateur</label>
+      <div class="col-md-8 col-lg-9">
+        <input
+          id="inputUsername"
+          type="text"
+          class="form-control"
+          name="inputUsername"
+          formControlName="username"
+        >
+      </div>
+    </div>
+
     <!-- firstname -->
     <div class="row mb-3">
       <label for="inputFirstname" class="col-md-4 col-lg-3 col-form-label mandatory">Prénom</label>
@@ -32,6 +46,7 @@
       </div>
     </div>
 
+    <!-- lastname -->
     <div class="row mb-3">
       <label for="inputLastname" class="col-md-4 col-lg-3 col-form-label mandatory">Nom</label>
       <div class="col-md-8 col-lg-9">
@@ -51,6 +66,7 @@
       </div>
     </div>
 
+    <!-- email -->
     <div class="row mb-3">
       <label for="inputEmail" class="col-md-4 col-lg-3 col-form-label mandatory">Adresse email</label>
       <div class="col-md-8 col-lg-9">
@@ -70,17 +86,19 @@
       </div>
     </div>
 
+    <!-- téléphone -->
     <div class="row mb-3">
-      <label for="phoneNumber" class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
+      <label for="inputPhoneNumber" class="col-md-4 col-lg-3 col-form-label">Téléphone</label>
       <div class="col-md-8 col-lg-9">
-        <input name="phoneNumber" type="tel" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="0609">
+        <input name="inputPhoneNumber" type="tel" class="form-control" id="inputPhoneNumber" formControlName="phoneNumber" placeholder="0660666666">
       </div>
     </div>
 
+    <!-- date de naissance -->
     <div class="row mb-3">
-      <label for="birthday" class="col-md-4 col-lg-3 col-form-label">Date de naissance</label>
+      <label for="inputBirthday" class="col-md-4 col-lg-3 col-form-label">Date de naissance</label>
       <div class="col-md-8 col-lg-9">
-        <input name="birthday" type="date" class="form-control" id="birthday" formControlName="birthday" placeholder="nom.prenom@mail.com">
+        <input name="inputBirthday" type="date" class="form-control" id="inputBirthday" formControlName="birthday">
       </div>
     </div>
   </fieldset>
@@ -88,52 +106,56 @@
   <fieldset>
     <legend>Présentation</legend>
 
+    <!-- à propos -->
     <div class="row mb-3">
-      <label for="presentation" class="col-md-4 col-lg-3 col-form-label">&Agrave; propos de moi</label>
+      <label for="inputPresentation" class="col-md-4 col-lg-3 col-form-label">&Agrave; propos de moi</label>
       <div class="col-md-8 col-lg-9">
       <textarea
-        name="presentation"
+        name="inputPresentation"
         class="form-control"
-        id="presentation"
+        id="inputPresentation"
         formControlName="presentation"
         placeholder="Décrivez vous en quelques mots ... "
       ></textarea>
       </div>
     </div>
 
+    <!-- objectif personnel -->
     <div class="row mb-3">
-      <label for="purpose" class="col-md-4 col-lg-3 col-form-label">Mon objectif professionnel</label>
+      <label for="inputPurpose" class="col-md-4 col-lg-3 col-form-label">Mon objectif professionnel</label>
       <div class="col-md-8 col-lg-9">
       <textarea
-        name="purpose"
+        name="inputPurpose"
         class="form-control"
-        id="purpose"
+        id="inputPurpose"
         formControlName="purpose"
         placeholder="Décrivez vos attentes, votre projet professionnel, ... "
       ></textarea>
       </div>
     </div>
 
+    <!-- mes attentes -->
     <div class="row mb-3">
-      <label for="expectation" class="col-md-4 col-lg-3 col-form-label">Ce que j'attends du réseau</label>
+      <label for="inputExpectation" class="col-md-4 col-lg-3 col-form-label">Ce que j'attends du réseau</label>
       <div class="col-md-8 col-lg-9">
       <textarea
         name="expectation"
         class="form-control"
-        id="expectation"
-        formControlName="expectation"
+        id="inputExpectation"
+        formControlName="inputExpectation"
         placeholder="Décrivez vos attentes du réseau"
       ></textarea>
       </div>
     </div>
 
+    <!-- mes apports -->
     <div class="row mb-3">
-      <label for="contribution" class="col-md-4 col-lg-3 col-form-label">Ce que je peux apporter au réseau</label>
+      <label for="inputContribution" class="col-md-4 col-lg-3 col-form-label">Ce que je peux apporter au réseau</label>
       <div class="col-md-8 col-lg-9">
       <textarea
-        name="contribution"
+        name="inputContribution"
         class="form-control"
-        id="contribution"
+        id="inputContribution"
         formControlName="contribution"
         placeholder="Présentez en quelques lignes ce que vous pouvez apporter au réseau "
       ></textarea>
@@ -149,6 +171,7 @@
       (click)="submit()"
       [disabled]="isLoading"
     >
+      <!-- spinner -->
       <span
         aria-hidden="true"
         class="spinner-border spinner-border-sm"
