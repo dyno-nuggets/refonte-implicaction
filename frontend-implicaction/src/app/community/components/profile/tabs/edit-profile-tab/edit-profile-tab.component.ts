@@ -15,7 +15,6 @@ export class EditProfileTabComponent implements OnDestroy {
 
   @Input() profile: Profile;
 
-  isSubmitted = false;
   isLoading = false;
 
   private onDestroySubject = new Subject<void>();
@@ -28,7 +27,6 @@ export class EditProfileTabComponent implements OnDestroy {
   }
 
   updateProfile(updateRequest: ProfileUpdateRequest) {
-    this.isSubmitted = true;
     this.isLoading = true;
     console.log('request:', updateRequest);
     this.profileService.updateProfile(updateRequest)
