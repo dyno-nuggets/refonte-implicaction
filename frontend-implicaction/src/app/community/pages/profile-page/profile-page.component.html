@@ -23,7 +23,7 @@
 
         <div class="card">
           <div class="card-body pt-3">
-            <!-- Tabs -->
+            <!-- TABS beg -->
             <ul class="nav nav-tabs nav-tabs-bordered" role="tablist">
 
               <li class="nav-item" role="presentation">
@@ -89,6 +89,8 @@
               </ng-container>
 
             </ul>
+            <!-- TABS end -->
+
             <div class="tab-content pt-3">
 
               <div
@@ -107,7 +109,9 @@
                   class="tab-pane fade profile-edit pt-3"
                   [ngClass]="{'show active': activeTab === tabEnum.EDIT_PROFILE}"
                 >
-                  <app-edit-profile-tab [profile]="profile"></app-edit-profile-tab>
+                  <ng-container *ngIf="activeTab === tabEnum.EDIT_PROFILE">
+                    <app-edit-profile-tab [profile]="profile"></app-edit-profile-tab>
+                  </ng-container>
                 </div>
 
                 <div
@@ -116,7 +120,9 @@
                   class="tab-pane fade pt-3"
                   [ngClass]="{'show active': activeTab === tabEnum.SETTINGS}"
                 >
-                  <app-edit-settings-tab></app-edit-settings-tab>
+                  <ng-container *ngIf="activeTab === tabEnum.SETTINGS">
+                    <app-edit-settings-tab></app-edit-settings-tab>
+                  </ng-container>
                 </div>
 
                 <div
@@ -125,7 +131,9 @@
                   class="tab-pane fade pt-3"
                   [ngClass]="{'show active': activeTab === tabEnum.PASSWORD}"
                 >
-                  <app-change-password-tab></app-change-password-tab>
+                  <ng-container *ngIf="activeTab === tabEnum.PASSWORD">
+                    <app-change-password-tab></app-change-password-tab>
+                  </ng-container>
                 </div>
               </ng-container>
             </div><!-- End Bordered Tabs -->

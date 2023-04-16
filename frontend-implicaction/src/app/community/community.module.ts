@@ -7,12 +7,6 @@ import {PaginatorModule} from "primeng/paginator";
 import {RouterLinkActive, RouterLinkWithHref} from "@angular/router";
 import {SharedModule} from "../shared/shared.module";
 import {UserInfoComponent} from "./components/profile/user-info/user-info.component";
-import {ExperienceListComponent} from "./components/profile/experience-list/experience-list.component";
-import {SidebarProfileComponent} from "./components/profile/sidebar-profile/sidebar-profile.component";
-import {TrainingListComponent} from "./components/profile/training-list/training-list.component";
-import {ExperienceFormComponent} from "./components/profile/experience-form/experience-form.component";
-import {TrainingFormComponent} from "./components/profile/training-form/training-form.component";
-import {UserProfilePageComponent} from "./pages/user-profile-page/user-profile-page.component";
 import {ProfileOverviewTabComponent} from "./components/profile/tabs/profile-overview/profile-overview-tab/profile-overview-tab.component";
 import {EditProfileTabComponent} from "./components/profile/tabs/edit-profile-tab/edit-profile-tab.component";
 import {EditSettingsTabComponent} from "./components/profile/tabs/edit-settings-tab/edit-settings-tab.component";
@@ -26,7 +20,9 @@ import {ReactiveFormsModule} from "@angular/forms";
 import {SkeletonModule} from "primeng/skeleton";
 import {CalendarModule} from "primeng/calendar";
 import {FeatherModule} from "angular-feather";
-import { ProfileAvatarFileUploaderComponent } from './components/profile/profile-avatar-file-uploader/profile-avatar-file-uploader.component';
+import {ProfileAvatarFileUploaderComponent} from './components/profile/profile-avatar-file-uploader/profile-avatar-file-uploader.component';
+import {ProfileEditFormComponent} from "./components/profile/forms/profile-edit-form/profile-edit-form.component";
+import {ProfilePageComponent} from "./pages/profile-page/profile-page.component";
 
 
 @NgModule({
@@ -34,12 +30,8 @@ import { ProfileAvatarFileUploaderComponent } from './components/profile/profile
     UserCardComponent,
     RelationListComponent,
     UserInfoComponent,
-    ExperienceListComponent,
-    SidebarProfileComponent,
-    TrainingListComponent,
-    ExperienceFormComponent,
-    TrainingFormComponent,
-    UserProfilePageComponent,
+    ProfilePageComponent,
+    ProfileEditFormComponent,
     ProfileOverviewTabComponent,
     EditProfileTabComponent,
     EditSettingsTabComponent,

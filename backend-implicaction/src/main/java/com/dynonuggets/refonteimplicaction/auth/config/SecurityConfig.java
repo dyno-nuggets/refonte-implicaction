@@ -19,7 +19,7 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.AUTH_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.getPublicUris;
-import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.*;
+import static com.dynonuggets.refonteimplicaction.core.utils.ApiUrls.PUBLIC_BASE_URI;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @EnableWebSecurity
@@ -30,13 +30,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String[] NO_AUTHENTICATION_URIS = {
             AUTH_BASE_URI + "/**",
             PUBLIC_BASE_URI + "/**",
-            POSTS_BASE_URI + GET_LATEST_POSTS_URI + "/**",
-            //JOBS_BASE_URI + VALIDATED_JOBS + "?**",
 
-            // swagger
+            // swagger && swagger ui
             "/v2/api-docs",
-
-            // swagger ui
             "/swagger-resources/**",
             "/swagger-ui.html",
             "/swagger-ui/**",

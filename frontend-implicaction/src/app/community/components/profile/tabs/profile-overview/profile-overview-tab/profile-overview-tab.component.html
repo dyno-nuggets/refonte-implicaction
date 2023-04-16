@@ -1,8 +1,8 @@
-<app-profile-block *ngIf="profile.presentation && profile.presentation.length" title="En quelques mots">
+<app-profile-block *ngIf="profile.presentation && profile.presentation.length" title="&Agrave; propos de moi">
   <app-profile-about-section [content]="profile.presentation"></app-profile-about-section>
 </app-profile-block>
 
-<app-profile-block title="Détails du profil">
+<app-profile-block title="Informations personnelles">
   <app-profile-details-section [profile]="profile"></app-profile-details-section>
 </app-profile-block>
 

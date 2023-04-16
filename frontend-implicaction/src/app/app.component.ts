@@ -40,18 +40,13 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.sidebarService.getContent()
       .pipe(takeUntil(this.onDestroySubject))
-      .subscribe(
-        content => this.loadComponent(content)
-      );
+      .subscribe(content => this.loadComponent(content));
 
     this.authService.principal$
       .pipe(takeUntil(this.onDestroySubject))
-      .subscribe(
-        principal => this.updateCurrentProfile(principal)
-      );
+      .subscribe(principal => this.updateCurrentProfile(principal));
 
     this.profile$ = this.profileContextService.observeProfile();
-    this.updateCurrentProfile(this.authService.getPrincipal());
   }
 
   private updateCurrentProfile(principal: Principal) {

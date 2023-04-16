@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from "@angular/router";
 import {RelationListComponent} from "./pages/relation-list/relation-list.component";
-import {UserProfilePageComponent} from "./pages/user-profile-page/user-profile-page.component";
+import {ProfilePageComponent} from "./pages/profile-page/profile-page.component";
 
 const routes: Routes = [
   {
@@ -18,7 +18,7 @@ const routes: Routes = [
   },
   {
     path: 'profile/:username',
-    component: UserProfilePageComponent
+    component: ProfilePageComponent
   },
   {
     path: '',
