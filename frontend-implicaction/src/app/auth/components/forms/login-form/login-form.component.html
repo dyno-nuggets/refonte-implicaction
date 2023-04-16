@@ -1,0 +1,81 @@
+<form
+  (ngSubmit)="submit()"
+  [formGroup]="loginForm"
+>
+  <!-- USERNAME -->
+  <div class="form-floating mb-4">
+    <input
+      id="floatingUsername"
+      aria-describedby="floatingUsernameFeedback"
+      formControlName="username"
+      placeholder="Entrez votre nom d'utilisateur"
+      class="form-control form-control-lg"
+      autofocus
+      [ngClass]="{'is-invalid': username.invalid && (username.dirty || username.touched)}"
+    >
+    <div id="floatingUsernameFeedback" class="invalid-feedback">
+      Vous devez saisir votre nom d'utilisateur
+    </div>
+    <label
+      for="floatingUsername"
+      class="form-label"
+    >
+      Nom d'utilisateur
+    </label>
+  </div>
+
+  <!-- PASSWORD -->
+  <div class="form-floating mb-3">
+    <input
+      id="floatingPassword"
+      aria-describedby="floatingPasswordFeedback"
+      formControlName="password"
+      type="password"
+      placeholder="mot de passe"
+      class="form-control form-control-lg"
+      [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}"
+    />
+    <div id="floatingPasswordFeedback" class="invalid-feedback">
+      Vous devez saisir votre mot de passe
+    </div>
+    <label
+      for="floatingPassword"
+      class="form-label"
+    >
+      Mot de passe
+    </label>
+  </div>
+
+  <!-- OPTIONS -->
+  <div class="d-flex justify-content-end align-items-center">
+    <!-- FORGOT PASSWORD -->
+    <a
+      href="#"
+      class="text-body"
+    >
+      J'ai oublié mon mot de passe
+    </a>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="text-center text-lg-start mt-4 pt-2">
+    <div class="d-grid gap-2">
+      <button
+        class="btn btn-primary btn-lg"
+        type="submit"
+        [disabled]="isLoading"
+      >
+          <span
+            *ngIf="isLoading"
+            aria-hidden="true"
+            class="spinner-border spinner-border-sm"
+            role="status"
+          ></span>
+        Connexion
+      </button>
+    </div>
+    <p class="small fw-bold mt-2 pt-1 mb-0">
+      Pas encore membre ? <a class="link-danger" routerLink="/auth/sign-up">S'inscrire</a>
+    </p>
+  </div>
+</form>

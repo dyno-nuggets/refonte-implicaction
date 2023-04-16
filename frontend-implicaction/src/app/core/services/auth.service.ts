@@ -6,10 +6,10 @@ import {SignupRequestPayload} from '../../auth/models/signup-request-payload';
 import {LoginRequestPayload} from '../../auth/models/login-request-payload';
 import {LoginResponse} from '../../auth/models/login-response';
 import {HttpClient} from '@angular/common/http';
-import {StorageService} from "./storage.service";
+import {StorageService} from './storage.service';
 import jwt_decode from 'jwt-decode';
-import {Principal} from "../../shared/models/principal";
-import {RoleEnumCode} from "../../shared/enums/role.enum";
+import {Principal} from '../../shared/models/principal';
+import {RoleEnumCode} from '../../shared/enums/role.enum';
 
 
 @Injectable({
@@ -49,7 +49,7 @@ export class AuthService {
           this.storeAndEmitPrincipal(principal);
           return principal;
         }),
-        catchError(() => of(null))
+        catchError(error => throwError(error))
       );
   }
 
@@ -125,7 +125,7 @@ export class AuthService {
 
   private rolesAsStringToRoleEnumCodes(rolesAsString: string): RoleEnumCode[] {
     if (!rolesAsString) {
-      return []
+      return [];
     }
     return rolesAsString.split(',') as RoleEnumCode[];
   }

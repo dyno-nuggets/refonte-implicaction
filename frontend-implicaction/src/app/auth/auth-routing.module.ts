@@ -1,14 +1,14 @@
 import {NgModule} from '@angular/core';
 import {SignupComponent} from './pages/signup/signup.component';
 import {RouterModule, Routes} from '@angular/router';
-import {LoginComponent} from './pages/login/login.component';
-import {LogoutComponent} from "./pages/logout/logout.component";
-import {LoggedInAuthGuard} from "./guards/logged-in-auth.guard";
+import {LoggedInAuthGuard} from './guards/logged-in-auth.guard';
+import {LoginPageComponent} from './pages/login-page/login-page.component';
+import {LogoutPageComponent} from './pages/logout-page/logout-page.component';
 
 const routes: Routes = [
   {path: 'sign-up', component: SignupComponent, canActivate: [LoggedInAuthGuard]},
-  {path: 'login', component: LoginComponent, canActivate: [LoggedInAuthGuard]},
-  {path: 'logout', component: LogoutComponent}
+  {path: 'login', component: LoginPageComponent, canActivate: [LoggedInAuthGuard]},
+  {path: 'logout', component: LogoutPageComponent}
 ];
 
 @NgModule({

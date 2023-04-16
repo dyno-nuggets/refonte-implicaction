@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy} from '@angular/core';
-import {Profile} from "../../../../models/profile/profile";
-import {ProfileContextService} from "../../../../../core/services/profile-context.service";
-import {ProfileService} from "../../../../services/profile/profile.service";
-import {ToasterService} from "../../../../../core/services/toaster.service";
-import {Subject} from "rxjs";
-import {ProfileUpdateRequest} from "../../../../models/profile/profile-update-request";
-import {finalize} from "rxjs/operators";
+import {Profile} from '../../../../models/profile/profile';
+import {ProfileContextService} from '../../../../../core/services/profile-context.service';
+import {ProfileService} from '../../../../services/profile/profile.service';
+import {ToasterService} from '../../../../../core/services/toaster.service';
+import {Subject} from 'rxjs';
+import {ProfileUpdateRequest} from '../../../../models/profile/profile-update-request';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-edit-profile-tab',
@@ -18,7 +18,7 @@ export class EditProfileTabComponent implements OnDestroy {
   isSubmitted = false;
   isLoading = false;
 
-  private onDestroySubject = new Subject<undefined>();
+  private onDestroySubject = new Subject<void>();
 
   constructor(
     private profileService: ProfileService,

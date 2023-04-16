@@ -1,0 +1,9 @@
+<app-auth-wrapper-page
+  title="Connexion"
+  [alert]="alert"
+>
+  <app-login-form
+    (formSubmit)="login($event)"
+    [isLoading]="isLoading"
+  ></app-login-form>
+</app-auth-wrapper-page>

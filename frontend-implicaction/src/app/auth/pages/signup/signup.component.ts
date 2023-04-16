@@ -7,8 +7,8 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';
 import {AlertService} from '../../../shared/services/alert.service';
 import {Univers} from '../../../shared/enums/univers';
-import {Subscription} from "rxjs";
-import {Alert} from "../../../shared/models/alert";
+import {Subscription} from 'rxjs';
+import {Alert} from '../../../shared/models/alert';
 
 @Component({
   templateUrl: './signup.component.html',
@@ -17,7 +17,6 @@ export class SignupComponent implements OnInit, OnDestroy {
 
   signupForm: UntypedFormGroup;
   signupRequestPayload: SignupRequestPayload;
-  isError: boolean;
   isLoading = false;
   alert: Alert;
 

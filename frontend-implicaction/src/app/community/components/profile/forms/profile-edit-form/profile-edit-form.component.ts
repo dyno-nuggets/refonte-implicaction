@@ -1,10 +1,10 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormGroup, NonNullableFormBuilder, Validators} from "@angular/forms";
-import {takeUntil} from "rxjs/operators";
-import {Profile} from "../../../../models/profile/profile";
-import {Subject} from "rxjs";
-import {ProfileUpdateRequest} from "../../../../models/profile/profile-update-request";
-import {ProfileUpdateForm} from "../../../../models/profile/forms/profile-update-form";
+import {FormGroup, NonNullableFormBuilder, Validators} from '@angular/forms';
+import {takeUntil} from 'rxjs/operators';
+import {Profile} from '../../../../models/profile/profile';
+import {Subject} from 'rxjs';
+import {ProfileUpdateRequest} from '../../../../models/profile/profile-update-request';
+import {ProfileUpdateForm} from '../../../../models/profile/forms/profile-update-form';
 
 @Component({
   selector: 'app-profile-edit-form',
@@ -21,7 +21,7 @@ export class ProfileEditFormComponent implements OnInit, OnDestroy {
 
   userForm!: FormGroup<ProfileUpdateForm>;
 
-  private onDestroySubject = new Subject<unknown>();
+  private onDestroySubject = new Subject<void>();
 
   constructor(private fb: NonNullableFormBuilder) {
   }
@@ -71,7 +71,7 @@ export class ProfileEditFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.formSubmit.emit({username: this.profile.username, ...this.userForm.value})
+    this.formSubmit.emit({username: this.profile.username, ...this.userForm.value});
   }
 
   ngOnDestroy(): void {
