@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
-import {LoginRequestPayload} from "../../../models/login-request-payload";
+import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
+import {LoginRequestPayload} from '../../../models/login-request-payload';
 
 @Component({
   selector: 'app-login-form',
@@ -23,5 +23,13 @@ export class LoginFormComponent {
     }
 
     this.formSubmit.emit({...this.loginForm.value});
+  }
+
+  get username() {
+    return this.loginForm.get('username');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
   }
 }

@@ -6,12 +6,16 @@
   <div class="form-floating mb-4">
     <input
       id="floatingUsername"
+      aria-describedby="floatingUsernameFeedback"
       formControlName="username"
-      placeholder="Enter a valid email address"
+      placeholder="Entrez votre nom d'utilisateur"
       class="form-control form-control-lg"
       autofocus
-      required
+      [ngClass]="{'is-invalid': username.invalid && (username.dirty || username.touched)}"
     >
+    <div id="floatingUsernameFeedback" class="invalid-feedback">
+      Vous devez saisir votre nom d'utilisateur
+    </div>
     <label
       for="floatingUsername"
       class="form-label"
@@ -24,12 +28,16 @@
   <div class="form-floating mb-3">
     <input
       id="floatingPassword"
-      type="password"
+      aria-describedby="floatingPasswordFeedback"
       formControlName="password"
+      type="password"
       placeholder="mot de passe"
       class="form-control form-control-lg"
-      required
+      [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}"
     />
+    <div id="floatingPasswordFeedback" class="invalid-feedback">
+      Vous devez saisir votre mot de passe
+    </div>
     <label
       for="floatingPassword"
       class="form-label"
