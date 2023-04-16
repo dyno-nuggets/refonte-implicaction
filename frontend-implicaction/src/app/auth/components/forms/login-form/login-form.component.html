@@ -1,50 +1,29 @@
 <form
   (ngSubmit)="submit()"
-  [formGroup]="loginForm"
+  [formGroup]="form"
 >
   <!-- USERNAME -->
-  <div class="form-floating mb-4">
-    <input
-      id="floatingUsername"
-      aria-describedby="floatingUsernameFeedback"
-      formControlName="username"
-      placeholder="Entrez votre nom d'utilisateur"
-      class="form-control form-control-lg"
-      autofocus
-      [ngClass]="{'is-invalid': username.invalid && (username.dirty || username.touched)}"
-    >
-    <div id="floatingUsernameFeedback" class="invalid-feedback">
-      Vous devez saisir votre nom d'utilisateur
-    </div>
-    <label
-      for="floatingUsername"
-      class="form-label"
-    >
-      Nom d'utilisateur
-    </label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="nom d'utilisateur"
+    controlName="username"
+    styleClass="mb-3"
+    label="Nom d'utilisateur"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="usernameControls"
+  ></app-floating-input-with-validation>
 
   <!-- PASSWORD -->
-  <div class="form-floating mb-3">
-    <input
-      id="floatingPassword"
-      aria-describedby="floatingPasswordFeedback"
-      formControlName="password"
-      type="password"
-      placeholder="mot de passe"
-      class="form-control form-control-lg"
-      [ngClass]="{'is-invalid': password.invalid && (password.dirty || password.touched)}"
-    />
-    <div id="floatingPasswordFeedback" class="invalid-feedback">
-      Vous devez saisir votre mot de passe
-    </div>
-    <label
-      for="floatingPassword"
-      class="form-label"
-    >
-      Mot de passe
-    </label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="mot de passe"
+    controlName="password"
+    styleClass="mb-3"
+    label="Mot de passe"
+    inputType="password"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="passwordControls"
+  ></app-floating-input-with-validation>
 
   <!-- OPTIONS -->
   <div class="d-flex justify-content-end align-items-center">

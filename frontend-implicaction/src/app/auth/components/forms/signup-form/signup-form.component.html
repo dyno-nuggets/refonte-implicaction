@@ -1,150 +1,75 @@
 <form
   (ngSubmit)="submit()"
-  [formGroup]="signupForm"
+  [formGroup]="form"
 >
 
   <!-- USERNAME -->
-  <div class="form-floating mb-4">
-    <input
-      autofocus
-      class="form-control form-control-lg"
-      formControlName="username"
-      id="floatingUsername"
-      aria-describedby="floatingUsernameFeedback"
-      placeholder="Enter a valid email address"
-      required
-      [ngClass]="{'is-invalid': (username.touched || submitted) && username.invalid}"
-    />
-    <div
-      *ngIf="(username.touched || submitted) && username.invalid"
-      id="floatingUsernameFeedback"
-      class="invalid-feedback"
-    >
-      Vous devez saisir votre nom d'utilisateur
-    </div>
-    <label class="form-label" for="floatingUsername">Nom d'utilisateur</label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="nom d'utilisateur"
+    controlName="username"
+    styleClass="mb-3"
+    label="Nom d'utilisateur"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="usernameControls"
+  ></app-floating-input-with-validation>
 
   <!-- EMAIL -->
-  <div class="form-floating mb-3">
-    <input
-      class="form-control form-control-lg"
-      formControlName="email"
-      aria-describedby="floatingEmailFeedback"
-      id="floatingEmail"
-      placeholder="email"
-      required
-      type="email"
-      [ngClass]="{'is-invalid': (email.touched || submitted) && email.invalid}"
-    />
-    <div
-      *ngIf="(email.touched || submitted) && email.invalid"
-      id="floatingEmailFeedback"
-      class="invalid-feedback"
-    >
-      Vous devez saisir une adresse email valide
-    </div>
-    <label class="form-label" for="floatingEmail">Email</label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="email"
+    controlName="email"
+    styleClass="mb-3"
+    label="Email"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="emailControls"
+  ></app-floating-input-with-validation>
 
   <!-- PASSWORD -->
-  <div class="form-floating mb-3">
-    <input
-      class="form-control form-control-lg"
-      formControlName="password"
-      id="floatingPassword"
-      aria-describedby="floatingPasswordFeedback"
-      placeholder="mot de passe"
-      required
-      type="password"
-      [ngClass]="{'is-invalid': (password.touched || submitted) && password.invalid}"
-    />
-    <div
-      *ngIf="(password.touched || submitted) && password.invalid"
-      id="floatingPasswordFeedback"
-      class="invalid-feedback"
-    >
-      <ng-container *ngIf="password.errors?.['required']">
-        Vous devez saisir un mot de passe
-      </ng-container>
-      <ng-container *ngIf="password.errors?.['invalidPassword']">
-        Votre mot de passe doit être composé d'<span class="fw-bold">au moins 8 caractères</span>, d'<span class="fw-bold">au moins une lettre majuscule</span>,
-        d'<span class="fw-bold">au mois une lettre minuscule</span> et d'au moins <span class="fw-bold">un chiffre</span>
-      </ng-container>
-    </div>
-    <label class="form-label" for="floatingPassword">Mot de passe</label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="mot de passe"
+    controlName="password"
+    styleClass="mb-3"
+    label="Mot de passe"
+    inputType="password"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="passwordControls"
+  ></app-floating-input-with-validation>
 
   <!-- CONFIRM PASSWORD -->
-  <div class="form-floating mb-3">
-    <input
-      class="form-control form-control-lg"
-      formControlName="confirmPassword"
-      id="floatingConfirmPassword"
-      aria-describedby="floatingConfirmPasswordFeedback"
-      placeholder="confirmer mot de passe"
-      required
-      type="password"
-      [ngClass]="{'is-invalid': (confirmPassword.touched || submitted) && confirmPassword.invalid}"
-    />
-    <div
-      *ngIf="(confirmPassword.touched || submitted) && password.invalid"
-      id="floatingConfirmPasswordFeedback"
-      class="invalid-feedback"
-    >
-      <ng-container *ngIf="confirmPassword.errors?.['required']">
-        Vous devez confirmer votre mot de passe
-      </ng-container>
-      <ng-container *ngIf="confirmPassword.errors?.['passwordMismatch']">
-        Les mots de passe ne correspondent pas
-      </ng-container>
-    </div>
-    <label class="form-label" for="floatingConfirmPassword">Confirmer mot de passe</label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="confirmer mot de passe"
+    controlName="confirmPassword"
+    styleClass="mb-3"
+    label="Confirmer mot de passe"
+    inputType="password"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="confirmPasswordControls"
+  ></app-floating-input-with-validation>
 
   <!-- FIRSTNAME -->
-  <div class="form-floating mb-3">
-    <input
-      type="text"
-      id="floatingFirstname"
-      aria-describedby="floatingFirstnameFeedback"
-      formControlName="firstname"
-      class="form-control form-control-lg"
-      placeholder="Prénom"
-      required
-      [ngClass]="{'is-invalid': (firstname.touched || submitted) && firstname.invalid}"
-    />
-    <div
-      *ngIf="(firstname.touched || submitted) && firstname.invalid"
-      id="floatingFirstnameFeedback"
-      class="invalid-feedback"
-    >
-      Vous devez saisir votre prénom
-    </div>
-    <label class="form-label" for="floatingFirstname">Prénom</label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="prénom"
+    controlName="firstname"
+    styleClass="mb-3"
+    label="Prénom"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="firstnameControls"
+  ></app-floating-input-with-validation>
 
   <!-- LASTNAME -->
-  <div class="form-floating mb-3">
-    <input
-      type="text"
-      id="floatingLastname"
-      aria-describedby="floatingLastnameFeedback"
-      formControlName="lastname"
-      class="form-control form-control-lg"
-      placeholder="Nom"
-      required
-      [ngClass]="{'is-invalid': (lastname.touched || submitted) && lastname.invalid}"
-    />
-    <div
-      *ngIf="(lastname.touched || submitted) && lastname.invalid"
-      id="floatingLastnameFeedback"
-      class="invalid-feedback"
-    >
-      Vous devez saisir votre nom de famille
-    </div>
-    <label class="form-label" for="floatingLastname">Nom</label>
-  </div>
+  <app-floating-input-with-validation
+    placeholder="nom de famille"
+    controlName="lastname"
+    styleClass="mb-3"
+    label="Nom de famille"
+    [formGroup]="form"
+    [submitted]="submitted"
+    [controls]="lastnameControls"
+  ></app-floating-input-with-validation>
 
   <div class="text-center text-lg-start mt-4 pt-2">
     <div class="d-grid gap-2 ">

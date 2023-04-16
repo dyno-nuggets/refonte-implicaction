@@ -1,0 +1,23 @@
+<div [formGroup]="formGroup" class="form-floating" [ngClass]="styleClass">
+  <input
+    class="form-control form-control-lg"
+    [type]="inputType"
+    [id]="inputId"
+    [attr.aria-describedby]="describedby"
+    [placeholder]="placeholder"
+    [formControlName]="controlName"
+    [ngClass]="{'is-invalid': (control.touched || submitted) && control.invalid}"
+  />
+  <div
+    *ngIf="(control.touched || submitted) && control.invalid"
+    id="floatingUsernameFeedback"
+    class="invalid-feedback"
+  >
+    <ng-container *ngFor="let entry of controls | keyvalue">
+      <ng-container *ngIf="control.errors?.[entry.key]">
+        <span [innerHTML]="entry.value"></span>
+      </ng-container>
+    </ng-container>
+  </div>
+  <label class="form-label" [for]="inputId" [ngClass]="{'mandatory': required}">{{label}}</label>
+</div>

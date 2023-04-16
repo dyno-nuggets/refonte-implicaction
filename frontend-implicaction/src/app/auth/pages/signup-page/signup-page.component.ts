@@ -33,6 +33,7 @@ export class SignupPageComponent implements OnInit, OnDestroy {
   }
 
   signup(signupPaylod: SignupRequestPayload): void {
+    this.isLoading = true;
     this.authService
       .signup(signupPaylod)
       .pipe(finalize(() => this.isLoading = false), take(1))

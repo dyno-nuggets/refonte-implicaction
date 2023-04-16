@@ -13,6 +13,7 @@ export class AuthFormValidatorService {
       if (!control.value) {
         return null;
       }
+
       const regex = new RegExp(AuthFormValidatorService.PASSWORD_PATTERN);
       const validPattern = regex.test(control.value);
       return validPattern ? null : {invalidPassword: true};
@@ -28,8 +29,7 @@ export class AuthFormValidatorService {
         return null;
       }
 
-      if (confirmPasswordControl.errors && !confirmPasswordControl.errors['passwordMismatch']
-      ) {
+      if (confirmPasswordControl.errors && !confirmPasswordControl.errors['passwordMismatch']) {
         return null;
       }
 
