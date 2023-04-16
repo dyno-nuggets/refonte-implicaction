@@ -15,7 +15,7 @@ import {AvatarModule} from 'primeng/avatar';
 import {FormsModule} from '@angular/forms';
 import {DropdownModule} from 'primeng/dropdown';
 import {TextEllipsisPipe} from './pipes/text-ellipsis.pipe';
-import {ImplicactionLogoTextComponent} from "./components/implicaction-logo-text/implicaction-logo-text.component";
+import {ImplicactionLogoTextComponent} from './components/implicaction-logo-text/implicaction-logo-text.component';
 import {UserAvatarComponent} from './components/user-avatar/user-avatar.component';
 import {RequiredRoleDirective} from './directives/required-role.directive';
 import {AnyRoleMatchesDirective} from './directives/any-role-matches.directive';
@@ -23,10 +23,11 @@ import {CardHorizontalComponent} from './components/cards/card-horizontal/card-h
 import {CardWithAvatarDurationAndTitleComponent} from './components/cards/card-with-avatar-duration-and-title/card-with-avatar-duration-and-title.component';
 import {
   CardWithAvatarDurationAndTitleSkeletonComponent
-} from "./components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component";
-import {SkeletonModule} from "primeng/skeleton";
+} from './components/cards/card-with-avatar-duration-and-title-skeleton/card-with-avatar-duration-and-title-skeleton.component';
+import {SkeletonModule} from 'primeng/skeleton';
 import {ProfileInfoDisplayComponent} from './components/profile-info-display/profile-info-display.component';
-import {OverlayPanelModule} from "primeng/overlaypanel";
+import {OverlayPanelModule} from 'primeng/overlaypanel';
+import {BaseFormComponent} from './components/base-form/base-form.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
     AnyRoleMatchesDirective,
     UserAvatarComponent,
     ProfileInfoDisplayComponent,
+    BaseFormComponent,
   ],
   exports: [
     LoadingComponent,
@@ -69,6 +71,7 @@ import {OverlayPanelModule} from "primeng/overlaypanel";
     CardWithAvatarDurationAndTitleComponent,
     CardWithAvatarDurationAndTitleSkeletonComponent,
     ProfileInfoDisplayComponent,
+    BaseFormComponent,
   ],
   imports: [
     CommonModule,

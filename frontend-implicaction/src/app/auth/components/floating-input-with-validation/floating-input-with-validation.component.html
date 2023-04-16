@@ -9,7 +9,7 @@
     [ngClass]="{'is-invalid': (control.touched || submitted) && control.invalid}"
   />
   <div
-    *ngIf="(control.touched || submitted) && control.invalid"
+    *ngIf="controls?.size && (control.touched || submitted) && control.invalid"
     id="floatingUsernameFeedback"
     class="invalid-feedback"
   >

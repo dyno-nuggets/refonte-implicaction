@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {AuthRoutingModule} from './auth-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
-import {AuthFormWrapperComponent} from './components/base-auth-page/auth-form-wrapper.component';
+import {AuthFormWrapperComponent} from './components/auth-form-wrapper/auth-form-wrapper.component';
 import {LoginFormComponent} from './components/forms/login-form/login-form.component';
 import {LoginPageComponent} from './pages/login-page/login-page.component';
 import {LogoutPageComponent} from './pages/logout-page/logout-page.component';

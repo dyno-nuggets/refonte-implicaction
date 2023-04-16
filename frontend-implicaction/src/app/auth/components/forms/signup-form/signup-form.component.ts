@@ -1,24 +1,15 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormGroup, NonNullableFormBuilder, Validators} from '@angular/forms';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {SignupRequestPayload} from '../../../models/signup-request-payload';
 import {AuthFormValidatorService} from '../../../services/auth-form-validator.service';
-import {SignupRequestForm} from '../../../models/forms/signup-request-form';
-import {takeUntil} from 'rxjs/operators';
-import {Subject} from 'rxjs';
+import {BaseFormComponent} from '../../../../shared/components/base-form/base-form.component';
 
 @Component({
   selector: 'app-signup-form',
   templateUrl: './signup-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SignupFormComponent implements OnInit, OnDestroy {
-
-  @Input() isLoading: boolean;
-
-  @Output() submitForm = new EventEmitter<SignupRequestPayload>();
-
-  protected form!: FormGroup<SignupRequestForm>;
-  protected submitted = false;
+export class SignupFormComponent extends BaseFormComponent<SignupRequestPayload> {
   protected usernameControls = new Map<string, string>([['required', 'Vous devez fournir un nom d\'utilisateur']]);
   protected emailControls = new Map<string, string>([
     ['required', 'Vous devez saisir une adresse email'],
@@ -43,31 +34,14 @@ export class SignupFormComponent implements OnInit, OnDestroy {
     ['required', 'Vous devez saisir votre nom de famille'],
   ]);
 
-  private onDestroySubject = new Subject<void>();
-
   constructor(
     private readonly fb: NonNullableFormBuilder,
     private readonly customFormValidator: AuthFormValidatorService,
   ) {
+    super();
   }
 
-  ngOnInit(): void {
-    this.initForm();
-    this.form.valueChanges
-      .pipe(takeUntil(this.onDestroySubject))
-      .subscribe(() => this.submitted = false);
-  }
-
-  submit() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    this.submitted = true;
-    this.submitForm.emit({...this.form.value});
-  }
-
-  private initForm() {
+  protected initForm() {
     this.form = this.fb.group(
       {
         username: this.fb.control('', [Validators.required]),
@@ -82,7 +56,6 @@ export class SignupFormComponent implements OnInit, OnDestroy {
         ]),
         confirmPassword: this.fb.control('', Validators.required),
         firstname: this.fb.control('', Validators.required),
-
       },
       {
         validators: [
@@ -93,10 +66,5 @@ export class SignupFormComponent implements OnInit, OnDestroy {
         ],
       }
     );
-  }
-
-  ngOnDestroy(): void {
-    this.onDestroySubject.next();
-    this.onDestroySubject.complete();
   }
 }
