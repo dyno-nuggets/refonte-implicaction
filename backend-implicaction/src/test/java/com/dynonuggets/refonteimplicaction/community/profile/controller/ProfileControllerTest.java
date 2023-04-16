@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import java.nio.charset.Charset;
+import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_NOT_FOUND_MESSAGE;
@@ -28,6 +29,7 @@ import static com.dynonuggets.refonteimplicaction.community.profile.utils.Profil
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.GET_PROFILE_BY_USERNAME;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileUris.PROFILES_BASE_URI;
 import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.POST_PROFILE_AVATAR;
+import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertErrorResultFieldValidation;
 import static java.lang.String.format;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.is;
@@ -146,7 +148,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
     class UpdateProfileTest {
         @Test
         @WithMockUser
-        @DisplayName("doit répondre OK avec le profil modifié si l'utilisateur existe et est identifié")
+        @DisplayName("doit répondre OK avec le profil modifié quand l'utilisateur existe et est identifié et que l'objet de requête est valide")
         void should_response_ok_with_updated_profile_when_user_exists_and_authenticated() throws Exception {
             // given
             final ProfileUpdateRequest updateRequest = generateRandomProfileUpdateRequest();
@@ -172,6 +174,26 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
             // then
             resultActionsAssertionsForSingleProfile(expectedProfile, resultActions);
             verify(profileService, times(1)).updateProfile(any());
+        }
+
+        @Test
+        @WithMockUser
+        @DisplayName("doit répondre BAD_REQUEST quand l'objet de requête est invalide")
+        void should_response_bad_request_when_user_authenticated_but_body_is_not_valid() throws Exception {
+            // given
+            final ProfileUpdateRequest updateRequest = ProfileUpdateRequest.builder().email("mail-invalide").build();
+
+            // when
+            final ResultActions resultActions = mvc.perform(put(baseUri)
+                    .with(csrf())
+                    .content(toJson(updateRequest))
+                    .accept(APPLICATION_JSON)
+                    .characterEncoding(Charset.defaultCharset())
+                    .contentType(APPLICATION_JSON));
+
+            // then
+            assertErrorResultFieldValidation(resultActions, Set.of("username", "email", "firstname", "lastname"));
+            verifyNoInteractions(profileService);
         }
 
         @Test

@@ -5,10 +5,15 @@ import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import lombok.NoArgsConstructor;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.Set;
+
+import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
 import static java.lang.String.format;
 import static lombok.AccessLevel.PRIVATE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.aMapWithSize;
+import static org.hamcrest.Matchers.hasKey;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,5 +65,16 @@ public class AssertionUtils {
                 .andExpect(status().is(errorResult.getStatus().value()))
                 .andExpect(jsonPath("$.errorMessage", is(String.format(errorResult.getMessage(), value))))
                 .andExpect(jsonPath("$.errorCode", is(errorResult.getStatus().value())));
+    }
+
+    public static void assertErrorResultFieldValidation(final ResultActions resultActions, final Set<String> invalidKeys) throws Exception {
+        resultActions
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorMessage", is(ERROR_FIELD_VALIDATION_MESSAGE)))
+                .andExpect(jsonPath("$.errors", aMapWithSize(invalidKeys.size())));
+
+        for (final String key : invalidKeys) {
+            resultActions.andExpect(jsonPath("$.errors", hasKey(key)));
+        }
     }
 }

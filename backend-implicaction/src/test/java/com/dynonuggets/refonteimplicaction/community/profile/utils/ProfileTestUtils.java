@@ -72,6 +72,9 @@ public class ProfileTestUtils {
     public static ProfileUpdateRequest generateRandomProfileUpdateRequest(final String username) {
         return ProfileUpdateRequest.builder()
                 .username(username)
+                .email("user@mail.com")
+                .firstname(randomAlphabetic(20))
+                .lastname(randomAlphabetic(20))
                 .birthday(generateRandomLocalDate())
                 .hobbies(randomAlphabetic(120))
                 .purpose(randomAlphabetic(120))
