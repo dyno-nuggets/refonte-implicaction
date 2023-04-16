@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormGroup, NonNullableFormBuilder, Validators} from '@angular/forms';
+import {AbstractControl, FormGroup, NonNullableFormBuilder, Validators} from '@angular/forms';
 import {takeUntil} from 'rxjs/operators';
 import {Profile} from '../../../../models/profile/profile';
 import {Subject} from 'rxjs';
@@ -54,15 +54,15 @@ export class ProfileEditFormComponent implements OnInit, OnDestroy {
       .subscribe(() => this.isSubmitted = false);
   }
 
-  get firstname() {
+  get firstname(): AbstractControl<string, string> {
     return this.userForm.get('firstname');
   }
 
-  get lastname() {
+  get lastname(): AbstractControl<string, string> {
     return this.userForm.get('lastname');
   }
 
-  get email() {
+  get email(): AbstractControl<string, string> {
     return this.userForm.get('email');
   }
 

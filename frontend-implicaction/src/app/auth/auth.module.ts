@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {SignupComponent} from './pages/signup/signup.component';
 import {AuthRoutingModule} from './auth-routing.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {UnauthorizedComponent} from './pages/unauthorized/unauthorized.component';
@@ -9,19 +8,22 @@ import {AuthFormWrapperComponent} from './components/base-auth-page/auth-form-wr
 import {LoginFormComponent} from './components/forms/login-form/login-form.component';
 import {LoginPageComponent} from './pages/login-page/login-page.component';
 import {LogoutPageComponent} from './pages/logout-page/logout-page.component';
+import {SignupFormComponent} from './components/forms/signup-form/signup-form.component';
+import {SignupPageComponent} from './pages/signup-page/signup-page.component';
 
 
 @NgModule({
   declarations: [
-    SignupComponent,
+    SignupPageComponent,
     LoginPageComponent,
     UnauthorizedComponent,
     AuthFormWrapperComponent,
     LogoutPageComponent,
-    LoginFormComponent
+    LoginFormComponent,
+    SignupFormComponent,
   ],
   exports: [
-    SignupComponent
+    SignupPageComponent
   ],
   imports: [
     CommonModule,
