@@ -49,7 +49,7 @@ export class AuthService {
           this.storeAndEmitPrincipal(principal);
           return principal;
         }),
-        catchError(() => of(null))
+        catchError((error) => throwError(error))
       );
   }
 

@@ -4,8 +4,8 @@ import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {Univers} from '../../../shared/enums/univers';
 import {RoleEnumCode} from '../../../shared/enums/role.enum';
-import {Subject} from "rxjs";
-import {Profile} from "../../../community/models/profile/profile";
+import {Subject} from 'rxjs';
+import {Profile} from '../../../community/models/profile/profile';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +20,7 @@ export class HeaderComponent implements OnChanges, OnDestroy {
   univers = Univers;
   navItems: Univers[];
 
-  private onDestroySubject = new Subject<undefined>();
+  private onDestroySubject = new Subject<void>();
 
   constructor(
     private authService: AuthService,
