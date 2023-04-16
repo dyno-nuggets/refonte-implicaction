@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators} from '@angular/forms';
 import {LoginRequestPayload} from '../../../models/login-request-payload';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginFormComponent {
 

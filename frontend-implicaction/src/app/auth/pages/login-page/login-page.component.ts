@@ -4,10 +4,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize, take, takeUntil} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
-import {AlertService} from "../../../shared/services/alert.service";
-import {Subject} from "rxjs";
-import {Alert, AlertType} from "../../../shared/models/alert";
-import {LoginRequestPayload} from "../../models/login-request-payload";
+import {AlertService} from '../../../shared/services/alert.service';
+import {Subject} from 'rxjs';
+import {Alert, AlertType} from '../../../shared/models/alert';
+import {LoginRequestPayload} from '../../models/login-request-payload';
 
 @Component({
   templateUrl: './login-page.component.html',
@@ -38,7 +38,7 @@ export class LoginPageComponent implements OnInit, OnDestroy {
         title: 'Votre compte a bien été créé',
         message: 'Votre inscription a bien été enregistrée. Elle doit maintenant être validée par un administrateur.',
         type: AlertType.SUCCESS
-      }
+      };
     }
   }
 
@@ -46,12 +46,16 @@ export class LoginPageComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.authService.login(loginRequest)
       .pipe(finalize(() => this.isLoading = false), take(1))
-      .subscribe(principal => this.redirectSuccess(principal.username));
+      .subscribe({
+        next: principal => this.redirectSuccess(principal.username),
+        // pour l'instant on ne fait rien, l'error-interceptor s'occupe de gérer les erreurs
+        error: () => ({}),
+      });
   }
 
   private redirectSuccess(username: string): void {
     this.router.navigateByUrl(this.activatedRoute.snapshot.queryParams['returnUrl'] ?? Univers.HOME.url)
-      .then(() => this.toaster.success(`Bienvenue ${username}`, 'vous êtes maintenant identifié'))
+      .then(() => this.toaster.success(`Bienvenue ${username}`, 'vous êtes maintenant identifié'));
   }
 
   ngOnDestroy(): void {
