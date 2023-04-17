@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,17 +22,21 @@ import static com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey.E
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class FeatureServiceTest {
-
     @Mock
     FeatureMapper mapper;
     @Mock
     FeatureRepository featureRepository;
     @InjectMocks
     FeatureService featureService;
+
+    @Captor
+    private ArgumentCaptor<FeatureModel> argumentCaptor;
 
     @Nested
     @DisplayName("# isActive")
@@ -40,13 +46,36 @@ class FeatureServiceTest {
         @DisplayName("doit retourner la valeur correspondante de l'activation de la feature")
         void should_return_true_or_false_when_feature_is_activated_or_not(final boolean isActivated) {
             // given
-            given(featureRepository.findByFeatureKeyAndActiveTrue(EMAIL_NOTIFICATION)).willReturn(isActivated ? of(FeatureModel.builder().build()) : empty());
+            given(featureRepository.findByFeatureKey(EMAIL_NOTIFICATION)).willReturn(of(FeatureModel.builder().active(isActivated).build()));
 
             // when
             final boolean isActive = featureService.isActive(EMAIL_NOTIFICATION);
 
             // then
             assertThat(isActive).isEqualTo(isActivated);
+            verify(featureRepository, times(1)).findByFeatureKey(EMAIL_NOTIFICATION);
+            verify(featureRepository, never()).save(any(FeatureModel.class));
+        }
+
+        @Test
+        @DisplayName("doit retourner un FeatureModel nouvellement créé quand la feature n'existe pas encore en base de données")
+        void should_return_new_unactive_feature_when_not_exists() {
+            // given
+            given(featureRepository.findByFeatureKey(EMAIL_NOTIFICATION)).willReturn(empty());
+            given(featureRepository.save(any(FeatureModel.class))).willReturn(FeatureModel.builder().featureKey(EMAIL_NOTIFICATION).build());
+
+            // when
+            final boolean isActive = featureService.isActive(EMAIL_NOTIFICATION);
+
+            // then
+            verify(featureRepository, times(1)).findByFeatureKey(EMAIL_NOTIFICATION);
+            verify(featureRepository, times(1)).save(argumentCaptor.capture());
+            final FeatureModel createdFeature = argumentCaptor.getValue();
+            assertThat(isActive).isFalse();
+            assertThat(createdFeature).isNotNull();
+            assertThat(createdFeature.getFeatureKey()).isEqualTo(EMAIL_NOTIFICATION);
+            assertThat(createdFeature.isActive()).isFalse();
+
         }
     }
 

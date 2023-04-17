@@ -20,7 +20,9 @@ public class FeatureModel {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "feature_key", nullable = false, unique = true)
     private FeatureKey featureKey;
-    private Boolean active;
+    private boolean active;
 }

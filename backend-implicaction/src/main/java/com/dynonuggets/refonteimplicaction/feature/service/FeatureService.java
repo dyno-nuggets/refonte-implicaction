@@ -3,6 +3,7 @@ package com.dynonuggets.refonteimplicaction.feature.service;
 import com.dynonuggets.refonteimplicaction.feature.dto.FeatureDto;
 import com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey;
 import com.dynonuggets.refonteimplicaction.feature.mapper.FeatureMapper;
+import com.dynonuggets.refonteimplicaction.feature.model.FeatureModel;
 import com.dynonuggets.refonteimplicaction.feature.repository.FeatureRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,10 @@ public class FeatureService {
     private final FeatureMapper featureMapper;
 
     public boolean isActive(final FeatureKey key) {
-        return featureRepository.findByFeatureKeyAndActiveTrue(key).isPresent();
+        final FeatureModel feature = featureRepository.findByFeatureKey(key)
+                .orElseGet(() -> featureRepository.save(FeatureModel.builder().featureKey(key).build()));
+
+        return feature.isActive();
     }
 
     public List<FeatureDto> getAll() {

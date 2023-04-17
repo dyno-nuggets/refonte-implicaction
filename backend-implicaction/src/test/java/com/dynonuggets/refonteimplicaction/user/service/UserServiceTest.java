@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
@@ -187,7 +187,7 @@ class UserServiceTest {
             // given
             final UserModel expectedUser = generateRandomUser(Set.of(USER), false);
             final String username = expectedUser.getUsername();
-            final Role roleUser = Role.builder().name(USER.getLongName()).build();
+            final RoleModel roleUser = RoleModel.builder().name(USER.getLongName()).build();
             given(userRepository.findByUsername(username)).willReturn(Optional.of(expectedUser));
             given(userRepository.save(expectedUser)).willReturn(expectedUser);
             given(roleService.getRoleByName(USER.getLongName())).willReturn(roleUser);

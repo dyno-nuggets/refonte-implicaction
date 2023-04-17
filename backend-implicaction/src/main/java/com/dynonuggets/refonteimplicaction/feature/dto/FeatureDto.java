@@ -9,5 +9,5 @@ import lombok.Data;
 public class FeatureDto {
     private Long id;
     private FeatureKey featureKey;
-    private Boolean active;
+    private boolean active;
 }

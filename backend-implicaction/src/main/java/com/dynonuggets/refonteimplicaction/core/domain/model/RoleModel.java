@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @Table(name = "role")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Role {
+public class RoleModel {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;

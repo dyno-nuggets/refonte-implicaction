@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.mapper;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import org.assertj.core.api.recursive.comparison.RecursiveComparisonConfiguration;
@@ -72,7 +72,7 @@ class UserMapperTest {
             // on vérifie que les rôles sont bien mappés
             assertThat(userDto.getRoles())
                     .isNotEmpty()
-                    .containsSequence(mockedUser.getRoles().stream().map(Role::getName).collect(toList()));
+                    .containsSequence(mockedUser.getRoles().stream().map(RoleModel::getName).collect(toList()));
         }
 
         @Test

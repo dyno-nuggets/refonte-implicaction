@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.utils;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
@@ -79,9 +79,9 @@ public class UserTestUtils {
         final Instant registeredAt = generateRandomInstant();
         final String email = format("%s.%s@mail.com", firstname, lastname);
 
-        final Set<Role> roles = ofNullable(roleEnums).orElse(emptySet())
+        final Set<RoleModel> roles = ofNullable(roleEnums).orElse(emptySet())
                 .stream()
-                .map(roleEnum -> Role.builder().name(roleEnum.name()).build())
+                .map(roleEnum -> RoleModel.builder().name(roleEnum.name()).build())
                 .collect(toSet());
 
         return UserModel.builder()

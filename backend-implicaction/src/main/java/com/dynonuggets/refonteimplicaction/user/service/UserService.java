@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -74,7 +74,7 @@ public class UserService {
     @Transactional
     public void enableUser(final String username) {
         final UserModel user = getUserByUsernameIfExists(username);
-        final Role roleUser = roleService.getRoleByName(USER.getLongName());
+        final RoleModel roleUser = roleService.getRoleByName(USER.getLongName());
 
         user.setEnabled(true);
         user.getRoles().add(roleUser);

@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.domain.model;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.Role;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.*;
 
@@ -71,7 +71,7 @@ public class UserModel {
             joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
     )
-    private Set<Role> roles;
+    private Set<RoleModel> roles;
 
     public boolean isAdmin() {
         return emptyStreamIfNull(roles).anyMatch(role -> RoleEnum.ADMIN.name().equals(role.getName()));
