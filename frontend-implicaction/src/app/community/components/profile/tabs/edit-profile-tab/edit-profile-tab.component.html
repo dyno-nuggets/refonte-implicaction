@@ -6,8 +6,7 @@
 </div>
 
 <app-profile-edit-form
-  (formSubmit)="updateProfile($event)"
+  (submitForm)="updateProfile($event)"
   [profile]="profile"
   [isLoading]="isLoading"
-  [isSubmitted]="isSubmitted"
 ></app-profile-edit-form>

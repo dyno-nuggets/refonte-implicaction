@@ -1,0 +1,9 @@
+<app-auth-wrapper-page
+  title="Inscription"
+  [alert]="alert"
+>
+  <app-signup-form
+    (submitForm)="signup($event)"
+    [isLoading]="isLoading"
+  ></app-signup-form>
+</app-auth-wrapper-page>

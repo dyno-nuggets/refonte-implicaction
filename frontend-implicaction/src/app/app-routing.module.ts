@@ -1,10 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './core/guards/auth.guard.service';
-import {UnauthorizedComponent} from './auth/pages/unauthorized/unauthorized.component';
 import {Univers} from './shared/enums/univers';
 import {BoardComponent} from './board/board.component';
-import {CompanyAreaComponent} from "./company-area/company-area.component";
+import {CompanyAreaComponent} from './company-area/company-area.component';
+import {UnauthorizedPageComponent} from './auth/pages/unauthorized-page/unauthorized-page.component';
 
 const routes: Routes = [
   {
@@ -41,7 +41,7 @@ const routes: Routes = [
   },
   {
     path: 'unauthorized',
-    component: UnauthorizedComponent
+    component: UnauthorizedPageComponent
   },
   {
     path: Univers.BOARD.url,
