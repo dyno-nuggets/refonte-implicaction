@@ -3,10 +3,10 @@ package com.dynonuggets.refonteimplicaction.community.workexperience.sercice;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
-import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.repository.WorkExperienceRepository;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
+import com.dynonuggets.refonteimplicaction.community.workexperience.mapper.WorkExperienceMapper;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -25,7 +25,7 @@ public class WorkExperienceService {
 
     private final AuthService authService;
     private final WorkExperienceRepository experienceRepository;
-    private final WorkExperienceAdapter experienceAdapter;
+    private final WorkExperienceMapper experienceAdapter;
     private final ProfileService profileService;
 
     @Transactional

@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.community.profile.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.profile.adapter.ProfileAdapter;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
+import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
@@ -32,7 +32,7 @@ public class ProfileService {
 
     private final ProfileRepository profileRepository;
     private final UserService userService;
-    private final ProfileAdapter profileAdapter;
+    private final ProfileMapper profileMapper;
     private final AuthService authService;
     private final CloudService cloudService;
 
@@ -75,7 +75,7 @@ public class ProfileService {
      */
     public Page<ProfileDto> getAllProfiles(final Pageable pageRequest) {
         return profileRepository.findAll(pageRequest)
-                .map(profileAdapter::toDto);
+                .map(profileMapper::toDto);
     }
 
     /**
@@ -87,7 +87,7 @@ public class ProfileService {
      */
     @Transactional(readOnly = true)
     public ProfileDto getByUsername(final String username) {
-        return profileAdapter.toDto(getByUsernameIfExistsAndUserEnabled(username));
+        return profileMapper.toDto(getByUsernameIfExistsAndUserEnabled(username));
     }
 
     /**
@@ -116,7 +116,7 @@ public class ProfileService {
         profile.setContribution(updateRequest.getContribution());
         profile.setPhoneNumber(updateRequest.getPhoneNumber());
 
-        return profileAdapter.toDto(profileRepository.save(profile));
+        return profileMapper.toDto(profileRepository.save(profile));
     }
 
     @Transactional(readOnly = true)
@@ -129,7 +129,7 @@ public class ProfileService {
         final ProfileModel profile = getByUsernameIfExistsAndUserEnabled(username);
         final String imageUrl = cloudService.uploadPublicImage(file);
         profile.setImageUrl(imageUrl);
-        return profileAdapter.toDtoLight(profileRepository.save(profile));
+        return profileMapper.toDtoLight(profileRepository.save(profile));
     }
 }
 
