@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
@@ -65,10 +65,10 @@ class UserServiceTest {
     @BeforeEach
     void setMockOutput() {
         mockedUsers = List.of(
-                generateRandomUser(Set.of(USER), true),
-                generateRandomUser(Set.of(USER, PREMIUM), true),
-                generateRandomUser(Set.of(ADMIN), true),
-                generateRandomUser(Set.of(USER, ADMIN), true)
+                generateRandomUser(Set.of(ROLE_USER), true),
+                generateRandomUser(Set.of(ROLE_USER, ROLE_PREMIUM), true),
+                generateRandomUser(Set.of(ROLE_ADMIN), true),
+                generateRandomUser(Set.of(ROLE_USER, ROLE_ADMIN), true)
         );
         mockedUser = generateRandomUser();
         mockedUserDto = generateRandomUserDto();
@@ -185,12 +185,12 @@ class UserServiceTest {
         @DisplayName("doit activer l'utilisateur et un évènement doit être publié")
         void should_enable_user_and_send_envent() {
             // given
-            final UserModel expectedUser = generateRandomUser(Set.of(USER), false);
+            final UserModel expectedUser = generateRandomUser(Set.of(ROLE_USER), false);
             final String username = expectedUser.getUsername();
-            final RoleModel roleUser = RoleModel.builder().name(USER.getLongName()).build();
+            final RoleModel roleUser = RoleModel.builder().name(ROLE_USER).build();
             given(userRepository.findByUsername(username)).willReturn(Optional.of(expectedUser));
             given(userRepository.save(expectedUser)).willReturn(expectedUser);
-            given(roleService.getRoleByName(USER.getLongName())).willReturn(roleUser);
+            given(roleService.getRoleByName(ROLE_USER)).willReturn(roleUser);
 
             // when
             userService.enableUser(username);
@@ -207,7 +207,7 @@ class UserServiceTest {
         @DisplayName("doit lancer une exception quand l'utilisateur n'existe pas et aucun évènement ne doit être publié")
         void should_throw_exception_and_no_event_should_be_published() {
             // given
-            final UserModel expectedUser = generateRandomUser(Set.of(USER), false);
+            final UserModel expectedUser = generateRandomUser(Set.of(ROLE_USER), false);
             final String username = expectedUser.getUsername();
             given(userRepository.findByUsername(username)).willReturn(Optional.empty());
 

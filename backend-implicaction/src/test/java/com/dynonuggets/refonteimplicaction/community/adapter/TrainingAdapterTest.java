@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
-import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,24 +16,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class TrainingAdapterTest {
     UserModel user;
-    List<WorkExperience> experiences;
-    List<Training> trainings;
+    List<WorkExperienceModel> experiences;
+    List<TrainingModel> trainings;
 
     TrainingAdapter trainingAdapter = new TrainingAdapter();
 
-    WorkExperience experience;
+    WorkExperienceModel experience;
 
 
-    Training training;
+    TrainingModel training;
 
     @BeforeEach
     public void setUp() {
         experiences = new ArrayList<>();
-        experience = new WorkExperience(1L, null, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description", "companyName");
+        experience = new WorkExperienceModel(1L, null, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description", "companyName");
         experiences.add(experience);
 
         trainings = new ArrayList<>();
-        training = new Training(2L, null, "label", LocalDate.now(), "supdevinci");
+        training = new TrainingModel(2L, null, "label", LocalDate.now(), "supdevinci");
         trainings.add(training);
 
         user = UserModel.builder()

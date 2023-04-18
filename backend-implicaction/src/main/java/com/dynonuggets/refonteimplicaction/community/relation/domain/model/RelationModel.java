@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 @Table(name = "relation")
-public class Relation {
+public class RelationModel {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id")

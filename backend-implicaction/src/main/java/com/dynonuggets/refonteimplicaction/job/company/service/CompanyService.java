@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.job.company.service;
 
 import com.dynonuggets.refonteimplicaction.job.company.adapter.CompanyAdapter;
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.domain.repository.CompanyRepository;
 import com.dynonuggets.refonteimplicaction.job.company.dto.CompanyDto;
 import lombok.AllArgsConstructor;
@@ -32,8 +32,8 @@ public class CompanyService {
 
     @Transactional
     public CompanyDto saveOrUpdateCompany(final CompanyDto companyDto) {
-        final Company company = companyAdapter.toModel(companyDto);
-        final Company saved = companyRepository.save(company);
+        final CompanyModel company = companyAdapter.toModel(companyDto);
+        final CompanyModel saved = companyRepository.save(company);
         return companyAdapter.toDto(saved);
     }
 }

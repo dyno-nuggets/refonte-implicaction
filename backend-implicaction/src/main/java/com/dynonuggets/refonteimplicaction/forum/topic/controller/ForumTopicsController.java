@@ -2,9 +2,9 @@ package com.dynonuggets.refonteimplicaction.forum.topic.controller;
 
 import com.dynonuggets.refonteimplicaction.forum.response.dto.ResponseDto;
 import com.dynonuggets.refonteimplicaction.forum.response.service.ResponseService;
-import com.dynonuggets.refonteimplicaction.forum.topic.dto.CreateTopicRequest;
+import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicCreationRequest;
 import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicDto;
-import com.dynonuggets.refonteimplicaction.forum.topic.dto.UpdateTopicRequest;
+import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicUpdateRequest;
 import com.dynonuggets.refonteimplicaction.forum.topic.service.TopicService;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,21 +20,21 @@ import static com.dynonuggets.refonteimplicaction.forum.topic.utils.TopicUris.*;
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
-@RequestMapping(TOPIC_BASE_URI)
 @AllArgsConstructor
+@RequestMapping(TOPIC_BASE_URI)
 public class ForumTopicsController {
     private final TopicService topicService;
     private final ResponseService responseService;
 
     @PostMapping
-    public ResponseEntity<TopicDto> createTopic(@RequestBody final CreateTopicRequest topicDto) {
-        final TopicDto saveDto = topicService.createTopic(topicDto);
+    public ResponseEntity<TopicDto> createTopic(@RequestBody final TopicCreationRequest creationRequest) {
+        final TopicDto saveDto = topicService.createTopic(creationRequest);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
 
     @PatchMapping
-    public ResponseEntity<TopicDto> updateTopic(@RequestBody final UpdateTopicRequest topicDto) {
-        final TopicDto saveDto = topicService.updateTopic(topicDto);
+    public ResponseEntity<TopicDto> updateTopic(@RequestBody final TopicUpdateRequest updateRequest) {
+        final TopicDto saveDto = topicService.updateTopic(updateRequest);
         return ResponseEntity.ok(saveDto);
     }
 

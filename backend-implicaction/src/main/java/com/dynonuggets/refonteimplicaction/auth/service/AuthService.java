@@ -10,6 +10,7 @@ import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
@@ -170,7 +171,6 @@ public class AuthService {
 
     /**
      * Vérifie que le nom d’utilisateur en paramètre correspond à l’utilisateur courant OU que l’utilisateur courant est admin
-     * TODO: refacto cette méthode en prenant en paramètre une liste de rôles autorisés
      *
      * @param username le nom de l’utilisateur dont il faut vérifier l’autorisation
      * @throws AuthenticationException si l’utilisateur n’est pas autorisé
@@ -186,8 +186,10 @@ public class AuthService {
 
     @Transactional(readOnly = true)
     public void ensureCurrentUserAllowed(final RoleEnum... roles) {
-        final List<String> requiredRoles = Arrays.stream(roles).map(RoleEnum::getLongName).collect(toList());
-        final boolean isAllowed = emptyStreamIfNull(getCurrentUser().getRoles()).anyMatch(role -> requiredRoles.contains(role.getName()));
+        final List<RoleEnum> requiredRoles = Arrays.stream(roles).collect(toList());
+        final boolean isAllowed = emptyStreamIfNull(getCurrentUser().getRoles())
+                .map(RoleModel::getName)
+                .anyMatch(requiredRoles::contains);
 
         if (!isAllowed) {
             throw new CoreException(OPERATION_NOT_PERMITTED);

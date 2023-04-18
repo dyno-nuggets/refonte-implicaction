@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.community.group.service;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
-import com.dynonuggets.refonteimplicaction.community.group.dto.CreateGroupRequest;
+import com.dynonuggets.refonteimplicaction.community.group.dto.GroupCreationRequest;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.group.error.GroupException;
 import com.dynonuggets.refonteimplicaction.community.group.mapper.GroupMapper;
@@ -36,13 +36,13 @@ public class GroupService {
     private final ProfileService profileService;
 
     @Transactional
-    public GroupDto createGroup(final CreateGroupRequest createGroupRequest, final MultipartFile image) {
+    public GroupDto createGroup(final GroupCreationRequest groupCreationRequest, final MultipartFile image) {
         final UserModel currentUser = authService.getCurrentUser();
         final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(currentUser.getUsername());
 
         final GroupModel.GroupModelBuilder builder = GroupModel.builder()
-                .name(createGroupRequest.getName())
-                .description(createGroupRequest.getDescription())
+                .name(groupCreationRequest.getName())
+                .description(groupCreationRequest.getDescription())
                 .createdAt(now())
                 .creator(profile)
                 .enabled(currentUser.isAdmin())

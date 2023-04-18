@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.job.company.adapter;
 
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.dto.CompanyDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class CompanyAdapterTest {
-    Company company;
+    CompanyModel company;
     CompanyDto companyDto;
     CompanyAdapter companyAdapter;
 
@@ -16,7 +16,7 @@ class CompanyAdapterTest {
     public void SetUp() {
         companyAdapter = new CompanyAdapter();
 
-        company = Company.builder()
+        company = CompanyModel.builder()
                 .id(1L)
                 .url("urlModel")
                 .logo("logo")
@@ -47,7 +47,7 @@ class CompanyAdapterTest {
 
     @Test
     void toModelTest() {
-        final Company companyTest = companyAdapter.toModel(companyDto);
+        final CompanyModel companyTest = companyAdapter.toModel(companyDto);
 
         assertThat(companyTest.getId()).isEqualTo(companyDto.getId());
         assertThat(companyTest.getName()).isEqualTo(companyDto.getName());

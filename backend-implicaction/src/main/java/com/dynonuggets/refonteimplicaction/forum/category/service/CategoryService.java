@@ -6,9 +6,9 @@ import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.forum.category.adapter.CategoryAdapter;
 import com.dynonuggets.refonteimplicaction.forum.category.domain.model.CategoryModel;
 import com.dynonuggets.refonteimplicaction.forum.category.domain.repository.CategoryRepository;
+import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryCreationRequest;
 import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryDto;
-import com.dynonuggets.refonteimplicaction.forum.category.dto.CreateCategoryRequest;
-import com.dynonuggets.refonteimplicaction.forum.category.dto.UpdateCategoryRequest;
+import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryUpdateRequest;
 import com.dynonuggets.refonteimplicaction.forum.commons.error.ForumException;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.repository.TopicRepository;
@@ -77,8 +77,8 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDto createCategory(final CreateCategoryRequest createRequest) throws ImplicactionException {
-        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
+    public CategoryDto createCategory(final CategoryCreationRequest createRequest) throws ImplicactionException {
+        authService.ensureCurrentUserAllowed(RoleEnum.ROLE_ADMIN);
         final CategoryModel createdCategory = categoryAdapter.toModel(createRequest);
         if (createRequest.getParentId() != null) {
             final CategoryModel parentCategory = getByIdIfExists(createRequest.getParentId());
@@ -90,7 +90,7 @@ public class CategoryService {
     }
 
     public void deleteCategory(final long categoryId) {
-        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
+        authService.ensureCurrentUserAllowed(RoleEnum.ROLE_ADMIN);
         final CategoryModel category = getByIdIfExists(categoryId);
         final boolean hasTopic = topicRepository.existsByCategory(category);
         final boolean hasChildren = isNotEmpty(category.getChildren());
@@ -109,8 +109,8 @@ public class CategoryService {
     }
 
     // TODO: vérifier les simplifications
-    public CategoryDto editCategory(final UpdateCategoryRequest updateRequest) {
-        authService.ensureCurrentUserAllowed(RoleEnum.ADMIN);
+    public CategoryDto editCategory(final CategoryUpdateRequest updateRequest) {
+        authService.ensureCurrentUserAllowed(RoleEnum.ROLE_ADMIN);
         CategoryModel newParentCategory = null;
         // TODO: revoir la validation des champs
         if (updateRequest.getParentId() != null) {

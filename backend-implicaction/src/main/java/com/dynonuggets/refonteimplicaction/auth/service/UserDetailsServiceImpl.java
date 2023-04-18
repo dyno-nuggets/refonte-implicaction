@@ -39,7 +39,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private Set<? extends GrantedAuthority> getAuthorities(final UserModel user) {
         return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(toSet());
     }
 }

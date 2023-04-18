@@ -170,7 +170,7 @@ class AuthServiceTest {
         @DisplayName("doit activer l'utilisateur correspondant à la clé d'activation transmise s'il n'est pas déjà activé")
         void should_activate_corresponding_user() {
             // given
-            final UserModel user = generateRandomUser(Set.of(RoleEnum.USER), false);
+            final UserModel user = generateRandomUser(Set.of(RoleEnum.ROLE_USER), false);
             given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when

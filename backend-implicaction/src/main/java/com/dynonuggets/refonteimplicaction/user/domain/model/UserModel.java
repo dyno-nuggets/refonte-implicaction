@@ -1,6 +1,5 @@
 package com.dynonuggets.refonteimplicaction.user.domain.model;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.*;
 
@@ -63,7 +62,7 @@ public class UserModel {
     @Column
     private boolean enabled;
 
-    @Column
+    @Column(name = "email_verified")
     private boolean emailVerified;
 
     @ManyToMany(cascade = ALL, fetch = EAGER)
@@ -74,6 +73,6 @@ public class UserModel {
     private Set<RoleModel> roles;
 
     public boolean isAdmin() {
-        return emptyStreamIfNull(roles).anyMatch(role -> RoleEnum.ADMIN.name().equals(role.getName()));
+        return emptyStreamIfNull(roles).map(RoleModel::getName).anyMatch(RoleEnum.ROLE_ADMIN::equals);
     }
 }

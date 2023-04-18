@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.utils;
 
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,8 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ExperienceTestUtils {
 
-    public static WorkExperience generateRandomExperience() {
-        return WorkExperience.builder()
+    public static WorkExperienceModel generateRandomExperience() {
+        return WorkExperienceModel.builder()
                 .id((long) generateRandomNumber())
                 .profile(null)
                 .startedAt(generateRandomLocalDate())

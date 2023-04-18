@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.forum.category.adapter;
 
 import com.dynonuggets.refonteimplicaction.forum.category.domain.model.CategoryModel;
+import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryCreationRequest;
 import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryDto;
-import com.dynonuggets.refonteimplicaction.forum.category.dto.CreateCategoryRequest;
-import com.dynonuggets.refonteimplicaction.forum.category.dto.UpdateCategoryRequest;
+import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryUpdateRequest;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
@@ -33,7 +33,7 @@ public class CategoryAdapter {
                 .build();
     }
 
-    public CategoryModel toModel(final CreateCategoryRequest dto) {
+    public CategoryModel toModel(final CategoryCreationRequest dto) {
         if (dto == null) {
             return null;
         }
@@ -44,7 +44,7 @@ public class CategoryAdapter {
                 .build();
     }
 
-    public CategoryModel toModel(final UpdateCategoryRequest dto, final CategoryModel parent) {
+    public CategoryModel toModel(final CategoryUpdateRequest dto, final CategoryModel parent) {
         if (dto == null) {
             return null;
         }

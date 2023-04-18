@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model;
 
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.ApplyStatusEnum;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
@@ -17,7 +17,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 @Table(name = "job_application")
-public class JobApplication {
+public class JobApplicationModel {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -26,7 +26,7 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "job_id", nullable = false)
-    private JobPosting job;
+    private JobPostingModel job;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

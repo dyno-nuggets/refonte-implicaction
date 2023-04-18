@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.utils;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
+import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
 import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
@@ -31,7 +31,7 @@ public class UserTestUtils {
         return generateRandomUserDto(null, false);
     }
 
-    public static UserDto generateRandomUserDto(final Set<String> roles, final boolean isActive) {
+    public static UserDto generateRandomUserDto(final Set<RoleEnum> roles, final boolean isActive) {
         return UserDto.builder()
                 .id((long) generateRandomNumber())
                 .username(randomAlphabetic(10))
@@ -81,7 +81,7 @@ public class UserTestUtils {
 
         final Set<RoleModel> roles = ofNullable(roleEnums).orElse(emptySet())
                 .stream()
-                .map(roleEnum -> RoleModel.builder().name(roleEnum.name()).build())
+                .map(roleEnum -> RoleModel.builder().name(roleEnum).build())
                 .collect(toSet());
 
         return UserModel.builder()

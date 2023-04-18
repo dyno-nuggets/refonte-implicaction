@@ -5,7 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profil
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.community.relation.adapter.RelationAdapter;
-import com.dynonuggets.refonteimplicaction.community.relation.domain.model.Relation;
+import com.dynonuggets.refonteimplicaction.community.relation.domain.model.RelationModel;
 import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.relation.error.RelationException;
@@ -57,8 +57,8 @@ public class RelationService {
             throw new RelationException(RELATION_ALREADY_EXISTS);
         }
 
-        final Relation relation = Relation.builder().sentAt(now()).sender(sender).receiver(receiver).build();
-        final Relation save = relationRepository.save(relation);
+        final RelationModel relation = RelationModel.builder().sentAt(now()).sender(sender).receiver(receiver).build();
+        final RelationModel save = relationRepository.save(relation);
         return relationAdapter.toDto(save);
     }
 
@@ -69,7 +69,7 @@ public class RelationService {
      * @throws RelationException si la relation n’existe pas ou si l’utilisateur n’est pas autorisé
      */
     public void removeRelation(final Long relationId) {
-        final Relation relation = getRelationIfExists(relationId);
+        final RelationModel relation = getRelationIfExists(relationId);
         verifyThatCurrentUserCanEditRelation(relation);
 
         relationRepository.delete(relation);
@@ -83,12 +83,12 @@ public class RelationService {
      * @throws RelationException si la relation n’existe pas ou si l’utilisateur n’est pas autorisé
      */
     public RelationsDto confirmRelation(final Long relationId) {
-        final Relation relation = getRelationIfExists(relationId);
+        final RelationModel relation = getRelationIfExists(relationId);
 
         verifyThatCurrentUserCanEditRelation(relation);
 
         relation.setConfirmedAt(now());
-        final Relation relationUpdate = relationRepository.save(relation);
+        final RelationModel relationUpdate = relationRepository.save(relation);
         return relationAdapter.toDto(relationUpdate);
     }
 
@@ -96,7 +96,7 @@ public class RelationService {
      * @return tous les utilisateurs qui sont amis avec username
      */
     public Page<RelationsDto> getAllRelationsByUsername(final String username, final Pageable pageable) {
-        final Page<Relation> relations = relationRepository.findAllByUser_UsernameAndConfirmedAtIsNotNull(username, pageable);
+        final Page<RelationModel> relations = relationRepository.findAllByUser_UsernameAndConfirmedAtIsNotNull(username, pageable);
         return relations.map(relation -> {
             final RelationsDto relationsDto = relationAdapter.toDto(relation);
             relationsDto.setRelationType(FRIEND);
@@ -122,7 +122,7 @@ public class RelationService {
      */
     public Page<RelationsDto> getReceivedFriendRequest(final String username, final Pageable pageable) {
         authService.verifyAccessIsGranted(username);
-        final Page<Relation> relations = relationRepository.findAllByReceiver_User_UsernameAndConfirmedAtIsNull(username, pageable);
+        final Page<RelationModel> relations = relationRepository.findAllByReceiver_User_UsernameAndConfirmedAtIsNull(username, pageable);
         return relations.map(relation -> {
             final RelationsDto relationsDto = relationAdapter.toDto(relation);
             relationsDto.setRelationType(RECEIVER);
@@ -137,15 +137,15 @@ public class RelationService {
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final Page<ProfileModel> allProfiles = profileRepository.findAllByUser_UsernameNotAndUser_EnabledTrue(currentUsername, pageable);
         final List<String> allProfilesUsernames = allProfiles.get().map(p -> p.getUser().getUsername()).collect(toList());
-        final List<Relation> currentUsersRelations = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allProfilesUsernames, pageable);
+        final List<RelationModel> currentUsersRelations = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allProfilesUsernames, pageable);
         return allProfiles
                 .map(profile -> {
-                    final Relation relation = currentUsersRelations.stream()
+                    final RelationModel relation = currentUsersRelations.stream()
                             // On recherche la relation entre l’utilisateur courant et le profil de la liste des profils
                             .filter(r -> isPartOfRelation(profile.getUser().getUsername(), r))
                             .findAny()
                             // Si elle n’existe pas, on crée une relation dont le profil est receiver et un sender null.
-                            .orElse(Relation.builder().receiver(profile).build());
+                            .orElse(RelationModel.builder().receiver(profile).build());
 
                     final RelationsDto relationsDto = relationAdapter.toDto(relation);
                     if (relationsDto.getConfirmedAt() != null) {
@@ -160,11 +160,11 @@ public class RelationService {
                 });
     }
 
-    private static boolean isPartOfRelation(final String username, final Relation r) {
+    private static boolean isPartOfRelation(final String username, final RelationModel r) {
         return isSender(username, r) || isReceiver(username, r);
     }
 
-    private static boolean isReceiver(final String username, final Relation r) {
+    private static boolean isReceiver(final String username, final RelationModel r) {
         if (r.getReceiver() == null) {
             return false;
         }
@@ -172,7 +172,7 @@ public class RelationService {
         return r.getReceiver().getUser().getUsername().equals(username);
     }
 
-    private static boolean isSender(final String username, final Relation r) {
+    private static boolean isSender(final String username, final RelationModel r) {
         if (r.getSender() == null) {
             return false;
         }
@@ -180,12 +180,12 @@ public class RelationService {
         return r.getSender().getUser().getUsername().equals(username);
     }
 
-    private Relation getRelationIfExists(final Long relationId) {
+    private RelationModel getRelationIfExists(final Long relationId) {
         return relationRepository.findById(relationId)
                 .orElseThrow(() -> new EntityNotFoundException(RELATION_NOT_FOUND));
     }
 
-    private void verifyThatCurrentUserCanEditRelation(final Relation relation) {
+    private void verifyThatCurrentUserCanEditRelation(final RelationModel relation) {
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
 
         if (of(relation.getSender().getUser().getUsername(), relation.getReceiver().getUser().getUsername())

@@ -3,11 +3,11 @@ package com.dynonuggets.refonteimplicaction.job.jobapplication.service;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.adapter.JobApplicationAdapter;
-import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplicationModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationRequest;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
@@ -34,7 +34,7 @@ public class JobApplicationService {
      */
     @Transactional
     public JobApplicationDto createApplyIfNotExists(final JobApplicationRequest applyRequest) {
-        final JobPosting job = jobRepository.findById(applyRequest.getJobId())
+        final JobPostingModel job = jobRepository.findById(applyRequest.getJobId())
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, applyRequest.getJobId())));
 
         final UserModel currentUser = authService.getCurrentUser();
@@ -43,7 +43,7 @@ public class JobApplicationService {
             throw new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, job.getId()));
         }
 
-        final JobApplication apply = JobApplication.builder()
+        final JobApplicationModel apply = JobApplicationModel.builder()
                 .job(job)
                 .archive(false)
                 .user(currentUser)
@@ -51,7 +51,7 @@ public class JobApplicationService {
                 .lastUpdate(Instant.now())
                 .build();
 
-        final JobApplication applySave = applyRepository.save(apply);
+        final JobApplicationModel applySave = applyRepository.save(apply);
 
         return applyAdapter.toDto(applySave);
     }
@@ -75,7 +75,7 @@ public class JobApplicationService {
         final Long jobId = requestDto.getJobId();
         final Long currentUserId = currentUser.getId();
 
-        final JobApplication jobApplication = getJobApplication(jobId, currentUserId);
+        final JobApplicationModel jobApplication = getJobApplication(jobId, currentUserId);
 
         jobApplication.setStatus(requestDto.getStatus());
 
@@ -84,18 +84,18 @@ public class JobApplicationService {
         }
 
         jobApplication.setLastUpdate(Instant.now());
-        final JobApplication applySave = applyRepository.save(jobApplication);
+        final JobApplicationModel applySave = applyRepository.save(jobApplication);
 
         return applyAdapter.toDto(applySave);
     }
 
     public void deleteApplyByJobId(final long jobId) {
         final long currentUserId = authService.getCurrentUser().getId();
-        final JobApplication jobApplication = getJobApplication(jobId, currentUserId);
+        final JobApplicationModel jobApplication = getJobApplication(jobId, currentUserId);
         applyRepository.delete(jobApplication);
     }
 
-    private JobApplication getJobApplication(final long jobId, final long currentUserId) {
+    private JobApplicationModel getJobApplication(final long jobId, final long currentUserId) {
         return applyRepository.findByJob_IdAndUser_id(jobId, currentUserId)
                 .orElseThrow(() -> new NotFoundException(String.format(APPLY_NOT_FOUND_WITH_JOB_AND_USER, jobId, currentUserId)));
     }

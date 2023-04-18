@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.relation.service.RelationSe
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.Getter;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.ROLE_USER;
 import static com.dynonuggets.refonteimplicaction.user.util.UserUris.*;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.*;
 import static java.util.List.of;
@@ -44,7 +45,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     UserDto mockedUserDto;
     List<UserDto> mockedUserDtos;
     Page<UserDto> mockedUserPage;
-    ArrayList<String> roles = new ArrayList<>();
+    ArrayList<RoleEnum> roles = new ArrayList<>();
 
     @MockBean
     UserService userService;
@@ -55,7 +56,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
 
     @BeforeEach
     void setUp() {
-        roles.add(USER.getLongName());
+        roles.add(ROLE_USER);
         mockedUser = generateRandomUser();
         mockedUserDtos = of(
                 generateRandomUserDto(),

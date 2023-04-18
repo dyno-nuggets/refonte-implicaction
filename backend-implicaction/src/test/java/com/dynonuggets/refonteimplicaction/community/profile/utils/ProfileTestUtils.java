@@ -4,8 +4,8 @@ import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupMod
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
-import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.ResultActions;
@@ -38,8 +38,8 @@ public class ProfileTestUtils {
                 .expectation(randomAlphabetic(100))
                 .contribution(randomAlphabetic(100))
                 .phoneNumber(randomNumeric(8))
-                .experiences(of(WorkExperience.builder().build()))
-                .trainings(of(Training.builder().build()))
+                .experiences(of(WorkExperienceModel.builder().build()))
+                .trainings(of(TrainingModel.builder().build()))
                 .groups(of(GroupModel.builder().build()))
                 .imageUrl("uneUrl")
                 .build();

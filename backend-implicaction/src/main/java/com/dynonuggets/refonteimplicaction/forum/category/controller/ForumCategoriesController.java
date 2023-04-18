@@ -2,9 +2,9 @@ package com.dynonuggets.refonteimplicaction.forum.category.controller;
 
 import com.dynonuggets.refonteimplicaction.core.dto.ExceptionResponse;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryCreationRequest;
 import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryDto;
-import com.dynonuggets.refonteimplicaction.forum.category.dto.CreateCategoryRequest;
-import com.dynonuggets.refonteimplicaction.forum.category.dto.UpdateCategoryRequest;
+import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryUpdateRequest;
 import com.dynonuggets.refonteimplicaction.forum.category.service.CategoryService;
 import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicDto;
 import com.dynonuggets.refonteimplicaction.forum.topic.service.TopicService;
@@ -37,7 +37,7 @@ public class ForumCategoriesController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody final CreateCategoryRequest createRequest) {
+    public ResponseEntity<CategoryDto> createCategory(@RequestBody final CategoryCreationRequest createRequest) {
         final CategoryDto saveDto = categoryService.createCategory(createRequest);
         return ResponseEntity.status(CREATED).body(saveDto);
     }
@@ -70,7 +70,7 @@ public class ForumCategoriesController {
     }
 
     @PutMapping()
-    public ResponseEntity<CategoryDto> edit(@RequestBody final UpdateCategoryRequest updateRequest) {
+    public ResponseEntity<CategoryDto> edit(@RequestBody final CategoryUpdateRequest updateRequest) {
 
         final CategoryDto editDto = categoryService.editCategory(updateRequest);
         return ResponseEntity.status(CREATED).body(editDto);

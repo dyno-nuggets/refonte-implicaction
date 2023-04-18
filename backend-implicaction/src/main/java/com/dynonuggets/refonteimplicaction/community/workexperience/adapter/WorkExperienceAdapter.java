@@ -1,13 +1,13 @@
 package com.dynonuggets.refonteimplicaction.community.workexperience.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class WorkExperienceAdapter {
 
-    public WorkExperienceDto toDto(final WorkExperience workExperience) {
+    public WorkExperienceDto toDto(final WorkExperienceModel workExperience) {
 
         return WorkExperienceDto.builder()
                 .id(workExperience.getId())
@@ -19,8 +19,8 @@ public class WorkExperienceAdapter {
                 .build();
     }
 
-    public WorkExperience toModel(final WorkExperienceDto workExperienceDto) {
-        return WorkExperience.builder()
+    public WorkExperienceModel toModel(final WorkExperienceDto workExperienceDto) {
+        return WorkExperienceModel.builder()
                 .id(workExperienceDto.getId())
                 .label(workExperienceDto.getLabel())
                 .startedAt(workExperienceDto.getStartedAt())

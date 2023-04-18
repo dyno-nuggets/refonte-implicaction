@@ -7,10 +7,6 @@ SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
 
 SET NAMES utf8mb4;
 
-DROP DATABASE IF EXISTS `implicaction`;
-CREATE DATABASE `implicaction` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `implicaction`;
-
 DROP TABLE IF EXISTS `category`;
 CREATE TABLE `category`
 (
@@ -90,6 +86,9 @@ CREATE TABLE `file`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO `file` (`id`, `content_type`, `filename`, `url`, `uploader_id`, `object_key`, `public_access`)
+VALUES (2, 'image/png', 'avatar.png', 'http://127.0.0.1:4566/refonte-implicaction/17992ce9-5529-4eff-80b6-5dc383930695.png', NULL, '17992ce9-5529-4eff-80b6-5dc383930695.png',
+        CONV('1', 2, 10) + 0);
 
 DROP TABLE IF EXISTS `hibernate_sequence`;
 CREATE TABLE `hibernate_sequence`
@@ -99,6 +98,8 @@ CREATE TABLE `hibernate_sequence`
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
+INSERT INTO `hibernate_sequence` (`next_val`)
+VALUES (3);
 
 DROP TABLE IF EXISTS `ia_group`;
 CREATE TABLE `ia_group`
@@ -108,7 +109,6 @@ CREATE TABLE `ia_group`
     `name`            varchar(255) DEFAULT NULL,
     `user_id`         bigint       DEFAULT NULL,
     `created_at`      datetime     DEFAULT NULL,
-    `image_id`        bigint       DEFAULT NULL,
     `valid`           bit(1)       DEFAULT NULL,
     `profile_user_id` bigint       DEFAULT NULL,
     `enabled`         bit(1)       DEFAULT NULL,
@@ -116,11 +116,9 @@ CREATE TABLE `ia_group`
     `creator_user_id` bigint       DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `FKt88xyv8u7r6f3m1byxhrfj4ck` (`user_id`),
-    KEY `FKaav1cbg8lm2vr5fc20ksdva0s` (`image_id`),
     KEY `FKj6ody68ev0aysn7ph67c6g21w` (`profile_user_id`),
     KEY `FK4ylh72hbeyntqronpqcphomcb` (`creator_user_id`),
     CONSTRAINT `FK4ylh72hbeyntqronpqcphomcb` FOREIGN KEY (`creator_user_id`) REFERENCES `profile` (`user_id`),
-    CONSTRAINT `FKaav1cbg8lm2vr5fc20ksdva0s` FOREIGN KEY (`image_id`) REFERENCES `file` (`id`),
     CONSTRAINT `FKj6ody68ev0aysn7ph67c6g21w` FOREIGN KEY (`profile_user_id`) REFERENCES `profile` (`user_id`),
     CONSTRAINT `FKt88xyv8u7r6f3m1byxhrfj4ck` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE = InnoDB
@@ -204,30 +202,6 @@ VALUES (125,
         '<p>Idée Blanche recrutement recherche pour un de ses clients, groupe industriel spécialiste des procédés spéciaux et de l’usinage dans le domaine aéronautique/énergie/automobile, un opérateur commande numérique.</p>',
         CONV('0', 2, 10) + 0, 'CDI', NULL, 'CHIMIE', CONV('1', 2, 10) + 0, NULL);
 
-DROP TABLE IF EXISTS `post`;
-CREATE TABLE `post`
-(
-    `id`          bigint NOT NULL AUTO_INCREMENT,
-    `created_at`  datetime     DEFAULT NULL,
-    `description` longtext,
-    `url`         varchar(255) DEFAULT NULL,
-    `vote_count`  int          DEFAULT NULL,
-    `group_id`    bigint       DEFAULT NULL,
-    `user_id`     bigint       DEFAULT NULL,
-    `name`        varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    KEY `FK72mt33dhhs48hf9gcqrq4fxte` (`user_id`),
-    KEY `FKmlnoks6ujgl9ynt53af0bx4pj` (`group_id`),
-    CONSTRAINT `FK72mt33dhhs48hf9gcqrq4fxte` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    CONSTRAINT `FKmlnoks6ujgl9ynt53af0bx4pj` FOREIGN KEY (`group_id`) REFERENCES `ia_group` (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
-
-INSERT INTO `post` (`id`, `created_at`, `description`, `url`, `vote_count`, `group_id`, `user_id`, `name`)
-VALUES (25, '2021-12-11 16:37:31', '<p>Bienvenue à tout le monde ^^ </p>', NULL, 1, NULL, 3, 'Petite publication pour souhaiter la bienvenue à tout le réseau d\'implic\'action'),
-       (26, '2022-04-01 12:07:35', 'string', 'string', 0, NULL, 1, 'string');
-
 DROP TABLE IF EXISTS `profile`;
 CREATE TABLE `profile`
 (
@@ -238,26 +212,23 @@ CREATE TABLE `profile`
     `phone_number` varchar(255) DEFAULT NULL,
     `presentation` varchar(255) DEFAULT NULL,
     `purpose`      varchar(255) DEFAULT NULL,
-    `avatar_id`    bigint       DEFAULT NULL,
     `image_url`    varchar(255) DEFAULT NULL,
     PRIMARY KEY (`user_id`),
-    KEY `FKpi27i7jdpqrmdegvmuytpg512` (`avatar_id`),
-    CONSTRAINT `FKawh070wpue34wqvytjqr4hj5e` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
-    CONSTRAINT `FKpi27i7jdpqrmdegvmuytpg512` FOREIGN KEY (`avatar_id`) REFERENCES `file` (`id`)
+    CONSTRAINT `FKawh070wpue34wqvytjqr4hj5e` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO `profile` (`user_id`, `contribution`, `expectation`, `hobbies`, `phone_number`, `presentation`, `purpose`, `avatar_id`, `image_url`)
+INSERT INTO `profile` (`user_id`, `contribution`, `expectation`, `hobbies`, `phone_number`, `presentation`, `purpose`, `image_url`)
 VALUES (1, 'Mon expertise dans le domaine du développement logiciel', 'Acquérir une expérience supplémentaire dans l\'élaboration de solutions informatiques', NULL, '066666688',
         'Passionné par le développement, je cherche toujours à trouver les solutions les plus élégantes aux problèmes qui me sont donnés.',
-        'Avant tout je cherche à m\'épanouir dans mon métier', NULL, 'http://localhost:8080/api/public/files/2bd592cc-aca6-4218-9ad3-1e629797a0dd.png'),
-       (2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-       (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-       (4, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-       (5, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-       (15, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-       (77, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+        'Avant tout je cherche à m\'épanouir dans mon métier', ''),
+       (2, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+       (3, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+       (4, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+       (5, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+       (15, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+       (78, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 DROP TABLE IF EXISTS `profile_group`;
 CREATE TABLE `profile_group`
@@ -283,6 +254,8 @@ CREATE TABLE `refresh_token`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb3;
 
+INSERT INTO `refresh_token` (`id`, `creation_date`, `token`)
+VALUES (11, '2023-04-18 00:36:42', 'cd853d08-875c-49e1-8421-a98f5f22e12f');
 
 DROP TABLE IF EXISTS `relation`;
 CREATE TABLE `relation`
@@ -425,41 +398,39 @@ CREATE TABLE `user`
     `registered_at`  datetime     DEFAULT NULL,
     `url`            varchar(255) DEFAULT NULL,
     `username`       varchar(255) DEFAULT NULL,
-    `image_id`       bigint       DEFAULT NULL,
     `email_verified` bit(1) NOT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `UK_ob8kqyqqgmefl0aco34akdtpe` (`email`),
-    UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`),
-    KEY `FK5v5h53roftm0e90x45m6bh7al` (`image_id`)
+    UNIQUE KEY `UK_sb8bbouer5wak8vyiiy4pf2bx` (`username`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb3;
 
 INSERT INTO `user` (`id`, `activated_at`, `activation_key`, `enabled`, `birthday`, `contribution`, `email`, `expectation`, `firstname`, `hobbies`, `lastname`, `password`,
-                    `phone_number`, `presentation`, `purpose`, `registered_at`, `url`, `username`, `image_id`, `email_verified`)
+                    `phone_number`, `presentation`, `purpose`, `registered_at`, `url`, `username`, `email_verified`)
 VALUES (1, '2021-09-24 23:11:23', '793d746c-36f8-4937-bda6-7d6222cf3f51', CONV('1', 2, 10) + 0, '1983-09-06', 'Mon expertise dans le domaine du développement logiciel',
         'matthieu.audemard@mail.com', 'Acquérir une expérience supplémentaire dans l\'élaboration de solutions informatiques', 'Matthieu', 'Equitation, programmation, snowboard',
         'Audemard', '$2a$10$vmy1fqGnyW7ZN0RXww2j2uBue.A4/5CSEGX6rsROmWfpwr.0bTVWG', '0617243258',
         'Passionné par le développement, je cherche toujours à trouver les solutions les plus élégantes aux problèmes qui me sont donnés.',
-        'Avant tout je cherche à m\'épanouir dans mon métier', '2021-09-24 23:10:48', NULL, 'matthieu', NULL, CONV('0', 2, 10) + 0),
+        'Avant tout je cherche à m\'épanouir dans mon métier', '2021-09-24 23:10:48', NULL, 'matthieu', CONV('0', 2, 10) + 0),
        (2, '2021-09-24 23:12:41', '35254265-fa9d-4514-ae23-f167a5f6a831', CONV('1', 2, 10) + 0, '2021-10-07', 'My knowledge as an Elf, having lived for thousands of years.',
         'dylan@mail.com', 'To help me throw the ring in Mount Doom.', 'Dylan', 'F1, Badminton, Pétanque, Anime', 'Brudey',
-        '$2a$10$s7u8ams6mKx4HlzczmTpDu2r.GWNwxkQzfHar1Rq9YkovEE2rzdCu', '0920100451', 'I was there, 3000 years ago.', 'Get the ring.', '2021-09-24 23:12:28', NULL, 'dylan', NULL,
+        '$2a$10$s7u8ams6mKx4HlzczmTpDu2r.GWNwxkQzfHar1Rq9YkovEE2rzdCu', '0920100451', 'I was there, 3000 years ago.', 'Get the ring.', '2021-09-24 23:12:28', NULL, 'dylan',
         CONV('0', 2, 10) + 0),
        (3, '2021-09-24 23:14:33', '88381beb-dd09-45a0-9e9f-66e468347ab9', CONV('1', 2, 10) + 0, '1996-07-26', 'De la joie et de la bonne humeur et de l\'expertise et mon réseau.',
         'mel@mail.com', 'De la joie et de la bonne humeur :)', 'Mélanie', 'Badminton,\nPing pong,\njeux video,\nSéries', 'Da Costa',
         '$2a$10$mLj1NYUHlajXwPurnR2h6eCshIRu8w1clempU07UfCSyh6Dcy3z6S', '0606969696', 'Geek dans l\'ame, je suis en train de terminer mon Mastère Expert en système d\'information',
-        'Réussir dans la vie :)', '2021-09-24 23:14:23', NULL, 'melanie', NULL, CONV('0', 2, 10) + 0),
+        'Réussir dans la vie :)', '2021-09-24 23:14:23', NULL, 'melanie', CONV('0', 2, 10) + 0),
        (4, '2021-09-24 23:15:21', '5ee1b136-1a89-48eb-bce7-241ef06b79de', CONV('1', 2, 10) + 0, '1996-10-06', 'De la bonne humeur et des compétences', 'paul@mail.com',
         'Trouver un emploi', 'Paul', 'Judo\nPhotographie', 'Flumian', '$2a$10$p1dW/T62V7C2vt2OK7dVruZVbQccT/GIetlSQc4Wh7jkariyBXq9W', '0606060606', NULL,
-        'Développeur informatique', '2021-09-24 23:15:11', NULL, 'paul', NULL, CONV('0', 2, 10) + 0),
+        'Développeur informatique', '2021-09-24 23:15:11', NULL, 'paul', CONV('0', 2, 10) + 0),
        (5, '2021-09-24 23:17:43', 'b1e89b98-d2a3-4958-9a9c-270ab2c0439a', CONV('1', 2, 10) + 0, NULL, NULL, 'm@thusha.com', NULL, 'Mathusha', NULL, 'Thirulogasingam',
-        '$2a$10$khA09HcY4cvY0B30.YVeJeVVqWjCMJ.0sfsvKCzmTKCnzQn5eV5b2', NULL, NULL, NULL, '2021-09-24 23:17:32', NULL, 'mathusha', NULL, CONV('0', 2, 10) + 0),
+        '$2a$10$khA09HcY4cvY0B30.YVeJeVVqWjCMJ.0sfsvKCzmTKCnzQn5eV5b2', NULL, NULL, NULL, '2021-09-24 23:17:32', NULL, 'mathusha', CONV('0', 2, 10) + 0),
        (15, '2021-10-05 19:04:50', '1256b301-d43b-457f-8a47-449b043efad6', CONV('1', 2, 10) + 0, '1979-07-02',
         'Bonne humeur, joie de vivre ainsi que de délicieuses spécialités venues des Balkans', 'vlad.leban@gmail.com', 'Une main tendue riche d\'amitié', 'Vlad',
         'Chasse, pêche et philatélie ', 'LEBAN', '$2a$10$v4LPrpkbwYh9PNoFMzd.juJAQyafdpOLc0dmd6a8uaEVPdhUqysMS', '0651299200',
-        'Dans ma branche d\'activité il est de coutume de ne pas se présenter. ', ' ', '2021-10-05 19:04:20', NULL, 'Vlad', NULL, CONV('0', 2, 10) + 0),
-       (77, NULL, '8f678d7f-8bba-4084-aab0-e13c958a1b27', CONV('1', 2, 10) + 0, NULL, NULL, 'finley@mail.com', NULL, 'Finley', NULL, 'Le Chat',
-        '$2a$10$MXmrqDaNJ8pdCzJF2CJ6g.QpAHecOMAeO019A11z/BWf7Srpl0zoO', NULL, NULL, NULL, '2023-04-17 15:18:19', NULL, 'FinleyLeChat', NULL, CONV('0', 2, 10) + 0);
+        'Dans ma branche d\'activité il est de coutume de ne pas se présenter. ', ' ', '2021-10-05 19:04:20', NULL, 'Vlad', CONV('0', 2, 10) + 0),
+       (78, NULL, '27c90079-e567-4783-a20a-f83925f6990f', CONV('1', 2, 10) + 0, NULL, NULL, 'finley@mail.com', NULL, 'Finley', NULL, 'Le Chat',
+        '$2a$10$0vnOOe3Rzy82KmO2DteCje4mp8P0mHcfjOaU1lEKP90vehcPP8lcK', NULL, NULL, NULL, '2023-04-18 00:23:12', NULL, 'FinleyLeChat', CONV('0', 2, 10) + 0);
 
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role`
@@ -485,7 +456,7 @@ VALUES (1, 1),
        (3, 5),
        (5, 5),
        (1, 2),
-       (77, 1);
+       (78, 1);
 
 DROP TABLE IF EXISTS `work_experience`;
 CREATE TABLE `work_experience`
@@ -529,4 +500,4 @@ VALUES (15, 'Ivalua', 'Alternance', '2022-09-30', 'Ingénieur informaticien c#',
         'Au sein d\'une équipe scrum, j\'ai en charge la conception d\'une application de gestion de projet collaboratif.\n\n#git #java11 - #spring-boot - #angular12 - #mongodb',
         '2022-09-30', 'Développeur Fullstack Java Angular (alternance)', '2020-09-07', 1);
 
--- 2023-04-17 14:03:09
+-- 2023-04-17 23:45:21

@@ -1,6 +1,6 @@
-package com.dynonuggets.refonteimplicaction.core.domain.model;
+package com.dynonuggets.refonteimplicaction.user.domain.model;
 
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,8 +23,9 @@ public class RoleModel {
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @EqualsAndHashCode.Include
+    @Enumerated(EnumType.STRING)
     @Column(name = "name", nullable = false)
-    private String name;
+    private RoleEnum name;
     @ManyToMany(fetch = LAZY, cascade = ALL, mappedBy = "roles")
     private Set<UserModel> users;
 }
