@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Getter
-public class UpdateTopicRequest {
+public class TopicUpdateRequest {
     private Long id;
     private String title;
     private String message;

@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.job.jobapplication.adapter;
 
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
-import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
+import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplicationModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationDto;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
@@ -21,9 +21,9 @@ class JobApplicationAdapterTest {
     void given_company_should_return_dto() {
         // given
         final UserModel user = UserModel.builder().id(87L).build();
-        final Company company = new Company(1234L, "World Company", "http://logo.com", "La World Company est une multinationale imaginaire basée aux États-Unis", "http://word-company.com");
-        final JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, user);
-        final JobApplication model = new JobApplication(123L, job, user, PENDING, Instant.now(), false);
+        final CompanyModel company = new CompanyModel(1234L, "World Company", "http://logo.com", "La World Company est une multinationale imaginaire basée aux États-Unis", "http://word-company.com");
+        final JobPostingModel job = new JobPostingModel(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, user);
+        final JobApplicationModel model = new JobApplicationModel(123L, job, user, PENDING, Instant.now(), false);
 
         // when
         final JobApplicationDto actual = adapter.toDto(model);
@@ -41,10 +41,10 @@ class JobApplicationAdapterTest {
     @Test
     void given_no_company_should_return_dto() {
         // given
-        final Company company = null;
+        final CompanyModel company = null;
         final UserModel user = UserModel.builder().id(87L).build();
-        final JobPosting job = new JobPosting(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, user);
-        final JobApplication model = new JobApplication(123L, job, user, PENDING, Instant.now(), false);
+        final JobPostingModel job = new JobPostingModel(34L, company, "Job de folie", "blablabla", "blablabla", "Paris", "240k", null, CDD, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, user);
+        final JobApplicationModel model = new JobApplicationModel(123L, job, user, PENDING, Instant.now(), false);
 
         // when
         final JobApplicationDto actual = adapter.toDto(model);

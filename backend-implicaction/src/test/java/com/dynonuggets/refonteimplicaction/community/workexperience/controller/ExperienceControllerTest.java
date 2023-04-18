@@ -39,12 +39,12 @@ class ExperienceControllerTest extends ControllerIntegrationTestBase {
 
     @MockBean
     WorkExperienceService experienceService;
-    Set<String> roles = new HashSet<>();
+    Set<RoleEnum> roles = new HashSet<>();
     UserDto user;
 
     @BeforeEach
     void setUp() {
-        roles.add(RoleEnum.USER.getLongName());
+        roles.add(RoleEnum.ROLE_USER);
         user = UserDto.builder()
                 .id(3L)
                 .username("paul-sdv")

@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.utils;
 
-import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,8 @@ import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TrainingTestUtils {
 
-    public static Training generateRandomTraining() {
-        return Training.builder()
+    public static TrainingModel generateRandomTraining() {
+        return TrainingModel.builder()
                 .id((long) generateRandomNumber())
                 .profile(null)
                 .label(randomAlphabetic(20))

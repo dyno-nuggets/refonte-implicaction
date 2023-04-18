@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ExceptionResponse {
 
-    // Le message que l'on veut afficher à l'utiliseur (front)
+    // Le message que l'on veut afficher à l'utilisateur (front)
     protected String errorMessage;
     // Le code du statut HTTP (ex: 401, 404 ...)
     protected int errorCode;

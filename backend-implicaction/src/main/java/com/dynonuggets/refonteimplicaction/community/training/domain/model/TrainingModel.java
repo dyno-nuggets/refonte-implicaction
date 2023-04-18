@@ -16,7 +16,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Setter
 @Builder
 @Table(name = "training")
-public class Training {
+public class TrainingModel {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "id", nullable = false)

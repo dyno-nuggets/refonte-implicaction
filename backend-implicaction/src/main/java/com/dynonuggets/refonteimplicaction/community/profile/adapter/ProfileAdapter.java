@@ -37,7 +37,8 @@ public class ProfileAdapter {
         final ProfileDto.ProfileDtoBuilder builder = ProfileDto.builder();
 
         if (user != null) {
-            builder.username(user.getUsername())
+            builder
+                    .username(user.getUsername())
                     .firstname(user.getFirstname())
                     .lastname(user.getLastname())
                     .registeredAt(user.getRegisteredAt())
@@ -64,7 +65,7 @@ public class ProfileAdapter {
             return null;
         }
 
-        final UserModel user = profile.getUser(); // ne peut pas être null par design
+        final UserModel user = profile.getUser();
 
         return ProfileDto.builder()
                 .username(callIfNotNull(user, UserModel::getUsername))

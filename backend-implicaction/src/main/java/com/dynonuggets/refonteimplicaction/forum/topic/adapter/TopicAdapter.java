@@ -6,9 +6,9 @@ import com.dynonuggets.refonteimplicaction.forum.category.domain.model.CategoryM
 import com.dynonuggets.refonteimplicaction.forum.response.adapter.ResponseAdapter;
 import com.dynonuggets.refonteimplicaction.forum.response.domain.model.ResponseModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
-import com.dynonuggets.refonteimplicaction.forum.topic.dto.CreateTopicRequest;
+import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicCreationRequest;
 import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicDto;
-import com.dynonuggets.refonteimplicaction.forum.topic.dto.UpdateTopicRequest;
+import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicUpdateRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -35,7 +35,7 @@ public class TopicAdapter {
     @Lazy
     private final ResponseAdapter responseAdapter;
 
-    public TopicModel toModel(final CreateTopicRequest createRequest) {
+    public TopicModel toModel(final TopicCreationRequest createRequest) {
         return TopicModel.builder()
                 .title(createRequest.getTitle())
                 .message(createRequest.getMessage())
@@ -44,7 +44,7 @@ public class TopicAdapter {
                 .build();
     }
 
-    public TopicModel mergeWith(final TopicModel existingTopic, final UpdateTopicRequest dto, final CategoryModel category) {
+    public TopicModel mergeWith(final TopicModel existingTopic, final TopicUpdateRequest dto, final CategoryModel category) {
         if (dto.getTitle() != null) {
             existingTopic.setTitle(dto.getTitle());
         }

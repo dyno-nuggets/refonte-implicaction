@@ -8,9 +8,9 @@ import com.dynonuggets.refonteimplicaction.forum.category.service.CategoryServic
 import com.dynonuggets.refonteimplicaction.forum.topic.adapter.TopicAdapter;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.repository.TopicRepository;
-import com.dynonuggets.refonteimplicaction.forum.topic.dto.CreateTopicRequest;
+import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicCreationRequest;
 import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicDto;
-import com.dynonuggets.refonteimplicaction.forum.topic.dto.UpdateTopicRequest;
+import com.dynonuggets.refonteimplicaction.forum.topic.dto.TopicUpdateRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.dynonuggets.refonteimplicaction.forum.topic.error.TopicErrorResult.TOPIC_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.ADMIN;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.ROLE_ADMIN;
 import static java.lang.String.valueOf;
 
 
@@ -43,7 +43,7 @@ public class TopicService {
     }
 
     @Transactional
-    public TopicDto createTopic(final CreateTopicRequest createRequest) {
+    public TopicDto createTopic(final TopicCreationRequest createRequest) {
         final CategoryModel category = categoryService.getByIdIfExists(createRequest.getCategoryId());
         final TopicModel topic = topicAdapter.toModel(createRequest);
         topic.setAuthor(profileService.getCurrentProfile());
@@ -53,14 +53,14 @@ public class TopicService {
     }
 
     @Transactional
-    public TopicDto updateTopic(final UpdateTopicRequest updateRequest) {
+    public TopicDto updateTopic(final TopicUpdateRequest updateRequest) {
         final CategoryModel category = categoryService.getByIdIfExists(updateRequest.getCategoryId());
         final TopicModel existingTopic = getByIdIfExists(updateRequest.getId());
         final String currentUsername = profileService.getCurrentProfile().getUser().getUsername();
         final String authorUsername = existingTopic.getAuthor().getUser().getUsername();
 
         if (!Objects.equals(currentUsername, authorUsername)) {
-            authService.ensureCurrentUserAllowed(ADMIN);
+            authService.ensureCurrentUserAllowed(ROLE_ADMIN);
         }
 
         final TopicModel topic = topicAdapter.mergeWith(existingTopic, updateRequest, category);
@@ -83,7 +83,7 @@ public class TopicService {
 
     @Transactional
     public void deleteTopic(final Long topicId) {
-        authService.ensureCurrentUserAllowed(ADMIN);
+        authService.ensureCurrentUserAllowed(ROLE_ADMIN);
         final TopicModel topic = getByIdIfExists(topicId);
         topicRepository.delete(topic);
     }

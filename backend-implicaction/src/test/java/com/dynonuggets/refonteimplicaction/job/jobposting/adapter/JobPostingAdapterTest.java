@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.adapter;
 
 import com.dynonuggets.refonteimplicaction.job.company.adapter.CompanyAdapter;
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.dto.CompanyDto;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -17,8 +17,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class JobPostingAdapterTest {
     CompanyDto companyDto;
-    Company company;
-    JobPosting jobPosting;
+    CompanyModel company;
+    JobPostingModel jobPosting;
     JobPostingDto expectedJobPostingDto;
     JobPostingAdapter jobPostingAdapter;
     CompanyAdapter companyAdapter;
@@ -29,12 +29,12 @@ class JobPostingAdapterTest {
     public void setUp() {
         companyAdapter = new CompanyAdapter();
         jobPostingAdapter = new JobPostingAdapter(companyAdapter);
-        company = new Company(1L, "urlModel", "logo", "name", "description");
+        company = new CompanyModel(1L, "urlModel", "logo", "name", "description");
         companyDto = new CompanyDto(1L, "urlModel", "logo", "name", "description");
         user = UserModel.builder().id(2L).username("user").build();
         createdAt = Instant.now();
 
-        jobPosting = JobPosting.builder()
+        jobPosting = JobPostingModel.builder()
                 .id(7L)
                 .company(company)
                 .title("title")
@@ -85,7 +85,7 @@ class JobPostingAdapterTest {
     void toModelTest() {
         final JobPostingDto dto = jobPostingAdapter.toDto(jobPosting);
 
-        final JobPosting expectedJobPosting = jobPostingAdapter.toModel(dto, user);
+        final JobPostingModel expectedJobPosting = jobPostingAdapter.toModel(dto, user);
 
         assertThat(jobPosting)
                 .usingRecursiveComparison()

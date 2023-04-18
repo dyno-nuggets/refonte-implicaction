@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.user.mapper;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
+import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
-import org.mapstruct.BeanMapping;
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -15,16 +15,10 @@ import static java.util.stream.Collectors.toSet;
 @Mapper
 public interface UserMapper {
 
-    @Mapping(target = "roles", expression = "java(rolesToRoleNames(model.getRoles()))")
+    @Mapping(target = "roles", expression = "java(rolesToRoleEnum(model.getRoles()))")
     UserDto toDto(UserModel model);
 
-    @BeanMapping(ignoreByDefault = true)
-    @Mapping(target = "id", source = "id")
-    @Mapping(target = "username", source = "username")
-    @Mapping(target = "roles", expression = "java(rolesToRoleNames(model.getRoles()))")
-    UserDto toDtoLight(final UserModel model);
-
-    default Set<String> rolesToRoleNames(final Set<RoleModel> roles) {
+    default Set<RoleEnum> rolesToRoleEnum(final Set<RoleModel> roles) {
         return emptyStreamIfNull(roles)
                 .map(RoleModel::getName)
                 .collect(toSet());

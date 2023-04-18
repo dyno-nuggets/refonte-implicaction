@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.user.dto;
 
+import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,5 +27,5 @@ public class UserDto {
     private String activationKey;
     private Boolean enabled;
     private Boolean emailVerified;
-    private Set<String> roles;
+    private Set<RoleEnum> roles;
 }

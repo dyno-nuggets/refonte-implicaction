@@ -2,13 +2,13 @@ package com.dynonuggets.refonteimplicaction.job.jobapplication.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.adapter.JobApplicationAdapter;
-import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplicationModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationRequest;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -56,15 +56,15 @@ class JobApplicationServiceTest {
     JobApplicationService jobApplicationService;
 
     @Captor
-    ArgumentCaptor<JobApplication> argumentCaptor;
+    ArgumentCaptor<JobApplicationModel> argumentCaptor;
 
     @Test
     void should_create_apply() {
         // given
         final JobApplicationRequest request = new JobApplicationRequest(123L, PENDING, null);
         final UserModel currentUser = UserModel.builder().id(45L).build();
-        final JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, currentUser);
-        final JobApplication jobApplication = new JobApplication(67L, job, currentUser, request.getStatus(), Instant.now(), false);
+        final JobPostingModel job = new JobPostingModel(123L, CompanyModel.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, currentUser);
+        final JobApplicationModel jobApplication = new JobApplicationModel(67L, job, currentUser, request.getStatus(), Instant.now(), false);
         final JobApplicationDto expectedDto = new JobApplicationDto(jobApplication.getId(), jobApplication.getJob().getId(), jobApplication.getJob().getTitle(), jobApplication.getJob().getCompany().getName(), jobApplication.getJob().getCompany().getLogo(), jobApplication.getStatus().name(), "Paris (75)", CDI, false);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
@@ -106,9 +106,9 @@ class JobApplicationServiceTest {
         final long jobId = 123L;
         final JobApplicationRequest request = new JobApplicationRequest(jobId, PENDING, null);
         final IllegalArgumentException expectedException = new IllegalArgumentException(String.format(APPLY_ALREADY_EXISTS_FOR_JOB, jobId));
-        final JobApplication apply = JobApplication.builder().id(123L).build();
+        final JobApplicationModel apply = JobApplicationModel.builder().id(123L).build();
         final UserModel currentUser = UserModel.builder().id(123L).build();
-        final JobPosting job = new JobPosting(123L, Company.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, currentUser);
+        final JobPostingModel job = new JobPostingModel(123L, CompanyModel.builder().id(23L).build(), "Mon super job", "Il est trop cool", "Blablabla", "Paris", "140k", null, CDI, BusinessSectorEnum.ASSURANCE, Instant.now(), false, true, currentUser);
         given(jobRepository.findById(anyLong())).willReturn(Optional.of(job));
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.of(apply));
@@ -124,10 +124,10 @@ class JobApplicationServiceTest {
     void should_return_all_users_apply() {
         // given
         final UserModel currentUser = UserModel.builder().id(123L).build();
-        final List<JobApplication> expecteds = asList(
-                new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false),
-                new JobApplication(2L, JobPosting.builder().id(13L).build(), currentUser, CHASED, Instant.now(), false),
-                new JobApplication(3L, JobPosting.builder().id(14L).build(), currentUser, INTERVIEW, Instant.now(), false)
+        final List<JobApplicationModel> expecteds = asList(
+                new JobApplicationModel(1L, JobPostingModel.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false),
+                new JobApplicationModel(2L, JobPostingModel.builder().id(13L).build(), currentUser, CHASED, Instant.now(), false),
+                new JobApplicationModel(3L, JobPostingModel.builder().id(14L).build(), currentUser, INTERVIEW, Instant.now(), false)
         );
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepository.findAllByUserAndArchiveIsFalse(any())).willReturn(expecteds);
@@ -144,8 +144,8 @@ class JobApplicationServiceTest {
         // given
         final JobApplicationRequest request = new JobApplicationRequest(123L, INTERVIEW, null);
         final UserModel currentUser = UserModel.builder().id(123L).build();
-        final JobApplication jobApplication = new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
-        final JobApplication jobApplicationUpdate = new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
+        final JobApplicationModel jobApplication = new JobApplicationModel(1L, JobPostingModel.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
+        final JobApplicationModel jobApplicationUpdate = new JobApplicationModel(1L, JobPostingModel.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
         final JobApplicationDto expectedDto = new JobApplicationDto(1L, 12L, "JobTitle", "companyName", "http://image.url", INTERVIEW.name(), "Paris", CDD, false);
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.of(jobApplication));
@@ -166,8 +166,8 @@ class JobApplicationServiceTest {
         // given
         final JobApplicationRequest request = new JobApplicationRequest(123L, INTERVIEW, null);
         final UserModel currentUser = UserModel.builder().id(123L).build();
-        final JobApplication jobApplication = new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
-        final JobApplication jobApplicationUpdate = new JobApplication(1L, JobPosting.builder().id(12L).build(), currentUser, PENDING, Instant.now(), true);
+        final JobApplicationModel jobApplication = new JobApplicationModel(1L, JobPostingModel.builder().id(12L).build(), currentUser, PENDING, Instant.now(), false);
+        final JobApplicationModel jobApplicationUpdate = new JobApplicationModel(1L, JobPostingModel.builder().id(12L).build(), currentUser, PENDING, Instant.now(), true);
         final JobApplicationDto expectedDto = new JobApplicationDto(1L, 12L, "JobTitle", "companyName", "http://image.url", INTERVIEW.name(), "Paris", CDD, true);
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.of(jobApplication));
@@ -205,7 +205,7 @@ class JobApplicationServiceTest {
         // given
         final long jobId = 123L;
         final UserModel currentUser = UserModel.builder().id(123L).build();
-        final JobApplication jobApplication = JobApplication.builder().build();
+        final JobApplicationModel jobApplication = JobApplicationModel.builder().build();
         given(authService.getCurrentUser()).willReturn(currentUser);
         given(applyRepository.findByJob_IdAndUser_id(anyLong(), anyLong())).willReturn(Optional.ofNullable(jobApplication));
 

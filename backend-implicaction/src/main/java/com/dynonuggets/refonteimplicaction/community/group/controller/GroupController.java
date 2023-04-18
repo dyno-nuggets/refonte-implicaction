@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.group.controller;
 
-import com.dynonuggets.refonteimplicaction.community.group.dto.CreateGroupRequest;
+import com.dynonuggets.refonteimplicaction.community.group.dto.GroupCreationRequest;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.group.service.GroupService;
 import lombok.AllArgsConstructor;
@@ -29,7 +29,7 @@ public class GroupController {
     @ResponseBody
     @PostMapping(consumes = {APPLICATION_JSON_VALUE, MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<GroupDto> createGroup(
-            @RequestPart final CreateGroupRequest request,
+            @RequestPart final GroupCreationRequest request,
             @RequestParam final MultipartFile file
     ) {
         final GroupDto saveDto = groupService.createGroup(request, file);
@@ -37,7 +37,7 @@ public class GroupController {
     }
 
     @PostMapping(value = CREATE_NO_IMAGE)
-    public ResponseEntity<GroupDto> createGroup(@RequestBody final CreateGroupRequest request) {
+    public ResponseEntity<GroupDto> createGroup(@RequestBody final GroupCreationRequest request) {
         final GroupDto saveDto = groupService.createGroup(request, null);
         return ResponseEntity.status(CREATED).body(saveDto);
     }

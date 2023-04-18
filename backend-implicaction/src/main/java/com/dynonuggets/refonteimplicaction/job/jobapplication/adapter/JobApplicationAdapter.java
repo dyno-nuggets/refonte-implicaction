@@ -1,15 +1,15 @@
 package com.dynonuggets.refonteimplicaction.job.jobapplication.adapter;
 
-import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplication;
+import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplicationModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationDto;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JobApplicationAdapter {
 
-    public JobApplicationDto toDto(final JobApplication model) {
-        final JobPosting job = model.getJob();
+    public JobApplicationDto toDto(final JobApplicationModel model) {
+        final JobPostingModel job = model.getJob();
         final boolean hasCompany = job.getCompany() != null;
         final String companyName = hasCompany ? job.getCompany().getName() : null;
         final String companyImageUrl = hasCompany ? job.getCompany().getLogo() : null;

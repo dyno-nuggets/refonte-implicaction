@@ -1,12 +1,12 @@
 package com.dynonuggets.refonteimplicaction.community.training.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import org.springframework.stereotype.Component;
 
 @Component
 public class TrainingAdapter {
-    public TrainingDto toDto(final Training training) {
+    public TrainingDto toDto(final TrainingModel training) {
         return TrainingDto.builder()
                 .id(training.getId())
                 .label(training.getLabel())
@@ -15,8 +15,8 @@ public class TrainingAdapter {
                 .build();
     }
 
-    public Training toModel(final TrainingDto trainingDto) {
-        return Training.builder()
+    public TrainingModel toModel(final TrainingDto trainingDto) {
+        return TrainingModel.builder()
                 .id(trainingDto.getId())
                 .label(trainingDto.getLabel())
                 .date(trainingDto.getDate())

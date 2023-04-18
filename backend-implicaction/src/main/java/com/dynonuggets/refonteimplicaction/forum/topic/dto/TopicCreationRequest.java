@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Getter
-public class CreateTopicRequest {
+public class TopicCreationRequest {
     private String title;
     private String message;
     private boolean isLocked;

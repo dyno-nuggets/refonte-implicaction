@@ -7,7 +7,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @Getter
-public class CreateCategoryRequest {
+public class CategoryCreationRequest {
     private String title;
     private String description;
     private Long parentId;

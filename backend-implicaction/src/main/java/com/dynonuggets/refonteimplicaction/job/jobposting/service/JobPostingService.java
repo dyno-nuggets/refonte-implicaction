@@ -4,7 +4,7 @@ import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.adapter.JobPostingAdapter;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
@@ -35,20 +35,20 @@ public class JobPostingService {
     private final AuthService authService;
 
     public JobPostingDto createJob(final JobPostingDto jobPostingDto) {
-        final JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
+        final JobPostingModel jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
         jobPosting.setCreatedAt(Instant.now());
         // si l'utilisateur qui crée une offre est admin, alors elle est validée par défaut
         final UserModel currentUser = authService.getCurrentUser();
         final boolean isAdmin = currentUser.getRoles()
                 .stream()
-                .anyMatch(role -> role.getName().equals(RoleEnum.ADMIN.getLongName()));
+                .anyMatch(role -> role.getName().equals(RoleEnum.ROLE_ADMIN));
         jobPosting.setValid(isAdmin);
-        final JobPosting jobSaved = jobPostingRepository.save(jobPosting);
+        final JobPostingModel jobSaved = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(jobSaved);
     }
 
     public JobPostingDto getJobById(final Long jobId) {
-        final JobPosting job = jobPostingRepository.findById(jobId)
+        final JobPostingModel job = jobPostingRepository.findById(jobId)
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId)));
 
         final Long currentUserId = authService.getCurrentUser().getId();
@@ -61,9 +61,9 @@ public class JobPostingService {
 
     public Page<JobPostingDto> getAllWithCriteria(final Pageable pageable, final String search, final ContractTypeEnum contractType, final BusinessSectorEnum businessSectorEnum, final Boolean archive, final boolean applyCheck, final Boolean valid) {
         // récupération des jobs
-        final Page<JobPosting> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, businessSectorEnum, archive, valid);
+        final Page<JobPostingModel> jobs = jobPostingRepository.findAllWithCriteria(pageable, search, contractType, businessSectorEnum, archive, valid);
         if (applyCheck) {
-            final List<Long> jobIds = jobs.stream().map(JobPosting::getId).collect(toList());
+            final List<Long> jobIds = jobs.stream().map(JobPostingModel::getId).collect(toList());
             final List<Long> jobAppliesIds = getAllAppliesWithJobIdsIn(jobIds, authService.getCurrentUser().getId());
             return jobs.map(job -> {
                 final JobPostingDto jobDto = jobPostingAdapter.toDto(job);
@@ -83,28 +83,28 @@ public class JobPostingService {
 
     @Transactional
     public JobPostingDto saveOrUpdateJobPosting(final JobPostingDto jobPostingDto) {
-        final JobPosting jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
-        final JobPosting save = jobPostingRepository.save(jobPosting);
+        final JobPostingModel jobPosting = jobPostingAdapter.toModel(jobPostingDto, authService.getCurrentUser());
+        final JobPostingModel save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
     }
 
     @Transactional
     public void deleteJobPosting(final Long jobPostingId) {
-        final JobPosting jobPosting = findById(jobPostingId);
+        final JobPostingModel jobPosting = findById(jobPostingId);
         jobPostingRepository.delete(jobPosting);
     }
 
     @Transactional
     public JobPostingDto toggleArchiveJobPosting(final Long jobPostingId) {
-        final JobPosting jobPosting = findById(jobPostingId);
+        final JobPostingModel jobPosting = findById(jobPostingId);
         jobPosting.setArchive(!jobPosting.isArchive());
-        final JobPosting save = jobPostingRepository.save(jobPosting);
+        final JobPostingModel save = jobPostingRepository.save(jobPosting);
         return jobPostingAdapter.toDto(save);
     }
 
     @Transactional
     public List<JobPostingDto> toggleArchiveAll(final List<Long> jobsId) {
-        final List<JobPosting> jobs = jobPostingRepository.findAllById(jobsId);
+        final List<JobPostingModel> jobs = jobPostingRepository.findAllById(jobsId);
         jobs.forEach(job -> job.setArchive(!job.isArchive()));
         return jobPostingRepository.saveAll(jobs)
                 .stream()
@@ -120,9 +120,9 @@ public class JobPostingService {
 
     @Transactional
     public JobPostingDto validateJob(final Long jobId) {
-        final JobPosting job = findById(jobId);
+        final JobPostingModel job = findById(jobId);
         job.setValid(true);
-        final JobPosting jobValidate = jobPostingRepository.save(job);
+        final JobPostingModel jobValidate = jobPostingRepository.save(job);
 
         return jobPostingAdapter.toDto(jobValidate);
     }
@@ -137,7 +137,7 @@ public class JobPostingService {
                 .getContent();
     }
 
-    private JobPosting findById(final Long jobId) {
+    private JobPostingModel findById(final Long jobId) {
         return jobPostingRepository.findById(jobId)
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId)));
     }

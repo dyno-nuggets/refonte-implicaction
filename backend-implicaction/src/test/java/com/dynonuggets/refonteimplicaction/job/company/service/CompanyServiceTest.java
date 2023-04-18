@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.job.company.service;
 
 import com.dynonuggets.refonteimplicaction.job.company.adapter.CompanyAdapter;
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.domain.repository.CompanyRepository;
 import com.dynonuggets.refonteimplicaction.job.company.dto.CompanyDto;
 import org.junit.jupiter.api.Test;
@@ -35,9 +35,9 @@ class CompanyServiceTest {
     @Test
     void should_list_all_companies() {
         // given
-        final List<Company> companies = Collections.singletonList(new Company(1L, "Idemia", "logo", "description", "url"));
+        final List<CompanyModel> companies = Collections.singletonList(new CompanyModel(1L, "Idemia", "logo", "description", "url"));
         final Pageable pageable = PageRequest.of(0, 10, Sort.DEFAULT_DIRECTION, "id");
-        final Page<Company> expectedPages = new PageImpl<>(companies);
+        final Page<CompanyModel> expectedPages = new PageImpl<>(companies);
 
         final CompanyDto companyDto1 = new CompanyDto(1L, "Idemia", "logo", "description", "url");
 
@@ -55,14 +55,14 @@ class CompanyServiceTest {
     @Test
     void should_create_a_company() {
         //given
-        final Company company = Company.builder()
+        final CompanyModel company = CompanyModel.builder()
                 .description("Compani Test service")
                 .name("Idemia")
                 .url("url")
                 .logo("logoo")
                 .build();
 
-        final Company companySaved = Company.builder()
+        final CompanyModel companySaved = CompanyModel.builder()
                 .id(1L)
                 .description("Compani Test service")
                 .name("Idemia")
@@ -101,7 +101,7 @@ class CompanyServiceTest {
     @Test
     void should_update_a_company() {
         //given
-        final Company company = Company.builder()
+        final CompanyModel company = CompanyModel.builder()
                 .id(4L)
                 .description("Compani Test service")
                 .name("Idemia")
@@ -109,7 +109,7 @@ class CompanyServiceTest {
                 .logo("logoo")
                 .build();
 
-        final Company companySaved = Company.builder()
+        final CompanyModel companySaved = CompanyModel.builder()
                 .id(4L)
                 .description("Compani Test service")
                 .name("Idemia")

@@ -1,7 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.adapter;
 
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,13 @@ class WorkExperienceAdapterTest {
     @Mock
     WorkExperienceAdapter workExperienceAdapter;
 
-    WorkExperience experience;
-    List<WorkExperience> experiences;
+    WorkExperienceModel experience;
+    List<WorkExperienceModel> experiences;
 
     @BeforeEach
     public void setUp() {
         experiences = new ArrayList<>();
-        experience = new WorkExperience(1L, null, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description", "companyName");
+        experience = new WorkExperienceModel(1L, null, LocalDate.now().minusDays(10L), LocalDate.now(), "label", "description", "companyName");
         experiences.add(experience);
         experience.setProfile(null);
 

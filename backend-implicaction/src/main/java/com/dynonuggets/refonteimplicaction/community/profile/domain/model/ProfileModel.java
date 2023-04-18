@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.community.profile.domain.model;
 
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
-import com.dynonuggets.refonteimplicaction.community.training.domain.model.Training;
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.forum.response.domain.model.ResponseModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -40,9 +40,9 @@ public class ProfileModel {
     @Column(name = "phone_number")
     private String phoneNumber;
     @OneToMany(fetch = LAZY, mappedBy = "profile")
-    private List<WorkExperience> experiences;
+    private List<WorkExperienceModel> experiences;
     @OneToMany(fetch = LAZY, mappedBy = "profile")
-    private List<Training> trainings;
+    private List<TrainingModel> trainings;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "profile_group",
             joinColumns = {@JoinColumn(name = "user_id")},

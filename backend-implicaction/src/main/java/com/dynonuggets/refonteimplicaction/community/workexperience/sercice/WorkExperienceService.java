@@ -4,7 +4,7 @@ import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.community.workexperience.adapter.WorkExperienceAdapter;
-import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperience;
+import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.repository.WorkExperienceRepository;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
@@ -30,18 +30,18 @@ public class WorkExperienceService {
 
     @Transactional
     public WorkExperienceDto saveOrUpdateExperience(final WorkExperienceDto experienceDto) {
-        final WorkExperience experience = experienceAdapter.toModel(experienceDto);
+        final WorkExperienceModel experience = experienceAdapter.toModel(experienceDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final ProfileModel user = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         experience.setProfile(user);
-        final WorkExperience saved = experienceRepository.save(experience);
+        final WorkExperienceModel saved = experienceRepository.save(experience);
         return experienceAdapter.toDto(saved);
     }
 
     @Transactional
     public void deleteExperience(final Long id) {
         final Long currentUserId = authService.getCurrentUser().getId();
-        final WorkExperience workExperience = experienceRepository.findById(id)
+        final WorkExperienceModel workExperience = experienceRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(XP_NOT_FOUND, valueOf(id)));
 
         if (!workExperience.getProfile().getId().equals(currentUserId)) {

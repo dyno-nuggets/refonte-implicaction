@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.user.service;
 
-import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
+import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.USER;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.ROLE_USER;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USER_ID_NOT_FOUND;
 
@@ -58,7 +58,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserModel getUserByUsernameIfExists(final String username) {
         return userRepository.findByUsername(username)
-                .orElseThrow(() -> new EntityNotFoundException(USERNAME_NOT_FOUND, username));
+                .orElseThrow(() -> new EntityNotFoundException(USERNAME_NOT_FOUND));
     }
 
     /**
@@ -74,7 +74,7 @@ public class UserService {
     @Transactional
     public void enableUser(final String username) {
         final UserModel user = getUserByUsernameIfExists(username);
-        final RoleModel roleUser = roleService.getRoleByName(USER.getLongName());
+        final RoleModel roleUser = roleService.getRoleByName(ROLE_USER);
 
         user.setEnabled(true);
         user.getRoles().add(roleUser);

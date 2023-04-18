@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.job.company.adapter;
 
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.dto.CompanyDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class CompanyAdapter {
 
-    public Company toModel(final CompanyDto dto) {
-        return Company.builder()
+    public CompanyModel toModel(final CompanyDto dto) {
+        return CompanyModel.builder()
                 .id(dto.getId())
                 .name(dto.getName())
                 .logo(dto.getLogo())
@@ -20,7 +20,7 @@ public class CompanyAdapter {
                 .build();
     }
 
-    public CompanyDto toDto(final Company model) {
+    public CompanyDto toDto(final CompanyModel model) {
         return CompanyDto.builder()
                 .id(model.getId())
                 .name(model.getName())

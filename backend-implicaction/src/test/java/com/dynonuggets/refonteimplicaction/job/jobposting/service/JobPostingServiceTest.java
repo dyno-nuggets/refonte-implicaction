@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.job.jobposting.service;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.adapter.JobPostingAdapter;
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -43,8 +43,8 @@ class JobPostingServiceTest {
     @Test
     void should_get_all_jobs_with_criteria_and_check_apply() {
         // given
-        final List<JobPosting> jobs = Collections.singletonList(JobPosting.builder().id(123L).contractType(CDD).build());
-        final Page<JobPosting> jobPage = new PageImpl<>(jobs);
+        final List<JobPostingModel> jobs = Collections.singletonList(JobPostingModel.builder().id(123L).contractType(CDD).build());
+        final Page<JobPostingModel> jobPage = new PageImpl<>(jobs);
         final Pageable pageable = PageRequest.of(0, 10);
         final UserModel currentUser = UserModel.builder().id(123L).build();
         given(jobPostingRepository.findAllWithCriteria(any(), anyString(), any(), any(), anyBoolean(), anyBoolean())).willReturn(jobPage);
@@ -62,8 +62,8 @@ class JobPostingServiceTest {
     @Test
     void should_get_all_jobs_with_criteria_and_check_apply_false() {
         // given
-        final List<JobPosting> jobs = Collections.singletonList(JobPosting.builder().id(123L).contractType(CDD).build());
-        final Page<JobPosting> jobPage = new PageImpl<>(jobs);
+        final List<JobPostingModel> jobs = Collections.singletonList(JobPostingModel.builder().id(123L).contractType(CDD).build());
+        final Page<JobPostingModel> jobPage = new PageImpl<>(jobs);
         final Pageable pageable = PageRequest.of(0, 10);
         given(jobPostingRepository.findAllWithCriteria(any(), anyString(), any(), any(), anyBoolean(), anyBoolean())).willReturn(jobPage);
 

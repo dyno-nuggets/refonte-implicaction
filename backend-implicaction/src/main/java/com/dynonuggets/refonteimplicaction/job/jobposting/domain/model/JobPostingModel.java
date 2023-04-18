@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.domain.model;
 
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.ContractTypeEnum;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -18,7 +18,7 @@ import static javax.persistence.GenerationType.IDENTITY;
 @Getter
 @Setter
 @Table(name = "job_posting")
-public class JobPosting {
+public class JobPostingModel {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -27,7 +27,7 @@ public class JobPosting {
 
     @ManyToOne
     @JoinColumn(name = "company_id", nullable = false)
-    private Company company;
+    private CompanyModel company;
 
     @Column(name = "title", nullable = false)
     private String title;

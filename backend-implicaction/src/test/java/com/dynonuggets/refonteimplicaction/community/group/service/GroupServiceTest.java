@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.community.group.service;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.group.domain.repository.GroupRepository;
-import com.dynonuggets.refonteimplicaction.community.group.dto.CreateGroupRequest;
+import com.dynonuggets.refonteimplicaction.community.group.dto.GroupCreationRequest;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.group.error.GroupException;
 import com.dynonuggets.refonteimplicaction.community.group.mapper.GroupMapper;
@@ -38,7 +38,7 @@ import java.util.Set;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.GROUP_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.USER_ALREADY_SUBSCRIBED_TO_GROUP;
 import static com.dynonuggets.refonteimplicaction.community.group.utils.GroupTestUtils.generateRandomGroup;
-import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.PREMIUM;
+import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.ROLE_PREMIUM;
 import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.time.Instant.now;
@@ -77,19 +77,19 @@ class GroupServiceTest {
         void should_create_group_when_image_is_submitted() {
             // given
             final MockMultipartFile mockedImage = new MockMultipartFile("user-file", "test.jpg", "image/jpeg", "test data".getBytes());
-            final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
-            final UserModel currentUser = generateRandomUser(Set.of(PREMIUM), true);
+            final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
+            final UserModel currentUser = generateRandomUser(Set.of(ROLE_PREMIUM), true);
             final String imageUrl = "http://localhost/imapge.png";
             final String username = currentUser.getUsername();
             final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
-            final GroupModel expectedGroup = GroupModel.builder().id(12L).name(createGroupRequest.getName()).description(createGroupRequest.getDescription()).creator(profile).createdAt(now()).imageUrl(imageUrl).enabled(false).build();
+            final GroupModel expectedGroup = GroupModel.builder().id(12L).name(groupCreationRequest.getName()).description(groupCreationRequest.getDescription()).creator(profile).createdAt(now()).imageUrl(imageUrl).enabled(false).build();
             given(authService.getCurrentUser()).willReturn(currentUser);
             given(profileService.getByUsernameIfExistsAndUserEnabled(username)).willReturn(profile);
             //given(fileService.save(fileModel)).willReturn(imageUrl);
             given(groupRepository.save(any(GroupModel.class))).willReturn(expectedGroup);
 
             // when
-            groupService.createGroup(createGroupRequest, mockedImage);
+            groupService.createGroup(groupCreationRequest, mockedImage);
 
             // then
             verify(profileService, times(1)).getByUsernameIfExistsAndUserEnabled(username);
@@ -106,17 +106,17 @@ class GroupServiceTest {
         @DisplayName("doit créer un groupe quand on ne soumet pas d'image")
         void should_create_group_when_no_image_is_submitted() {
             // given
-            final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
-            final UserModel currentUser = generateRandomUser(Set.of(PREMIUM), true);
+            final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
+            final UserModel currentUser = generateRandomUser(Set.of(ROLE_PREMIUM), true);
             final String username = currentUser.getUsername();
             final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
-            final GroupModel expectedGroup = GroupModel.builder().id(12L).name(createGroupRequest.getName()).description(createGroupRequest.getDescription()).creator(profile).createdAt(now()).enabled(false).build();
+            final GroupModel expectedGroup = GroupModel.builder().id(12L).name(groupCreationRequest.getName()).description(groupCreationRequest.getDescription()).creator(profile).createdAt(now()).enabled(false).build();
             given(authService.getCurrentUser()).willReturn(currentUser);
             given(profileService.getByUsernameIfExistsAndUserEnabled(username)).willReturn(profile);
             given(groupRepository.save(any(GroupModel.class))).willReturn(expectedGroup);
 
             // when
-            groupService.createGroup(createGroupRequest, null);
+            groupService.createGroup(groupCreationRequest, null);
 
             // then
             verifyNoInteractions(cloudService);

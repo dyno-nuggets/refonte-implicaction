@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.impl;
 
-import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPosting;
+import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepositoryCustom;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.ContractTypeEnum;
@@ -25,10 +25,10 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
     private final EntityManager entityManager;
 
     @Override
-    public Page<JobPosting> findAllWithCriteria(final Pageable pageable, String search, final ContractTypeEnum contractType, final BusinessSectorEnum businessSector, final Boolean archive, final Boolean valid) {
+    public Page<JobPostingModel> findAllWithCriteria(final Pageable pageable, String search, final ContractTypeEnum contractType, final BusinessSectorEnum businessSector, final Boolean archive, final Boolean valid) {
         final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<JobPosting> query = criteriaBuilder.createQuery(JobPosting.class);
-        final Root<JobPosting> queryRoot = query.from(JobPosting.class);
+        final CriteriaQuery<JobPostingModel> query = criteriaBuilder.createQuery(JobPostingModel.class);
+        final Root<JobPostingModel> queryRoot = query.from(JobPostingModel.class);
         final List<Predicate> predicates = new ArrayList<>();
 
         // gestion du tri des résultats
@@ -69,12 +69,12 @@ public class JobPostingRepositoryImpl implements JobPostingRepositoryCustom {
         query.where(finalPredicate);
 
         final CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        countQuery.select(criteriaBuilder.count(countQuery.from(JobPosting.class)));
+        countQuery.select(criteriaBuilder.count(countQuery.from(JobPostingModel.class)));
         final Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
         final int firstResult = pageable.getPageNumber() * pageable.getPageSize();
 
         // lancement de la requête et mise en place de la pagination
-        final List<JobPosting> results = entityManager.createQuery(query)
+        final List<JobPostingModel> results = entityManager.createQuery(query)
                 .setFirstResult(firstResult)
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

@@ -11,7 +11,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Getter
 @Builder
 @AllArgsConstructor(access = PRIVATE)
-public class CreateGroupRequest {
+public class GroupCreationRequest {
     @NotBlank(message = "Le nom d'un groupe ne peut pas être vide")
     private String name;
     private String description;

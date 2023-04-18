@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.job.company.domain.repository.impl;
 
-import com.dynonuggets.refonteimplicaction.job.company.domain.model.Company;
+import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.domain.repository.CompanyRepositoryCustom;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -22,10 +22,10 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     private final EntityManager entityManager;
 
     @Override
-    public Page<Company> findAllWithCriteria(final Pageable pageable, String keyword) {
+    public Page<CompanyModel> findAllWithCriteria(final Pageable pageable, String keyword) {
         final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<Company> query = criteriaBuilder.createQuery(Company.class);
-        final Root<Company> queryRoot = query.from(Company.class);
+        final CriteriaQuery<CompanyModel> query = criteriaBuilder.createQuery(CompanyModel.class);
+        final Root<CompanyModel> queryRoot = query.from(CompanyModel.class);
         final List<Predicate> predicates = new ArrayList<>();
 
         // gestion du tri des résultats
@@ -48,12 +48,12 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
         query.where(finalPredicate);
 
         final CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
-        countQuery.select(criteriaBuilder.count(countQuery.from(Company.class)));
+        countQuery.select(criteriaBuilder.count(countQuery.from(CompanyModel.class)));
         final Long totalCount = entityManager.createQuery(countQuery).getSingleResult();
         final int firstResult = pageable.getPageNumber() * pageable.getPageSize();
 
         // lancement de la requête et mise en place de la pagination
-        final List<Company> results = entityManager.createQuery(query)
+        final List<CompanyModel> results = entityManager.createQuery(query)
                 .setFirstResult(firstResult)
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();

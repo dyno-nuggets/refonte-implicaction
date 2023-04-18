@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.group.controller;
 
-import com.dynonuggets.refonteimplicaction.community.group.dto.CreateGroupRequest;
+import com.dynonuggets.refonteimplicaction.community.group.dto.GroupCreationRequest;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.group.service.GroupService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
@@ -52,13 +52,13 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre CREATED quand l'utilisateur est identifié")
         void should_response_forbidden_when_create_group_with_no_image_with_no_authentication() throws Exception {
             // given
-            final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("name").description("description").build();
-            final GroupDto expectedDto = GroupDto.builder().id(12L).name(createGroupRequest.getName()).description(createGroupRequest.getDescription()).createdAt(now()).creator("creator").build();
+            final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("name").description("description").build();
+            final GroupDto expectedDto = GroupDto.builder().id(12L).name(groupCreationRequest.getName()).description(groupCreationRequest.getDescription()).createdAt(now()).creator("creator").build();
             given(groupService.createGroup(any(), any())).willReturn(expectedDto);
 
             // when
             final ResultActions resultActions = mvc.perform(post(getFullPath(CREATE_NO_IMAGE))
-                    .content(toJson(createGroupRequest))
+                    .content(toJson(groupCreationRequest))
                     .accept(APPLICATION_JSON)
                     .contentType(APPLICATION_JSON)
                     .with(csrf()));
@@ -80,11 +80,11 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre forbidden sans image quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_create_group_with_no_image_and_with_no_authentication() throws Exception {
             // given
-            final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("name").description("description").build();
+            final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("name").description("description").build();
 
             // when
             final ResultActions resultActions = mvc.perform(post(getFullPath(CREATE_NO_IMAGE))
-                    .content(toJson(createGroupRequest))
+                    .content(toJson(groupCreationRequest))
                     .accept(APPLICATION_JSON)
                     .contentType(APPLICATION_JSON)
                     .with(csrf()));
@@ -104,11 +104,11 @@ class GroupControllerIntegrationTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre forbidden sans image quand l'utilisateur n'est pas identifié")
         void should_response_forbidden_when_create_group_with_no_image_and_with_no_authentication() throws Exception {
             // given
-            final CreateGroupRequest createGroupRequest = CreateGroupRequest.builder().name("name").description("description").build();
+            final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("name").description("description").build();
 
             // when
             final ResultActions resultActions = mvc.perform(post(getFullPath(GROUPS_BASE_URI))
-                    .content(toJson(createGroupRequest))
+                    .content(toJson(groupCreationRequest))
                     .accept(APPLICATION_JSON)
                     .contentType(APPLICATION_JSON)
                     .with(csrf()));
