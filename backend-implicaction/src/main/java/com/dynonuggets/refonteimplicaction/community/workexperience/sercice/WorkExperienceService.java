@@ -25,17 +25,17 @@ public class WorkExperienceService {
 
     private final AuthService authService;
     private final WorkExperienceRepository experienceRepository;
-    private final WorkExperienceMapper experienceAdapter;
+    private final WorkExperienceMapper workExperienceMapper;
     private final ProfileService profileService;
 
     @Transactional
     public WorkExperienceDto saveOrUpdateExperience(final WorkExperienceDto experienceDto) {
-        final WorkExperienceModel experience = experienceAdapter.toModel(experienceDto);
+        final WorkExperienceModel experience = workExperienceMapper.toModel(experienceDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final ProfileModel user = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         experience.setProfile(user);
         final WorkExperienceModel saved = experienceRepository.save(experience);
-        return experienceAdapter.toDto(saved);
+        return workExperienceMapper.toDto(saved);
     }
 
     @Transactional
