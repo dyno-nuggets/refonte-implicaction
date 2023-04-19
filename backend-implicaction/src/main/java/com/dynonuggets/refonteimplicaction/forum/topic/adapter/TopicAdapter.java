@@ -1,6 +1,6 @@
 package com.dynonuggets.refonteimplicaction.forum.topic.adapter;
 
-import com.dynonuggets.refonteimplicaction.community.profile.adapter.ProfileAdapter;
+import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
 import com.dynonuggets.refonteimplicaction.forum.category.adapter.CategoryAdapter;
 import com.dynonuggets.refonteimplicaction.forum.category.domain.model.CategoryModel;
 import com.dynonuggets.refonteimplicaction.forum.response.adapter.ResponseAdapter;
@@ -27,7 +27,7 @@ import static org.apache.commons.collections4.CollectionUtils.size;
 public class TopicAdapter {
 
     @Lazy
-    private final ProfileAdapter profileAdapter;
+    private final ProfileMapper profileMapper;
 
     @Lazy
     private final CategoryAdapter categoryAdapter;
@@ -75,7 +75,7 @@ public class TopicAdapter {
                 .editedAt(model.getEditedAt())
                 .isPinned(model.isPinned())
                 .isLocked(model.isLocked())
-                .author(profileAdapter.toDto(model.getAuthor()))
+                .author(profileMapper.toDto(model.getAuthor()))
                 .category(categoryAdapter.toDtoWithoutChildren(model.getCategory()))
                 .responses(new ArrayList<>())
                 .lastResponse(null)
@@ -95,7 +95,7 @@ public class TopicAdapter {
                 .editedAt(model.getEditedAt())
                 .isPinned(model.isPinned())
                 .isLocked(model.isLocked())
-                .author(profileAdapter.toDto(model.getAuthor()))
+                .author(profileMapper.toDto(model.getAuthor()))
                 .category(categoryAdapter.toDtoWithoutChildren(model.getCategory()))
                 .responses(new ArrayList<>())
                 .lastResponse(isNotEmpty(responses) ? responseAdapter.toDto(responses.get(responses.size() - 1)) : null)

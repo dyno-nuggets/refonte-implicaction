@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.community.profile.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
-import com.dynonuggets.refonteimplicaction.community.profile.adapter.ProfileAdapter;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
+import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
@@ -51,7 +51,7 @@ class ProfileServiceTest {
     @Mock
     ProfileRepository profileRepository;
     @Mock
-    ProfileAdapter profileAdapter;
+    ProfileMapper profileMapper;
     @Mock
     CloudService cloudService;
     @Mock
@@ -159,7 +159,7 @@ class ProfileServiceTest {
             final ProfileModel expectedProfile = generateRandomProfile();
             final ProfileDto expectedProfileDto = ProfileDto.builder().username(expectedProfile.getUser().getUsername()).build();
             given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willReturn(Optional.of(expectedProfile));
-            given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
+            given(profileMapper.toDto(any())).willReturn(expectedProfileDto);
 
             // when
             final ProfileDto profileDto = profileService.getByUsername(expectedProfile.getUser().getUsername());
@@ -195,7 +195,7 @@ class ProfileServiceTest {
             willDoNothing().given(authService).verifyAccessIsGranted(any());
             given(profileRepository.findByUser_UsernameAndUser_EnabledTrue(any())).willReturn(Optional.of(profile));
             given(profileRepository.save(any())).willReturn(profile);
-            given(profileAdapter.toDto(any())).willReturn(expectedProfileDto);
+            given(profileMapper.toDto(any())).willReturn(expectedProfileDto);
             expectedProfileDto.setBirthday(updateRequest.getBirthday());
             expectedProfileDto.setHobbies(updateRequest.getHobbies());
             expectedProfileDto.setPurpose(updateRequest.getPurpose());
@@ -212,7 +212,7 @@ class ProfileServiceTest {
             verify(authService, times(1)).verifyAccessIsGranted(any());
             verify(profileRepository, times(1)).findByUser_UsernameAndUser_EnabledTrue(any());
             verify(profileRepository, times(1)).save(any());
-            verify(profileAdapter, times(1)).toDto(any());
+            verify(profileMapper, times(1)).toDto(any());
         }
 
         @Test
@@ -227,7 +227,7 @@ class ProfileServiceTest {
             assertImplicactionException(e, CoreException.class, OPERATION_NOT_PERMITTED);
             verify(authService, times(1)).verifyAccessIsGranted(any());
             verifyNoInteractions(profileRepository);
-            verifyNoInteractions(profileAdapter);
+            verifyNoInteractions(profileMapper);
         }
 
         @Test
@@ -242,7 +242,7 @@ class ProfileServiceTest {
             assertImplicactionException(e, CoreException.class, OPERATION_NOT_PERMITTED);
             verify(authService, times(1)).verifyAccessIsGranted(any());
             verifyNoInteractions(profileRepository);
-            verifyNoInteractions(profileAdapter);
+            verifyNoInteractions(profileMapper);
         }
     }
 
@@ -259,7 +259,7 @@ class ProfileServiceTest {
         final int size = profiles.getSize();
         assertThat(result).hasSize(size);
         verify(profileRepository, times(1)).findAll(any(Pageable.class));
-        verify(profileAdapter, times(size)).toDto(any());
+        verify(profileMapper, times(size)).toDto(any());
     }
 
     @Nested

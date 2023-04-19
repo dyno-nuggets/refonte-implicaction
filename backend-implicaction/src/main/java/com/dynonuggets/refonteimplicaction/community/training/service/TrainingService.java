@@ -3,10 +3,10 @@ package com.dynonuggets.refonteimplicaction.community.training.service;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
-import com.dynonuggets.refonteimplicaction.community.training.adapter.TrainingAdapter;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.training.domain.repository.TrainingRepository;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
+import com.dynonuggets.refonteimplicaction.community.training.mapper.TrainingMapper;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
@@ -19,18 +19,18 @@ import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotN
 @AllArgsConstructor
 public class TrainingService {
     private final TrainingRepository trainingRepository;
-    private final TrainingAdapter trainingAdapter;
+    private final TrainingMapper trainingMapper;
     private final ProfileService profileService;
     private final AuthService authService;
 
     @Transactional
     public TrainingDto saveOrUpdateTraining(final TrainingDto trainingDto) {
-        final TrainingModel training = trainingAdapter.toModel(trainingDto);
+        final TrainingModel training = trainingMapper.toModel(trainingDto);
         final String currentUsername = callIfNotNull(authService.getCurrentUser(), UserModel::getUsername);
         final ProfileModel profile = profileService.getByUsernameIfExistsAndUserEnabled(currentUsername);
         training.setProfile(profile);
         final TrainingModel save = trainingRepository.save(training);
-        return trainingAdapter.toDto(save);
+        return trainingMapper.toDto(save);
     }
 
     @Transactional

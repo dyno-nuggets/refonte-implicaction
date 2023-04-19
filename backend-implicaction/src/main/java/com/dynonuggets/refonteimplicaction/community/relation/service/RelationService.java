@@ -4,11 +4,11 @@ import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
-import com.dynonuggets.refonteimplicaction.community.relation.adapter.RelationAdapter;
 import com.dynonuggets.refonteimplicaction.community.relation.domain.model.RelationModel;
 import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.relation.error.RelationException;
+import com.dynonuggets.refonteimplicaction.community.relation.mapper.RelationMapper;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
@@ -34,7 +34,7 @@ public class RelationService {
     private final ProfileService profileService;
     private final ProfileRepository profileRepository;
     private final RelationRepository relationRepository;
-    private final RelationAdapter relationAdapter;
+    private final RelationMapper relationMapper;
     private final AuthService authService;
 
     /**
@@ -59,7 +59,7 @@ public class RelationService {
 
         final RelationModel relation = RelationModel.builder().sentAt(now()).sender(sender).receiver(receiver).build();
         final RelationModel save = relationRepository.save(relation);
-        return relationAdapter.toDto(save);
+        return relationMapper.toDto(save);
     }
 
     /**
@@ -89,7 +89,7 @@ public class RelationService {
 
         relation.setConfirmedAt(now());
         final RelationModel relationUpdate = relationRepository.save(relation);
-        return relationAdapter.toDto(relationUpdate);
+        return relationMapper.toDto(relationUpdate);
     }
 
     /**
@@ -98,7 +98,7 @@ public class RelationService {
     public Page<RelationsDto> getAllRelationsByUsername(final String username, final Pageable pageable) {
         final Page<RelationModel> relations = relationRepository.findAllByUser_UsernameAndConfirmedAtIsNotNull(username, pageable);
         return relations.map(relation -> {
-            final RelationsDto relationsDto = relationAdapter.toDto(relation);
+            final RelationsDto relationsDto = relationMapper.toDto(relation);
             relationsDto.setRelationType(FRIEND);
             return relationsDto;
         });
@@ -111,7 +111,7 @@ public class RelationService {
         authService.verifyAccessIsGranted(username);
         return relationRepository.findAllBySender_User_UsernameAndConfirmedAtIsNull(username, pageable)
                 .map(relation -> {
-                    final RelationsDto relationsDto = relationAdapter.toDto(relation);
+                    final RelationsDto relationsDto = relationMapper.toDto(relation);
                     relationsDto.setRelationType(SENDER);
                     return relationsDto;
                 });
@@ -124,7 +124,7 @@ public class RelationService {
         authService.verifyAccessIsGranted(username);
         final Page<RelationModel> relations = relationRepository.findAllByReceiver_User_UsernameAndConfirmedAtIsNull(username, pageable);
         return relations.map(relation -> {
-            final RelationsDto relationsDto = relationAdapter.toDto(relation);
+            final RelationsDto relationsDto = relationMapper.toDto(relation);
             relationsDto.setRelationType(RECEIVER);
             return relationsDto;
         });
@@ -147,7 +147,7 @@ public class RelationService {
                             // Si elle n’existe pas, on crée une relation dont le profil est receiver et un sender null.
                             .orElse(RelationModel.builder().receiver(profile).build());
 
-                    final RelationsDto relationsDto = relationAdapter.toDto(relation);
+                    final RelationsDto relationsDto = relationMapper.toDto(relation);
                     if (relationsDto.getConfirmedAt() != null) {
                         relationsDto.setRelationType(FRIEND);
                     } else if (relationsDto.getSender() == null) {
