@@ -10,10 +10,10 @@ import {AuthService} from '../../../core/services/auth.service';
 import {ProfileContextService} from '../../../core/services/profile-context.service';
 
 @Component({
-  templateUrl: './profile-page.component.html',
-  styleUrls: ['./profile-page.component.scss'],
+  templateUrl: './profile-details-page.component.html',
+  styleUrls: ['./profile-details-page.component.scss'],
 })
-export class ProfilePageComponent implements OnInit, OnDestroy {
+export class ProfileDetailsPageComponent implements OnInit, OnDestroy {
   profile$: Observable<Profile>;
   univers = Univers;
   activeTab: ProfileTabEnum = ProfileTabEnum.PROFILE;
@@ -36,9 +36,9 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.paramMap
-      .pipe(filter(paramMap => paramMap.has(ProfilePageComponent.USER_PARAM_NAME)), takeUntil(this.onDestroySubject))
+      .pipe(filter(paramMap => paramMap.has(ProfileDetailsPageComponent.USER_PARAM_NAME)), takeUntil(this.onDestroySubject))
       .subscribe(paramMap => {
-        this.username = paramMap.get(ProfilePageComponent.USER_PARAM_NAME);
+        this.username = paramMap.get(ProfileDetailsPageComponent.USER_PARAM_NAME);
         this.isPrincipal = this.username === this.authService.getPrincipal()?.username;
         this.profile$ = this.isPrincipal
           ? this.profileContextService.observeProfile()
@@ -46,8 +46,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy {
       });
 
     this.route.queryParamMap
-      .pipe(filter(paramMap => paramMap.has(ProfilePageComponent.TAB_KEY_QUERY_PARAM)), takeUntil(this.onDestroySubject))
-      .subscribe(paramMap => this.activeTab = this.getActiveTab(paramMap.get(ProfilePageComponent.TAB_KEY_QUERY_PARAM) as string));
+      .pipe(filter(paramMap => paramMap.has(ProfileDetailsPageComponent.TAB_KEY_QUERY_PARAM)), takeUntil(this.onDestroySubject))
+      .subscribe(paramMap => this.activeTab = this.getActiveTab(paramMap.get(ProfileDetailsPageComponent.TAB_KEY_QUERY_PARAM) as string));
   }
 
   private getActiveTab(tabAsString: string): ProfileTabEnum {

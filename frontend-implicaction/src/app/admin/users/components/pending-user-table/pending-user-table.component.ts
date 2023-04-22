@@ -15,7 +15,7 @@ import {UserService} from '../../../../community/services/profile/user.service';
 })
 export class PendingUserTableComponent extends BaseWithPaginationAndFilterComponent<User, Criteria> {
 
-  loading = true;
+  isLoading = true;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(
@@ -31,7 +31,7 @@ export class PendingUserTableComponent extends BaseWithPaginationAndFilterCompon
       .getAllPendingActivationUsers(this.pageable)
       .pipe(
         take(1),
-        finalize(() => this.loading = false)
+        finalize(() => this.isLoading = false)
       )
       .subscribe(
         data => {

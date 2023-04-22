@@ -1,7 +1,7 @@
 <p-table
   (onLazyLoad)="paginate($event)"
   [lazy]="true"
-  [loading]="loading"
+  [loading]="isLoading"
   [paginator]="true"
   [rowsPerPageOptions]="[10, 25, 50]"
   [rows]="rowsPerPage"

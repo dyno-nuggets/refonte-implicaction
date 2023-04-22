@@ -1,0 +1,32 @@
+<div class="container-fluid row justify-content-around">
+
+  <div class="card col-md-5 col-lg-4 col-xxl-3">
+    <ul class="list-group list-group-flush">
+      <ng-container *ngFor="let menuItem of menuItems">
+        <li class="list-group-item">
+          <a
+            [routerLinkActive]="'active'"
+            [routerLink]=menuItem.routerLink
+            [routerLinkActiveOptions]="{exact: true}"
+          >
+            {{menuItem.label}}
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </div>
+
+  <div class="row col-md-7 col-lg-8 m-0 p-0">
+    <ng-container *ngIf="!isLoading; else templateLoading">
+      <div *ngFor="let profile of pageable.content; let index = index" class="col-xl-6 px-0 px-md-3">
+        <app-profile-card [profile]="profile"></app-profile-card>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #templateLoading>
+  <div *ngFor="let _ of [].constructor(pageable.rows)" class="col col-lg-6 px-0 px-md-3">
+    <app-profile-card-skeleton></app-profile-card-skeleton>
+  </div>
+</ng-template>
