@@ -7,9 +7,9 @@ import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.repository.WorkExperienceRepository;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.community.workexperience.mapper.WorkExperienceMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

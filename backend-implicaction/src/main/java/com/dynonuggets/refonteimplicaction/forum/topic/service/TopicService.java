@@ -21,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Objects;
 
+import static com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum.ROLE_ADMIN;
 import static com.dynonuggets.refonteimplicaction.forum.topic.error.TopicErrorResult.TOPIC_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum.ROLE_ADMIN;
 import static java.lang.String.valueOf;
 
 

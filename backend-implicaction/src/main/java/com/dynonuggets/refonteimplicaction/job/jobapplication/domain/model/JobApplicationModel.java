@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.ApplyStatusEnum;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
 import javax.persistence.*;

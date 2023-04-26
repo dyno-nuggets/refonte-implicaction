@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.job.jobapplication.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.adapter.JobApplicationAdapter;
@@ -11,7 +12,6 @@ import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplication
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;

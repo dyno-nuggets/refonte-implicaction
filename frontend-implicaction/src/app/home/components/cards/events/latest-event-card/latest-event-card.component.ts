@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ImplicactionEvent} from "../../../../../shared/models/implicactionEvent";
+import {ImplicactionEvent} from '../../../../../shared/models/implicaction-event';
 
 @Component({
   selector: 'app-latest-event-card',

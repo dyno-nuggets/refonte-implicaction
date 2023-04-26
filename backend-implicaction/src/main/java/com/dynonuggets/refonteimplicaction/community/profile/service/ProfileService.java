@@ -6,11 +6,11 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.P
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

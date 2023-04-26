@@ -1,12 +1,12 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.adapter.JobPostingAdapter;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobPostingRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.JobPostingDto;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

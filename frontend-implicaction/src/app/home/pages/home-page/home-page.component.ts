@@ -1,16 +1,16 @@
 import {Component, OnInit} from '@angular/core';
 import {Univers} from '../../../shared/enums/univers';
-import {Constants} from "../../../config/constants";
-import {JobService} from "../../../job/services/job.service";
-import {JobPosting} from "../../../shared/models/job-posting";
-import {finalize, take} from "rxjs/operators";
-import {ImplicactionEventService} from "../../../shared/services/implicaction-event.service";
-import {ImplicactionEvent} from "../../../shared/models/implicactionEvent";
-import {HighlightPoint} from "../../models/highlight-point";
-import {forkJoin} from "rxjs";
-import {TopicService} from "../../../forum/services/topic.service";
-import {Topic} from "../../../forum/model/topic";
-import {ToasterService} from "../../../core/services/toaster.service";
+import {Constants} from '../../../config/constants';
+import {JobService} from '../../../job/services/job.service';
+import {JobPosting} from '../../../shared/models/job-posting';
+import {finalize, take} from 'rxjs/operators';
+import {ImplicactionEventService} from '../../../shared/services/implicaction-event.service';
+import {ImplicactionEvent} from '../../../shared/models/implicaction-event';
+import {HighlightPoint} from '../../models/highlight-point';
+import {forkJoin} from 'rxjs';
+import {TopicService} from '../../../forum/services/topic.service';
+import {Topic} from '../../../forum/model/topic';
+import {ToasterService} from '../../../core/services/toaster.service';
 
 
 @Component({

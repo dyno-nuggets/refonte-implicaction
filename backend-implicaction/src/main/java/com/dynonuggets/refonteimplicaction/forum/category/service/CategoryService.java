@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.forum.category.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.forum.category.adapter.CategoryAdapter;
@@ -12,7 +13,6 @@ import com.dynonuggets.refonteimplicaction.forum.category.dto.CategoryUpdateRequ
 import com.dynonuggets.refonteimplicaction.forum.commons.error.ForumException;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.repository.TopicRepository;
-import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

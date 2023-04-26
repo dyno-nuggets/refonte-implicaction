@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {CompanyFilterContextService} from '../../services/company-filter-context.service';
-import {Criteria} from '../../models/Criteria';
+import {Criteria} from '../../models/criteria';
 
 @Component({
   selector: 'app-company-filter',

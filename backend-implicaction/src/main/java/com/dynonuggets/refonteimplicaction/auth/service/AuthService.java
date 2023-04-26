@@ -5,19 +5,21 @@ import com.dynonuggets.refonteimplicaction.auth.dto.LoginResponse;
 import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenRequest;
 import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
-import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.user.service.UserService;
+import com.dynonuggets.refonteimplicaction.core.event.UserCreatedEvent;
+import com.dynonuggets.refonteimplicaction.core.event.UserEnabledEvent;
+import com.dynonuggets.refonteimplicaction.core.service.RoleService;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +35,7 @@ import javax.validation.Valid;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
@@ -41,6 +44,7 @@ import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotN
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.emptyStreamIfNull;
 import static java.time.Instant.now;
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 @Service
@@ -54,8 +58,8 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
-    private final NotificationService notificationService;
-    private final EmailValidationNotificationMapper emailValidationNotificationMapper;
+    private final RoleService roleService;
+    private final ApplicationEventPublisher publisher;
 
     /**
      * Enregistre un utilisateur en base de données
@@ -67,7 +71,13 @@ public class AuthService {
         validateRegisterRequest(registerRequest);
         final String activationKey = generateActivationKey();
         final UserModel user = registerUser(registerRequest, activationKey);
-        notificationService.notify(user, emailValidationNotificationMapper);
+
+        
+        if (user.isEnabled()) {
+            publisher.publishEvent(new UserEnabledEvent(this, user.getUsername()));
+        } else {
+            publisher.publishEvent(new UserCreatedEvent(this, user));
+        }
     }
 
     /**
@@ -148,6 +158,13 @@ public class AuthService {
     }
 
     private UserModel registerUser(final RegisterRequest registerRequest, final String activationKey) {
+        final boolean isInitialisation = userRepository.count() <= 0;
+        final Set<RoleModel> roles = isInitialisation ?
+                Arrays.stream(RoleEnum.values())
+                        .map(roleService::getRoleByName)
+                        .collect(toSet())
+                : null;
+
         final UserModel user = UserModel.builder()
                 .username(registerRequest.getUsername())
                 .firstname(registerRequest.getFirstname())
@@ -155,12 +172,16 @@ public class AuthService {
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .registeredAt(now())
-                .enabled(false)
-                .emailVerified(false)
+                .enabled(isInitialisation)
+                .emailVerified(isInitialisation)
+                .roles(roles)
                 .activationKey(activationKey)
                 .registeredAt(now())
                 .build();
-        userRepository.save(user);
+
+        // On est obligé de flush ici pour que l'objet soit modifié instantanément dans le cas
+        // où il faille créer le profil dans la foulée
+        userRepository.saveAndFlush(user);
 
         return user;
     }

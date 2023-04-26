@@ -1,4 +1,4 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {NonNullableFormBuilder, Validators} from '@angular/forms';
 import {SignupRequestPayload} from '../../../models/signup-request-payload';
 import {AuthFormValidatorService} from '../../../services/auth-form-validator.service';
@@ -10,6 +10,9 @@ import {BaseFormComponent} from '../../../../shared/components/base-form/base-fo
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SignupFormComponent extends BaseFormComponent<SignupRequestPayload> {
+
+  @Input() initialization = false;
+
   protected usernameControls = new Map<string, string>([['required', 'Vous devez fournir un nom d\'utilisateur']]);
   protected emailControls = new Map<string, string>([
     ['required', 'Vous devez saisir une adresse email'],

@@ -1,0 +1,4 @@
+export enum AppStatusEnum {
+  INITIALIZATION = 'INITIALIZATION',
+  INITIALIZED = 'INITIALIZED'
+}

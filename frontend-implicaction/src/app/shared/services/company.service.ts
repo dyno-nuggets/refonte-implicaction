@@ -4,7 +4,7 @@ import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Pageable} from '../models/pageable';
 import {Observable} from 'rxjs';
 import {Company} from '../models/company';
-import {Criteria} from '../models/Criteria';
+import {Criteria} from '../models/criteria';
 
 @Injectable({
   providedIn: 'root'

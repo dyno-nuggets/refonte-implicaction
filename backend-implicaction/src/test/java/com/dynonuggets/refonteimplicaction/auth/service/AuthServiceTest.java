@@ -2,14 +2,15 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.dto.*;
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.auth.mapper.EmailValidationNotificationMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.service.RoleService;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.domain.repository.UserRepository;
-import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
-import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,6 +21,7 @@ import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -30,19 +32,18 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
-import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.error.UserErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
 import static java.util.Optional.of;
 import static org.apache.commons.lang3.BooleanUtils.isFalse;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -56,6 +57,10 @@ class AuthServiceTest {
     @Mock
     UserRepository userRepository;
     @Mock
+    RoleService roleService;
+    @Mock
+    ApplicationEventPublisher publisher;
+    @Mock
     UserService userService;
     @Mock
     UserDetailsService userDetailsService;
@@ -67,8 +72,6 @@ class AuthServiceTest {
     RefreshTokenService refreshTokenService;
     @Mock
     NotificationService notificationService;
-    @Mock
-    EmailValidationNotificationMapper emailValidationNotificationMapper;
     @InjectMocks
     AuthService authService;
     @Captor
@@ -98,6 +101,45 @@ class AuthServiceTest {
     @DisplayName("# signup")
     class SignupTest {
         @Test
+        @DisplayName("doit créer un nouvel utilisateur avec tous les rôles quand il n'y a aucun utilisateur en BDD")
+        void should_register_user_when_request_is_valid_and_no_user_in_DB() {
+            // given
+            final RegisterRequest validLoginRequest = generateValidRegisterRequest();
+            final String expectedPassword = "encryptedPassword";
+            given(userRepository.existsByUsername(any())).willReturn(false);
+            given(userRepository.existsByEmail(any())).willReturn(false);
+            given(passwordEncoder.encode(any())).willReturn(expectedPassword);
+            given(userRepository.saveAndFlush(any())).willReturn(UserModel.builder().build());
+            given(userRepository.count()).willReturn(0L); // au moins un utilisateur enregistré
+            given(roleService.getRoleByName(RoleEnum.ROLE_USER)).willReturn(RoleModel.builder().name(RoleEnum.ROLE_USER).build());
+            given(roleService.getRoleByName(RoleEnum.ROLE_PREMIUM)).willReturn(RoleModel.builder().name(RoleEnum.ROLE_PREMIUM).build());
+            given(roleService.getRoleByName(RoleEnum.ROLE_ADMIN)).willReturn(RoleModel.builder().name(RoleEnum.ROLE_ADMIN).build());
+
+            // when
+            authService.signup(validLoginRequest);
+
+            // then
+            verify(userRepository, times(1)).saveAndFlush(userArgumentCaptorCaptor.capture());
+            final UserModel savedUser = userArgumentCaptorCaptor.getValue();
+            assertThat(savedUser)
+                    .usingRecursiveComparison()
+                    .ignoringFields("password", "birthday", "image", "purpose", "activatedAt", "roles", "registeredAt", "trainings", "enabled", "emailVerified", "groups", "expectation", "activationKey", "experiences", "url", "presentation", "contribution", "phoneNumber", "hobbies", "id", "notifications")
+                    .isEqualTo(validLoginRequest);
+            assertThat(savedUser.getPassword()).isEqualTo(expectedPassword);
+            assertThat(savedUser.getActivationKey()).isNotNull();
+            assertThat(savedUser.getRoles()).hasSize(RoleEnum.values().length);
+            assertThat(savedUser.getRoles().stream().map(RoleModel::getName).collect(Collectors.toList()))
+                    .asList().containsAll(Arrays.asList(RoleEnum.values()));
+            assertThat(savedUser)
+                    .extracting(UserModel::isEnabled, UserModel::isEmailVerified)
+                    .allMatch(value -> isTrue((Boolean) value));
+            verify(userRepository, times(1)).existsByUsername(any());
+            verify(userRepository, times(1)).existsByEmail(any());
+            verify(passwordEncoder, times(1)).encode(any());
+            verify(roleService, times(3)).getRoleByName(any(RoleEnum.class));
+        }
+
+        @Test
         @DisplayName("doit créer un nouvel utilisateur quand l'utilisateur n'existe pas déjà")
         void should_register_user_when_request_is_valid_and_user_not_already_exists() {
             // given
@@ -106,14 +148,14 @@ class AuthServiceTest {
             given(userRepository.existsByUsername(any())).willReturn(false);
             given(userRepository.existsByEmail(any())).willReturn(false);
             given(passwordEncoder.encode(any())).willReturn(expectedPassword);
-            willDoNothing().given(notificationService).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
-            given(userRepository.save(any())).willReturn(UserModel.builder().build());
+            given(userRepository.saveAndFlush(any())).willReturn(UserModel.builder().build());
+            given(userRepository.count()).willReturn(10L); // au moins un utilisateur enregistré
 
             // when
             authService.signup(validLoginRequest);
 
             // then
-            verify(userRepository, times(1)).save(userArgumentCaptorCaptor.capture());
+            verify(userRepository, times(1)).saveAndFlush(userArgumentCaptorCaptor.capture());
             final UserModel savedUser = userArgumentCaptorCaptor.getValue();
             assertThat(savedUser)
                     .usingRecursiveComparison()
@@ -128,8 +170,6 @@ class AuthServiceTest {
             verify(userRepository, times(1)).existsByUsername(any());
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
-            verify(userRepository, times(1)).save(any());
-            verify(notificationService, times(1)).notify(any(UserModel.class), any(EmailValidationNotificationMapper.class));
         }
 
         @Test

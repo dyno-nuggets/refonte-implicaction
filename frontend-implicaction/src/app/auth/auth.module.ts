@@ -11,6 +11,7 @@ import {SignupFormComponent} from './components/forms/signup-form/signup-form.co
 import {SignupPageComponent} from './pages/signup-page/signup-page.component';
 import {FloatingInputWithValidationComponent} from './components/floating-input-with-validation/floating-input-with-validation.component';
 import {UnauthorizedPageComponent} from './pages/unauthorized-page/unauthorized-page.component';
+import { InitializePageComponent } from './pages/initialize-page/initialize-page.component';
 
 
 @NgModule({
@@ -23,6 +24,7 @@ import {UnauthorizedPageComponent} from './pages/unauthorized-page/unauthorized-
     LoginFormComponent,
     SignupFormComponent,
     FloatingInputWithValidationComponent,
+    InitializePageComponent,
   ],
   exports: [
     SignupPageComponent

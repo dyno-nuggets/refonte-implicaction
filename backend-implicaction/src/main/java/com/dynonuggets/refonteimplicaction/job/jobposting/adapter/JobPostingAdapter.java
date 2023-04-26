@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.adapter;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.job.company.adapter.CompanyAdapter;
 import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.company.dto.CompanyDto;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.JobPostingDto;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -3,12 +3,15 @@ import {SidebarService} from './shared/services/sidebar.service';
 import {SidebarContentComponent, SidebarProps} from './shared/models/sidebar-props';
 import {SidebarContentDirective} from './shared/directives/sidebar-content.directive';
 import {Observable, Subject} from 'rxjs';
-import {AuthService} from "./core/services/auth.service";
-import {take, takeUntil} from "rxjs/operators";
-import {ProfileContextService} from "./core/services/profile-context.service";
-import {Principal} from "./shared/models/principal";
-import {Profile} from "./community/models/profile/profile";
-import {ProfileService} from "./community/services/profile/profile.service";
+import {AuthService} from './core/services/auth.service';
+import {take, takeUntil} from 'rxjs/operators';
+import {ProfileContextService} from './core/services/profile-context.service';
+import {Principal} from './shared/models/principal';
+import {Profile} from './community/models/profile/profile';
+import {ProfileService} from './community/services/profile/profile.service';
+import {AppService} from './core/services/app.service';
+import {AppStatusEnum} from './shared/enums/app-status-enum';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -33,11 +36,19 @@ export class AppComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     public sidebarService: SidebarService,
     public profileService: ProfileService,
-    private profileContextService: ProfileContextService
+    private profileContextService: ProfileContextService,
+    private appService: AppService,
+    private router: Router
   ) {
   }
 
   ngOnInit(): void {
+    this.appService.getApp().subscribe(app => {
+      if (app.status === AppStatusEnum.INITIALIZATION) {
+        this.router.navigateByUrl('/auth/initialize');
+      }
+    });
+
     this.sidebarService.getContent()
       .pipe(takeUntil(this.onDestroySubject))
       .subscribe(content => this.loadComponent(content));
@@ -77,7 +88,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.onDestroySubject.next()
+    this.onDestroySubject.next();
     this.onDestroySubject.complete();
   }
 }

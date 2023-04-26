@@ -91,11 +91,19 @@ export class AuthService {
       this.apiEndpointsService.getJwtRefreshTokenEndpoint(),
       refreshTokenPayload
     )
-      .pipe(tap(loginResponse => {
-        this.storageService.storeLoginResponse(loginResponse);
-        const principal = this.decodeToken(loginResponse.authenticationToken);
-        this.storeAndEmitPrincipal(principal);
-      }));
+      .pipe(
+        tap(loginResponse => {
+          this.storageService.storeLoginResponse(loginResponse);
+          const principal = this.decodeToken(loginResponse.authenticationToken);
+          this.storeAndEmitPrincipal(principal);
+        }),
+        catchError(err => {
+          // Si on reçoit une erreur 404 c'est que le token n'existe plus. On supprime les données d'identification
+          if (err.status === 404) {
+            this.logout();
+          }
+          return of() as Observable<any>;
+        }));
   }
 
   getRefreshToken(): string {

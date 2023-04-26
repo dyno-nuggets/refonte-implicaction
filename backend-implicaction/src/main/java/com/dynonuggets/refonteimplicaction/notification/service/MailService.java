@@ -31,7 +31,7 @@ public class MailService {
     private final JavaMailSender mailSender;
 
     @Async
-    public void sendMail(final MailTemplateEnum templateEnum, final EmailDataObject emailDataObject) {
+    public void sendMail(final EmailDataObject emailDataObject, final MailTemplateEnum templateEnum) {
         final String allRecipientsJoined = String.join(",", emailDataObject.getRecipients());
         final MimeMessagePreparator messagePreparator = mimeMessage -> {
             try {

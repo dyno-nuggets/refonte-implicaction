@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
-import {Observable} from "rxjs";
+import {ActivatedRoute} from '@angular/router';
+import {Observable} from 'rxjs';
 
-import {BaseWithPaginationAndFilterComponent} from "../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component";
-import {Response} from "../../model/response";
-import {Criteria} from "../../../shared/models/Criteria";
-import {TopicService} from "../../services/topic.service";
-import {Topic} from "../../model/topic";
-import {map, switchMap} from "rxjs/operators";
-import {Pageable} from "../../../shared/models/pageable";
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {Response} from '../../model/response';
+import {Criteria} from '../../../shared/models/criteria';
+import {TopicService} from '../../services/topic.service';
+import {Topic} from '../../model/topic';
+import {map, switchMap} from 'rxjs/operators';
+import {Pageable} from '../../../shared/models/pageable';
 
 @Component({
   selector: 'app-topic-content',

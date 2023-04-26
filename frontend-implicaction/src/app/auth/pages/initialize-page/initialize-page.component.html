@@ -1,0 +1,10 @@
+<app-auth-wrapper-page
+  [title]="'Initialisation'"
+  [alert]="alert"
+>
+  <app-signup-form
+    [initialization]="true"
+    (submitForm)="submit($event)"
+  ></app-signup-form>
+</app-auth-wrapper-page>
+

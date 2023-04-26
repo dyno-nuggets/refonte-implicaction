@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.auth.service;
 
 import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.service.UserService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

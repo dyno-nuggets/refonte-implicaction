@@ -10,9 +10,9 @@ import {finalize} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
 import {MenuItem} from 'primeng/api';
 import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
-import {Criteria} from '../../../shared/models/Criteria';
-import {ProfileService} from "../../services/profile/profile.service";
-import {Relation} from "../../models/relation";
+import {Criteria} from '../../../shared/models/criteria';
+import {ProfileService} from '../../services/profile/profile.service';
+import {Relation} from '../../models/relation';
 
 enum UserListType {
   ALL_USERS = 'community',
@@ -30,7 +30,7 @@ export class RelationListComponent extends BaseWithPaginationAndFilterComponent<
 
   readonly univers = Univers;
 
-  user$: Observable<any>
+  user$: Observable<any>;
   currentUser: User;
   action: string;
   listType: UserListType;

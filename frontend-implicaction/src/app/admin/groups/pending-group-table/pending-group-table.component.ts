@@ -3,9 +3,9 @@ import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/b
 import {ActivatedRoute} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {finalize, take} from 'rxjs/operators';
-import {Criteria} from '../../../shared/models/Criteria';
-import {Group} from "../../../community/models/group";
-import {GroupService} from "../../../community/services/group.service";
+import {Criteria} from '../../../shared/models/criteria';
+import {Group} from '../../../community/models/group';
+import {GroupService} from '../../../community/services/group.service';
 
 @Component({
   selector: 'app-pending-group-table',

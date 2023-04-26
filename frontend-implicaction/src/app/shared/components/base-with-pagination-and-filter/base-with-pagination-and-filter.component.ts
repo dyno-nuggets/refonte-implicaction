@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Constants} from '../../../config/constants';
 import {Pageable} from '../../models/pageable';
 import {ActivatedRoute} from '@angular/router';
-import {Criteria} from '../../models/Criteria';
+import {Criteria} from '../../models/criteria';
 
 @Component({template: ''})
 export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {

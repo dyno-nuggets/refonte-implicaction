@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {LocalStorageService} from "ngx-webstorage";
-import {LoginResponse} from "../../auth/models/login-response";
-import {Principal} from "../../shared/models/principal";
+import {LocalStorageService} from 'ngx-webstorage';
+import {LoginResponse} from '../../auth/models/login-response';
+import {Principal} from '../../shared/models/principal';
 
 @Injectable({
   providedIn: 'root'
@@ -23,18 +23,18 @@ export class StorageService {
     this.store(StorageService.EXPIRE_AT_KEY, expiresAt);
   }
 
-  storePrincipal(principal: Principal) {
+  storePrincipal(principal: Principal): void {
     this.store(StorageService.PRINCIPAL_KEY, JSON.stringify(principal));
   }
 
-  clearLogin() {
+  clearLogin(): void {
     this.localStorage.clear(StorageService.JWT_TOKEN_KEY);
     this.localStorage.clear(StorageService.REFRESH_TOKEN_KEY);
     this.localStorage.clear(StorageService.EXPIRE_AT_KEY);
     this.localStorage.clear(StorageService.PRINCIPAL_KEY);
   }
 
-  clearPrincipal() {
+  clearPrincipal(): void {
     return this.clear(StorageService.PRINCIPAL_KEY);
   }
 

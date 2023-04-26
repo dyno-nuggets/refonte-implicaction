@@ -6,13 +6,13 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.P
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
+import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -34,8 +34,8 @@ import static com.dynonuggets.refonteimplicaction.community.profile.error.Profil
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_ALREADY_EXISTS_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
-import static com.dynonuggets.refonteimplicaction.user.error.UserErrorResult.USERNAME_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.error.UserErrorResult.USERNAME_NOT_FOUND;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.util.List.of;

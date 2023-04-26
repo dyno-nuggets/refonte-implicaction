@@ -9,9 +9,9 @@ import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.
 import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.relation.error.RelationException;
 import com.dynonuggets.refonteimplicaction.community.relation.mapper.RelationMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
