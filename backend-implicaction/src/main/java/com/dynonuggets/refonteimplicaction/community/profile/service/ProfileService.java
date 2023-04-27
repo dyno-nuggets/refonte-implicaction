@@ -6,16 +6,17 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.P
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
-import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.relation.mapper.RelationMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
 import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
@@ -87,13 +88,13 @@ public class ProfileService {
 
         final String currentUsername = authService.getCurrentUser().getUsername();
 
-        final List<String> allUsernamesWithoutCurrents = profilesModels.stream()
+        final List<String> allUsernamesExceptCurrentUser = profilesModels.stream()
                 .map(ProfileModel::getUser)
                 .map(UserModel::getUsername)
-                .filter(username -> !username.equals(currentUsername))
+                .filter(username -> StringUtils.equals(username, currentUsername))
                 .collect(Collectors.toList());
 
-        final Map<String, RelationsDto> relationTypeMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesWithoutCurrents, Pageable.unpaged()).stream()
+        final Map<String, RelationsDto> relationTypeMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser, Pageable.unpaged()).stream()
                 .collect(Collectors.toMap(relation -> {
                     final String username = relation.getReceiver().getUser().getUsername();
                     return !username.equals(currentUsername) ? username : relation.getSender().getUser().getUsername();

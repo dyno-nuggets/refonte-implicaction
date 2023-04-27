@@ -1,3 +1,5 @@
+@import "src/assets/variables";
+
 @mixin create-icone($icone, $color) {
   .p-toast-message-icon[class *= 'pi-']:before {
     font-family: "FontAwesome", serif;
@@ -14,19 +16,13 @@
     border-width: 0 0 0 2px;
   }
 
-  .p-toast-summary {
-    color: $secondary;
-  }
-
-  .p-toast-detail {
-    color: $light-gray;
+  .p-toast-summary, .p-toast-detail {
+    color: $dark;
   }
 
   .p-toast {
-
     width: 22rem;
     opacity: 0.97;
-
   }
 
   .p-toast-message-success.p-toast-message {
@@ -34,7 +30,7 @@
     @include create-icone('\f058', $success);
 
     .p-toast-icon-close {
-      color: $secondary;
+      color: $dark;
     }
   }
 

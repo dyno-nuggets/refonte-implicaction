@@ -6,6 +6,8 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.P
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
+import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
+import com.dynonuggets.refonteimplicaction.community.relation.mapper.RelationMapper;
 import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.CoreException;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
@@ -51,11 +53,15 @@ class ProfileServiceTest {
     @Mock
     ProfileRepository profileRepository;
     @Mock
+    RelationRepository relationRepository;
+    @Mock
     ProfileMapper profileMapper;
     @Mock
     CloudService cloudService;
     @Mock
     UserService userService;
+    @Mock
+    RelationMapper relationMapper;
     @InjectMocks
     ProfileService profileService;
 
@@ -251,6 +257,9 @@ class ProfileServiceTest {
     void should_get_all_profiles_when_getAllProfiles() {
         final Page<ProfileModel> profiles = new PageImpl<>(of(generateRandomProfile(), generateRandomProfile(), generateRandomProfile()));
         given(profileRepository.findAll(any(Pageable.class))).willReturn(profiles);
+        given(authService.getCurrentUser()).willReturn(UserModel.builder().username("username").build());
+        given(relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(anyString(), anyList(), any(Pageable.class))).willReturn(of());
+        profiles.forEach(p -> given(profileMapper.toDtoLight(p)).willReturn(ProfileDto.builder().username(p.getUser().getUsername()).build()));
 
         // when
         final Page<ProfileDto> result = profileService.getAllProfiles(Pageable.unpaged());
@@ -259,7 +268,7 @@ class ProfileServiceTest {
         final int size = profiles.getSize();
         assertThat(result).hasSize(size);
         verify(profileRepository, times(1)).findAll(any(Pageable.class));
-        verify(profileMapper, times(size)).toDto(any());
+        verify(profileMapper, times(size)).toDtoLight(any());
     }
 
     @Nested

@@ -1,15 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
 @Component({
   selector: 'app-profile-card-skeleton',
   templateUrl: './profile-card-skeleton.component.html',
-  styleUrls: ['./profile-card-skeleton.component.scss']
+  styleUrls: ['./profile-card-skeleton.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ProfileCardSkeletonComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+export class ProfileCardSkeletonComponent {
 
 }
