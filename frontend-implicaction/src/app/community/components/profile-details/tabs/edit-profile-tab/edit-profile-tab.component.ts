@@ -28,7 +28,6 @@ export class EditProfileTabComponent implements OnDestroy {
 
   updateProfile(updateRequest: ProfileUpdateRequest) {
     this.isLoading = true;
-    console.log('request:', updateRequest);
     this.profileService.updateProfile(updateRequest)
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({

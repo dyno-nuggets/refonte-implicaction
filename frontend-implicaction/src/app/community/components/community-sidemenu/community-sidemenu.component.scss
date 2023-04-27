@@ -1,0 +1,20 @@
+
+.list-group-item {
+  a {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 1;
+    line-height: 2.8rem;
+
+    &:hover, &.active {
+      font-weight: 600;
+    }
+
+    &:after {
+      font-family: FontAwesome;
+      content: "\f054";
+    }
+  }
+}

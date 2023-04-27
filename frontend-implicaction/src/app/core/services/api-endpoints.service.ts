@@ -90,8 +90,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithQueryParameters(
       uri,
       (qs: QueryStringParameters) => {
-        if (pageable.page) {
-          qs.push('page', pageable.page);
+        if (pageable.number) {
+          qs.push('page', pageable.number);
         }
         if (pageable.rows) {
           qs.push('rows', pageable.rows);
@@ -109,7 +109,7 @@ export class ApiEndpointsService {
     return {
       ...criteria,
       rows: pageable.rows,
-      page: pageable.page,
+      page: pageable.number,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder
     };
@@ -270,7 +270,7 @@ export class ApiEndpointsService {
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
-      page: pageable.page,
+      page: pageable.number,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder,
       checkApply,
@@ -288,7 +288,7 @@ export class ApiEndpointsService {
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
-      page: pageable.page,
+      page: pageable.number,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder,
       archive: archive !== null ? `${archive}` : null

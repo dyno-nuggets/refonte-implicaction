@@ -1,32 +1,59 @@
 <div class="container-fluid row justify-content-around">
 
-  <div class="card col-md-5 col-lg-4 col-xxl-3">
-    <ul class="list-group list-group-flush">
-      <ng-container *ngFor="let menuItem of menuItems">
-        <li class="list-group-item">
-          <a
-            [routerLinkActive]="'active'"
-            [routerLink]=menuItem.routerLink
-            [routerLinkActiveOptions]="{exact: true}"
-          >
-            {{menuItem.label}}
-          </a>
-        </li>
-      </ng-container>
-    </ul>
+  <div class="card col-lg-4 col-xl-3">
+    <app-community-sidemenu [menuItems]="menuItems"></app-community-sidemenu>
   </div>
 
-  <div class="row col-md-7 col-lg-8 m-0 p-0">
-    <ng-container *ngIf="!isLoading; else templateLoading">
-      <div *ngFor="let profile of pageable.content; let index = index" class="col-xl-6 px-0 px-md-3">
-        <app-profile-card [profile]="profile"></app-profile-card>
+
+  <div class="row col-lg-8 col-xl-9 mt-4 mt-lg-0 m-0 p-0 align-items-baseline">
+    <ng-container *ngIf="!loading; else templateLoading">
+      <div
+        *ngFor="let profile of pageable.content; let index = index"
+        class="col-md-6 col-xl-6 px-0 px-md-2 profile-card"
+      >
+        <app-profile-card-base>
+          <ng-container avatar>
+            <app-user-avatar [profile]="profile" [shape]="'rounded'" [size]="'large'"></app-user-avatar>
+          </ng-container>
+          <ng-container heading>
+            <h5
+              class="card-title fw-bold pe-3 mb-1 text-wrap"
+            >
+              <a
+                tooltipPosition="top"
+                pTooltip="{{profile?.firstname}} {{profile?.lastname}}"
+                [routerLink]="['/', univer.COMMUNITY.url, 'profiles', profile?.username]"
+              >
+                {{profile?.firstname}} {{profile?.lastname}}
+              </a>
+            </h5>
+            <ul *ngIf="profile?.corp || profile?.rank" class="list-unstyled">
+              <li *ngIf="profile?.corp"><i class="fa fa-globe"></i> profile?.corp</li>
+              <li *ngIf="profile?.rank"><i class="fa fa-medal"></i> profile?.rank</li>
+            </ul>
+          </ng-container>
+          <ng-container options>
+            <app-relation-button [profile]="profile"></app-relation-button>
+          </ng-container>
+        </app-profile-card-base>
       </div>
     </ng-container>
   </div>
-</div>
 
-<ng-template #templateLoading>
-  <div *ngFor="let _ of [].constructor(pageable.rows)" class="col col-lg-6 px-0 px-md-3">
-    <app-profile-card-skeleton></app-profile-card-skeleton>
+  <div class="d-flex justify-content-end">
+    <app-paginator
+      class="align-self-end"
+      (pageChange)="setCurrentPage($event)"
+      [pageable]="pageable"
+    ></app-paginator>
   </div>
-</ng-template>
+
+  <ng-template #templateLoading>
+    <div
+      *ngFor="let _ of [].constructor(pageable.rows)"
+      class="col-md-6 col-xl-6 px-0 px-md-3 profile-card"
+    >
+      <app-profile-card-skeleton></app-profile-card-skeleton>
+    </div>
+  </ng-template>
+</div>

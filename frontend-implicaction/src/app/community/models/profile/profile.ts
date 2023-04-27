@@ -1,5 +1,6 @@
 import {WorkExperience} from "../../../shared/models/work-experience";
 import {Training} from "../../../shared/models/training";
+import {Relation} from "../relation";
 
 export interface Profile {
   username?: string;
@@ -17,4 +18,5 @@ export interface Profile {
   imageUrl?: string;
   experiences?: WorkExperience[];
   trainings?: Training[];
+  relationWithCurrentUser?: Relation;
 }

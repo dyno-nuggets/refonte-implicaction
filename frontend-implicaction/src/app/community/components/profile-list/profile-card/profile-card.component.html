@@ -3,12 +3,17 @@
     <app-user-avatar [profile]="profile" [shape]="'rounded'" [size]="'large'"></app-user-avatar>
   </ng-container>
   <ng-container heading>
-    <h5 class="card-title fw-bold pe-3 mb-1 overflow-ellipsis">
-      <a [routerLink]="['/', univer.COMMUNITY.url, 'profile', profile?.username]">
+    <h5
+      class="card-title fw-bold pe-3 mb-1 text-wrap"
+    >
+      <a
+        tooltipPosition="top"
+        pTooltip="{{profile?.firstname}} {{profile?.lastname}}"
+        [routerLink]="['/', univer.COMMUNITY.url, 'profiles', profile?.username]"
+      >
         {{profile?.firstname}} {{profile?.lastname}}
       </a>
     </h5>
-    <p class="mb-2 pb-1 subtitle">@{{profile?.username}}</p>
     <ul *ngIf="profile?.corp || profile?.rank" class="list-unstyled">
       <li *ngIf="profile?.corp"><i class="fa fa-globe"></i> profile?.corp</li>
       <li *ngIf="profile?.rank"><i class="fa fa-medal"></i> profile?.rank</li>

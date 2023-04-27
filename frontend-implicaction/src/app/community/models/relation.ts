@@ -1,5 +1,5 @@
 import {Profile} from "./profile/profile";
-import {RelationType} from "./relation-type.enum";
+import {RelationTypeCode} from "./relation-type.enum";
 
 export interface Relation {
   id?: string;
@@ -7,5 +7,5 @@ export interface Relation {
   sentAt?: string;
   receiver?: Profile;
   sender?: Profile;
-  relationType?: RelationType;
+  relationWithCurrentUser?: RelationTypeCode;
 }

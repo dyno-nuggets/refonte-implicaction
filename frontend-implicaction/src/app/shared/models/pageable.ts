@@ -1,6 +1,6 @@
 export interface Pageable<T> {
-  rows: number;
-  page?: number;
+  rows?: number;
+  number?: number;
   sortBy?: string;
   sortOrder?: string;
   content?: T[];

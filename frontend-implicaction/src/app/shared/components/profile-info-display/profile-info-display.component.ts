@@ -26,7 +26,7 @@ export class ProfileInfoDisplayComponent implements OnInit {
   private subscriptionShow: Subscription;
 
   ngOnInit(): void {
-    this.profileLink = ['/', Univers.COMMUNITY.url, 'profile', this.profile.username];
+    this.profileLink = ['/', Univers.COMMUNITY.url, 'profiles', this.profile.username];
   }
 
   initPanelHideOperation() {

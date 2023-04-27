@@ -17,12 +17,17 @@ const routes: Routes = [
     component: ProfileListPageComponent,
   },
   {
-    path: 'profile/:username',
+    path: 'profiles/:username',
     component: ProfileDetailsPageComponent
   },
   {
-    path: '',
+    path: 'profiles',
     component: ProfileListPageComponent
+  },
+  {
+    path: '',
+    redirectTo: 'profiles',
+    pathMatch: 'full'
   },
 ];
 

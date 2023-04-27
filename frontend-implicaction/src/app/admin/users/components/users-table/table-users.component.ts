@@ -34,7 +34,7 @@ export class TableUsersComponent {
     const page = first / rows;
 
     this.userService
-      .getAll({page, rows})
+      .getAll({number: page, rows})
       .pipe(
         take(1),
         finalize(() => this.loading = false)

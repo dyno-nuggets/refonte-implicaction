@@ -1,0 +1,13 @@
+<ul class="list-group list-group-flush">
+  <ng-container *ngFor="let menuItem of menuItems">
+    <li class="list-group-item">
+      <a
+        [routerLinkActive]="'active'"
+        [routerLink]=menuItem.routerLink
+        [routerLinkActiveOptions]="{exact: true}"
+      >
+        {{menuItem.label}}
+      </a>
+    </li>
+  </ng-container>
+</ul>
