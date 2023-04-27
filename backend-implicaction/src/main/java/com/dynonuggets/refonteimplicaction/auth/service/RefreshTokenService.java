@@ -3,13 +3,13 @@ package com.dynonuggets.refonteimplicaction.auth.service;
 import com.dynonuggets.refonteimplicaction.auth.domain.model.RefreshToken;
 import com.dynonuggets.refonteimplicaction.auth.domain.repository.RefreshTokenRepository;
 import com.dynonuggets.refonteimplicaction.auth.dto.RefreshTokenDto;
-import com.dynonuggets.refonteimplicaction.auth.error.AuthenticationException;
+import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.REFRESH_TOKEN_EXPIRED;
+import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.REFRESH_TOKEN_NOT_FOUND;
 import static java.time.Instant.now;
 import static java.util.UUID.randomUUID;
 
@@ -33,8 +33,8 @@ public class RefreshTokenService {
      * @throws ImplicactionException si le token n'est pas retrouvé en base de données
      */
     public void validateRefreshToken(final String token) throws ImplicactionException {
-        if (refreshTokenRepository.findByToken(token).isEmpty()) {
-            throw new AuthenticationException(REFRESH_TOKEN_EXPIRED);
+        if (!refreshTokenRepository.existsByToken(token)) {
+            throw new EntityNotFoundException(REFRESH_TOKEN_NOT_FOUND);
         }
     }
 

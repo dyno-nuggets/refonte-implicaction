@@ -1,0 +1,3 @@
+export enum FeatureKey {
+  EMAIL_NOTIFICATION = 'EMAIL_NOTIFICATION'
+}

@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.feature.service;
 
 import com.dynonuggets.refonteimplicaction.feature.dto.FeatureDto;
-import com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey;
 import com.dynonuggets.refonteimplicaction.feature.mapper.FeatureMapper;
 import com.dynonuggets.refonteimplicaction.feature.model.FeatureModel;
+import com.dynonuggets.refonteimplicaction.feature.model.properties.enums.FeatureKey;
 import com.dynonuggets.refonteimplicaction.feature.repository.FeatureRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

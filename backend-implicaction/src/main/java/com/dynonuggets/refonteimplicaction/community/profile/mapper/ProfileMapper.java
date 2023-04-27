@@ -6,7 +6,7 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profil
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
 import com.dynonuggets.refonteimplicaction.community.workexperience.mapper.WorkExperienceMapper;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

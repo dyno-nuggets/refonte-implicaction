@@ -1,13 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {CategoryService} from "../../services/category.service";
-import {ActivatedRoute} from "@angular/router";
-import {map, switchMap} from "rxjs/operators";
-import {Observable, of} from "rxjs";
-import {Category} from "../../model/category";
-import {BaseWithPaginationAndFilterComponent} from "../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component";
-import {Criteria} from "../../../shared/models/Criteria";
-import {Topic} from "../../model/topic";
-import {Pageable} from "../../../shared/models/pageable";
+import {CategoryService} from '../../services/category.service';
+import {ActivatedRoute} from '@angular/router';
+import {map, switchMap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {Category} from '../../model/category';
+import {BaseWithPaginationAndFilterComponent} from '../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
+import {Criteria} from '../../../shared/models/criteria';
+import {Topic} from '../../model/topic';
+import {Pageable} from '../../../shared/models/pageable';
 
 @Component({
   selector: 'app-category-content',

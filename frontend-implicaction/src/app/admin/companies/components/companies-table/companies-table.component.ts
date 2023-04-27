@@ -11,7 +11,7 @@ import {CompanySortEnum} from '../../../../shared/enums/company-sort.enum';
 import {CompanyContextServiceService} from '../../../../shared/services/company-context-service.service';
 import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {Subscription} from 'rxjs';
-import {Criteria} from '../../../../shared/models/Criteria';
+import {Criteria} from '../../../../shared/models/criteria';
 
 @Component({
   selector: 'app-companies-table',

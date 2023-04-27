@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.community.group.mapper;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
 import com.dynonuggets.refonteimplicaction.community.profile.domain.model.ProfileModel;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 

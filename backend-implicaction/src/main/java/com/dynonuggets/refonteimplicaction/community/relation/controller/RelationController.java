@@ -3,7 +3,7 @@ package com.dynonuggets.refonteimplicaction.community.relation.controller;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.relation.service.RelationService;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

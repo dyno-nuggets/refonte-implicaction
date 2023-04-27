@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {ImplicactionEvent} from "../../../../shared/models/implicactionEvent";
-import {Constants} from "../../../../config/constants";
+import {ImplicactionEvent} from '../../../../shared/models/implicaction-event';
+import {Constants} from '../../../../config/constants';
 
 @Component({
   selector: 'app-events-list',
@@ -9,7 +9,7 @@ import {Constants} from "../../../../config/constants";
 })
 export class LatestEventsListComponent {
 
-  @Input() latestEvents: ImplicactionEvent[] = []
+  @Input() latestEvents: ImplicactionEvent[] = [];
   @Input() isLoading = false;
   @Input() size = Constants.LATEST_EVENTS_COUNT;
 

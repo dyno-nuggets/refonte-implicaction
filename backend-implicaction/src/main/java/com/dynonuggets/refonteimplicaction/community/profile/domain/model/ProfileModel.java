@@ -3,9 +3,9 @@ package com.dynonuggets.refonteimplicaction.community.profile.domain.model;
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.forum.response.domain.model.ResponseModel;
 import com.dynonuggets.refonteimplicaction.forum.topic.domain.model.TopicModel;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
 import javax.persistence.*;

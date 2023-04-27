@@ -7,8 +7,8 @@ import com.dynonuggets.refonteimplicaction.community.training.domain.model.Train
 import com.dynonuggets.refonteimplicaction.community.training.domain.repository.TrainingRepository;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.training.mapper.TrainingMapper;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

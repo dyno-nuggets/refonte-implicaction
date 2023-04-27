@@ -1,4 +1,12 @@
 export class Uris {
+
+  /**
+   * App
+   */
+  static readonly APP = class {
+    static readonly BASE_URI = 'public/app';
+  };
+
   /**
    * Auth
    */
@@ -24,8 +32,8 @@ export class Uris {
   static readonly PROFILES = class {
     static readonly BASE_URI = 'profiles';
     static readonly BY_USERNAME = 'profiles';
-    static readonly POST_AVATAR = 'profiles/{username}/avatar'
-  }
+    static readonly POST_AVATAR = 'profiles/{username}/avatar';
+  };
 
   /**
    * EXPERIENCES

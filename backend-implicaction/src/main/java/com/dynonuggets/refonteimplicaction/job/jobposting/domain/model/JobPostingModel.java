@@ -1,9 +1,9 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.domain.model;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.ContractTypeEnum;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import lombok.*;
 
 import javax.persistence.*;

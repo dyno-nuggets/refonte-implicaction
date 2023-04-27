@@ -1,8 +1,8 @@
 package com.dynonuggets.refonteimplicaction.core.service;
 
-import com.dynonuggets.refonteimplicaction.user.domain.model.RoleModel;
-import com.dynonuggets.refonteimplicaction.user.domain.repository.RoleRepository;
-import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.domain.model.RoleModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum;
+import com.dynonuggets.refonteimplicaction.core.domain.repository.RoleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

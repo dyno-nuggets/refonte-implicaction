@@ -5,8 +5,8 @@ import {RoleEnum, RoleEnumCode} from '../../../../shared/enums/role.enum';
 import {User} from '../../../../shared/models/user';
 import {BaseWithPaginationAndFilterComponent} from '../../../../shared/components/base-with-pagination-and-filter/base-with-pagination-and-filter.component';
 import {ActivatedRoute} from '@angular/router';
-import {Criteria} from '../../../../shared/models/Criteria';
-import {UserService} from "../../../../community/services/profile/user.service";
+import {Criteria} from '../../../../shared/models/criteria';
+import {UserService} from '../../../../community/services/profile/user.service';
 
 @Component({
   selector: 'app-pending-user-table',
@@ -54,7 +54,7 @@ export class PendingUserTableComponent extends BaseWithPaginationAndFilterCompon
       () => this.toastService.error('Oops', `Une erreur est survenue lors de la validation de l'utilisateur.`),
       () => {
         user.enabled = true;
-        this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais activé.`)
+        this.toastService.success('Succès', `L'utilisateur ${user.username} est désormais activé.`);
       },
     );
   }

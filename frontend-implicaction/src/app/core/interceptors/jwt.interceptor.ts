@@ -7,11 +7,12 @@ import {catchError, filter, switchMap, take} from 'rxjs/operators';
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
 
+  isTokenRefreshing = false;
+  refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
+
   constructor(private authService: AuthService) {
   }
 
-  isTokenRefreshing = false;
-  refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject(null);
 
   private static addToken(request: HttpRequest<unknown>, jwtToken: string): HttpRequest<unknown> {
     return request.clone({
@@ -28,9 +29,8 @@ export class JwtInterceptor implements HttpInterceptor {
       request = JwtInterceptor.addToken(request, jwtToken);
     }
     return next.handle(request)
-      .pipe(
-        catchError(error => {
-          if (error instanceof HttpErrorResponse && error.status === 403) {
+      .pipe(catchError(error => {
+          if (error instanceof HttpErrorResponse && [401, 403].includes(error.status)) {
             return this.handleAuthErrors(request, next);
           } else {
             return throwError(error);
@@ -40,7 +40,7 @@ export class JwtInterceptor implements HttpInterceptor {
   }
 
   private handleAuthErrors(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    if (!this.isTokenRefreshing) {
+    if (this.authService.isLoggedIn() && !this.isTokenRefreshing) {
       this.isTokenRefreshing = true;
       this.refreshTokenSubject.next(null);
 
@@ -49,15 +49,13 @@ export class JwtInterceptor implements HttpInterceptor {
             this.isTokenRefreshing = false;
             this.refreshTokenSubject.next(refreshTokenResponse.authenticationToken);
             return next.handle(JwtInterceptor.addToken(request, refreshTokenResponse.authenticationToken));
-          })
+          }),
         );
     } else {
       return this.refreshTokenSubject.pipe(
         filter(result => result !== null),
         take(1),
-        switchMap(() => {
-          return next.handle(JwtInterceptor.addToken(request, this.authService.getJwtToken()));
-        })
+        switchMap(() => next.handle(JwtInterceptor.addToken(request, this.authService.getJwtToken())))
       );
     }
   }

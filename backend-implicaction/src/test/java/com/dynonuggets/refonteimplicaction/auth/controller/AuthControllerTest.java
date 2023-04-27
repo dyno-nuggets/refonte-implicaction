@@ -7,7 +7,7 @@ import com.dynonuggets.refonteimplicaction.auth.dto.RegisterRequest;
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.auth.service.RefreshTokenService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
-import com.dynonuggets.refonteimplicaction.user.dto.UserDto;
+import com.dynonuggets.refonteimplicaction.core.dto.UserDto;
 import lombok.Getter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +23,7 @@ import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.REFRESH
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthMessages.USER_SIGNUP_SUCCESS_MESSAGE;
 import static com.dynonuggets.refonteimplicaction.auth.util.AuthUris.*;
 import static com.dynonuggets.refonteimplicaction.core.utils.CoreMessages.ERROR_FIELD_VALIDATION_MESSAGE;
-import static com.dynonuggets.refonteimplicaction.user.utils.UserTestUtils.generateRandomUserDto;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserDto;
 import static java.time.Instant.now;
 import static org.apache.commons.lang3.RandomStringUtils.randomAlphabetic;
 import static org.hamcrest.Matchers.hasKey;

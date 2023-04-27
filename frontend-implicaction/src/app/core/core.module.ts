@@ -1,9 +1,11 @@
-import {NgModule, Optional, SkipSelf} from '@angular/core';
+import {APP_INITIALIZER, NgModule, Optional, SkipSelf} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {Constants} from '../config/constants';
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {JwtInterceptor} from './interceptors/jwt.interceptor';
 import {HttpErrorInterceptor} from './interceptors/http-error.interceptor';
+import {appInitializer} from './initializers/app-initializer';
+import {AppService} from './services/app.service';
 
 /**
  * Cette classe abstraite utilisée pour la construction de modules, empêche l'importation du module dans un autre endroit
@@ -24,6 +26,12 @@ export abstract class EnsureImportedOnceModule {
   ],
   providers: [
     Constants,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: appInitializer,
+      multi: true,
+      deps: [AppService]
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

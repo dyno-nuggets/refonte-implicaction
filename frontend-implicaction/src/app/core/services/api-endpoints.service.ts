@@ -5,11 +5,11 @@ import {Constants} from '../../config/constants';
 import {Uris} from '../../shared/models/uris';
 import {Pageable} from '../../shared/models/pageable';
 import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
-import {Criteria} from '../../shared/models/Criteria';
-import {Response} from "../../forum/model/response";
+import {Criteria} from '../../shared/models/criteria';
+import {Response} from '../../forum/model/response';
 import {GetCategoriesOptions} from '../../forum/services/category.service';
-import {Profile} from "../../community/models/profile/profile";
-import {Relation} from "../../community/models/relation";
+import {Profile} from '../../community/models/profile/profile';
+import {Relation} from '../../community/models/relation';
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
 export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
@@ -120,6 +120,13 @@ export class ApiEndpointsService {
       .reduce((accu, key) => {
         return accu.replace(`{${key}}`, params.get(key));
       }, url);
+  }
+
+  /**
+   * APP
+   */
+  getAppEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.APP.BASE_URI);
   }
 
   /**
@@ -302,7 +309,7 @@ export class ApiEndpointsService {
       Uris.JOBS.LATEST_JOBS,
       (qs: QueryStringParameters) => {
         if (jobCount) {
-          qs.push('rows', jobCount)
+          qs.push('rows', jobCount);
         }
       },
       true);
@@ -458,7 +465,7 @@ export class ApiEndpointsService {
       pathVariables,
       queryStringHandler(queryString) {
         if (options?.withRecentlyUpdatedTopic) {
-          queryString.push("withRecentlyUpdatedTopic", options.withRecentlyUpdatedTopic);
+          queryString.push('withRecentlyUpdatedTopic', options.withRecentlyUpdatedTopic);
         }
       }
     });

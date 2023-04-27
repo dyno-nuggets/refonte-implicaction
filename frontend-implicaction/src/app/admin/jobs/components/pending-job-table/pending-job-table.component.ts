@@ -5,7 +5,7 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {JobService} from '../../../../job/services/job.service';
 import {ActivatedRoute} from '@angular/router';
 import {finalize, take} from 'rxjs/operators';
-import {Criteria} from '../../../../shared/models/Criteria';
+import {Criteria} from '../../../../shared/models/criteria';
 
 @Component({
   selector: 'app-pending-job-table',

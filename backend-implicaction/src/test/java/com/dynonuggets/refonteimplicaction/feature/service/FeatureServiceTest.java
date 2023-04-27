@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey.EMAIL_NOTIFICATION;
+import static com.dynonuggets.refonteimplicaction.feature.model.properties.enums.FeatureKey.EMAIL_NOTIFICATION;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.assertj.core.api.Assertions.assertThat;

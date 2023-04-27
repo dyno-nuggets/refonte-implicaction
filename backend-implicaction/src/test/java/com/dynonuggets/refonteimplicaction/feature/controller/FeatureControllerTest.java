@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static com.dynonuggets.refonteimplicaction.feature.dto.enums.FeatureKey.EMAIL_NOTIFICATION;
+import static com.dynonuggets.refonteimplicaction.feature.model.properties.enums.FeatureKey.EMAIL_NOTIFICATION;
 import static com.dynonuggets.refonteimplicaction.feature.utils.FeatureUris.FEATURE_BASE_URI;
 import static java.util.List.of;
 import static org.hamcrest.Matchers.is;

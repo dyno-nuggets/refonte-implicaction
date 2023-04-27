@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from "rxjs";
-import {ImplicactionEvent} from "../models/implicactionEvent";
+import {Observable, of} from 'rxjs';
+import {ImplicactionEvent} from '../models/implicaction-event';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,6 @@ export class ImplicactionEventService {
         title: `Conférence Général de Villiers à l'UCO d'Angers`,
         date: new Date('2021-12-01')
       }
-    ])
+    ]);
   }
 }

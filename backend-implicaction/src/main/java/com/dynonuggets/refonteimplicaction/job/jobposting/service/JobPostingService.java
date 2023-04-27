@@ -1,6 +1,8 @@
 package com.dynonuggets.refonteimplicaction.job.jobposting.service;
 
 import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
+import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum;
 import com.dynonuggets.refonteimplicaction.exception.NotFoundException;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.repository.JobApplicationRepository;
 import com.dynonuggets.refonteimplicaction.job.jobposting.adapter.JobPostingAdapter;
@@ -9,8 +11,6 @@ import com.dynonuggets.refonteimplicaction.job.jobposting.domain.repository.JobP
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.JobPostingDto;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.ContractTypeEnum;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
-import com.dynonuggets.refonteimplicaction.user.dto.enums.RoleEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

@@ -1,6 +1,6 @@
 <ng-container *ngIf="alert">
   <div class="alert alert-{{alert.type}} mt-4" role="alert">
     <h4 class="fw-bold mb-4">{{alert.title}}</h4>
-    <p>{{alert.message}}</p>
+    <p [innerHTML]="alert.message"></p>
   </div>
 </ng-container>

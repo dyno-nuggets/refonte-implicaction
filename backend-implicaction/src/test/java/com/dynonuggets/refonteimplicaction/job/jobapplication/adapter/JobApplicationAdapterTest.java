@@ -1,11 +1,11 @@
 package com.dynonuggets.refonteimplicaction.job.jobapplication.adapter;
 
+import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.job.company.domain.model.CompanyModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.domain.model.JobApplicationModel;
 import com.dynonuggets.refonteimplicaction.job.jobapplication.dto.JobApplicationDto;
 import com.dynonuggets.refonteimplicaction.job.jobposting.domain.model.JobPostingModel;
 import com.dynonuggets.refonteimplicaction.job.jobposting.dto.enums.BusinessSectorEnum;
-import com.dynonuggets.refonteimplicaction.user.domain.model.UserModel;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
