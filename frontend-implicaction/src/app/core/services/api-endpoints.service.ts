@@ -8,8 +8,8 @@ import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/criteria';
 import {Response} from '../../forum/model/response';
 import {GetCategoriesOptions} from '../../forum/services/category.service';
-import {Profile} from '../../community/models/profile/profile';
-import {Relation} from '../../community/models/relation/relation';
+import {Profile} from '../../community/models/profile';
+import {Relation} from '../../community/models/relation';
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
 export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
@@ -97,7 +97,8 @@ export class ApiEndpointsService {
           qs.push('rows', pageable.rows);
         }
         if (pageable.sortBy) {
-          qs.push('sortBy', pageable.sortBy);
+          const sortBys = pageable.sortBy.split(',');
+          sortBys.forEach(sortBy => qs.push('sortBy', sortBy));
         }
         if (pageable.sortOrder) {
           qs.push('sortOrder', pageable.sortOrder);

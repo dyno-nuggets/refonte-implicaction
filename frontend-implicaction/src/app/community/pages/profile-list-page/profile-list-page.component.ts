@@ -9,10 +9,10 @@ import {Univers} from '../../../shared/enums/univers';
 import {ProfileService} from "../../services/profile/profile.service";
 import {MenuItem} from "primeng/api";
 import {Pageable} from "../../../shared/models/pageable";
-import {Profile} from "../../models/profile/profile";
+import {Profile} from "../../models/profile";
 import {Constants} from "../../../config/constants";
-import {RelationAction, RelationActionEnumCode} from "../../models/relation/relation-action";
-import {Relation} from "../../models/relation/relation";
+import {RelationAction, RelationActionEnumCode} from "../../models/relation-action";
+import {Relation} from "../../models/relation";
 import {Subject} from "rxjs";
 
 @Component({
@@ -21,8 +21,9 @@ import {Subject} from "rxjs";
 })
 export class ProfileListPageComponent implements OnInit, OnDestroy {
 
-  readonly univer = Univers;
-  pageable: Pageable<Profile> = Constants.PAGEABLE_DEFAULT;
+  readonly univers = Univers;
+
+  pageable: Pageable<Profile> = {...Constants.PAGEABLE_DEFAULT, sortBy: 'user.lastname,user.firstname'};
   profiles: Profile[] = [];
   currentUser: User;
   action: string;
@@ -30,15 +31,20 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
   menuItems: MenuItem[] = [
     {
       label: 'Tous les utilisateurs',
-      routerLink: `/${Univers.COMMUNITY.url}/profiles`
+      routerLink: `/${Univers.COMMUNITY.url}/profiles`,
+      routerLinkActiveOptions: {exact: true}
     },
     {
       label: 'Mes amis',
-      routerLink: `/${Univers.COMMUNITY.url}/relations`
+      routerLink: `/${Univers.COMMUNITY.url}/profiles`,
+      queryParams: {filter: 'friends'},
+      routerLinkActiveOptions: {exact: true}
     },
     {
       label: 'Invitations',
-      routerLink: `/${Univers.COMMUNITY.url}/relations/received`
+      routerLink: `/${Univers.COMMUNITY.url}/relations`,
+      queryParams: {filter: 'friendRequests'},
+      routerLinkActiveOptions: {exact: true}
     }
   ];
 
@@ -131,7 +137,8 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: pageable => {
-          this.pageable = pageable;
+          this.pageable = {...this.pageable, ...pageable};
+          console.log(this.pageable);
           this.profiles = [...this.pageable.content];
         },
         error: () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')

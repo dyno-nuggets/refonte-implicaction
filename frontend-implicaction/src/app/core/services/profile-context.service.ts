@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {Profile} from "../../community/models/profile/profile";
+import {Profile} from "../../community/models/profile";
 
 @Injectable({
   providedIn: 'root'

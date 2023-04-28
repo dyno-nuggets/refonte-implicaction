@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {ProfileService} from '../../services/profile/profile.service';
-import {Profile} from '../../models/profile/profile';
+import {Profile} from '../../models/profile';
 import {Univers} from '../../../shared/enums/univers';
 import {Observable, Subject} from 'rxjs';
-import {ProfileTabEnum} from '../../models/profile/enums/profile-tab-enum';
+import {ProfileTabEnum} from '../../models/enums/profile-tab-enum';
 import {filter, takeUntil} from 'rxjs/operators';
 import {AuthService} from '../../../core/services/auth.service';
 import {ProfileContextService} from '../../../core/services/profile-context.service';

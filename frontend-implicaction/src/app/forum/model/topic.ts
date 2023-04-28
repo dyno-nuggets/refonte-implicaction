@@ -1,6 +1,6 @@
 import {Category} from "./category";
 import {Response} from "./response";
-import {Profile} from "../../community/models/profile/profile";
+import {Profile} from "../../community/models/profile";
 
 export interface Topic {
   id: number;

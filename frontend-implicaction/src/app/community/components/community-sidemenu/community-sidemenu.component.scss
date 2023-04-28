@@ -1,7 +1,10 @@
 @import "src/assets/variables";
 
 .list-group-item {
+  padding: 0;
+
   a {
+    padding: 8px 16px;
     text-decoration: none;
     display: flex;
     justify-content: space-between;
@@ -11,6 +14,7 @@
 
     &:hover, &.active {
       font-weight: 600;
+      background-color: $secondary;
     }
 
     &:after {
@@ -18,9 +22,4 @@
       content: "\f054";
     }
   }
-}
-
-
-li:has(a.active) {
-  background-color: $secondary;
 }

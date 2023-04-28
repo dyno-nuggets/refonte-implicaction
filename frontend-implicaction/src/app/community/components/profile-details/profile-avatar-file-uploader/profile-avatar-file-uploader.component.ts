@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
-import {Profile} from "../../../models/profile/profile";
+import {Profile} from "../../../models/profile";
 import {ToasterService} from "../../../../core/services/toaster.service";
 import {ProfileContextService} from "../../../../core/services/profile-context.service";
 import {finalize} from "rxjs/operators";

@@ -7,7 +7,7 @@ import {AuthService} from './core/services/auth.service';
 import {take, takeUntil} from 'rxjs/operators';
 import {ProfileContextService} from './core/services/profile-context.service';
 import {Principal} from './shared/models/principal';
-import {Profile} from './community/models/profile/profile';
+import {Profile} from './community/models/profile';
 import {ProfileService} from './community/services/profile/profile.service';
 import {AppService} from './core/services/app.service';
 import {AppStatusEnum} from './shared/enums/app-status-enum';

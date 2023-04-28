@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Relation} from '../models/relation/relation';
+import {Relation} from '../models/relation';
 import {ApiEndpointsService} from '../../core/services/api-endpoints.service';
 import {Pageable} from "../../shared/models/pageable";
-import {RelationRequest} from "../models/relation/relation-request";
+import {RelationRequest} from "../models/relation-request";
 
 @Injectable({
   providedIn: 'root'

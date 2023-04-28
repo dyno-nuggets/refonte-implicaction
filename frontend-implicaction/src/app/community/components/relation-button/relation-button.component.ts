@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
-import {Profile} from "../../models/profile/profile";
+import {Profile} from "../../models/profile";
 import {ProfileContextService} from "../../../core/services/profile-context.service";
-import {RelationAction, RelationActionEnum, RelationActionEnumCode} from "../../models/relation/relation-action";
+import {RelationAction, RelationActionEnum, RelationActionEnumCode} from "../../models/relation-action";
 import {take} from "rxjs/operators";
 
 @Component({
@@ -36,7 +36,6 @@ export class RelationButtonComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.hasOwnProperty('profile')) {
-      console.log(changes['profile'].currentValue);
       this.okButton = this.getOkButton();
       this.cancelButton = this.getCancelButton();
     }

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {AbstractControl, NonNullableFormBuilder, Validators} from '@angular/forms';
-import {Profile} from '../../../../models/profile/profile';
-import {ProfileUpdateRequest} from '../../../../models/profile/profile-update-request';
+import {Profile} from '../../../../models/profile';
+import {ProfileUpdateRequest} from '../../../../models/profile-update-request';
 import {BaseFormComponent} from '../../../../../shared/components/base-form/base-form.component';
 
 @Component({

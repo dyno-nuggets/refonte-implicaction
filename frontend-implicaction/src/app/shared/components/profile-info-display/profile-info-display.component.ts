@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Univers} from "../../enums/univers";
-import {Profile} from "../../../community/models/profile/profile";
+import {Profile} from "../../../community/models/profile";
 import {Subscription, timer} from "rxjs";
 import {OverlayPanel} from "primeng/overlaypanel";
 

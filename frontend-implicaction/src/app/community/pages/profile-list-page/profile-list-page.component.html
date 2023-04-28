@@ -7,6 +7,7 @@
 
   <div class="row col-lg-8 col-xl-9 mt-4 mt-lg-0 m-0 p-0 align-items-baseline">
     <ng-container *ngIf="!loading; else templateLoading">
+      <p *ngIf="!profiles.length">Aucun résultat</p>
       <div
         *ngFor="let profile of profiles; trackBy: trackByUsername"
         class="col-md-6 col-xl-6 px-0 px-md-2 profile-card"
@@ -22,7 +23,7 @@
               <a
                 tooltipPosition="top"
                 pTooltip="{{profile?.firstname}} {{profile?.lastname}}"
-                [routerLink]="['/', univer.COMMUNITY.url, 'profiles', profile?.username]"
+                [routerLink]="['/', univers.COMMUNITY.url, 'profiles', profile?.username]"
               >
                 {{profile?.firstname}} {{profile?.lastname}}
               </a>

@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Profile} from "../../../../community/models/profile/profile";
+import {Profile} from "../../../../community/models/profile";
 import {Univers} from "../../../enums/univers";
 
 @Component({

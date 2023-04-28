@@ -5,7 +5,7 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {Univers} from '../../../shared/enums/univers';
 import {RoleEnumCode} from '../../../shared/enums/role.enum';
 import {Subject} from 'rxjs';
-import {Profile} from '../../../community/models/profile/profile';
+import {Profile} from '../../../community/models/profile';
 
 @Component({
   selector: 'app-header',

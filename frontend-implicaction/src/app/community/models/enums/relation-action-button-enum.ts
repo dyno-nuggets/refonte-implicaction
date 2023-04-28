@@ -1,4 +1,4 @@
-import {EnumCodeLabelAbstract} from "../../../../shared/enums/enum-code-label-abstract.enum";
+import {EnumCodeLabelAbstract} from "../../../shared/enums/enum-code-label-abstract.enum";
 
 export enum RelationActionButton {
   RELATION_DELETE = 'RELATION_CANCEL',

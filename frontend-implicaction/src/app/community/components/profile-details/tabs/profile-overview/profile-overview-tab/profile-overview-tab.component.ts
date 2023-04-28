@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
-import {Profile} from "../../../../../models/profile/profile";
+import {Profile} from "../../../../../models/profile";
 
 @Component({
   selector: 'app-profile-overview-tab',

@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {MenuItem} from "primeng/api";
 
 @Component({
   selector: 'app-community-sidemenu',
@@ -7,6 +8,6 @@ import {Component, Input} from '@angular/core';
 })
 export class CommunitySidemenuComponent {
 
-  @Input() menuItems: any[];
+  @Input() menuItems: MenuItem[];
 
 }
