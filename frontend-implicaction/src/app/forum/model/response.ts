@@ -1,5 +1,5 @@
 import {Topic} from "./topic"
-import {Profile} from "../../community/models/profile/profile";
+import {Profile} from "../../community/models/profile";
 
 export interface Response {
   id: number;

@@ -155,10 +155,8 @@ textarea, input {
   color: $primary !important;
 }
 
-.title {
-  font-weight: bold;
-  color: $primary;
-  font-size: 1.2rem;
+.card-title {
+  font-size: 1.2rem !important;
 
   a {
     color: $primary;

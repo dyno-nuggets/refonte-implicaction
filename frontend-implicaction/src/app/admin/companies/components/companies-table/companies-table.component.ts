@@ -97,7 +97,7 @@ export class CompaniesTableComponent extends BaseWithPaginationAndFilterComponen
       .getAllByCriteria(this.pageable, this.criteria)
       .pipe(
         take(1),
-        finalize(() => this.isLoading = false)
+        finalize(() => this.loading = false)
       )
       .subscribe(
         data => {

@@ -1,0 +1,12 @@
+@import "src/assets/variables";
+
+.content {
+  min-height: 800px;
+}
+
+@media (min-width: 1600px) {
+  .profile-card {
+    flex: 0 0 auto;
+    width: 33%;
+  }
+}

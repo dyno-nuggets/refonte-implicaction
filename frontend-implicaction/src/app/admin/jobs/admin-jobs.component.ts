@@ -75,7 +75,7 @@ export class AdminJobsComponent extends JobsListComponent {
       .getAllByCriteria(this.pageable, this.criteria)
       .pipe(
         take(1),
-        finalize(() => this.isLoading = false)
+        finalize(() => this.loading = false)
       )
       .subscribe(
         data => {

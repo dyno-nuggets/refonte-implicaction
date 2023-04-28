@@ -8,7 +8,7 @@ import {JobCriteriaFilter} from '../../job/models/job-criteria-filter';
 import {Criteria} from '../../shared/models/criteria';
 import {Response} from '../../forum/model/response';
 import {GetCategoriesOptions} from '../../forum/services/category.service';
-import {Profile} from '../../community/models/profile/profile';
+import {Profile} from '../../community/models/profile';
 import {Relation} from '../../community/models/relation';
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
@@ -90,14 +90,15 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithQueryParameters(
       uri,
       (qs: QueryStringParameters) => {
-        if (pageable.page) {
-          qs.push('page', pageable.page);
+        if (pageable.number) {
+          qs.push('page', pageable.number);
         }
         if (pageable.rows) {
           qs.push('rows', pageable.rows);
         }
         if (pageable.sortBy) {
-          qs.push('sortBy', pageable.sortBy);
+          const sortBys = pageable.sortBy.split(',');
+          sortBys.forEach(sortBy => qs.push('sortBy', sortBy));
         }
         if (pageable.sortOrder) {
           qs.push('sortOrder', pageable.sortOrder);
@@ -109,7 +110,7 @@ export class ApiEndpointsService {
     return {
       ...criteria,
       rows: pageable.rows,
-      page: pageable.page,
+      page: pageable.number,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder
     };
@@ -225,8 +226,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_ALL_COMMUNITY, pageable);
   }
 
-  createRelationEndpoint(receiverId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
+  createRelationEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.RELATIONS.REQUEST);
   }
 
   /**
@@ -270,7 +271,7 @@ export class ApiEndpointsService {
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
-      page: pageable.page,
+      page: pageable.number,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder,
       checkApply,
@@ -288,7 +289,7 @@ export class ApiEndpointsService {
     const objectParam = {
       ...criteria,
       rows: pageable.rows,
-      page: pageable.page,
+      page: pageable.number,
       sortBy: pageable.sortBy,
       sortOrder: pageable.sortOrder,
       archive: archive !== null ? `${archive}` : null

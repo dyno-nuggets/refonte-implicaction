@@ -7,5 +7,5 @@ import static lombok.AccessLevel.PRIVATE;
 
 @NoArgsConstructor(access = PRIVATE)
 public class AppUris {
-    public final static String APP_BASE_URI = PUBLIC_BASE_URI + "/app";
+    public static final String APP_BASE_URI = PUBLIC_BASE_URI + "/app";
 }

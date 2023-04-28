@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {Constants} from "../../../config/constants";
-import {Profile} from "../../../community/models/profile/profile";
+import {Profile} from "../../../community/models/profile";
 
 @Component({
   selector: 'app-user-avatar',

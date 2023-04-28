@@ -9,7 +9,7 @@ export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
 
   readonly DEFAULT_ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
-  isLoading = true;
+  loading = true;
   criteria: C;
 
   // Pagination
@@ -24,14 +24,14 @@ export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
    * @param first indice du 1er élément à récupérer
    * @param rows nombre d'éléments par page
    */
-  paginate({page, first, rows} = this.pageable as Pageable<T>): void {
-    this.isLoading = true;
-    if (page) {
-      this.pageable.page = page;
+  paginate({number, first, rows} = this.pageable as Pageable<T>): void {
+    this.loading = true;
+    if (number) {
+      this.pageable.number = number;
     } else if (rows > 0) {
-      this.pageable.page = first / rows;
+      this.pageable.number = first / rows;
     } else {
-      this.pageable.page = 0;
+      this.pageable.number = 0;
     }
     this.pageable.first = first;
     this.pageable.rows = rows;
@@ -79,7 +79,7 @@ export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
     return {
       ...this.criteria,
       size: this.pageable.rows,
-      page: this.pageable.page,
+      page: this.pageable.number,
       sortBy: this.pageable.sortBy,
       sortOrder: this.pageable.sortOrder
     };

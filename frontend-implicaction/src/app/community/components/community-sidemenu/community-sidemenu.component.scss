@@ -1,0 +1,25 @@
+@import "src/assets/variables";
+
+.list-group-item {
+  padding: 0;
+
+  a {
+    padding: 8px 16px;
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 1;
+    line-height: 2.8rem;
+
+    &:hover, &.active {
+      font-weight: 600;
+      background-color: $secondary;
+    }
+
+    &:after {
+      font-family: FontAwesome;
+      content: "\f054";
+    }
+  }
+}

@@ -5,8 +5,8 @@ export class Constants {
   public static readonly PUBLIC_ENDPOINT: string = '/api/public';
   public static readonly API_MOCK_ENDPOINT: string = 'mock-domain/api';
   public static readonly PAGEABLE_DEFAULT: Pageable<any> = {
-    page: 0,
-    rows: 10,
+    number: 0,
+    rows: 12,
     totalElements: 0,
     first: 0,
     content: [],
@@ -22,13 +22,13 @@ export class Constants {
    * valeur maximale d’un entier en java.
    */
   public static readonly ALL_VALUE_PAGEABLE: Pageable<any> = {
-    page: 0,
+    number: 0,
     rows: 2147483647, // correspond à Integer.MAX_VALUE
   };
 
   public static readonly DATE_REGEX = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
-  public static readonly ROWS_PER_PAGE_OPTIONS = [10, 25, 50];
+  public static readonly ROWS_PER_PAGE_OPTIONS = [12, 25, 50];
 
   public static readonly USER_IMAGE_DEFAULT_URI = 'assets/img/avatar-ia-user.png';
 

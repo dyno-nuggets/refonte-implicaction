@@ -1,12 +1,10 @@
 package com.dynonuggets.refonteimplicaction.community.profile.dto;
 
 import com.dynonuggets.refonteimplicaction.community.group.dto.GroupDto;
+import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
 import com.dynonuggets.refonteimplicaction.community.training.dto.TrainingDto;
 import com.dynonuggets.refonteimplicaction.community.workexperience.dto.WorkExperienceDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -35,4 +33,6 @@ public class ProfileDto {
     private List<WorkExperienceDto> experiences;
     private List<TrainingDto> trainings;
     private List<GroupDto> groups;
+    @Setter
+    private RelationsDto relationWithCurrentUser;
 }

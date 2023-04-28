@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {ProfileUpdateRequest} from "../../models/profile/profile-update-request";
+import {ProfileUpdateRequest} from "../../models/profile-update-request";
 import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
 import {ApiEndpointsService} from "../../../core/services/api-endpoints.service";
-import {Profile} from "../../models/profile/profile";
+import {Profile} from "../../models/profile";
+import {Pageable} from "../../../shared/models/pageable";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,9 @@ export class ProfileService {
       responseType: 'text'
     });
     return this.http.request<Profile>(req);
+  }
+
+  getAllProfiles(pageable: Pageable<Profile>): Observable<Pageable<Profile>> {
+    return this.http.get<Pageable<Profile>>(this.apiEndpointsService.getAllProfilesEndpoint(pageable));
   }
 }

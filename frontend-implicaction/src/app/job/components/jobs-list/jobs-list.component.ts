@@ -20,7 +20,7 @@ import {Subscription} from 'rxjs';
 })
 export class JobsListComponent extends BaseWithPaginationAndFilterComponent<JobPosting, JobCriteriaFilter> implements OnInit, OnDestroy {
 
-  isLoading = true;
+  loading = true;
 
   // Pagination et filtres
   orderByEnums = JobSortEnum.all();
@@ -79,7 +79,7 @@ export class JobsListComponent extends BaseWithPaginationAndFilterComponent<JobP
   protected innerPaginate(): void {
     this.jobsService
       .getAllValidatedByCriteria(this.pageable, this.criteria, false)
-      .pipe(finalize(() => this.isLoading = false))
+      .pipe(finalize(() => this.loading = false))
       .subscribe(
         data => {
           this.pageable.totalPages = data.totalPages;

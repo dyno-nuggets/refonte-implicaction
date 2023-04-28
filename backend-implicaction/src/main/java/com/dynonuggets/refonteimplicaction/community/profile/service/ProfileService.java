@@ -6,6 +6,9 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.P
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
+import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
+import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
+import com.dynonuggets.refonteimplicaction.community.relation.mapper.RelationMapper;
 import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
@@ -13,12 +16,17 @@ import com.dynonuggets.refonteimplicaction.core.service.UserService;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_ALREADY_EXISTS_MESSAGE;
@@ -35,6 +43,8 @@ public class ProfileService {
     private final ProfileMapper profileMapper;
     private final AuthService authService;
     private final CloudService cloudService;
+    private final RelationRepository relationRepository;
+    private final RelationMapper relationMapper;
 
     /**
      * crée un nouveau profil si l’utilisateur existe
@@ -74,8 +84,28 @@ public class ProfileService {
      * @return la liste paginée des ProfileDto
      */
     public Page<ProfileDto> getAllProfiles(final Pageable pageRequest) {
-        return profileRepository.findAll(pageRequest)
-                .map(profileMapper::toDto);
+        final Page<ProfileModel> profilesModels = profileRepository.findAll(pageRequest);
+
+        final String currentUsername = authService.getCurrentUser().getUsername();
+
+        final List<String> allUsernamesExceptCurrentUser = profilesModels.stream()
+                .map(ProfileModel::getUser)
+                .map(UserModel::getUsername)
+                .filter(username -> !StringUtils.equals(username, currentUsername))
+                .collect(Collectors.toList());
+
+        final Map<String, RelationsDto> usernameRelationMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser).stream()
+                .collect(Collectors.toMap(relation -> {
+                    final String username = relation.getReceiver().getUser().getUsername();
+                    return !username.equals(currentUsername) ? username : relation.getSender().getUser().getUsername();
+                }, relationMapper::toDto));
+
+        return profilesModels
+                .map(profileMapper::toDtoLight)
+                .map(dto -> {
+                    dto.setRelationWithCurrentUser(usernameRelationMap.getOrDefault(dto.getUsername(), null));
+                    return dto;
+                });
     }
 
     /**

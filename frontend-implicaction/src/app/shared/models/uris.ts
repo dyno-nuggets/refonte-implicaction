@@ -58,7 +58,7 @@ export class Uris {
     static readonly GET_ALL_COMMUNITY = 'relations/community';
     static readonly GET_FRIEND_REQUEST_RECEIVED = 'relations';
     static readonly GET_FRIEND_REQUEST_SENT = 'relations';
-    static readonly REQUEST = 'relations/request';
+    static readonly REQUEST = 'relations';
   };
 
   /**

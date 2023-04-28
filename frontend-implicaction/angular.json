@@ -41,8 +41,8 @@
               "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
+              "./node_modules/@popperjs/core/dist/umd/popper.min.js",
               "./node_modules/bootstrap/dist/js/bootstrap.bundle.js",
-              "./node_modules/@popperjs/core/dist/umd/popper.js",
               "./node_modules/quill/dist/quill.js"
             ],
             "vendorChunk": true,

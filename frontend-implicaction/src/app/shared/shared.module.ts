@@ -28,6 +28,8 @@ import {SkeletonModule} from 'primeng/skeleton';
 import {ProfileInfoDisplayComponent} from './components/profile-info-display/profile-info-display.component';
 import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {BaseFormComponent} from './components/base-form/base-form.component';
+import {PaginatorComponent} from './components/paginator/paginator.component';
+import {PaginatorModule} from "primeng/paginator";
 
 
 @NgModule({
@@ -53,6 +55,7 @@ import {BaseFormComponent} from './components/base-form/base-form.component';
     UserAvatarComponent,
     ProfileInfoDisplayComponent,
     BaseFormComponent,
+    PaginatorComponent,
   ],
   exports: [
     LoadingComponent,
@@ -72,6 +75,7 @@ import {BaseFormComponent} from './components/base-form/base-form.component';
     CardWithAvatarDurationAndTitleSkeletonComponent,
     ProfileInfoDisplayComponent,
     BaseFormComponent,
+    PaginatorComponent,
   ],
   imports: [
     CommonModule,
@@ -83,6 +87,7 @@ import {BaseFormComponent} from './components/base-form/base-form.component';
     DropdownModule,
     SkeletonModule,
     OverlayPanelModule,
+    PaginatorModule,
   ]
 })
 export class SharedModule {

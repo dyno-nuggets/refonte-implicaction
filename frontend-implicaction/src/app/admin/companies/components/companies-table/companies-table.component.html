@@ -14,7 +14,7 @@
   (onLazyLoad)="paginate($event)"
   [(selection)]="selectedCompanies"
   [lazy]="true"
-  [loading]="isLoading"
+  [loading]="loading"
   [paginator]="true"
   [rowsPerPageOptions]="[10, 25, 50]"
   [rows]="pageable.rows"

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, Input} from '@angular/core';
 import {RoleEnumCode} from "../../../shared/enums/role.enum";
 import {Univers} from "../../../shared/enums/univers";
-import {Profile} from "../../../community/models/profile/profile";
+import {Profile} from "../../../community/models/profile";
 
 @Component({
   selector: 'app-navbar-profile-dropdown',

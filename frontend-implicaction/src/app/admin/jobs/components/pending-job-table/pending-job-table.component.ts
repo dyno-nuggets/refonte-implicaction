@@ -14,7 +14,7 @@ import {Criteria} from '../../../../shared/models/criteria';
 })
 export class PendingJobTableComponent extends BaseWithPaginationAndFilterComponent<JobPosting, Criteria> {
 
-  isLoading = true;
+  loading = true;
   // Pagination et filtres
   rowsPerPage = this.pageable.rowsPerPages[0];
 
@@ -41,7 +41,7 @@ export class PendingJobTableComponent extends BaseWithPaginationAndFilterCompone
       .getAllPendingActivationJobs(this.pageable)
       .pipe(
         take(1),
-        finalize(() => this.isLoading = false)
+        finalize(() => this.loading = false)
       )
       .subscribe(
         data => {
