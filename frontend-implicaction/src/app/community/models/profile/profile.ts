@@ -1,6 +1,6 @@
 import {WorkExperience} from "../../../shared/models/work-experience";
 import {Training} from "../../../shared/models/training";
-import {Relation} from "../relation";
+import {Relation} from "../relation/relation";
 
 export interface Profile {
   username?: string;

@@ -1,45 +1,107 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Profile} from "../../models/profile/profile";
-import {AuthService} from "../../../core/services/auth.service";
-import {Relation} from "../../models/relation";
+import {ProfileContextService} from "../../../core/services/profile-context.service";
+import {RelationAction, RelationActionEnum, RelationActionEnumCode} from "../../models/relation/relation-action";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-relation-button',
   templateUrl: './relation-button.component.html',
   styleUrls: ['./relation-button.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RelationButtonComponent implements OnInit {
+export class RelationButtonComponent implements OnInit, OnChanges {
 
   @Input() profile: Profile;
 
-  okButtonText: string;
-  cancelButtonText: string;
-  principalUsername: string;
+  @Output() action = new EventEmitter<RelationAction>();
 
-  constructor(private authService: AuthService) {
+  okButton: { text?: string, action?: RelationAction };
+  cancelButton: { text?: string, action?: RelationAction };
+  currentProfile: Profile;
+
+  constructor(private pcs: ProfileContextService) {
   }
 
   ngOnInit(): void {
-    this.principalUsername = this.authService.getPrincipal()?.username;
-    this.okButtonText = this.getOkButtonText(this.profile.relationWithCurrentUser);
-    this.cancelButtonText = this.getCancelButton(this.profile.relationWithCurrentUser);
+    this.pcs.observeProfile()
+      .pipe(
+        take(1)
+      )
+      .subscribe(p => {
+        this.currentProfile = p;
+        this.okButton = this.getOkButton();
+        this.cancelButton = this.getCancelButton();
+      });
   }
 
-  getOkButtonText(relation: Relation): string {
-    if (this.profile.username === this.principalUsername) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.hasOwnProperty('profile')) {
+      console.log(changes['profile'].currentValue);
+      this.okButton = this.getOkButton();
+      this.cancelButton = this.getCancelButton();
+    }
+  }
+
+  cancelButtonClicked(): void {
+    this.buttonClicked(this.cancelButton.action);
+  }
+
+  okButtonClicked(): void {
+    this.buttonClicked(this.okButton.action);
+  }
+
+  private buttonClicked(action: RelationAction): void {
+    if (action) {
+      this.action.emit(action);
+    }
+  }
+
+
+  private getOkButton(): { text: string, action: RelationAction } {
+    // CAS 1: il s’agit de l’utilisateur courant
+    if (!(this.profile && this.currentProfile) || this.profile.username === this.currentProfile.username) {
       return null;
     }
-    if (!relation) {
-      return 'ajouter en ami(e)';
+
+    // CAS 2: il existe n’existe pas de relation
+    if (!this.profile.relationWithCurrentUser) {
+      return {
+        text: RelationActionEnum.CREATE.label,
+        action: {
+          relation: {sender: this.currentProfile, receiver: this.profile},
+          action: RelationActionEnum.CREATE.code
+        }
+      };
     }
-    if (!relation.confirmedAt && relation.receiver === this.principalUsername) {
-      return 'confirmer';
+
+    // CAS 3: la relation n’a pas été confirmée
+    if (!this.profile.relationWithCurrentUser.confirmedAt) {
+      return {
+        text: RelationActionEnum.CONFIRM.label,
+        action: {
+          relation: this.profile.relationWithCurrentUser,
+          action: RelationActionEnum.CONFIRM.code
+        }
+      };
     }
+
+    // CAS 4: la relation est déjà confirmée
     return null;
   }
 
-  getCancelButton(relation: Relation): string {
-    return relation ? 'supprimer' : null;
+  private getCancelButton(): { text: string, action: RelationAction } {
+    // CAS 1: il n'y a aucune relation
+    if (!(this.profile && this.currentProfile) || !this.profile.relationWithCurrentUser) {
+      return null
+    }
+
+    // CAS 2: peu importe la relation, on veut la supprimer
+    return {
+      text: RelationActionEnum.DELETE.label,
+      action: {
+        relation: this.profile.relationWithCurrentUser,
+        action: RelationActionEnumCode.DELETE
+      }
+    };
   }
 }

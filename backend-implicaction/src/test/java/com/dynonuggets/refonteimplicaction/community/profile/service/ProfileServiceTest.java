@@ -258,7 +258,7 @@ class ProfileServiceTest {
         final Page<ProfileModel> profiles = new PageImpl<>(of(generateRandomProfile(), generateRandomProfile(), generateRandomProfile()));
         given(profileRepository.findAll(any(Pageable.class))).willReturn(profiles);
         given(authService.getCurrentUser()).willReturn(UserModel.builder().username("username").build());
-        given(relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(anyString(), anyList(), any(Pageable.class))).willReturn(of());
+        given(relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(anyString(), anyList())).willReturn(of());
         profiles.forEach(p -> given(profileMapper.toDtoLight(p)).willReturn(ProfileDto.builder().username(p.getUser().getUsername()).build()));
 
         // when

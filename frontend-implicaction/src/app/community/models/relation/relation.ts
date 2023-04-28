@@ -1,4 +1,4 @@
-import {Profile} from "./profile/profile";
+import {Profile} from "../profile/profile";
 import {RelationTypeCode} from "./relation-type.enum";
 
 export interface Relation {

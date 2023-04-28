@@ -9,7 +9,7 @@ import {Criteria} from '../../shared/models/criteria';
 import {Response} from '../../forum/model/response';
 import {GetCategoriesOptions} from '../../forum/services/category.service';
 import {Profile} from '../../community/models/profile/profile';
-import {Relation} from '../../community/models/relation';
+import {Relation} from '../../community/models/relation/relation';
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
 export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
@@ -225,8 +225,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.RELATIONS.GET_ALL_COMMUNITY, pageable);
   }
 
-  createRelationEndpoint(receiverId: string): string {
-    return ApiEndpointsService.createUrlWithPathVariables(Uris.RELATIONS.REQUEST, [receiverId]);
+  createRelationEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.RELATIONS.REQUEST);
   }
 
   /**

@@ -91,10 +91,10 @@ public class ProfileService {
         final List<String> allUsernamesExceptCurrentUser = profilesModels.stream()
                 .map(ProfileModel::getUser)
                 .map(UserModel::getUsername)
-                .filter(username -> StringUtils.equals(username, currentUsername))
+                .filter(username -> !StringUtils.equals(username, currentUsername))
                 .collect(Collectors.toList());
 
-        final Map<String, RelationsDto> relationTypeMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser, Pageable.unpaged()).stream()
+        final Map<String, RelationsDto> relationTypeMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser).stream()
                 .collect(Collectors.toMap(relation -> {
                     final String username = relation.getReceiver().getUser().getUsername();
                     return !username.equals(currentUsername) ? username : relation.getSender().getUser().getUsername();

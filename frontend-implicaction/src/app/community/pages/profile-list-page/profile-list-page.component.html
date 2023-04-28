@@ -8,7 +8,7 @@
   <div class="row col-lg-8 col-xl-9 mt-4 mt-lg-0 m-0 p-0 align-items-baseline">
     <ng-container *ngIf="!loading; else templateLoading">
       <div
-        *ngFor="let profile of pageable.content; let index = index"
+        *ngFor="let profile of profiles; trackBy: trackByUsername"
         class="col-md-6 col-xl-6 px-0 px-md-2 profile-card"
       >
         <app-profile-card-base>
@@ -33,7 +33,7 @@
             </ul>
           </ng-container>
           <ng-container options>
-            <app-relation-button [profile]="profile"></app-relation-button>
+            <app-relation-button [profile]="profile" (action)="updateRelation(profile, $event)"></app-relation-button>
           </ng-container>
         </app-profile-card-base>
       </div>
