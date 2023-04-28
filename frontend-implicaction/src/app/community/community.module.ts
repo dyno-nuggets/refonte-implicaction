@@ -26,11 +26,10 @@ import {ProfileAvatarFileUploaderComponent} from './components/profile-details/p
 import {ProfileEditFormComponent} from "./components/profile-details/forms/profile-edit-form/profile-edit-form.component";
 import {ProfileDetailsPageComponent} from "./pages/profile-details-page/profile-details-page.component";
 import {ProfileCardSkeletonComponent} from './components/profile-list/profile-card-skeleton/profile-card-skeleton.component';
-import {ProfileCardComponent} from './components/profile-list/profile-card/profile-card.component';
 import {CommunitySidemenuComponent} from './components/community-sidemenu/community-sidemenu.component';
 
 import {TooltipModule} from 'primeng/tooltip';
-import { RelationButtonComponent } from './components/relation-button/relation-button.component';
+import {RelationButtonComponent} from './components/relation-button/relation-button.component';
 
 
 @NgModule({
@@ -51,7 +50,6 @@ import { RelationButtonComponent } from './components/relation-button/relation-b
     ProfileWorkExperiencesSectionComponent,
     ProfileAvatarFileUploaderComponent,
     ProfileCardSkeletonComponent,
-    ProfileCardComponent,
     ProfileCardBaseComponent,
     CommunitySidemenuComponent,
     RelationButtonComponent,

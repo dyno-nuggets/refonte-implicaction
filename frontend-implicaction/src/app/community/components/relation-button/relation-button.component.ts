@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import {Profile} from "../../models/profile";
 import {ProfileContextService} from "../../../core/services/profile-context.service";
-import {RelationAction, RelationActionEnum, RelationActionEnumCode} from "../../models/relation-action";
+import {RelationAction, RelationActionEnum, RelationActionEnumCode} from "../../models/enums/relation-action";
 import {take} from "rxjs/operators";
 
 @Component({

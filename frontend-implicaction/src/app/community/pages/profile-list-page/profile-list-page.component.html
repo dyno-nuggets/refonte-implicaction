@@ -22,16 +22,12 @@
             >
               <a
                 tooltipPosition="top"
-                pTooltip="{{profile?.firstname}} {{profile?.lastname}}"
-                [routerLink]="['/', univers.COMMUNITY.url, 'profiles', profile?.username]"
+                pTooltip="{{profile.firstname}} {{profile.lastname}}"
+                [routerLink]="['/', univers.COMMUNITY.url, 'profiles', profile.username]"
               >
-                {{profile?.firstname}} {{profile?.lastname}}
+                {{profile.firstname}} {{profile.lastname}}
               </a>
             </h5>
-            <ul *ngIf="profile?.corp || profile?.rank" class="list-unstyled">
-              <li *ngIf="profile?.corp"><i class="fa fa-globe"></i> profile?.corp</li>
-              <li *ngIf="profile?.rank"><i class="fa fa-medal"></i> profile?.rank</li>
-            </ul>
           </ng-container>
           <ng-container options>
             <app-relation-button [profile]="profile" (action)="updateRelation(profile, $event)"></app-relation-button>

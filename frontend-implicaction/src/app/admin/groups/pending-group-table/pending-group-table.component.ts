@@ -14,7 +14,7 @@ import {GroupService} from '../../../community/services/group.service';
 })
 export class PendingGroupTableComponent extends BaseWithPaginationAndFilterComponent<Group, Criteria> {
 
-  isLoading = true;
+  loading = true;
   rowsPerPage = this.pageable.rowsPerPages[0];
 
   constructor(
@@ -40,7 +40,7 @@ export class PendingGroupTableComponent extends BaseWithPaginationAndFilterCompo
       .getAllPendingGroup(this.pageable)
       .pipe(
         take(1),
-        finalize(() => this.isLoading = false)
+        finalize(() => this.loading = false)
       )
       .subscribe(
         data => {

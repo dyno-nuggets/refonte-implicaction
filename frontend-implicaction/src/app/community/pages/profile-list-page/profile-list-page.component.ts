@@ -11,7 +11,7 @@ import {MenuItem} from "primeng/api";
 import {Pageable} from "../../../shared/models/pageable";
 import {Profile} from "../../models/profile";
 import {Constants} from "../../../config/constants";
-import {RelationAction, RelationActionEnumCode} from "../../models/relation-action";
+import {RelationAction, RelationActionEnumCode} from "../../models/enums/relation-action";
 import {Relation} from "../../models/relation";
 import {Subject} from "rxjs";
 

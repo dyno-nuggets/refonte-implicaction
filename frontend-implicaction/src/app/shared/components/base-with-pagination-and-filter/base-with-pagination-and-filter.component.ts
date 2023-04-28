@@ -9,7 +9,7 @@ export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
 
   readonly DEFAULT_ROWS_PER_PAGE_OPTIONS = Constants.ROWS_PER_PAGE_OPTIONS;
 
-  isLoading = true;
+  loading = true;
   criteria: C;
 
   // Pagination
@@ -25,7 +25,7 @@ export class BaseWithPaginationAndFilterComponent<T, C extends Criteria> {
    * @param rows nombre d'éléments par page
    */
   paginate({number, first, rows} = this.pageable as Pageable<T>): void {
-    this.isLoading = true;
+    this.loading = true;
     if (number) {
       this.pageable.number = number;
     } else if (rows > 0) {

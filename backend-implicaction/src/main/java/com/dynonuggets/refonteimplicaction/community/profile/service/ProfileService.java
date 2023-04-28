@@ -94,7 +94,7 @@ public class ProfileService {
                 .filter(username -> !StringUtils.equals(username, currentUsername))
                 .collect(Collectors.toList());
 
-        final Map<String, RelationsDto> relationTypeMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser).stream()
+        final Map<String, RelationsDto> usernameRelationMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser).stream()
                 .collect(Collectors.toMap(relation -> {
                     final String username = relation.getReceiver().getUser().getUsername();
                     return !username.equals(currentUsername) ? username : relation.getSender().getUser().getUsername();
@@ -103,7 +103,7 @@ public class ProfileService {
         return profilesModels
                 .map(profileMapper::toDtoLight)
                 .map(dto -> {
-                    dto.setRelationWithCurrentUser(relationTypeMap.getOrDefault(dto.getUsername(), null));
+                    dto.setRelationWithCurrentUser(usernameRelationMap.getOrDefault(dto.getUsername(), null));
                     return dto;
                 });
     }
