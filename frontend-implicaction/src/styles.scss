@@ -1,6 +1,7 @@
 @import "src/assets/variables";
 @import "src/assets/ui";
 @import "src/assets/primeng";
+@import "src/assets/datatable";
 @import "../node_modules/bootstrap/scss/bootstrap";
 
 input.ng-invalid.ng-touched {
@@ -132,8 +133,8 @@ p-calendar span {
 }
 
 textarea, input {
-  &:hover {
-    border-color: $info !important;
+  &:focus {
+    outline: $info !important;
   }
 }
 

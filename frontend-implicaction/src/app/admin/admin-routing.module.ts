@@ -1,8 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {AdminComponent} from './admin.component';
 import {JobFilterComponent} from '../shared/components/job-filter/job-filter.component';
 import {CompanyFilterComponent} from '../shared/components/company-filter/company-filter.component';
+import {AdminPageComponent} from "./pages/admin-page/admin-page.component";
+import {UserFragmentComponent} from "./fragments/user-fragment/user-fragment.component";
+import {DashboardFragmentComponent} from "./fragments/dashboard-fragment/dashboard-fragment.component";
 
 
 const routes: Routes = [
@@ -10,58 +12,58 @@ const routes: Routes = [
     path: '', redirectTo: 'dashboard', pathMatch: 'full'
   },
   {
-    path: 'dashboard', component: AdminComponent, children: [
+    path: 'dashboard', component: AdminPageComponent, children: [
       {
         path: '',
-        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-        outlet: 'admin-content'
+        component: DashboardFragmentComponent,
+        outlet: 'fragment-content'
       }
     ]
   },
   {
-    path: 'users', component: AdminComponent, children: [
+    path: 'users', component: AdminPageComponent, children: [
       {
         path: '',
-        loadChildren: () => import('./users/users.module').then(m => m.UsersModule),
-        outlet: 'admin-content'
+        component: UserFragmentComponent,
+        outlet: 'fragment-content'
       }
     ]
   },
   {
-    path: 'jobs', component: AdminComponent, children: [
+    path: 'jobs', component: AdminPageComponent, children: [
       {
         path: '',
         loadChildren: () => import('./jobs/admin-jobs.module').then(m => m.AdminJobsModule),
-        outlet: 'admin-content',
+        outlet: 'fragment-content',
 
       },
       {
         path: '',
         component: JobFilterComponent,
-        outlet: 'admin-filter'
+        outlet: 'fragment-content'
       }
     ]
   },
   {
-    path: 'companies', component: AdminComponent, children: [
+    path: 'companies', component: AdminPageComponent, children: [
       {
         path: '',
         loadChildren: () => import('./companies/companies.module').then(m => m.CompaniesModule),
-        outlet: 'admin-content'
+        outlet: 'fragment-content'
       },
       {
         path: '',
         component: CompanyFilterComponent,
-        outlet: 'admin-filter'
+        outlet: 'fragment-content'
       }
     ]
   },
   {
-    path: 'forum', component: AdminComponent, children: [
+    path: 'forum', component: AdminPageComponent, children: [
       {
         path: '',
         loadChildren: () => import('./forum/forum.module').then(m => m.ForumModule),
-        outlet: 'admin-content'
+        outlet: 'fragment-content'
       }
     ]
   },

@@ -1,14 +1,11 @@
 <nav>
   <ul class="pagination justify-content-center align-items-end m-0">
-    <li
-      class="page-item cursor-pointer"
-      [ngClass]="{'disabled': pageable.first, 'cursor-pointer': !pageable.first}"
-    >
+    <li *ngIf="!pageable.first" class="page-item cursor-pointer">
       <span
         class="page-link"
         tabindex="-1"
-        (click)="changePage(0)"
-      >Préc</span>
+        (click)="changePage(pageable.number - 1)"
+      >‹ préc</span>
     </li>
     <ng-container *ngFor="let _ of [].constructor(pageable?.totalPages); let index = index">
       <li
@@ -16,19 +13,11 @@
         (click)="changePage(index)"
         [ngClass]="{'disabled': (pageable.number === index), 'cursor-pointer': (pageable.number !== index)}"
       >
-        <a class="page-link">{{index + 1}}</a>
+        <a class="page-link" [ngClass]="{'disabled': (pageable.number === index)}">{{index + 1}}</a>
       </li>
     </ng-container>
-    <li
-      class="page-item"
-      [ngClass]="{'disabled': pageable.last, 'cursor-pointer': !pageable.last}"
-    >
-      <a
-        class="page-link"
-        (click)="changePage(pageable.totalPages - 1)"
-      >
-        Suiv
-      </a>
+    <li *ngIf="!pageable.last" class="page-item cursor-pointer">
+      <a class="page-link" (click)="changePage(pageable.number + 1)">suiv ›</a>
     </li>
   </ul>
 </nav>

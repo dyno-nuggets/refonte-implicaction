@@ -1,3 +1,5 @@
+@import "src/assets/variables";
+
 .p-overlaypanel {
   border: none !important;
   border-radius: 5px !important;
@@ -8,5 +10,20 @@
   &:before, &:after {
     content: none;
     display: none;
+  }
+}
+
+.p-element {
+  &:hover, &.p-highlight {
+    background-color: $secondary !important;
+  }
+}
+
+.p-checkbox {
+  .p-checkbox-box {
+    &.p-highlight {
+      border-color: $info !important;
+      background: $info !important;
+    }
   }
 }

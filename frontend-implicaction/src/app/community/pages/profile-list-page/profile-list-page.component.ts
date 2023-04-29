@@ -138,7 +138,6 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
       .subscribe({
         next: pageable => {
           this.pageable = {...this.pageable, ...pageable};
-          console.log(this.pageable);
           this.profiles = [...this.pageable.content];
         },
         error: () => this.toastService.error('Oops', 'Une erreur est survenue lors de la récupération de la liste des utilisateurs')

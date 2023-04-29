@@ -30,6 +30,7 @@ import {OverlayPanelModule} from 'primeng/overlaypanel';
 import {BaseFormComponent} from './components/base-form/base-form.component';
 import {PaginatorComponent} from './components/paginator/paginator.component';
 import {PaginatorModule} from "primeng/paginator";
+import {SidemenuComponent} from "./components/sidemenu/sidemenu.component";
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import {PaginatorModule} from "primeng/paginator";
     ProfileInfoDisplayComponent,
     BaseFormComponent,
     PaginatorComponent,
+    SidemenuComponent,
   ],
   exports: [
     LoadingComponent,
@@ -76,6 +78,7 @@ import {PaginatorModule} from "primeng/paginator";
     ProfileInfoDisplayComponent,
     BaseFormComponent,
     PaginatorComponent,
+    SidemenuComponent,
   ],
   imports: [
     CommonModule,
