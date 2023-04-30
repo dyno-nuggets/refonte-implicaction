@@ -9,7 +9,6 @@ import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.event.UserEnabledEvent;
 import com.dynonuggets.refonteimplicaction.core.mapper.UserMapper;
-import com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -73,7 +72,7 @@ class UserServiceTest {
                 generateRandomUserModel(Set.of(ROLE_ADMIN), true),
                 generateRandomUserModel(Set.of(ROLE_USER, ROLE_ADMIN), true)
         );
-        mockedUser = UserTestUtils.generateRandomUserModel();
+        mockedUser = generateRandomUserModel();
         mockedUserDto = generateRandomUserDto();
     }
 
@@ -232,7 +231,7 @@ class UserServiceTest {
             // given
             final Set<RoleEnum> roleEnums = Set.of(ROLE_USER, ROLE_PREMIUM);
             final Set<RoleModel> roles = roleEnums.stream().map(name -> RoleModel.builder().name(name).build()).collect(Collectors.toSet());
-            final UserModel expectedUser = UserTestUtils.generateRandomUserModel(Set.of(ROLE_USER), true);
+            final UserModel expectedUser = generateRandomUserModel(Set.of(ROLE_USER), true);
             given(userRepository.findByUsername(expectedUser.getUsername())).willReturn(of(expectedUser));
             given(userRepository.save(expectedUser)).willReturn(expectedUser);
             roles.forEach(role -> given(roleService.getRoleByName(role.getName())).willReturn(role));

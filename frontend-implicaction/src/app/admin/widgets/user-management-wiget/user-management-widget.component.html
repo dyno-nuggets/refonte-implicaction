@@ -1,7 +1,10 @@
 <app-users-table
   (userUpdate)="updateUser($event)"
-  (paginationChange)="updateUserPageable($event)"
+  (paginationChange)="updatePagination($event)"
   [loading]="loading"
   [title]="title"
-  [pageable]="pageable"
+  [users]="pageable.content"
+  [rowsPerPages]="pageable.rowsPerPages"
+  [page]="pageable.number"
+  [totalPage]="pageable.totalPages"
 ></app-users-table>

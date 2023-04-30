@@ -2,7 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Outp
 import {User} from "../../../../shared/models/user";
 import {RoleEnum} from "../../../../shared/enums/role.enum";
 import {UserService} from "../../../../community/services/profile/user.service";
-import {Pageable} from "../../../../shared/models/pageable";
+import {PaginationUpdate} from "../../../../shared/models/pagination-update";
 
 @Component({
   selector: 'app-users-table',
@@ -12,16 +12,19 @@ import {Pageable} from "../../../../shared/models/pageable";
 })
 export class UsersTableComponent implements OnChanges {
 
-  @Input() pageable: Pageable<User>;
+  @Input() users: User[];
+  @Input() rowsPerPages: number[];
+  @Input() rows: number
+  @Input() page: number;
+  @Input() totalPage: number;
   @Input() title: string;
   @Input() loading = false;
 
-  @Output() paginationChange = new EventEmitter<Pageable<User>>();
+  @Output() paginationChange = new EventEmitter<PaginationUpdate>();
   @Output() userUpdate = new EventEmitter<User>();
   @Output() sortChange = new EventEmitter<string>();
 
   roles = RoleEnum.all();
-  users: User[];
 
 
   constructor(private userService: UserService) {
@@ -47,12 +50,12 @@ export class UsersTableComponent implements OnChanges {
       .subscribe(userSaved => this.userUpdate.emit(userSaved));
   }
 
-  updateRowsPerPage(rows: number): void {
-    this.paginationChange.emit({...this.pageable, rows});
+  updateRowsPerPage(rowsPerPage: number): void {
+    this.paginationChange.emit({rowsPerPage});
   }
 
-  updatePage(number: number): void {
-    this.paginationChange.emit({...this.pageable, number});
+  updatePage(page: number): void {
+    this.paginationChange.emit({page});
   }
 
   updateSort(key: string): void {

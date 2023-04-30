@@ -1,5 +1,5 @@
-import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {Pageable} from "../../models/pageable";
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
+import {PaginationUpdate} from "../../models/pagination-update";
 
 @Component({
   selector: 'app-paginator',
@@ -7,13 +7,24 @@ import {Pageable} from "../../models/pageable";
   styleUrls: ['./paginator.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PaginatorComponent {
+export class PaginatorComponent implements OnChanges {
 
-  @Input() pageable: Pageable<any>;
+  @Input() page: number;
+  @Input() totalPages: number;
 
-  @Output() pageChange = new EventEmitter<number>();
+  @Output() pageChange = new EventEmitter<PaginationUpdate>();
+
+  first: boolean;
+  last: boolean;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.hasOwnProperty('page') || changes.hasOwnProperty('totalPages')) {
+      this.first = !this.page
+      this.last = this.page >= (this.totalPages - 1);
+    }
+  }
 
   changePage(page: number): void {
-    this.pageChange.emit(page);
+    this.pageChange.emit({page});
   }
 }

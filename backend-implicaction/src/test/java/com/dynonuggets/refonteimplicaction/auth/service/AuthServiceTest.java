@@ -8,10 +8,10 @@ import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.Ro
 import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.event.UserCreatedEvent;
+import com.dynonuggets.refonteimplicaction.core.event.UserEnabledEvent;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.core.service.UserService;
-import com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils;
-import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -71,8 +71,6 @@ class AuthServiceTest {
     JwtProvider jwtProvider;
     @Mock
     RefreshTokenService refreshTokenService;
-    @Mock
-    NotificationService notificationService;
     @InjectMocks
     AuthService authService;
     @Captor
@@ -138,6 +136,7 @@ class AuthServiceTest {
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
             verify(roleService, times(3)).getRoleByName(any(RoleEnum.class));
+            verify(publisher, times(1)).publishEvent(any(UserEnabledEvent.class));
         }
 
         @Test
@@ -171,6 +170,7 @@ class AuthServiceTest {
             verify(userRepository, times(1)).existsByUsername(any());
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
+            verify(publisher, times(1)).publishEvent(any(UserCreatedEvent.class));
         }
 
         @Test
@@ -268,7 +268,7 @@ class AuthServiceTest {
         @DisplayName("doit identifier l'utilisateur quand il existe")
         void should_log_user_when_exists() {
             // given
-            final UserModel user = UserTestUtils.generateRandomUserModel();
+            final UserModel user = generateRandomUserModel();
             final String username = user.getUsername();
             final LoginRequest loginRequest = LoginRequest.builder().username(username).password("password").build();
             final String jwtToken = "jwt-token";

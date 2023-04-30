@@ -5,6 +5,7 @@ import {Constants} from "../../../config/constants";
 import {UserService} from "../../../community/services/profile/user.service";
 import {ToasterService} from "../../../core/services/toaster.service";
 import {finalize} from "rxjs/operators";
+import {PaginationUpdate} from "../../../shared/models/pagination-update";
 
 @Component({
   selector: 'app-user-management-widget',
@@ -34,12 +35,19 @@ export class UserManagementWidgetComponent implements OnInit {
 
   updateUser(userUpdated: User): void {
     const index = this.pageable.content.findIndex(user => userUpdated.id === user.id);
-    this.pageable.content.splice(index, 1, userUpdated);
+    this.pageable.content.splice(index, 1, userUpdated)
+    this.pageable = {...this.pageable};
     this.toasterService.success('Succès', 'L\'utilisateur a bien été mis à jour')
   }
 
-  updateUserPageable(pageable: Pageable<User>) {
-    this.fetchUsers(pageable);
+  updatePagination(update: PaginationUpdate) {
+    if (update.rowsPerPage) {
+      this.pageable.rows = update.rowsPerPage;
+    }
+    if (update.page !== undefined) {
+      this.pageable.number = update.page;
+    }
+    this.fetchUsers();
   }
 
   private fetchUsers(pageable = this.pageable): void {

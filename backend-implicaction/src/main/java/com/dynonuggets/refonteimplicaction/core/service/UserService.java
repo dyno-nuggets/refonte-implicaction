@@ -91,10 +91,12 @@ public class UserService {
     @Transactional
     public UserDto updateUserRoles(final String username, final Set<RoleEnum> roles) {
         final UserModel user = getUserByUsernameIfExists(username);
-        final Set<RoleModel> rolesModels = roles.stream().map(roleService::getRoleByName).collect(Collectors.toSet());
+        final Set<RoleModel> rolesModels = roles.stream()
+                .map(roleService::getRoleByName)
+                .collect(Collectors.toSet());
 
         user.setRoles(rolesModels);
-        
+
         return userMapper.toDto(userRepository.save(user));
     }
 }

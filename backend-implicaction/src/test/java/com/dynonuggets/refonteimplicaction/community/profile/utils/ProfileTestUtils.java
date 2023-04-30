@@ -6,7 +6,6 @@ import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
-import com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.test.web.servlet.ResultActions;
@@ -14,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserModel;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomLocalDate;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static java.lang.String.format;
@@ -31,7 +31,7 @@ public class ProfileTestUtils {
     public static ProfileModel generateRandomProfile() {
         return ProfileModel.builder()
                 .id((long) generateRandomNumber())
-                .user(UserTestUtils.generateRandomUserModel())
+                .user(generateRandomUserModel())
                 .hobbies(randomAlphabetic(100))
                 .purpose(randomAlphabetic(100))
                 .presentation(randomAlphabetic(100))

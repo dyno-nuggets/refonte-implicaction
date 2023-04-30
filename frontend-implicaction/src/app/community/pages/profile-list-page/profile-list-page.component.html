@@ -40,8 +40,9 @@
   <div class="d-flex justify-content-end">
     <app-paginator
       class="align-self-end"
-      (pageChange)="setCurrentPage($event)"
-      [pageable]="pageable"
+      (pageChange)="setCurrentPage($event.page)"
+      [totalPages]="pageable.totalPages"
+      [page]="pageable.number"
     ></app-paginator>
   </div>
 

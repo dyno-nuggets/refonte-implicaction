@@ -1,19 +1,19 @@
-import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {User} from "../../../../shared/models/user";
 
 @Component({
   selector: 'app-user-status-badge',
   templateUrl: './user-status-badge.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserStatusBadgeComponent implements OnInit {
 
-  @Input() enabled: boolean;
+  @Input() user: User;
 
   status: string;
   text: string;
 
   ngOnInit(): void {
-    if (this.enabled) {
+    if (this.user.enabled) {
       this.status = 'success';
       this.text = 'actif';
     } else {
