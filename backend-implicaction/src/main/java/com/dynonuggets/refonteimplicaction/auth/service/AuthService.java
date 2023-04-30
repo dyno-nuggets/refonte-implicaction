@@ -72,7 +72,7 @@ public class AuthService {
         final String activationKey = generateActivationKey();
         final UserModel user = registerUser(registerRequest, activationKey);
 
-        
+
         if (user.isEnabled()) {
             publisher.publishEvent(new UserEnabledEvent(this, user.getUsername()));
         } else {
@@ -83,7 +83,7 @@ public class AuthService {
     /**
      * Vérifie la validité de la requête de sign-up
      *
-     * @throws AuthenticationException si le nom d’utilisateur ou l’email est déjà utilisé
+     * @throws AuthenticationException si le nom d’utilisateur ou l’adresse mail est déjà utilisé
      */
     private void validateRegisterRequest(@Valid final RegisterRequest registerRequest) throws ImplicactionException {
         if (userRepository.existsByUsername(registerRequest.getUsername())) {
@@ -96,10 +96,10 @@ public class AuthService {
     }
 
     /**
-     * Définit l’adresse email de l’utilisateur correspondant à la clé d’activation comme vérifié si elle ne l’est pas déjà
+     * Définit l’adresse mail de l’utilisateur correspondant à la clé d’activation comme vérifié si elle ne l’est pas déjà
      *
      * @throws EntityNotFoundException si aucun utilisateur n’est associé à cette clé d’activation
-     * @throws AuthenticationException si l’email de l’utilisateur est déjà vérifié
+     * @throws AuthenticationException si l’adresse mail de l’utilisateur est déjà vérifié
      */
     @Transactional
     public void verifyAccount(final String activationKey) throws ImplicactionException {
@@ -114,7 +114,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    // TODO: revoir potentiellement la logique des jetons (ex: suppression des refresh tokens associés précédemment)
+    // TODO : revoir potentiellement la logique des jetons (ex: suppression des refresh tokens associés précédemment)
     @Transactional
     public LoginResponse login(@Valid final LoginRequest loginRequest) throws ImplicactionException {
         final String username = loginRequest.getUsername();
@@ -179,8 +179,7 @@ public class AuthService {
                 .registeredAt(now())
                 .build();
 
-        // On est obligé de flush ici pour que l'objet soit modifié instantanément dans le cas
-        // où il faille créer le profil dans la foulée
+        // On est obligé de flush ici pour que l’objet soit modifié instantanément dans le cas où il faille créer le profil dans la foulée.
         userRepository.saveAndFlush(user);
 
         return user;
