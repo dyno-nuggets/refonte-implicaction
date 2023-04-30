@@ -14,6 +14,7 @@ import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
 import com.dynonuggets.refonteimplicaction.core.error.TechnicalException;
 import com.dynonuggets.refonteimplicaction.core.service.UserService;
+import com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils;
 import com.dynonuggets.refonteimplicaction.filemanagement.service.CloudService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,7 +38,6 @@ import static com.dynonuggets.refonteimplicaction.community.profile.utils.Profil
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.error.CoreErrorResult.OPERATION_NOT_PERMITTED;
 import static com.dynonuggets.refonteimplicaction.core.error.UserErrorResult.USERNAME_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.util.List.of;
@@ -75,7 +75,7 @@ class ProfileServiceTest {
         @DisplayName("doit créer un profil utilisateur si l'utilisateur existe et que son profil n'existe pas encore")
         void should_create_profile_if_user_exists_and_profile_is_not_already_created() {
             // given
-            final UserModel userModel = generateRandomUser();
+            final UserModel userModel = UserTestUtils.generateRandomUserModel();
             final String username = userModel.getUsername();
             given(userService.getUserByUsernameIfExists(username)).willReturn(userModel);
             given(profileRepository.findByUser_Username(username)).willReturn(Optional.empty());
@@ -109,7 +109,7 @@ class ProfileServiceTest {
         @DisplayName("doit lancer une exception si le profil existe déjà")
         void should_throw_exception_if_profile_already_exists() {
             // given
-            final UserModel userModel = generateRandomUser();
+            final UserModel userModel = UserTestUtils.generateRandomUserModel();
             final String username = userModel.getUsername();
             given(userService.getUserByUsernameIfExists(username)).willReturn(userModel);
             given(profileRepository.findByUser_Username(username)).willReturn(Optional.of(ProfileModel.builder().build()));

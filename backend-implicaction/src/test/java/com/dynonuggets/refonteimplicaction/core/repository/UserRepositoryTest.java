@@ -11,7 +11,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum.ROLE_USER;
-import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserModel;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.TestInstance.Lifecycle;
 
@@ -27,11 +27,11 @@ class UserRepositoryTest extends AbstractContainerBaseTest {
     void setup() {
         dbContent = userRepository.saveAll(
                 List.of(
-                        generateRandomUser(Set.of(ROLE_USER), true),
-                        generateRandomUser(Set.of(ROLE_USER), false),
-                        generateRandomUser(Set.of(ROLE_USER), true),
-                        generateRandomUser(Set.of(ROLE_USER), false),
-                        generateRandomUser(Set.of(ROLE_USER), true)
+                        generateRandomUserModel(Set.of(ROLE_USER), true),
+                        generateRandomUserModel(Set.of(ROLE_USER), false),
+                        generateRandomUserModel(Set.of(ROLE_USER), true),
+                        generateRandomUserModel(Set.of(ROLE_USER), false),
+                        generateRandomUserModel(Set.of(ROLE_USER), true)
                 )
         );
     }

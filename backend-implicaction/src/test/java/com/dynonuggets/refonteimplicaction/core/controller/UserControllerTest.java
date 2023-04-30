@@ -56,7 +56,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @BeforeEach
     void setUp() {
         roles.add(ROLE_USER);
-        mockedUser = generateRandomUser();
+        mockedUser = generateRandomUserModel();
         mockedUserDtos = of(
                 generateRandomUserDto(),
                 generateRandomUserDto(),
