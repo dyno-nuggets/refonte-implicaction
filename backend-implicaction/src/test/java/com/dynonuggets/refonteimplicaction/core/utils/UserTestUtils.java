@@ -69,11 +69,11 @@ public class UserTestUtils {
                 .andExpect(jsonPath(format("%s.registeredAt", prefix), is(registeredAt)));
     }
 
-    public static UserModel generateRandomUser() {
-        return generateRandomUser(null, generateRandomBoolean());
+    public static UserModel generateRandomUserModel() {
+        return generateRandomUserModel(null, generateRandomBoolean());
     }
 
-    public static UserModel generateRandomUser(final Set<RoleEnum> roleEnums, final boolean isEnabled) {
+    public static UserModel generateRandomUserModel(final Set<RoleEnum> roleEnums, final boolean isEnabled) {
         final String firstname = randomAlphabetic(10);
         final String lastname = randomAlphabetic(10);
         final Instant registeredAt = generateRandomInstant();

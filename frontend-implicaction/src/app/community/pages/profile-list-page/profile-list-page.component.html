@@ -1,7 +1,7 @@
 <div class="container-fluid row justify-content-around">
 
   <div class="card col-lg-4 col-xl-3">
-    <app-community-sidemenu [menuItems]="menuItems"></app-community-sidemenu>
+    <app-sidemenu [menuItems]="menuItems"></app-sidemenu>
   </div>
 
 
@@ -40,8 +40,9 @@
   <div class="d-flex justify-content-end">
     <app-paginator
       class="align-self-end"
-      (pageChange)="setCurrentPage($event)"
-      [pageable]="pageable"
+      (pageChange)="setCurrentPage($event.page)"
+      [totalPages]="pageable.totalPages"
+      [page]="pageable.number"
     ></app-paginator>
   </div>
 

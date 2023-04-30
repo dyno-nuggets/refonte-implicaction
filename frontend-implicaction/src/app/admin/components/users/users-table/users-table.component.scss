@@ -1,0 +1,74 @@
+@import "src/assets/variables";
+
+@media only screen and (max-width: 880px), (min-width: 992px) and (max-width: 1199px) {
+
+  /* force le tableau à "ne plus être un tableau" */
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  /* cache les headers (mais ne les supprime pas pour des raisons d'accessibilité */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    margin: 0 0 1rem 0;
+  }
+
+  tr:nth-child(odd) {
+    background: $secondary;
+  }
+
+  td {
+    /* transformation en "ligne" */
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    display: grid;
+  }
+
+  td:before {
+    position: absolute;
+    top: 0;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  /*
+  fixme: voir si on ne peut pas utiliser un data-* pour éviter d'avoir à maintenir le html et le css
+  */
+  td:before {
+    font-weight: bold;
+  }
+
+  td:nth-of-type(1):before {
+    content: "#";
+  }
+
+  td:nth-of-type(2):before {
+    content: "Nom Complet";
+  }
+
+  td:nth-of-type(3):before {
+    content: "Rôles";
+  }
+
+  td:nth-of-type(4):before {
+    content: "Email";
+  }
+
+  td:nth-of-type(5) {
+    .options-wrapper {
+      justify-content: end !important;
+    }
+
+    &:before {
+      content: "Statut";
+    }
+  }
+}

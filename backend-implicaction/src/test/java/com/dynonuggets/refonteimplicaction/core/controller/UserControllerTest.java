@@ -27,11 +27,11 @@ import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.*;
 import static com.dynonuggets.refonteimplicaction.core.utils.UserUris.*;
 import static java.util.List.of;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = UserController.class)
@@ -56,7 +56,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
     @BeforeEach
     void setUp() {
         roles.add(ROLE_USER);
-        mockedUser = generateRandomUser();
+        mockedUser = generateRandomUserModel();
         mockedUserDtos = of(
                 generateRandomUserDto(),
                 generateRandomUserDto(),
@@ -111,7 +111,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
             given(userService.getAllPendingActivationUsers(any())).willReturn(expectedUsers);
 
             // when
-            final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_PENDING_USER_URI));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_USER_URI)));
 
             // then
             resultActionsValidationForPageUser(expectedUsers, resultActions);
@@ -122,7 +122,7 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         @DisplayName("doit répondre OK avec la liste des utilisateurs dont le compte n'est pas encore activé")
         void should_response_forbidden_when_user_is_not_authenticated() throws Exception {
             // when
-            final ResultActions resultActions = mvc.perform(get(USER_BASE_URI + GET_PENDING_USER_URI));
+            final ResultActions resultActions = mvc.perform(get(getFullPath(GET_PENDING_USER_URI)));
 
             // then
             resultActions.andExpect(status().isForbidden());
@@ -139,11 +139,14 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_when_current_user_has_role_admin_and_csrf_token_is_present() throws Exception {
             // given
             final String username = "username";
-            willDoNothing().given(userService).enableUser(username);
+            given(userService.enableUser(username)).willReturn(UserDto.builder().username("username").enabled(true).build());
 
             // when - then
-            mvc.perform(post(USER_BASE_URI + ENABLE_USER, username).with(csrf()))
-                    .andExpect(status().isOk());
+            mvc.perform(post(getFullPath(ENABLE_USER), username).with(csrf()))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.username").value(username))
+                    .andExpect(jsonPath("$.enabled").value(true));
+            verify(userService, times(1)).enableUser(username);
         }
 
         @Test
@@ -152,11 +155,13 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_when_current_user_has_role_admin() throws Exception {
             // given
             final String username = "username";
-            willDoNothing().given(userService).enableUser(username);
 
-            // when - then
-            mvc.perform(post(USER_BASE_URI + ENABLE_USER, username))
-                    .andExpect(status().isForbidden());
+            // when
+            final ResultActions resultActions = mvc.perform(post(getFullPath(ENABLE_USER), username));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
+            verifyNoInteractions(userService);
         }
 
         @Test
@@ -165,11 +170,13 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_when_current_user_is_not_admin() throws Exception {
             // given
             final String username = "username";
-            willDoNothing().given(userService).enableUser(username);
 
-            // when - then
-            mvc.perform(post(USER_BASE_URI + ENABLE_USER, username).with(csrf()))
-                    .andExpect(status().isForbidden());
+            // when
+            final ResultActions resultActions = mvc.perform(post(getFullPath(ENABLE_USER), username).with(csrf()));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
+            verifyNoInteractions(userService);
         }
 
         @Test
@@ -178,11 +185,13 @@ class UserControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_when_current_user_is_not_authenticated() throws Exception {
             // given
             final String username = "username";
-            willDoNothing().given(userService).enableUser(username);
 
             // when - then
-            mvc.perform(post(USER_BASE_URI + ENABLE_USER, username).with(csrf()))
-                    .andExpect(status().isForbidden());
+            final ResultActions resultActions = mvc.perform(post(getFullPath(ENABLE_USER), username).with(csrf()));
+
+            // then
+            resultActions.andExpect(status().isForbidden());
+            verifyNoInteractions(userService);
         }
     }
 }

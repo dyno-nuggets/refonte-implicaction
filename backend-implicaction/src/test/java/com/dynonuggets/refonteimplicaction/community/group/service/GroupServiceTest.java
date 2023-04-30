@@ -39,7 +39,7 @@ import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErr
 import static com.dynonuggets.refonteimplicaction.community.group.error.GroupErrorResult.USER_ALREADY_SUBSCRIBED_TO_GROUP;
 import static com.dynonuggets.refonteimplicaction.community.group.utils.GroupTestUtils.generateRandomGroup;
 import static com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum.ROLE_PREMIUM;
-import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserModel;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.time.Instant.now;
 import static java.util.List.of;
@@ -78,7 +78,7 @@ class GroupServiceTest {
             // given
             final MockMultipartFile mockedImage = new MockMultipartFile("user-file", "test.jpg", "image/jpeg", "test data".getBytes());
             final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
-            final UserModel currentUser = generateRandomUser(Set.of(ROLE_PREMIUM), true);
+            final UserModel currentUser = generateRandomUserModel(Set.of(ROLE_PREMIUM), true);
             final String imageUrl = "http://localhost/imapge.png";
             final String username = currentUser.getUsername();
             final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
@@ -107,7 +107,7 @@ class GroupServiceTest {
         void should_create_group_when_no_image_is_submitted() {
             // given
             final GroupCreationRequest groupCreationRequest = GroupCreationRequest.builder().name("coucou subreddit").description("Elle est super bien ma description").build();
-            final UserModel currentUser = generateRandomUser(Set.of(ROLE_PREMIUM), true);
+            final UserModel currentUser = generateRandomUserModel(Set.of(ROLE_PREMIUM), true);
             final String username = currentUser.getUsername();
             final ProfileModel profile = ProfileModel.builder().user(currentUser).build();
             final GroupModel expectedGroup = GroupModel.builder().id(12L).name(groupCreationRequest.getName()).description(groupCreationRequest.getDescription()).creator(profile).createdAt(now()).enabled(false).build();

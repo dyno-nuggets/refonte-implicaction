@@ -165,7 +165,11 @@ export class ApiEndpointsService {
   }
 
   getActivateUserEndpoint(username: string): string {
-    return ApiEndpointsService.createUrl(Uris.AUTH.ACTIVATE_USER.replace('{username}', username));
+    return ApiEndpointsService.createUrl(Uris.USERS.ACTIVATE_USER.replace('{username}', username));
+  }
+
+  updateUserRolesEndpoint(username: string) {
+    return ApiEndpointsService.createUrlWithPathVariables(Uris.USERS.UPDATE_USER_ROLES.replace('{username}', username));
   }
 
   updateImageProfileEndpoint(username: string): string {

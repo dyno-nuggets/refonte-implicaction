@@ -8,9 +8,10 @@ import com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.Ro
 import com.dynonuggets.refonteimplicaction.core.domain.repository.UserRepository;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
 import com.dynonuggets.refonteimplicaction.core.error.ImplicactionException;
+import com.dynonuggets.refonteimplicaction.core.event.UserCreatedEvent;
+import com.dynonuggets.refonteimplicaction.core.event.UserEnabledEvent;
 import com.dynonuggets.refonteimplicaction.core.service.RoleService;
 import com.dynonuggets.refonteimplicaction.core.service.UserService;
-import com.dynonuggets.refonteimplicaction.notification.service.NotificationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,7 +38,7 @@ import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.auth.error.AuthErrorResult.*;
 import static com.dynonuggets.refonteimplicaction.core.error.UserErrorResult.USERNAME_NOT_FOUND;
-import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserModel;
 import static com.dynonuggets.refonteimplicaction.utils.AssertionUtils.assertImplicactionException;
 import static java.lang.String.format;
 import static java.time.Instant.now;
@@ -70,8 +71,6 @@ class AuthServiceTest {
     JwtProvider jwtProvider;
     @Mock
     RefreshTokenService refreshTokenService;
-    @Mock
-    NotificationService notificationService;
     @InjectMocks
     AuthService authService;
     @Captor
@@ -137,6 +136,7 @@ class AuthServiceTest {
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
             verify(roleService, times(3)).getRoleByName(any(RoleEnum.class));
+            verify(publisher, times(1)).publishEvent(any(UserEnabledEvent.class));
         }
 
         @Test
@@ -170,6 +170,7 @@ class AuthServiceTest {
             verify(userRepository, times(1)).existsByUsername(any());
             verify(userRepository, times(1)).existsByEmail(any());
             verify(passwordEncoder, times(1)).encode(any());
+            verify(publisher, times(1)).publishEvent(any(UserCreatedEvent.class));
         }
 
         @Test
@@ -210,7 +211,7 @@ class AuthServiceTest {
         @DisplayName("doit activer l'utilisateur correspondant à la clé d'activation transmise s'il n'est pas déjà activé")
         void should_activate_corresponding_user() {
             // given
-            final UserModel user = generateRandomUser(Set.of(RoleEnum.ROLE_USER), false);
+            final UserModel user = generateRandomUserModel(Set.of(RoleEnum.ROLE_USER), false);
             given(userRepository.findByActivationKey(any())).willReturn(of(user));
 
             // when
@@ -267,7 +268,7 @@ class AuthServiceTest {
         @DisplayName("doit identifier l'utilisateur quand il existe")
         void should_log_user_when_exists() {
             // given
-            final UserModel user = generateRandomUser();
+            final UserModel user = generateRandomUserModel();
             final String username = user.getUsername();
             final LoginRequest loginRequest = LoginRequest.builder().username(username).password("password").build();
             final String jwtToken = "jwt-token";

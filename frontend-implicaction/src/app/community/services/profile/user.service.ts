@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 import {User} from '../../../shared/models/user';
 import {Pageable} from '../../../shared/models/pageable';
 import {HttpClient} from '@angular/common/http';
-import {Group} from '../../models/group';
+import {RoleEnumCode} from "../../../shared/enums/role.enum";
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class UserService {
 
   }
 
-  getAll(pageable: Pageable<any>): Observable<any> {
+  getAll(pageable: Pageable<any>): Observable<Pageable<User>> {
     return this.http.get(this.apiEndpointsService.getAllUserEndpoint(pageable));
   }
 
@@ -28,12 +28,11 @@ export class UserService {
     return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
 
-  enableUser(username: string): Observable<void> {
-    return this.http.post<void>(this.apiEndpointsService.getActivateUserEndpoint(username), null);
+  enableUser(username: string): Observable<User> {
+    return this.http.post<User>(this.apiEndpointsService.getActivateUserEndpoint(username), null);
   }
 
-  getUserGroups(userId: string): Observable<Group[]> {
-    return this.http.get<Group[]>(this.apiEndpointsService.getAllGroupsByMemberUsername(userId));
+  updateUserRoles(username: string, roles: RoleEnumCode[]): Observable<User> {
+    return this.http.post(this.apiEndpointsService.updateUserRolesEndpoint(username), roles);
   }
-
 }

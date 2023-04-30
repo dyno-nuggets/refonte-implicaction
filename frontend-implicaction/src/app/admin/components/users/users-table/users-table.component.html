@@ -1,0 +1,132 @@
+<div class="col-12">
+  <div class="card overflow-auto">
+
+    <div class="filter">
+
+    </div>
+
+    <div class="card-body">
+      <h2 class="card-title">{{title}}</h2>
+
+      <div class="datatable-wrapper datatable-loading sortable searchable fixed-columns">
+        <div class="datatable-top">
+          <div *ngIf="rowsPerPages?.length" class="datatable-dropdown">
+            <label>
+              <p-dropdown
+                (ngModelChange)="updateRowsPerPage($event)"
+                [options]="rowsPerPages"
+                [(ngModel)]="rows"
+              ></p-dropdown>
+              <span class="ps-2">entrées par page</span>
+            </label>
+          </div>
+          <!--
+          <div class="datatable-search">
+            <input class="datatable-input" placeholder="Search..." type="search" title="Search within table">
+          </div>
+          -->
+        </div>
+        <div class="datatable-container">
+          <table role="table" class="table table-borderless table-hover datatable datatable-table" [ngClass]="{'table-hover': !loading}">
+            <thead role="rowgroup">
+            <tr role="row">
+              <th role="columnheader" style="width: 10%">#</th>
+              <th role="columnheader" data-sortable="true" style="width: 25%">Nom Complet</th>
+              <th role="columnheader" data-sortable="true" style="width: 40%">Rôle</th>
+              <th role="columnheader" data-sortable="true" style="width: 15%">Email</th>
+              <th role="columnheader" data-sortable="true" style="width: 10%">Statut</th>
+            </tr>
+            </thead>
+            <tbody role="rowgroup">
+            <ng-container *ngIf="!loading; else templateLoading">
+              <tr *ngFor="let user of users; let index = index" role="row" data-index="{{index}}">
+                <td role="cell">{{user.id}}</td>
+                <td role="cell">{{user.firstname}} {{user.lastname}}</td>
+                <td role="cell">
+                  <div>
+                    <p-multiSelect
+                      optionLabel="label"
+                      optionValue="code"
+                      [styleClass]="'col-8'"
+                      [(ngModel)]="user.roles"
+                      [showHeader]="false"
+                      [options]="roles"
+                    ></p-multiSelect>
+                    <button
+                      pTooltip="enregistrer les rôles de l'utilisateur"
+                      tooltipPosition="top"
+                      class="btn btn-outline-primary btn-sm mb-1 ms-2"
+                      (click)="saveUserRoles(user)"
+                    >
+
+                      <i class="d-inline-block fas fa-save"></i>
+                    </button>
+                  </div>
+                </td>
+                <td role="cell">{{user.email}}</td>
+                <td role="cell">
+                  <div class="options-wrapper d-flex justify-content-between align-items-center">
+                    <app-user-status-badge [user]="user"></app-user-status-badge>
+                    <div>
+                      <a
+                        id="dropdownMenuButton"
+                        aria-expanded="false"
+                        class="btn border-0 text-light-gray"
+                        data-bs-toggle="dropdown"
+                        role="button"
+                      >
+                        <i class="fas fa-cog"></i>
+                      </a>
+                      <ul aria-labelledby="dropdownMenuButton" class="dropdown-menu dropdown-menu-end">
+                        <li>
+                          <span (click)="disableUser(user)" class="dropdown-item cursor-pointer">
+                            <i class="fa fa-times text-danger"></i> désactiver l'utilisateur (non fonctionnel)
+                          </span>
+                        </li>
+                        <li *ngIf="!user.enabled">
+                          <span (click)="enableUser(user)" class="dropdown-item cursor-pointer">
+                            <i class="fa fa-check text-success"></i> activer l'utilisateur
+                          </span>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </div>
+        <div class="d-flex justify-content-end align-items-center datatable-bottom">
+          <app-paginator
+            [totalPages]="totalPage"
+            [page]="page"
+            (pageChange)="updatePage($event.page)"
+          ></app-paginator>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #templateLoading>
+  <tr *ngFor="let user of [].constructor(rows); let index = index" style="height: 58px">
+    <td>
+      <p-skeleton width="60%"></p-skeleton>
+    </td>
+    <td>
+      <p-skeleton width="60%"></p-skeleton>
+    </td>
+    <td>
+      <p-skeleton width="70%"></p-skeleton>
+    </td>
+    <td>
+      <p-skeleton></p-skeleton>
+    </td>
+    <td>
+      <p-skeleton width="50%"></p-skeleton>
+    </td>
+  </tr>
+</ng-template>

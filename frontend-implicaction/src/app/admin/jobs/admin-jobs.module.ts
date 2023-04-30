@@ -8,7 +8,6 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {FeatherModule} from 'angular-feather';
 import {DropdownModule} from 'primeng/dropdown';
 import {CheckboxModule} from 'primeng/checkbox';
-import {PendingJobTableComponent} from './components/pending-job-table/pending-job-table.component';
 import {JobPostingFormComponent} from './components/job-posting-form/job-posting-form.component';
 
 
@@ -16,10 +15,6 @@ import {JobPostingFormComponent} from './components/job-posting-form/job-posting
   declarations: [
     AdminJobsComponent,
     JobPostingFormComponent,
-    PendingJobTableComponent
-  ],
-  exports: [
-    PendingJobTableComponent
   ],
   imports: [
     CommonModule,

@@ -1,0 +1,36 @@
+@import "src/assets/variables";
+
+.datatable-wrapper {
+
+  .datatable-top {
+    padding: 8px 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .datatable-container {
+    border-bottom: 1px solid #d9d9d9;
+
+    .table thead {
+      background: $secondary;
+    }
+
+    .table tr {
+      vertical-align: middle;
+    }
+  }
+
+
+  .datatable-bottom {
+    padding: 8px 10px;
+  }
+
+  .datatable-table {
+    max-width: 100%;
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: separate;
+  }
+}
+
+

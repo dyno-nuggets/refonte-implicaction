@@ -13,7 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static com.dynonuggets.refonteimplicaction.core.utils.AppUtils.callIfNotNull;
-import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserModel;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomLocalDate;
 import static com.dynonuggets.refonteimplicaction.utils.TestUtils.generateRandomNumber;
 import static java.lang.String.format;
@@ -31,7 +31,7 @@ public class ProfileTestUtils {
     public static ProfileModel generateRandomProfile() {
         return ProfileModel.builder()
                 .id((long) generateRandomNumber())
-                .user(generateRandomUser())
+                .user(generateRandomUserModel())
                 .hobbies(randomAlphabetic(100))
                 .purpose(randomAlphabetic(100))
                 .presentation(randomAlphabetic(100))

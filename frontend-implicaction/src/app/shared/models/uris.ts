@@ -15,7 +15,6 @@ export class Uris {
     static readonly SIGNUP = 'auth/signup';
     static readonly REFRESH_TOKEN = 'auth/refresh/token';
     static readonly LOGOUT = 'auth/logout';
-    static readonly ACTIVATE_USER = 'users/{username}/enable';
   };
 
   /**
@@ -27,6 +26,8 @@ export class Uris {
     static readonly BY_ID = 'users';
     static readonly GET_ALL_PENDING_USERS = 'users/pending';
     static readonly GROUP_LIST = 'users';
+    static readonly ACTIVATE_USER = 'users/{username}/enable';
+    static readonly UPDATE_USER_ROLES = 'users/{username}/roles';
   };
 
   static readonly PROFILES = class {

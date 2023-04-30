@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.Set;
 
 import static com.dynonuggets.refonteimplicaction.core.domain.model.properties.enums.RoleEnum.ROLE_USER;
-import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUser;
+import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserModel;
 import static com.dynonuggets.refonteimplicaction.core.utils.UserTestUtils.generateRandomUserDto;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,7 +32,7 @@ class UserMapperTest {
 
     @BeforeEach
     void setUp() {
-        mockedUser = generateRandomUser(Set.of(ROLE_USER), true);
+        mockedUser = generateRandomUserModel(Set.of(ROLE_USER), true);
         mockedUserDto = generateRandomUserDto(Set.of(ROLE_USER), true);
     }
 
