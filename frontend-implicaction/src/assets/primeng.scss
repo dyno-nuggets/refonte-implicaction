@@ -14,8 +14,11 @@
 }
 
 .p-element {
-  &:hover, &.p-highlight {
-    background-color: $secondary !important;
+  &.p-dropdown-item, &.p-multiselect-item {
+
+    &:hover, &.p-highlight {
+      background-color: $secondary !important;
+    }
   }
 }
 

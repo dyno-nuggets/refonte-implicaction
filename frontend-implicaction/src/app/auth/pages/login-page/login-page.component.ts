@@ -48,8 +48,10 @@ export class LoginPageComponent implements OnInit, OnDestroy {
       .pipe(finalize(() => this.isLoading = false), take(1))
       .subscribe({
         next: principal => this.redirectSuccess(principal.username),
-        // pour l'instant on ne fait rien, l'error-interceptor s'occupe de gérer les erreurs
-        error: () => ({}),
+        error: (err) => {
+          if (err.error.errorMessage)
+            this.alertService.error('Erreur', err.error.errorMessage, null);
+        },
       });
   }
 

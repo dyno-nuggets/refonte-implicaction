@@ -1,4 +1,4 @@
-<nav>
+<nav [ngStyle]="{'visibility': visible ? 'visible' : 'hidden'}">
   <ul class="pagination justify-content-center align-items-end m-0">
     <li *ngIf="!first" class="page-item cursor-pointer">
       <span

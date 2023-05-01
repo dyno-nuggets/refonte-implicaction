@@ -37,7 +37,13 @@ export class SignupPageComponent implements OnInit, OnDestroy {
     this.authService
       .signup(signupPaylod)
       .pipe(finalize(() => this.isLoading = false), take(1))
-      .subscribe(() => this.router.navigate(['/auth/login'], {queryParams: {signupSuccess: true}}));
+      .subscribe({
+        next: () => this.router.navigate(['/auth/login'], {queryParams: {signupSuccess: true}}),
+        error: (err) => {
+          if (err.error.errorMessage)
+            this.alertService.error('Erreur', err.error.errorMessage, null);
+        }
+      });
   }
 
   ngOnDestroy(): void {

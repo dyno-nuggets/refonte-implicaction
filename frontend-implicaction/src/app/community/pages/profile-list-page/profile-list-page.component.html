@@ -35,15 +35,16 @@
         </app-profile-card-base>
       </div>
     </ng-container>
-  </div>
 
-  <div class="d-flex justify-content-end">
-    <app-paginator
-      class="align-self-end"
-      (pageChange)="setCurrentPage($event.page)"
-      [totalPages]="pageable.totalPages"
-      [page]="pageable.number"
-    ></app-paginator>
+
+    <div class=" ms-lg-2 p-4">
+      <app-paginator
+        class="align-self-end"
+        (pageChange)="setCurrentPage($event.page)"
+        [totalPages]="pageable.totalPages"
+        [page]="pageable.number"
+      ></app-paginator>
+    </div>
   </div>
 
   <ng-template #templateLoading>

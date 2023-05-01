@@ -44,10 +44,12 @@
                 <td role="cell">{{user.firstname}} {{user.lastname}}</td>
                 <td role="cell">
                   <div>
+                    <!-- appendTo="body" permet d'afficher toutes les options du dropdown quand la card est trop petite  -->
                     <p-multiSelect
+                      appendTo="body"
                       optionLabel="label"
                       optionValue="code"
-                      [styleClass]="'col-8'"
+                      [styleClass]="'col-5 col-sm-8'"
                       [(ngModel)]="user.roles"
                       [showHeader]="false"
                       [options]="roles"
@@ -99,9 +101,9 @@
         </div>
         <div class="d-flex justify-content-end align-items-center datatable-bottom">
           <app-paginator
+            (pageChange)="updatePage($event.page)"
             [totalPages]="totalPage"
             [page]="page"
-            (pageChange)="updatePage($event.page)"
           ></app-paginator>
         </div>
       </div>
