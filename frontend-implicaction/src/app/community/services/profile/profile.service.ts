@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Observable} from "rxjs";
-import {ProfileUpdateRequest} from "../../models/profile-update-request";
-import {HttpClient, HttpEvent, HttpRequest} from "@angular/common/http";
-import {ApiEndpointsService} from "../../../core/services/api-endpoints.service";
-import {Profile} from "../../models/profile";
-import {Pageable} from "../../../shared/models/pageable";
+import {Observable} from 'rxjs';
+import {ProfileUpdateRequest} from '../../models/profile-update-request';
+import {HttpClient, HttpEvent, HttpRequest} from '@angular/common/http';
+import {ApiEndpointsService} from '../../../core/services/api-endpoints.service';
+import {Profile} from '../../models/profile';
+import {Pageable} from '../../../shared/models/pageable';
+import {RelationCriteriaEnum} from '../../models/enums/relation-criteria-enum';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ export class ProfileService {
     return this.http.request<Profile>(req);
   }
 
-  getAllProfiles(pageable: Pageable<Profile>): Observable<Pageable<Profile>> {
-    return this.http.get<Pageable<Profile>>(this.apiEndpointsService.getAllProfilesEndpoint(pageable));
+  getAllProfiles(relationCriteria: RelationCriteriaEnum, pageable: Pageable<Profile>): Observable<Pageable<Profile>> {
+    return this.http.get<Pageable<Profile>>(this.apiEndpointsService.getAllProfilesEndpoint(relationCriteria, pageable));
   }
 }

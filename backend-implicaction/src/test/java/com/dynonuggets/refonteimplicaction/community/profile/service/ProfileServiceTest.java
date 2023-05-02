@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profil
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
+import com.dynonuggets.refonteimplicaction.community.profile.dto.enums.RelationCriteriaEnum;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
 import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.community.relation.mapper.RelationMapper;
@@ -30,7 +31,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.dynonuggets.refonteimplicaction.community.profile.error.ProfileErrorResult.PROFILE_NOT_FOUND;
 import static com.dynonuggets.refonteimplicaction.community.profile.utils.ProfileMessages.PROFILE_ALREADY_EXISTS_MESSAGE;
@@ -255,19 +258,24 @@ class ProfileServiceTest {
     @Test
     @DisplayName("doit retourner la liste des profils des utilisateurs")
     void should_get_all_profiles_when_getAllProfiles() {
-        final Page<ProfileModel> profiles = new PageImpl<>(of(generateRandomProfile(), generateRandomProfile(), generateRandomProfile()));
-        given(profileRepository.findAll(any(Pageable.class))).willReturn(profiles);
-        given(authService.getCurrentUser()).willReturn(UserModel.builder().username("username").build());
-        given(relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(anyString(), anyList())).willReturn(of());
+        final List<ProfileModel> profileModels = of(generateRandomProfile(), generateRandomProfile(), generateRandomProfile());
+        final Page<ProfileModel> profiles = new PageImpl<>(profileModels);
+        final UserModel currentUser = generateRandomUserModel();
+        final Pageable pageable = Pageable.ofSize(10);
+        final List<String> usernames = profileModels.stream().map(p -> p.getUser().getUsername()).collect(Collectors.toList());
+        
+        given(authService.getCurrentUser()).willReturn(currentUser);
+        given(profileRepository.findAllProfilesWithRelationTypeCriteria(currentUser.getUsername(), RelationCriteriaEnum.ANY, pageable)).willReturn(profiles);
+        given(relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUser.getUsername(), usernames)).willReturn(of());
         profiles.forEach(p -> given(profileMapper.toDtoLight(p)).willReturn(ProfileDto.builder().username(p.getUser().getUsername()).build()));
 
         // when
-        final Page<ProfileDto> result = profileService.getAllProfiles(Pageable.unpaged());
+        final Page<ProfileDto> result = profileService.getAllProfiles(RelationCriteriaEnum.ANY, pageable);
 
         // then
         final int size = profiles.getSize();
         assertThat(result).hasSize(size);
-        verify(profileRepository, times(1)).findAll(any(Pageable.class));
+        verify(profileRepository, times(1)).findAllProfilesWithRelationTypeCriteria(currentUser.getUsername(), RelationCriteriaEnum.ANY, pageable);
         verify(profileMapper, times(size)).toDtoLight(any());
     }
 

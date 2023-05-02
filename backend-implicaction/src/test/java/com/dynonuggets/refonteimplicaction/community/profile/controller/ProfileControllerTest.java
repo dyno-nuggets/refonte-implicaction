@@ -2,6 +2,7 @@ package com.dynonuggets.refonteimplicaction.community.profile.controller;
 
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
+import com.dynonuggets.refonteimplicaction.community.profile.dto.enums.RelationCriteriaEnum;
 import com.dynonuggets.refonteimplicaction.community.profile.service.ProfileService;
 import com.dynonuggets.refonteimplicaction.core.controller.ControllerIntegrationTestBase;
 import com.dynonuggets.refonteimplicaction.core.error.EntityNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -61,7 +63,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
         void should_response_ok_with_all_profiles_when_getAllProfile_and_authenticated() throws Exception {
             // given
             final Page<ProfileDto> expectedPages = new PageImpl<>(of(generateRandomProfileDto(), generateRandomProfileDto()));
-            given(profileService.getAllProfiles(any())).willReturn(expectedPages);
+            given(profileService.getAllProfiles(any(RelationCriteriaEnum.class), any(Pageable.class))).willReturn(expectedPages);
 
             // when
             final ResultActions resultActions = mvc.perform(get(baseUri)
@@ -70,7 +72,7 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
 
             // then
             resultActionsValidationForPageProfile(expectedPages, resultActions);
-            verify(profileService, times(1)).getAllProfiles(any());
+            verify(profileService, times(1)).getAllProfiles(any(RelationCriteriaEnum.class), any(Pageable.class));
         }
 
         @Test
