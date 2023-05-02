@@ -10,6 +10,7 @@ import {Response} from '../../forum/model/response';
 import {GetCategoriesOptions} from '../../forum/services/category.service';
 import {Profile} from '../../community/models/profile';
 import {Relation} from '../../community/models/relation';
+import {RelationCriteriaEnum} from '../../community/models/enums/relation-criteria-enum';
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
 export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
@@ -106,7 +107,7 @@ export class ApiEndpointsService {
       });
   }
 
-  private static concatCriteria(criteria: Criteria, pageable: Pageable<any>): any {
+  private static concatCriteria(criteria: any, pageable: Pageable<any>): any {
     return {
       ...criteria,
       rows: pageable.rows,
@@ -160,8 +161,13 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.PROFILES.BASE_URI);
   }
 
-  getAllProfilesEndpoint(pageable: Pageable<Profile>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.PROFILES.BASE_URI, pageable);
+  getAllProfilesEndpoint(relationCriteria: RelationCriteriaEnum, pageable: Pageable<Profile>): string {
+    const objectParam = ApiEndpointsService.concatCriteria({relationCriteria}, pageable);
+    return ApiEndpointsService.createUrlWithQueryParameters(
+      Uris.PROFILES.BASE_URI,
+      (qs: QueryStringParameters) =>
+        this.buildQueryStringFromFilters(objectParam, qs)
+    );
   }
 
   getActivateUserEndpoint(username: string): string {

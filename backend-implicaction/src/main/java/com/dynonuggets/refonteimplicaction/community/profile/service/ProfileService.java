@@ -5,6 +5,7 @@ import com.dynonuggets.refonteimplicaction.community.profile.domain.model.Profil
 import com.dynonuggets.refonteimplicaction.community.profile.domain.repository.ProfileRepository;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
+import com.dynonuggets.refonteimplicaction.community.profile.dto.enums.RelationCriteriaEnum;
 import com.dynonuggets.refonteimplicaction.community.profile.mapper.ProfileMapper;
 import com.dynonuggets.refonteimplicaction.community.relation.domain.repository.RelationRepository;
 import com.dynonuggets.refonteimplicaction.community.relation.dto.RelationsDto;
@@ -79,14 +80,9 @@ public class ProfileService {
                 .orElseThrow(() -> new EntityNotFoundException(PROFILE_NOT_FOUND, username));
     }
 
-    /**
-     * @param pageRequest contient les critères de pagination et de tri
-     * @return la liste paginée des ProfileDto
-     */
-    public Page<ProfileDto> getAllProfiles(final Pageable pageRequest) {
-        final Page<ProfileModel> profilesModels = profileRepository.findAll(pageRequest);
-
+    public Page<ProfileDto> getAllProfiles(final RelationCriteriaEnum relationCriteria, final Pageable pageable) {
         final String currentUsername = authService.getCurrentUser().getUsername();
+        final Page<ProfileModel> profilesModels = profileRepository.findAllProfilesWithRelationTypeCriteria(currentUsername, relationCriteria, pageable);
 
         final List<String> allUsernamesExceptCurrentUser = profilesModels.stream()
                 .map(ProfileModel::getUser)
@@ -97,7 +93,7 @@ public class ProfileService {
         final Map<String, RelationsDto> usernameRelationMap = relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUsername, allUsernamesExceptCurrentUser).stream()
                 .collect(Collectors.toMap(relation -> {
                     final String username = relation.getReceiver().getUser().getUsername();
-                    return !username.equals(currentUsername) ? username : relation.getSender().getUser().getUsername();
+                    return !StringUtils.equals(username, currentUsername) ? username : relation.getSender().getUser().getUsername();
                 }, relationMapper::toDto));
 
         return profilesModels

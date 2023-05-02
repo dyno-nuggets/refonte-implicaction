@@ -6,14 +6,16 @@ import {AuthService} from '../../../core/services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {finalize, take, takeUntil} from 'rxjs/operators';
 import {Univers} from '../../../shared/enums/univers';
-import {ProfileService} from "../../services/profile/profile.service";
-import {MenuItem} from "primeng/api";
-import {Pageable} from "../../../shared/models/pageable";
-import {Profile} from "../../models/profile";
-import {Constants} from "../../../config/constants";
-import {RelationAction, RelationActionEnumCode} from "../../models/enums/relation-action";
-import {Relation} from "../../models/relation";
-import {Subject} from "rxjs";
+import {ProfileService} from '../../services/profile/profile.service';
+import {MenuItem} from 'primeng/api';
+import {Pageable} from '../../../shared/models/pageable';
+import {Profile} from '../../models/profile';
+import {Constants} from '../../../config/constants';
+import {RelationActionEnumCode} from '../../models/enums/relation-action';
+import {Relation} from '../../models/relation';
+import {Subject} from 'rxjs';
+import {RelationCriteriaEnum} from '../../models/enums/relation-criteria-enum';
+import {RelationButton} from '../../models/relation-button';
 
 @Component({
   templateUrl: './profile-list-page.component.html',
@@ -28,6 +30,7 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
   currentUser: User;
   action: string;
   loading = true;
+  relationTypeCriteria: RelationCriteriaEnum;
   menuItems: MenuItem[] = [
     {
       label: 'Tous les utilisateurs',
@@ -37,13 +40,13 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
     {
       label: 'Mes amis',
       routerLink: `/${Univers.COMMUNITY.url}/profiles`,
-      queryParams: {filter: 'friends'},
+      queryParams: {filter: RelationCriteriaEnum.ALL_FRIENDS},
       routerLinkActiveOptions: {exact: true}
     },
     {
       label: 'Invitations',
-      routerLink: `/${Univers.COMMUNITY.url}/relations`,
-      queryParams: {filter: 'friendRequests'},
+      routerLink: `/${Univers.COMMUNITY.url}/profiles`,
+      queryParams: {filter: RelationCriteriaEnum.ONLY_FRIEND_REQUESTS},
       routerLinkActiveOptions: {exact: true}
     }
   ];
@@ -66,6 +69,7 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.onDestroySubject))
       .subscribe(params => {
         this.pageable.number = (params.page ?? 1) - 1;
+        this.relationTypeCriteria = params.filter ?? RelationCriteriaEnum.ANY;
         this.fetchProfiles();
       });
   }
@@ -82,8 +86,8 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
     );
   }
 
-  updateRelation(profile: Profile, relationAction: RelationAction): void {
-    switch (relationAction.action) {
+  updateRelation(profile: Profile, relationAction: RelationButton): void {
+    switch (relationAction.action.code) {
       case RelationActionEnumCode.CONFIRM:
         this.relationService.confirmRelation(relationAction.relation.id)
           .subscribe(relation => {
@@ -111,7 +115,7 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
         break;
 
       default:
-        this.toastService.error('Oops', 'action non implémentée')
+        this.toastService.error('Oops', 'action non implémentée');
         break;
     }
   }
@@ -130,7 +134,7 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
 
   private fetchProfiles(): void {
     this.loading = true;
-    this.profileService.getAllProfiles(this.pageable)
+    this.profileService.getAllProfiles(this.relationTypeCriteria ?? RelationCriteriaEnum.ANY, this.pageable)
       .pipe(
         finalize(() => this.loading = false),
         take(1),

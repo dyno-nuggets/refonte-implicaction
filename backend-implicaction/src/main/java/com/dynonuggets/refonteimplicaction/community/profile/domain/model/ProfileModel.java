@@ -1,6 +1,7 @@
 package com.dynonuggets.refonteimplicaction.community.profile.domain.model;
 
 import com.dynonuggets.refonteimplicaction.community.group.domain.model.GroupModel;
+import com.dynonuggets.refonteimplicaction.community.relation.domain.model.RelationModel;
 import com.dynonuggets.refonteimplicaction.community.training.domain.model.TrainingModel;
 import com.dynonuggets.refonteimplicaction.community.workexperience.domain.model.WorkExperienceModel;
 import com.dynonuggets.refonteimplicaction.core.domain.model.UserModel;
@@ -43,15 +44,18 @@ public class ProfileModel {
     private List<WorkExperienceModel> experiences;
     @OneToMany(fetch = LAZY, mappedBy = "profile")
     private List<TrainingModel> trainings;
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = LAZY)
     @JoinTable(name = "profile_group",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "group_id")})
     private List<GroupModel> groups;
+    @OneToMany(fetch = LAZY, mappedBy = "sender")
+    private List<RelationModel> relationAsSender;
+    @OneToMany(fetch = LAZY, mappedBy = "receiver")
+    private List<RelationModel> relationAsReceiver;
 
     @OneToMany(mappedBy = "author")
     private List<TopicModel> topics;
-
     @OneToMany(mappedBy = "author")
     private List<ResponseModel> responses;
 }
