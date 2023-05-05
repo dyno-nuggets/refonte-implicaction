@@ -57,10 +57,9 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom {
     private Predicate[] generateFilterPredicates(final String username, final RelationCriteriaEnum relationCriteria, final CriteriaQuery<?> query) {
         final Root<ProfileModel> p = query.from(ProfileModel.class);
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final List<Predicate> queryPredicates = new ArrayList<>() {{
-            add(builder.isTrue(p.get("user").get("enabled")));
-            add(builder.notEqual(p.get("user").get("username"), username));
-        }};
+        final List<Predicate> queryPredicates = new ArrayList<>();
+        queryPredicates.add(builder.isTrue(p.get("user").get("enabled")));
+        queryPredicates.add(builder.notEqual(p.get("user").get("username"), username));
 
         if (List.of(ALL_FRIENDS, ONLY_FRIEND_REQUESTS).contains(relationCriteria)) {
             final Subquery<Integer> subQuery = query.subquery(Integer.class);
