@@ -18,8 +18,14 @@
     }
 
     &:after {
+      position: absolute;
+      right: 10px;
       font-family: FontAwesome;
       content: "\f054";
+    }
+
+    .badge {
+      font-size: 0.9rem;
     }
   }
 }

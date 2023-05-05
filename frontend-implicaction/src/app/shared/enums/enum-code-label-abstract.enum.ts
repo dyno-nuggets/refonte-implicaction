@@ -9,14 +9,14 @@ export class EnumCodeLabelAbstract<T> {
   /**
    * @return toutes les valeurs de l'enum
    */
-  protected static values<U>(): U[] {
+  public static values<U>(): U[] {
     return Object.values(this).filter(enumVal => typeof enumVal === 'object');
   }
 
   /**
    * @return l'enum correspondant au code fourni
    */
-  protected static fromCode<U extends EnumCodeLabelAbstract<R>, R = {}>(code: R): U {
+  public static fromCode<U extends EnumCodeLabelAbstract<R>, R = {}>(code: R): U {
     return this.values<U>().find(enumVal => enumVal.code === code);
   }
 }

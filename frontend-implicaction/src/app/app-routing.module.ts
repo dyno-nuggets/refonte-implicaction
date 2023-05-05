@@ -8,7 +8,7 @@ import {UnauthorizedPageComponent} from './auth/pages/unauthorized-page/unauthor
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: Univers.AUTH.url,
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
   },
   {

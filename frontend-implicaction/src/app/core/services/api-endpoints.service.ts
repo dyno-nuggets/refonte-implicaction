@@ -10,7 +10,7 @@ import {Response} from '../../forum/model/response';
 import {GetCategoriesOptions} from '../../forum/services/category.service';
 import {Profile} from '../../community/models/profile';
 import {Relation} from '../../community/models/relation';
-import {RelationCriteriaEnum} from '../../community/models/enums/relation-criteria-enum';
+import {ProfileMenuCode} from "../../community/models/enums/profile-menu-enum";
 
 export type QueryStringHandler = (queryStringParameters: QueryStringParameters) => void;
 export type CreateUrlOptions = { isMockApi?: boolean, queryStringHandler?: QueryStringHandler, pathVariables?: any[] };
@@ -161,13 +161,17 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrl(Uris.PROFILES.BASE_URI);
   }
 
-  getAllProfilesEndpoint(relationCriteria: RelationCriteriaEnum, pageable: Pageable<Profile>): string {
+  getAllProfilesEndpoint(relationCriteria: ProfileMenuCode, pageable: Pageable<Profile>): string {
     const objectParam = ApiEndpointsService.concatCriteria({relationCriteria}, pageable);
     return ApiEndpointsService.createUrlWithQueryParameters(
       Uris.PROFILES.BASE_URI,
       (qs: QueryStringParameters) =>
         this.buildQueryStringFromFilters(objectParam, qs)
     );
+  }
+
+  getProfileRequestAsFriendCountEndpoint() {
+    return ApiEndpointsService.createUrl(Uris.PROFILES.REQUEST_AS_FRIEND_COUNT);
   }
 
   getActivateUserEndpoint(username: string): string {

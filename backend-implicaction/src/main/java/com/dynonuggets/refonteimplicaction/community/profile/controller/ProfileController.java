@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.profile.controller;
 
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.enums.RelationCriteriaEnum;
@@ -25,6 +26,7 @@ import static com.dynonuggets.refonteimplicaction.filemanagement.utils.FileUris.
 public class ProfileController {
 
     private final ProfileService profileService;
+    private final AuthService authService;
 
     @GetMapping
     @ResponseBody
@@ -33,7 +35,7 @@ public class ProfileController {
             @RequestParam(defaultValue = "10") final int rows,
             @RequestParam(value = "sortBy", defaultValue = "id") final String[] sortBy,
             @RequestParam(value = "sortOrder", defaultValue = "ASC") final String sortOrder,
-            @RequestParam(value = "relationCriteria", defaultValue = "ANY") final RelationCriteriaEnum relationCriteria
+            @RequestParam(value = "relationCriteria", defaultValue = "ALL") final RelationCriteriaEnum relationCriteria
     ) {
         final Pageable pageable = PageRequest.of(page, rows, Sort.by(Sort.Direction.valueOf(sortOrder), sortBy));
         return ResponseEntity.ok(profileService.getAllProfiles(relationCriteria, pageable));
@@ -52,5 +54,10 @@ public class ProfileController {
     @PostMapping(POST_PROFILE_AVATAR)
     public ResponseEntity<ProfileDto> postProfileAvatar(@RequestParam final MultipartFile file, @PathVariable final String username) {
         return ResponseEntity.ok(profileService.uploadAvatar(file, username));
+    }
+
+    @GetMapping("/friend-requests/count")
+    public Long getCountFriendRequestsByUsername() {
+        return profileService.countFriendRequestsByUsername(authService.getCurrentUser().getUsername());
     }
 }

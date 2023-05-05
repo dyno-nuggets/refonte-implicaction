@@ -5,18 +5,6 @@ import {ProfileDetailsPageComponent} from "./pages/profile-details-page/profile-
 
 const routes: Routes = [
   {
-    path: 'relations/received',
-    component: ProfileListPageComponent,
-  },
-  {
-    path: 'relations/sent',
-    component: ProfileListPageComponent,
-  },
-  {
-    path: 'relations',
-    component: ProfileListPageComponent,
-  },
-  {
     path: 'profiles/:username',
     component: ProfileDetailsPageComponent
   },

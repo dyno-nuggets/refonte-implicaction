@@ -34,6 +34,7 @@ export class Uris {
     static readonly BASE_URI = 'profiles';
     static readonly BY_USERNAME = 'profiles';
     static readonly POST_AVATAR = 'profiles/{username}/avatar';
+    static readonly REQUEST_AS_FRIEND_COUNT = 'profiles/friend-requests/count';
   };
 
   /**

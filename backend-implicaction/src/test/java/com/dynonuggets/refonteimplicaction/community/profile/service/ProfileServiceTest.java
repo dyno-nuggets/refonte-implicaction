@@ -263,19 +263,19 @@ class ProfileServiceTest {
         final UserModel currentUser = generateRandomUserModel();
         final Pageable pageable = Pageable.ofSize(10);
         final List<String> usernames = profileModels.stream().map(p -> p.getUser().getUsername()).collect(Collectors.toList());
-        
+
         given(authService.getCurrentUser()).willReturn(currentUser);
-        given(profileRepository.findAllProfilesWithRelationTypeCriteria(currentUser.getUsername(), RelationCriteriaEnum.ANY, pageable)).willReturn(profiles);
+        given(profileRepository.findAllProfilesWithRelationTypeCriteria(currentUser.getUsername(), RelationCriteriaEnum.ALL, pageable)).willReturn(profiles);
         given(relationRepository.findAllRelationByUsernameWhereUserListAreSenderOrReceiver(currentUser.getUsername(), usernames)).willReturn(of());
         profiles.forEach(p -> given(profileMapper.toDtoLight(p)).willReturn(ProfileDto.builder().username(p.getUser().getUsername()).build()));
 
         // when
-        final Page<ProfileDto> result = profileService.getAllProfiles(RelationCriteriaEnum.ANY, pageable);
+        final Page<ProfileDto> result = profileService.getAllProfiles(RelationCriteriaEnum.ALL, pageable);
 
         // then
         final int size = profiles.getSize();
         assertThat(result).hasSize(size);
-        verify(profileRepository, times(1)).findAllProfilesWithRelationTypeCriteria(currentUser.getUsername(), RelationCriteriaEnum.ANY, pageable);
+        verify(profileRepository, times(1)).findAllProfilesWithRelationTypeCriteria(currentUser.getUsername(), RelationCriteriaEnum.ALL, pageable);
         verify(profileMapper, times(size)).toDtoLight(any());
     }
 

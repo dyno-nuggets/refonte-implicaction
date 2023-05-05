@@ -9,4 +9,5 @@ public interface ProfileRepositoryCustom {
 
     Page<ProfileModel> findAllProfilesWithRelationTypeCriteria(final String username, final RelationCriteriaEnum relationCriteria, final Pageable pageable);
 
+    Long countFriendRequestsByUsername(String username);
 }
