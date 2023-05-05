@@ -14,8 +14,8 @@ import {Constants} from '../../../config/constants';
 import {RelationActionEnumCode} from '../../models/enums/relation-action';
 import {Relation} from '../../models/relation';
 import {Subject} from 'rxjs';
-import {RelationCriteriaEnum} from '../../models/enums/relation-criteria-enum';
 import {RelationButton} from '../../models/relation-button';
+import {ProfileMenuCode, ProfileMenuEnum} from "../../models/enums/profile-menu-enum";
 
 @Component({
   templateUrl: './profile-list-page.component.html',
@@ -30,28 +30,18 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
   currentUser: User;
   action: string;
   loading = true;
-  relationTypeCriteria: RelationCriteriaEnum;
-  menuItems: MenuItem[] = [
-    {
-      label: 'Tous les utilisateurs',
-      routerLink: `/${Univers.COMMUNITY.url}/profiles`,
-      routerLinkActiveOptions: {exact: true}
-    },
-    {
-      label: 'Mes amis',
-      routerLink: `/${Univers.COMMUNITY.url}/profiles`,
-      queryParams: {filter: RelationCriteriaEnum.ALL_FRIENDS},
-      routerLinkActiveOptions: {exact: true}
-    },
-    {
-      label: 'Invitations',
-      routerLink: `/${Univers.COMMUNITY.url}/profiles`,
-      queryParams: {filter: RelationCriteriaEnum.ONLY_FRIEND_REQUESTS},
-      routerLinkActiveOptions: {exact: true}
-    }
-  ];
+  selectedItemMenuCode: ProfileMenuCode;
+  menuItems: MenuItem[] = ProfileMenuEnum.values()
+    .map((item: ProfileMenuEnum) => ({
+      id: item.code,
+      label: item.label,
+      routerLink: item.url,
+      queryParams: {filter: item.code},
+      routerLinkActiveOptions: {queryParams: 'subset'}
+    } as MenuItem));
 
   private onDestroySubject = new Subject<void>();
+  private onlyFriendRequestMenuItem: MenuItem;
 
   constructor(
     private authService: AuthService,
@@ -65,13 +55,20 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.currentUser = this.authService.getPrincipal();
+    this.onlyFriendRequestMenuItem = this.menuItems.find(item => item.id === ProfileMenuCode.ONLY_FRIEND_REQUESTS);
     this.route.queryParams
       .pipe(takeUntil(this.onDestroySubject))
       .subscribe(params => {
         this.pageable.number = (params.page ?? 1) - 1;
-        this.relationTypeCriteria = params.filter ?? RelationCriteriaEnum.ANY;
+        this.selectedItemMenuCode = params.filter ?? ProfileMenuCode.ALL;
         this.fetchProfiles();
       });
+
+    this.profileService.getProfileRequestAsFriendCount().subscribe(relationCount => {
+      if (this.onlyFriendRequestMenuItem) {
+        this.onlyFriendRequestMenuItem.badge = relationCount ? `${relationCount}` : null;
+      }
+    });
   }
 
   trackByUsername = (index: number, item: Profile) => item.username;
@@ -130,11 +127,15 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
     const index = this.pageable.content.findIndex(p => p.username === profile.username);
     this.pageable.content.splice(index, 1, {...profile, relationWithCurrentUser});
     this.profiles = [...this.pageable.content];
+    if (relationWithCurrentUser.confirmedAt) {
+      const relationCount = +this.onlyFriendRequestMenuItem.badge - 1;
+      this.onlyFriendRequestMenuItem.badge = relationCount ? `${relationCount}` : null;
+    }
   }
 
   private fetchProfiles(): void {
     this.loading = true;
-    this.profileService.getAllProfiles(this.relationTypeCriteria ?? RelationCriteriaEnum.ANY, this.pageable)
+    this.profileService.getAllProfiles(this.selectedItemMenuCode ?? ProfileMenuCode.ALL, this.pageable)
       .pipe(
         finalize(() => this.loading = false),
         take(1),

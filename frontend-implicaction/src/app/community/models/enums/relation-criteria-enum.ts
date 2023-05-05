@@ -1,3 +1,0 @@
-export enum RelationCriteriaEnum {
-  ANY = 'ANY', ALL_FRIENDS = 'ALL_FRIENDS', ONLY_FRIEND_REQUESTS = 'ONLY_FRIEND_REQUESTS'
-}

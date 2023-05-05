@@ -1,5 +1,6 @@
 package com.dynonuggets.refonteimplicaction.community.profile.controller;
 
+import com.dynonuggets.refonteimplicaction.auth.service.AuthService;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileDto;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.ProfileUpdateRequest;
 import com.dynonuggets.refonteimplicaction.community.profile.dto.enums.RelationCriteriaEnum;
@@ -50,6 +51,9 @@ class ProfileControllerTest extends ControllerIntegrationTestBase {
 
     @Getter
     protected String baseUri = PROFILES_BASE_URI;
+
+    @MockBean
+    AuthService authService;
 
     @MockBean
     ProfileService profileService;

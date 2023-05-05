@@ -10,6 +10,8 @@
         <span>
           <i *ngIf="menuItem.icon" [class]="menuItem.icon"></i> {{menuItem.label}}
         </span>
+
+        <span *ngIf="menuItem.badge" class="badge bg-primary rounded-pill me-3">{{menuItem.badge}}</span>
       </a>
     </li>
   </ng-container>

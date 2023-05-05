@@ -104,6 +104,10 @@ public class ProfileService {
                 });
     }
 
+    public Long countFriendRequestsByUsername(final String username) {
+        return profileRepository.countFriendRequestsByUsername(username);
+    }
+
     /**
      * Renvoie le profil s’il existe, sinon, si l’utilisateur existe, le profil est créé
      *
