@@ -2,7 +2,9 @@ import {EnumCodeLabelAbstract} from "../../../shared/enums/enum-code-label-abstr
 import {Univers} from "../../../shared/enums/univers";
 
 export enum ProfileMenuCode {
-  ALL = 'ALL', ALL_FRIENDS = 'ALL_FRIENDS', ONLY_FRIEND_REQUESTS = 'ONLY_FRIEND_REQUESTS'
+  ALL = 'ALL',
+  ALL_FRIENDS = 'ALL_FRIENDS',
+  ONLY_FRIEND_REQUESTS = 'ONLY_FRIEND_REQUESTS'
 }
 
 export class ProfileMenuEnum extends EnumCodeLabelAbstract<ProfileMenuCode> {

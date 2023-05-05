@@ -1,7 +1,9 @@
 import {EnumCodeLabelAbstract} from '../../../shared/enums/enum-code-label-abstract.enum';
 
 export enum RelationActionEnumCode {
-  CREATE = 'CREATE', DELETE = 'DELETE', CONFIRM = 'CONFIRM'
+  CREATE = 'CREATE',
+  DELETE = 'DELETE',
+  CONFIRM = 'CONFIRM'
 }
 
 export class RelationActionEnum extends EnumCodeLabelAbstract<RelationActionEnumCode> {

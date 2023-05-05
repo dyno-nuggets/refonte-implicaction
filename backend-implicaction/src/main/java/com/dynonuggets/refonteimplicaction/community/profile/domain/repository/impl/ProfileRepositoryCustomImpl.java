@@ -23,7 +23,7 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom {
     private final EntityManager entityManager;
 
     /**
-     * @param username         nom de l'utilisateur courant
+     * @param username         nom de l’utilisateur courant
      * @param relationCriteria type de relation.
      * @param pageable         options de pagination
      * @return <ul>
@@ -66,16 +66,15 @@ public class ProfileRepositoryCustomImpl implements ProfileRepositoryCustom {
             final Subquery<Integer> subQuery = query.subquery(Integer.class);
             final Root<RelationModel> r = subQuery.from(RelationModel.class);
 
-            // l'utilisateur doit être à la cible d'une invitation (receiver)
+            // l'utilisateur doit être à la cible d’une invitation (receiver)
             Predicate relationPredicate = builder.and(builder.equal(r.get("receiver").get("user").get("username"), username), builder.equal(r.get("sender"), p));
 
-            // si l'on veut remonter toutes les relatons de l'utilisateur, il faut aussi récupérer les profils pour lesquels il est à l'origine d'une relation
+            // si l’on veut remonter toutes les relatons de l’utilisateur, il faut aussi récupérer les profils pour lesquels il est à l’origine d’une relation
             if (relationCriteria == ALL_FRIENDS) {
                 final Predicate isSender = builder.and(builder.equal(r.get("sender").get("user").get("username"), username), builder.equal(r.get("receiver"), p));
                 relationPredicate = builder.or(relationPredicate, isSender);
             }
 
-            // si 2 utilisateurs sont amis, alors la relation a été confirmée, sinon non
             final Predicate confirmedPredicate = relationCriteria == ALL_FRIENDS
                     ? builder.isNotNull(r.get("confirmedAt"))
                     : builder.isNull(r.get("confirmedAt"));
