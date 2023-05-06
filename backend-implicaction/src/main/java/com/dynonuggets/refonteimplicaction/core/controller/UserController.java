@@ -36,7 +36,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping(GET_TOTAL_USERS)
+    @GetMapping(GET_ENABLED_USERS_COUNT)
     public ResponseEntity<Long> getEnabledUsersCount() {
         return ResponseEntity.ok(userService.getEnabledUsersCount());
     }
