@@ -10,5 +10,5 @@ public class UserUris {
     public static final String GET_PENDING_USER_URI = "/pending";
     public static final String ENABLE_USER = "/{username}/enable";
     public static final String UPDATE_USER_ROLES = "/{username}/roles";
-    public static final String GET_ENABLED_USERS_COUNT = "/total";
+    public static final String GET_ENABLED_USERS_COUNT = "/count";
 }
