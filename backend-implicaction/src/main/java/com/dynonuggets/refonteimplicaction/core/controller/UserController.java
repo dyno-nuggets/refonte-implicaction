@@ -36,6 +36,11 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping(GET_ENABLED_USERS_COUNT)
+    public ResponseEntity<Long> getEnabledUsersCount() {
+        return ResponseEntity.ok(userService.getEnabledUsersCount());
+    }
+
     @GetMapping(GET_PENDING_USER_URI)
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Page<UserDto>> getAllPendingUsers(

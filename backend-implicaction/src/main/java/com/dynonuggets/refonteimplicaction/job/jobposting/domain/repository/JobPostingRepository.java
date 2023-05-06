@@ -12,4 +12,6 @@ public interface JobPostingRepository extends JpaRepository<JobPostingModel, Lon
     Page<JobPostingModel> findAllByValidIsFalse(Pageable pageable);
 
     Page<JobPostingModel> findAllByArchiveFalseAndValidTrueOrderByCreatedAtDesc(Pageable pageable);
+
+    Long countByValidTrue();
 }

@@ -112,4 +112,9 @@ public class JobPostingController {
         final JobPostingDto jobUpdate = jobPostingService.validateJob(jobId);
         return ResponseEntity.ok(jobUpdate);
     }
+
+    @GetMapping(GET_ENABLED_COUNT)
+    public ResponseEntity<Long> getEnabledJobsCount() {
+        return ResponseEntity.ok(jobPostingService.getEnabledJobsCount());
+    }
 }

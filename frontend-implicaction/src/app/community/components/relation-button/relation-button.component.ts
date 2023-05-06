@@ -48,7 +48,6 @@ export class RelationButtonComponent implements OnInit, OnChanges {
   }
 
   private buildButtons(): RelationButton[] {
-    console.log(this.profile.username, [this.getCancelButton(), this.getOkButton()]);
     return [this.getCancelButton(), this.getOkButton()].filter(b => b !== null);
   }
 

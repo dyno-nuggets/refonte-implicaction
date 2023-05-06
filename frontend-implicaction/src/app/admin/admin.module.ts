@@ -18,8 +18,10 @@ import {UserManagementWidgetComponent} from './widgets/user-management-wiget/use
 import {UserFragmentComponent} from './fragments/user-fragment/user-fragment.component';
 import {SkeletonModule} from "primeng/skeleton";
 import {DashboardFragmentComponent} from "./fragments/dashboard-fragment/dashboard-fragment.component";
-import {AdminOverviewWidgetComponent} from "./widgets/admin-overview-widget/admin-overview-widget.component";
+import {UserCounterWidgetComponent} from './widgets/user-counter-widget/user-counter-widget.component';
+import {CounterCardComponent} from './components/counter-card/counter-card.component';
 import {PendingJobTableComponent} from "./components/users/pending-job-table/pending-job-table.component";
+import { JobCounterWidgetComponent } from './widgets/job-counter-widget/job-counter-widget.component';
 
 
 @NgModule({
@@ -32,8 +34,10 @@ import {PendingJobTableComponent} from "./components/users/pending-job-table/pen
     UserManagementWidgetComponent,
     UserFragmentComponent,
     DashboardFragmentComponent,
-    AdminOverviewWidgetComponent,
-    PendingJobTableComponent
+    UserCounterWidgetComponent,
+    CounterCardComponent,
+    PendingJobTableComponent,
+    JobCounterWidgetComponent
   ],
   imports: [
     CommonModule,

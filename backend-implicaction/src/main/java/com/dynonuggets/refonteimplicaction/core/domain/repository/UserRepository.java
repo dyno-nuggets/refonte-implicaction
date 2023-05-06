@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<UserModel, Long> {
 
     Page<UserModel> findAllByEnabledIsFalse(Pageable pageable);
 
+    Long countByEnabledTrue();
 }

@@ -60,4 +60,8 @@ export class JobService {
   validateJob(jobId: string): Observable<JobPosting> {
     return this.http.patch(this.apiEndpointsService.getValidateJobEndpoint(jobId), null);
   }
+
+  getEnabledJobsCount(): Observable<number> {
+    return this.http.get<number>(this.apiEndpointsService.getEnabledJobsCountEndpoint());
+  }
 }

@@ -32,13 +32,15 @@ export class ProfileListPageComponent implements OnInit, OnDestroy {
   loading = true;
   selectedItemMenuCode: ProfileMenuCode;
   menuItems: MenuItem[] = ProfileMenuEnum.values()
-    .map((item: ProfileMenuEnum) => ({
-      id: item.code,
-      label: item.label,
-      routerLink: item.url,
-      queryParams: {filter: item.code},
-      routerLinkActiveOptions: {queryParams: 'subset'}
-    } as MenuItem));
+    .map((item: ProfileMenuEnum) => {
+      const menuItem = {
+        id: item.code,
+        label: item.label,
+        routerLink: item.url,
+        routerLinkActiveOptions: {queryParams: 'subset'}
+      } as MenuItem;
+      return item.filter ? {...menuItem, queryParams: {filter: item.filter}} : menuItem;
+    });
 
   private onDestroySubject = new Subject<void>();
   private onlyFriendRequestMenuItem: MenuItem;

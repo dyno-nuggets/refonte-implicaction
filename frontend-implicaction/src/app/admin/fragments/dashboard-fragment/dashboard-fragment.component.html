@@ -1,13 +1,19 @@
-<div class="overview">
-  <app-admin-overview></app-admin-overview>
-</div>
+<div class="row">
+  <div class="col-xxl-4 col-md-6">
+    <app-user-counter-widget></app-user-counter-widget>
+  </div>
+  <div class="col-xxl-4 col-md-6">
+    <app-job-counter-widget></app-job-counter-widget>
+  </div>
 
-<app-user-management-widget
-  title="Inscriptions récentes"
-  sortBy="registeredAt"
-  sortOrder="DESC"
-  [rows]="5"
-></app-user-management-widget>
+  <app-user-management-widget
+    title="Inscriptions récentes"
+    sortBy="registeredAt"
+    sortOrder="DESC"
+    [rows]="5"
+  ></app-user-management-widget>
+
+</div>
 
 <div class="pending-table card mt-4">
   <div class="card-header pb-0 bg-primary text-light">
@@ -21,4 +27,3 @@
   </div>
   <app-pending-group-table></app-pending-group-table>
 </div>
-
