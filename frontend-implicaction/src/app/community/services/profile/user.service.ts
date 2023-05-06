@@ -32,7 +32,7 @@ export class UserService {
     return this.http.post(this.apiEndpointsService.updateUserRolesEndpoint(username), roles);
   }
 
-  getTotalUsers(): Observable<number> {
-    return this.http.get<number>(this.apiEndpointsService.getTotalUsers());
+  getEnabledUsersCount(): Observable<number> {
+    return this.http.get<number>(this.apiEndpointsService.getEnabledUsersCount());
   }
 }

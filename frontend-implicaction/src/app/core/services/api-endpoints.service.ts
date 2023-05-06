@@ -194,8 +194,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
-  getTotalUsers() {
-    return ApiEndpointsService.createUrl(Uris.USERS.TOTAL);
+  getEnabledUsersCount() {
+    return ApiEndpointsService.createUrl(Uris.USERS.ENABLED_USERS_COUNT);
   }
 
 

@@ -14,7 +14,7 @@ export class UserCounterWidgetComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userCount$ = this.userService.getTotalUsers();
+    this.userCount$ = this.userService.getEnabledUsersCount();
   }
 
 }

@@ -27,7 +27,7 @@ export class Uris {
     static readonly GROUP_LIST = 'users';
     static readonly ACTIVATE_USER = 'users/{username}/enable';
     static readonly UPDATE_USER_ROLES = 'users/{username}/roles';
-    static readonly TOTAL = 'users/total';
+    static readonly ENABLED_USERS_COUNT = 'users/total';
   };
 
   static readonly PROFILES = class {

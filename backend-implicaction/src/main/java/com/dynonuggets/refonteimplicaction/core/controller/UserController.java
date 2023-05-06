@@ -37,8 +37,8 @@ public class UserController {
     }
 
     @GetMapping(GET_TOTAL_USERS)
-    public ResponseEntity<Long> getTotalUsers() {
-        return ResponseEntity.ok(userService.getTotalUsers());
+    public ResponseEntity<Long> getEnabledUsersCount() {
+        return ResponseEntity.ok(userService.getEnabledUsersCount());
     }
 
     @GetMapping(GET_PENDING_USER_URI)
