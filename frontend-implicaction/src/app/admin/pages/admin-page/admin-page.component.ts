@@ -12,7 +12,7 @@ export class AdminPageComponent {
       label: 'Dashboard',
       routerLink: `/${Univers.ADMIN.url}/dashboard`,
       icon: 'fas fa-tachometer-alt',
-      routerLinkActiveOptions: {exact: true}
+      routerLinkActiveOptions: {exact: true,}
     },
     {
       label: 'Utilisateurs',

@@ -24,10 +24,10 @@ export class Uris {
     static readonly BASE_URI = 'users';
     static readonly COMMUNITY_LIST = 'users/community';
     static readonly BY_ID = 'users';
-    static readonly GET_ALL_PENDING_USERS = 'users/pending';
     static readonly GROUP_LIST = 'users';
     static readonly ACTIVATE_USER = 'users/{username}/enable';
     static readonly UPDATE_USER_ROLES = 'users/{username}/roles';
+    static readonly TOTAL = 'users/total';
   };
 
   static readonly PROFILES = class {
@@ -73,6 +73,7 @@ export class Uris {
     static readonly VALIDATE_JOB = 'job-postings/validate';
     static readonly GET_VALIDATED_JOBS = 'job-postings/validated';
     static readonly TOGGLE_ARCHIVE = 'job-postings/archive';
+    static readonly COUNT = 'job-postings/count';
   };
 
   /**

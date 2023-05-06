@@ -17,4 +17,5 @@ public class JobPostingUris {
     public static final String VALIDATE_JOB_URI = "{jobId}/validate";
     public static final String VALIDATED_JOBS = "/validated";
     public static final String GET_LATEST_JOBS_URI = "/latest";
+    public static final String GET_ENABLED_COUNT = "/count";
 }

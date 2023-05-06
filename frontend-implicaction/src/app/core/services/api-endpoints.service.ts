@@ -194,8 +194,8 @@ export class ApiEndpointsService {
     return ApiEndpointsService.createUrlWithPageable(Uris.USERS.BASE_URI, pageable);
   }
 
-  getAllPendingActivationUsersEndpoint(pageable: Pageable<any>): string {
-    return ApiEndpointsService.createUrlWithPageable(Uris.USERS.GET_ALL_PENDING_USERS, pageable);
+  getTotalUsers() {
+    return ApiEndpointsService.createUrl(Uris.USERS.TOTAL);
   }
 
 
@@ -328,6 +328,10 @@ export class ApiEndpointsService {
         }
       },
       true);
+  }
+
+  getEnabledJobsCountEndpoint(): string {
+    return ApiEndpointsService.createUrl(Uris.JOBS.COUNT);
   }
 
   createJobPostingEndpoint(): string {

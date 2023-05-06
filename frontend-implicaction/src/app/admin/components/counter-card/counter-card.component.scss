@@ -1,0 +1,31 @@
+@import "src/assets/variables";
+
+.card-icon {
+  font-size: 32px;
+  line-height: 0;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  background-color: $secondary;
+}
+
+.card {
+  margin: 0 0 30px !important;
+  padding: 10px 0 !important;
+
+  .card-body {
+    padding: 20px;
+
+    .card-title {
+      margin: 0 0 8px;
+      padding: 20px 0 15px;
+    }
+
+    h4 {
+      color: $primary;
+      font-size: 28px;
+      font-weight: 700;
+    }
+  }
+}

@@ -20,12 +20,8 @@ export class UserService {
 
   }
 
-  getAll(pageable: Pageable<any>): Observable<Pageable<User>> {
+  getAll(pageable: Pageable<User>): Observable<Pageable<User>> {
     return this.http.get(this.apiEndpointsService.getAllUserEndpoint(pageable));
-  }
-
-  getAllPendingActivationUsers(pageable: Pageable<User>): Observable<any> {
-    return this.http.get(this.apiEndpointsService.getAllPendingActivationUsersEndpoint(pageable));
   }
 
   enableUser(username: string): Observable<User> {
@@ -34,5 +30,9 @@ export class UserService {
 
   updateUserRoles(username: string, roles: RoleEnumCode[]): Observable<User> {
     return this.http.post(this.apiEndpointsService.updateUserRolesEndpoint(username), roles);
+  }
+
+  getTotalUsers(): Observable<number> {
+    return this.http.get<number>(this.apiEndpointsService.getTotalUsers());
   }
 }

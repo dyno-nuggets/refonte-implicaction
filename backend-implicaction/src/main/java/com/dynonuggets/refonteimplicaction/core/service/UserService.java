@@ -99,4 +99,8 @@ public class UserService {
 
         return userMapper.toDto(userRepository.save(user));
     }
+
+    public Long getTotalUsers() {
+        return userRepository.countByEnabledTrue();
+    }
 }

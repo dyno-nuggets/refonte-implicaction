@@ -141,4 +141,8 @@ public class JobPostingService {
         return jobPostingRepository.findById(jobId)
                 .orElseThrow(() -> new NotFoundException(String.format(JOB_NOT_FOUND_MESSAGE, jobId)));
     }
+
+    public Long getEnabledJobsCount() {
+        return jobPostingRepository.countByValidTrue();
+    }
 }
