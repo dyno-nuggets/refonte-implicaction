@@ -24,7 +24,7 @@ export class AdminPageComponent {
       label: 'Offres',
       routerLink: `/${Univers.ADMIN.url}/jobs`,
       icon: 'fas fa-briefcase',
-      routerLinkActiveOptions: {exact: true}
+      routerLinkActiveOptions: {queryParams: 'subset'}
     },
     {
       label: 'Entreprises',
@@ -36,7 +36,19 @@ export class AdminPageComponent {
       label: 'Forum',
       routerLink: `/${Univers.ADMIN.url}/forum`,
       icon: 'fas fa-comments',
-      routerLinkActiveOptions: {exact: true}
+      routerLinkActiveOptions: {queryParams: 'subset', exact: false},
+      items: [
+        {
+          label: 'Catégories',
+          routerLink: `/${Univers.ADMIN.url}/forum`,
+          routerLinkActiveOptions: {exact: true},
+        },
+        {
+          label: 'Messages',
+          routerLink: `/${Univers.ADMIN.url}/forum`,
+          routerLinkActiveOptions: {exact: true},
+        }
+      ]
     },
   ];
 }

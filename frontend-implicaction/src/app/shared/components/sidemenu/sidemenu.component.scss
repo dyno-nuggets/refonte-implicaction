@@ -17,15 +17,28 @@
       background-color: $secondary;
     }
 
-    &:after {
-      position: absolute;
-      right: 10px;
-      font-family: FontAwesome;
-      content: "\f054";
+    &.collapsed, &.expanded {
+      &:after {
+        position: absolute;
+        right: 10px;
+        font-family: FontAwesome;
+      }
+    }
+
+    &.collapsed:after {
+      content: '\f107'
+    }
+
+    &.expanded:after {
+      content: '\f106'
     }
 
     .badge {
       font-size: 0.9rem;
     }
   }
+}
+
+li.active {
+  list-style-type: disc;
 }
