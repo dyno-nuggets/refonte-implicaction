@@ -21,10 +21,7 @@
       <ng-template #templateCollapsable>
         <a
           class="nav-link cursor-pointer"
-          data-bs-target="#collapsed-nav"
-          data-bs-toggle="collapse"
-          aria-expanded="false"
-          (click)="menuItem.expanded = !menuItem.expanded"
+          (click)="toggleCollapse(menuItem)"
           [ngClass]="{'collapsed': !menuItem.expanded, 'expanded active': menuItem.expanded}"
         >
         <span>
@@ -32,19 +29,17 @@
         </span>
         </a>
 
-        <ul
-          id="collapsed-nav"
-          class="nav-content"
-          data-bs-parent="#sidebar-nav"
-          [ngClass]="{'collapse': !menuItem.expanded}"
-        >
+        <ul class="ps-5" [ngClass]="{'collapse': !menuItem.expanded}">
           <ng-container *ngFor="let item of menuItem.items">
-            <li routerLinkActive="active">
+            <li [ngClass]="{'active': item.expanded}">
               <a
                 role="button"
                 class="nav-link"
                 [routerLink]="item.routerLink"
                 [queryParams]="item.queryParams"
+                [routerLinkActive]="''"
+                [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions"
+                (isActiveChange)="toggleCollapseParent(item, menuItem, $event)"
               >
                 <span>
                   <i *ngIf="item.icon" [class]="item.icon"></i> {{item.label}}

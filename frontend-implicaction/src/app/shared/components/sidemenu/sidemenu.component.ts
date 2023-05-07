@@ -1,29 +1,22 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {MenuItem} from "primeng/api";
-import {NavigationEnd, Router} from "@angular/router";
+import {Component, Input} from '@angular/core';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   selector: 'app-sidemenu',
   templateUrl: './sidemenu.component.html',
   styleUrls: ['./sidemenu.component.scss']
 })
-export class SidemenuComponent implements OnInit {
+export class SidemenuComponent {
 
   @Input() menuItems: MenuItem[];
 
-  constructor(private router: Router) {
+  toggleCollapseParent(child: MenuItem, parent: MenuItem, expanded: boolean) {
+    child.expanded = expanded;
+    parent.expanded = parent.items.some(item => item.expanded);
   }
 
-  ngOnInit(): void {
-    this.router.events.subscribe(routerEvent => {
-      if (routerEvent instanceof NavigationEnd) {
-        // Get your url
-        console.log(routerEvent.url);
-        console.log(this.menuItems.find(item => !!item.items && item.items.find(i => i.url && this.router.isActive(i.url, false))));
-      }
-    });
-
-
+  toggleCollapse(menuItem: MenuItem) {
+    this.menuItems.filter(i => i !== menuItem).forEach(i => i.expanded = false);
+    menuItem.expanded = !menuItem.expanded;
   }
-
 }

@@ -37,8 +37,12 @@
       font-size: 0.9rem;
     }
   }
-}
 
-li.active {
-  list-style-type: disc;
+  li {
+    &.active, &:hover, a:hover {
+      font-weight: 600;
+      list-style-type: disc !important;
+      background-color: transparent !important;
+    }
+  }
 }
