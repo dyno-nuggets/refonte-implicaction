@@ -23,7 +23,7 @@ export class AdminPageComponent {
     {
       label: 'Offres',
       routerLink: `/${Univers.ADMIN.url}/jobs`,
-      icon: 'fas fa-newspaper',
+      icon: 'fas fa-briefcase',
       routerLinkActiveOptions: {exact: true}
     },
     {
