@@ -9,12 +9,6 @@ export class SupportsComponent {
 
   supports = [
     {
-      label: 'Défense et mobilité',
-      imageSrc: 'assets/img/supports/DFME-logo.png',
-      link: 'https://www.defense-mobilite.fr/'
-
-    },
-    {
       label: 'Union Nationale des Combattants (U.N.C)',
       imageSrc: 'assets/img/supports/UNC-logo.png',
       link: 'https://www.unc.fr/'
@@ -25,29 +19,14 @@ export class SupportsComponent {
       link: 'https://www.anocr.org/'
     },
     {
-      label: 'Association Tégo',
-      imageSrc: 'assets/img/supports/TEGO-logo.png',
-      link: 'https://associationtego.fr/'
-    },
-    {
-      label: 'Unéo',
-      imageSrc: 'assets/img/supports/UNEO-logo.png',
-      link: 'https://www.groupe-uneo.fr/'
-    },
-    {
       label: 'La France mutualiste',
       imageSrc: 'assets/img/supports/LFM-logo.png',
       link: 'https://www.la-france-mutualiste.fr/'
     },
     {
-      label: 'Cap vers une 2ème carrière (CAP2C)',
-      imageSrc: 'assets/img/supports/CAP2C-logo.png',
-      link: 'https://cap2c.org/eh/'
-    },
-    {
-      label: 'Fiducial',
-      imageSrc: 'assets/img/supports/fiducial-logo.png',
-      link: 'https://www.fiducial.fr/'
+      label: 'Socété Nationale d\'Entraide de la Médaille Militaire (SNEMM)',
+      imageSrc: 'assets/img/supports/SNEMM-logo.png',
+      link: 'https://www.snemm.fr/'
     }
   ]
 
