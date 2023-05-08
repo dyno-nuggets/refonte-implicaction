@@ -5,9 +5,9 @@
         <a
           role="button"
           class="nav-link"
-          [routerLinkActive]="'active'"
           [routerLink]="menuItem.routerLink"
           [queryParams]="menuItem.queryParams"
+          [routerLinkActive]="'active'"
           [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions"
         >
         <span>
@@ -20,6 +20,7 @@
 
       <ng-template #templateCollapsable>
         <a
+          role="button"
           class="nav-link cursor-pointer"
           (click)="toggleCollapse(menuItem)"
           [ngClass]="{'collapsed': !menuItem.expanded, 'expanded active': menuItem.expanded}"
@@ -31,15 +32,16 @@
 
         <ul class="ps-5" [ngClass]="{'collapse': !menuItem.expanded}">
           <ng-container *ngFor="let item of menuItem.items">
-            <li [ngClass]="{'active': item.expanded}">
+            <li [ngClass]="{'active': child.isActive}">
               <a
+                #child="routerLinkActive"
                 role="button"
                 class="nav-link"
                 [routerLink]="item.routerLink"
                 [queryParams]="item.queryParams"
-                [routerLinkActive]="''"
+                [routerLinkActive]="'active'"
                 [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions"
-                (isActiveChange)="toggleCollapseParent(item, menuItem, $event)"
+                (isActiveChange)="onChildActiveChange(item, menuItem, $event)"
               >
                 <span>
                   <i *ngIf="item.icon" [class]="item.icon"></i> {{item.label}}

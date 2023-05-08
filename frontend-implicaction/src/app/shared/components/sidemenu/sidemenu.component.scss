@@ -39,7 +39,7 @@
   }
 
   li {
-    &.active, &:hover, a:hover {
+    &.active, &:hover, a:hover, a.active {
       font-weight: 600;
       list-style-type: disc !important;
       background-color: transparent !important;
