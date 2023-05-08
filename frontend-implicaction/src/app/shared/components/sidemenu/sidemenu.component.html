@@ -1,18 +1,59 @@
 <ul class="list-group list-group-flush py-2">
   <ng-container *ngFor="let menuItem of menuItems">
-    <li class="list-group-item">
-      <a
-        [routerLinkActive]="'active'"
-        [routerLink]="menuItem.routerLink"
-        [queryParams]="menuItem.queryParams"
-        [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions"
-      >
+    <li class="list-group-item nav-item">
+      <ng-container *ngIf="!menuItem.items; else templateCollapsable">
+        <a
+          role="button"
+          class="nav-link"
+          [routerLink]="menuItem.routerLink"
+          [queryParams]="menuItem.queryParams"
+          [routerLinkActive]="'active'"
+          [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions"
+        >
         <span>
           <i *ngIf="menuItem.icon" [class]="menuItem.icon"></i> {{menuItem.label}}
         </span>
 
-        <span *ngIf="menuItem.badge" class="badge bg-primary rounded-pill me-3">{{menuItem.badge}}</span>
-      </a>
+          <span *ngIf="menuItem.badge" class="badge bg-primary rounded-pill me-3">{{menuItem.badge}}</span>
+        </a>
+      </ng-container>
+
+      <ng-template #templateCollapsable>
+        <a
+          role="button"
+          class="nav-link cursor-pointer"
+          (click)="toggleCollapse(menuItem)"
+          [ngClass]="{'collapsed': !menuItem.expanded, 'expanded active': menuItem.expanded}"
+        >
+        <span>
+          <i *ngIf="menuItem.icon" [class]="menuItem.icon"></i> {{menuItem.label}}
+        </span>
+        </a>
+
+        <ul class="ps-5" [ngClass]="{'collapse': !menuItem.expanded}">
+          <ng-container *ngFor="let item of menuItem.items">
+            <li [ngClass]="{'active': child.isActive}">
+              <a
+                #child="routerLinkActive"
+                role="button"
+                class="nav-link"
+                [routerLink]="item.routerLink"
+                [queryParams]="item.queryParams"
+                [routerLinkActive]="'active'"
+                [routerLinkActiveOptions]="menuItem.routerLinkActiveOptions"
+                (isActiveChange)="onChildActiveChange(item, menuItem, $event)"
+              >
+                <span>
+                  <i *ngIf="item.icon" [class]="item.icon"></i> {{item.label}}
+                </span>
+
+                <span *ngIf="item.badge" class="badge bg-primary rounded-pill me-3">{{item.badge}}</span>
+              </a>
+            </li>
+          </ng-container>
+        </ul>
+      </ng-template>
+
     </li>
   </ng-container>
 </ul>

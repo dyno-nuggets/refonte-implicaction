@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {Univers} from "../../../shared/enums/univers";
-import {MenuItem} from "primeng/api";
+import {Univers} from '../../../shared/enums/univers';
+import {MenuItem} from 'primeng/api';
 
 @Component({
   templateUrl: './admin-page.component.html',
@@ -21,22 +21,34 @@ export class AdminPageComponent {
       routerLinkActiveOptions: {exact: true}
     },
     {
-      label: 'Offres',
-      routerLink: `/${Univers.ADMIN.url}/jobs`,
+      label: 'Emploi',
       icon: 'fas fa-briefcase',
-      routerLinkActiveOptions: {exact: true}
-    },
-    {
-      label: 'Entreprises',
-      routerLink: `/${Univers.ADMIN.url}/companies`,
-      icon: 'fas fa-building',
-      routerLinkActiveOptions: {exact: true}
+      routerLinkActiveOptions: {queryParams: 'subset', exact: false},
+      items: [
+        {
+          label: 'Offres',
+          routerLink: `/${Univers.ADMIN.url}/jobs`,
+          routerLinkActiveOptions: {queryParams: 'subset'}
+        },
+        {
+          label: 'Entreprises',
+          routerLink: `/${Univers.ADMIN.url}/companies`,
+          routerLinkActiveOptions: {exact: true}
+        }
+      ]
     },
     {
       label: 'Forum',
-      routerLink: `/${Univers.ADMIN.url}/forum`,
       icon: 'fas fa-comments',
-      routerLinkActiveOptions: {exact: true}
+      routerLinkActiveOptions: {queryParams: 'subset', exact: false},
+      items: [
+        {
+          label: 'Catégories',
+          routerLink: `/${Univers.ADMIN.url}/forum`,
+          queryParams: {target: 'categories'},
+          routerLinkActiveOptions: {exact: true},
+        }
+      ]
     },
   ];
 }
